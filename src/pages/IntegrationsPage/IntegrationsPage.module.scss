@@ -1,13 +1,51 @@
-.pageTitle {
-    font-size: 20px;
-    font-weight: 600;
-    width: 100%;
-    text-align: center;
-}
+.wrp {
 
-.statsUnderTitle {
-    display: flex;
     width: 100%;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    gap: 5px
+
+    .pageTitle {
+        font-size: 20px;
+        font-weight: 600;
+        width: 100%;
+        text-align: center;
+    
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .statsUnderTitle {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        gap: 5px;
+    
+        .stat {
+         font-family: 'Inter', sans-serif;
+         font-size: 14px;
+         font-weight: 500;
+        }
+    }
+    
+    .integrationNameWrp {
+        width: 92%;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        justify-content: space-between;
+        align-self: center;
+        padding-left: 20px;
+        padding-right: 20px;
+    
+        .integrationTitle {
+            font-size: 14px;
+            font-weight: 500;
+            color: '#AFB9D4';
+        }
+    
+        .integrationLevel {
+            font-size: 14px;
+            font-weight: 500;
+            color: '#fff';
+        }
+    }
 }
