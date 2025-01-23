@@ -1,3 +1,5 @@
+@use '../../assets/styles/index.scss' as var;
+
 .wrp {
     width: 85vw;
     height: 190px;
@@ -23,14 +25,14 @@
             font-size: 14px;
             font-weight: 500;
             margin: 0;
-            color: #219653;
+            color: var.$color-green;
         }
 
         .negativeCommentText {
             font-size: 14px;
             font-weight: 500;
             margin: 0;
-            color: #E84949;
+            color: var.$color-red;
         }
     }
 
@@ -42,7 +44,7 @@
             .amount {
                 font-size: 12px;
                 font-weight: 500;
-                color: #AFB9D4;
+                color: var.$color-text-semi-transparent;
                 margin: 0;
             }
 
@@ -67,7 +69,7 @@
             height: 40px;
             width: 40px;
             border-radius: 10px;
-            background-color: #219653;
+            background-color: var.$color-green;
 
             border: none;
             background-image: url('../../assets/icons/thumbs_up.svg');
@@ -81,7 +83,7 @@
             height: 40px;
             width: 40px;
             border-radius: 10px;
-            background-color: #E84949;
+            background-color: var.$color-red;
 
             border: none;
             background-image: url('../../assets/icons/thumbs_down.svg');

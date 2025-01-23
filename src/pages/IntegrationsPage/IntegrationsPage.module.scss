@@ -1,9 +1,7 @@
-//@use '/src/platform/assets/styles' as var;
+@use '../../assets/styles/index.scss' as var;
 
 .wrp {
-
     width: 100%;
-    background-color: #AFB9D4;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,7 +9,7 @@
     overflow-x: hidden;
     color: white;
 
-    background-color: #141319;
+    background-color: var.$color-bg;
 
     margin: 0;
 
@@ -66,7 +64,7 @@
             height: 40px;
             width: 40px;
             border-radius: 10px;
-            background-color: #2F80ED;
+            background-color: var.$color-blue-primary;
             border: none;
             background-image: url('../../assets/icons/stats_button.svg');
             background-repeat: no-repeat;
@@ -89,7 +87,7 @@
         .integrationTitle {
             font-size: 14px;
             font-weight: 500;
-            color: #AFB9D4;
+            color: var.$color-text-semi-transparent;
         }
 
         .integrationLevelWrp {
@@ -107,8 +105,8 @@
         width: 90%;
         height: 195px;
         align-self: center;
-        background-color: #2D2D35;
-        border: 1px solid #282830;
+        background-color: var.$footer-bg;
+        border: 1px solid var.$color-dark-gray-stroke;
         border-radius: 12px;
     }
 
@@ -140,7 +138,7 @@
                     font-size: 12px;
                     margin: 0;
                     font-weight: 500;
-                    color: #AFB9D4;
+                    color: var.$color-text-semi-transparent;
                 }
             }
 
@@ -161,7 +159,7 @@
         .commentsSectionTitle {
             font-weight: 500;
             font-size: 14px;
-            color: #AFB9D4;
+            color: var.$color-text-semi-transparent;
         }
 
         .commentsAmount {
