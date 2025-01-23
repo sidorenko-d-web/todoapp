@@ -10,7 +10,7 @@ import brilliantIcon from '../../assets/icons/integration_brilliant.svg';
 import { IntegrationComment } from '../../components/integrations/IntegrationComment';
 
 const commentsData = [
-    { id: '1', username: 'user1', comment: 'comment text 1', isPositive: true, level: 1, reward: 100 },
+    { id: '1', username: 'user1', comment: 'comment text 1', isPositive: true, level: 0, reward: 100 },
     { id: '2', username: 'user2', comment: 'comment text 2', isPositive: false, level: 2, reward: 200 },
     { id: '3', username: 'user3', comment: 'comment text 3', isPositive: true, level: 3, reward: 300 },
     { id: '4', username: 'user4', comment: 'comment text 4', isPositive: false, level: 4, reward: 400 },
