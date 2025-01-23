@@ -24,6 +24,7 @@
         font-weight: 600;
         width: 100%;
         text-align: center;
+        margin-bottom: 0;
     }
 
     .statsUnderTitleWrp {
@@ -43,13 +44,25 @@
             display: flex;
             align-self: center;
             gap: 5px;
-            .stat {
-                font-size: 14px;
-                font-weight: 500;
+            margin-top: 5px;
+
+            .statWrp {
+                display: flex;
+                align-items: center;
+                gap: 2px;   
+
+                height: fit-content;
                 padding: 5px;
                 padding-left: 7px;
                 border-radius: 10px;
                 background-color: #212129;
+
+                .stat {
+                    font-size: 14px;
+                    font-weight: 500;
+                    margin: 0;
+                    white-space: nowrap;
+                }
             }
         }
 
@@ -62,29 +75,35 @@
             background-image: url('../../assets/icons/stats_button.svg');
             background-repeat: no-repeat;
             background-position: center;
-            background-size: contain; 
+            background-size: contain;
             margin-right: 15px;
             background-size: 50%;
         }
-        
-    }   
+
+    }
 
     .integrationNameWrp {
         width: 90%;
         display: flex;
         justify-content: space-between;
         align-self: center;
-        
+
+        margin-top: 10px;
+
         .integrationTitle {
             font-size: 14px;
             font-weight: 500;
             color: #AFB9D4;
         }
 
-        .integrationLevel {
-            font-size: 14px;
-            font-weight: 500;
-            color: #fff;
+        .integrationLevelWrp {
+            display: flex;
+            gap: 5px;
+            .integrationLevel {
+                font-size: 14px;
+                font-weight: 500;
+                color: #fff;
+            }
         }
     }
 
@@ -117,18 +136,23 @@
             border-radius: 12px;
             gap: 5px;
 
+            .typeWrp {
+                display: flex;
+                gap: 2px;
+
+                .type {
+                    font-size: 12px;
+                    margin: 0;
+                    font-weight: 500;
+                    color: #AFB9D4;
+                }
+            }
+
             .amount {
                 font-size: 16px;
                 font-weight: 500;
                 color: white;
                 margin: 0;
-            }
-
-            .type {
-                font-size: 12px;
-                margin: 0;
-                font-weight: 500;
-                color: #AFB9D4;
             }
         }
     }
