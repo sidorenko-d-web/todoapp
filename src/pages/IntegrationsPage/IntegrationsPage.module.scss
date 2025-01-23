@@ -15,9 +15,6 @@
 
     margin: 0;
 
-    font-family: 'Inter', sans-serif;
-
-
     .pageTitle {
         font-size: 20px;
         font-weight: 600;
@@ -174,9 +171,8 @@
     }
 
     .commentsWrp {
-        width: fit-content;
-        padding-left: 20px;
-        padding-right: 20px;
+        width: 90%;
+        
         display: flex;
         flex-direction: column;
         align-items: center;
