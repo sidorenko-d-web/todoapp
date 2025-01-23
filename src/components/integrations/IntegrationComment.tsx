@@ -1,14 +1,38 @@
 import styles from './IntegrationComment.module.scss';
 
-export const IntegrationComment: React.FC = () => {
+import coinIcon from '../../assets/icons/coin.svg';
+
+interface IntegrationCommentProps {
+    id: string;
+    username: string;
+    comment: string;
+    isPositive: boolean;
+    level: number;
+    reward: number;
+}
+
+export const IntegrationComment: React.FC<IntegrationCommentProps> = ({ id, username, comment, isPositive, level, reward }) => {
     return (
         <div className={styles.wrp}>
-            <p className={styles.username}>Username: </p>
-            <p className={styles.commentText}>Comments text positive or negative</p>
-
+            <div className={styles.usernameAndComment}>
+                <p className={styles.username}>{username}:</p>
+                {isPositive
+                    ? <p className={styles.positiveCommentText}>{comment}</p>
+                    : <p className={styles.negativeCommentText}>{comment}</p>
+                }
+            </div>
+            <div className={styles.progressWrp}>
+                <div className={styles.amountAndRewardWrp}>
+                    <p className={styles.amount}>{level}/5</p>
+                    <div className={styles.rewardWrp}>
+                        <p className={styles.reward}>+{reward}</p>
+                        <img src={coinIcon} />
+                    </div>
+                </div>
+            </div>
             <div className={styles.thumbs}>
-                <button className={styles.thumbsUp}/>
-                <button className={styles.thumbsDown}/>
+                <button className={styles.thumbsUp} />
+                <button className={styles.thumbsDown} />
             </div>
         </div>
     )

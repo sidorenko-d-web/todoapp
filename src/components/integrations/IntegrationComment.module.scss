@@ -1,5 +1,5 @@
 .wrp {
-    width: 90%;
+    width: 90vw;
     height: 190px;
     display: flex;
     flex-direction: column;
@@ -8,17 +8,55 @@
     gap: 20px;
     padding: 10px;
 
-    .username {
-        font-size: 14px;
-        font-weight: 500;
-        margin: 0;
-        margin-bottom: 10px;
+    .usernameAndComment {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .username {
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0;
+            color: #2F80ED;
+        }
+    
+        .positiveCommentText {
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0;
+            color: #219653;
+        }
+
+        .negativeCommentText {
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0;
+            color: #E84949;
+        }
     }
 
-    .commentText {
-        font-size: 14px;
-        font-weight: 500;
-        margin: 0;
+    .progressWrp {
+        .amountAndRewardWrp {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            .amount {
+                font-size: 12px;
+                font-weight: 500;
+                color: #AFB9D4;
+                margin: 0;
+            }
+
+            .rewardWrp {
+                display: flex;
+                gap: 5px;
+                .reward {
+                    color: #fff;
+                    font-size: 12px;
+                    font-weight: 500;
+                    margin: 0;
+                }
+            }
+        }
     }
 
     .thumbs {
