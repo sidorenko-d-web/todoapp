@@ -61,5 +61,10 @@ export const IntegrationsPage: React.FC = () => {
                     </div>
                 </div>
             </div>
+            <div className={styles.commentsSectionTitleWrp}>
+                <p className={styles.commentsSectionTitle}>Комментарии</p>
+                <p className={styles.commentsAmount}>0/3</p>
+            </div>
+            
         </div>);
 }
