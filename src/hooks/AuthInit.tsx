@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSignInMutation } from '../redux';
+import { LoadingScreen } from '../components/shared/LoadingScreen';
 
 type AuthInitProps = {
   children: React.ReactNode;
@@ -41,7 +42,7 @@ export function AuthInit({ children }: AuthInitProps) {
   }, [signIn]);
 
   if (isLoading && !isAuthDone) {
-    return <div>Авторизация...</div>;
+    return <LoadingScreen />;
   }
 
   if (isError) {
