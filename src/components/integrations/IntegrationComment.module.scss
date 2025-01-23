@@ -1,0 +1,56 @@
+.wrp {
+    width: 90%;
+    height: 190px;
+    display: flex;
+    flex-direction: column;
+    background-color: #1C1D22;
+    border-radius: 10px;
+    gap: 20px;
+    padding: 10px;
+
+    .username {
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0;
+        margin-bottom: 10px;
+    }
+
+    .commentText {
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    .thumbs {
+        display: flex;
+        gap: 10px;
+        
+        .thumbsUp {
+            height: 40px;
+            width: 40px;
+            border-radius: 10px;
+            background-color: #219653;
+
+            border: none;
+            background-image: url('../../assets/icons/thumbs_up.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            background-size: 50%;
+        }
+
+        .thumbsDown {
+            height: 40px;
+            width: 40px;
+            border-radius: 10px;
+            background-color: #E84949;
+
+            border: none;
+            background-image: url('../../assets/icons/thumbs_down.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            background-size: 50%;
+        }
+    }
+}

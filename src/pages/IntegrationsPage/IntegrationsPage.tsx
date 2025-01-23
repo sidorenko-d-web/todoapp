@@ -6,6 +6,7 @@ import subscribersIcon from '../../assets/icons/subscribers.svg';
 import viewsIcon from '../../assets/icons/views.svg';
 import coinIcon from '../../assets/icons/coin.svg';
 import brilliantIcon from '../../assets/icons/integration_brilliant.svg';
+import { IntegrationComment } from '../../components/integrations/IntegrationComment';
 
 export const IntegrationsPage: React.FC = () => {
     return (
@@ -65,6 +66,8 @@ export const IntegrationsPage: React.FC = () => {
                 <p className={styles.commentsSectionTitle}>Комментарии</p>
                 <p className={styles.commentsAmount}>0/3</p>
             </div>
+
+            <IntegrationComment/>
             
         </div>);
 }
