@@ -28,8 +28,8 @@ export function AuthInit({ children }: AuthInitProps) {
         console.log(authResponse)
 
 
-        localStorage.setItem('access_token', authResponse.access_token);
-        localStorage.setItem('refresh_token', authResponse.refresh_token);
+        localStorage.setItem('accessToken', authResponse.access_token);
+        localStorage.setItem('refreshToken', authResponse.refresh_token);
 
         setIsAuthDone(true);
       } catch (err) {
