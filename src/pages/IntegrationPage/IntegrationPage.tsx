@@ -5,10 +5,7 @@ import styles from './IntegrationPage.module.scss';
 import { useParams } from 'react-router-dom';
 
 import { useGetIntegrationQuery } from '../../redux';
-import { IntegrationComment } from '../../components/integration/IntegrationComment';
-import { Integration } from '../../components/integration/Integration';
-import { IntegrationStats } from '../../components/integration/IntegrationStats/IntegrationStats';
-import { IntegrationStatsMini } from '../../components/integration/IntegrationStatsMini/IntegrationStatsMini';
+import { Integration, IntegrationComment, IntegrationStats, IntegrationStatsMini } from '../../components';
 
 
 interface Comment {
