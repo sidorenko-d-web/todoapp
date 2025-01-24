@@ -1,1 +1,1 @@
-export * from './tasks/TaskCard/TaskCard'
+export * from './tasks'
