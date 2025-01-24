@@ -12,7 +12,7 @@ import { setCredentials, signOut } from '../slices';
 export const baseQuery = fetchBaseQuery({
   baseUrl: 'https://bbajd7fltqec6462cm1j.containers.yandexcloud.net',
   prepareHeaders: (headers, { getState }) => {
-    const token = localStorage.getItem('access_token');
+    const token = (getState() as RootState).auth.accessToken;
     headers.set('X-Authorization', token || '');
     return headers;
   },
