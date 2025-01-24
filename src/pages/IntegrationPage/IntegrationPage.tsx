@@ -7,8 +7,8 @@ import { useParams } from 'react-router-dom';
 import subscribersIcon from '../../assets/icons/subscribers.svg';
 import viewsIcon from '../../assets/icons/views.svg';
 import coinIcon from '../../assets/icons/coin.svg';
-import brilliantIcon from '../../assets/icons/integration_brilliant.svg';
-import integrationPlaceholder from '../../assets/icons/integration_placeholder.svg';
+import integrationIcon from '../../assets/icons/integration-icon.svg';
+import integrationPlaceholder from '../../assets/icons/integration-placeholder.svg';
 
 import { IntegrationComment } from '../../components/integration/IntegrationComment';
 
@@ -74,7 +74,7 @@ export const IntegrationPage: React.FC = () => {
                 <p className={styles.integrationTitle}>Интеграция {integrationId}</p>
                 <div className={styles.integrationLevelWrp}>
                     <p className={styles.integrationLevel}>Brilliant</p>
-                    <img src={brilliantIcon} />
+                    <img src={integrationIcon} />
                 </div>
             </div>
 
