@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { useGetIntegrationQuery } from '../../redux';
 import { Integration, IntegrationComment, IntegrationStats, IntegrationStatsMini } from '../../components';
 
+import integrationIcon from '../../assets/icons/integration-icon.svg';
 
 interface Comment {
     id: string;
@@ -60,6 +61,13 @@ export const IntegrationPage: React.FC = () => {
                 <>
                     <IntegrationStatsMini views={data.views} subscribers={data.subscribers}/>
 
+                    <div className={styles.integrationNameWrp}>
+                        <p className={styles.integrationTitle}>Интеграция {data.campaign.company_name}</p>
+                        <div className={styles.integrationLevelWrp}>
+                            <p className={styles.integrationLevel}>Brilliant</p>
+                            <img src={integrationIcon} height={12} width={12} />
+                        </div>
+                    </div>
                     <Integration />
 
                     <IntegrationStats views={data.views} income={data.income} subscribers={data.subscribers} />
