@@ -7,7 +7,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules/
+/node_modules
+.env
+
 my-vue-app/node_modules
 dist
 dist-ssr
@@ -23,3 +25,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+/node_modules
