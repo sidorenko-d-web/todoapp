@@ -110,21 +110,6 @@ export const IntegrationPage: React.FC = () => {
                 <p className={styles.commentsAmount}>{currentCommentIndex + 1}/{commentsData.length}</p>
             </div>
 
-            {/* <>
-                {finished ? (
-                    <div style={{ width: '90%' }}>
-                        <p>Нет новых комментариев</p>
-                        <ProgressLine level={progress} />
-                    </div>
-                ) : (
-                    <IntegrationComment
-                        progres={progress}
-                        {...commentsData[currentCommentIndex]}
-                        onVote={handleVote}
-                    />
-                )}
-            </> */}
-
             <IntegrationComment
                 progres={progress}
                 {...commentsData[currentCommentIndex]}
