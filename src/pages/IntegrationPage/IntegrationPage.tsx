@@ -62,7 +62,6 @@ export const IntegrationPage: React.FC = () => {
 
                     <Integration />
 
-
                     <IntegrationStats views={data.views} income={data.income} subscribers={data.subscribers} />
                     <div className={styles.commentsSectionTitleWrp}>
                         <p className={styles.commentsSectionTitle}>Комментарии</p>
