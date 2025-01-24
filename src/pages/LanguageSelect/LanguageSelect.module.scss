@@ -1,0 +1,90 @@
+
+.root {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  background-color: #1C1C23;
+}
+
+.languageOptions {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 343px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.selected {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #2B8DFF;
+
+    .check {
+      opacity: 1;
+    }
+  }
+
+  img {
+    margin-right: 12px;
+    width: 24px;
+    height: 24px;
+  }
+
+  span {
+    color: white;
+    flex-grow: 1;
+    font-size: 16px;
+  }
+
+  .check {
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 6L9 17L4 12' stroke='%232B8DFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+}
+
+
+   .continueButton {
+     margin-bottom: 30px;
+     margin-top: auto;
+     width: 343px;  // Фиксированная ширина
+     background: #2B8DFF;
+     border-radius: 12px;
+     color: white;
+     border: none;
+     cursor: pointer;
+     transition: background 0.2s ease;
+
+     display: flex;
+     padding: 10px;
+     justify-content: center;
+     align-items: center;
+     gap: 5px;
+   }
+
+
+.selectText {
+  color: #505B78;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: -0.8px;
+  margin-bottom: 60px;
+
+
+}
