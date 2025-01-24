@@ -27,7 +27,6 @@ export function AuthInit({ children }: AuthInitProps) {
         }).unwrap();
         console.log(authResponse)
 
-
         localStorage.setItem('accessToken', authResponse.access_token);
         localStorage.setItem('refreshToken', authResponse.refresh_token);
 
