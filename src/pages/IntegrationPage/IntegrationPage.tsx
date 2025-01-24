@@ -33,10 +33,7 @@ const commentsData: Comment[] = [
 export const IntegrationPage: React.FC = () => {
     const { integrationId } = useParams<{ integrationId: string }>();
 
-
     const { data, error, isLoading } = useGetIntegrationQuery(`${integrationId}`);
-
-    console.log('integration data: ' + JSON.stringify(data));
 
     const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
 
@@ -44,26 +41,6 @@ export const IntegrationPage: React.FC = () => {
 
     const [progress, setProgress] = useState(0);
 
-
-    // const token = localStorage.getItem('access_token');
-    // console.log('access token:!  ' + token)
-    // useEffect(() => {
-    //     fetch("https://bbajd7fltqec6462cm1j.containers.yandexcloud.net/integrations/f83cccbc-5dd9-4ed6-b0d2-e384f85dc065", {
-    //         method: "GET",
-    //         headers: {
-    //             "X-Authorization": '' + token,
-    //             "Content-Type": "application/json"
-    //         }
-    //     })
-    //     .then(response => {
-    //         console.log("Response received:", response); // ✅ Check if response comes
-    //         return response.json();
-    //     })
-    //     .then(data => console.log("Data:", data)) // ✅ Log parsed data
-    //     .catch(error => console.error("Fetch error:", error)); // ✅ Log any errors
-    // }, []);
-
-    
     const handleVote = (isThumbsUp: boolean) => {
         if ((isThumbsUp && commentsData[currentCommentIndex].isPositive) || (!isThumbsUp && !commentsData[currentCommentIndex].isPositive)) {
             setProgress((prevProgress) => Math.min(prevProgress + 1, 5));
@@ -79,60 +56,69 @@ export const IntegrationPage: React.FC = () => {
     return (
         <div className={styles.wrp}>
             <h1 className={styles.pageTitle}>Интеграции</h1>
-            <div className={styles.statsUnderTitleWrp}>
-                <div className={styles.toCenterStats} />
-                <div className={styles.statsUnderTitle}>
-                    <div className={styles.statWrp}>
-                        <p className={styles.stat}>{data.views}</p>
-                        <img src={viewsIcon} height={12} width={12} />
+
+            {isLoading && <p>загрузка</p>}
+
+            {error && <p>Интеграция не найдена</p>}
+
+            {data && (
+                <>
+                    <div className={styles.statsUnderTitleWrp}>
+                        <div className={styles.toCenterStats} />
+                        <div className={styles.statsUnderTitle}>
+                            <div className={styles.statWrp}>
+                                <p className={styles.stat}>{data.views}</p>
+                                <img src={viewsIcon} height={12} width={12} />
+                            </div>
+
+                            <div className={styles.statWrp}>
+                                <p className={styles.stat}>{data.subscribers}</p>
+                                <img src={subscribersIcon} height={12} width={12} />
+                            </div>
+                        </div>
+                        <button className={styles.seeStatsButton}></button>
+                    </div>
+                    <div className={styles.integrationNameWrp}>
+                        <p className={styles.integrationTitle}>Интеграция {data.campaign.company_name}</p>
+                        <div className={styles.integrationLevelWrp}>
+                            <p className={styles.integrationLevel}>Brilliant</p>
+                            <img src={integrationIcon} height={12} width={12} />
+                        </div>
                     </div>
 
-                    <div className={styles.statWrp}>
-                        <p className={styles.stat}>{data.subscribers}</p>
-                        <img src={subscribersIcon} height={12} width={12} />
+                    <div className={styles.integration}>
+                        <img src={integrationPlaceholder} />
                     </div>
-                </div>
-                <button className={styles.seeStatsButton}></button>
-            </div>
-            <div className={styles.integrationNameWrp}>
-                <p className={styles.integrationTitle}>Интеграция {data.campaign.company_name}</p>
-                <div className={styles.integrationLevelWrp}>
-                    <p className={styles.integrationLevel}>Brilliant</p>
-                    <img src={integrationIcon} height={12} width={12}/>
-                </div>
-            </div>
 
-            <div className={styles.integration}>
-                <img src={integrationPlaceholder} />
-            </div>
-
-            <div className={styles.IntegrationtatsWrp}>
-                <div className={styles.Integrationtat}>
-                    <p className={styles.amount}>{data.subscribers}</p>
-                    <div className={styles.typeWrp}>
-                        <img src={subscribersIcon} />
-                        <p className={styles.type}>  Подписчики</p>
+                    <div className={styles.IntegrationtatsWrp}>
+                        <div className={styles.Integrationtat}>
+                            <p className={styles.amount}>{data.subscribers}</p>
+                            <div className={styles.typeWrp}>
+                                <img src={subscribersIcon} />
+                                <p className={styles.type}>  Подписчики</p>
+                            </div>
+                        </div>
+                        <div className={styles.Integrationtat}>
+                            <p className={styles.amount}>{data.views}</p>
+                            <div className={styles.typeWrp}>
+                                <img src={viewsIcon} />
+                                <p className={styles.type}>Просмотры</p>
+                            </div>
+                        </div>
+                        <div className={styles.Integrationtat}>
+                            <p className={styles.amount}>{data.income}</p>
+                            <div className={styles.typeWrp}>
+                                <img src={coinIcon} />
+                                <p className={styles.type}>Доход</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className={styles.Integrationtat}>
-                    <p className={styles.amount}>{data.views}</p>
-                    <div className={styles.typeWrp}>
-                        <img src={viewsIcon} />
-                        <p className={styles.type}>Просмотры</p>
+                    <div className={styles.commentsSectionTitleWrp}>
+                        <p className={styles.commentsSectionTitle}>Комментарии</p>
+                        <p className={styles.commentsAmount}>{currentCommentIndex + 1}/{commentsData.length}</p>
                     </div>
-                </div>
-                <div className={styles.Integrationtat}>
-                    <p className={styles.amount}>{data.income}</p>
-                    <div className={styles.typeWrp}>
-                        <img src={coinIcon} />
-                        <p className={styles.type}>Доход</p>
-                    </div>
-                </div>
-            </div>
-            <div className={styles.commentsSectionTitleWrp}>
-                <p className={styles.commentsSectionTitle}>Комментарии</p>
-                <p className={styles.commentsAmount}>{currentCommentIndex + 1}/{commentsData.length}</p>
-            </div>
+                </>
+            )}
 
             <IntegrationComment
                 progres={progress}
