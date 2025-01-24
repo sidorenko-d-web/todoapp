@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import MainPage from '../pages/MainPage.tsx';
 import { AppRoute } from '../constants';
-import { IntegrationPage } from '../pages/IntegrationPage/IntegrationPage.tsx';
-import TasksPage from '../pages/TasksPage/TasksPage.tsx';
+import { IntegrationPage } from '../pages/index.ts';
+import { TasksPage } from '../pages/index.ts';
+
 
 function AppRouter(): JSX.Element | null {
   const location = useLocation();
