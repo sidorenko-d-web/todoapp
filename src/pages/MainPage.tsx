@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Footer } from '../components/Footer';
 
 interface MainPageProps {
 
@@ -10,6 +11,7 @@ const MainPage: FC<MainPageProps> = ({}: MainPageProps) => {
   return (
     <>
       <h2>{text}</h2>
+      <Footer />
     </>
   );
 };

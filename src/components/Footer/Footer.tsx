@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useState } from "react";
 
 
+
 export const Footer = () => {
   const [activeButton, setActiveButton] = useState<number | null>(null);
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ export const Footer = () => {
              className={`${styles.footerItem} ${activeButton === item.id ? styles.active : ''}`}
              onClick={() => handleFooterItemClick(item.id, item.redirectTo)}
              >
-              <img src={item.icon} alt={item.title} className={styles.itemIcon} />
+              <item.icon />
             </button>
         ))}
     </div>

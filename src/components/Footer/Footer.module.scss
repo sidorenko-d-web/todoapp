@@ -10,7 +10,6 @@
     inset: auto 0 0 0;
 }
 
-
 .footerItem {
     padding: 8px 9px;
     justify-content: center;
@@ -19,18 +18,17 @@
     background: #373A43;
     border: 1px solid transparent;
 
+
+    fill: #D9DCE1;
     &.active {
+        fill: #FDFAE8;
         border-color: #FFF;
         background: #2F80ED;
     }
-
+    
     &:hover {
+        fill: #FDFAE8;
         border-color: #FFF;
         background: #2F80ED;
-    }   
-}
-
-.itemIcon {
-    width: 22px;
-    height: 22px;
+    } 
 }

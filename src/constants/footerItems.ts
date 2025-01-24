@@ -1,8 +1,8 @@
-import EyeIcon  from '../assets/icons/eye.svg';
-import HomeIcon from '../assets/icons/home.svg';
-import FlagIcon from '../assets/icons/flag.svg';
-import ListIcon from "../assets/icons/list.svg";
-import ShopIcon  from "../assets/icons/shop.svg";
+import { EyeIcon }  from '../assets/icons/eye';
+import { HomeIcon } from '../assets/icons/home';
+import { FlagIcon } from '../assets/icons/flag';
+import { ListIcon } from "../assets/icons/list";
+import { ShopIcon }  from "../assets/icons/shop";
 
 import { AppRoute } from './appRoute';
 
