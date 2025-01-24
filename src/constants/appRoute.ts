@@ -1,6 +1,7 @@
 export enum AppRoute {
   Main = '/',
-  Integrations = '/integrations',
+  integrations = '/integrations',
+  Integration = '/integration/:integrationId',
 
   NotFound = '*',
 }
