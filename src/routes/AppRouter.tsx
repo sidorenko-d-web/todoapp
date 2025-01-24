@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { Route, Routes, useLocation} from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import MainPage from '../pages/MainPage.tsx';
 import { AppRoute } from '../constants';
 import { IntegrationPage } from '../pages/IntegrationPage/IntegrationPage.tsx';
+import TasksPage from '../pages/TasksPage/TasksPage.tsx';
 
 function AppRouter(): JSX.Element | null {
   const location = useLocation();
@@ -15,6 +16,7 @@ function AppRouter(): JSX.Element | null {
     <Routes>
       <Route path={AppRoute.Main} element={<MainPage />} />
       <Route path={AppRoute.Integration} element={<IntegrationPage/>} />
+      <Route path={AppRoute.Tasks} element={<TasksPage />} />
     </Routes>
   );
 }
