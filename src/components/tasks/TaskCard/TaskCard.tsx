@@ -80,9 +80,9 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       {type === 'progress' && (
         <section className={s.progressType}>
           <div className={s.progressTypeSteps}>
-            <img src={circleIcon} className={s.circle} height={18} width={18} alt={'step'}/>
-            <img src={circleIcon} className={s.circle} height={18} width={18} alt={'step'}/>
-            <img src={circleIcon} className={s.circle} height={18} width={18} alt={'step'}/>
+            <img src={circleIcon} height={18} width={18} alt={'step'}/>
+            <img src={circleIcon} height={18} width={18} alt={'step'}/>
+            <img src={circleIcon} height={18} width={18} alt={'step'}/>
           </div>
           <div className={s.progressTypeReward}>
             <span className={s.reward}>10 - 1000 <img src={coinIcon} height={14} width={14} alt={'income'} /></span>
