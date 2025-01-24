@@ -3,39 +3,41 @@ import styles from './IntegrationComment.module.scss';
 import coinIcon from '../../assets/icons/coin.svg';
 import ProgressLine from './ProgressLine/ProgressLine';
 
+
 interface IntegrationCommentProps {
-    id: string;
     username: string;
     comment: string;
     isPositive: boolean;
-    level: number;
-    reward: number;
+    progres: number;
+    onVote: (isThumbsUp: boolean) => void;
+    finished: boolean;
 }
 
-export const IntegrationComment: React.FC<IntegrationCommentProps> = ({ id, username, comment, isPositive, level, reward }) => {
+export const IntegrationComment: React.FC<IntegrationCommentProps> = ({ username, comment, isPositive, progres, onVote, finished }) => {
     return (
         <div className={styles.wrp}>
-            <div className={styles.usernameAndComment}>
+            {!finished ? <div className={styles.usernameAndComment}>
                 <p className={styles.username}>{username}:</p>
                 {isPositive
                     ? <p className={styles.positiveCommentText}>{comment}</p>
                     : <p className={styles.negativeCommentText}>{comment}</p>
                 }
-            </div>
+            </div> : null}
             <div className={styles.progressWrp}>
+                {finished ? <p className={styles.noComment}>Нет новых комментариев</p> : null}
                 <div className={styles.amountAndRewardWrp}>
-                    <p className={styles.amount}>{level}/5</p>
+                    <p className={styles.amount}>{progres}/5</p>
                     <div className={styles.rewardWrp}>
-                        <p className={styles.reward}>+{reward}</p>
+                        <p className={styles.reward}>+100</p>
                         <img src={coinIcon} />
                     </div>
                 </div>
-                <ProgressLine level={level} />
+                <ProgressLine level={progres} />
             </div>
-            <div className={styles.thumbs}>
-                <button className={styles.thumbsUp} />
-                <button className={styles.thumbsDown} />
-            </div>
+            {!finished ? <div className={styles.thumbs}>
+                <button className={styles.thumbsUp} onClick={() => onVote(true)} />
+                <button className={styles.thumbsDown} onClick={() => onVote(false)} />
+            </div> : null}
         </div>
     )
 }

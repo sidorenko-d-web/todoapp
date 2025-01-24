@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import styles from './IntegrationPage.module.scss';
+
+import { useParams } from 'react-router-dom';
 
 import subscribersIcon from '../../assets/icons/subscribers.svg';
 import viewsIcon from '../../assets/icons/views.svg';
@@ -10,16 +12,46 @@ import integrationPlaceholder from '../../assets/icons/integration_placeholder.s
 
 import { IntegrationComment } from '../../components/integration/IntegrationComment';
 
-const commentsData = [
-    { id: '1', username: 'user1', comment: 'comment text 1', isPositive: true, level: 0, reward: 100 },
-    { id: '2', username: 'user2', comment: 'comment text 2', isPositive: false, level: 2, reward: 200 },
-    { id: '3', username: 'user3', comment: 'comment text 3', isPositive: true, level: 3, reward: 300 },
-    { id: '4', username: 'user4', comment: 'comment text 4', isPositive: false, level: 4, reward: 400 },
-    { id: '5', username: 'user5', comment: 'comment text 5', isPositive: true, level: 5, reward: 500 }
+
+interface Comment {
+    id: string;
+    username: string;
+    comment: string;
+    isPositive: boolean;
+}
+
+const commentsData: Comment[] = [
+    { id: '1', username: 'user1', comment: 'Great job!', isPositive: true },
+    { id: '2', username: 'user2', comment: 'Not helpful...', isPositive: false },
+    { id: '3', username: 'user3', comment: 'Loved it!', isPositive: true },
+    { id: '4', username: 'user4', comment: 'Needs improvement.', isPositive: false },
+    { id: '5', username: 'user5', comment: 'Great.', isPositive: true },
+    { id: '6', username: 'user6', comment: 'Needs improvement.', isPositive: false },
+    { id: '7', username: 'user7', comment: 'Cool.', isPositive: true },
 ];
-
-
 export const IntegrationPage: React.FC = () => {
+    const { integrationId } = useParams<{ integrationId: string }>();
+
+
+    const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
+
+    const [finished, setFinished] = useState(false);
+
+    const [progress, setProgress] = useState(0);
+
+
+    const handleVote = (isThumbsUp: boolean) => {
+        if ((isThumbsUp && commentsData[currentCommentIndex].isPositive) || (!isThumbsUp && !commentsData[currentCommentIndex].isPositive)) {
+            setProgress((prevProgress) => Math.min(prevProgress + 1, 5));
+        }
+
+        if (currentCommentIndex + 1 < commentsData.length) {
+            setCurrentCommentIndex((prevIndex) => prevIndex + 1);
+        } else {
+            setFinished(true);
+        }
+    };
+
     return (
         <div className={styles.wrp}>
             <h1 className={styles.pageTitle}>Интеграции</h1>
@@ -39,7 +71,7 @@ export const IntegrationPage: React.FC = () => {
                 <button className={styles.seeStatsButton}></button>
             </div>
             <div className={styles.integrationNameWrp}>
-                <p className={styles.integrationTitle}>Интеграция 3</p>
+                <p className={styles.integrationTitle}>Интеграция {integrationId}</p>
                 <div className={styles.integrationLevelWrp}>
                     <p className={styles.integrationLevel}>Brilliant</p>
                     <img src={brilliantIcon} />
@@ -47,7 +79,7 @@ export const IntegrationPage: React.FC = () => {
             </div>
 
             <div className={styles.integration}>
-                <img src={integrationPlaceholder}/>
+                <img src={integrationPlaceholder} />
             </div>
 
             <div className={styles.IntegrationtatsWrp}>
@@ -75,10 +107,29 @@ export const IntegrationPage: React.FC = () => {
             </div>
             <div className={styles.commentsSectionTitleWrp}>
                 <p className={styles.commentsSectionTitle}>Комментарии</p>
-                <p className={styles.commentsAmount}>{commentsData.length}/20</p>
+                <p className={styles.commentsAmount}>{currentCommentIndex + 1}/{commentsData.length}</p>
             </div>
 
-            <IntegrationComment {...commentsData[0]} />
+            {/* <>
+                {finished ? (
+                    <div style={{ width: '90%' }}>
+                        <p>Нет новых комментариев</p>
+                        <ProgressLine level={progress} />
+                    </div>
+                ) : (
+                    <IntegrationComment
+                        progres={progress}
+                        {...commentsData[currentCommentIndex]}
+                        onVote={handleVote}
+                    />
+                )}
+            </> */}
 
+            <IntegrationComment
+                progres={progress}
+                {...commentsData[currentCommentIndex]}
+                onVote={handleVote}
+                finished={finished}
+            />
         </div>);
 }
