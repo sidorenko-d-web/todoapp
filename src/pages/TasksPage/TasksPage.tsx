@@ -5,7 +5,7 @@ import coinIcon from '../../assets/icons/coin.svg';
 import s from './TasksPage.module.scss';
 import { DailyTasks, SocialTasks, TopTasks } from '../../components';
 
-const TasksPage: React.FC = () => {
+export const TasksPage: React.FC = () => {
   return (
     <main className={s.page}>
       <section className={s.topSection}>
@@ -23,5 +23,3 @@ const TasksPage: React.FC = () => {
     </main>
   );
 };
-
-export default TasksPage;
