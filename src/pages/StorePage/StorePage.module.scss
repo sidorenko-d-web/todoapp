@@ -1,0 +1,83 @@
+@use '/src/assets/styles' as *;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 0 15px;
+
+  .titleWrapper {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .title {
+      text-align: center;
+      font-size: 20;
+      font-weight: 600;
+      color: $color-white;
+    }
+
+    .scores {
+      display: flex;
+      gap: 5px;
+
+      .scoresItem {
+        background: $dark-blue-bg;
+        padding: 4px 7px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+
+        img {
+          width: 14px;
+          height: 14px;
+          margin-left: 2px;
+        }
+
+        p {
+          font-weight: 500;
+          color: $color-white;
+        }
+      }
+    }
+  }
+
+  .navs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    .coloredNav {
+      .tabItem {
+        &:first-child {
+          background: $accent-blue;
+        }
+      }
+    }
+  }
+
+  .cardsWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .personCards {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+
+    h2{
+      text-align: center;
+      color: $half-transparent-text;
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+}

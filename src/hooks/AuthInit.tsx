@@ -13,27 +13,23 @@ export function AuthInit({ children }: AuthInitProps) {
   useEffect(() => {
     (async () => {
       try {
-        const ipData = await axios
-          .get('https://ipapi.co/json/')
-          .then(res => res.data);
+        const ipData = await axios.get('https://ipapi.co/json/').then(res => res.data);
 
-        const init_data = window.Telegram.WebApp.initData;
-        // const init_data = "query_id%3DAAHa-fEBAwAAANr58QFkP1lV%26user%3D%257B%2522id%2522%253A6475086298%252C%2522first_name%2522%253A%2522%25D0%2590%25D0%25BD%25D0%25B4%25D1%2580%25D0%25B5%25D0%25B9%2522%252C%2522last_name%2522%253A%2522%25D0%2593%25D0%25B5%25D1%2580%25D0%25B0%25D1%2581%25D0%25B8%25D0%25BC%25D0%25BE%25D0%25B2%2522%252C%2522username%2522%253A%2522De_Geras%2522%252C%2522language_code%2522%253A%2522ru%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FGzJ9TEsOx7Oc1JJcHr-lzeFQB6alew8O_qoBdhO-6gGt7kZEiGJ6urTqgGlF9_Ye.svg%2522%257D%26auth_date%3D1737553293%26signature%3D8_Ghv6rhUKC-V-8rlrIrARtiuAPSOyVN_uzP3LXfQBHnj4RRBGnmi7TwLZVfbGFTgPO4Sgv48Bz_jAyvW3oPAA%26hash%3D9b2d6a17b75c7f860c38048f47ec609892af6edba1117df226c4e93fe75ca7b8&tgWebAppVersion=7.2&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22header_bg_color%22%3A%22%231c1c1c%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22hint_color%22%3A%22%23ffffff%22%2C%22link_color%22%3A%22%23007aff%22%2C%22bg_color%22%3A%22%23282828%22%2C%22destructive_text_color%22%3A%22%23ff453a%22%2C%22button_color%22%3A%22%23007aff%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22section_bg_color%22%3A%22%23282828%22%7D";
+        // const init_data = window.Telegram.WebApp.initData;
+        const init_data = `query_id%3DAAEYoFtBAAAAABigW0GbVpKe%26user%3D%257B%2522id%2522%253A1096523800%252C%2522first_name%2522%253A%2522%25D0%2594%25D0%25BC%25D0%25B8%25D1%2582%25D1%2580%25D0%25B8%25D0%25B9%2522%252C%2522last_name%2522%253A%2522%25D0%25A1%25D0%25B8%25D0%25B4%25D0%25BE%25D1%2580%25D0%25B5%25D0%25BD%25D0%25BA%25D0%25BE%2522%252C%2522username%2522%253A%2522big_banka%2522%252C%2522language_code%2522%253A%2522ru%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FUIap5sUEQ_kQmYD3jRj-ne9SxNjI5c3BYBgY6A_pxBk.svg%2522%257D%26auth_date%3D1737660808%26signature%3DMjz82dnGsz8StB_nGEqokrZYEYjIZ-vE6dlwNnZw8zW6b3hqDphVLgeJuNG5WtdYfuqEfZlq-NWHd4-I1xRzCQ%26hash%3Dca1da915de9ce1d729d460889d055e48d90090d0e777023fbe2f4b3caeda69af&tgWebAppVersion=8.0&tgWebAppPlatform=weba&tgWebAppThemeParams=%7B"bg_color"%3A"%23212121"%2C"text_color"%3A"%23ffffff"%2C"hint_color"%3A"%23aaaaaa"%2C"link_color"%3A"%238774e1"%2C"button_color"%3A"%238774e1"%2C"button_text_color"%3A"%23ffffff"%2C"secondary_bg_color"%3A"%230f0f0f"%2C"header_bg_color"%3A"%23212121"%2C"accent_text_color"%3A"%238774e1"%2C"section_bg_color"%3A"%23212121"%2C"section_header_text_color"%3A"%23aaaaaa"%2C"subtitle_text_color"%3A"%23aaaaaa"%2C"destructive_text_color"%3A"%23e53935"%7D`;
 
         const authResponse = await signIn({
           init_data: init_data,
           ip: ipData.ip,
           country: ipData.country,
         }).unwrap();
-        console.log(authResponse)
-
+        console.log(authResponse);
 
         localStorage.setItem('access_token', authResponse.access_token);
         localStorage.setItem('refresh_token', authResponse.refresh_token);
 
         setIsAuthDone(true);
       } catch (err) {
-
         console.error('Ошибка при авторизации:', err);
         setIsAuthDone(true);
       }

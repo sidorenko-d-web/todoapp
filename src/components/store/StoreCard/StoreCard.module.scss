@@ -1,0 +1,314 @@
+@use 'sass:color';
+@use '/src/assets/styles' as *;
+
+.storeCard {
+  background-color: $secondary-bg;
+  align-self: stretch;
+  padding: 10px;
+  border-radius: 12px;
+  .header {
+    display: flex;
+    gap: 10px;
+    .image {
+      border: 2px solid $accent-blue;
+      border-radius: 8px;
+      background: $third-bg;
+      flex-direction: column;
+      display: flex;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      aspect-ratio: 1;
+      position: relative;
+      p {
+        background: $accent-blue;
+        position: absolute;
+        bottom: 0;
+        transform: translateY(50%);
+        font-size: 12px;
+        padding: 2px 5px;
+        border-radius: 4px;
+      }
+      .disabledImageIcon {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+
+        g {
+          color: $light-gray-bg;
+        }
+      }
+      .disabledImage {
+        opacity: 0.3;
+      }
+    }
+
+    .purpleImage {
+      @extend .image;
+      border-color: $purple;
+      p {
+        background-color: $purple;
+      }
+    }
+    .redImage {
+      @extend .image;
+      border-color: red;
+      p {
+        background-color: red;
+      }
+    }
+
+    .title {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      h3 {
+        color: $color-white;
+        font-weight: 500;
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+      .level {
+        font-weight: 500;
+        font-size: 12px;
+        color: $accent-blue;
+        line-height: 12px;
+      }
+
+      .colorPurple {
+        @extend .level;
+        color: $purple;
+      }
+
+      .colorRed {
+        @extend .level;
+        color: red;
+      }
+
+      .stats {
+        display: flex;
+        margin-top: auto;
+        gap: 15px;
+
+        .statsItem {
+          display: flex;
+          align-items: center;
+          gap: 2px;
+          img {
+            width: 14px;
+            height: 14px;
+          }
+          p {
+            color: $color-white;
+            font-size: 14px;
+          }
+        }
+      }
+      .disabledStats {
+        opacity: 0.3;
+      }
+    }
+    .variant {
+      background: $accent-blue;
+      opacity: 0.5;
+      align-self: flex-start;
+      padding: 2px 5px;
+      border-radius: 4px;
+      p {
+        color: $dark-grey-border;
+        font-size: 12px;
+        line-height: 12px;
+      }
+    }
+
+    .variantPurple {
+      @extend .variant;
+      background-color: $purple;
+    }
+    .variantRed {
+      @extend .variant;
+      background-color: red;
+    }
+
+    .personIcon {
+      width: 16px;
+      height: 16px;
+      background: $half-tgransparent-bg;
+      border-radius: 4px;
+      padding: 2px;
+      opacity: 0.5;
+    }
+  }
+
+  .progress {
+    margin-top: 20px;
+    .text {
+      display: flex;
+      justify-content: space-between;
+
+      p {
+        font-size: 12px;
+        line-height: 12px;
+        color: $half-transparent-text;
+        font-weight: 500;
+      }
+      .goal {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        img {
+          width: 12px;
+          aspect-ratio: 1;
+        }
+      }
+    }
+
+    .progressBar {
+      margin-top: 5px;
+      border: 1px solid $dark-grey-border;
+      border-radius: 6px;
+      overflow: hidden;
+      background: $gray;
+      .done {
+        height: 16px;
+        background: $accent-blue;
+      }
+
+      .donePurple {
+        @extend .done;
+        background-color: $purple;
+      }
+      .doneRed {
+        @extend .done;
+        background-color: red;
+      }
+    }
+
+    .items {
+      display: flex;
+      margin-top: 5px;
+      gap: 5px;
+      .item {
+        border: 1px solid $accent-blue;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        background: $third-bg;
+        .itemImage {
+          width: 24px;
+          height: 24px;
+        }
+
+        .lock {
+          display: none;
+          width: 12px;
+          height: 12px;
+          position: absolute;
+        }
+      }
+
+      .itemLocked {
+        @extend .item;
+        opacity: 0.5;
+        border: transparent;
+
+        .lock {
+          display: block;
+        }
+      }
+
+      .itemPurple {
+        @extend .item;
+        border-color: $purple;
+      }
+      .itemRed {
+        @extend .item;
+        border-color: red;
+      }
+    }
+  }
+
+  .actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: center;
+      font-weight: 500;
+      align-items: center;
+      background: $gray;
+      border: 1px solid $dark-grey-border;
+      color: $color-white;
+      gap: 5px;
+
+      &:first-child {
+        background: $accent-blue;
+        border: 1px solid $dark-blue-border;
+        flex: 1;
+
+        img {
+          width: 14px;
+          aspect-ratio: 1;
+        }
+      }
+
+      &:last-child {
+        background: $gray;
+        opacity: 0.3;
+        flex: 1;
+        border: none;
+      }
+    }
+  }
+
+  .disabledUpgradeActions {
+    background: color.scale($accent-blue, $alpha: -80%);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    gap: 2px;
+    align-items: center;
+    margin-top: 20px;
+    img {
+      width: 14px;
+      height: 14px;
+    }
+    p {
+      line-height: 14px;
+      color: $grayed-white;
+      font-weight: 500;
+    }
+  }
+
+  .disabledActions {
+    @extend .disabledUpgradeActions;
+    background: $gray;
+    border: 1px solid $dark-grey-border;
+    width: 100%;
+
+    color: $color-white;
+  }
+
+  .disabledText {
+    color: $half-transparent-text;
+    margin-top: 20px;
+    line-height: 14.4px;
+    font-size: 12px;
+    font-weight: 500;
+
+    .itemNamePurple {
+      color: $purple;
+    }
+    .itemNameBlue {
+      color: $accent-blue;
+    }
+  }
+}
