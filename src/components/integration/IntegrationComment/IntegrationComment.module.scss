@@ -1,4 +1,4 @@
-@use '../../assets/styles/index.scss' as var;
+@use '../../../assets/styles/index.scss' as var;
 
 .wrp {
     width: 85vw;
@@ -71,7 +71,7 @@
             background-color: var.$color-green;
 
             border: none;
-            background-image: url('../../assets/icons/thumbs-up.svg');
+            background-image: url('../../../assets/icons/thumbs-up.svg');
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
@@ -85,7 +85,7 @@
             background-color: var.$color-red;
 
             border: none;
-            background-image: url('../../assets/icons/thumbs-down.svg');
+            background-image: url('../../../assets/icons/thumbs-down.svg');
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;

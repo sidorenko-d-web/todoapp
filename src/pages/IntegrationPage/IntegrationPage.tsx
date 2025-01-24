@@ -10,7 +10,7 @@ import coinIcon from '../../assets/icons/coin.svg';
 import integrationIcon from '../../assets/icons/integration-icon.svg';
 import integrationPlaceholder from '../../assets/icons/integration-placeholder.svg';
 
-import { IntegrationComment } from '../../components/integration/IntegrationComment';
+import { IntegrationComment } from '../../components/integration/IntegrationComment/IntegrationComment';
 
 
 interface Comment {

@@ -1,7 +1,7 @@
 import styles from './IntegrationComment.module.scss';
 
-import coinIcon from '../../assets/icons/coin.svg';
-import ProgressLine from './ProgressLine/ProgressLine';
+import coinIcon from '../../../assets/icons/coin.svg';
+import ProgressLine from '../ProgressLine/ProgressLine';
 
 
 interface IntegrationCommentProps {
