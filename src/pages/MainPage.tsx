@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { Footer } from '../components/Footer';
+
+import { Link } from 'react-router-dom';
 
 interface MainPageProps {
 
@@ -11,7 +12,8 @@ const MainPage: FC<MainPageProps> = ({}: MainPageProps) => {
   return (
     <>
       <h2>{text}</h2>
-      <Footer />
+      <Link to={'/tasks'}>Tasks</Link>
+
     </>
   );
 };
