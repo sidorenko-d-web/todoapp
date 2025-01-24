@@ -1,0 +1,46 @@
+@use '../../../assets/styles/index.scss' as var;
+
+
+.IntegrationStatsWrp {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 90%;
+    gap: 5px;
+    height: 53px;
+
+    margin-top: 10px;
+
+    .IntegrationStat {
+        display: flex;
+        padding: 5px;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 53px;
+        background-color: #1C1D22;
+        border-radius: 12px;
+        gap: 5px;
+
+        .typeWrp {
+            display: flex;
+            gap: 2px;
+
+            .type {
+                font-size: 12px;
+                margin: 0;
+                font-weight: 500;
+                color: var.$color-text-semi-transparent;
+            }
+        }
+
+        .amount {
+            font-size: 16px;
+            font-weight: 500;
+            color: white;
+            white-space: nowrap;
+            width: 100%;
+            text-align: center;
+            margin: 0;
+        }
+    }
+}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import styles from './IntegrationPage.module.scss';
 
@@ -6,12 +6,12 @@ import { useParams } from 'react-router-dom';
 
 import subscribersIcon from '../../assets/icons/subscribers.svg';
 import viewsIcon from '../../assets/icons/views.svg';
-import coinIcon from '../../assets/icons/coin.svg';
 import integrationIcon from '../../assets/icons/integration-icon.svg';
-import integrationPlaceholder from '../../assets/icons/integration-placeholder.svg';
-
-import { IntegrationComment } from '../../components/integration/IntegrationComment/IntegrationComment';
-import { useGetIntegrationQuery } from '../../redux/api/integrations/api';
+import { useGetIntegrationQuery } from '../../redux';
+import { IntegrationComment } from '../../components/integration/IntegrationComment';
+import { Integration } from '../../components/integration/Integration';
+import { IntegrationStats } from '../../components/integration/IntegrationStats/IntegrationStats';
+import { IntegrationStatsMini } from '../../components/integration/IntegrationStatsMini/IntegrationStatsMini';
 
 
 interface Comment {
@@ -30,6 +30,7 @@ const commentsData: Comment[] = [
     { id: '6', username: 'user6', comment: 'Needs improvement.', isPositive: false },
     { id: '7', username: 'user7', comment: 'Cool.', isPositive: true },
 ];
+
 export const IntegrationPage: React.FC = () => {
     const { integrationId } = useParams<{ integrationId: string }>();
 
@@ -63,56 +64,12 @@ export const IntegrationPage: React.FC = () => {
 
             {data && (
                 <>
-                    <div className={styles.statsUnderTitleWrp}>
-                        <div className={styles.toCenterStats} />
-                        <div className={styles.statsUnderTitle}>
-                            <div className={styles.statWrp}>
-                                <p className={styles.stat}>{data.views}</p>
-                                <img src={viewsIcon} height={12} width={12} />
-                            </div>
+                    <IntegrationStatsMini views={data.views} subscribers={data.subscribers}/>
 
-                            <div className={styles.statWrp}>
-                                <p className={styles.stat}>{data.subscribers}</p>
-                                <img src={subscribersIcon} height={12} width={12} />
-                            </div>
-                        </div>
-                        <button className={styles.seeStatsButton}></button>
-                    </div>
-                    <div className={styles.integrationNameWrp}>
-                        <p className={styles.integrationTitle}>Интеграция {data.campaign.company_name}</p>
-                        <div className={styles.integrationLevelWrp}>
-                            <p className={styles.integrationLevel}>Brilliant</p>
-                            <img src={integrationIcon} height={12} width={12} />
-                        </div>
-                    </div>
+                    <Integration />
 
-                    <div className={styles.integration}>
-                        <img src={integrationPlaceholder} />
-                    </div>
 
-                    <div className={styles.IntegrationtatsWrp}>
-                        <div className={styles.Integrationtat}>
-                            <p className={styles.amount}>{data.subscribers}</p>
-                            <div className={styles.typeWrp}>
-                                <img src={subscribersIcon} />
-                                <p className={styles.type}>  Подписчики</p>
-                            </div>
-                        </div>
-                        <div className={styles.Integrationtat}>
-                            <p className={styles.amount}>{data.views}</p>
-                            <div className={styles.typeWrp}>
-                                <img src={viewsIcon} />
-                                <p className={styles.type}>Просмотры</p>
-                            </div>
-                        </div>
-                        <div className={styles.Integrationtat}>
-                            <p className={styles.amount}>{data.income}</p>
-                            <div className={styles.typeWrp}>
-                                <img src={coinIcon} />
-                                <p className={styles.type}>Доход</p>
-                            </div>
-                        </div>
-                    </div>
+                    <IntegrationStats views={data.views} income={data.income} subscribers={data.subscribers} />
                     <div className={styles.commentsSectionTitleWrp}>
                         <p className={styles.commentsSectionTitle}>Комментарии</p>
                         <p className={styles.commentsAmount}>{currentCommentIndex + 1}/{commentsData.length}</p>
