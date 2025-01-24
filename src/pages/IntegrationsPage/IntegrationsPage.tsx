@@ -6,6 +6,7 @@ import subscribersIcon from '../../assets/icons/subscribers.svg';
 import viewsIcon from '../../assets/icons/views.svg';
 import coinIcon from '../../assets/icons/coin.svg';
 import brilliantIcon from '../../assets/icons/integration_brilliant.svg';
+import integrationPlaceholder from '../../assets/icons/integration_placeholder.svg';
 
 import { IntegrationComment } from '../../components/integrations/IntegrationComment';
 
@@ -46,7 +47,7 @@ export const IntegrationsPage: React.FC = () => {
             </div>
 
             <div className={styles.integration}>
-
+                <img src={integrationPlaceholder}/>
             </div>
 
             <div className={styles.integrationStatsWrp}>
@@ -77,11 +78,12 @@ export const IntegrationsPage: React.FC = () => {
                 <p className={styles.commentsAmount}>{commentsData.length}/20</p>
             </div>
 
-            <div className={styles.commentsWrp}>
+            {/* <div className={styles.commentsWrp}>
                 {commentsData.map(comment => (
                     <IntegrationComment key={comment.id} {...comment} />
                 ))}
-            </div>
+            </div> */}
+            <IntegrationComment {...commentsData[0]} />
 
         </div>);
 }
