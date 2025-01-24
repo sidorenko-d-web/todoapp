@@ -78,7 +78,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
         </section>
       )}
       {type === 'progress' && (
-        <section className={s.progressType}>
+        <section className={s.progressTypeSection}>
           <div className={s.progressTypeSteps}>
             <img src={circleIcon} height={18} width={18} alt={'step'}/>
             <img src={circleIcon} height={18} width={18} alt={'step'}/>
