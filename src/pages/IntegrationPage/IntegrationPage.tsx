@@ -4,9 +4,6 @@ import styles from './IntegrationPage.module.scss';
 
 import { useParams } from 'react-router-dom';
 
-import subscribersIcon from '../../assets/icons/subscribers.svg';
-import viewsIcon from '../../assets/icons/views.svg';
-import integrationIcon from '../../assets/icons/integration-icon.svg';
 import { useGetIntegrationQuery } from '../../redux';
 import { IntegrationComment } from '../../components/integration/IntegrationComment';
 import { Integration } from '../../components/integration/Integration';
