@@ -14,30 +14,30 @@ export const footerItems = [
         id: 0,
         title: "Магазин",
         icon: ShopIcon,
-        redirectTo: AppRoute.Main
+        redirectTo: AppRoute.Main // поменять
     },
     {
         id: 1, 
         title: "Интеграции",
         icon: EyeIcon,
-        redirectTo: AppRoute.Main
+        redirectTo: AppRoute.integrations
     },
     {
         id: 2,
         title: "Дом",
         icon: HomeIcon,
-        redirectTo: AppRoute.Main
+        redirectTo: AppRoute.Main // поменять ?
     },
     {
         id: 3, 
         title: "Продвижение",
         icon: FlagIcon,
-        redirectTo: AppRoute.Main
+        redirectTo: AppRoute.Main // поменять
     },
     {
         id: 4, 
         title: "Задания",
         icon: ListIcon,
-        redirectTo: AppRoute.Main
+        redirectTo: AppRoute.Tasks
     }
 ]
