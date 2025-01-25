@@ -12,6 +12,7 @@ const MainPage: FC<MainPageProps> = ({}: MainPageProps) => {
     <>
       <h2>{text}</h2>
       <Link to={'/tasks'}>Tasks</Link>
+      <Link to={'/promotion'}>Promotion</Link>
     </>
   );
 };
