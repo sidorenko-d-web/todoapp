@@ -13,7 +13,7 @@
         min-width: 118px;
         justify-content: space-between;
         border: 2px solid var.$color-dark-gray-stroke;
-        border-radius: 10px;
+        border-radius: 12px;
         background-color: var.$footer-bg;
 
         .clanWrp {
@@ -42,12 +42,16 @@
         background-color: var.$color-card-bg;
         width: 100%;
         padding: 5px;
+
+        border-radius: 12px;
+
+        gap: 10px;
         
         .info {
             display: flex;
             flex-direction: column;
             justify-content: start;
-            gap: 5px;
+            
 
             width: 100%;
 
@@ -86,9 +90,31 @@
         }
 
         .subscription {
-            height: 20px;
-            background-color: red;
-            margin-top: auto;
+            padding: 5px;
+
+            .subscriptionTextWrp {
+                display: flex;
+                justify-content: space-between;
+
+                .subscriptionText {
+                    font-size: 12px;
+                    font-weight: 500;
+                    margin: 0;
+                    color: var.$color-text-semi-transparent;
+                }
+
+                .subscriptionLevelWrp {
+                    display: flex;
+                    gap: 5px;
+
+                    .subscriptionLevel {
+                        font-size: 12px;
+                        font-weight: 500;
+                        color: var.$color-text-semi-transparent;
+                        margin: 0;
+                    }
+                }
+            }
         }
     }
 }

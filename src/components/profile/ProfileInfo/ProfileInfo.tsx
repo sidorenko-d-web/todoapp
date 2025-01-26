@@ -5,6 +5,9 @@ import styles from './ProfileInfo.module.scss';
 import profileImagePlaceholder from '../../../assets/icons/profile-icon-placeholder.svg';
 import clanIcon from '../../../assets/icons/clan-red.svg';
 import editIcon from '../../../assets/icons/edit.svg';
+import subscriptionLeveIcon from '../../../assets/icons/subscription-level.svg';
+
+import ProgressLine from "../../shared/ProgressLine/ProgressLine";
 
 export const ProfileInfo: React.FC = () => {
     return (
@@ -33,7 +36,15 @@ export const ProfileInfo: React.FC = () => {
                 </div>
                 
                 <div className={styles.subscription}>
+                    <div className={styles.subscriptionTextWrp}>
+                        <p className={styles.subscriptionText}>Подписка</p>
 
+                        <div className={styles.subscriptionLevelWrp}>
+                            <p className={styles.subscriptionLevel}>1/5</p>
+                            <img src={subscriptionLeveIcon}/>
+                        </div>
+                    </div>
+                    <ProgressLine level={1} color="red"/>
                 </div>
             </div>
             
