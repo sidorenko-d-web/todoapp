@@ -6,24 +6,30 @@ import clanIcon from '../../../assets/icons/clan-red.svg';
 import subscriberIcon from '../../../assets/icons/subscribers.svg';
 import fireIcon from '../../../assets/icons/fire.svg';
 
-export const ProfileStatsMini: React.FC = () => {
+interface ProfileStatsMiniProps {
+    subscribers: number;
+    daysInARow: number;
+    position: number;
+}
+
+export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({subscribers, daysInARow, position}) => {
     return (
         <div className={styles.wrp}>
             <div className={styles.toCenterStats}/>
 
             <div className={styles.statsWrp}>
                 <div className={styles.statWrp}>
-                    <p className={styles.stat}>#345</p>
+                    <p className={styles.stat}>{`#${position}`}</p>
                     <img src={clanIcon} width={14} height={14} />
                 </div>
 
                 <div className={styles.statWrp}>
-                    <p className={styles.stat}>223 567</p>
+                    <p className={styles.stat}>{subscribers}</p>
                     <img src={subscriberIcon} width={14} height={14} />
                 </div>
 
                 <div className={styles.statWrp}>
-                    <p className={styles.stat}>12</p>
+                    <p className={styles.stat}>{daysInARow}</p>
                     <img src={fireIcon} width={14} height={14} />
                 </div>
             </div>

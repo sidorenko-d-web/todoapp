@@ -9,12 +9,19 @@ import subscriptionLeveIcon from '../../../assets/icons/subscription-level.svg';
 
 import ProgressLine from "../../shared/ProgressLine/ProgressLine";
 
-export const ProfileInfo: React.FC = () => {
+interface ProfileInfoProps {
+    nickname: string;
+    blogName: string;
+    subscriptionIntegrationsLeft: number;
+    position: number;
+}
+
+export const ProfileInfo: React.FC<ProfileInfoProps> = ({nickname, blogName, subscriptionIntegrationsLeft, position}) => {
     return (
         <div className={styles.wrp}>
             <div className={styles.avatar}>
                 <div className={styles.clanWrp}>
-                    <p className={styles.position}>345</p>
+                    <p className={styles.position}>{`#${position}`}</p>
                     <img src={clanIcon} />
                 </div>
 
@@ -25,13 +32,13 @@ export const ProfileInfo: React.FC = () => {
             <div className={styles.infoCard}>
                 <div className={styles.info}>
                     <div className={styles.nicknameWrp}>
-                        <p className={styles.nickname}>Nickname</p>
+                        <p className={styles.nickname}>{nickname}</p>
                         <p className={styles.subscribers}>999</p>
                         <img className={styles.edit} src={editIcon} />
                     </div>
 
                     <p className={styles.blogName}>
-                        Blog name
+                        {blogName}
                     </p>
                 </div>
                 
@@ -40,11 +47,11 @@ export const ProfileInfo: React.FC = () => {
                         <p className={styles.subscriptionText}>Подписка</p>
 
                         <div className={styles.subscriptionLevelWrp}>
-                            <p className={styles.subscriptionLevel}>1/5</p>
+                            <p className={styles.subscriptionLevel}>{subscriptionIntegrationsLeft}</p>
                             <img src={subscriptionLeveIcon}/>
                         </div>
                     </div>
-                    <ProgressLine level={1} color="red"/>
+                    <ProgressLine level={subscriptionIntegrationsLeft} color="red"/>
                 </div>
             </div>
             
