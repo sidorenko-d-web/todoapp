@@ -4,7 +4,7 @@ import styles from './ProfilePage.module.scss';
 import { ProfileStatsMini } from "../../components/profile/ProfileStatsMini";
 import { ProfileInfo } from "../../components/profile/ProfileInfo";
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from "../../redux/api/profile/api";
-import { CalendarDay } from "../../components/profile/ProfileStreak/CalendarDay/CalendarDay";
+
 
 export const ProfilePage: React.FC = () => {
 
@@ -37,6 +37,6 @@ export const ProfilePage: React.FC = () => {
                     <ProfileInfo nickname={userProfileData.username} blogName={userProfileData.blog_name} 
                         subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left} position={position}/>
                 </div>}
-        </>
+        </> 
     );
 }
