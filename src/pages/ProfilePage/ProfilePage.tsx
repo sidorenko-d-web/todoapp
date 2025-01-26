@@ -3,30 +3,38 @@ import React from "react";
 import styles from './ProfilePage.module.scss';
 import { ProfileStatsMini } from "../../components/profile/ProfileStatsMini";
 import { ProfileInfo } from "../../components/profile/ProfileInfo";
-import { useGetCurrentUserProfileInfoQuery } from "../../redux/api/profile/api";
+import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from "../../redux/api/profile/api";
 
 export const ProfilePage: React.FC = () => {
 
-    const { data, isLoading, error } = useGetCurrentUserProfileInfoQuery();
+    const { data: userProfileData, error: userError, isLoading: isUserLoading } = useGetCurrentUserProfileInfoQuery();
+  
+    const { data: topProfilesData, error: topProfilesError, isLoading: isTopProfilesLoading } = useGetTopProfilesQuery();
 
 
+    const userPosition = userProfileData && topProfilesData?.profiles 
+        ? topProfilesData.profiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
+        : -1;
+
+    const position = userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length!;
 
 
     return (
         <>
-            {isLoading && <p>Загрузка...</p>}
+            {(isUserLoading || isTopProfilesLoading) && <p>Загрузка...</p>}
 
-            {error && <p>Ошибка при загрузке данных профиля</p>}
+            {(userError || topProfilesError) && <p>Ошибка при загрузке данных профиля</p>}
 
-            {data &&
+            {(userProfileData && topProfilesData) && 
                 <div className={styles.wrp}>
                     <div>
                         <h1 className={styles.pageTitle}>Профиль</h1>
-                        <ProfileStatsMini subscribers={data.subscribers} position={123} daysInARow={10}/>
+                        
+                        <ProfileStatsMini subscribers={userProfileData.subscribers} position={position} daysInARow={10}/>
                     </div>
 
-                    <ProfileInfo nickname={data.username} blogName={data.blog_name} 
-                        subscriptionIntegrationsLeft={data.subscription_integrations_left} position={123}/>
+                    <ProfileInfo nickname={userProfileData.username} blogName={userProfileData.blog_name} 
+                        subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left} position={position}/>
                 </div>}
         </>
     );

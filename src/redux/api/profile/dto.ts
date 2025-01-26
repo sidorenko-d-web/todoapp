@@ -1,4 +1,4 @@
-export type userProfileInfoResponseDTO = {
+export type UserProfileInfoResponseDTO = {
     blog_name: string;
     username: string;
     points: string;
@@ -9,3 +9,8 @@ export type userProfileInfoResponseDTO = {
     total_views: number;
     comments_answered: number;
 }
+
+export type TopProfilesResponseDTO = {
+    count: number;
+    profiles: UserProfileInfoResponseDTO[];
+};
