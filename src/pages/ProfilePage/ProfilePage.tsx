@@ -4,6 +4,7 @@ import styles from './ProfilePage.module.scss';
 import { ProfileStatsMini } from "../../components/profile/ProfileStatsMini";
 import { ProfileInfo } from "../../components/profile/ProfileInfo";
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from "../../redux/api/profile/api";
+import { CalendarDay } from "../../components/profile/ProfileStreak/CalendarDay/CalendarDay";
 
 export const ProfilePage: React.FC = () => {
 
@@ -29,7 +30,7 @@ export const ProfilePage: React.FC = () => {
                 <div className={styles.wrp}>
                     <div>
                         <h1 className={styles.pageTitle}>Профиль</h1>
-                        
+                       
                         <ProfileStatsMini subscribers={userProfileData.subscribers} position={position} daysInARow={10}/>
                     </div>
 
