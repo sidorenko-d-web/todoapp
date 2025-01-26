@@ -1,0 +1,71 @@
+import peeps from '../../../assets/icons/peeps.svg';
+import piggy from '../../../assets/icons/piggy.svg';
+import subscribersIcon from '../../../assets/icons/subscribers.svg';
+import s from './IncreaseIncome.module.scss';
+import classNames from 'classnames';
+
+export const IncreaseIncome = () => {
+  return (
+    <>
+      <h2 className={s.headerIncrease}>
+        <span className={s.textName}>Увеличьте доход</span>
+        <span className={s.badge}>
+          +440 <img src={peeps} height={14} width={14} alt="Количество peeps" />
+        </span>
+      </h2>
+      <section className={s.wrapperIncrease}>
+        <div className={s.content}>
+          <img src={piggy} height={40} width={40} alt="Piggy Icon" />
+          <div className={s.contentFriends}>
+            <h3 className={s.nameFriends}>Пригласить друзей</h3>
+            <ul className={s.subscribers}>
+              <li>
+            <span className={s.badge}>
+              +120 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+            </span>
+              </li>
+              <li>
+            <span className={s.badge}>
+              +40 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+            </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className={s.userCard}>
+          <div className={s.userCardTop}>
+            <div className={s.infoUser}>
+              <div className={s.userCardAvatar}>😊</div>
+              <div className={classNames(s.userCardUsername, s.text)}>Никнейм пользователя</div>
+            </div>
+            <div className={classNames(s.userCardRank, s.text)}>#1</div>
+          </div>
+
+          <div className={s.userCardBottom}>
+
+            <div className={s.userCardBonus}>
+              <span className={s.badge}>
+              +120 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+              </span>
+              <span className={classNames(s.level, s.text)}>1ур.</span>
+            </div>
+
+            <div className={s.userCardBonus}>
+              <span className={s.badge}>
+              +40 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+              </span>
+              <span className={classNames(s.level, s.text)}>2ур.</span>
+            </div>
+            <div className={classNames(s.userCardRefs, s.text)}>
+              (ещё 2 реф.)
+            </div>
+          </div>
+        </div>
+
+        <button className={classNames(s.buttonContainer, s.text)}>
+          Пригласить
+        </button>
+      </section>
+    </>
+  );
+};

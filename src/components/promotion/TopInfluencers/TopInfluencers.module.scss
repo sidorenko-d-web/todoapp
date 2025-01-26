@@ -1,0 +1,96 @@
+@use '../../../assets/styles/index.scss' as var;
+
+.headerInfluencers {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 10px 0 0;
+}
+
+.badge {
+  display: flex;
+  gap: 5px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 100%;
+}
+
+.textName {
+  color: var.$color-text-semi-transparent;
+}
+
+.wrapperInfo {
+  width: 100%;
+  background: var.$color-card-bg;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.contentChest {
+  margin: 20px 0;
+}
+
+.chestText {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 14px;
+  color: var.$color-text-semi-transparent;
+}
+
+.infoName {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.progressBar {
+  width: 100%;
+  height: 16px;
+  border-radius: 4px;
+  background-color: var.$color-dark-gray-stroke;
+  margin-top: 5px;
+}
+
+.progress {
+  display: block;
+  height: 16px;
+  border-radius: 4px 0 0 4px;
+  background: var.$color-purple;
+}
+
+.textInfo {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14.4px;
+  letter-spacing: -0.05em;
+}
+
+.textDay {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14.4px;
+  letter-spacing: -0.05em;
+  color: var.$color-secondary;
+}
+
+.buttonContainer {
+  max-width: 132px;
+  width: 100%;
+  height: 34px;
+  border-radius: 8px;
+  color: var.$color-white;
+  background: var.$color-secondary;
+  border: 1px solid var.$color-border-secondary;
+}

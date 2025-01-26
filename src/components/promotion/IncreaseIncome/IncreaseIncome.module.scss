@@ -1,0 +1,136 @@
+@use '../../../assets/styles/index.scss' as var;
+
+.headerIncrease {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 10px 0 0;
+}
+
+.badge {
+  display: flex;
+  gap: 5px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 100%;
+}
+
+.textName {
+  color: var.$color-text-semi-transparent;
+}
+
+.wrapperIncrease {
+  width: 100%;
+  background: var.$color-card-bg;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.subscribers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+}
+
+.contentFriends {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nameFriends {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+  line-height: 16px;
+  letter-spacing: -0.05em;
+}
+
+.subscribers {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.userCard {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background: var.$footer-bg;
+  margin-top: 20px;
+}
+
+.userCardBottom {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  gap: 31px;
+}
+
+.userCardAvatar {
+  padding: 5px;
+  border-radius: 3px;
+  background: var.$color-gray;
+}
+
+.userCardTop {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.infoUser {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.userCardBonus {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 14px;
+  color: var.$color-white;
+}
+
+.level {
+  font-size: 10px;
+  position: absolute;
+  top: -3px;
+  right: -20px;
+  color: var.$color-text-semi-transparent
+}
+
+.userCardRank, .userCardRefs {
+  color: var.$color-blue-primary;
+}
+
+.buttonContainer {
+  margin-top: 20px;
+  max-width: 132px;
+  width: 100%;
+  height: 34px;
+  border-radius: 8px;
+  background: var.$color-blue-primary;
+  border: none;
+}
