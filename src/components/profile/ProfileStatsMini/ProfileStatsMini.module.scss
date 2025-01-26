@@ -1,0 +1,24 @@
+@use '../../../assets/styles/index.scss' as var;
+
+.wrp {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    gap: 5px;
+    
+    .statWrp {
+        border-radius: 10px;
+        background-color: var.$color-badge-bg;
+        display: flex;
+        padding: 4px;
+        padding-left: 7px;
+        gap: 2px;
+        justify-content: center;
+
+        .stat {
+            margin: 0;
+            font-weight: 500;
+        }
+    }
+}

@@ -1,0 +1,20 @@
+@use '../../assets/styles/index.scss' as var;
+
+
+.wrp {
+    min-height: 100vh;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+
+    background-color: var.$color-bg;
+    color: var.$color-text;
+
+    .pageTitle {
+        color: #FFF;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+}
