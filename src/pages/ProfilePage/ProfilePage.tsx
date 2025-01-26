@@ -25,7 +25,7 @@ export const ProfilePage: React.FC = () => {
                         <ProfileStatsMini subscribers={data.subscribers} position={123} daysInARow={10}/>
                     </div>
 
-                    <ProfileInfo nickname={data.username} blogName={data.blogName || 'Blog name'} 
+                    <ProfileInfo nickname={data.username} blogName={data.blog_name} 
                         subscriptionIntegrationsLeft={data.subscription_integrations_left} position={123}/>
                 </div>}
         </>
