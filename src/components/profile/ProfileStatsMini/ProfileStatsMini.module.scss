@@ -3,22 +3,47 @@
 .wrp {
     width: 100%;
     display: flex;
-    justify-content: center;
-
-    gap: 5px;
+    justify-content: space-between;
     
-    .statWrp {
-        border-radius: 10px;
-        background-color: var.$color-badge-bg;
-        display: flex;
-        padding: 4px;
-        padding-left: 7px;
-        gap: 2px;
-        justify-content: center;
+    .toCenterStats {
+        width: 40px;
+        height: 40px;
+    }
 
-        .stat {
-            margin: 0;
-            font-weight: 500;
+    .statsWrp {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+
+        .statWrp {
+            height: fit-content;
+            border-radius: 10px;
+            background-color: var.$color-badge-bg;
+            display: flex;
+            padding: 4px;
+            padding-left: 7px;
+            gap: 2px;
+            justify-content: center;
+            align-items: center;
+    
+            .stat {
+                margin: 0;
+                font-weight: 500;
+            }
         }
+    }
+
+    .wardrobeButton {
+        height: 40px;
+        width: 40px;
+        border-radius: 10px;
+        background-color: var.$color-primary;
+
+        border: none;
+        background-image: url('../../../assets/icons/wardrobe.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        background-size: 60%;
     }
 }
