@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import BottomModal from '../../shared/BottomModal/BottomModal.tsx';
+import CentralModal from '../../shared/CentralModal/CentralModal.tsx';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 
 interface CreatingIntegrationModalProps {
@@ -14,9 +14,9 @@ const CreatingIntegrationModal: FC<CreatingIntegrationModalProps> = ({
 
 
   return (
-    <BottomModal modalId={modalId} title={'Создание интеграции'} onClose={onClose} titleIcon={integrationWhiteIcon}>
+    <CentralModal modalId={modalId} title={'Создание интеграции'} onClose={onClose} titleIcon={integrationWhiteIcon}>
       todo content
-    </BottomModal>
+    </CentralModal>
   );
 };
 
