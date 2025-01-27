@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useSignInMutation } from '../redux';
 import { LoadingScreen } from '../components/shared/LoadingScreen';
 import { LanguageSelect } from '../pages/LanguageSelect/LanguageSelect.tsx';
+import { SkinSetupPage } from '../pages/SkinSetupPage/SkinSetupPage.tsx';
 
 type AuthInitProps = {
   children: React.ReactNode;
@@ -43,8 +44,10 @@ export function AuthInit({ children }: AuthInitProps) {
   }
 
   if (true) {
-    return <LanguageSelect onContinue={() => setAuthCompleted(true)} />;
+    return <SkinSetupPage/>;
   }
+
+
 
   if (isError) {
     return <div style={{ color: 'red' }}>Ошибка при авторизации: {String(error)}</div>;
