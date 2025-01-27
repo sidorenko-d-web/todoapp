@@ -27,7 +27,7 @@ const ShopSkinTab = () => {
         <div className={styles.personCards}>
           <h2>Голова</h2>
           {skins.head?.map(item => (
-            <ShopSkinCard item={item} />
+            <ShopSkinCard key={item.id} item={item} />
           ))}
         </div>
       )}
@@ -36,7 +36,7 @@ const ShopSkinTab = () => {
         <div className={styles.personCards}>
           <h2>Вверх</h2>
           {skins.upper_body?.map(item => (
-            <ShopSkinCard item={item} />
+            <ShopSkinCard key={item.id} item={item} />
           ))}
         </div>
       )}
@@ -45,7 +45,7 @@ const ShopSkinTab = () => {
         <div className={styles.personCards}>
           <h2>Тело</h2>
           {skins.entire_body?.map(item => (
-            <ShopSkinCard item={item} />
+            <ShopSkinCard key={item.id} item={item} />
           ))}
         </div>
       )}
@@ -54,7 +54,7 @@ const ShopSkinTab = () => {
         <div className={styles.personCards}>
           <h2>Низ</h2>
           {skins.legs?.map(item => (
-            <ShopSkinCard item={item} />
+            <ShopSkinCard key={item.id} item={item} />
           ))}
         </div>
       )}
@@ -63,7 +63,7 @@ const ShopSkinTab = () => {
         <div className={styles.personCards}>
           <h2>Обувь</h2>
           {skins.feet?.map(item => (
-            <ShopSkinCard item={item} />
+            <ShopSkinCard key={item.id} item={item} />
           ))}
         </div>
       )}
@@ -71,7 +71,7 @@ const ShopSkinTab = () => {
         <div className={styles.personCards}>
           <h2 className={styles.vipTitle}>VIP скины</h2>
           {skins.vip?.map(item => (
-            <ShopSkinCard item={item} />
+            <ShopSkinCard key={item.id} item={item} />
           ))}
         </div>
       )}

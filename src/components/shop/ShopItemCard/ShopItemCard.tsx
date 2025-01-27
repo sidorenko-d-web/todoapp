@@ -155,7 +155,7 @@ const ShopItemCard: FC<Props> = ({
             )}
           </button>
           <button>Задание</button>
-          <button>{item.price_usdt} $USDT</button>
+          <button disabled>{item.price_usdt} $USDT</button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>

@@ -6,11 +6,11 @@
   flex-direction: row;
   font-size: 12px;
   padding: 3px;
-  background: $secondary-bg;
+  background: $color-card-bg;
   border-radius: 30px;
 
   .tabItem {
-    color: $half-transparent-text;
+    color: $color-text-semi-transparent;
     font-weight: 500;
     padding: 5px 18px;
     border-radius: 30px;
@@ -28,13 +28,13 @@
     @extend .tabItem;
 
     color: $color-white;
-    background-color: $accent-blue;
+    background-color: $color-primary;
   }
   .tabItemSelectedPurple {
     @extend .tabItem;
 
     color: $color-white;
-    background-color: $purple;
+    background-color: $color-purple;
   }
   .tabItemSelectedRed {
     @extend .tabItem;

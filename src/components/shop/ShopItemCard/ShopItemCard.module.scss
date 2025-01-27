@@ -2,7 +2,7 @@
 @use '/src/assets/styles' as *;
 
 .storeCard {
-  background-color: $secondary-bg;
+  background-color: $color-card-bg;
   align-self: stretch;
   padding: 10px;
   border-radius: 12px;
@@ -10,9 +10,9 @@
     display: flex;
     gap: 10px;
     .image {
-      border: 2px solid $accent-blue;
+      border: 2px solid $color-primary;
       border-radius: 8px;
-      background: $third-bg;
+      background: $footer-bg;
       flex-direction: column;
       display: flex;
       position: relative;
@@ -22,7 +22,7 @@
       aspect-ratio: 1;
       position: relative;
       p {
-        background: $accent-blue;
+        background: $color-primary;
         position: absolute;
         bottom: 0;
         transform: translateY(50%);
@@ -46,9 +46,9 @@
 
     .purpleImage {
       @extend .image;
-      border-color: $purple;
+      border-color: $color-purple;
       p {
-        background-color: $purple;
+        background-color: $color-purple;
       }
     }
     .redImage {
@@ -72,13 +72,13 @@
       .level {
         font-weight: 500;
         font-size: 12px;
-        color: $accent-blue;
+        color: $color-primary;
         line-height: 12px;
       }
 
       .colorPurple {
         @extend .level;
-        color: $purple;
+        color: $color-purple;
       }
 
       .colorRed {
@@ -110,13 +110,13 @@
       }
     }
     .variant {
-      background: $accent-blue;
+      background: $color-primary;
       opacity: 0.5;
       align-self: flex-start;
       padding: 2px 5px;
       border-radius: 4px;
       p {
-        color: $dark-grey-border;
+        color: $color-dark-gray-stroke;
         font-size: 12px;
         line-height: 12px;
       }
@@ -124,7 +124,7 @@
 
     .variantPurple {
       @extend .variant;
-      background-color: $purple;
+      background-color: $color-purple;
     }
     .variantRed {
       @extend .variant;
@@ -141,7 +141,7 @@
       p {
         font-size: 12px;
         line-height: 12px;
-        color: $half-transparent-text;
+        color: $color-text-semi-transparent;
         font-weight: 500;
       }
       .goal {
@@ -157,18 +157,18 @@
 
     .progressBar {
       margin-top: 5px;
-      border: 1px solid $dark-grey-border;
+      border: 1px solid $color-dark-gray-stroke;
       border-radius: 6px;
       overflow: hidden;
-      background: $gray;
+      background: $color-gray;
       .done {
         height: 16px;
-        background: $accent-blue;
+        background: $color-primary;
       }
 
       .donePurple {
         @extend .done;
-        background-color: $purple;
+        background-color: $color-purple;
       }
       .doneRed {
         @extend .done;
@@ -181,13 +181,13 @@
       margin-top: 5px;
       gap: 5px;
       .item {
-        border: 1px solid $accent-blue;
+        border: 1px solid $color-primary;
         border-radius: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
         position: relative;
-        background: $third-bg;
+        background: $footer-bg;
         .itemImage {
           width: 24px;
           height: 24px;
@@ -213,7 +213,7 @@
 
       .itemPurple {
         @extend .item;
-        border-color: $purple;
+        border-color: $color-purple;
       }
       .itemRed {
         @extend .item;
@@ -234,14 +234,14 @@
       justify-content: center;
       font-weight: 500;
       align-items: center;
-      background: $gray;
-      border: 1px solid $dark-grey-border;
+      background: $color-gray;
+      border: 1px solid $color-dark-gray-stroke;
       color: $color-white;
       gap: 5px;
 
       &:first-child {
-        background: $accent-blue;
-        border: 1px solid $dark-blue-border;
+        background: $color-primary;
+        border: 1px solid $color-border-primary;
         flex: 1;
 
         img {
@@ -251,7 +251,7 @@
       }
 
       &:last-child {
-        background: $gray;
+        background: $color-gray;
         opacity: 0.3;
         flex: 1;
         border: none;
@@ -260,7 +260,7 @@
   }
 
   .disabledUpgradeActions {
-    background: color.scale($accent-blue, $alpha: -80%);
+    background: color.scale($color-primary, $alpha: -80%);
     border-radius: 8px;
     display: flex;
     justify-content: center;
@@ -281,25 +281,25 @@
 
   .disabledActions {
     @extend .disabledUpgradeActions;
-    background: $gray;
-    border: 1px solid $dark-grey-border;
+    background: $color-gray;
+    border: 1px solid $color-dark-gray-stroke;
     width: 100%;
 
     color: $color-white;
   }
 
   .disabledText {
-    color: $half-transparent-text;
+    color: $color-text-semi-transparent;
     margin-top: 20px;
     line-height: 14.4px;
     font-size: 12px;
     font-weight: 500;
 
     .itemNamePurple {
-      color: $purple;
+      color: $color-purple;
     }
     .itemNameBlue {
-      color: $accent-blue;
+      color: $color-primary;
     }
   }
 }

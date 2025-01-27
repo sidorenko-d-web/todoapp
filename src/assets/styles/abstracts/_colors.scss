@@ -1,21 +1,34 @@
 @use 'sass:color';
 
 $color-white: #ffffff;
-$color-black: #0a0a0b;
-$half-transparent-text: #afb9d4;
+$color-black: #000000;
 
-$main-bg: #141319;
-$secondary-bg: #1c1d22;
-$third-bg: #2d2d35;
-$dark-blue-bg: #212129;
-$light-gray-bg: #cbcee2;
-$accent-blue: #2f80ed;
-$half-tgransparent-bg: #505b78;
-$purple: #9747ff;
+$color-bg: #141319;
+$footer-bg: #2d2d35;
+
+$color-dark-gray-stroke: #282830;
+
+$color-green: #219653;
+$color-red: #e84949;
+$color-gray: #373a43;
+$color-blue-primary: #2f80ed;
+
+$color-purple: #9747ff;
+$color-dark-blue: #2d79df;
+
+$color-text: #fff;
+$color-text-semi-transparent: #afb9d4;
+
+$color-card-bg: #1c1d22;
+$color-badge-bg: #212129;
+$color-bg: #141319;
+
+$color-primary: #2f80ed;
+$color-border-primary: #2064c0;
+$color-secondary: #9b51e0;
+$color-border-secondary: #7a2bc3;
 
 $grayed-white: #d9dce1;
-$gray: #373a43;
-$dark-grey-border: #282830;
-$dark-blue-border: #2064C0;
-
-$gradient: linear-gradient(to right ,#1551e8, #e84951);
+$half-tgransparent-bg: #505b78;
+$light-gray-bg: #cbcee2;
+$gradient: linear-gradient(to right, #1551e8, #e84951);

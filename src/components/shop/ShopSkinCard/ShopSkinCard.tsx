@@ -77,7 +77,7 @@ const ShopSkinCard: FC<Props> = ({ item }) => {
               )}
             </button>
             <button className={styles.button}>Задание</button>
-            <button className={styles.button}>{item.price_usdt} $USD</button>
+            <button disabled className={styles.button}>{item.price_usdt} $USD</button>
           </>
         )}
       </div>

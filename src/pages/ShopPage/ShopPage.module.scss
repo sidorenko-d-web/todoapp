@@ -24,7 +24,7 @@
       gap: 5px;
 
       .scoresItem {
-        background: $dark-blue-bg;
+        background: $color-badge-bg;
         padding: 4px 7px;
         border-radius: 10px;
         display: flex;
@@ -53,7 +53,7 @@
     .coloredNav {
       .tabItem {
         &:first-child {
-          background: $accent-blue;
+          background: $color-primary;
         }
       }
     }
