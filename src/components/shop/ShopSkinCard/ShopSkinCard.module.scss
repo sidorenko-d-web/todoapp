@@ -26,6 +26,8 @@
       background: $gradient;
       border: none;
       position: relative;
+      width: 60px;
+      height: 60px;
 
       &::before {
         content: '';
@@ -49,50 +51,59 @@
       display: flex;
       flex-direction: column;
       flex: 1;
-      h3 {
-        color: $color-white;
-        font-weight: 500;
-        font-size: 16px;
+      width: 100%;
+
+      .headline {
+        display: flex;
+        justify-content: space-between;
         margin-bottom: 10px;
+        width: 100%;
+        
+        h3 {
+          color: $color-white;
+          font-weight: 500;
+          font-size: 16px;
+          text-wrap: pretty;
+        }
+        .icons {
+          display: flex;
+          gap: 2px;
+          align-items: start;
+          .vip {
+            background: $gradient;
+            display: flex;
+            gap: 1;
+            border-radius: 4px;
+            padding: 2px;
+
+            img {
+              width: 12px;
+              height: 12px;
+            }
+
+            p {
+              font-weight: 500;
+              font-size: 12px;
+              line-height: 12px;
+              color: $color-white;
+            }
+          }
+
+          .personIcon {
+            width: 16px;
+            height: 16px;
+            background: $half-tgransparent-bg;
+            border-radius: 4px;
+            padding: 2px;
+            opacity: 0.5;
+          }
+        }
       }
       .description {
         font-weight: 500;
         color: $color-text-semi-transparent;
         line-height: 16.8px;
-      }
-    }
-
-    .icons {
-      display: flex;
-      gap: 2px;
-      align-items: start;
-      .vip {
-        background: $gradient;
-        display: flex;
-        gap: 1;
-        border-radius: 4px;
-        padding: 2px;
-
-        img {
-          width: 12px;
-          height: 12px;
-        }
-
-        p {
-          font-weight: 500;
-          font-size: 12px;
-          line-height: 12px;
-          color: $color-white;
-        }
-      }
-
-      .personIcon {
-        width: 16px;
-        height: 16px;
-        background: $half-tgransparent-bg;
-        border-radius: 4px;
-        padding: 2px;
-        opacity: 0.5;
+        text-wrap: pretty;
       }
     }
   }
@@ -146,6 +157,7 @@
       gap: 5px;
       flex: 1;
       background: $gradient !important;
+      text-wrap: pretty;
     }
   }
 }

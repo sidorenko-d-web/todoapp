@@ -18,8 +18,8 @@
       position: relative;
       align-items: center;
       justify-content: center;
-      width: 60px;
-      aspect-ratio: 1;
+      min-width: 60px;
+      height: 60px;
       position: relative;
       p {
         background: $color-primary;
@@ -63,11 +63,39 @@
       display: flex;
       flex-direction: column;
       flex: 1;
-      h3 {
-        color: $color-white;
-        font-weight: 500;
-        font-size: 16px;
-        margin-bottom: 4px;
+      .headline {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        h3 {
+          color: $color-white;
+          font-weight: 500;
+          font-size: 16px;
+          margin-bottom: 4px;
+        }
+
+        .variant {
+          background: $color-primary;
+          opacity: 0.5;
+          align-self: flex-start;
+          padding: 2px 5px;
+          border-radius: 4px;
+          p {
+            color: $color-dark-gray-stroke;
+            font-size: 12px;
+            line-height: 12px;
+            text-wrap: nowrap;
+          }
+        }
+
+        .variantPurple {
+          @extend .variant;
+          background-color: $color-purple;
+        }
+        .variantRed {
+          @extend .variant;
+          background-color: red;
+        }
       }
       .level {
         font-weight: 500;
@@ -88,8 +116,10 @@
 
       .stats {
         display: flex;
+        flex-wrap: wrap;
         margin-top: auto;
-        gap: 15px;
+        width: 100%;
+        gap: 5%;
 
         .statsItem {
           display: flex;
@@ -108,27 +138,6 @@
       .disabledStats {
         opacity: 0.3;
       }
-    }
-    .variant {
-      background: $color-primary;
-      opacity: 0.5;
-      align-self: flex-start;
-      padding: 2px 5px;
-      border-radius: 4px;
-      p {
-        color: $color-dark-gray-stroke;
-        font-size: 12px;
-        line-height: 12px;
-      }
-    }
-
-    .variantPurple {
-      @extend .variant;
-      background-color: $color-purple;
-    }
-    .variantRed {
-      @extend .variant;
-      background-color: red;
     }
   }
 
@@ -226,6 +235,7 @@
     margin-top: 20px;
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
     button {
       border: none;
       border-radius: 8px;

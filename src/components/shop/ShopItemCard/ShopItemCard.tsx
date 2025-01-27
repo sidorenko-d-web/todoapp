@@ -48,7 +48,22 @@ const ShopItemCard: FC<Props> = ({
           {!isBlocked && <p>Base</p>}
         </div>
         <div className={styles.title}>
-          <h3>{item.name}</h3>
+          <div className={styles.headline}>
+            <h3>{item.name}</h3>
+            {variant === 'lowcost' ? (
+              <div className={styles.variant}>
+                <p>Эконом</p>
+              </div>
+            ) : variant === 'prem' ? (
+              <div className={styles.variantPurple}>
+                <p>Премиум</p>
+              </div>
+            ) : (
+              <div className={styles.variantRed}>
+                <p>Люкс</p>
+              </div>
+            )}
+          </div>
           <p className={variant === 'lux' ? styles.colorRed : variant === 'prem' ? styles.colorPurple : styles.level}>
             Уровень {item.level} {isB && 'Предмет куплен'}
           </p>
@@ -68,20 +83,6 @@ const ShopItemCard: FC<Props> = ({
             </div>
           </div>
         </div>
-
-        {variant === 'lowcost' ? (
-          <div className={styles.variant}>
-            <p>Эконом</p>
-          </div>
-        ) : variant === 'prem' ? (
-          <div className={styles.variantPurple}>
-            <p>Премиум</p>
-          </div>
-        ) : (
-          <div className={styles.variantRed}>
-            <p>Люкс</p>
-          </div>
-        )}
       </div>
 
       {!isBlocked &&

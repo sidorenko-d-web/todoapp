@@ -66,3 +66,9 @@ button {
 
   cursor: pointer;
 }
+
+p,
+a,
+button {
+  text-wrap: nowrap;
+}

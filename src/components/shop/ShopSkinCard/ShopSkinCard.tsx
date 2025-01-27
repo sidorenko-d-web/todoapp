@@ -34,29 +34,30 @@ const ShopSkinCard: FC<Props> = ({ item }) => {
           <img src={item.image_url} alt="item" />
         </div>
         <div className={styles.title}>
-          <h3>{item.name}</h3>
-          <p className={styles.description}>Небольшое описание скина.</p>
-        </div>
+          <div className={styles.headline}>
+            <h3>{item.name}</h3>
+            <div className={styles.icons}>
+              {item.wear_location === 'head' ? (
+                <img src="/img/head_icon.svg" className={styles.personIcon} />
+              ) : item.wear_location === 'upper_body' ? (
+                <img src="/img/face_icon.svg" className={styles.personIcon} />
+              ) : item.wear_location === 'entire_body' ? (
+                <img src="/img/person_icon.svg" className={styles.personIcon} />
+              ) : item.wear_location === 'feet' ? (
+                <img src="/img/face_icon.svg" className={styles.personIcon} />
+              ) : (
+                <img src="/img/face_icon.svg" className={styles.personIcon} />
+              )}
 
-        <div className={styles.icons}>
-          {item.wear_location === 'head' ? (
-            <img src="/img/head_icon.svg" className={styles.personIcon} />
-          ) : item.wear_location === 'upper_body' ? (
-            <img src="/img/face_icon.svg" className={styles.personIcon} />
-          ) : item.wear_location === 'entire_body' ? (
-            <img src="/img/person_icon.svg" className={styles.personIcon} />
-          ) : item.wear_location === 'feet' ? (
-            <img src="/img/face_icon.svg" className={styles.personIcon} />
-          ) : (
-            <img src="/img/face_icon.svg" className={styles.personIcon} />
-          )}
-
-          {item.limited && (
-            <div className={styles.vip}>
-              <img src="/img/star_check_icon.svg" />
-              <p>VIP</p>
+              {item.limited && (
+                <div className={styles.vip}>
+                  <img src="/img/star_check_icon.svg" />
+                  <p>VIP</p>
+                </div>
+              )}
             </div>
-          )}
+          </div>
+          <p className={styles.description}>Небольшое описание скина.</p>
         </div>
       </div>
 
@@ -77,7 +78,9 @@ const ShopSkinCard: FC<Props> = ({ item }) => {
               )}
             </button>
             <button className={styles.button}>Задание</button>
-            <button disabled className={styles.button}>{item.price_usdt} $USD</button>
+            <button disabled className={styles.button}>
+              {item.price_usdt} $USD
+            </button>
           </>
         )}
       </div>
