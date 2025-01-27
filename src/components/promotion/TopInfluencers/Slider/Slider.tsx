@@ -8,6 +8,7 @@ import s from './Slider.module.scss';
 import face from '../../../../assets/icons/face.svg';
 import fire from '../../../../assets/icons/fire.svg';
 import star from '../../../../assets/icons/star.svg';
+import { CARDS } from './constantSlider.ts';
 
 export const SliderSelect = () => {
   const settings = {
@@ -19,51 +20,24 @@ export const SliderSelect = () => {
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 500,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 3.5,
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 350,
         settings: {
-          slidesToShow: 3.5,
+          slidesToShow: 2.5,
         },
       },
     ],
   };
 
-  const cards = [
-    {
-      id: 1,
-      seat: '#10 00',
-      vip: true,
-      fire: 12,
-    },
-    {
-      id: 2,
-      seat: '#2',
-      vip: true,
-      fire: 12,
-    },
-    {
-      id: 3,
-      seat: '#3',
-      vip: false,
-      fire: 12,
-    },
-    {
-      id: 4,
-      seat: '#4',
-      vip: false,
-      fire: 12,
-    },
-  ];
-
   return (
     <div className={s.sliderContainer}>
       <Slider {...settings}>
-        {cards.map(card => (
+        {CARDS.map(card => (
           <div
             key={card.id}
             className={s.cardWrapper}

@@ -2,6 +2,7 @@ import lockOpen from '../../../assets/icons/lockOpen.svg';
 import tickCircle from '../../../assets/icons/tickCircle.svg';
 import s from './DevelopmentPlan.module.scss';
 import classNames from 'classnames';
+import { ONE_INFO_TEXT, TWO_INFO_TEXT } from './constantsPlan.ts';
 
 export const DevelopmentPlan = () => {
   return (
@@ -12,37 +13,42 @@ export const DevelopmentPlan = () => {
       </div>
       <section className={s.component}>
         <ul className={s.list}>
-          <li className={s.wrapperList}>
+          {ONE_INFO_TEXT.map((item) => (
+            <li key={item.id} className={s.wrapperList}>
             <div className={s.infoUser}>
-              <h3 className={s.namePlan}><span>Добро пожаловать!</span> <img src={tickCircle} height={17} width={17}
-                                                                             alt="tickCircle" /></h3>
-              <span className={s.text}>#1</span>
+              <h3 className={s.namePlan}><span>{item.namePlan}</span> <img src={tickCircle} height={17} width={17}
+                                                                           alt="tickCircle" /></h3>
+              <span className={s.text}>{item.number}</span>
             </div>
             <div className={s.users}>
               <img src={lockOpen} height={14} width={14} alt="lockOpen" />
-              <span className={classNames(s.countUsers, s.text)}>250 пользователей</span>
+              <span className={classNames(s.countUsers, s.text)}>{item.userCount} пользователей</span>
             </div>
-            <p className={s.textInfoPlan}>
-              Welcome-бонус: 500 баллов каждому новому пользователю. Приобретите подписку в Apusher и оборудование,
-              чтобы сделать свою первую интеграцию! Доступ к магазину для покупки первого оборудования и базовых
-              улучшений комнаты.
-            </p>
+              <p className={s.textInfoPlan}>{item.description}</p>
           </li>
+          ))}
         </ul>
         <ul className={s.list}>
-          <li className={s.wrapperList}>
-            <div className={s.topRow}>
+          {TWO_INFO_TEXT.map((item) => (
+            <li key={item.id} className={s.wrapperList}>
+              <div className={s.headerPlan}>
+                <div className={s.topRow}>
                 <span className={s.title}>
-                  Новые скины и уникальная кампания от Apusher!
+                  {item.title}
                 </span>
-              <input className={s.inputRadio} type="radio" />
-            </div>
-            <div className={s.userBlock}>
-              <img src={lockOpen} height={14} width={14} alt="lockOpen" />
-              <span className={s.userCount}>10&nbsp;000 пользователей</span>
-            </div>
-            <p className={s.info}>*****</p>
-          </li>
+                  <div className={s.circle}>
+                    <input className={s.inputRadio} type="radio" />
+                  </div>
+                </div>
+                <p className={s.text}>{item.number}</p>
+              </div>
+              <div className={s.userBlock}>
+                <img src={lockOpen} height={14} width={14} alt="lockOpen" />
+                <span className={s.userCount}>{item.userCount} пользователей</span>
+              </div>
+              <p className={s.info}>{item.info}</p>
+            </li>
+          ))}
         </ul>
       </section>
     </>
