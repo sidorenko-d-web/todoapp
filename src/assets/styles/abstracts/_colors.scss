@@ -6,11 +6,16 @@ $color-black: #000000;
 $color-bg: #141319;
 $footer-bg: #2D2D35;
 
-$color-opacity-black: transparentize($color-black, 0.5);
+$color-opacity-black: transparentize($color-black, 0.5)
 
 $color-dark-gray-stroke: #282830;
 
 $color-green: #219653;
+
+$grayed-white: #d9dce1;
+$light-gray-bg: #cbcee2;
+$gradient: linear-gradient(to right, #1551e8, #e84951);
+
 $color-red: #E84949;
 $color-gray: #373A43;
 $color-blue-primary: #2F80ED;
