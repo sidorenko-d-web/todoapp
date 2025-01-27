@@ -53,7 +53,10 @@ export const ProfilePage: React.FC = () => {
                             favoriteCompany={'Favourite company'} comments={userProfileData.comments_answered} rewards={12} coffee={5} />
                     </div>
 
-                    <RewardsList />
+                    <div>
+                        <p className={styles.statsTitle}>Награды</p>
+                        <RewardsList />
+                    </div>
                 </div>}
         </>
     );

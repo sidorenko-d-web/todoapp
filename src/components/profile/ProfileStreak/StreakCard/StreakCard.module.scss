@@ -1,7 +1,7 @@
 @use '../../../../assets/styles/index.scss' as var;
 
 .wrp {
-    background-color: #1e1e1e;
+    background-color: var.$color-card-bg;
     padding: 10px;
     border-radius: 12px;
     color: white;
