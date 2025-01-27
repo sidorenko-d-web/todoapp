@@ -1,0 +1,84 @@
+@use '../../../assets/styles' as var;
+
+.overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & > div {
+    width: 100%;
+
+    & > div {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+
+      height: 100%;
+    }
+  }
+}
+
+.modal {
+  @include var.hide-scroll;
+  padding: 0 24px 24px 24px;
+  background-color: white;
+  border-radius: 24px;
+  width: 100%;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.disabled {
+  opacity: 0.7;
+
+  pointer-events: none;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 50;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: white;
+  padding: 40px 0 0 0;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 40px;
+  line-height: 48px;
+  font-weight: 400;
+  color: #3C3937;
+
+  max-width: 80%;
+
+  margin: 0;
+}
+
+.closeBtn {
+  background-color: transparent;
+  border: none;
+}
+
+.closeIcon {
+  @include var.transition(color);
+  color: #3C3937;
+
+  background-color: transparent;
+  border: none;
+
+  fill: currentcolor;
+
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+
+  &:hover {
+    color: var.$color-black;
+  }
+}

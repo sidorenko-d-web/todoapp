@@ -1,0 +1,33 @@
+@use '../../assets/styles/index.scss' as var;
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .sectionTitle {
+      margin: 0;
+      color: var.$color-text-semi-transparent;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 100%;
+    }
+
+    .count {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 100%;
+    }
+  }
+
+  .tasksList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

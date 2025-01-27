@@ -1,0 +1,15 @@
+@mixin transition($args...) {
+  transition-timing-function: ease-out;
+  transition-duration: 0.2s;
+  transition-property: $args;
+}
+
+@mixin hide-scroll() {
+  @-moz-document url-prefix() {
+    scrollbar-width: none;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

@@ -1,0 +1,13 @@
+@use '../assets/styles/index.scss' as var;
+
+.page {
+  min-height: 100vh;
+  padding: 20px 15px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  background-color: var.$color-bg;
+  color: var.$color-text;
+}
