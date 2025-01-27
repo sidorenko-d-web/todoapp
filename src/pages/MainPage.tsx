@@ -8,7 +8,6 @@ const MainPage: FC = () => {
   return (
     <main className={s.page}>
       <Link to={'/tasks'}>Tasks</Link>
-
       <IntegrationCreation/>
     </main>
   );

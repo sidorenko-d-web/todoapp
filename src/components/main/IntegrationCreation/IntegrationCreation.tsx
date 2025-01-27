@@ -3,17 +3,22 @@ import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
 
 import s from './IntegrationCreation.module.scss';
+import CreatingIntegrationModal from '../CreatingIntegrationModal/CreatingIntegrationModal.tsx';
+import { useModal } from '../../../hooks';
+import { MODALS } from '../../../constants/modals.ts';
 
 export const IntegrationCreation = () => {
   const progress = 39;
+  const { openModal, closeModal } = useModal();
 
   return (
     <section className={s.integrationsControls}>
-      <button className={s.button}>
+      <button className={s.button} onClick={() => openModal(MODALS.CREATING_INTEGRATION)}>
         Создать интеграцию
         <span className={s.buttonBadge}>3/5 <img src={integrationIcon} height={12} width={12}
                                                  alt="integration" /></span>
       </button>
+      <CreatingIntegrationModal modalId={MODALS.CREATING_INTEGRATION} onClose={() => closeModal(MODALS.CREATING_INTEGRATION)}/>
       <div className={s.integration}>
         <div className={s.integrationHeader}>
           <h2 className={s.title}>Интеграция 3</h2>

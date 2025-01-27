@@ -6,6 +6,8 @@ $color-black: #000000;
 $color-bg: #141319;
 $footer-bg: #2D2D35;
 
+$color-opacity-black: transparentize($color-black, 0.5);
+
 $color-dark-gray-stroke: #282830;
 
 $color-green: #219653;
