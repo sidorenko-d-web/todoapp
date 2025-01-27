@@ -29,7 +29,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({ nickname, blogName, su
                         <img src={clanIcon} />
                     </div>
 
-                    <img src={profileImagePlaceholder} height={30} width={22.5} />
+                    <img src={profileImagePlaceholder} className={styles.imagePlaceholder} />
                     {isVip ? (
                         <>
                             <div className={styles.vipWrp}>
