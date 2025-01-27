@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import styles from './CentralModal.module.scss'
+import { FC, PropsWithChildren, useEffect } from 'react';
+import s from './CentralModal.module.scss';
 import { useModal } from '../../../hooks';
 import { Fade, Overlay } from '../common';
 import classNames from 'classnames';
@@ -14,23 +14,24 @@ interface CentralModalProps {
   containerStyles?: string;
   modalStyles?: string;
   headerStyles?: string;
+  titleIcon?: string;
 }
 
-const CentralModal: React.FC<React.PropsWithChildren<CentralModalProps>> = ({
-                                                                             modalId,
-                                                                             title,
-                                                                             onClose,
-                                                                             disabled = false,
-                                                                             disableScrollLock = false,
-                                                                             containerStyles,
-                                                                             modalStyles,
-                                                                             children,
-                                                                             headerStyles,
-                                                                           }) => {
+const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
+                                                                  modalId,
+                                                                  title,
+                                                                  onClose,
+                                                                  disabled = false,
+                                                                  disableScrollLock = false,
+                                                                  containerStyles,
+                                                                  modalStyles,
+                                                                  children,
+                                                                  headerStyles,
+                                                                  titleIcon,
+                                                                }) => {
   const { getModalState } = useModal();
 
   const { isOpen } = getModalState(modalId);
-
 
 
   useEffect(() => {
@@ -39,20 +40,21 @@ const CentralModal: React.FC<React.PropsWithChildren<CentralModalProps>> = ({
     } else {
       document.body.style.overflow = 'auto';
     }
-  }, [isOpen]);
+  }, [ isOpen ]);
 
   if (!isOpen) return null;
   return (
-    <Overlay className={classNames(styles.overlay, containerStyles)}>
+    <Overlay className={classNames(s.overlay, containerStyles)}>
       <Fade open>
-        <div className={classNames(styles.modal, modalStyles)} onClick={e => e.stopPropagation()}>
-          <div className={classNames({ [styles.disabled]: disabled })}>
-            <div className={classNames(styles.header, headerStyles)}>
-              <h2 className={styles.title}>{title}</h2>
-              <button className={styles.closeBtn} onClick={onClose}>
-                <img src={closeIcon} alt={''} width={32} height={32}/>
+        <div className={classNames(s.modal, modalStyles)} onClick={e => e.stopPropagation()}>
+          <div className={classNames({ [s.disabled]: disabled })}>
+            <header className={classNames(s.header, headerStyles)}>
+              <h2 className={s.title}>{title}{titleIcon &&
+                <img src={titleIcon} alt={'title'} width={14} height={14} />}</h2>
+              <button className={s.closeBtn} onClick={onClose}>
+                <img src={closeIcon} alt={'Close'} width={14} height={14} />
               </button>
-            </div>
+            </header>
             <div>{children}</div>
           </div>
         </div>
