@@ -5,13 +5,13 @@ import fireIcon from '../../../../../assets/icons/streak-fire.svg';
 import freezeIcon from '../../../../../assets/icons/streak-freeze.svg';
 import { DayType } from '../../../../../types';
 
-
 interface StreakDayProps {
   dayNumber: number;
   type: DayType;
+  weekIndex: number;
 }
 
-export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type }) => {
+export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type, weekIndex }) => {
   const getIcon = () => {
     switch (type) {
       case 'streak':
@@ -22,6 +22,8 @@ export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type }) => {
         return null;
     }
   };
+
+  const weekdays = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
 
   return (
     <div>
@@ -34,7 +36,8 @@ export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type }) => {
         {dayNumber}
       </div>
 
-      <p className={styles.dayOfTheWeek}>чт</p>
+      {/* Dynamic weekday based on weekIndex */}
+      <p className={styles.dayOfTheWeek}>{weekdays[weekIndex]}</p>
     </div>
   );
 };

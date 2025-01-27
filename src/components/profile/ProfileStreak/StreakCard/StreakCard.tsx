@@ -37,10 +37,11 @@ export const StreakCard: React.FC<StreakCardProps> = ({ streakCount, freezeCount
       </div>
 
       <div className={styles.streakDays}>
-        {days.map(({ day, type }) => (
-          <StreakDay key={day} dayNumber={day} type={type} />
+        {days.map(({ day, type }, index) => (
+          <StreakDay key={day} dayNumber={day} type={type} weekIndex={index} />
         ))}
       </div>
+
 
       <div className={styles.progressContainer}>
         <div className={`${styles['progressBarTextWrp']} ${styles['progressText']}`}>
