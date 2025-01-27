@@ -29,7 +29,9 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({ nickname, blogName, su
                         <img src={clanIcon} />
                     </div>
 
-                    <img src={profileImagePlaceholder} className={styles.imagePlaceholder} />
+                    <div className={styles.imagePlaceholder}>
+                        <img src={profileImagePlaceholder} />
+                    </div>
                     {isVip ? (
                         <>
                             <div className={styles.vipWrp}>
@@ -38,7 +40,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({ nickname, blogName, su
                             </div>
                         </>
                     ) : <>
-                        <div style={{height: '16px'}}></div>
+                        <div style={{ height: '16px' }}></div>
                     </>}
 
                 </div>
