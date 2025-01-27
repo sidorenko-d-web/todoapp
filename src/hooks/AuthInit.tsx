@@ -44,7 +44,7 @@ export function AuthInit({ children }: AuthInitProps) {
   }
 
   if (true) {
-    return <SkinSetupPage/>;
+    return <LoadingScreen/>;
   }
 
 
