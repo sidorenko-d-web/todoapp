@@ -60,7 +60,7 @@
 .statusIcon {
   @extend %icon-base;
   border-radius: 50%;
-  background-color: var.$color-text-registration;
+  background-color: var.$color-text-super-transparent;
 }
 
 %wrapper-base {
@@ -104,7 +104,7 @@
 }
 
 .selectText {
-  color: var.$color-text-registration;
+  color: var.$color-text-super-transparent;
   text-align: center;
   font-size: 16px;
   font-weight: 500;
