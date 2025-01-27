@@ -11,6 +11,10 @@
   margin: 10px 0 0;
 }
 
+.listBadge {
+  position: relative;
+}
+
 .badge {
   display: flex;
   gap: 5px;
@@ -123,6 +127,11 @@
 
 .userCardRank, .userCardRefs {
   color: var.$color-blue-primary;
+}
+
+.userCardRefs {
+  background: none;
+  border: none;
 }
 
 .buttonContainer {
