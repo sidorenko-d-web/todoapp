@@ -4,6 +4,7 @@ export enum AppRoute {
   Integration = '/integrations/:integrationId',
   Tasks = '/tasks',
   Profile = '/profile',
+  Store = '/store',
 
   NotFound = '*',
 }

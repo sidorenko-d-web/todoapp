@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReducer } from './rootReducer';
 import {authApi} from './api';
+import { shopApi } from './api/shop/api';
+import { inventoryApi } from './api/inventory/api';
 import { integrationsApi } from './api/integrations/api';
 import { profileApi } from './api/profile/api';
 
@@ -9,6 +11,8 @@ export const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(
       authApi.middleware,
+      shopApi.middleware,
+      inventoryApi.middleware,
       integrationsApi.middleware,
       profileApi.middleware,
     ),
