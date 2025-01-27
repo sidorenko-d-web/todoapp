@@ -3,9 +3,9 @@ import styles from './TabsNavigation.module.scss';
 import clsx from 'clsx';
 
 interface Props {
-  tabs: string[];
+  tabs: { title: string; value: string }[];
   currentTab: string;
-  onChange: Dispatch<SetStateAction<string>>;
+  onChange: Dispatch<SetStateAction<{ title: string; value: string }>>;
   colorClass?: string;
 }
 
@@ -19,10 +19,10 @@ const TabsNavigation: FC<Props> = ({ tabs, currentTab, onChange, colorClass }) =
         return (
           <button
             onClick={handleClick}
-            className={item === currentTab ? styles[colorClass ?? 'tabItemSelectedWhite'] : styles.tabItem}
+            className={item.title === currentTab ? styles[colorClass ?? 'tabItemSelectedWhite'] : styles.tabItem}
             key={item + '' + index}
           >
-            {item}
+            {item.title}
           </button>
         );
       })}

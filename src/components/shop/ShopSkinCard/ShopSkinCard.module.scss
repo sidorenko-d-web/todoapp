@@ -1,0 +1,151 @@
+@use '/src/assets/styles' as *;
+
+.storeCard {
+  background-color: $secondary-bg;
+  align-self: stretch;
+  padding: 10px;
+  border-radius: 12px;
+  .header {
+    display: flex;
+    gap: 10px;
+    .image {
+      border: 2px solid $accent-blue;
+      border-radius: 8px;
+      background: $third-bg;
+      flex-direction: column;
+      display: flex;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      aspect-ratio: 1;
+      position: relative;
+    }
+
+    .vipImage {
+      background: $gradient;
+      border: none;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        background: $third-bg;
+        width: 56px;
+        height: 56px;
+        border-radius: 6px;
+      }
+
+      img {
+        width: 56px;
+        height: 56px;
+        position: absolute;
+        z-index: 100;
+        border-radius: 6px;
+      }
+    }
+
+    .title {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      h3 {
+        color: $color-white;
+        font-weight: 500;
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+      .description {
+        font-weight: 500;
+        color: $half-transparent-text;
+        line-height: 16.8px;
+      }
+    }
+
+    .icons {
+      display: flex;
+      gap: 2px;
+      align-items: start;
+      .vip {
+        background: $gradient;
+        display: flex;
+        gap: 1;
+        border-radius: 4px;
+        padding: 2px;
+
+        img {
+          width: 12px;
+          height: 12px;
+        }
+
+        p {
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 12px;
+          color: $color-white;
+        }
+      }
+
+      .personIcon {
+        width: 16px;
+        height: 16px;
+        background: $half-tgransparent-bg;
+        border-radius: 4px;
+        padding: 2px;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    .button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: center;
+      font-weight: 500;
+      align-items: center;
+      background: $gray;
+      border: 1px solid $dark-grey-border;
+      color: $color-white;
+      gap: 5px;
+
+      &:first-child {
+        background: $accent-blue;
+        border: 1px solid $dark-blue-border;
+        flex: 1;
+
+        img {
+          width: 14px;
+          aspect-ratio: 1;
+        }
+      }
+
+      &:last-child {
+        background: $gray;
+        opacity: 0.3;
+        flex: 1;
+        border: none;
+      }
+    }
+
+    .vipButton {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: center;
+      font-weight: 500;
+      align-items: center;
+      border: 1px solid $dark-grey-border;
+      color: $color-white;
+      gap: 5px;
+      flex: 1;
+      background: $gradient !important;
+    }
+  }
+}

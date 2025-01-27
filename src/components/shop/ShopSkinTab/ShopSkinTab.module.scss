@@ -1,0 +1,22 @@
+@use '/src/assets/styles' as *;
+
+.personCards {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+
+  h2 {
+    text-align: center;
+    color: $half-transparent-text;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .vipTitle {
+    background-image: $gradient;
+    color: transparent;
+    background-clip: text;
+    align-self: center;
+  }
+}

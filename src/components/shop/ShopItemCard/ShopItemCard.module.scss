@@ -130,15 +130,6 @@
       @extend .variant;
       background-color: red;
     }
-
-    .personIcon {
-      width: 16px;
-      height: 16px;
-      background: $half-tgransparent-bg;
-      border-radius: 4px;
-      padding: 2px;
-      opacity: 0.5;
-    }
   }
 
   .progress {
