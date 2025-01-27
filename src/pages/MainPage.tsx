@@ -1,18 +1,16 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
+import { IntegrationCreation } from '../components';
 
-interface MainPageProps {
+import s from './MainPage.module.scss';
 
-}
-
-const MainPage: FC<MainPageProps> = ({}: MainPageProps) => {
-  const text = 'MainPage component';
-
+const MainPage: FC = () => {
   return (
-    <>
-      <h2>{text}</h2>
+    <main className={s.page}>
       <Link to={'/tasks'}>Tasks</Link>
-    </>
+
+      <IntegrationCreation/>
+    </main>
   );
 };
 
