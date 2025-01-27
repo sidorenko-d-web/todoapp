@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './StreakCard.module.scss';
 
 
-import chestIcon from '../../../../assets/icons/chest.svg';
+import chestIcon from '../../../../assets/icons/elite-chest-glowing.svg';
 import snowflake from '../../../../assets/icons/snowflake.svg';
 import ProgressLine from '../../../shared/ProgressLine/ProgressLine';
 import { DayType, StreakDay } from '../StreakDay';
@@ -30,7 +30,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({ streakCount, freezeCount
             </div>
           </div>
         </div>
-        <div className={styles.fire}/>
+        <div className={styles.fire} />
 
       </div>
 
@@ -44,7 +44,10 @@ export const StreakCard: React.FC<StreakCardProps> = ({ streakCount, freezeCount
         <div className={`${styles['progressBarTextWrp']} ${styles['progressText']}`}>
           <span>{progress}/30 дней</span>
           <span className={styles.reward}>
-            Легендарный сундук <img src={chestIcon} />
+            Легендарный сундук
+            <div className={styles.chestImgContainer}>
+              <img src={chestIcon} className={styles.chestImg} />
+            </div>
           </span>
         </div>
         <ProgressLine level={3} color='red' />
