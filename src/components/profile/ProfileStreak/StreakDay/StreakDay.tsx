@@ -3,9 +3,8 @@ import styles from './StreakDay.module.scss';
 
 import fireIcon from '../../../../assets/icons/streak-fire.svg';
 import freezeIcon from '../../../../assets/icons/streak-freeze.svg';
+import { DayType } from '../../../../types';
 
-
-export type DayType = 'streak' | 'freeze' | 'regular';
 
 interface StreakDayProps {
   dayNumber: number;
