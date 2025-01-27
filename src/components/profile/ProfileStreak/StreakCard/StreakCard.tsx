@@ -5,8 +5,9 @@ import styles from './StreakCard.module.scss';
 import chestIcon from '../../../../assets/icons/elite-chest-glowing.svg';
 import snowflake from '../../../../assets/icons/snowflake.svg';
 import ProgressLine from '../../../shared/ProgressLine/ProgressLine';
-import { StreakDay } from '../StreakDay';
+
 import { DayType } from '../../../../types';
+import { StreakDay } from './StreakDay';
 
 
 interface StreakCardProps {
