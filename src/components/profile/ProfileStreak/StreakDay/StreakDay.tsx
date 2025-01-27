@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './CalendarDay.module.scss';
+import styles from './StreakDay.module.scss';
 
 import fireIcon from '../../../../assets/icons/streak-fire.svg';
 import freezeIcon from '../../../../assets/icons/streak-freeze.svg';
@@ -7,18 +7,18 @@ import freezeIcon from '../../../../assets/icons/streak-freeze.svg';
 
 export type DayType = 'streak' | 'freeze' | 'regular';
 
-interface CalendarDayProps {
+interface StreakDayProps {
   dayNumber: number;
   type: DayType;
 }
 
-export const CalendarDay: React.FC<CalendarDayProps> = ({ dayNumber, type }) => {
+export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type }) => {
   const getIcon = () => {
     switch (type) {
       case 'streak':
-        return <img src={fireIcon} alt="Streak" />;
+        return <img src={fireIcon} />;
       case 'freeze':
-        return <img src={freezeIcon} alt="Freeze" />;
+        return <img src={freezeIcon} />;
       default:
         return null;
     }

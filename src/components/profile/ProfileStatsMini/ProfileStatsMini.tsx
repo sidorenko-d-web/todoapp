@@ -24,7 +24,7 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({subscribers, 
                 </div>
 
                 <div className={styles.statWrp}>
-                    <p className={styles.stat}>{subscribers}</p>
+                    <span className={styles.stat}>{subscribers}</span>
                     <img src={subscriberIcon} width={14} height={14} />
                 </div>
 

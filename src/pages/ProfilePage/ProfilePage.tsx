@@ -4,6 +4,7 @@ import styles from './ProfilePage.module.scss';
 import { ProfileStatsMini } from "../../components/profile/ProfileStatsMini";
 import { ProfileInfo } from "../../components/profile/ProfileInfo";
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from "../../redux/api/profile/api";
+import { StreakCard } from "../../components/profile/ProfileStreak/StreakDay/StreakCard/StreakCard";
 
 
 export const ProfilePage: React.FC = () => {
@@ -19,6 +20,15 @@ export const ProfilePage: React.FC = () => {
 
     const position = userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length!;
 
+    const weekData = [
+        { day: 20, type: 'freeze' },
+        { day: 21, type: 'streak' },
+        { day: 22, type: 'streak' },
+        { day: 23, type: 'regular' },
+        { day: 24, type: 'regular' },
+        { day: 25, type: 'regular' },
+        { day: 26, type: 'regular' }
+      ];
 
     return (
         <>
@@ -36,6 +46,8 @@ export const ProfilePage: React.FC = () => {
 
                     <ProfileInfo nickname={userProfileData.username} blogName={userProfileData.blog_name} 
                         subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left} position={position}/>
+
+                    <StreakCard streakCount={12} freezeCount={0} days={weekData} progress={12} />
                 </div>}
         </> 
     );

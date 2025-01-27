@@ -47,11 +47,11 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({nickname, blogName, sub
                         <p className={styles.subscriptionText}>Подписка</p>
 
                         <div className={styles.subscriptionLevelWrp}>
-                            <p className={styles.subscriptionLevel}>{subscriptionIntegrationsLeft}</p>
+                            <p className={styles.subscriptionLevel}>{subscriptionIntegrationsLeft}/5</p>
                             <img src={subscriptionLeveIcon}/>
                         </div>
                     </div>
-                    <ProgressLine level={subscriptionIntegrationsLeft} color="red"/>
+                    <ProgressLine level={subscriptionIntegrationsLeft} color="blue"/>
                 </div>
             </div>
             
