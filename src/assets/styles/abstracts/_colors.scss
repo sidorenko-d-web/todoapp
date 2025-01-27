@@ -6,9 +6,16 @@ $color-black: #000000;
 $color-bg: #141319;
 $footer-bg: #2D2D35;
 
+$color-opacity-black: transparentize($color-black, 0.5);
+
 $color-dark-gray-stroke: #282830;
 
 $color-green: #219653;
+
+$grayed-white: #d9dce1;
+$light-gray-bg: #cbcee2;
+$gradient: linear-gradient(to right, #1551e8, #e84951);
+
 $color-red: #E84949;
 $color-gray: #373A43;
 $color-blue-primary: #2F80ED;
@@ -18,10 +25,14 @@ $color-dark-blue: #2D79DF;
 
 $color-text: #FFF;
 $color-text-semi-transparent: #AFB9D4;
+$color-text-super-transparent: #505B78;
 
 $color-card-bg: #1C1D22;
 $color-badge-bg: #212129;
+$color-badge-button-bg: #D9DCE1;
 $color-bg: #141319;
+
+$color-dark-gray: #282830;
 
 $color-primary: #2F80ED;
 $color-border-primary: #2064C0;

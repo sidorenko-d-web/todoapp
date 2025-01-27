@@ -1,0 +1,163 @@
+@use '/src/assets/styles' as *;
+
+.storeCard {
+  background-color: $color-card-bg;
+  align-self: stretch;
+  padding: 10px;
+  border-radius: 12px;
+  .header {
+    display: flex;
+    gap: 10px;
+    .image {
+      border: 2px solid $color-primary;
+      border-radius: 8px;
+      background: $footer-bg;
+      flex-direction: column;
+      display: flex;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      aspect-ratio: 1;
+      position: relative;
+    }
+
+    .vipImage {
+      background: $gradient;
+      border: none;
+      position: relative;
+      width: 60px;
+      height: 60px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        background: $footer-bg;
+        width: 56px;
+        height: 56px;
+        border-radius: 6px;
+      }
+
+      img {
+        width: 56px;
+        height: 56px;
+        position: absolute;
+        z-index: 100;
+        border-radius: 6px;
+      }
+    }
+
+    .title {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      width: 100%;
+
+      .headline {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        width: 100%;
+        
+        h3 {
+          color: $color-white;
+          font-weight: 500;
+          font-size: 16px;
+          text-wrap: pretty;
+        }
+        .icons {
+          display: flex;
+          gap: 2px;
+          align-items: start;
+          .vip {
+            background: $gradient;
+            display: flex;
+            gap: 1;
+            border-radius: 4px;
+            padding: 2px;
+
+            img {
+              width: 12px;
+              height: 12px;
+            }
+
+            p {
+              font-weight: 500;
+              font-size: 12px;
+              line-height: 12px;
+              color: $color-white;
+            }
+          }
+
+          .personIcon {
+            width: 16px;
+            height: 16px;
+            background: $color-text-super-transparent;
+            border-radius: 4px;
+            padding: 2px;
+            opacity: 0.5;
+          }
+        }
+      }
+      .description {
+        font-weight: 500;
+        color: $color-text-semi-transparent;
+        line-height: 16.8px;
+        text-wrap: pretty;
+      }
+    }
+  }
+
+  .actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    .button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: center;
+      font-weight: 500;
+      align-items: center;
+      background: $color-gray;
+      border: 1px solid $color-dark-gray-stroke;
+      color: $color-white;
+      gap: 5px;
+
+      &:first-child {
+        background: $color-primary;
+        border: 1px solid $color-border-primary;
+        flex: 1;
+
+        img {
+          width: 14px;
+          aspect-ratio: 1;
+        }
+      }
+
+      &:last-child {
+        background: $color-gray;
+        opacity: 0.3;
+        flex: 1;
+        border: none;
+      }
+    }
+
+    .vipButton {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: center;
+      font-weight: 500;
+      align-items: center;
+      border: 1px solid $color-dark-gray-stroke;
+      color: $color-white;
+      gap: 5px;
+      flex: 1;
+      background: $gradient !important;
+      text-wrap: pretty;
+    }
+  }
+}
