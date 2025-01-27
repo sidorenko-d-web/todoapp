@@ -2,21 +2,23 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSignInMutation } from '../redux';
 import { LoadingScreen } from '../components/shared/LoadingScreen';
-import { LanguageSelect } from '../pages/LanguageSelect/LanguageSelect.tsx';
-import { SkinSetupPage } from '../pages/SkinSetupPage/SkinSetupPage.tsx';
+import { LanguageSelect } from '../pages/LanguageSelect/LanguageSelect';
+import { SkinSetupPage } from '../pages/SkinSetupPage/SkinSetupPage';
 
 type AuthInitProps = {
   children: React.ReactNode;
 };
 
+type AuthStep = 'loading' | 'language' | 'skin' | 'completed';
+
 export function AuthInit({ children }: AuthInitProps) {
   const [signIn, { isLoading, isError, error }] = useSignInMutation();
-  const [isAuthDone, setIsAuthDone] = useState(false);
-  const [showLanguageSelect, setShowLanguageSelect] = useState(false);
-  const [authCompleted, setAuthCompleted] = useState(false);
+  const [currentStep, setCurrentStep] = useState<AuthStep>('loading');
+  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [showLoading, setShowLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {
+    const initAuth = async () => {
       try {
         const ipData = await axios.get('https://ipapi.co/json/').then(res => res.data);
         // const init_data = window.Telegram.WebApp.initData;
@@ -30,32 +32,59 @@ export function AuthInit({ children }: AuthInitProps) {
 
         localStorage.setItem('access_token', authResponse.access_token);
         localStorage.setItem('refresh_token', authResponse.refresh_token);
-        setShowLanguageSelect(true);
-        setIsAuthDone(true);
+        
+        // Добавляем задержку в 2 секунды перед переходом к следующему шагу пока временно
+        setTimeout(() => {
+          setShowLoading(false);
+          setCurrentStep('language');
+        }, 2000);
+        
       } catch (err) {
         console.error('Ошибка при авторизации:', err);
-        setIsAuthDone(true);
+        setShowLoading(false);
       }
-    })();
+    };
+
+    initAuth();
   }, [signIn]);
 
-  if (isLoading && !isAuthDone) {
+  const handleLanguageSelect = (language: string) => {
+    setSelectedLanguage(language);
+  };
+
+  const handleLanguageContinue = () => {
+    setCurrentStep('skin');
+  };
+
+  const handleSkinContinue = () => {
+    setCurrentStep('completed');
+  };
+
+  if (isLoading || showLoading) {
     return <LoadingScreen />;
   }
-
-  if (true) {
-    return <LoadingScreen/>;
-  }
-
-
 
   if (isError) {
     return <div style={{ color: 'red' }}>Ошибка при авторизации: {String(error)}</div>;
   }
 
-  if (authCompleted) {
-    return <>{children}</>;
+  switch (currentStep) {
+    case 'language':
+      return (
+        <LanguageSelect
+          selectedLanguage={selectedLanguage}
+          onLanguageSelect={handleLanguageSelect}
+          onContinue={handleLanguageContinue}
+        />
+      );
+    
+    case 'skin':
+      return <SkinSetupPage onContinue={handleSkinContinue} />;
+    
+    case 'completed':
+      return <>{children}</>;
+    
+    default:
+      return null;
   }
-
-  return null;
 }

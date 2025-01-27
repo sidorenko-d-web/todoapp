@@ -3,6 +3,10 @@ import styles from './SkinSetupPage.module.scss';
 import humanIcon from '../../../src/assets/icons/human.svg';
 import sckinIcon from '../../../src/assets/icons/skin.svg';
 
+interface SkinSetupPageProps {
+  onContinue: () => void;
+}
+
 const BODY_PARTS = [
   { id: 'head', label: 'Голова' },
   { id: 'face', label: 'Лицо' },
@@ -17,7 +21,7 @@ const SKIN_OPTIONS = Array(9)
     value: index + 1,
   }));
 
-export const SkinSetupPage = () => {
+export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
   const [selectedPart, setSelectedPart] = useState('head');
   const [selectedSkin, setSelectedSkin] = useState('skin1');
 
@@ -53,7 +57,9 @@ export const SkinSetupPage = () => {
           </button>
         ))}
       </div>
-      <button className={styles.continueButton}>Продолжить</button>
+      <button className={styles.continueButton} onClick={onContinue}>
+        Продолжить
+      </button>
       <div className={styles.selectText}>Настройте внешность</div>
     </div>
   );

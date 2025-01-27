@@ -11,21 +11,29 @@ export const LoadingScreen = () => {
       setDots(prev => (prev.length >= 3 ? '.' : prev + '.'));
     }, 500);
 
-    const progressInterval = setInterval(() => {
-      setProgress(prev => (prev >= 100 ? 100 : prev + 1));
-    }, 100);
+    return () => clearInterval(dotsInterval);
+  }, []);
 
-    return () => {
-      clearInterval(dotsInterval);
-      clearInterval(progressInterval);
-    };
+  // Управление прогрессом
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return prev + 1;
+      });
+    }, 20);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <div className={styles.root}>
       <img className={styles.coin} src={coinIcon} alt="Coin" />
       <div className={styles.loadingWrp}>
-        <ProgressBar progress={progress}/>
+        <ProgressBar progress={progress} />
         <div className={styles.text}>Загрузка{dots}</div>
       </div>
     </div>
