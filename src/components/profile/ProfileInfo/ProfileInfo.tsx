@@ -21,7 +21,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({nickname, blogName, sub
         <div className={styles.wrp}>
             <div className={styles.avatar}>
                 <div className={styles.clanWrp}>
-                    <p className={styles.position}>{`#${position}`}</p>
+                    <span className={styles.position}>{`#${position}`}</span>
                     <img src={clanIcon} />
                 </div>
 
@@ -32,8 +32,8 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({nickname, blogName, sub
             <div className={styles.infoCard}>
                 <div className={styles.info}>
                     <div className={styles.nicknameWrp}>
-                        <p className={styles.nickname}>{nickname}</p>
-                        <p className={styles.subscribers}>999</p>
+                        <span className={styles.nickname}>{nickname}</span>
+                        <span className={styles.subscribers}>999</span>
                         <img className={styles.edit} src={editIcon} />
                     </div>
 
@@ -44,10 +44,10 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({nickname, blogName, sub
                 
                 <div className={styles.subscription}>
                     <div className={styles.subscriptionTextWrp}>
-                        <p className={styles.subscriptionText}>Подписка</p>
+                        <span className={styles.subscriptionText}>Подписка</span>
 
                         <div className={styles.subscriptionLevelWrp}>
-                            <p className={styles.subscriptionLevel}>{subscriptionIntegrationsLeft}/5</p>
+                            <span className={styles.subscriptionLevel}>{subscriptionIntegrationsLeft}/5</span>
                             <img src={subscriptionLeveIcon}/>
                         </div>
                     </div>

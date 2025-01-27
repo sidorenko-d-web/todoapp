@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from './StreakCard.module.scss';
-import { DayType, StreakDay } from '../StreakDay';
 
-import chestIcon from '../../../../../assets/icons/chest.svg';
-import snowflake from '../../../../../assets/icons/snowflake.svg';
-import ProgressLine from '../../../../shared/ProgressLine/ProgressLine';
+
+import chestIcon from '../../../../assets/icons/chest.svg';
+import snowflake from '../../../../assets/icons/snowflake.svg';
+import ProgressLine from '../../../shared/ProgressLine/ProgressLine';
+import { DayType, StreakDay } from '../StreakDay';
 
 
 interface StreakCardProps {

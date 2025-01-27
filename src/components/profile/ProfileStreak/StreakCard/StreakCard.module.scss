@@ -1,4 +1,4 @@
-@use '../../../../../assets/styles/index.scss' as var;
+@use '../../../../assets/styles/index.scss' as var;
 
 .wrp {
     background-color: #1e1e1e;
@@ -20,7 +20,7 @@
             padding: 10px;
             background-color: var.$footer-bg;
             width: 65px;
-            background-image: url('../../../../../assets/icons/fire.svg');
+            background-image: url('../../../../assets/icons/fire.svg');
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;

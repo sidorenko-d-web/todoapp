@@ -25,13 +25,17 @@ export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type }) => {
   };
 
   return (
-    <div className={`${styles['calendar-day']} ${styles[type]}`}>
-      {(type === 'streak' || type === 'freeze') && (
-        <div className={`${styles['status-icon']} ${styles[type]}`}>
-          {getIcon()}
-        </div>
-      )}
-      {dayNumber}
+    <div>
+      <div className={`${styles['calendar-day']} ${styles[type]}`}>
+        {(type === 'streak' || type === 'freeze') && (
+          <div className={`${styles['status-icon']} ${styles[type]}`}>
+            {getIcon()}
+          </div>
+        )}
+        {dayNumber}
+      </div>
+
+      <p className={styles.dayOfTheWeek}>чт</p>
     </div>
   );
 };
