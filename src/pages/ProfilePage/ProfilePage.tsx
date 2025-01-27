@@ -5,7 +5,8 @@ import { ProfileStatsMini } from "../../components/profile/ProfileStatsMini";
 import { ProfileInfo } from "../../components/profile/ProfileInfo";
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from "../../redux/api/profile/api";
 import { StreakCard } from "../../components/profile/ProfileStreak/StreakCard/StreakCard";
-import { ProfileStats } from "../../components/profile";
+import { DayType, ProfileStats } from "../../components/profile";
+import RewardsList from "../../components/profile/RewardsCard/RewardsList";
 
 
 export const ProfilePage: React.FC = () => {
@@ -21,7 +22,7 @@ export const ProfilePage: React.FC = () => {
 
     const position = userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length!;
 
-    const weekData = [
+    const weekData: { day: number; type: DayType }[] = [
         { day: 20, type: 'freeze' },
         { day: 21, type: 'streak' },
         { day: 22, type: 'streak' },
@@ -55,6 +56,8 @@ export const ProfilePage: React.FC = () => {
                         <ProfileStats earned={userProfileData.total_earned} views={userProfileData.total_views}
                             favoriteCompany={'Favourite company'} comments={userProfileData.comments_answered} rewards={12} coffee={5} />
                     </div>
+
+                    <RewardsList/>
                 </div>}
         </>
     );
