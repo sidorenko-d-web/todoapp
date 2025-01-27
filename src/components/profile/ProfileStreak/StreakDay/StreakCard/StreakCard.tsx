@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './StreakCard.module.scss';
 import { DayType, StreakDay } from '../StreakDay';
 
-import fireIcon from '../../../../../assets/icons/fire.svg';
 import chestIcon from '../../../../../assets/icons/chest.svg';
 import snowflake from '../../../../../assets/icons/snowflake.svg';
 import ProgressLine from '../../../../shared/ProgressLine/ProgressLine';
@@ -19,14 +18,18 @@ export const StreakCard: React.FC<StreakCardProps> = ({ streakCount, freezeCount
   return (
     <div className={styles.wrp}>
       <div className={styles.header}>
-        <span className={styles.badge}>Новичок</span>
-        <div className={styles.title}>
-          <h2 className={styles.daysInARow}>{streakCount} дней в блоге!</h2>
-          <div className={styles.freezeCount}>
-            <span>{freezeCount}</span>
-            <img src={snowflake} />
+        <div className={styles.daysInARowWrp}>
+          <span className={styles.badge}>Новичок</span>
+
+          <div className={styles.title}>
+            <h2 className={styles.daysInARow}>{streakCount} дней в блоге!</h2>
+            <div className={styles.freezeCount}>
+              <span>{freezeCount}</span>
+              <img src={snowflake} />
+            </div>
           </div>
         </div>
+        <div className={styles.fire}/>
 
       </div>
 

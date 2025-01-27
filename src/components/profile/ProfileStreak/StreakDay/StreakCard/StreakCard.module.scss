@@ -12,21 +12,39 @@
 
     .header {
         display: flex;
-        flex-direction: column;
-    }
+        justify-content: space-between;
 
-    .daysInARow {
-        margin: 0;
-        color: var.$color-grayish-white;
-    }
+        .fire {
+            aspect-ratio: 1/1;
+            border-radius: 10px;
+            padding: 10px;
+            background-color: var.$footer-bg;
+            width: 65px;
+            background-image: url('../../../../../assets/icons/fire.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            background-size: 50%;
+        }
 
-    .badge {
-        color: var.$color-red;
-        padding: 5px;
-        width: fit-content;
-        border-radius: 4px;
-        font-size: 14px;
-        background-color: var.$color-gray;
+        .daysInARowWrp {
+            display: flex;
+            flex-direction: column;
+
+            .daysInARow {
+                margin: 0;
+                color: var.$color-grayish-white;
+            }
+
+            .badge {
+                color: var.$color-red;
+                padding: 5px;
+                width: fit-content;
+                border-radius: 4px;
+                font-size: 14px;
+                background-color: var.$color-gray;
+            }
+        }
     }
 
     .title {
