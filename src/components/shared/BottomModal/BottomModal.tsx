@@ -1,9 +1,11 @@
-import styles from './BottomModal.module.scss'
-import { useEffect } from 'react';
+import s from './BottomModal.module.scss';
+import { FC, PropsWithChildren, useEffect } from 'react';
 import { Fade, Overlay } from '../common';
-import closeIcon from '../../../assets/icons/close.svg'
+import closeIcon from '../../../assets/icons/close.svg';
 import classNames from 'classnames';
 import { useModal } from '../../../hooks';
+
+import modalGripIcon from '../../../assets/icons/modal-grip.svg';
 
 interface BottomModalProps {
   modalId: string;
@@ -13,24 +15,28 @@ interface BottomModalProps {
   disableScrollLock?: boolean;
   containerStyles?: string;
   modalStyles?: string;
+  titleWrapperStyles?: string;
   headerStyles?: string;
+  titleIcon?: string;
 }
 
-const BottomModal: React.FC<React.PropsWithChildren<BottomModalProps>> = ({
-                                                                          modalId,
-                                                                          title,
-                                                                          onClose,
-                                                                          disabled = false,
-                                                                          disableScrollLock = false,
-                                                                          containerStyles,
-                                                                          modalStyles,
-                                                                          children,
-                                                                          headerStyles,
-                                                                        }) => {
+const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
+                                                                            modalId,
+                                                                            title,
+                                                                            onClose,
+                                                                            disabled = false,
+                                                                            disableScrollLock = false,
+                                                                            containerStyles,
+                                                                            modalStyles,
+                                                                            children,
+                                                                            titleWrapperStyles,
+
+                                                                headerStyles,
+                                                                titleIcon,
+                                                                          }) => {
   const { getModalState } = useModal();
 
   const { isOpen } = getModalState(modalId);
-
 
 
   useEffect(() => {
@@ -39,20 +45,24 @@ const BottomModal: React.FC<React.PropsWithChildren<BottomModalProps>> = ({
     } else {
       document.body.style.overflow = 'auto';
     }
-  }, [isOpen]);
+  }, [ isOpen ]);
 
   if (!isOpen) return null;
   return (
-    <Overlay className={classNames(styles.overlay, containerStyles)}>
+    <Overlay className={classNames(s.overlay, containerStyles)}>
       <Fade open>
-        <div className={classNames(styles.modal, modalStyles)} onClick={e => e.stopPropagation()}>
-          <div className={classNames({ [styles.disabled]: disabled })}>
-            <div className={classNames(styles.header, headerStyles)}>
-              <h2 className={styles.title}>{title}</h2>
-              <button className={styles.closeBtn} onClick={onClose}>
-                <img src={closeIcon} alt={''} width={32} height={32}/>
-              </button>
-            </div>
+        <div className={classNames(s.modal, modalStyles)} onClick={e => e.stopPropagation()}>
+          <div className={classNames({ [s.disabled]: disabled })}>
+            <header className={classNames(s.header, headerStyles)}>
+              <img src={modalGripIcon} alt={'Grip'} width={26} height={3} />
+              <div className={classNames(s.titleWrapper, titleWrapperStyles)}>
+                <h2 className={s.title}>{title}{titleIcon &&
+                  <img src={titleIcon} alt={'title'} width={14} height={14} />}</h2>
+                <button className={s.closeBtn} onClick={onClose}>
+                  <img src={closeIcon} alt={'Close'} width={14} height={14} />
+                </button>
+              </div>
+            </header>
             <div>{children}</div>
           </div>
         </div>

@@ -3,26 +3,16 @@
 .overlay {
   display: flex;
   justify-content: center;
-  align-items: center;
-
-  & > div {
-    width: 100%;
-
-    & > div {
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-
-      height: 100%;
-    }
-  }
+  align-items: end;
 }
 
 .modal {
   @include var.hide-scroll;
-  padding: 0 24px 24px 24px;
-  background-color: white;
-  border-radius: 24px;
+  padding: 5px 12px 12px;
+  background-color: var.$color-bg;
+  border: 1px solid var.$color-dark-gray;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
   width: 100%;
   max-height: 80%;
   overflow-y: auto;
@@ -39,23 +29,34 @@
   top: 0;
   left: 0;
   z-index: 50;
+  width: 100%;
 
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  gap: 5px;
 
-  background-color: white;
-  padding: 40px 0 0 0;
-  margin-bottom: 24px;
+  padding: 5px 12px 10px;
+  margin-bottom: 5px;
+}
+
+.titleWrapper {
+  display: flex;
+  position: relative;
+  width: 100%;
+  justify-content: center;
 }
 
 .title {
-  font-size: 40px;
-  line-height: 48px;
-  font-weight: 400;
-  color: #3C3937;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
 
-  max-width: 80%;
+  color: var.$color-text;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 100%;
 
   margin: 0;
 }
@@ -63,6 +64,8 @@
 .closeBtn {
   background-color: transparent;
   border: none;
+  position: absolute;
+  right: 0;
 }
 
 .closeIcon {
@@ -73,10 +76,6 @@
   border: none;
 
   fill: currentcolor;
-
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
 
   &:hover {
     color: var.$color-black;
