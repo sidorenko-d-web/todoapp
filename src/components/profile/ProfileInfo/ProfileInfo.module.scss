@@ -3,18 +3,37 @@
 .wrp {
     display: flex;
     gap: 10px;
-
     height: 118px;
 
     .avatar {
         display: flex;
         flex-direction: column;
         align-items: center;
-        min-width: 118px;
         justify-content: space-between;
         border: 2px solid var.$color-dark-gray-stroke;
         border-radius: 12px;
         background-color: var.$footer-bg;
+
+        padding: 2px;
+
+
+        &.vip {
+            background: linear-gradient(transparent, transparent) padding-box,
+            linear-gradient(90deg, #1551E8 0%, #E84951 100%) border-box;
+            border-radius: 12px;
+            border: 2px solid transparent;
+        }
+
+        .avatarImageWrp {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 118px;
+            height: 100%;
+            justify-content: space-between;
+            border-radius: 12px;
+            background-color: var.$footer-bg;
+        }
 
         .clanWrp {
             display: flex;
@@ -22,7 +41,11 @@
             justify-content: center;
             align-items: center;
             gap: 2px;
-            margin-top: 4px;
+            margin-top: 2px;
+
+            &.vip {
+                margin-top: 4px;
+            }
 
             background-color: var.$color-gray;
             border-radius: 4px;
@@ -31,6 +54,22 @@
                 font-size: 12px;
                 font-weight: 500;
                 margin: 0;
+            }
+        }
+
+        .vipWrp {
+            display: flex;
+            align-items: center;
+            height: 16px;
+            border-radius: 4px;
+            padding: 2px;
+            gap: 1px;
+            margin-bottom: 4px;
+
+            background: linear-gradient(90deg, #1551E8 0%, #E84951 100%);
+
+            .vipText {
+                font-size: 12px;
             }
         }
     }

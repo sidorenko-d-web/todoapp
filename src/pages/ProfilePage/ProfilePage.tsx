@@ -43,7 +43,7 @@ export const ProfilePage: React.FC = () => {
                     </div>
 
                     <ProfileInfo nickname={userProfileData.username} blogName={userProfileData.blog_name}
-                        subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left} position={position} />
+                        subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left} position={position} isVip={false}/>
 
                     <StreakCard streakCount={12} freezeCount={0} days={weekData} progress={12} />
 

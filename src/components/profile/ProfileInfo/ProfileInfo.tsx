@@ -5,6 +5,8 @@ import styles from './ProfileInfo.module.scss';
 import profileImagePlaceholder from '../../../assets/icons/profile-icon-placeholder.svg';
 import clanIcon from '../../../assets/icons/clan-red.svg';
 import editIcon from '../../../assets/icons/edit.svg';
+import vipIcon from '../../../assets/icons/vip.svg';
+
 import subscriptionLeveIcon from '../../../assets/icons/subscription-level.svg';
 
 import ProgressLine from "../../shared/ProgressLine/ProgressLine";
@@ -14,19 +16,32 @@ interface ProfileInfoProps {
     blogName: string;
     subscriptionIntegrationsLeft: number;
     position: number;
+    isVip: boolean;
 }
 
-export const ProfileInfo: React.FC<ProfileInfoProps> = ({nickname, blogName, subscriptionIntegrationsLeft, position}) => {
+export const ProfileInfo: React.FC<ProfileInfoProps> = ({ nickname, blogName, subscriptionIntegrationsLeft, position, isVip }) => {
     return (
         <div className={styles.wrp}>
-            <div className={styles.avatar}>
-                <div className={styles.clanWrp}>
-                    <span className={styles.position}>{`#${position}`}</span>
-                    <img src={clanIcon} />
-                </div>
+            <div className={`${styles.avatar} ${isVip ? styles.vip : ""}`}>
+                <div className={styles.avatarImageWrp}>
+                    <div className={`${styles.clanWrp} ${isVip ? styles.vip : ""}`}>
+                        <span className={styles.position}>{`#${position}`}</span>
+                        <img src={clanIcon} />
+                    </div>
 
-                <img src={profileImagePlaceholder} height={30} width={22.5} />
-                <div style={{ height: '12px' }} />
+                    <img src={profileImagePlaceholder} height={30} width={22.5} />
+                    {isVip ? (
+                        <>
+                            <div className={styles.vipWrp}>
+                                <img src={vipIcon} />
+                                <span className={styles.vipText}>VIP</span>
+                            </div>
+                        </>
+                    ) : <>
+                        <div style={{height: '16px'}}></div>
+                    </>}
+
+                </div>
             </div>
 
             <div className={styles.infoCard}>
@@ -41,20 +56,20 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({nickname, blogName, sub
                         {blogName}
                     </p>
                 </div>
-                
+
                 <div className={styles.subscription}>
                     <div className={styles.subscriptionTextWrp}>
                         <span className={styles.subscriptionText}>Подписка</span>
 
                         <div className={styles.subscriptionLevelWrp}>
                             <span className={styles.subscriptionLevel}>{subscriptionIntegrationsLeft}/5</span>
-                            <img src={subscriptionLeveIcon}/>
+                            <img src={subscriptionLeveIcon} />
                         </div>
                     </div>
-                    <ProgressLine level={subscriptionIntegrationsLeft} color="blue"/>
+                    <ProgressLine level={subscriptionIntegrationsLeft} color="blue" />
                 </div>
             </div>
-            
+
         </div>
     );
 }
