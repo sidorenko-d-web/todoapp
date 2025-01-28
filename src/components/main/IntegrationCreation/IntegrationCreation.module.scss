@@ -7,9 +7,8 @@
   gap: 15px;
   position: absolute;
   right: 15px;
-  bottom: 80px;
+  bottom: calc(60px + 80px + 15px); // 60px - header height, 80px - footer height, 15px - padding from footer
   left: 15px;
-  padding-bottom: 15px;
 
   .button {
     display: flex;

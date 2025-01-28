@@ -1,0 +1,173 @@
+@use "../../assets/styles/abstracts" as var;
+
+$progress-bar-color: #2F80ED;
+
+.header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 20;
+    padding: 10px 10px 0px;
+    margin: 0;
+}
+
+
+.lowerHeader {
+    padding: 5px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 12px;
+    border: var.$header-border;
+    background: var.$color-header-dark;
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.15);
+
+    max-height: 50px;
+}
+
+
+.levelWrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+
+    .avatarWrapper {
+        padding: 5px;
+        border-radius: 8px;
+        border: var.$header-border;
+        background: var.$color-header-content-dark;
+        position: relative;
+        height: 40px;
+        width: 40px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+
+        .avatarIcon {
+            width: 37px;
+            height: 37px;
+            object-fit: contain;
+            position: absolute;
+            bottom: -3px;
+            left: calc(50% - 17px);
+        }
+    
+        .fireIcon {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 15px;
+            width: 15px;
+        }
+    }
+    
+
+    .info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        .subscribers {
+            width: fit-content;
+            display: flex;
+            flex-direction: row;
+            gap: 3px;
+            align-items: center;
+            border-radius: 8px;
+            border: var.$header-border;
+            background: var.$color-header-content-dark;
+
+            padding: 4px 4px 4px 7px;
+            height: 20px;
+            
+            .subscribersIcon {
+                width: 14px;
+                height: 14px;
+            }
+
+            .subscribersNumber {
+                @include var.number-text;
+                font-size: 14px;
+                
+            }
+            
+        }
+
+        .levelInfo {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 4px;
+
+            .levelNumber {
+
+                height: 16px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                padding: 1px 3px; 
+
+                color: var.$color-white;
+                font-family: var.$font-default;
+                font-size: 12px;
+                font-weight: 500;
+
+                border-radius: 3px;
+                border: var.$header-border;
+                background: $progress-bar-color;
+            }
+
+            .levelProgressBar {
+                width: 100px; 
+                height: 16px;
+                border-radius: 3px;
+                border: var.$header-border;
+                background: var.$color-header-content-dark;
+
+                &::-webkit-progress-bar {
+                    background: var.$color-header-content-dark;
+                    border-radius: 3px;
+                }
+
+                &::-webkit-progress-value {
+                    background: $progress-bar-color;
+                    border-radius: 2px;
+                }
+
+                &::-moz-progress-bar {
+                    background: $progress-bar-color;
+                    border-radius: 2px;
+                }
+            }
+        }
+    }
+}
+
+
+.coinsWrapper {
+    display: flex;
+    padding: 4px 4px 4px 7px;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+
+    align-self: stretch;
+    
+    border-radius: 8px;
+    border: var.$header-border;
+    background: var.$color-header-content-dark;
+
+    .coins {
+        @include var.number-text;
+        font-size: 14px;
+    }
+
+    .coinIcon {
+        height: 14px;
+        width: 14px;
+    }
+}
+
