@@ -2,7 +2,6 @@
 
 .inputGroup {
   position: relative;
-  margin-bottom: 15px;
   width: 100%;
   
 
@@ -30,6 +29,7 @@
     border-color: var.$color-red !important;
   }
 
+  
   .statusIcon {
     position: absolute;
     right: 10px;
@@ -41,3 +41,29 @@
     border-radius: 6px;
   }
 }
+
+.maxLength {
+  color: var.$color-red;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+.saveBtn {
+  width: 100%;
+  border: none;
+  color: var.$color-gray;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: var.$color-button-inactive;
+  pointer-events: none;
+
+  &.validInput {
+    background-color: var.$color-primary;
+    color: white;
+    border: 1px solid var.$color-border-primary;
+    pointer-events: all;
+  }
+}
+
