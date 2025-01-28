@@ -17,7 +17,7 @@ export const footerItems = [
         id: 1, 
         title: "Интеграции",
         icon: EyeIcon,
-        redirectTo: AppRoute.Integration
+        redirectTo: AppRoute.Integrations
     },
     {
         id: 2,
