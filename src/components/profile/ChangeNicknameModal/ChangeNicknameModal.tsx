@@ -19,7 +19,7 @@ const ChangeNicknameModal: FC<ChangeNicknameModalProps> = ({ modalId, onClose, c
   const [blogName, setBlogName] = useState(currentBlogName);
   const [suchUserExists, setSuchUserExists] = useState(false);
 
-  const isValid = (text: string) => text.trim().length > 0 && text.trim().length <= 26;
+  const isValid = (text: string) => text.trim().length <= 26;
 
   const [updateProfile, { isLoading }] = useUpdateCurrentUserProfileMutation();
   const { refetch: refetchProfile } = useGetCurrentUserProfileInfoQuery();
@@ -30,6 +30,8 @@ const ChangeNicknameModal: FC<ChangeNicknameModalProps> = ({ modalId, onClose, c
   const isFormValid =
     isValid(trimmedNickname) &&
     isValid(trimmedBlogName) &&
+    trimmedNickname.length > 0 &&
+    trimmedBlogName.length > 0 &&
     !(trimmedNickname === currentNickname.trim() &&
     trimmedBlogName === currentBlogName.trim());
 
