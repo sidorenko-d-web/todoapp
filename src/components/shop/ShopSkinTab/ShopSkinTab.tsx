@@ -8,9 +8,9 @@ const ShopSkinTab = () => {
 
   const { data: inventorySkins } = useGetInventorySkinsQuery();
 
-  const skinsData = shopSkins?.skins.filter(
-    item => inventorySkins?.skins.findIndex(_item => _item.id === item.id) === -1,
-  );
+  const skinsData = inventorySkins
+    ? shopSkins?.skins.filter(item => inventorySkins?.skins.findIndex(_item => _item.id === item.id) === -1)
+    : shopSkins?.skins;
 
   const skins = {
     head: skinsData?.filter(item => item.wear_location === 'head' && !item.limited),
@@ -20,6 +20,8 @@ const ShopSkinTab = () => {
     feet: skinsData?.filter(item => item.wear_location === 'feet' && !item.limited),
     vip: skinsData?.filter(item => item.limited),
   };
+
+  console.log(shopSkins);
 
   return (
     <>

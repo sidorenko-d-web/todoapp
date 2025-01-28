@@ -8,11 +8,9 @@ interface CreatingIntegrationModalProps {
 }
 
 const CreatingIntegrationModal: FC<CreatingIntegrationModalProps> = ({
-                                                                       modalId,
-                                                                       onClose,
-                                                                     }: CreatingIntegrationModalProps) => {
-
-
+  modalId,
+  onClose,
+}: CreatingIntegrationModalProps) => {
   return (
     <CentralModal modalId={modalId} title={'Создание интеграции'} onClose={onClose} titleIcon={integrationWhiteIcon}>
       todo content

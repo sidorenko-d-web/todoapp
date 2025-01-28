@@ -21,8 +21,8 @@ function AppRouter(): JSX.Element | null {
     <Routes>
       <Route path="/" element={<Layout/>}>
         <Route path={AppRoute.Main} element={<MainPage />} />
-        <Route path={AppRoute.Store} element={<ShopPage />} />
-        <Route path={AppRoute.Integration} element={<IntegrationPage/>} />
+        <Route path={AppRoute.Shop} element={<ShopPage />} />
+        <Route path={AppRoute.Integrations} element={<IntegrationPage/>} />
         <Route path={AppRoute.Tasks} element={<TasksPage />} />
         <Route path={AppRoute.Profile} element={<ProfilePage/>}/>
         <Route path={AppRoute.Promotion} element={<PromotionPage />} />
