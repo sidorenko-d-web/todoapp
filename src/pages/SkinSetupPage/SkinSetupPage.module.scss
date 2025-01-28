@@ -1,4 +1,4 @@
-@use '../../../src/assets/styles/index.scss' as var;
+@use '../../../src/assets/styles' as var;
 
 .root {
   display: flex;
@@ -15,7 +15,6 @@
   .avatarPreview {
     width: 280px;
     height: 280px;
-    width: 100%;
     margin: 32px 0 0 0;
     display: flex;
     align-items: center;
