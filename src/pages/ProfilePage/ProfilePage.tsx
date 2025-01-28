@@ -8,9 +8,15 @@ import { StreakCard } from "../../components/profile/ProfileStreak/StreakCard/St
 import { ProfileStats } from "../../components/profile";
 import RewardsList from "../../components/profile/RewardsCard/RewardsList";
 import { getWeekData } from "../../utils";
+import { useModal } from "../../hooks";
+import { MODALS } from "../../constants/modals";
+import CreatingIntegrationModal from "../../components/main/CreatingIntegrationModal/CreatingIntegrationModal";
+import ChangeNicknameModal from "../../components/profile/ChangeNicknameModal/ChangeNicknameModal";
 
 
 export const ProfilePage: React.FC = () => {
+
+    const { openModal, closeModal } = useModal();
 
     const { data: userProfileData, error: userError, isLoading: isUserLoading } = useGetCurrentUserProfileInfoQuery();
 
@@ -27,6 +33,7 @@ export const ProfilePage: React.FC = () => {
     const freezeDays = [29]; // TODO: replace with real data
 
     const weekData = getWeekData(streakDays, freezeDays);
+    
 
     return (
         <>
@@ -41,6 +48,8 @@ export const ProfilePage: React.FC = () => {
 
                         <ProfileStatsMini subscribers={userProfileData.subscribers} position={position} daysInARow={10} />
                     </div>
+
+                    <ChangeNicknameModal modalId={MODALS.CHANGING_NICKNAME} onClose={() => closeModal(MODALS.CHANGING_NICKNAME)}/>
 
                     <ProfileInfo nickname={userProfileData.username} blogName={userProfileData.blog_name}
                         subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left} position={position} isVip={false}/>
