@@ -7,19 +7,21 @@ import { IntegrationCreationCard, IntegrationCreationModal } from '../';
 import s from './IntegrationCreation.module.scss';
 
 export const IntegrationCreation = () => {
-  const { data: profile, isLoading: profileLoading } = useGetCurrentUserProfileInfoQuery();
-  const { data: integrations, isLoading: integrationsLoading } = useGetIntegrationsQuery({ status: 'creating' }, {
+  const { data: profile } = useGetCurrentUserProfileInfoQuery();
+  const {
+    data: integrations,
+    error: integrationsError,
+  } = useGetIntegrationsQuery({ status: 'creating' }, {
     pollingInterval: 10 * 60 * 1000,
-    skipPollingIfUnfocused: true,
   });
   const { openModal, closeModal } = useModal();
-
+  console.log(integrationsError);
   return (
     <section className={s.integrationsControls}>
       <button className={s.button} onClick={() => openModal(MODALS.CREATING_INTEGRATION)}>
         Создать интеграцию
         <span className={s.buttonBadge}>
-          {profile?.subscription_integrations_left || '-'}/5 <img src={integrationIcon} height={12} width={12}
+          {profile?.subscription_integrations_left || 0}/5 <img src={integrationIcon} height={12} width={12}
                                                                   alt="integration" />
         </span>
       </button>
@@ -27,7 +29,7 @@ export const IntegrationCreation = () => {
                                 onClose={() => closeModal(MODALS.CREATING_INTEGRATION)} />
 
       {
-        integrations?.integrations.map(integration => (
+        integrationsError?.status === 404 ? null : integrations?.integrations.map(integration => (
           <IntegrationCreationCard key={integration.id} integration={integration} />
         ))
       }

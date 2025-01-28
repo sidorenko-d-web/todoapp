@@ -6,8 +6,10 @@ import { TopProfilesResponseDTO, UserProfileInfoResponseDTO } from './dto';
 export const profileApi = createApi({
   reducerPath: 'profileApi',
   baseQuery: baseQueryReauth,
+  tagTypes: [ 'Me' ],
   endpoints: builder => ({
-    getCurrentUserProfileInfo: builder.query<UserProfileInfoResponseDTO, void>({ 
+    getCurrentUserProfileInfo: builder.query<UserProfileInfoResponseDTO, void>({
+      providesTags: [ 'Me' ],
       query: () => ({
         url: `/profiles/me`,
         method: 'GET',
