@@ -11,7 +11,7 @@ export const footerItems = [
         id: 0,
         title: "Магазин",
         icon: ShopIcon,
-        redirectTo: AppRoute.Store
+        redirectTo: AppRoute.Shop
     },
     {
         id: 1, 

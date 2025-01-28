@@ -1,6 +1,6 @@
 import { TaskCard } from '../';
-import telegramIcon from '../../../../public/telegram.png';
-import instagramIcon from '../../../../public/instagram.png';
+import telegramIcon from '/telegram.png';
+import instagramIcon from '/instagram.png';
 
 import s from '../styles.module.scss';
 
