@@ -4,11 +4,13 @@ import { authApi } from './api';
 import { shopApi } from './api/shop/api';
 import { inventoryApi } from './api/inventory/api';
 import { integrationsApi } from './api/integrations/api';
+import { profileApi } from './api/profile/api';
 
 const appReducer = combineReducers({
   auth: authReducer,
   [shopApi.reducerPath]: shopApi.reducer,
   [integrationsApi.reducerPath]: integrationsApi.reducer,
+  [profileApi.reducerPath]: profileApi.reducer,
 });
 
 export const rootReducer = (state: any, action: Action) => {

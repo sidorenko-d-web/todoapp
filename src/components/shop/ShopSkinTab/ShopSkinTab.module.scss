@@ -1,4 +1,4 @@
-@use '/src/assets/styles' as *;
+@use '../../../assets/styles' as var;
 
 .personCards {
   display: flex;
@@ -8,13 +8,13 @@
 
   h2 {
     text-align: center;
-    color: $color-text-semi-transparent;
+    color: var.$color-text-semi-transparent;
     font-size: 14px;
     font-weight: 600;
   }
 
   .vipTitle {
-    background-image: $gradient;
+    background-image: var.$gradient;
     color: transparent;
     background-clip: text;
     align-self: center;

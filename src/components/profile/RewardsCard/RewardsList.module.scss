@@ -1,0 +1,21 @@
+@use '../../../assets/styles/index.scss' as var;
+
+.rewardsList {
+    background-color: var.$color-card-bg;
+    padding: 10px;
+    gap: 10px;
+    border-radius: 10px;
+  
+    .title {
+      font-size: 18px;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+  
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+  
