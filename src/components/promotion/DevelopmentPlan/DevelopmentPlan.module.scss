@@ -1,0 +1,164 @@
+@use '../../../assets/styles/index.scss' as var;
+
+.headerDevelopment {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 10px 0 0;
+}
+
+.textName {
+  margin: 0;
+  color: var.$color-text-semi-transparent;
+}
+
+.list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.component {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.wrapperList {
+  width: 100%;
+  background: var.$color-card-bg;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.infoUser {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 18px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.namePlan {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  height: 37px;
+  max-width: 290px;
+  padding: 10px;
+  border-radius: 8px;
+  background: var.$color-blue-primary;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16.8px;
+  margin: 0;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 14px;
+  text-wrap: nowrap;
+  color: var.$color-blue-primary;
+}
+
+.countUsers {
+  color: var.$color-white;
+}
+
+.users {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.textInfoPlan {
+  margin: 10px 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16.8px;
+  color: var.$color-text-semi-transparent;
+  text-wrap: wrap;
+}
+
+.headerPlan {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.topRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  background: #373A43;
+  padding: 10px 8px 10px 10px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16.8px;
+}
+
+.circle {
+  display: grid;
+  place-items: center;
+}
+
+.inputRadio {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background-color: transparent;
+  cursor: pointer;
+  position: relative;
+}
+
+.inputRadio:checked::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  background: var.$color-primary;
+  border-radius: 50%;
+}
+
+.userBlock {
+  max-width: 177px;
+  height: 22px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  border-radius: 4px;
+  margin: 10px 0;
+  background: var.$color-dark-gray-stroke;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 14px;
+}
+
+.info {
+  margin: 0;
+}
