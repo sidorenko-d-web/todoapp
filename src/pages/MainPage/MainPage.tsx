@@ -1,11 +1,10 @@
 import { FC } from 'react';
-
 import { Link } from 'react-router-dom';
-import { IntegrationCreation } from '../components';
+import { IntegrationCreation } from '../../components';
 
 import s from './MainPage.module.scss';
 
-const MainPage: FC = () => {
+export const MainPage: FC = () => {
   return (
     <main className={s.page}>
       <Link to={'/tasks'}>Tasks</Link>
@@ -13,5 +12,3 @@ const MainPage: FC = () => {
     </main>
   );
 };
-
-export default MainPage;
