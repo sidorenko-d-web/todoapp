@@ -1,8 +1,8 @@
-import { EyeIcon }  from '../assets/icons/eye';
-import { HomeIcon } from '../assets/icons/home';
-import { FlagIcon } from '../assets/icons/flag';
-import { ListIcon } from "../assets/icons/list";
-import { ShopIcon }  from "../assets/icons/shop";
+import { EyeIcon }  from '../assets/Icons/eye';
+import { HomeIcon } from '../assets/Icons/home';
+import { FlagIcon } from '../assets/Icons/flag';
+import { ListIcon } from "../assets/Icons/list";
+import { ShopIcon }  from "../assets/Icons/shop";
 
 import { AppRoute } from './appRoute';
 
@@ -14,13 +14,13 @@ export const footerItems = [
         id: 0,
         title: "Магазин",
         icon: ShopIcon,
-        redirectTo: AppRoute.Main
+        redirectTo: AppRoute.Shop
     },
     {
         id: 1, 
         title: "Интеграции",
         icon: EyeIcon,
-        redirectTo: AppRoute.integrations
+        redirectTo: AppRoute.Integrations
     },
     {
         id: 2,

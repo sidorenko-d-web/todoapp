@@ -21,23 +21,22 @@ interface BottomModalProps {
 }
 
 const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
-                                                                            modalId,
-                                                                            title,
-                                                                            onClose,
-                                                                            disabled = false,
-                                                                            disableScrollLock = false,
-                                                                            containerStyles,
-                                                                            modalStyles,
-                                                                            children,
-                                                                            titleWrapperStyles,
+  modalId,
+  title,
+  onClose,
+  disabled = false,
+  disableScrollLock = false,
+  containerStyles,
+  modalStyles,
+  children,
+  titleWrapperStyles,
 
-                                                                headerStyles,
-                                                                titleIcon,
-                                                                          }) => {
+  headerStyles,
+  titleIcon,
+}) => {
   const { getModalState } = useModal();
 
   const { isOpen } = getModalState(modalId);
-
 
   useEffect(() => {
     if (isOpen && !disableScrollLock) {
@@ -45,7 +44,7 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
     } else {
       document.body.style.overflow = 'auto';
     }
-  }, [ isOpen ]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
   return (
@@ -56,8 +55,10 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
             <header className={classNames(s.header, headerStyles)}>
               <img src={modalGripIcon} alt={'Grip'} width={26} height={3} />
               <div className={classNames(s.titleWrapper, titleWrapperStyles)}>
-                <h2 className={s.title}>{title}{titleIcon &&
-                  <img src={titleIcon} alt={'title'} width={14} height={14} />}</h2>
+                <h2 className={s.title}>
+                  {title}
+                  {titleIcon && <img src={titleIcon} alt={'title'} width={14} height={14} />}
+                </h2>
                 <button className={s.closeBtn} onClick={onClose}>
                   <img src={closeIcon} alt={'Close'} width={14} height={14} />
                 </button>
