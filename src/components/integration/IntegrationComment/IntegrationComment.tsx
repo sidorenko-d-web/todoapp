@@ -1,7 +1,8 @@
 import styles from './IntegrationComment.module.scss';
 
 import coinIcon from '../../../assets/icons/coin.svg';
-import ProgressLine from '../ProgressLine/ProgressLine';
+import ProgressLine from '../../shared/ProgressLine/ProgressLine';
+
 
 
 interface IntegrationCommentProps {
@@ -32,7 +33,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({ username
                         <img src={coinIcon} />
                     </div>
                 </div>
-                <ProgressLine level={progres} />
+                <ProgressLine level={progres} color='blue'/>
             </div>
             {!finished ? <div className={styles.thumbs}>
                 <button className={styles.thumbsUp} onClick={() => onVote(true)} />

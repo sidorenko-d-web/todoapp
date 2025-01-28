@@ -1,0 +1,11 @@
+@use '../../../../assets/styles' as var;
+
+.fade {
+  @include var.transition(opacity);
+
+  opacity: 0;
+
+  &.visible {
+    opacity: 1;
+  }
+}

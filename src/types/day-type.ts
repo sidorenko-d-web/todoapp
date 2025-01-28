@@ -1,0 +1,1 @@
+export type DayType = 'streak' | 'freeze' | 'regular';

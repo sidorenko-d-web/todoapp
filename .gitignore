@@ -11,11 +11,12 @@ lerna-debug.log*
 .env
 
 my-vue-app/node_modules
+node_modules
 dist
 dist-ssr
 *.local
 
-# Editor directories and files
+# Editor directories and files`
 .vscode/*
 !.vscode/extensions.json
 .idea
