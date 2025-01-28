@@ -1,44 +1,36 @@
 import integrationIcon from '../../../assets/icons/integration.svg';
-import dotIcon from '../../../assets/icons/dot.svg';
-import rocketIcon from '../../../assets/icons/rocket.svg';
-
-import s from './IntegrationCreation.module.scss';
-import CreatingIntegrationModal from '../CreatingIntegrationModal/CreatingIntegrationModal.tsx';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants/modals.ts';
+import { useGetCurrentUserProfileInfoQuery, useGetIntegrationsQuery } from '../../../redux';
+import { IntegrationCreationCard, IntegrationCreationModal } from '../';
+
+import s from './IntegrationCreation.module.scss';
 
 export const IntegrationCreation = () => {
-  const progress = 39;
+  const { data: profile, isLoading: profileLoading } = useGetCurrentUserProfileInfoQuery();
+  const { data: integrations, isLoading: integrationsLoading } = useGetIntegrationsQuery({ status: 'creating' }, {
+    pollingInterval: 10 * 60 * 1000,
+    skipPollingIfUnfocused: true,
+  });
   const { openModal, closeModal } = useModal();
 
   return (
     <section className={s.integrationsControls}>
       <button className={s.button} onClick={() => openModal(MODALS.CREATING_INTEGRATION)}>
         Создать интеграцию
-        <span className={s.buttonBadge}>3/5 <img src={integrationIcon} height={12} width={12}
-                                                 alt="integration" /></span>
+        <span className={s.buttonBadge}>
+          {profile?.subscription_integrations_left || '-'}/5 <img src={integrationIcon} height={12} width={12}
+                                                                  alt="integration" />
+        </span>
       </button>
-      <CreatingIntegrationModal modalId={MODALS.CREATING_INTEGRATION} onClose={() => closeModal(MODALS.CREATING_INTEGRATION)}/>
-      <div className={s.integration}>
-        <div className={s.integrationHeader}>
-          <h2 className={s.title}>Интеграция 3</h2>
-          <span className={s.author}>Apusher <img src={dotIcon} height={14} width={14} alt="dot" /></span>
-        </div>
-        <div className={s.body}>
-          <div className={s.info}>
-            <div className={s.infoHeader}>
-              <span>Создание интеграции...</span>
-              <span>Осталось 34:20</span>
-            </div>
-            <div className={s.progressBar}>
-              <div className={s.progressBarInner} style={{ width: `${progress}%` }} />
-            </div>
-          </div>
-          <button className={s.iconButton}>
-            <img src={rocketIcon} alt="rocket" />
-          </button>
-        </div>
-      </div>
+      <IntegrationCreationModal modalId={MODALS.CREATING_INTEGRATION}
+                                onClose={() => closeModal(MODALS.CREATING_INTEGRATION)} />
+
+      {
+        integrations?.integrations.map(integration => (
+          <IntegrationCreationCard key={integration.id} integration={integration} />
+        ))
+      }
     </section>
   );
 };
