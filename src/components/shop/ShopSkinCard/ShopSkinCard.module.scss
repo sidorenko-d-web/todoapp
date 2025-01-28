@@ -1,7 +1,7 @@
-@use '/src/assets/styles' as *;
+@use '../../../assets/styles' as var;
 
 .storeCard {
-  background-color: $color-card-bg;
+  background-color: var.$color-card-bg;
   align-self: stretch;
   padding: 10px;
   border-radius: 12px;
@@ -9,9 +9,9 @@
     display: flex;
     gap: 10px;
     .image {
-      border: 2px solid $color-primary;
+      border: 2px solid var.$color-primary;
       border-radius: 8px;
-      background: $footer-bg;
+      background: var.$footer-bg;
       flex-direction: column;
       display: flex;
       position: relative;
@@ -19,11 +19,10 @@
       justify-content: center;
       width: 60px;
       aspect-ratio: 1;
-      position: relative;
     }
 
     .vipImage {
-      background: $gradient;
+      background: var.$gradient;
       border: none;
       position: relative;
       width: 60px;
@@ -32,7 +31,7 @@
       &::before {
         content: '';
         position: absolute;
-        background: $footer-bg;
+        background: var.$footer-bg;
         width: 56px;
         height: 56px;
         border-radius: 6px;
@@ -60,7 +59,7 @@
         width: 100%;
         
         h3 {
-          color: $color-white;
+          color: var.$color-white;
           font-weight: 500;
           font-size: 16px;
           text-wrap: pretty;
@@ -70,9 +69,9 @@
           gap: 2px;
           align-items: start;
           .vip {
-            background: $gradient;
+            background: var.$gradient;
             display: flex;
-            gap: 1;
+            gap: 1px;
             border-radius: 4px;
             padding: 2px;
 
@@ -85,14 +84,14 @@
               font-weight: 500;
               font-size: 12px;
               line-height: 12px;
-              color: $color-white;
+              color: var.$color-white;
             }
           }
 
           .personIcon {
             width: 16px;
             height: 16px;
-            background: $color-text-super-transparent;
+            background: var.$color-text-super-transparent;
             border-radius: 4px;
             padding: 2px;
             opacity: 0.5;
@@ -101,7 +100,7 @@
       }
       .description {
         font-weight: 500;
-        color: $color-text-semi-transparent;
+        color: var.$color-text-semi-transparent;
         line-height: 16.8px;
         text-wrap: pretty;
       }
@@ -113,21 +112,20 @@
     display: flex;
     gap: 10px;
     .button {
-      border: none;
       border-radius: 8px;
       padding: 10px 12px;
       display: flex;
       justify-content: center;
       font-weight: 500;
       align-items: center;
-      background: $color-gray;
-      border: 1px solid $color-dark-gray-stroke;
-      color: $color-white;
+      background: var.$color-gray;
+      border: 1px solid var.$color-dark-gray-stroke;
+      color: var.$color-white;
       gap: 5px;
 
       &:first-child {
-        background: $color-primary;
-        border: 1px solid $color-border-primary;
+        background: var.$color-primary;
+        border: 1px solid var.$color-border-primary;
         flex: 1;
 
         img {
@@ -137,7 +135,7 @@
       }
 
       &:last-child {
-        background: $color-gray;
+        background: var.$color-gray;
         opacity: 0.3;
         flex: 1;
         border: none;
@@ -145,18 +143,17 @@
     }
 
     .vipButton {
-      border: none;
       border-radius: 8px;
       padding: 10px 12px;
       display: flex;
       justify-content: center;
       font-weight: 500;
       align-items: center;
-      border: 1px solid $color-dark-gray-stroke;
-      color: $color-white;
+      border: 1px solid var.$color-dark-gray-stroke;
+      color: var.$color-white;
       gap: 5px;
       flex: 1;
-      background: $gradient !important;
+      background: var.$gradient !important;
       text-wrap: pretty;
     }
   }
