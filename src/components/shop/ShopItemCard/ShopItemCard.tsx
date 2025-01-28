@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
-import LockIconSvg from '../../../assets/Icons/Lock_icon_svg';
+import LockIconSvg from '../../../assets/icons/Lock_icon_svg';
 import { IShopItem } from '../../../types/shop/ShopApiTypes';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
 

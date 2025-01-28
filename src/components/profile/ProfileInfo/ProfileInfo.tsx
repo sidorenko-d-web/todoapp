@@ -10,6 +10,8 @@ import vipIcon from '../../../assets/icons/vip.svg';
 import subscriptionLeveIcon from '../../../assets/icons/subscription-level.svg';
 
 import ProgressLine from "../../shared/ProgressLine/ProgressLine";
+import { useModal } from "../../../hooks";
+import { MODALS } from "../../../constants/modals";
 
 interface ProfileInfoProps {
     nickname: string;
@@ -20,6 +22,10 @@ interface ProfileInfoProps {
 }
 
 export const ProfileInfo: React.FC<ProfileInfoProps> = ({ nickname, blogName, subscriptionIntegrationsLeft, position, isVip }) => {
+
+
+    const { openModal, closeModal } = useModal();
+
     return (
         <div className={styles.wrp}>
             <div className={`${styles.avatar} ${isVip ? styles.vip : ""}`}>
@@ -51,7 +57,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({ nickname, blogName, su
                     <div className={styles.nicknameWrp}>
                         <span className={styles.nickname}>{nickname}</span>
                         <span className={styles.subscribers}>999</span>
-                        <img className={styles.edit} src={editIcon} />
+                        <img className={styles.edit} src={editIcon} onClick={() => {openModal(MODALS.CHANGING_NICKNAME)}} />
                     </div>
 
                     <p className={styles.blogName}>
