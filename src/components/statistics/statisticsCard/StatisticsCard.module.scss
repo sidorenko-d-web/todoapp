@@ -1,0 +1,47 @@
+@use '/src/assets/styles' as *;
+
+.statisticsCard {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  background-color: $color-card-bg;
+  align-self: stretch;
+  padding: 10px;
+  border-radius: 12px;
+  width: 345px;
+  .left {
+    background-color: $footer-bg;
+    border-radius: 8px;
+    padding: 26px 59px;
+  }
+  .right {
+    display: flex;
+    flex-direction: column;
+  }
+  .header {
+  }
+  .title {
+    color: $color-text-semi-transparent;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: -80px;
+    p {
+      color: $color-white;
+    }
+  }
+  .scores {
+    display: flex;
+    flex-direction: column;
+  }
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    p {
+      color: $color-white;
+    }
+  }
+}

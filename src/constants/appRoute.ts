@@ -3,6 +3,6 @@ export enum AppRoute {
   integrations = '/integrations',
   Integration = '/integrations/:integrationId',
   Tasks = '/tasks',
-
+  Statistics = '/statistics',
   NotFound = '*',
 }
