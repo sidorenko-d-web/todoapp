@@ -15,9 +15,7 @@ const Layout: FC<LayoutProps> = ({}: LayoutProps) => {
       <main className={styles.content}>
         <Outlet/>
       </main>
-      <footer className={styles.footer}>
         <Footer/>
-      </footer>
     </div>
   );
 };

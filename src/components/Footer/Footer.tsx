@@ -1,5 +1,5 @@
 import styles from "./Footer.module.scss"
-import { footerItems } from "../../constants/footerItems"
+import { footerItems } from "./constants"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react";
 
@@ -17,15 +17,14 @@ export const Footer = () => {
   return (
     <div className={styles.footerItems}>
         {footerItems.map((item) => (
-            <button key={item.id}
-             className={`${styles.footerItem} ${activeButton === item.id ? styles.active : ''}`}
-             onClick={() => handleFooterItemClick(item.id, item.redirectTo)}
-             >
+          <button key={item.id}
+          className={`${styles.footerItem} ${activeButton === item.id ? styles.active : ''}`}
+          onClick={() => handleFooterItemClick(item.id, item.redirectTo)}
+          >
               <item.icon />
             </button>
         ))}
     </div>
-
   )
 }
 
