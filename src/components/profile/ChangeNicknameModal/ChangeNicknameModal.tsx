@@ -5,6 +5,7 @@ import styles from "./ChangingNicknameModal.module.scss";
 
 import cross from '../../../assets/icons/input-cross.svg';
 import tick from '../../../assets/icons/input-tick.svg';
+import { useUpdateCurrentUserProfileMutation } from "../../../redux/index.ts";
 
 interface ChangeNicknameModalProps {
   modalId: string;
@@ -17,6 +18,21 @@ const ChangeNicknameModal: FC<ChangeNicknameModalProps> = ({ modalId, onClose })
 
   const isValid = (text: string) => text.length <= 26;
 
+
+  const [updateProfile, { isLoading, error }] = useUpdateCurrentUserProfileMutation();
+
+  const handleUpdate = async () => {
+    try {
+      const response = await updateProfile({
+        blog_name: blogTitle,
+        username: nickname,
+      }).unwrap();
+      console.log("Profile updated successfully:", response);
+    } catch (err) {
+      console.error("Failed to update profile:", err);
+    }
+  };
+  
   return (
     <CentralModal modalId={modalId} title={"Редактировать профиль"} onClose={onClose}>
       <div className={styles.inputGroup}>
@@ -41,8 +57,10 @@ const ChangeNicknameModal: FC<ChangeNicknameModalProps> = ({ modalId, onClose })
           placeholder="Введите название блога"
         />
         <img className={styles.statusIcon} src={!isValid(blogTitle) ? cross : tick}/>
-        {/* <span className={`${styles.statusIcon} ${isValid(blogTitle) ? styles.validImg : styles.invalidImg}`} /> */}
       </div>
+      <button onClick={handleUpdate} disabled={isLoading}>
+        Update Profile
+      </button>
     </CentralModal>
   );
 };

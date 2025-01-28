@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import styles from './ProfilePage.module.scss';
 import { ProfileStatsMini } from "../../components/profile/ProfileStatsMini";
@@ -34,6 +34,34 @@ export const ProfilePage: React.FC = () => {
 
     const weekData = getWeekData(streakDays, freezeDays);
     
+    const updateUserProfile = async () => {
+        const url = "https://bbajd7fltqec6462cm1j.containers.yandexcloud.net/profiles/me"; // Replace with actual API URL
+        const payload = {
+          blog_name: "My New Blog",
+          username: "new_username"
+        };
+      
+        try {
+          const response = await fetch(url, {
+            method: "PATCH",
+            headers: {
+              'Accept': 'application/json',
+            'Content-Type': 'application/json',
+              "X-Authorization": ''+localStorage.getItem('access_token'), // Replace with your auth token
+            },
+            body: JSON.stringify(payload),
+          });
+      
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+      
+          const data = await response.json();
+          console.log("Profile updated successfully:", data);
+        } catch (error) {
+          console.error("Error updating profile:", error);
+        }
+      };
 
     return (
         <>
@@ -44,7 +72,7 @@ export const ProfilePage: React.FC = () => {
             {(userProfileData && topProfilesData) &&
                 <div className={styles.wrp}>
                     <div>
-                        <h1 className={styles.pageTitle}>Профиль</h1>
+                        <h1 className={styles.pageTitle} onClick={updateUserProfile}>Профиль</h1>
 
                         <ProfileStatsMini subscribers={userProfileData.subscribers} position={position} daysInARow={10} />
                     </div>
