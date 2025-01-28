@@ -6,9 +6,6 @@ import { ShopIcon }  from "../assets/Icons/shop";
 
 import { AppRoute } from './appRoute';
 
-// TODO: 
-// поменять все redirectTo на правильные
-
 export const footerItems = [
     {
         id: 0,
@@ -26,13 +23,13 @@ export const footerItems = [
         id: 2,
         title: "Дом",
         icon: HomeIcon,
-        redirectTo: AppRoute.Main // поменять ?
+        redirectTo: AppRoute.Main
     },
     {
         id: 3, 
         title: "Продвижение",
         icon: FlagIcon,
-        redirectTo: AppRoute.Main // поменять
+        redirectTo: AppRoute.Promotion
     },
     {
         id: 4, 
