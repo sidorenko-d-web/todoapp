@@ -11,8 +11,8 @@ import { setCredentials, signOut } from '../slices';
 
 export const baseQuery = fetchBaseQuery({
   baseUrl: 'https://bbajd7fltqec6462cm1j.containers.yandexcloud.net',
-  prepareHeaders: (headers, { getState }) => {
-    const token = (getState() as RootState).auth.accessToken;
+  prepareHeaders: headers => {
+    const token = localStorage.getItem('access_token');
     headers.set('X-Authorization', token || '');
     return headers;
   },

@@ -1,0 +1,51 @@
+@use 'sass:color';
+@use '../../assets/styles' as var;
+
+
+.tabNav {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+  padding: 3px;
+  background: var.$color-card-bg;
+  border-radius: 30px;
+
+  .tabItem {
+    color: var.$color-text-semi-transparent;
+    font-weight: 500;
+    padding: 5px 18px;
+    border-radius: 30px;
+    background: none;
+    border: none;
+
+    @media (max-width: 340px) {
+      
+    padding: 5px 3vw;
+    }
+  }
+
+  .tabItemSelectedWhite {
+    @extend .tabItem;
+    color: var.$color-black;
+    background-color: var.$grayed-white;
+  }
+
+  .tabItemSelectedBlue {
+    @extend .tabItem;
+
+    color: var.$color-white;
+    background-color: var.$color-primary;
+  }
+  .tabItemSelectedPurple {
+    @extend .tabItem;
+
+    color: var.$color-white;
+    background-color: var.$color-purple;
+  }
+  .tabItemSelectedRed {
+    @extend .tabItem;
+
+    color: var.$color-white;
+    background-color: red;
+  }
+}
