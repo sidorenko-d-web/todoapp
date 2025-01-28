@@ -25,7 +25,7 @@ function AppRouter(): JSX.Element | null {
         <Route path={AppRoute.Integration} element={<IntegrationPage/>} />
         <Route path={AppRoute.Tasks} element={<TasksPage />} />
         <Route path={AppRoute.Profile} element={<ProfilePage/>}/>
-      <Route path={AppRoute.Promotion} element={<PromotionPage />} />
+        <Route path={AppRoute.Promotion} element={<PromotionPage />} />
       </Route>
     </Routes>
   );
