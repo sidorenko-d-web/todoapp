@@ -20,6 +20,9 @@ export function AuthInit({ children }: AuthInitProps) {
   useEffect(() => {
     const initAuth = async () => {
       try {
+        // Проверяем, проходил ли пользователь начальную настройку
+        const hasCompletedSetup = localStorage.getItem('hasCompletedSetup');
+
         const ipData = await axios.get('https://ipapi.co/json/').then(res => res.data);
 
         // const init_data = window.Telegram.WebApp.initData;
@@ -31,17 +34,21 @@ export function AuthInit({ children }: AuthInitProps) {
           ip: ipData.ip,
           country: ipData.country,
         }).unwrap();
-        console.log(authResponse);
 
         localStorage.setItem('access_token', authResponse.access_token);
         localStorage.setItem('refresh_token', authResponse.refresh_token);
-        
-        // Добавляем задержку в 2 секунды перед переходом к следующему шагу пока временно
+
+        // Добавляем задержку в 2 секунды для отображения загрузки
         setTimeout(() => {
           setShowLoading(false);
-          setCurrentStep('language');
+
+          // Если пользователь уже проходил настройку, сразу переходим к completed
+          if (hasCompletedSetup) {
+            setCurrentStep('completed');
+          } else {
+            setCurrentStep('language');
+          }
         }, 2000);
-        
       } catch (err) {
         console.error('Ошибка при авторизации:', err);
         setShowLoading(false);
@@ -60,9 +67,12 @@ export function AuthInit({ children }: AuthInitProps) {
   };
 
   const handleSkinContinue = () => {
+    // Сохраняем информацию о завершении начальной настройки
+    localStorage.setItem('hasCompletedSetup', 'true');
     setCurrentStep('completed');
   };
 
+  // Показываем экран загрузки при начальной загрузке или во время выполнения запроса
   if (isLoading || showLoading) {
     return <LoadingScreen />;
   }
@@ -80,13 +90,13 @@ export function AuthInit({ children }: AuthInitProps) {
           onContinue={handleLanguageContinue}
         />
       );
-    
+
     case 'skin':
       return <SkinSetupPage onContinue={handleSkinContinue} />;
-    
+
     case 'completed':
       return <>{children}</>;
-    
+
     default:
       return null;
   }
