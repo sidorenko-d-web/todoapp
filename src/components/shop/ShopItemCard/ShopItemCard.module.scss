@@ -1,8 +1,9 @@
+@use '../../../assets/styles' as var;
 @use 'sass:color';
-@use '/src/assets/styles' as *;
+
 
 .storeCard {
-  background-color: $color-card-bg;
+  background-color: var.$color-card-bg;
   align-self: stretch;
   padding: 10px;
   border-radius: 12px;
@@ -10,9 +11,9 @@
     display: flex;
     gap: 10px;
     .image {
-      border: 2px solid $color-primary;
+      border: 2px solid var.$color-primary;
       border-radius: 8px;
-      background: $footer-bg;
+      background: var.$footer-bg;
       flex-direction: column;
       display: flex;
       position: relative;
@@ -20,9 +21,8 @@
       justify-content: center;
       min-width: 60px;
       height: 60px;
-      position: relative;
       p {
-        background: $color-primary;
+        background: var.$color-primary;
         position: absolute;
         bottom: 0;
         transform: translateY(50%);
@@ -36,7 +36,7 @@
         height: 40px;
 
         g {
-          color: $light-gray-bg;
+          color: var.$light-gray-bg;
         }
       }
       .disabledImage {
@@ -46,9 +46,9 @@
 
     .purpleImage {
       @extend .image;
-      border-color: $color-purple;
+      border-color: var.$color-purple;
       p {
-        background-color: $color-purple;
+        background-color: var.$color-purple;
       }
     }
     .redImage {
@@ -68,20 +68,20 @@
         flex-direction: row;
         justify-content: space-between;
         h3 {
-          color: $color-white;
+          color: var.$color-white;
           font-weight: 500;
           font-size: 16px;
           margin-bottom: 4px;
         }
 
         .variant {
-          background: $color-primary;
+          background: var.$color-primary;
           opacity: 0.5;
           align-self: flex-start;
           padding: 2px 5px;
           border-radius: 4px;
           p {
-            color: $color-dark-gray-stroke;
+            color: var.$color-dark-gray-stroke;
             font-size: 12px;
             line-height: 12px;
             text-wrap: nowrap;
@@ -90,7 +90,7 @@
 
         .variantPurple {
           @extend .variant;
-          background-color: $color-purple;
+          background-color: var.$color-purple;
         }
         .variantRed {
           @extend .variant;
@@ -100,13 +100,13 @@
       .level {
         font-weight: 500;
         font-size: 12px;
-        color: $color-primary;
+        color: var.$color-primary;
         line-height: 12px;
       }
 
       .colorPurple {
         @extend .level;
-        color: $color-purple;
+        color: var.$color-purple;
       }
 
       .colorRed {
@@ -130,7 +130,7 @@
             height: 14px;
           }
           p {
-            color: $color-white;
+            color: var.$color-white;
             font-size: 14px;
           }
         }
@@ -150,7 +150,7 @@
       p {
         font-size: 12px;
         line-height: 12px;
-        color: $color-text-semi-transparent;
+        color: var.$color-text-semi-transparent;
         font-weight: 500;
       }
       .goal {
@@ -166,18 +166,18 @@
 
     .progressBar {
       margin-top: 5px;
-      border: 1px solid $color-dark-gray-stroke;
+      border: 1px solid var.$color-dark-gray-stroke;
       border-radius: 6px;
       overflow: hidden;
-      background: $color-gray;
+      background: var.$color-gray;
       .done {
         height: 16px;
-        background: $color-primary;
+        background: var.$color-primary;
       }
 
       .donePurple {
         @extend .done;
-        background-color: $color-purple;
+        background-color: var.$color-purple;
       }
       .doneRed {
         @extend .done;
@@ -190,13 +190,13 @@
       margin-top: 5px;
       gap: 5px;
       .item {
-        border: 1px solid $color-primary;
+        border: 1px solid var.$color-primary;
         border-radius: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
         position: relative;
-        background: $footer-bg;
+        background: var.$footer-bg;
         .itemImage {
           width: 24px;
           height: 24px;
@@ -222,7 +222,7 @@
 
       .itemPurple {
         @extend .item;
-        border-color: $color-purple;
+        border-color: var.$color-purple;
       }
       .itemRed {
         @extend .item;
@@ -237,21 +237,20 @@
     gap: 10px;
     flex-wrap: wrap;
     button {
-      border: none;
       border-radius: 8px;
       padding: 10px 12px;
       display: flex;
       justify-content: center;
       font-weight: 500;
       align-items: center;
-      background: $color-gray;
-      border: 1px solid $color-dark-gray-stroke;
-      color: $color-white;
+      background: var.$color-gray;
+      border: 1px solid var.$color-dark-gray-stroke;
+      color: var.$color-white;
       gap: 5px;
 
       &:first-child {
-        background: $color-primary;
-        border: 1px solid $color-border-primary;
+        background: var.$color-primary;
+        border: 1px solid var.$color-border-primary;
         flex: 1;
 
         img {
@@ -261,7 +260,7 @@
       }
 
       &:last-child {
-        background: $color-gray;
+        background: var.$color-gray;
         opacity: 0.3;
         flex: 1;
         border: none;
@@ -270,7 +269,7 @@
   }
 
   .disabledUpgradeActions {
-    background: color.scale($color-primary, $alpha: -80%);
+    background: color.scale(var.$color-primary, $alpha: -80%);
     border-radius: 8px;
     display: flex;
     justify-content: center;
@@ -284,32 +283,32 @@
     }
     p {
       line-height: 14px;
-      color: $grayed-white;
+      color: var.$grayed-white;
       font-weight: 500;
     }
   }
 
   .disabledActions {
     @extend .disabledUpgradeActions;
-    background: $color-gray;
-    border: 1px solid $color-dark-gray-stroke;
+    background: var.$color-gray;
+    border: 1px solid var.$color-dark-gray-stroke;
     width: 100%;
 
-    color: $color-white;
+    color: var.$color-white;
   }
 
   .disabledText {
-    color: $color-text-semi-transparent;
+    color: var.$color-text-semi-transparent;
     margin-top: 20px;
     line-height: 14.4px;
     font-size: 12px;
     font-weight: 500;
 
     .itemNamePurple {
-      color: $color-purple;
+      color: var.$color-purple;
     }
     .itemNameBlue {
-      color: $color-primary;
+      color: var.$color-primary;
     }
   }
 }

@@ -1,0 +1,30 @@
+@use '../../assets/styles/index.scss' as var;
+
+
+.wrp {
+    min-height: 100vh;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+
+    background-color: var.$color-bg;
+    color: var.$color-text;
+
+    gap: 20px;
+
+    .pageTitle {
+        color: #FFF;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 600;
+
+        margin-bottom: 5px;
+    }
+
+    .statsTitle {
+        margin-left: 5px;
+        color: var.$color-text-semi-transparent;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+}

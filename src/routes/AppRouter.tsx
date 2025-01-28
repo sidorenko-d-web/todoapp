@@ -5,6 +5,7 @@ import { AppRoute } from '../constants';
 import ShopPage from '../pages/ShopPage/ShopPage.tsx';
 import { IntegrationPage } from '../pages/index.ts';
 import { TasksPage } from '../pages/index.ts';
+import { ProfilePage } from '../pages/index.ts';
 
 
 function AppRouter(): JSX.Element | null {
@@ -20,6 +21,7 @@ function AppRouter(): JSX.Element | null {
       <Route path={AppRoute.Store} element={<ShopPage />} />
       <Route path={AppRoute.Integration} element={<IntegrationPage/>} />
       <Route path={AppRoute.Tasks} element={<TasksPage />} />
+      <Route path={AppRoute.Profile} element={<ProfilePage/>}/>
     </Routes>
   );
 }
