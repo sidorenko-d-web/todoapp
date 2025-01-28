@@ -14,14 +14,25 @@ type AuthStep = 'loading' | 'language' | 'skin' | 'completed';
 export function AuthInit({ children }: AuthInitProps) {
   const [signIn, { isLoading, isError, error }] = useSignInMutation();
   const [currentStep, setCurrentStep] = useState<AuthStep>('loading');
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
-  const [showLoading, setShowLoading] = useState(true);
+  const [selectedLanguage, setSelectedLanguage] = useState(() => {
+    return localStorage.getItem('selectedLanguage') || 'en';
+  });
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  const saveCurrentStep = (step: AuthStep) => {
+    if (step !== 'loading') {
+      localStorage.setItem('currentSetupStep', step);
+    }
+    setCurrentStep(step);
+  };
 
   useEffect(() => {
     const initAuth = async () => {
+      const minLoadingTime = new Promise(resolve => setTimeout(resolve, 2000));
+
       try {
-        // Проверяем, проходил ли пользователь начальную настройку
         const hasCompletedSetup = localStorage.getItem('hasCompletedSetup');
+        const savedStep = localStorage.getItem('currentSetupStep') as AuthStep;
 
         const ipData = await axios.get('https://ipapi.co/json/').then(res => res.data);
 
@@ -38,20 +49,27 @@ export function AuthInit({ children }: AuthInitProps) {
         localStorage.setItem('access_token', authResponse.access_token);
         localStorage.setItem('refresh_token', authResponse.refresh_token);
 
-        // Добавляем задержку в 2 секунды для отображения загрузки
-        setTimeout(() => {
-          setShowLoading(false);
+        await minLoadingTime;
 
-          // Если пользователь уже проходил настройку, сразу переходим к completed
-          if (hasCompletedSetup) {
-            setCurrentStep('completed');
-          } else {
-            setCurrentStep('language');
-          }
-        }, 2000);
+        if (hasCompletedSetup) {
+          saveCurrentStep('completed');
+        } else if (savedStep && savedStep !== 'loading') {
+          saveCurrentStep(savedStep);
+        } else {
+          saveCurrentStep('language');
+        }
+        setIsInitializing(false);
       } catch (err) {
+        await minLoadingTime;
+
         console.error('Ошибка при авторизации:', err);
-        setShowLoading(false);
+        setIsInitializing(false);
+        const savedStep = localStorage.getItem('currentSetupStep') as AuthStep;
+        if (savedStep && savedStep !== 'loading') {
+          saveCurrentStep(savedStep);
+        } else {
+          saveCurrentStep('language');
+        }
       }
     };
 
@@ -60,28 +78,30 @@ export function AuthInit({ children }: AuthInitProps) {
 
   const handleLanguageSelect = (language: string) => {
     setSelectedLanguage(language);
+    localStorage.setItem('selectedLanguage', language);
   };
 
   const handleLanguageContinue = () => {
-    setCurrentStep('skin');
+    saveCurrentStep('skin');
   };
 
   const handleSkinContinue = () => {
-    // Сохраняем информацию о завершении начальной настройки
     localStorage.setItem('hasCompletedSetup', 'true');
-    setCurrentStep('completed');
+    localStorage.removeItem('currentSetupStep');
+    saveCurrentStep('completed');
   };
 
-  // Показываем экран загрузки при начальной загрузке или во время выполнения запроса
-  if (isLoading || showLoading) {
+  if (isLoading || isInitializing) {
     return <LoadingScreen />;
   }
 
   if (isError) {
     return <div style={{ color: 'red' }}>Ошибка при авторизации: {String(error)}</div>;
   }
-
   switch (currentStep) {
+    case 'loading':
+      return <LoadingScreen />;
+
     case 'language':
       return (
         <LanguageSelect
@@ -98,6 +118,6 @@ export function AuthInit({ children }: AuthInitProps) {
       return <>{children}</>;
 
     default:
-      return null;
+      return <LoadingScreen />;
   }
 }
