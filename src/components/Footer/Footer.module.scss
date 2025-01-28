@@ -8,6 +8,8 @@
     background: #2D2D35;
     position: fixed;
     inset: auto 0 0 0;
+    z-index: 10;
+    width: 100%;
 }
 
 .footerItem {
@@ -25,7 +27,7 @@
         border-color: #FFF;
         background: #2F80ED;
     }
-    
+
     &:hover {
         fill: #FDFAE8;
         border-color: #FFF;
