@@ -1,5 +1,5 @@
 import styles from "./Footer.module.scss"
-import { footerItems } from "./constants"
+import { footerItems } from "../../constants"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react";
 
