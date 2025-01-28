@@ -9,6 +9,7 @@ const MainPage: FC = () => {
   return (
     <main className={s.page}>
       <Link to={'/tasks'}>Tasks</Link>
+      <Link to={'/promotion'}>Promotion</Link>
       <IntegrationCreation/>
     </main>
   );

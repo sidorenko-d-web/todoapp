@@ -3,8 +3,8 @@ import { rootReducer } from './rootReducer';
 import {authApi} from './api';
 import { shopApi } from './api/shop/api';
 import { inventoryApi } from './api/inventory/api';
-import { integrationsApi } from './api/integrations/api';
-import { profileApi } from './api/profile/api';
+import { integrationsApi } from './api';
+import { profileApi } from './api';
 
 export const store = configureStore({
   reducer: rootReducer,
