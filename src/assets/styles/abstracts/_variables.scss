@@ -1,6 +1,1 @@
-@use "./colors" as var;
-
 $font-default: 'Inter', sans-serif;
-
-$mobile-device-safe-are-inset-top: env(safe-area-inset-top);
-$header-border: 1px solid var.$color-header-border-dark;

@@ -1,10 +1,10 @@
-import { EyeIcon }  from '../../assets/Icons/eye';
-import { HomeIcon } from '../../assets/Icons/home';
-import { FlagIcon } from '../../assets/Icons/flag';
-import { ListIcon } from "../../assets/Icons/list";
-import { ShopIcon }  from "../../assets/Icons/shop";
+import { EyeIcon }  from '../assets/Icons/eye';
+import { HomeIcon } from '../assets/Icons/home';
+import { FlagIcon } from '../assets/Icons/flag';
+import { ListIcon } from "../assets/Icons/list";
+import { ShopIcon }  from "../assets/Icons/shop";
 
-import { AppRoute } from '../../constants/appRoute';
+import { AppRoute } from './appRoute';
 
 export const footerItems = [
     {
