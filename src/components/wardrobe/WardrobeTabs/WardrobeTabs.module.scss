@@ -1,0 +1,84 @@
+@use '../../../assets/styles' as var;
+
+
+$primary-color: #ffffff;
+$background-dark: #121212;
+$highlight: #4a4a4a;
+
+.container {
+  background: $background-dark;
+  color: $primary-color;
+  padding: 16px;
+  border-radius: 12px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.tabsWrapper {
+  margin-bottom: 16px;
+  padding-bottom: 5px;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  width: max-content;
+  background-color: var.$color-card-bg;
+  border-radius: 30px;
+  padding: 3px 6px;
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  color: $primary-color;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 28px;
+  transition: background 0.3s;
+
+  font-size: 12px;
+  
+  &:hover {
+    background: $highlight;
+  }
+}
+
+.activeTab {
+  background: #D9DCE1;
+  color: black;
+}
+
+/* Grid Layout */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.option {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  background: #222;
+  border: none;
+  color: $primary-color;
+  padding: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+
+  &:hover {
+    background: $highlight;
+  }
+}
+
+.selected {
+  border: 2px solid blue;
+}
+
+.icon {
+  font-size: 24px;
+}
