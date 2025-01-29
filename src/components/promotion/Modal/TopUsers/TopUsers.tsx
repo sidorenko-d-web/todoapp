@@ -7,7 +7,7 @@ import user from '../../../../assets/icons/user.svg';
 import close from '../../../../assets/icons/close.svg';
 import star from '../../../../assets/icons/star.svg';
 import classNames from 'classnames';
-import chest from '../../../../assets/icons/chest.svg';
+import chest from '../../../../assets/icons/chest-purple.svg';
 import { USERS } from './constantUsers.ts';
 import BottomModal from '../../../shared/BottomModal/BottomModal.tsx';
 
