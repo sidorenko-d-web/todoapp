@@ -7,7 +7,7 @@
   gap: 15px;
   position: fixed;
   right: 15px;
-  bottom: calc(80px + 15px); // 60px - header height, 80px - footer height, 15px - padding from footer
+  bottom: calc(80px + 15px); // 80px - footer height, 15px - padding from footer
   left: 15px;
 
   .button {
@@ -24,6 +24,11 @@
 
     border: 1px solid var.$color-border-primary;
     background-color: var.$color-primary;
+
+    &:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
 
     .buttonBadge {
       position: absolute;
@@ -42,83 +47,4 @@
       line-height: 100%;
     }
   }
-
-  .integration {
-    width: 100%;
-    display: flex;
-    padding: 10px;
-    flex-direction: column;
-    gap: 10px;
-    border-radius: 10px;
-    border: 1px solid var.$color-dark-gray;
-    background-color: var.$color-card-bg;
-
-    .integrationHeader {
-      display: flex;
-      justify-content: space-between;
-
-      .title {
-        margin: 0;
-        color: var.$color-text-semi-transparent;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 100%;
-      }
-
-      .author {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        color: var.$color-text;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 100%;
-      }
-    }
-
-    .body {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-
-      .info {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-
-        .infoHeader {
-          display: flex;
-          justify-content: space-between;
-          color: var.$color-text-super-transparent;
-          font-size: 12px;
-          font-weight: 500;
-          line-height: 100%;
-        }
-
-        .progressBar {
-          height: 16px;
-          border-radius: 3px;
-          background-color: var.$color-gray;
-          overflow: hidden;
-
-          .progressBarInner {
-            height: 100%;
-            background-color: var.$color-primary;
-          }
-        }
-      }
-
-      .iconButton {
-        aspect-ratio: 1 / 1;
-        display: flex;
-        padding: 8px;
-        justify-content: center;
-        align-items: center;
-        border-radius: 8px;
-        background-color: var.$color-primary;
-        border: none;
-      }
-    }
-  }
-
 }

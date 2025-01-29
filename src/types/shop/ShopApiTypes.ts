@@ -31,7 +31,7 @@ export interface IShopSkinsResponse {
 }
 
 export type TypeWearLocation = 'head' | 'upper_body' | 'legs' | 'feet' | 'entire_body';
-export type TypeItemCategory = 'text' | 'image' | 'video' | 'fedecoret';
+export type TypeItemCategory = 'text' | 'image' | 'video' | 'decor';
 
 export interface IShopItemsRequest {
   item_category: TypeItemCategory;

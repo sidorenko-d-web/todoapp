@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReducer } from './rootReducer';
-import {authApi} from './api';
+import { authApi, companiesApi } from './api';
 import { shopApi } from './api/shop/api';
 import { inventoryApi } from './api/inventory/api';
 import { integrationsApi } from './api';
@@ -15,6 +15,7 @@ export const store = configureStore({
       inventoryApi.middleware,
       integrationsApi.middleware,
       profileApi.middleware,
+      companiesApi.middleware,
     ),
 });
 
