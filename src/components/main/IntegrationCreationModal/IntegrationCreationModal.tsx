@@ -23,10 +23,10 @@ interface CreatingIntegrationModalProps {
 }
 
 export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
-                                                                              modalId,
-                                                                              onClose,
-                                                                              hasCreatingIntegration,
-                                                                            }) => {
+  modalId,
+  onClose,
+  hasCreatingIntegration,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -36,19 +36,19 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     { label: 'Видео', value: 'video' },
   ] as const;
 
-  const [ selectedOption, setSelectedOption ] = useState<typeof contentOptions[number]['value']>('text');
-  const [ selectedCompany, setSelectedCompany ] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<(typeof contentOptions)[number]['value']>('text');
+  const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
 
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
-  const [ createIntegration, { isError, error } ] = useCreateIntegrationMutation();
+  const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
   const { data: profile } = useGetCurrentUserProfileInfoQuery();
   const { data } = useGetCompaniesQuery();
   const companies = data?.campaigns;
 
   const goToShop = () => {
-    onClose()
-    navigate('/shop')
-  }
+    onClose();
+    navigate('/shop');
+  };
 
   const submitCreation = () => {
     if (!selectedOption || !selectedCompany) return;
@@ -60,8 +60,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       .unwrap()
       .then(() => {
         onClose();
-        dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
-        dispatch(profileApi.util.invalidateTags([ 'Me' ]));
+        dispatch(integrationsApi.util.invalidateTags(['Integrations']));
+        dispatch(profileApi.util.invalidateTags(['Me']));
       });
   };
 
@@ -98,25 +98,36 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           ))}
         </div>
 
-        {
-          !noItemsMessage ? <div className={s.companies}>
-            {companies?.map((company) => (
-              <CompanyCard key={company.id} company={company} selected={selectedCompany === company.id}
-                           onClick={setSelectedCompany} />
+        {!noItemsMessage ? (
+          <div className={s.companies}>
+            {companies?.map(company => (
+              <CompanyCard
+                key={company.id}
+                company={company}
+                selected={selectedCompany === company.id}
+                onClick={setSelectedCompany}
+              />
             ))}
-          </div> : <span className={s.message}>{noItemsMessage}</span>
-        }
+          </div>
+        ) : (
+          <span className={s.message}>{noItemsMessage}</span>
+        )}
 
-        {!noItemsMessage && hasCreatingIntegration &&
-          <span className={s.message}>Нельзя создавать новую интеграцию, пока создание предыдущей не закончится.</span>}
+        {!noItemsMessage && hasCreatingIntegration && (
+          <span className={s.message}>Нельзя создавать новую интеграцию, пока создание предыдущей не закончится.</span>
+        )}
 
         {
           // @ts-expect-error No error types yet
           isError && <span className={s.errorMessage}>{error?.data?.detail}</span>
         }
 
-        <button className={s.button} disabled={submitDisabled && !noItemsMessage} onClick={noItemsMessage ? goToShop : submitCreation}>
-          {noItemsMessage  ? 'В магазин' : 'Создать интеграцию'}
+        <button
+          className={s.button}
+          disabled={submitDisabled && !noItemsMessage}
+          onClick={noItemsMessage ? goToShop : submitCreation}
+        >
+          {noItemsMessage ? 'В магазин' : 'Создать интеграцию'}
         </button>
       </div>
     </CentralModal>

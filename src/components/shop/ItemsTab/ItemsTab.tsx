@@ -17,7 +17,7 @@ interface props {
   refetchFn: () => void;
 }
 
-export const ItemsTab: FC<props> = ({ shopCategory, itemsQuality, shopItems, inventoryItems, refetchFn }) => {
+export const ItemsTab: FC<props> = ({itemsQuality, shopItems, refetchFn }) => {
   const shopItemsFiltered = shopItems?.filter(item => {
     if (itemsQuality.value === 'lux') {
       return item.name.includes('Pro');

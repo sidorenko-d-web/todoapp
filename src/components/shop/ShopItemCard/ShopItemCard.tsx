@@ -7,6 +7,7 @@ import ChestPurpleIcon from '../../../assets/Icons/chest-purple.svg';
 import ChestRedIcon from '../../../assets/Icons/chest-red.svg';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
 import { TypeItemQuality, IShopItem } from '../../../redux';
+import CoinIcon from '../../../assets/Icons/coin.svg'
 
 interface Props {
   disabled?: boolean;
@@ -73,7 +74,7 @@ export const ShopItemCard: FC<Props> = ({
           <div className={clsx(styles.stats, (isBlocked || disabled) && styles.disabledStats)}>
             <div className={styles.statsItem}>
               <p>+{item.boost.income_per_integration}</p>
-              <img src="/img/coin.svg" />
+              <img src={CoinIcon} />
             </div>
             <div className={styles.statsItem}>
               <p>+{item.boost.subscribers}</p>
@@ -81,7 +82,7 @@ export const ShopItemCard: FC<Props> = ({
             </div>
             <div className={styles.statsItem}>
               <p>+{item.boost.income_per_second}</p>
-              <img src="/img/coin.svg" />
+              <img src={CoinIcon} />
               <p>/сек</p>
             </div>
           </div>
@@ -124,15 +125,15 @@ export const ShopItemCard: FC<Props> = ({
                   variant === 'lowcost' ? styles.item : variant === 'prem' ? styles.itemPurple : styles.itemRed
                 }
               >
-                <img src="/img/chair.svg" className={styles.itemImage} />
+                <img src={item.image_url} className={styles.itemImage} />
                 <img src="/img/lock_icon.svg" className={styles.lock} />
               </div>
               <div className={styles.itemLocked}>
-                <img src="/img/chair.svg" className={styles.itemImage} />
+                <img src={item.image_url} className={styles.itemImage} />
                 <img src="/img/lock_icon.svg" className={styles.lock} />
               </div>
               <div className={styles.itemLocked}>
-                <img src="/img/chair.svg" className={styles.itemImage} />
+                <img src={item.image_url} className={styles.itemImage} />
                 <img src="/img/lock_icon.svg" className={styles.lock} />
               </div>
             </div>
@@ -156,7 +157,7 @@ export const ShopItemCard: FC<Props> = ({
               <p>loading</p>
             ) : (
               <>
-                {item.price_internal} <img src="/img/coin.svg" />
+                {item.price_internal} <img src={CoinIcon} />
               </>
             )}
           </button>
