@@ -1,17 +1,13 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import {
-  CreateIntegrationRequestDTO,
-  IntegrationResponseDTO,
-  IntegrationsQueryRequestDTO,
-  IntegrationsResponseDTO,
-} from '.';
 
 export const integrationsApi = createApi({
   reducerPath: 'integrationsApi',
   baseQuery: baseQueryReauth,
   tagTypes: [ 'Integrations' ],
   endpoints: builder => ({
+    getIntegration: builder.query<IntegrationResponseDTO, string>({
+      query: integrationId => ({
     createIntegration: builder.mutation<IntegrationResponseDTO, CreateIntegrationRequestDTO>({
       query: (body) => ({
         url: '/integrations',
@@ -42,7 +38,14 @@ export const integrationsApi = createApi({
         method: 'GET',
       }),
     }),
+
+    getAllIntegrations: builder.query<IntegrationsResponseDTO, void>({
+      query: () => ({
+        url: '/integrations',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
-export const { useGetIntegrationQuery, useGetIntegrationsQuery, useCreateIntegrationMutation } = integrationsApi;
+export const { useGetIntegrationQuery, useGetAllIntegrationsQuery } = integrationsApi;

@@ -11,7 +11,7 @@ import subscriptionLeveIcon from '../../../assets/icons/subscription-level.svg';
 
 import ProgressLine from "../../shared/ProgressLine/ProgressLine";
 import { useModal } from "../../../hooks";
-import { MODALS } from "../../../constants/modals";
+import { MODALS } from '../../../constants';
 
 interface ProfileInfoProps {
     nickname: string;
@@ -24,7 +24,7 @@ interface ProfileInfoProps {
 export const ProfileInfo: React.FC<ProfileInfoProps> = ({ nickname, blogName, subscriptionIntegrationsLeft, position, isVip }) => {
 
 
-    const { openModal, closeModal } = useModal();
+    const { openModal} = useModal();
 
     return (
         <div className={styles.wrp}>
@@ -32,16 +32,16 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({ nickname, blogName, su
                 <div className={styles.avatarImageWrp}>
                     <div className={`${styles.clanWrp} ${isVip ? styles.vip : ""}`}>
                         <span className={styles.position}>{`#${position}`}</span>
-                        <img src={clanIcon} />
+                        <img src={clanIcon} alt=''/>
                     </div>
 
                     <div className={styles.imagePlaceholder}>
-                        <img src={profileImagePlaceholder} />
+                        <img src={profileImagePlaceholder} alt=''/>
                     </div>
                     {isVip ? (
                         <>
                             <div className={styles.vipWrp}>
-                                <img src={vipIcon} />
+                                <img src={vipIcon} alt=''/>
                                 <span className={styles.vipText}>VIP</span>
                             </div>
                         </>
@@ -57,7 +57,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({ nickname, blogName, su
                     <div className={styles.nicknameWrp}>
                         <span className={styles.nickname}>{nickname}</span>
                         <span className={styles.subscribers}>999</span>
-                        <img className={styles.edit} src={editIcon} onClick={() => {openModal(MODALS.CHANGING_NICKNAME)}} />
+                        <img className={styles.edit} src={editIcon} onClick={() => {openModal(MODALS.CHANGING_NICKNAME)}} alt=''/>
                     </div>
 
                     <p className={styles.blogName}>
@@ -71,7 +71,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({ nickname, blogName, su
 
                         <div className={styles.subscriptionLevelWrp}>
                             <span className={styles.subscriptionLevel}>{subscriptionIntegrationsLeft}/5</span>
-                            <img src={subscriptionLeveIcon} />
+                            <img src={subscriptionLeveIcon} alt=''/>
                         </div>
                     </div>
                     <ProgressLine level={subscriptionIntegrationsLeft} color="blue" />

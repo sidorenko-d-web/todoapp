@@ -6,6 +6,5 @@ export enum AppRoute {
   Profile = '/profile',
   Shop = '/shop',
   Promotion = '/promotion',
-
   NotFound = '*',
 }
