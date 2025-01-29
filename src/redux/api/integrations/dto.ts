@@ -19,5 +19,18 @@ export type IntegrationResponseDTO = {
 
 export type IntegrationsResponseDTO = {
   count: number
-  integrations: IntegrationResponseDTO[]
+  integrations: IntegrationResponseDTO[];
+};
+
+export type IntegrationsQueryRequestDTO = {
+  company_name?: string;
+  status?: 'creating' | 'created';
+  asc?: boolean;
+  offset?: number;
+  limit?: number;
+}
+
+export type CreateIntegrationRequestDTO = {
+  campaign_id: string;
+  content_type: string
 }

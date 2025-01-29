@@ -6,29 +6,31 @@ $background-dark: #121212;
 $highlight: #4a4a4a;
 
 .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: $background-dark;
   color: $primary-color;
-  padding: 16px;
   border-radius: 12px;
   width: 100%;
-  overflow: hidden;
+  gap: 20px;
 }
 
-.tabsWrapper {
-  margin-bottom: 16px;
-  padding-bottom: 5px;
-}
 
 .tabs {
+  width: 100%;
   display: flex;
-  gap: 8px;
+  justify-content: space-between;
+  align-self: center;
+  gap: 16px;
   width: max-content;
   background-color: var.$color-card-bg;
   border-radius: 30px;
   padding: 3px 6px;
 }
 
-.tab {
+.tab {  
+    
   background: transparent;
   border: none;
   color: $primary-color;
@@ -50,9 +52,9 @@ $highlight: #4a4a4a;
   color: black;
 }
 
-/* Grid Layout */
 .grid {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 8px;
 }

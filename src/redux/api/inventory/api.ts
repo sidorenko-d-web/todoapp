@@ -19,11 +19,11 @@ export const inventoryApi = createApi({
       }),
       providesTags: ['skins'],
     }),
-    getInventoryItems: builder.query<IShopItemsResponse, IShopItemsRequest>({
+    getInventoryItems: builder.query<IShopItemsResponse, IShopItemsRequest | void>({
       query: (params) => ({
         url: `/inventory/items`,
         method: 'GET',
-        params
+        params: params || {}
       }),
       providesTags: ['items'],
     }),
