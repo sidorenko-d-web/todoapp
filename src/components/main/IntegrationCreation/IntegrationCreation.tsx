@@ -47,14 +47,14 @@ export const IntegrationCreation = () => {
         </span>
       </button>
       {
-        integrationsError?.status === 404 ? null : integrations?.integrations.map(integration => (
-          <IntegrationCreationCard key={integration.id} integration={integration} />
-        ))
+        integrationsError?.status === 404 ? null :
+          integrations?.integrations && <IntegrationCreationCard integration={integrations?.integrations[0]} />
       }
 
       <IntegrationCreationModal
         modalId={MODALS.CREATING_INTEGRATION}
         onClose={() => closeModal(MODALS.CREATING_INTEGRATION)}
+        hasCreatingIntegration={integrations?.integrations && integrations?.integrations.length > 0}
       />
       <SubscribeModal
         modalId={MODALS.SUBSCRIBE}

@@ -17,11 +17,13 @@ import { useDispatch } from 'react-redux';
 interface CreatingIntegrationModalProps {
   modalId: string;
   onClose: () => void;
+  hasCreatingIntegration?: boolean
 }
 
 export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                                                                               modalId,
                                                                               onClose,
+                                                                              hasCreatingIntegration,
                                                                             }: CreatingIntegrationModalProps) => {
   const dispatch = useDispatch();
 
@@ -54,7 +56,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     });
   };
 
-  const submitDisabled = !selectedOption || !selectedCompany;
+  const submitDisabled = !selectedOption || !selectedCompany || hasCreatingIntegration;
   console.log(error);
 
   return (
@@ -83,6 +85,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         </div>
 
         {isError && <span className={s.errorMessage}>{error?.data?.detail}</span>}
+        {hasCreatingIntegration && <span className={s.message}>Нельзя создавать новую интеграцию, пока создание предыдущей не закончится.</span>}
 
         <button className={s.button} disabled={submitDisabled} onClick={submitCreation}>Создать интеграцию</button>
       </div>
