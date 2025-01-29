@@ -88,7 +88,7 @@ export const InventoryCard: FC<Props> = ({
         </div>
       </div>
 
-      {!isBlocked &&
+      {!isBlocked && 
         (disabled ? (
           <p className={styles.disabledText}>
             Сейчас активен “
