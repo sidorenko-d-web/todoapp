@@ -46,7 +46,7 @@ export interface IShopItemsRequest {
 }
 
 export interface IBoosts {
-  income_per_integration: string;
+  views: string;
   income_per_second: string;
   subscribers: number;
 }

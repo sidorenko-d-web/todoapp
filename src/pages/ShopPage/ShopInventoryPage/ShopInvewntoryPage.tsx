@@ -10,16 +10,19 @@ export const ShopInvewntoryPage = () => {
   const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
   const [itemsQuality, setItemsQuality] = useState<TypeTab<TypeItemQuality>>();
 
-  const {data: inventory, isFetching: isInventoryFetching, refetch} = useGetInventoryItemsQuery({item_category: shopCategory?.value!}, {skip: !shopCategory?.value})
+  const {
+    data: inventory,
+    isFetching: isInventoryFetching,
+    refetch,
+    isSuccess,
+  } = useGetInventoryItemsQuery({ item_category: shopCategory?.value! }, { skip: !shopCategory?.value });
 
   return (
-    <ShopLayout
-      mode="inventory"
-      onItemCategoryChange={setShopCategory}
-      onItemQualityChange={setItemsQuality}
-    >
+    <ShopLayout mode="inventory" onItemCategoryChange={setShopCategory} onItemQualityChange={setItemsQuality}>
       {isInventoryFetching ? (
         <p style={{ color: '#fff' }}>Loading...</p>
+      ) : !isSuccess ? (
+        <p style={{ color: '#fff' }}>No items in inventory</p>
       ) : !shopCategory || !itemsQuality ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
       ) : shopCategory?.title !== 'Вы' ? (

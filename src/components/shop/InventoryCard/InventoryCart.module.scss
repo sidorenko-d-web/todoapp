@@ -196,9 +196,12 @@
         justify-content: center;
         position: relative;
         background: var.$footer-bg;
+        overflow: hidden;
         .itemImage {
           width: 24px;
           height: 24px;
+          border: none;
+          background: none;
         }
 
         .lock {

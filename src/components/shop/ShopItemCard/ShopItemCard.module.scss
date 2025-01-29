@@ -1,7 +1,6 @@
 @use '../../../assets/styles' as var;
 @use 'sass:color';
 
-
 .storeCard {
   background-color: var.$color-card-bg;
   align-self: stretch;
@@ -11,7 +10,6 @@
     display: flex;
     gap: 10px;
     .image {
-      border: 2px solid var.$color-primary;
       border-radius: 8px;
       background: var.$footer-bg;
       flex-direction: column;
@@ -44,21 +42,6 @@
       }
     }
 
-    .purpleImage {
-      @extend .image;
-      border-color: var.$color-purple;
-      p {
-        background-color: var.$color-purple;
-      }
-    }
-    .redImage {
-      @extend .image;
-      border-color: red;
-      p {
-        background-color: red;
-      }
-    }
-
     .title {
       display: flex;
       flex-direction: column;
@@ -73,35 +56,13 @@
           font-size: 16px;
           margin-bottom: 4px;
         }
-
-        .variant {
-          background: var.$color-primary;
-          opacity: 0.5;
-          align-self: flex-start;
-          padding: 2px 5px;
-          border-radius: 4px;
-          p {
-            color: var.$color-dark-gray-stroke;
-            font-size: 12px;
-            line-height: 12px;
-            text-wrap: nowrap;
-          }
-        }
-
-        .variantPurple {
-          @extend .variant;
-          background-color: var.$color-purple;
-        }
-        .variantRed {
-          @extend .variant;
-          background-color: red;
-        }
       }
       .level {
         font-weight: 500;
         font-size: 12px;
         color: var.$color-primary;
         line-height: 12px;
+        opacity: 0.3;
       }
 
       .colorPurple {
@@ -120,6 +81,7 @@
         margin-top: auto;
         width: 100%;
         gap: 5%;
+        opacity: 0.3;
 
         .statsItem {
           display: flex;
@@ -137,96 +99,6 @@
       }
       .disabledStats {
         opacity: 0.3;
-      }
-    }
-  }
-
-  .progress {
-    margin-top: 20px;
-    .text {
-      display: flex;
-      justify-content: space-between;
-
-      p {
-        font-size: 12px;
-        line-height: 12px;
-        color: var.$color-text-semi-transparent;
-        font-weight: 500;
-      }
-      .goal {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        img {
-          width: 12px;
-          aspect-ratio: 1;
-        }
-      }
-    }
-
-    .progressBar {
-      margin-top: 5px;
-      border: 1px solid var.$color-dark-gray-stroke;
-      border-radius: 6px;
-      overflow: hidden;
-      background: var.$color-gray;
-      .done {
-        height: 16px;
-        background: var.$color-primary;
-      }
-
-      .donePurple {
-        @extend .done;
-        background-color: var.$color-purple;
-      }
-      .doneRed {
-        @extend .done;
-        background-color: red;
-      }
-    }
-
-    .items {
-      display: flex;
-      margin-top: 5px;
-      gap: 5px;
-      .item {
-        border: 1px solid var.$color-primary;
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        background: var.$footer-bg;
-        .itemImage {
-          width: 24px;
-          height: 24px;
-        }
-
-        .lock {
-          display: none;
-          width: 12px;
-          height: 12px;
-          position: absolute;
-        }
-      }
-
-      .itemLocked {
-        @extend .item;
-        opacity: 0.5;
-        border: transparent;
-
-        .lock {
-          display: block;
-        }
-      }
-
-      .itemPurple {
-        @extend .item;
-        border-color: var.$color-purple;
-      }
-      .itemRed {
-        @extend .item;
-        border-color: red;
       }
     }
   }
@@ -252,18 +124,16 @@
         background: var.$color-primary;
         border: 1px solid var.$color-border-primary;
         flex: 1;
-
-        img {
-          width: 14px;
-          aspect-ratio: 1;
-        }
       }
 
       &:last-child {
         background: var.$color-gray;
-        opacity: 0.3;
         flex: 1;
         border: none;
+        img {
+          width: 14px;
+          height: 14px;
+        }
       }
     }
   }

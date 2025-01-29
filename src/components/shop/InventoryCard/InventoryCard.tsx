@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import styles from './ShopItemCard.module.scss';
+import styles from './InventoryCart.module.scss';
 import clsx from 'clsx';
 import LockIconSvg from '../../../assets/Icons/lock-closed';
 import ChestBlueIcon from '../../../assets/Icons/chest-blue.svg';
@@ -10,6 +10,7 @@ import { TypeItemQuality, IShopItem } from '../../../redux';
 import CoinIcon from '../../../assets/Icons/coin.svg'
 import SubscriberCoin from '../../../assets/Icons/subscriber_coin.svg'
 import LockIcon from '../../../assets/Icons/lock_icon.svg'
+import ViewsIcon from '../../../assets/Icons/views.svg';
 
 interface Props {
   disabled?: boolean;
@@ -75,8 +76,8 @@ export const InventoryCard: FC<Props> = ({
           </p>
           <div className={clsx(styles.stats, (isBlocked || disabled) && styles.disabledStats)}>
             <div className={styles.statsItem}>
-              <p>+{item.boost.income_per_integration}</p>
-              <img src={CoinIcon} />
+              <p>+{item.boost.views}</p>
+              <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
               <p>+{item.boost.subscribers}</p>
