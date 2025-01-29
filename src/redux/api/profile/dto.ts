@@ -14,3 +14,8 @@ export type TopProfilesResponseDTO = {
     count: number;
     profiles: UserProfileInfoResponseDTO[];
 };
+
+export type UpdateProfileRequestDTO = {
+    blog_name: string;
+    username: string;
+  }
