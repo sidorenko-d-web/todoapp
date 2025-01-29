@@ -1,16 +1,10 @@
 @use '../../../assets/styles' as var;
 
 
-$primary-color: #ffffff;
-$background-dark: #121212;
-$highlight: #4a4a4a;
-
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: $background-dark;
-  color: $primary-color;
   border-radius: 12px;
   width: 100%;
   gap: 20px;
@@ -29,23 +23,16 @@ $highlight: #4a4a4a;
   padding: 3px 6px;
 }
 
-.tab {  
-    
+.tab {
   background: transparent;
   border: none;
-  color: $primary-color;
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 28px;
-  transition: background 0.3s;
-
-
+  color: white; 
   font-size: 12px;
-  
-  &:hover {
-    background: $highlight;
-  }
 }
+
 
 .activeTab {
   background: #D9DCE1;
@@ -55,7 +42,7 @@ $highlight: #4a4a4a;
 .grid {
   width: 85%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); 
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
   gap: 8px;
   justify-content: space-between;
 }
@@ -68,19 +55,13 @@ $highlight: #4a4a4a;
   height: 44px;
   background: #222;
   border: none;
-  color: $primary-color;
-  padding: 20px;
+    padding: 20px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s;
-
-  &:hover {
-    background: $highlight;
-  }
 }
 
 .selected {
-  border: 2px solid blue;
+  border: 2px solid var.$color-primary;
 }
 
 .icon {

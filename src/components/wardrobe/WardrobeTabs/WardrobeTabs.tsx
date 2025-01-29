@@ -12,7 +12,6 @@ const WardrobeTabs: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            {/* Scrollable Tabs */}
             <div className={styles.tabs}>
                 {categories.map((category) => (
                     <button
@@ -25,7 +24,6 @@ const WardrobeTabs: React.FC = () => {
                 ))}
             </div>
 
-            {/* Option Grid */}
             <div className={styles.grid}>
                 {options.map((_, index) => (
                     <button
