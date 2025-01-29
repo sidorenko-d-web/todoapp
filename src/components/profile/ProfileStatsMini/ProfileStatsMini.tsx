@@ -4,7 +4,7 @@ import styles from './ProfileStatsMini.module.scss';
 
 import clanIcon from '../../../assets/icons/clan-red.svg';
 import subscriberIcon from '../../../assets/icons/subscribers.svg';
-import fireIcon from '../../../assets/icons/fire.svg';
+import fireIcon from '../../../assets/images/fire-red.svg';
 
 interface ProfileStatsMiniProps {
     subscribers: number;
