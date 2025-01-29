@@ -11,9 +11,6 @@ import { getWeekData } from "../../utils";
 import { useModal } from "../../hooks";
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from "../../components/profile/ChangeNicknameModal/ChangeNicknameModal";
-import WardrobeTabs from "../../components/wardrobe/WardrobeTabs/WardrobeTabs";
-import { WardrobeIcon } from "../../components/wardrobe/WardrobeIcon/WardrobeIcon";
-
 
 
 export const ProfilePage: React.FC = () => {
@@ -69,9 +66,6 @@ export const ProfilePage: React.FC = () => {
                     <div>
                         <p className={styles.statsTitle}>Награды</p>
                         <RewardsList />
-                        <WardrobeIcon/>
-                        <WardrobeTabs/>
-
                     </div>
 
                 </div>}

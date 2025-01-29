@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
-import LockIconSvg from '../../../assets/Icons/lock-closed';
-import ChestBlueIcon from '../../../assets/Icons/chest-blue.svg';
-import ChestPurpleIcon from '../../../assets/Icons/chest-purple.svg';
-import ChestRedIcon from '../../../assets/Icons/chest-red.svg';
+import LockIconSvg from '../../../assets/icons/lock-closed';
+import ChestBlueIcon from '../../../assets/icons/chest-blue.svg';
+import ChestPurpleIcon from '../../../assets/icons/chest-purple.svg';
+import ChestRedIcon from '../../../assets/icons/chest-red.svg';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
 import { TypeItemQuality, IShopItem } from '../../../redux';
 
