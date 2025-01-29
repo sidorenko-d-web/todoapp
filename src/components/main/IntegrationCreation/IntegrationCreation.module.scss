@@ -5,9 +5,9 @@
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  position: absolute;
+  position: fixed;
   right: 15px;
-  bottom: calc(60px + 80px + 15px); // 60px - header height, 80px - footer height, 15px - padding from footer
+  bottom: calc(80px + 15px); // 60px - header height, 80px - footer height, 15px - padding from footer
   left: 15px;
 
   .button {
