@@ -8,12 +8,12 @@ import integrations from '../../../../public/img/integrations.svg';
 interface Props {
   id: string;
   views: number;
-  subscribers: number;
+  points: string;
   companyName: string;
   onClick: () => void;
 }
 
-const StatisticsCard: FC<Props> = ({ views, subscribers, companyName, onClick }) => {
+const StatisticsCard: FC<Props> = ({ views, points, companyName, onClick }) => {
   return (
     <>
       <div className={styles.statisticsCard} onClick={onClick} style={{ cursor: 'pointer' }}>
@@ -34,7 +34,7 @@ const StatisticsCard: FC<Props> = ({ views, subscribers, companyName, onClick })
               <img src={view} alt=''/>
             </div>
             <div className={styles.item}>
-              <p>{subscribers}</p>
+              <p>{points}</p>
               <img src={coin} alt=''/>
             </div>
           </div>

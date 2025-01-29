@@ -3,9 +3,9 @@ import CoinIcon from "../../assets/icons/coin.svg"
 import AvatarIcon from "../../assets/icons/new-avatar.svg"
 import FireIcon from "../../assets/icons/avatar-fire.svg"
 import SubscribersIcon from "../../assets/images/subscribers.png"
-import { useGetCurrentUserProfileInfoQuery } from '../../redux/api/profile';
+import { useGetCurrentUserProfileInfoQuery } from '../../redux';
 import { useNavigate } from 'react-router-dom';
-import { AppRoute } from "../../constants/appRoute"
+import { AppRoute } from '../../constants'
 
 
 export const Header = () => {
@@ -44,7 +44,7 @@ export const Header = () => {
 
           <div className={styles.coinsWrapper}>
               <p className={styles.coins}>
-                  {data?.total_earned || 0}
+                  {data?.points || 0}
               </p>
               <img className={styles.coinIcon} src={CoinIcon} alt="CoinIcon" />
           </div>

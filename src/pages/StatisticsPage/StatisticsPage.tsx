@@ -6,11 +6,12 @@ import subscribers from '../../../public/img/subscribers.svg';
 import logo from '../../../public/img/logo.svg';
 import StatisticsCard from '../../components/statistics/statisticsCard/StatisticsCard';
 
-import { useGetAllIntegrationsQuery } from '../../redux';
+import { useGetAllIntegrationsQuery, useGetCurrentUserProfileInfoQuery } from '../../redux';
 
 const StatisticsPage: FC = () => {
   const navigate = useNavigate();
   const { data: statisticData, isLoading } = useGetAllIntegrationsQuery();
+  const { data: userProfileData, isLoading: isUserLoading} = useGetCurrentUserProfileInfoQuery();
 
   return (
     <div className={styles.wrapper}>
@@ -18,11 +19,11 @@ const StatisticsPage: FC = () => {
         <h1 className={styles.title}>Статистика</h1>
         <div className={styles.scores}>
           <div className={styles.scoresItem}>
-            <p>856,754 млн.</p>
+            <p>{userProfileData?.total_views}</p>
             <img src={views} alt="views" />
           </div>
           <div className={styles.scoresItem}>
-            <p>223 567</p>
+            <p>{userProfileData?.subscribers}</p>
             <img src={subscribers} alt="subscribers" />
           </div>
         </div>
@@ -35,7 +36,7 @@ const StatisticsPage: FC = () => {
         </div>
       </div>
       <div className={styles.integrationsWrapper}>
-        {isLoading ? (
+        {isLoading && isUserLoading ? (
           <p className={styles.info}>Загрузка...</p>
         ) : statisticData?.count != 0 ? (
           statisticData?.integrations.map(integration => (
@@ -43,7 +44,7 @@ const StatisticsPage: FC = () => {
               key={integration.id}
               id={integration.id}
               views={integration.views}
-              subscribers={integration.subscribers}
+              points={integration.income}
               companyName={integration.campaign.company_name}
               onClick={() => navigate(`/integrations/${integration.id}`)}
             />
