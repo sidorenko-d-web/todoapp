@@ -41,7 +41,10 @@
 
       .scores {
         display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 5px;
+        margin: 0 15px;
 
         .scoresItem {
           background: $color-badge-bg;

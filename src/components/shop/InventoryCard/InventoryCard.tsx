@@ -7,9 +7,9 @@ import ChestPurpleIcon from '../../../assets/Icons/chest-purple.svg';
 import ChestRedIcon from '../../../assets/Icons/chest-red.svg';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
 import { TypeItemQuality, IShopItem } from '../../../redux';
-import CoinIcon from '../../../assets/Icons/coin.svg'
-import SubscriberCoin from '../../../assets/Icons/subscriber_coin.svg'
-import LockIcon from '../../../assets/Icons/lock_icon.svg'
+import CoinIcon from '../../../assets/Icons/coin.svg';
+import SubscriberCoin from '../../../assets/Icons/subscriber_coin.svg';
+import LockIcon from '../../../assets/Icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/Icons/views.svg';
 
 interface Props {
@@ -92,7 +92,7 @@ export const InventoryCard: FC<Props> = ({
         </div>
       </div>
 
-      {!isBlocked && 
+      {!isBlocked &&
         (disabled ? (
           <p className={styles.disabledText}>
             Сейчас активен “
