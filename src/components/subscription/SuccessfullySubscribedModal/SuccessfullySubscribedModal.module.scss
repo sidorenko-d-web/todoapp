@@ -1,2 +1,114 @@
+@use '../../../assets/styles/index.scss' as var;
+@use 'sass:color';
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+
+  .reward {
+    width: 100%;
+    padding: 20px 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .badge {
+      z-index: 10;
+      display: flex;
+      padding: 4px 8px;
+      gap: 4px;
+      border-radius: 26px;
+      background-color: color.scale(var.$color-dark-gray, $alpha: 60%);
+      backdrop-filter: blur(12.5px);
+
+      color: var.$color-text;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 100%;
+    }
+
+    .spinner {
+      position: absolute;
+      animation: spin 5s linear infinite;
+    }
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .progress {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      .progressInfo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var.$color-text-semi-transparent;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 100%;
+
+        .progressIcon {
+          display: flex;
+          gap: 5px;
+        }
+      }
+
+      .progressBar {
+        height: 16px;
+        border-radius: 3px;
+        background-color: var.$color-gray;
+        overflow: hidden;
+
+        .progressBarInner {
+          height: 100%;
+          background-color: var.$color-primary;
+        }
+      }
+    }
+
+    .description {
+      margin-top: 10px;
+      color: var.$color-text-semi-transparent;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 120%;
+    }
+  }
+
+  .button {
+    width: 100%;
+    display: flex;
+    position: relative;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    color: var.$color-text;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    border: 1px solid var.$color-border-primary;
+    background-color: var.$color-primary;
+  }
 }
