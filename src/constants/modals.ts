@@ -1,5 +1,6 @@
 export const MODALS = {
   CREATING_INTEGRATION: 'creatingIntegration',
   CHANGING_NICKNAME: 'changingNickname',
-  INVITE_FRIEND: 'inviteFriend'
+  INVITE_FRIEND: 'inviteFriend',
+  TOP_USERS: 'topUsers'
 };
