@@ -1,8 +1,7 @@
-@use '../assets/styles/index.scss' as var;
+@use '../../assets/styles/index' as var;
 
 .page {
   min-height: 100vh;
-  padding: 20px 15px;
   position: relative;
   display: flex;
   flex-direction: column;
