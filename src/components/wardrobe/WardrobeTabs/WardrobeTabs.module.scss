@@ -53,10 +53,11 @@ $highlight: #4a4a4a;
 }
 
 .grid {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  width: 85%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); 
   gap: 8px;
+  justify-content: space-between;
 }
 
 .option {

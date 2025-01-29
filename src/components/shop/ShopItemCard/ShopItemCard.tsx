@@ -7,9 +7,9 @@ import ChestPurpleIcon from '../../../assets/icons/chest-purple.svg';
 import ChestRedIcon from '../../../assets/icons/chest-red.svg';
 import { useBuyItemMutation } from '../../../redux';
 import { TypeItemQuality, IShopItem } from '../../../redux';
-import CoinIcon from '../../../assets/Icons/coin.svg'
-import SubscriberCoin from '../../../assets/Icons/subscriber_coin.svg'
-import LockIcon from '../../../assets/Icons/lock_icon.svg'
+import CoinIcon from '../../../assets/icons/coin.svg'
+import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg'
+import LockIcon from '../../../assets/icons/lock_icon.svg'
 
 interface Props {
   disabled?: boolean;

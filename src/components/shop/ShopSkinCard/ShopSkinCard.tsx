@@ -4,13 +4,13 @@ import clsx from 'clsx';
 import { useBuySkinMutation, useGetShopSkinsQuery } from '../../../redux/api/shop/api';
 import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
 import { IShopSkin } from '../../../redux';
-import CoinIcon from '../../../assets/Icons/coin.svg'
-import HeadIcon from '../../../assets/Icons/head_icon.svg'
-import FaceIcon from '../../../assets/Icons/face_icon.svg'
-import PersonIcon from '../../../assets/Icons/person_icon.svg'
-import LegsIcon from '../../../assets/Icons/face_icon.svg'
-import FeetIcon from '../../../assets/Icons/face_icon.svg'
-import VIPIcon from '../../../assets/Icons/star_check_icon.svg'
+import CoinIcon from '../../../assets/icons/coin.svg'
+import HeadIcon from '../../../assets/icons/head_icon.svg'
+import FaceIcon from '../../../assets/icons/face_icon.svg'
+import PersonIcon from '../../../assets/icons/person_icon.svg'
+import LegsIcon from '../../../assets/icons/face_icon.svg'
+import FeetIcon from '../../../assets/icons/face_icon.svg'
+import VIPIcon from '../../../assets/icons/star_check_icon.svg'
 
 interface Props {
   item: IShopSkin;
