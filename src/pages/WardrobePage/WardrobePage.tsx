@@ -3,9 +3,11 @@ import { WardrobeIcon } from "../../components/wardrobe/WardrobeIcon/WardrobeIco
 import WardrobeTabs from "../../components/wardrobe/WardrobeTabs/WardrobeTabs";
 import { WardrobeInfo } from "../../components/wardrobe/WardrobeInfo/WardrobeInfo";
 
+import styles from './WardrobePage.module.scss';
+
 export const WardrobePage: React.FC = () => {
     return (
-        <div>
+        <div className={styles.wrp}>
             <WardrobeInfo/>
             <WardrobeIcon/>
             <WardrobeTabs/>
