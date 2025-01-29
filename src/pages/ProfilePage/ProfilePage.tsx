@@ -1,15 +1,15 @@
 import React from "react";
 
 import styles from './ProfilePage.module.scss';
-import { ProfileStatsMini } from "../../components/profile/ProfileStatsMini";
-import { ProfileInfo } from "../../components/profile/ProfileInfo";
-import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from "../../redux/api/profile/api";
-import { StreakCard } from "../../components/profile/ProfileStreak/StreakCard/StreakCard";
+import { ProfileStatsMini } from '../../components/profile';
+import { ProfileInfo } from '../../components/profile';
+import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../redux';
+import { StreakCard } from '../../components/profile';
 import { ProfileStats } from "../../components/profile";
 import RewardsList from "../../components/profile/RewardsCard/RewardsList";
 import { getWeekData } from "../../utils";
 import { useModal } from "../../hooks";
-import { MODALS } from "../../constants/modals";
+import { MODALS } from '../../constants';
 import ChangeNicknameModal from "../../components/profile/ChangeNicknameModal/ChangeNicknameModal";
 
 

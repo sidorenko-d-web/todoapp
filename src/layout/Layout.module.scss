@@ -4,15 +4,18 @@
   align-items: center;
   height: 100vh;
   margin: 0 auto;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
   width: 100%;
   max-width: 1728px;
-  padding-top: 60px;
-  padding-bottom: 80px;
+
+  height: calc(100vh - 140px);
+  margin-top: 60px;
+  padding: 20px 15px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
