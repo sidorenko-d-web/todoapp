@@ -6,11 +6,11 @@ import subscribers from '../../../public/img/subscribers.svg';
 import logo from '../../../public/img/logo.svg';
 import StatisticsCard from '../../components/statistics/statisticsCard/StatisticsCard';
 
-import { useGetAllIntegrationsQuery } from '../../redux/api/integrations/api';
+import { useGetAllIntegrationsQuery } from '../../redux';
 
 const StatisticsPage: FC = () => {
   const navigate = useNavigate();
-  const { data, error, isLoading } = useGetAllIntegrationsQuery();
+  const { data: statisticData, isLoading } = useGetAllIntegrationsQuery();
 
   return (
     <div className={styles.wrapper}>
@@ -30,15 +30,15 @@ const StatisticsPage: FC = () => {
       <div className={styles.sectionHeader}>
         <h2 className={styles.sectionTitle}>Все интеграции</h2>
         <div className={styles.sectionCount}>
-          <p>{data?.integrations.length || 0}</p>
+          <p>{statisticData?.count || 0}</p>
           <img src={logo} alt="logo" />
         </div>
       </div>
       <div className={styles.integrationsWrapper}>
         {isLoading ? (
           <p className={styles.info}>Загрузка...</p>
-        ) : data?.integrations?.length ? (
-          data.integrations.map(integration => (
+        ) : statisticData?.count != 0 ? (
+          statisticData?.integrations.map(integration => (
             <StatisticsCard
               key={integration.id}
               id={integration.id}

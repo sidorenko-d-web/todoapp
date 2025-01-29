@@ -4,9 +4,9 @@ $color-white: #ffffff;
 $color-black: #000000;
 
 $color-bg: #141319;
-$footer-bg: #2D2D35;
+$footer-bg: #2d2d35;
 
-$color-opacity-black: transparentize($color-black, 0.5);
+$color-opacity-black: color.scale($color-black, $alpha: 50%);
 
 $color-dark-gray-stroke: #282830;
 
@@ -16,28 +16,28 @@ $grayed-white: #d9dce1;
 $light-gray-bg: #cbcee2;
 $gradient: linear-gradient(to right, #1551e8, #e84951);
 
-$color-red: #E84949;
-$color-gray: #373A43;
-$color-blue-primary: #2F80ED;
+$color-red: #e84949;
+$color-gray: #373a43;
+$color-blue-primary: #2f80ed;
 
-$color-purple: #9747FF;
-$color-dark-blue: #2D79DF;
+$color-purple: #9747ff;
+$color-dark-blue: #2d79df;
 
-$color-text: #FFF;
-$color-text-semi-transparent: #AFB9D4;
-$color-text-super-transparent: #505B78;
+$color-text: #fff;
+$color-text-semi-transparent: #afb9d4;
+$color-text-super-transparent: #505b78;
 
-$color-card-bg: #1C1D22;
+$color-card-bg: #1c1d22;
 $color-badge-bg: #212129;
-$color-badge-button-bg: #D9DCE1;
+$color-badge-button-bg: #d9dce1;
 $color-bg: #141319;
 
 $color-dark-gray: #282830;
 
-$color-primary: #2F80ED;
-$color-border-primary: #2064C0;
-$color-secondary: #9B51E0;
-$color-border-secondary: #7A2BC3;
-$color-grayish-white: #D9DCE1;
+$color-primary: #2f80ed;
+$color-border-primary: #2064c0;
+$color-secondary: #9b51e0;
+$color-border-secondary: #7a2bc3;
+$color-grayish-white: #d9dce1;
 
 $color-button-inactive: #24252C;

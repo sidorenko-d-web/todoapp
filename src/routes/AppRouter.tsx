@@ -24,11 +24,11 @@ function AppRouter(): JSX.Element | null {
          <Route path="/" element={<Layout/>}>
         <Route path={AppRoute.Main} element={<MainPage />} />
         <Route path={AppRoute.Shop} element={<ShopPage />} />
-        <Route path={AppRoute.Integrations} element={<IntegrationPage/>} />
+        <Route path={AppRoute.Integration} element={<IntegrationPage/>} />
         <Route path={AppRoute.Tasks} element={<TasksPage />} />
-         <Route path={AppRoute.Statistics} element={<StatisticsPage />} />
         <Route path={AppRoute.Profile} element={<ProfilePage/>}/>
         <Route path={AppRoute.Promotion} element={<PromotionPage />} />
+        <Route path={AppRoute.Integrations} element={<StatisticsPage />} />
       </Route>
     </Routes>
   );

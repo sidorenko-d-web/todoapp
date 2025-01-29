@@ -1,4 +1,4 @@
-import { TaskCard } from '../';
+import { TaskCard } from '../TaskCard';
 import magicBallIcon from '/magic-ball.png';
 import chestIcon from '../../../assets/icons/chest.svg';
 

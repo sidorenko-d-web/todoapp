@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import { IntegrationResponseDTO } from './dto';
+import { IntegrationResponseDTO, IntegrationsResponseDTO } from './dto';
 
 export const integrationsApi = createApi({
   reducerPath: 'integrationsApi',
@@ -13,7 +13,7 @@ export const integrationsApi = createApi({
       }),
     }),
 
-    getAllIntegrations: builder.query<IntegrationResponseDTO[], void>({
+    getAllIntegrations: builder.query<IntegrationsResponseDTO, void>({
       query: () => ({
         url: '/integrations',
         method: 'GET',
