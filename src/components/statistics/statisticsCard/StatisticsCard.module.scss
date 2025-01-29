@@ -17,8 +17,10 @@
   .right {
     display: flex;
     flex-direction: column;
+    gap: 20px;
   }
   .header {
+    margin-bottom: 20px;
   }
   .title {
     color: $color-text-semi-transparent;

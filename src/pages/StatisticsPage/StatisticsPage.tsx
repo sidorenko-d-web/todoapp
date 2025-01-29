@@ -1,25 +1,17 @@
-import { FC, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './StatisticsPage.module.scss';
 import views from '../../../public/img/views.svg';
 import subscribers from '../../../public/img/subscribers.svg';
 import logo from '../../../public/img/logo.svg';
 import StatisticsCard from '../../components/statistics/statisticsCard/StatisticsCard';
 
-import { useGetIntegrationQuery, useGetAllIntegrationsQuery } from '../../redux/api/integrations/api';
+import { useGetAllIntegrationsQuery } from '../../redux/api/integrations/api';
 
 const StatisticsPage: FC = () => {
-  const { integrationId } = useParams<{ integrationId: string }>();
-
+  const navigate = useNavigate();
   const { data, error, isLoading } = useGetAllIntegrationsQuery();
-  useEffect(() => {
-    if (!isLoading && data) {
-      console.log('Data loaded:', data);
-    }
-    if (error) {
-      console.error('Error loading data:', error);
-    }
-  }, [isLoading, data, error]);
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.titleWrapper}>
@@ -27,25 +19,38 @@ const StatisticsPage: FC = () => {
         <div className={styles.scores}>
           <div className={styles.scoresItem}>
             <p>856,754 млн.</p>
-            <img src={views} />
+            <img src={views} alt="views" />
           </div>
           <div className={styles.scoresItem}>
             <p>223 567</p>
-            <img src={subscribers} />
+            <img src={subscribers} alt="subscribers" />
           </div>
         </div>
       </div>
       <div className={styles.sectionHeader}>
         <h2 className={styles.sectionTitle}>Все интеграции</h2>
         <div className={styles.sectionCount}>
-          <p>3</p>
-          <img src={logo} />
+          <p>{data?.integrations.length || 0}</p>
+          <img src={logo} alt="logo" />
         </div>
       </div>
       <div className={styles.integrationsWrapper}>
-        <StatisticsCard />
-        <StatisticsCard />
-        <StatisticsCard />
+        {isLoading ? (
+          <p className={styles.info}>Загрузка...</p>
+        ) : data?.integrations?.length ? (
+          data.integrations.map(integration => (
+            <StatisticsCard
+              key={integration.id}
+              id={integration.id}
+              views={integration.views}
+              subscribers={integration.subscribers}
+              companyName={integration.campaign.company_name}
+              onClick={() => navigate(`/integrations/${integration.id}`)}
+            />
+          ))
+        ) : (
+          <p className={styles.info}>Нет доступных интеграций</p>
+        )}
       </div>
     </div>
   );
