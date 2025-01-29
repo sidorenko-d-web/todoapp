@@ -19,7 +19,7 @@ interface Props {
   item: IShopItem;
 }
 
-export const ShopItemCard: FC<Props> = ({
+export const InventoryCard: FC<Props> = ({
   disabled,
   isBlocked,
   isUpgradeEnabled = true,
@@ -88,7 +88,7 @@ export const ShopItemCard: FC<Props> = ({
         </div>
       </div>
 
-      {!isBlocked &&
+      {!isBlocked && 
         (disabled ? (
           <p className={styles.disabledText}>
             Сейчас активен “

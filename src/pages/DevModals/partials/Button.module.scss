@@ -1,0 +1,19 @@
+@use '../../../assets//styles//abstracts/colors' as var;
+
+.button {
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-weight: 500px;
+  color: var.$color-white;
+}
+
+.buttonBlue {
+  border: 1px solid var.$color-border-primary;
+  background: var.$color-blue-primary;
+}
+
+.buttonRed {
+  border: 1px solid var.$color-border-red;
+  background: var.$color-red;
+}

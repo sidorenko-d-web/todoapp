@@ -1,5 +1,5 @@
 import cup from '../../../assets/icons/cup.svg';
-import chest from '../../../assets/icons/chest.svg';
+import chest from '../../../assets/icons/chest-purple.svg';
 import { SliderSelect } from './Slider';
 import { MODALS } from '../../../constants';
 import { TopUsers } from '../Modal';

@@ -5,4 +5,5 @@ export const MODALS = {
   TOP_USERS: 'topUsers',
   SUBSCRIBE: 'subscribe',
   SUCCESSFULLY_SUBSCRIBED: 'successfullySubscribed',
+  DAYS_IN_A_ROW: 'daysInARow'
 };

@@ -1,4 +1,4 @@
 export * from './ShopItemCard';
-export * from './ShopItemsTab';
+export * from './ItemsTab';
 export * from './ShopSkinCard';
-export * from './ShopSkinTab';
+export * from './SkinTab';

@@ -1,15 +1,15 @@
 import { FC } from 'react';
 import styles from './ShopSkinCard.module.scss';
 import clsx from 'clsx';
-import type { IShopSkin } from '../../../types/shop/ShopApiTypes';
 import { useBuySkinMutation, useGetShopSkinsQuery } from '../../../redux/api/shop/api';
 import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
+import { IShopSkin } from '../../../redux';
 
 interface Props {
   item: IShopSkin;
 }
 
-const ShopSkinCard: FC<Props> = ({ item }) => {
+export const ShopSkinCard: FC<Props> = ({ item }) => {
   const [buySkin, { isLoading }] = useBuySkinMutation();
   const { refetch: refetchShop } = useGetShopSkinsQuery();
   const { refetch: refetchInventory } = useGetInventorySkinsQuery();
@@ -88,4 +88,3 @@ const ShopSkinCard: FC<Props> = ({ item }) => {
   );
 };
 
-export default ShopSkinCard;
