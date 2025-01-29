@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { useInventoryItemsFilter } from '../../../hooks';
 
 import s from './IntegrationCreationModal.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 interface CreatingIntegrationModalProps {
   modalId: string;
@@ -27,6 +28,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                                                                               hasCreatingIntegration,
                                                                             }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const contentOptions = [
     { label: 'Текст', value: 'text' },
@@ -42,6 +44,11 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const { data: profile } = useGetCurrentUserProfileInfoQuery();
   const { data } = useGetCompaniesQuery();
   const companies = data?.campaigns;
+
+  const goToShop = () => {
+    onClose()
+    navigate('/shop')
+  }
 
   const submitCreation = () => {
     if (!selectedOption || !selectedCompany) return;
@@ -105,8 +112,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
         {isError && <span className={s.errorMessage}>{error?.data?.detail}</span>}
 
-        <button className={s.button} disabled={submitDisabled} onClick={submitCreation}>
-          Создать интеграцию
+        <button className={s.button} disabled={submitDisabled && !noItemsMessage} onClick={noItemsMessage ? goToShop : submitCreation}>
+          {noItemsMessage  ? 'В магазин' : 'Создать интеграцию'}
         </button>
       </div>
     </CentralModal>
