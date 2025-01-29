@@ -1,6 +1,6 @@
 import styles from "./Header.module.scss"
-import CoinIcon from "../../assets/Icons/coin.svg"
-import AvatarIcon from "../../assets/Icons/new-avatar.svg"
+import CoinIcon from "../../assets/icons/coin.svg"
+import AvatarIcon from "../../assets/icons/new-avatar.svg"
 import FireIcon from "../../assets/icons/avatar-fire.svg"
 import SubscribersIcon from "../../assets/images/subscribers.png"
 // import { selectProfile } from "../../redux/selectors/profile"
