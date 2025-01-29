@@ -6,7 +6,7 @@ import skinPlacehoder from '../../../assets/icons/skin-placeholder.svg';
 const categories = ["Голова", "Фото", "Видео", "Декор", "VIP"];
 const options = Array(9).fill(null);
 
-const WardrobeTabs: React.FC = () => {
+export const WardrobeTabs: React.FC = () => {
     const [activeTab, setActiveTab] = useState("Голова");
     const [selected, setSelected] = useState(0);
 
@@ -38,5 +38,3 @@ const WardrobeTabs: React.FC = () => {
         </div>
     );
 };
-
-export default WardrobeTabs;

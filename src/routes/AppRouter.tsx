@@ -10,10 +10,10 @@ import { ProfilePage } from '../pages';
 import { MainPage } from '../pages';
 import Layout from '../layout/Layout.tsx';
 import StatisticsPage from '../pages/StatisticsPage/StatisticsPage';
-import { WardrobePage } from '../pages/WardrobePage/WardrobePage.tsx';
 
 import DevModals from '../pages/DevModals/DevModals.tsx';
 import { ShopInvewntoryPage } from '../pages/ShopPage';
+import { WardrobePage } from '../pages';
 
 function AppRouter(): JSX.Element | null {
   const location = useLocation();
