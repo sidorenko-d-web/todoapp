@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { useBuySkinMutation, useGetShopSkinsQuery } from '../../../redux/api/shop/api';
 import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
 import { IShopSkin } from '../../../redux';
+import CoinIcon from '../../../assets/Icons/coin.svg'
 
 interface Props {
   item: IShopSkin;
@@ -73,7 +74,7 @@ export const ShopSkinCard: FC<Props> = ({ item }) => {
                 <p>Загрузка</p>
               ) : (
                 <>
-                  {item.price_internal} <img src="/img/coin.svg" />
+                  {item.price_internal} <img src={CoinIcon} />
                 </>
               )}
             </button>

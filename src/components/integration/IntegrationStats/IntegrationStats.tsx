@@ -4,7 +4,7 @@ import styles from './IntegrationStats.module.scss';
 
 import subscribersIcon from '../../../assets/icons/subscribers.svg';
 import viewsIcon from '../../../assets/icons/views.svg';
-import coinIcon from '../../../../public/img/coin.svg';
+import CoinIcon from '../../../assets/Icons/coin.svg'
 
 interface IntegrationStatsProps {
     subscribers: number;
@@ -32,7 +32,7 @@ export const IntegrationStats: React.FC<IntegrationStatsProps> = ({subscribers, 
             <div className={styles.IntegrationStat}>
                 <p className={styles.amount}>{income}</p>
                 <div className={styles.typeWrp}>
-                    <img src={coinIcon} />
+                    <img src={CoinIcon} />
                     <p className={styles.type}>Доход</p>
                 </div>
             </div>
