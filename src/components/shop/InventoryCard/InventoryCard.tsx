@@ -19,7 +19,7 @@ interface Props {
   item: IShopItem;
 }
 
-export const ShopItemCard: FC<Props> = ({
+export const InventoryCard: FC<Props> = ({
   disabled,
   isBlocked,
   isUpgradeEnabled = true,

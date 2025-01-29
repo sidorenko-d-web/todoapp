@@ -1,72 +1,40 @@
 import { FC, useState } from 'react';
-import styles from './ShopPage.module.scss';
-import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
-import { useGetInventoryBoostQuery } from '../../redux/api/inventory/api';
-import ShopItemsTab from '../../components/shop/ShopItemsTab/ShopItemsTab';
-import ShopSkinTab from '../../components/shop/ShopSkinTab/ShopSkinTab';
+import { ShopLayout } from '../../layout/ShopLayout/ShopLayout';
+import { ItemsTab, SkinTab } from '../../components';
+import { useGetShopItemsQuery } from '../../redux/api/shop/api';
+import { TypeItemCategory, TypeItemQuality } from '../../redux';
 
-const shopItemCategories = [
-  { title: 'Текст', value: 'text' },
-  { title: 'Фото', value: 'image' },
-  { title: 'Видео', value: 'video' },
-  { title: 'Декор', value: 'decor' },
-  { title: 'Вы', value: 'decor' },
-];
-const shopItemQualities = [
-  { title: 'Эконом', value: 'lowcost' },
-  { title: 'Премиум', value: 'prem' },
-  { title: 'Люкс', value: 'lux' },
-];
+type TypeTab<T> = { title: string; value: T };
 
 const StorePage: FC = () => {
-  const [shopCategory, setShopCategory] = useState(shopItemCategories[0]);
-  const [itemsQuality, setItemsQuality] = useState(shopItemQualities[0]);
+  const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
+  const [itemsQuality, setItemsQuality] = useState<TypeTab<TypeItemQuality>>();
 
-  const { data: boosts } = useGetInventoryBoostQuery();
+  const {
+    data: shop,
+    isFetching: isShopFetching,
+    refetch: refetchShop,
+  } = useGetShopItemsQuery({
+    item_category: shopCategory?.value as TypeItemCategory,
+  });
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.titleWrapper}>
-        <h1 className={styles.title}>Магазин</h1>
-
-        <div className={styles.scores}>
-          <div className={styles.scoresItem}>
-            <p>+{boosts?.income_per_integration ?? 0}</p>
-            <img src="/img/subscriber_coin.svg" />
-            <p>/инт.</p>
-          </div>
-          <div className={styles.scoresItem}>
-            <p>+{boosts?.income_per_second ?? 0}</p>
-            <img src="/img/coin.svg" />
-            <p>/сек.</p>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.navs}>
-        <TabsNavigation tabs={shopItemCategories} currentTab={shopCategory.title} onChange={setShopCategory} />
-        {shopCategory.title !== 'Вы' && (
-          <TabsNavigation
-            colorClass={
-              itemsQuality.title === 'Эконом'
-                ? 'tabItemSelectedBlue'
-                : itemsQuality.title === 'Премиум'
-                ? 'tabItemSelectedPurple'
-                : 'tabItemSelectedRed'
-            }
-            tabs={shopItemQualities}
-            currentTab={itemsQuality.title}
-            onChange={setItemsQuality}
-          />
-        )}
-      </div>
-
-      {shopCategory.title !== 'Вы' ? (
-        <ShopItemsTab shopCategory={shopCategory} itemsQuality={itemsQuality} />
+    <ShopLayout mode="shop" onItemCategoryChange={setShopCategory} onItemQualityChange={setItemsQuality}>
+      {isShopFetching ? (
+        <p style={{ color: '#fff' }}>Loading...</p>
+      ) : !shopCategory || !itemsQuality ? (
+        <p style={{ color: '#fff' }}>Error occured while getting data</p>
+      ) : shopCategory?.title !== 'Вы' ? (
+        <ItemsTab
+          shopCategory={shopCategory}
+          itemsQuality={itemsQuality}
+          shopItems={shop?.items}
+          refetchFn={refetchShop}
+        />
       ) : (
-        <ShopSkinTab />
+        <SkinTab />
       )}
-    </div>
+    </ShopLayout>
   );
 };
 

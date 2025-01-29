@@ -9,7 +9,7 @@ import { PromotionPage } from '../pages';
 import { ProfilePage } from '../pages';
 import Layout from '../layout/Layout.tsx';
 import DevModals from '../pages/DevModals/DevModals.tsx';
-
+import { ShopInvewntoryPage } from '../pages/ShopPage/index.ts';
 
 function AppRouter(): JSX.Element | null {
   const location = useLocation();
@@ -20,13 +20,14 @@ function AppRouter(): JSX.Element | null {
 
   return (
     <Routes>
-      <Route path="/" element={<Layout/>}>
+      <Route path="/" element={<Layout />}>
         <Route path={AppRoute.Main} element={<MainPage />} />
         <Route path={AppRoute.Shop} element={<ShopPage />} />
-        <Route path={AppRoute.Integrations} element={<IntegrationPage/>} />
+        <Route path={AppRoute.Integrations} element={<IntegrationPage />} />
         <Route path={AppRoute.Tasks} element={<TasksPage />} />
-        <Route path={AppRoute.Profile} element={<ProfilePage/>}/>
+        <Route path={AppRoute.Profile} element={<ProfilePage />} />
         <Route path={AppRoute.Promotion} element={<PromotionPage />} />
+        <Route path={AppRoute.ShopInventory} element={<ShopInvewntoryPage />} />
         <Route path={'dev-modals'} element={<DevModals />} />
       </Route>
     </Routes>

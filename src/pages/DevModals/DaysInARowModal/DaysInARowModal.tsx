@@ -8,7 +8,6 @@ import FireBlue from '../../../assets/images/fire-blue.svg';
 import FireRed from '../../../assets/images/fire-red.svg';
 import FirePurple from '../../../assets/images/fire-purple.svg';
 import styles from './DaysInARowModal.module.scss';
-import { TypeItemQuality } from '../../../types/shop/ShopApiTypes';
 import SnowflakeIcon from '../../../assets/Icons/snowflake-icon.svg';
 import FireIcon from '../../../assets/Icons/fire-icon.svg';
 import clsx from 'clsx';
@@ -16,6 +15,7 @@ import ChestBlue from '../../../assets/Icons/chest-blue.svg';
 import ChestPurple from '../../../assets/Icons/chest-purple.svg';
 import ChestRed from '../../../assets/Icons/chest-red.svg';
 import Button from '../partials/Button';
+import { TypeItemQuality } from '../../../redux';
 
 interface Props {
   days?: number;

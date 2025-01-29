@@ -1,11 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import type {
-  IBoosts,
-  IShopItemsRequest,
-  IShopItemsResponse,
-  IShopSkinsResponse,
-} from '../../../types/shop/ShopApiTypes';
+import { IShopSkinsResponse, IShopItemsResponse, IShopItemsRequest, IBoosts } from '../shop';
 
 export const inventoryApi = createApi({
   reducerPath: 'inventoryApi',
