@@ -1,6 +1,10 @@
 import { FC } from 'react';
 import CentralModal from '../../../shared/CentralModal/CentralModal.tsx';
-import integrationWhiteIcon from '../../../../assets/icons/integration-white.svg';
+import subscribersIcon from '../../../../assets/icons/subscribers.svg';
+import copy from '../../../../assets/icons/copy.svg';
+import arrow from '../../../../assets/icons/arrow.svg';
+import s from './InviteFriend.module.scss';
+import classNames from 'classnames';
 
 interface InviteFriendProps {
   modalId: string;
@@ -11,9 +15,50 @@ export const InviteFriend: FC<InviteFriendProps> = ({
                                                       modalId,
                                                       onClose,
                                                     }: InviteFriendProps) => {
+  const inviteTG = () => {
+    const shareData = {
+      title: 'Приглашение в MiniApp',
+      text: 'Присоединяйся ко мне в MiniApp и получи бонусы!',
+      url: 'https://t.me/STR_Viktor',
+    };
+
+    if (navigator.share) {
+      navigator.share(shareData).catch((error) => console.log('Ошибка при шаринге', error));
+    } else {
+      window.open(`https://t.me/share/url?url=${encodeURIComponent(shareData.url)}&text=${encodeURIComponent(shareData.text)}`, '_blank');
+    }
+  }
+
   return (
-    <CentralModal modalId={modalId} title={'Пригласить друга'} onClose={onClose} titleIcon={integrationWhiteIcon}>
-      todo content
+    <CentralModal modalId={modalId} title={'Пригласить друга'} onClose={onClose}>
+      <ul className={s.subscribers}>
+        <li className={s.listBadge}>
+            <span className={s.badge}>
+              +120 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+            </span>
+          <span className={classNames(s.level, s.text)}>1ур.</span>
+        </li>
+        <li className={s.listBadge}>
+            <span className={s.badge}>
+              +40 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+            </span>
+          <span className={classNames(s.level, s.text)}>2ур.</span>
+        </li>
+      </ul>
+      <div>
+        <p className={s.description}>Пригласите друга в MiniApp и получите бонус к подписчикам! Когда ваш друг будет
+          приглашать ещё кого-то, вы
+          также будете получать бонус.</p>
+        <div className={s.blockInput}>
+          <input type="text" value="https://t.me/bissektr1sa" readOnly className={s.inputLink} />
+          <button onClick={() => navigator.clipboard.writeText('https://t.me/bissektr1sa')} className={s.copyButton}>
+            <img src={copy} height={14} width={14} alt="copy" />
+          </button>
+        </div>
+        <button className={classNames(s.buttonContainer, s.text)} onClick={inviteTG}>
+          Поделиться ссылкой <img src={arrow} height={14} width={14} alt="arrow" />
+        </button>
+      </div>
     </CentralModal>
   );
 };

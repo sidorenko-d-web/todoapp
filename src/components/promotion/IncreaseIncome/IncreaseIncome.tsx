@@ -125,7 +125,7 @@ export const IncreaseIncome = () => {
         <button className={classNames(s.buttonContainer, s.text)} onClick={() => openModal(MODALS.INVITE_FRIEND)}>
           Пригласить
         </button>
-        <InviteFriend modalId={MODALS.CHANGING_NICKNAME} onClose={() => closeModal(MODALS.CHANGING_NICKNAME)}/>
+        <InviteFriend modalId={MODALS.INVITE_FRIEND} onClose={() => closeModal(MODALS.INVITE_FRIEND)}/>
       </section>
     </>
   );
