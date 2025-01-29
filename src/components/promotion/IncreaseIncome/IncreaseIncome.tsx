@@ -4,9 +4,13 @@ import piggy from '../../../assets/icons/piggy.svg';
 import subscribersIcon from '../../../assets/icons/subscribers.svg';
 import s from './IncreaseIncome.module.scss';
 import classNames from 'classnames';
+import { useModal } from '../../../hooks';
+import { MODALS } from '../../../constants';
+import { InviteFriend } from '../Modal';
 
 export const IncreaseIncome = () => {
   const [open, setOpen] = useState(false);
+  const { openModal, closeModal } = useModal();
 
   const openRef = () => {
     setOpen(!open);
@@ -41,7 +45,6 @@ export const IncreaseIncome = () => {
             </ul>
           </div>
         </div>
-
         <div className={s.userCard}>
           <div className={s.userCardTop}>
             <div className={s.infoUser}>
@@ -117,13 +120,12 @@ export const IncreaseIncome = () => {
               </div>
             </div>
           </>
-
         )}
 
-
-        <button className={classNames(s.buttonContainer, s.text)}>
+        <button className={classNames(s.buttonContainer, s.text)} onClick={() => openModal(MODALS.INVITE_FRIEND)}>
           Пригласить
         </button>
+        <InviteFriend modalId={MODALS.CHANGING_NICKNAME} onClose={() => closeModal(MODALS.CHANGING_NICKNAME)}/>
       </section>
     </>
   );
