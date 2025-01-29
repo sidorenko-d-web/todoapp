@@ -10,21 +10,22 @@ import {
   useGetCurrentUserProfileInfoQuery,
 } from '../../../redux';
 import { CompanyCard } from '../';
+import { useDispatch } from 'react-redux';
+import { useInventoryItemsFilter } from '../../../hooks';
 
 import s from './IntegrationCreationModal.module.scss';
-import { useDispatch } from 'react-redux';
 
 interface CreatingIntegrationModalProps {
   modalId: string;
   onClose: () => void;
-  hasCreatingIntegration?: boolean
+  hasCreatingIntegration?: boolean;
 }
 
 export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                                                                               modalId,
                                                                               onClose,
                                                                               hasCreatingIntegration,
-                                                                            }: CreatingIntegrationModalProps) => {
+                                                                            }) => {
   const dispatch = useDispatch();
 
   const contentOptions = [
@@ -36,6 +37,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const [ selectedOption, setSelectedOption ] = useState<typeof contentOptions[number]['value']>('text');
   const [ selectedCompany, setSelectedCompany ] = useState<string | null>(null);
 
+  const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
   const [ createIntegration, { isError, error } ] = useCreateIntegrationMutation();
   const { data: profile } = useGetCurrentUserProfileInfoQuery();
   const { data } = useGetCompaniesQuery();
@@ -44,23 +46,30 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const submitCreation = () => {
     if (!selectedOption || !selectedCompany) return;
 
-    console.log('Submitting with:', selectedOption, selectedCompany);
-
     createIntegration({
       content_type: selectedOption,
       campaign_id: selectedCompany,
-    }).unwrap().then(() => {
-      onClose();
-      dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
-      dispatch(profileApi.util.invalidateTags([ 'Me' ]));
-    });
+    })
+      .unwrap()
+      .then(() => {
+        onClose();
+        dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
+        dispatch(profileApi.util.invalidateTags([ 'Me' ]));
+      });
   };
 
   const submitDisabled = !selectedOption || !selectedCompany || hasCreatingIntegration;
-  console.log(error);
+
+  const noItemsMessage = (() => {
+    const baseText = 'Купите предмет нужного типа, чтобы начать делать ';
+    if (selectedOption === 'text' && !hasText) return baseText + 'текстовые интеграции.';
+    if (selectedOption === 'image' && !hasImage) return baseText + 'фото-интеграции.';
+    if (selectedOption === 'video' && !hasVideo) return baseText + 'видео-интеграции.';
+    return null;
+  })();
 
   return (
-    <CentralModal modalId={modalId} title={'Создание интеграции'} onClose={onClose} titleIcon={integrationWhiteIcon}>
+    <CentralModal modalId={modalId} title="Создание интеграции" onClose={onClose} titleIcon={integrationWhiteIcon}>
       <div className={s.content}>
         <div className={s.skinsWrapper}>
           {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
@@ -72,22 +81,33 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
         <div className={s.tabs}>
           {contentOptions.map((option, index) => (
-            <span key={index} className={s.tab + ' ' + (selectedOption === option.value ? s.active : '')}
-                  onClick={() => setSelectedOption(option.value)}>{option.label}</span>
+            <span
+              key={index}
+              className={`${s.tab} ${selectedOption === option.value ? s.active : ''}`}
+              onClick={() => setSelectedOption(option.value)}
+            >
+              {option.label}
+            </span>
           ))}
         </div>
 
-        <div className={s.companies}>
-          {companies?.map((company) => (
-            <CompanyCard key={company.id} company={company} selected={selectedCompany === company.id}
-                         onClick={setSelectedCompany} />
-          ))}
-        </div>
+        {
+          !noItemsMessage ? <div className={s.companies}>
+            {companies?.map((company) => (
+              <CompanyCard key={company.id} company={company} selected={selectedCompany === company.id}
+                           onClick={setSelectedCompany} />
+            ))}
+          </div> : <span className={s.message}>{noItemsMessage}</span>
+        }
+
+        {!noItemsMessage && hasCreatingIntegration &&
+          <span className={s.message}>Нельзя создавать новую интеграцию, пока создание предыдущей не закончится.</span>}
 
         {isError && <span className={s.errorMessage}>{error?.data?.detail}</span>}
-        {hasCreatingIntegration && <span className={s.message}>Нельзя создавать новую интеграцию, пока создание предыдущей не закончится.</span>}
 
-        <button className={s.button} disabled={submitDisabled} onClick={submitCreation}>Создать интеграцию</button>
+        <button className={s.button} disabled={submitDisabled} onClick={submitCreation}>
+          Создать интеграцию
+        </button>
       </div>
     </CentralModal>
   );
