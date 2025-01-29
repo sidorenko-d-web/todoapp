@@ -1,8 +1,11 @@
 import { FC } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
-import LockIconSvg from '../../../assets/icons/Lock_icon_svg';
-import { IShopItem } from '../../../types/shop/ShopApiTypes';
+import LockIconSvg from '../../../assets/Icons/lock-closed';
+import ChestBlueIcon from '../../../assets/Icons/chest-blue.svg';
+import ChestPurpleIcon from '../../../assets/Icons/chest-purple.svg';
+import ChestRedIcon from '../../../assets/Icons/chest-red.svg';
+import type { IShopItem, TypeItemQuality } from '../../../types/shop/ShopApiTypes';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
 
 interface Props {
@@ -11,7 +14,7 @@ interface Props {
   isBlocked?: boolean;
   isB?: boolean;
   refetchAll: () => void;
-  variant?: 'lowcost' | 'prem' | 'lux';
+  variant?: TypeItemQuality;
 
   item: IShopItem;
 }
@@ -100,7 +103,9 @@ const ShopItemCard: FC<Props> = ({
               <p>{item.level}/50 уровней </p>
               <div className={styles.goal}>
                 <p>Каменный сундук</p>
-                <img src={variant === 'lowcost' ? '/img/blue_chest.svg' : '/img/purple_chest.svg'} />
+                <img
+                  src={variant === 'lowcost' ? ChestBlueIcon : variant === 'prem' ? ChestPurpleIcon : ChestRedIcon}
+                />
               </div>
             </div>
 

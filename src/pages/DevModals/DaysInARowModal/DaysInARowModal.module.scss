@@ -1,0 +1,123 @@
+@use '../../../assets/styles/abstracts/colors' as var;
+@use 'sass:color';
+
+.images {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .light {
+    position: absolute;
+    width: 70%;
+  }
+  .fire {
+    position: relative;
+    width: 30%;
+  }
+  .days {
+    padding: 4px 8px;
+    border-radius: 999px;
+    backdrop-filter: blur(15px);
+    background: color.scale(var.$color-dark-gray-stroke, $alpha: -20%);
+    position: absolute;
+    p {
+      font-size: 24px;
+      font-weight: 500;
+      color: var.$color-white;
+      line-height: 24px;
+    }
+  }
+}
+
+.days {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  position: relative;
+  .dayWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    .day {
+      border: 2px solid var.$color-blue-primary;
+      border-radius: 999px;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      p {
+        font-weight: 500;
+        color: var.$color-white;
+      }
+    }
+    .dayRed {
+      border: 2px solid var.$color-red;
+    }
+    .dayPurple {
+      border: 2px solid var.$color-purple;
+    }
+  }
+  .weekday {
+    font-weight: 500;
+    font-size: 10px;
+    color: var.$color-gray;
+  }
+
+  .icon {
+    border: 0.5 solid #3a374d;
+    background: var.$color-blue-primary;
+    border-radius: 999px;
+    padding: 1px;
+    position: absolute;
+    top: 0;
+    transform: translateY(-50%);
+  }
+
+  .iconRed {
+    background: var.$color-red;
+  }
+  .iconPurple {
+    background: var.$color-purple;
+  }
+}
+
+.progressTitle {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0 5px;
+
+  p {
+    color: var.$color-text-semi-transparent;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .chest {
+    display: flex;
+    gap: 5px;
+  }
+}
+
+.progress {
+  height: 18px;
+  border-radius: 3px;
+  background: var.$color-gray;
+  border: 1px solid var.$color-dark-gray-stroke;
+  overflow: hidden;
+  margin-bottom: 30px;
+  .progressBar {
+    height: 16px;
+    background: var.$color-primary;
+  }
+  .progressBarPurple {
+    height: 16px;
+    background: var.$color-purple;
+  }
+  .progressBarRed {
+    height: 16px;
+    background: var.$color-red;
+  }
+}

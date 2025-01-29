@@ -1,6 +1,6 @@
 import { TaskCard } from '../';
 import magicBallIcon from '/magic-ball.png';
-import chestIcon from '../../../assets/icons/chest.svg';
+import chestIcon from '../../../assets/icons/chest-purple.svg';
 
 import s from '../styles.module.scss';
 

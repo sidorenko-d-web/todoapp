@@ -8,6 +8,7 @@ import { TasksPage } from '../pages';
 import { PromotionPage } from '../pages';
 import { ProfilePage } from '../pages';
 import Layout from '../layout/Layout.tsx';
+import DevModals from '../pages/DevModals/DevModals.tsx';
 
 
 function AppRouter(): JSX.Element | null {
@@ -26,6 +27,7 @@ function AppRouter(): JSX.Element | null {
         <Route path={AppRoute.Tasks} element={<TasksPage />} />
         <Route path={AppRoute.Profile} element={<ProfilePage/>}/>
         <Route path={AppRoute.Promotion} element={<PromotionPage />} />
+        <Route path={'dev-modals'} element={<DevModals />} />
       </Route>
     </Routes>
   );

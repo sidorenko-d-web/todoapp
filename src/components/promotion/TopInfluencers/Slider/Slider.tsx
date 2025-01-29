@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import s from './Slider.module.scss';
 
 import face from '../../../../assets/icons/face.svg';
-import fire from '../../../../assets/icons/fire.svg';
+import fire from '../../../../assets/icons/fire-icon.svg';
 import star from '../../../../assets/icons/star.svg';
 import { CARDS } from './constantSlider.ts';
 

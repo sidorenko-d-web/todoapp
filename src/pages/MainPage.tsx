@@ -10,6 +10,7 @@ const MainPage: FC = () => {
     <main className={s.page}>
       <Link to={'/tasks'}>Tasks</Link>
       <Link to={'/promotion'}>Promotion</Link>
+      <Link to={'/dev-modals'}>dev-modals</Link>
       <IntegrationCreation/>
     </main>
   );
