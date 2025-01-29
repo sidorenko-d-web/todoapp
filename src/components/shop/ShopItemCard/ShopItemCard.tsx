@@ -65,7 +65,7 @@ export const ShopItemCard: FC<Props> = ({
             </div>
             <div className={styles.statsItem}>
               <p>+{item.boost.income_per_second}</p>
-              <img src={CoinIcon} />
+              <img src={CoinIcon} alt=''/>
               <p>/сек</p>
             </div>
           </div>
@@ -84,16 +84,16 @@ export const ShopItemCard: FC<Props> = ({
               <p>loading</p>
             ) : (
               <>
-                {item.price_internal} <img src={CoinIcon} />
+                {item.price_internal} <img src={CoinIcon} alt=''/>
               </>
             )}
           </button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>
-          <img src={LockIcon} />
+          <img src={LockIcon} alt=''/>
           <p>Нужен уровень Древа 7</p>
-          <img src={LockIcon} />
+          <img src={LockIcon} alt=''/>
         </div>
       )}
     </div>

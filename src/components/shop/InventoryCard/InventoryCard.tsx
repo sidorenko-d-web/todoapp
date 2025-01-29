@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import styles from './InventoryCart.module.scss';
 import clsx from 'clsx';
-import LockIconSvg from '../../../assets/Icons/lock-closed';
+import LockIconSvg from '../../../assets/icons/lock-closed';
 import ChestBlueIcon from '../../../assets/Icons/chest-blue.svg';
 import ChestPurpleIcon from '../../../assets/Icons/chest-purple.svg';
 import ChestRedIcon from '../../../assets/Icons/chest-red.svg';
-import { useBuyItemMutation } from '../../../redux/api/shop/api';
+import { useBuyItemMutation } from '../../../redux';
 import { TypeItemQuality, IShopItem } from '../../../redux';
 import CoinIcon from '../../../assets/Icons/coin.svg';
 import SubscriberCoin from '../../../assets/Icons/subscriber_coin.svg';
@@ -50,7 +50,7 @@ export const InventoryCard: FC<Props> = ({
         <div
           className={clsx(styles.image, variant === 'prem' ? styles.purpleImage : variant === 'lux' && styles.redImage)}
         >
-          <img src={item.image_url} className={clsx(isBlocked && styles.disabledImage)} />
+          <img src={item.image_url} className={clsx(isBlocked && styles.disabledImage)} alt=''/>
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
           {!isBlocked && <p>Base</p>}
         </div>
@@ -81,11 +81,11 @@ export const InventoryCard: FC<Props> = ({
             </div>
             <div className={styles.statsItem}>
               <p>+{item.boost.subscribers}</p>
-              <img src={SubscriberCoin} />
+              <img src={SubscriberCoin} alt=''/>
             </div>
             <div className={styles.statsItem}>
               <p>+{item.boost.income_per_second}</p>
-              <img src={CoinIcon} />
+              <img src={CoinIcon} alt=''/>
               <p>/сек</p>
             </div>
           </div>
@@ -108,7 +108,7 @@ export const InventoryCard: FC<Props> = ({
               <div className={styles.goal}>
                 <p>Каменный сундук</p>
                 <img
-                  src={variant === 'lowcost' ? ChestBlueIcon : variant === 'prem' ? ChestPurpleIcon : ChestRedIcon}
+                  src={variant === 'lowcost' ? ChestBlueIcon : variant === 'prem' ? ChestPurpleIcon : ChestRedIcon} alt=''
                 />
               </div>
             </div>
@@ -128,16 +128,16 @@ export const InventoryCard: FC<Props> = ({
                   variant === 'lowcost' ? styles.item : variant === 'prem' ? styles.itemPurple : styles.itemRed
                 }
               >
-                <img src={item.image_url} className={styles.itemImage} />
-                <img src={LockIcon} className={styles.lock} />
+                <img src={item.image_url} className={styles.itemImage} alt=''/>
+                <img src={LockIcon} className={styles.lock} alt=''/>
               </div>
               <div className={styles.itemLocked}>
-                <img src={item.image_url} className={styles.itemImage} />
-                <img src={LockIcon} className={styles.lock} />
+                <img src={item.image_url} className={styles.itemImage} alt=''/>
+                <img src={LockIcon} className={styles.lock} alt=''/>
               </div>
               <div className={styles.itemLocked}>
-                <img src={item.image_url} className={styles.itemImage} />
-                <img src={LockIcon} className={styles.lock} />
+                <img src={item.image_url} className={styles.itemImage} alt=''/>
+                <img src={LockIcon} className={styles.lock} alt=''/>
               </div>
             </div>
           </div>
@@ -145,9 +145,9 @@ export const InventoryCard: FC<Props> = ({
 
       {isBlocked ? (
         <div className={styles.disabledUpgradeActions}>
-          <img src={LockIcon} />
+          <img src={LockIcon} alt=''/>
           <p>Прокачайте основной предмет</p>
-          <img src={LockIcon} />
+          <img src={LockIcon} alt=''/>
         </div>
       ) : disabled ? (
         <button className={styles.disabledActions}>
@@ -160,7 +160,7 @@ export const InventoryCard: FC<Props> = ({
               <p>loading</p>
             ) : (
               <>
-                {item.price_internal} <img src={CoinIcon} />
+                {item.price_internal} <img src={CoinIcon} alt=''/>
               </>
             )}
           </button>
@@ -169,9 +169,9 @@ export const InventoryCard: FC<Props> = ({
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>
-          <img src={LockIcon} />
+          <img src={LockIcon} alt=''/>
           <p>Нужен уровень Древа 7</p>
-          <img src={LockIcon} />
+          <img src={LockIcon} alt=''/>
         </div>
       )}
     </div>
