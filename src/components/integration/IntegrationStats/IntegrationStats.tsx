@@ -4,7 +4,7 @@ import styles from './IntegrationStats.module.scss';
 
 import subscribersIcon from '../../../assets/icons/subscribers.svg';
 import viewsIcon from '../../../assets/icons/views.svg';
-import coinIcon from '../../../../public/img/coin.svg';
+import coinIcon from '../../../assets/icons/coin.svg'
 
 interface IntegrationStatsProps {
     subscribers: number;

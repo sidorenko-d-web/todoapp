@@ -13,7 +13,7 @@ import StatisticsPage from '../pages/StatisticsPage/StatisticsPage';
 import { WardrobePage } from '../pages/WardrobePage/WardrobePage.tsx';
 
 import DevModals from '../pages/DevModals/DevModals.tsx';
-import { ShopInvewntoryPage } from '../pages/ShopPage/index.ts';
+import { ShopInvewntoryPage } from '../pages/ShopPage';
 
 function AppRouter(): JSX.Element | null {
   const location = useLocation();
@@ -28,16 +28,13 @@ function AppRouter(): JSX.Element | null {
         <Route path={AppRoute.Main} element={<MainPage />} />
         <Route path={AppRoute.Shop} element={<ShopPage />} />
         <Route path={AppRoute.Integration} element={<IntegrationPage/>} />
-        <Route path={AppRoute.Integrations} element={<IntegrationPage />} />
+        <Route path={AppRoute.Integrations} element={<StatisticsPage />} />
         <Route path={AppRoute.Tasks} element={<TasksPage />} />
         <Route path={AppRoute.Profile} element={<ProfilePage />} />
-        <Route path={AppRoute.Profile} element={<ProfilePage />} />
         <Route path={AppRoute.Promotion} element={<PromotionPage />} />
-        <Route path={AppRoute.Integrations} element={<StatisticsPage />} />
-        <Route path={AppRoute.Wardrobe} element={<WardrobePage />} />
-        <Route path={AppRoute.Profile} element={<ProfilePage />} />
         <Route path={AppRoute.ShopInventory} element={<ShopInvewntoryPage />} />
         <Route path={'dev-modals'} element={<DevModals />} />
+        <Route path={AppRoute.Wardrobe} element={<WardrobePage/>} />
       </Route>
     </Routes>
   );

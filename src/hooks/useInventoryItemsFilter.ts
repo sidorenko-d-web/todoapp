@@ -1,18 +1,18 @@
 import { useMemo } from 'react';
 import { useGetInventoryItemsQuery } from '../redux/api/inventory/api.ts';
-import { IShopItem } from '../types/shop/ShopApiTypes.ts';
+import { IShopItem } from '../redux/index.ts';
 
 type CategorizedItems = {
   text: IShopItem[];
   image: IShopItem[];
   video: IShopItem[];
   decor: IShopItem[];
-}
+};
 
 export const useInventoryItemsFilter = () => {
   const { data, isLoading, refetch } = useGetInventoryItemsQuery();
 
-  const items = useMemo(() => data?.items || [], [ data ]);
+  const items = useMemo(() => data?.items || [], [data]);
 
   const categorizedItems = useMemo(() => {
     const categories: CategorizedItems = { text: [], image: [], video: [], decor: [] };
@@ -25,7 +25,7 @@ export const useInventoryItemsFilter = () => {
     });
 
     return categories;
-  }, [ items ]);
+  }, [items]);
 
   return {
     isLoading,

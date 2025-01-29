@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './StatisticsPage.module.scss';
-import views from '../../../public/img/views.svg';
-import subscribers from '../../../public/img/subscribers.svg';
-import logo from '../../../public/img/logo.svg';
+import views from '../../assets/Icons/views.svg';
+import subscribers from '../../assets/Icons/subscribers.svg';
+import logo from '../../assets/Icons/logo.svg';
 import StatisticsCard from '../../components/statistics/statisticsCard/StatisticsCard';
 
 import { useGetAllIntegrationsQuery, useGetCurrentUserProfileInfoQuery } from '../../redux';

@@ -4,6 +4,13 @@ import clsx from 'clsx';
 import { useBuySkinMutation, useGetShopSkinsQuery } from '../../../redux/api/shop/api';
 import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
 import { IShopSkin } from '../../../redux';
+import CoinIcon from '../../../assets/Icons/coin.svg'
+import HeadIcon from '../../../assets/Icons/head_icon.svg'
+import FaceIcon from '../../../assets/Icons/face_icon.svg'
+import PersonIcon from '../../../assets/Icons/person_icon.svg'
+import LegsIcon from '../../../assets/Icons/face_icon.svg'
+import FeetIcon from '../../../assets/Icons/face_icon.svg'
+import VIPIcon from '../../../assets/Icons/star_check_icon.svg'
 
 interface Props {
   item: IShopSkin;
@@ -38,20 +45,20 @@ export const ShopSkinCard: FC<Props> = ({ item }) => {
             <h3>{item.name}</h3>
             <div className={styles.icons}>
               {item.wear_location === 'head' ? (
-                <img src="/img/head_icon.svg" className={styles.personIcon} />
+                <img src={HeadIcon} className={styles.personIcon} />
               ) : item.wear_location === 'upper_body' ? (
-                <img src="/img/face_icon.svg" className={styles.personIcon} />
+                <img src={FaceIcon} className={styles.personIcon} />
               ) : item.wear_location === 'entire_body' ? (
-                <img src="/img/person_icon.svg" className={styles.personIcon} />
+                <img src={PersonIcon} className={styles.personIcon} />
               ) : item.wear_location === 'feet' ? (
-                <img src="/img/face_icon.svg" className={styles.personIcon} />
+                <img src={FeetIcon} className={styles.personIcon} />
               ) : (
-                <img src="/img/face_icon.svg" className={styles.personIcon} />
+                <img src={LegsIcon} className={styles.personIcon} />
               )}
 
               {item.limited && (
                 <div className={styles.vip}>
-                  <img src="/img/star_check_icon.svg" />
+                  <img src={VIPIcon} />
                   <p>VIP</p>
                 </div>
               )}
@@ -73,7 +80,7 @@ export const ShopSkinCard: FC<Props> = ({ item }) => {
                 <p>Загрузка</p>
               ) : (
                 <>
-                  {item.price_internal} <img src="/img/coin.svg" />
+                  {item.price_internal} <img src={CoinIcon} />
                 </>
               )}
             </button>

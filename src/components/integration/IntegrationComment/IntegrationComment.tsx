@@ -1,6 +1,6 @@
 import styles from './IntegrationComment.module.scss';
 
-import coinIcon from '../../../../public/img/coin.svg';
+import coinIcon from '../../../assets/icons/coin.svg'
 import ProgressLine from '../../shared/ProgressLine/ProgressLine';
 
 

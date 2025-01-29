@@ -13,3 +13,16 @@
     display: none;
   }
 }
+
+@mixin custom-scroll() {
+  &::-webkit-scrollbar {
+    width: 4px;
+    background: #282830;
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #505B78;
+    border-radius: 2px;
+  }
+}

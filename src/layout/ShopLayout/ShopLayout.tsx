@@ -7,6 +7,8 @@ import ArrowLeftIcon from '../../assets/icons/arrow-left.svg';
 import InventoryBox from '../../assets/icons/inventory-box.svg';
 import { TypeItemCategory, TypeItemQuality } from '../../redux';
 import { useNavigate } from 'react-router-dom';
+import CoinIcon from '../../assets/Icons/coin.svg';
+import SubscriberCoin from '../../assets/Icons/subscriber_coin.svg';
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
   { title: 'Фото', value: 'image' },
@@ -62,12 +64,12 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
           <div className={styles.scores}>
             <div className={styles.scoresItem}>
               <p>+{boosts?.income_per_integration ?? 0}</p>
-              <img src="/img/subscriber_coin.svg" />
+              <img src={SubscriberCoin} />
               <p>/инт.</p>
             </div>
             <div className={styles.scoresItem}>
               <p>+{boosts?.income_per_second ?? 0}</p>
-              <img src="/img/coin.svg" />
+              <img src={CoinIcon} />
               <p>/сек.</p>
             </div>
           </div>
