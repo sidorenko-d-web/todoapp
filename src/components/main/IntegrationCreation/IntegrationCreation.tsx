@@ -47,6 +47,7 @@ export const IntegrationCreation = () => {
         </span>
       </button>
       {
+        // @ts-expect-error ts(2769)
         integrationsError?.status === 404 ? null :
           integrations?.integrations && <IntegrationCreationCard integration={integrations?.integrations[0]} />
       }

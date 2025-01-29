@@ -23,7 +23,7 @@ export const inventoryApi = createApi({
       query: (params) => ({
         url: `/inventory/items`,
         method: 'GET',
-        params
+        params: params || {}
       }),
       providesTags: ['items'],
     }),

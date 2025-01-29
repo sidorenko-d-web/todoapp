@@ -110,7 +110,10 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         {!noItemsMessage && hasCreatingIntegration &&
           <span className={s.message}>Нельзя создавать новую интеграцию, пока создание предыдущей не закончится.</span>}
 
-        {isError && <span className={s.errorMessage}>{error?.data?.detail}</span>}
+        {
+          // @ts-expect-error No error types yet
+          isError && <span className={s.errorMessage}>{error?.data?.detail}</span>
+        }
 
         <button className={s.button} disabled={submitDisabled && !noItemsMessage} onClick={noItemsMessage ? goToShop : submitCreation}>
           {noItemsMessage  ? 'В магазин' : 'Создать интеграцию'}
