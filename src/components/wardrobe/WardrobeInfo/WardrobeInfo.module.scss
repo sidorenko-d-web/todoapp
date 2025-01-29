@@ -56,10 +56,13 @@
 
         .statusWrp {
             display: flex;
+            align-items: center;
             gap: 2px;
             padding: 4px 7px;
             border-radius: 10px;
             width: fit-content;
+            height: fit-content;
+            align-self: center;
             .status {
                 color: var.$color-text-super-transparent;
                 font-size: 14px;
