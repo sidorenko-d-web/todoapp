@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import { TopProfilesResponseDTO, UserProfileInfoResponseDTO, UpdateProfileRequestDTO} from './dto';
-
+import { TopProfilesResponseDTO, UpdateProfileRequestDTO, UserProfileInfoResponseDTO } from './dto';
 
 export const profileApi = createApi({
   reducerPath: 'profileApi',
@@ -15,7 +14,7 @@ export const profileApi = createApi({
         method: 'GET',
       }),
     }),
-    getTopProfiles: builder.query<TopProfilesResponseDTO, void>({ 
+    getTopProfiles: builder.query<TopProfilesResponseDTO, void>({
       query: () => ({
         url: `/profiles/top`,
         method: 'GET',
@@ -23,15 +22,26 @@ export const profileApi = createApi({
     }),
     updateCurrentUserProfile: builder.mutation<UserProfileInfoResponseDTO, UpdateProfileRequestDTO>({
       query: (data) => ({
-        url: "/profiles/me",
-        method: "PATCH",
+        url: '/profiles/me',
+        method: 'PATCH',
         body: data,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
+      }),
+    }),
+    buySubscription: builder.mutation<void, void>({
+      query: () => ({
+        url: '/profiles/buy-subscription',
+        method: 'POST',
       }),
     }),
   }),
 });
 
-export const { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useUpdateCurrentUserProfileMutation } = profileApi;
+export const {
+  useGetCurrentUserProfileInfoQuery,
+  useGetTopProfilesQuery,
+  useUpdateCurrentUserProfileMutation,
+  useBuySubscriptionMutation,
+} = profileApi;
