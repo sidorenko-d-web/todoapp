@@ -1,11 +1,16 @@
 import cup from '../../../assets/icons/cup.svg';
 import chest from '../../../assets/icons/chest-purple.svg';
 import { SliderSelect } from './Slider';
+import { MODALS } from '../../../constants';
+import { TopUsers } from '../Modal';
+import { useModal } from '../../../hooks';
 
 import s from './TopInfluencers.module.scss';
 import classNames from 'classnames';
 
 export const TopInfluencers = () => {
+  const { openModal, closeModal } = useModal();
+
   return (
     <>
       <h2 className={s.headerInfluencers}>
@@ -29,12 +34,14 @@ export const TopInfluencers = () => {
           </div>
         </div>
         <p className={s.textInfo}>
-          Войдите в топ #100 инфлюенсеров по количеству подписчиков на этой неделе, чтобы получить Драгоценный сундук!
+          Войдите в топ #100 инфлюенсеров по количеству <br /> подписчиков на этой неделе, чтобы получить
+          Драгоценный<br /> сундук!
           <span className={s.textDay}> До выдачи призов осталось 3д.</span>
         </p>
-        <button className={classNames(s.buttonContainer, s.text)}>
+        <button className={classNames(s.buttonContainer, s.text)} onClick={() => openModal(MODALS.TOP_USERS)}>
           Смотреть список
         </button>
+        <TopUsers modalId={MODALS.TOP_USERS} onClose={() => closeModal(MODALS.TOP_USERS)}/>
       </section>
     </>
   );
