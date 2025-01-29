@@ -1,9 +1,9 @@
 import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
 import { useGetShopSkinsQuery } from '../../../redux/api/shop/api';
-import ShopSkinCard from '../ShopSkinCard/ShopSkinCard';
-import styles from './ShopSkinTab.module.scss';
+import { ShopSkinCard } from '../ShopSkinCard/ShopSkinCard';
+import styles from './SkinTab.module.scss';
 
-const ShopSkinTab = () => {
+export const SkinTab = () => {
   const { data: shopSkins } = useGetShopSkinsQuery();
 
   const { data: inventorySkins } = useGetInventorySkinsQuery();
@@ -80,5 +80,3 @@ const ShopSkinTab = () => {
     </>
   );
 };
-
-export default ShopSkinTab;

@@ -5,6 +5,7 @@ export enum AppRoute {
   Tasks = '/tasks',
   Profile = '/profile',
   Shop = '/shop',
+  ShopInventory = '/shop/inventory',
   Promotion = '/promotion',
   Wardrobe = '/wardrobe',
   NotFound = '*',

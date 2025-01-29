@@ -4,6 +4,8 @@ export interface IShopItem {
   item_category: TypeItemCategory;
   level: number;
   price_internal: string;
+  item_rarity: TypeItemRarity;
+  depends: string;
   price_usdt: string;
   boost: IBoosts;
   image_url: string;
@@ -31,7 +33,9 @@ export interface IShopSkinsResponse {
 }
 
 export type TypeWearLocation = 'head' | 'upper_body' | 'legs' | 'feet' | 'entire_body';
-export type TypeItemCategory = 'text' | 'image' | 'video' | 'decor';
+export type TypeItemCategory = 'text' | 'image' | 'video' | 'fedecoret';
+export type TypeItemQuality = 'lowcost' | 'prem' | 'lux';
+export type TypeItemRarity = 'red' | 'yellow' | 'green';
 
 export interface IShopItemsRequest {
   item_category: TypeItemCategory;
@@ -46,4 +50,7 @@ export interface IBoosts {
   income_per_second: string;
   subscribers: number;
 }
-export interface IBuyItemRequest{ payment_method: 'internal_wallet'; id: string }
+export interface IBuyItemRequest {
+  payment_method: 'internal_wallet';
+  id: string;
+}
