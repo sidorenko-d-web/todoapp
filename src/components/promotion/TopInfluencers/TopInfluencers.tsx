@@ -34,7 +34,8 @@ export const TopInfluencers = () => {
           </div>
         </div>
         <p className={s.textInfo}>
-          Войдите в топ #100 инфлюенсеров по количеству подписчиков на этой неделе, чтобы получить Драгоценный сундук!
+          Войдите в топ #100 инфлюенсеров по количеству <br /> подписчиков на этой неделе, чтобы получить
+          Драгоценный<br /> сундук!
           <span className={s.textDay}> До выдачи призов осталось 3д.</span>
         </p>
         <button className={classNames(s.buttonContainer, s.text)} onClick={() => openModal(MODALS.TOP_USERS)}>

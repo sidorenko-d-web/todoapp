@@ -1,5 +1,6 @@
 export const USERS = [
   {
+    id: 1,
     nickname: 'Виктория',
     level: 12,
     coins: 45,
@@ -8,6 +9,7 @@ export const USERS = [
     hasChest: true,
   },
   {
+    id: 2,
     nickname: 'Алексей',
     level: 9,
     coins: 30,
@@ -16,6 +18,7 @@ export const USERS = [
     hasChest: false,
   },
   {
+    id: 3,
     nickname: 'Мария',
     level: 15,
     coins: 60,
@@ -24,6 +27,7 @@ export const USERS = [
     hasChest: true,
   },
   {
+    id: 4,
     nickname: 'Ваш Никнейм',
     level: 10,
     coins: 120,
@@ -33,6 +37,7 @@ export const USERS = [
     isCurrentUser: true,
   },
   {
+    id: 5,
     nickname: 'Дмитрий',
     level: 7,
     coins: 5,
@@ -41,6 +46,16 @@ export const USERS = [
     hasChest: false,
   },
   {
+    id: 6,
+    nickname: 'Екатерина',
+    level: 8,
+    coins: 18,
+    vip: false,
+    rank: 76,
+    hasChest: false,
+  },
+  {
+    id: 7,
     nickname: 'Екатерина',
     level: 8,
     coins: 18,

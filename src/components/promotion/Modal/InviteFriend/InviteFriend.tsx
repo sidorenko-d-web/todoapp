@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import CentralModal from '../../../shared/CentralModal/CentralModal.tsx';
 import subscribersIcon from '../../../../assets/icons/subscribers.svg';
 import copy from '../../../../assets/icons/copy.svg';
 import arrow from '../../../../assets/icons/arrow.svg';
+import BottomModal from '../../../shared/BottomModal/BottomModal.tsx';
 import s from './InviteFriend.module.scss';
 import classNames from 'classnames';
 
@@ -30,7 +30,7 @@ export const InviteFriend: FC<InviteFriendProps> = ({
   }
 
   return (
-    <CentralModal modalId={modalId} title={'Пригласить друга'} onClose={onClose}>
+    <BottomModal modalId={modalId} title={'Пригласить друга'} onClose={onClose}>
       <ul className={s.subscribers}>
         <li className={s.listBadge}>
             <span className={s.badge}>
@@ -46,8 +46,10 @@ export const InviteFriend: FC<InviteFriendProps> = ({
         </li>
       </ul>
       <div>
-        <p className={s.description}>Пригласите друга в MiniApp и получите бонус к подписчикам! Когда ваш друг будет
-          приглашать ещё кого-то, вы
+        <p className={s.description}>
+          Пригласите друга в MiniApp и получите бонус к <br /> подписчикам! Когда ваш друг
+          будет
+          приглашать ещё<br /> кого-то, вы
           также будете получать бонус.</p>
         <div className={s.blockInput}>
           <input type="text" value="https://t.me/bissektr1sa" readOnly className={s.inputLink} />
@@ -59,6 +61,6 @@ export const InviteFriend: FC<InviteFriendProps> = ({
           Поделиться ссылкой <img src={arrow} height={14} width={14} alt="arrow" />
         </button>
       </div>
-    </CentralModal>
+    </BottomModal>
   );
 };

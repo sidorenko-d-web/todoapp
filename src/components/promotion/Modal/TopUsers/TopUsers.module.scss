@@ -31,9 +31,13 @@
 }
 
 .blogUsers {
+  height: 400px;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding-right: 5px;
+  @include var.custom-scroll();
 }
 
 .listBadge {

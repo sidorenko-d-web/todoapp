@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import CentralModal from '../../../shared/CentralModal/CentralModal.tsx';
 import cup from '../../../../assets/icons/cup.svg';
 import clanRed from '../../../../assets/icons/clanRed.svg';
 import s from './TopUsers.module.scss';
@@ -10,6 +9,7 @@ import star from '../../../../assets/icons/star.svg';
 import classNames from 'classnames';
 import chest from '../../../../assets/icons/chest.svg';
 import { USERS } from './constantUsers.ts';
+import BottomModal from '../../../shared/BottomModal/BottomModal.tsx';
 
 interface InviteFriendProps {
   modalId: string;
@@ -21,7 +21,7 @@ export const TopUsers: FC<InviteFriendProps> = ({
                                                   onClose,
                                                 }: InviteFriendProps) => {
   return (
-    <CentralModal modalId={modalId} title={'Топ 10 000 инфлюенсеров'} onClose={onClose} titleIcon={cup}>
+    <BottomModal modalId={modalId} title={'Топ 10 000 инфлюенсеров'} onClose={onClose} titleIcon={cup}>
       <ul className={classNames(s.subscribers, s.ulBlock)}>
         <li className={s.listBadge}>
             <span className={s.badge}>
@@ -36,7 +36,7 @@ export const TopUsers: FC<InviteFriendProps> = ({
       </ul>
       <ul className={classNames(s.ulBlock, s.blogUsers)}>
         {USERS.sort((a, b) => Number(b.vip) - Number(a.vip)).map(item => (
-          <li className={s.listUser}>
+          <li key={item.id} className={s.listUser}>
             <div className={classNames(s.cardBlock, { [s.vipCard]: item.vip })}>
               <div className={s.card}>
                 <img src={user} alt="user" width={27} height={36} />
@@ -69,6 +69,6 @@ export const TopUsers: FC<InviteFriendProps> = ({
           </li>
         ))}
       </ul>
-    </CentralModal>
+    </BottomModal>
   );
 };
