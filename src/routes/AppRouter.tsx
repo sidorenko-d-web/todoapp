@@ -10,6 +10,7 @@ import { PromotionPage } from '../pages';
 import { ProfilePage } from '../pages';
 import Layout from '../layout/Layout.tsx';
 import StatisticsPage from '../pages/StatisticsPage/StatisticsPage';
+import { WardrobePage } from '../pages/WardrobePage/WardrobePage.tsx';
 
 
 function AppRouter(): JSX.Element | null {
@@ -29,6 +30,7 @@ function AppRouter(): JSX.Element | null {
         <Route path={AppRoute.Profile} element={<ProfilePage/>}/>
         <Route path={AppRoute.Promotion} element={<PromotionPage />} />
         <Route path={AppRoute.Integrations} element={<StatisticsPage />} />
+        <Route path={AppRoute.Wardrobe} element={<WardrobePage />} />
       </Route>
     </Routes>
   );
