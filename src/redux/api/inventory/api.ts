@@ -5,7 +5,7 @@ import { IShopSkinsResponse, IShopItemsResponse, IShopItemsRequest, IBoosts, IAc
 export const inventoryApi = createApi({
   reducerPath: 'inventoryApi',
   baseQuery: baseQueryReauth,
-  tagTypes: ['items', 'skins'],
+  tagTypes: ['items', 'skins', 'achievements'],
   endpoints: builder => ({
     getInventorySkins: builder.query<IShopSkinsResponse, void>({
       query: () => ({
@@ -33,7 +33,8 @@ export const inventoryApi = createApi({
       query: () => ({
         url: '/inventory/achievements',
         method: 'GET'
-      })
+      }),
+      providesTags: ['achievements']
     })
   }),
 });
