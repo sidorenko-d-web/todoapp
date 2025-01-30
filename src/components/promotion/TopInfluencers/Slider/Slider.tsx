@@ -35,7 +35,9 @@ export const SliderSelect = () => {
   };
 
   const { data } = useGetTopProfilesQuery();
-  const topProfiles = data?.profiles || [];
+  const topProfiles = data?.profiles;
+
+  if (!topProfiles) return null
 
   // TODO: Раскомментировать когда на бэке будет vip данные
   return (
