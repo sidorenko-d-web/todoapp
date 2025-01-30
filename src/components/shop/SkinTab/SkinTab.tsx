@@ -1,27 +1,41 @@
+import { FC } from 'react';
 import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
 import { useGetShopSkinsQuery } from '../../../redux/api/shop/api';
 import { ShopSkinCard } from '../ShopSkinCard/ShopSkinCard';
 import styles from './SkinTab.module.scss';
 
-export const SkinTab = () => {
-  const { data: shopSkins } = useGetShopSkinsQuery();
+interface Props {
+  mode: 'shop' | 'inventory';
+}
 
-  const { data: inventorySkins } = useGetInventorySkinsQuery();
+export const SkinTab: FC<Props> = ({ mode }) => {
+  const { data: shop } = useGetShopSkinsQuery();
 
-  const skinsData = inventorySkins
-    ? shopSkins?.skins.filter(item => inventorySkins?.skins.findIndex(_item => _item.id === item.id) === -1)
-    : shopSkins?.skins;
+  const { data: inventory } = useGetInventorySkinsQuery();
 
-  const skins = {
-    head: skinsData?.filter(item => item.wear_location === 'head' && !item.limited),
-    upper_body: skinsData?.filter(item => item.wear_location === 'upper_body' && !item.limited),
-    entire_body: skinsData?.filter(item => item.wear_location === 'entire_body' && !item.limited),
-    legs: skinsData?.filter(item => item.wear_location === 'legs' && !item.limited),
-    feet: skinsData?.filter(item => item.wear_location === 'feet' && !item.limited),
-    vip: skinsData?.filter(item => item.limited),
-  };
+const skinsData = shop?.skins.filter(item => inventory?.skins.findIndex(_item => _item.id === item.id) === -1)
 
-  console.log(shopSkins);
+  let skins;
+
+  if (mode === 'shop') {
+    skins = {
+      head: skinsData?.filter(item => item.wear_location === 'head' && !item.limited),
+      upper_body: skinsData?.filter(item => item.wear_location === 'upper_body' && !item.limited),
+      entire_body: skinsData?.filter(item => item.wear_location === 'entire_body' && !item.limited),
+      legs: skinsData?.filter(item => item.wear_location === 'legs' && !item.limited),
+      feet: skinsData?.filter(item => item.wear_location === 'feet' && !item.limited),
+      vip: skinsData?.filter(item => item.limited),
+    };
+  } else {
+    skins = {
+      head: inventory?.skins?.filter(item => item.wear_location === 'head' && !item.limited),
+      upper_body: inventory?.skins?.filter(item => item.wear_location === 'upper_body' && !item.limited),
+      entire_body: inventory?.skins?.filter(item => item.wear_location === 'entire_body' && !item.limited),
+      legs: inventory?.skins?.filter(item => item.wear_location === 'legs' && !item.limited),
+      feet: inventory?.skins?.filter(item => item.wear_location === 'feet' && !item.limited),
+      vip: inventory?.skins?.filter(item => item.limited),
+    };
+  }
 
   return (
     <>
@@ -29,7 +43,7 @@ export const SkinTab = () => {
         <div className={styles.personCards}>
           <h2>Голова</h2>
           {skins.head?.map(item => (
-            <ShopSkinCard key={item.id} item={item} />
+            <ShopSkinCard mode={mode} key={item.id} item={item} />
           ))}
         </div>
       )}
@@ -38,7 +52,7 @@ export const SkinTab = () => {
         <div className={styles.personCards}>
           <h2>Вверх</h2>
           {skins.upper_body?.map(item => (
-            <ShopSkinCard key={item.id} item={item} />
+            <ShopSkinCard mode={mode} key={item.id} item={item} />
           ))}
         </div>
       )}
@@ -47,7 +61,7 @@ export const SkinTab = () => {
         <div className={styles.personCards}>
           <h2>Тело</h2>
           {skins.entire_body?.map(item => (
-            <ShopSkinCard key={item.id} item={item} />
+            <ShopSkinCard mode={mode} key={item.id} item={item} />
           ))}
         </div>
       )}
@@ -56,7 +70,7 @@ export const SkinTab = () => {
         <div className={styles.personCards}>
           <h2>Низ</h2>
           {skins.legs?.map(item => (
-            <ShopSkinCard key={item.id} item={item} />
+            <ShopSkinCard mode={mode} key={item.id} item={item} />
           ))}
         </div>
       )}
@@ -65,7 +79,7 @@ export const SkinTab = () => {
         <div className={styles.personCards}>
           <h2>Обувь</h2>
           {skins.feet?.map(item => (
-            <ShopSkinCard key={item.id} item={item} />
+            <ShopSkinCard mode={mode} key={item.id} item={item} />
           ))}
         </div>
       )}
@@ -73,7 +87,7 @@ export const SkinTab = () => {
         <div className={styles.personCards}>
           <h2 className={styles.vipTitle}>VIP скины</h2>
           {skins.vip?.map(item => (
-            <ShopSkinCard key={item.id} item={item} />
+            <ShopSkinCard mode={mode} key={item.id} item={item} />
           ))}
         </div>
       )}

@@ -38,11 +38,13 @@ export type TypeItemQuality = 'lowcost' | 'prem' | 'lux';
 export type TypeItemRarity = 'red' | 'yellow' | 'green';
 
 export interface IShopItemsRequest {
-  item_category: TypeItemCategory;
+  item_category?: TypeItemCategory;
   limit?: number;
   offset?: number;
   asc?: boolean;
   level?: number;
+  name?: string
+  item_rarity?: TypeItemRarity
 }
 
 export interface IBoosts {

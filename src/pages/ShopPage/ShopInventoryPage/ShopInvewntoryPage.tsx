@@ -21,7 +21,7 @@ export const ShopInvewntoryPage = () => {
     <ShopLayout mode="inventory" onItemCategoryChange={setShopCategory} onItemQualityChange={setItemsQuality}>
       {isInventoryFetching ? (
         <p style={{ color: '#fff' }}>Loading...</p>
-      ) : !isSuccess ? (
+      ) : !isSuccess && shopCategory?.title !== 'Вы' ? (
         <p style={{ color: '#fff' }}>No items in inventory</p>
       ) : !shopCategory || !itemsQuality ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
@@ -33,7 +33,7 @@ export const ShopInvewntoryPage = () => {
           refetchFn={refetch}
         />
       ) : (
-        <SkinTab />
+        <SkinTab mode="inventory" />
       )}
     </ShopLayout>
   );

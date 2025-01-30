@@ -32,11 +32,19 @@ export const shopApi = createApi({
       }),
       invalidatesTags: ['items'],
     }),
-
     buySkin: builder.mutation<any, IBuyItemRequest>({
       query: ({ id, ...params }) => ({
         url: `/shop/skins/buy/${id}`,
         method: 'POST',
+        params,
+      }),
+      invalidatesTags: ['items'],
+    }),
+
+    upgradeItem: builder.mutation<any, IBuyItemRequest>({
+      query: ({ id, ...params }) => ({
+        url: `/inventory/upgrade/${id}`,
+        method: 'PATCH',
         params,
       }),
       invalidatesTags: ['skins'],
@@ -44,4 +52,10 @@ export const shopApi = createApi({
   }),
 });
 
-export const { useGetShopItemsQuery, useGetShopSkinsQuery, useBuyItemMutation, useBuySkinMutation } = shopApi;
+export const {
+  useGetShopItemsQuery,
+  useGetShopSkinsQuery,
+  useBuyItemMutation,
+  useBuySkinMutation,
+  useUpgradeItemMutation,
+} = shopApi;

@@ -7,9 +7,9 @@ import ArrowLeftIcon from '../../assets/icons/arrow-left.svg';
 import InventoryBox from '../../assets/icons/inventory-box.svg';
 import { TypeItemCategory, TypeItemQuality } from '../../redux';
 import { useNavigate } from 'react-router-dom';
-import CoinIcon from '../../assets/Icons/coin.svg';
-import SubscriberCoin from '../../assets/Icons/subscriber_coin.svg';
-import ViewsCoin from '../../assets/Icons/views.svg';
+import CoinIcon from '../../assets/icons/coin.svg';
+import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
+import ViewsCoin from '../../assets/icons/views.svg';
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
   { title: 'Фото', value: 'image' },
@@ -60,7 +60,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
           <img src={ArrowLeftIcon} />
         </button>
         <div className={styles.mainHeader}>
-          <h1 className={styles.title}>Магазин</h1>
+          <h1 className={styles.title}>{mode === 'shop' ? 'Магазин' : 'Инвентарь '}</h1>
 
           <div className={styles.scores}>
             <div className={styles.scoresItem}>
@@ -100,7 +100,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
                 ? 'tabItemSelectedPurple'
                 : 'tabItemSelectedRed'
             }
-            tabs={shopItemQualities}
+            tabs={mode === 'inventory' ? shopItemQualities: [shopItemQualities[0]]}
             currentTab={itemsQuality.title}
             onChange={setItemsQuality}
           />
