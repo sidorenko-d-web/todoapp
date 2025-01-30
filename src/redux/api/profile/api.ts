@@ -36,6 +36,12 @@ export const profileApi = createApi({
         method: 'POST',
       }),
     }),
+    getUserProfileInfoById: builder.query<UserProfileInfoResponseDTO, string>({
+      query: (profile_id) => ({
+        url: `/profiles/${profile_id}`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -44,4 +50,5 @@ export const {
   useGetTopProfilesQuery,
   useUpdateCurrentUserProfileMutation,
   useBuySubscriptionMutation,
+  useGetUserProfileInfoByIdQuery,
 } = profileApi;
