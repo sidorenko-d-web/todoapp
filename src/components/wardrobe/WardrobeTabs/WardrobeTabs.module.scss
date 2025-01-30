@@ -12,27 +12,35 @@
 
 
 .tabs {
-  width: 100%;
   display: flex;
   justify-content: space-between;
-  align-self: center;
-  gap: 16px;
-  width: max-content;
+  width: 100%;
   background-color: var.$color-card-bg;
   border-radius: 30px;
-  padding: 3px 6px;
+  padding: 3px;
+  gap: 8px;
 }
 
 .tab {
+  flex: 1;
+  text-align: center;
   background: transparent;
   border: none;
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 28px;
-  color: white; 
+  color: white;
   font-size: 12px;
 }
 
+.vipTab {
+  font-weight: 600;
+  background: linear-gradient(90deg, #1551E8 -19.37%, #E84951 121.25%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
 
 .activeTab {
   background: #D9DCE1;

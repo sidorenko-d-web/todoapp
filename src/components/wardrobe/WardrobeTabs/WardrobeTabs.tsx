@@ -2,16 +2,24 @@ import React, { useState } from "react";
 import styles from "./WardrobeTabs.module.scss";
 
 import { useGetInventorySkinsQuery } from "../../../redux/api/inventory/api";
-
 import skinPlaceholder from '../../../assets/icons/skin-placeholder.svg';
+import { IShopSkin } from "../../../redux";
 
 const categories = [
     { name: "Голова", key: "head" },
     { name: "Лицо", key: "face" },
-    { name: "Туловище", key: "upper_body" },
-    { name: "Ноги", key: "legs" },
-    { name: "Всё", key: "all" }
+    { name: "Верх", key: "upper_body" },
+    { name: "Низ", key: "lower_body" }, // Merged legs & feet
+    { name: "VIP", key: "entire_body" }
 ];
+
+type CategorizedSkins = {
+    head: IShopSkin[];
+    face: IShopSkin[];
+    upper_body: IShopSkin[];
+    lower_body: IShopSkin[];
+    entire_body: IShopSkin[];
+};
 
 interface WardrobeTabsProps {
     setSelectedSkinUrl: (url: string) => void;
@@ -19,20 +27,28 @@ interface WardrobeTabsProps {
 
 export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ setSelectedSkinUrl }) => {
     const { data: inventorySkinsData, isLoading } = useGetInventorySkinsQuery();
-    const [activeTab, setActiveTab] = useState("Голова");
+    const [activeTab, setActiveTab] = useState("head");
     const [selected, setSelected] = useState<string | null>(null);
 
     if (isLoading || !inventorySkinsData) {
         return <p>Loading skins...</p>;
     }
 
-    const categorizedSkins = inventorySkinsData.skins.reduce((acc, skin) => {
-        if (!acc[skin.wear_location]) acc[skin.wear_location] = [];
-        acc[skin.wear_location].push(skin);
-        return acc;
-    }, {} as Record<string, typeof inventorySkinsData.skins>);
+    const categorizedSkins: CategorizedSkins = {
+        head: [],
+        face: [],
+        upper_body: [],
+        lower_body: [],
+        entire_body: [],
+    };
 
-    categorizedSkins["all"] = inventorySkinsData.skins;
+    inventorySkinsData.skins.forEach((skin) => {
+        if (skin.wear_location === "legs" || skin.wear_location === "feet") {
+            categorizedSkins.lower_body.push(skin);
+        } else if (skin.wear_location in categorizedSkins) {
+            categorizedSkins[skin.wear_location as keyof CategorizedSkins].push(skin);
+        }
+    });
 
     return (
         <div className={styles.container}>
@@ -40,8 +56,8 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ setSelectedSkinUrl }
                 {categories.map(({ name, key }) => (
                     <button
                         key={key}
-                        className={`${styles.tab} ${activeTab === name ? styles.activeTab : ""}`}
-                        onClick={() => setActiveTab(name)}
+                        className={`${styles.tab} ${activeTab === key ? styles.activeTab : ""} ${(key === "entire_body" && activeTab !== key) ? styles.vipTab : ""}`}
+                        onClick={() => setActiveTab(key)}
                     >
                         {name}
                     </button>
@@ -49,7 +65,7 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ setSelectedSkinUrl }
             </div>
 
             <div className={styles.grid}>
-                {categorizedSkins[categories.find(cat => cat.name === activeTab)?.key || "all"]?.map((skin) => (
+                {categorizedSkins[activeTab as keyof CategorizedSkins]?.map((skin) => (
                     <button
                         key={skin.id}
                         className={`${styles.option} ${selected === skin.id ? styles.selected : ""}`}
@@ -58,7 +74,7 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ setSelectedSkinUrl }
                             setSelectedSkinUrl(skin.image_url);
                         }}
                     >
-                         <img src={skin.image_url || skinPlaceholder} />
+                        <img src={skin.image_url || skinPlaceholder} />
                     </button>
                 ))}
             </div>
