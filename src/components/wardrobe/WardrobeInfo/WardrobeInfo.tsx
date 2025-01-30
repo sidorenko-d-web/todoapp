@@ -8,11 +8,15 @@ import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
 
 export const WardrobeInfo: React.FC = () => {
 
-    const { data } = useGetInventorySkinsQuery();
+    const { data, isLoading, error } = useGetInventorySkinsQuery();
 
 
     return (
         <>
+            {isLoading && <p>Загрузка...</p>}
+
+            {error && <p>Ошибка при загрузке данных профиля</p>}
+
             {data && <div className={styles.wrp}>
                 <Link to='/profile'>
                     <button className={styles.backBtn} />
