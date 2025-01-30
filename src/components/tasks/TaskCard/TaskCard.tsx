@@ -20,6 +20,7 @@ type BaseTaskProps = {
   buttonType?: 'primary' | 'secondary';
   isLoading?: boolean;
   disabled?: boolean;
+  onButtonClick?: () => void;
 };
 
 type DefaultTaskProps = {
@@ -57,6 +58,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      buttonType = 'primary',
                                                      isLoading,
                                                      disabled,
+                                                     onButtonClick,
                                                    }) => {
   return (
     <div className={s.card}>
@@ -80,9 +82,9 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       {type === 'progress' && (
         <section className={s.progressTypeSection}>
           <div className={s.progressTypeSteps}>
-            <img src={circleIcon} height={18} width={18} alt={'step'}/>
-            <img src={circleIcon} height={18} width={18} alt={'step'}/>
-            <img src={circleIcon} height={18} width={18} alt={'step'}/>
+            <img src={circleIcon} height={18} width={18} alt={'step'} />
+            <img src={circleIcon} height={18} width={18} alt={'step'} />
+            <img src={circleIcon} height={18} width={18} alt={'step'} />
           </div>
           <div className={s.progressTypeReward}>
             <span className={s.reward}>10 - 1000 <img src={coinIcon} height={14} width={14} alt={'income'} /></span>
@@ -108,6 +110,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
         <button
           className={s.button + ' ' + s[buttonType] + ' ' + (isLoading ? s.loading : '')}
           disabled={disabled || isLoading}
+          onClick={onButtonClick}
         >
           {buttonText}
         </button>
