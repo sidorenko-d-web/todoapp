@@ -1,37 +1,64 @@
 import React, { useState } from "react";
 import styles from "./WardrobeTabs.module.scss";
 
-import skinPlacehoder from '../../../assets/icons/skin-placeholder.svg';
+import { useGetInventorySkinsQuery } from "../../../redux/api/inventory/api";
 
-const categories = ["Голова", "Фото", "Видео", "Декор", "VIP"];
-const options = Array(9).fill(null);
+import skinPlaceholder from '../../../assets/icons/skin-placeholder.svg';
 
-export const WardrobeTabs: React.FC = () => {
+const categories = [
+    { name: "Голова", key: "head" },
+    { name: "Лицо", key: "face" },
+    { name: "Туловище", key: "upper_body" },
+    { name: "Ноги", key: "legs" },
+    { name: "Всё", key: "all" }
+];
+
+interface WardrobeTabsProps {
+    setSelectedSkinUrl: (url: string) => void;
+}
+
+export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ setSelectedSkinUrl }) => {
+    const { data: inventorySkinsData, isLoading } = useGetInventorySkinsQuery();
     const [activeTab, setActiveTab] = useState("Голова");
-    const [selected, setSelected] = useState(0);
+    const [selected, setSelected] = useState<string | null>(null);
+
+    if (isLoading || !inventorySkinsData) {
+        return <p>Loading skins...</p>;
+    }
+
+    const categorizedSkins = inventorySkinsData.skins.reduce((acc, skin) => {
+        if (!acc[skin.wear_location]) acc[skin.wear_location] = [];
+        acc[skin.wear_location].push(skin);
+        return acc;
+    }, {} as Record<string, typeof inventorySkinsData.skins>);
+
+    categorizedSkins["all"] = inventorySkinsData.skins;
 
     return (
         <div className={styles.container}>
             <div className={styles.tabs}>
-                {categories.map((category) => (
+                {categories.map(({ name, key }) => (
                     <button
-                        key={category}
-                        className={`${styles.tab} ${activeTab === category ? styles.activeTab : ""}`}
-                        onClick={() => setActiveTab(category)}
+                        key={key}
+                        className={`${styles.tab} ${activeTab === name ? styles.activeTab : ""}`}
+                        onClick={() => setActiveTab(name)}
                     >
-                        {category}
+                        {name}
                     </button>
                 ))}
             </div>
 
             <div className={styles.grid}>
-                {options.map((_, index) => (
+                {categorizedSkins[categories.find(cat => cat.name === activeTab)?.key || "all"]?.map((skin) => (
                     <button
-                        key={index}
-                        className={`${styles.option} ${selected === index ? styles.selected : ""}`}
-                        onClick={() => setSelected(index)}
+                        key={skin.id}
+                        className={`${styles.option} ${selected === skin.id ? styles.selected : ""}`}
+                        onClick={() => {
+                            setSelected(skin.id);
+                            setSelectedSkinUrl(skin.image_url);
+                        }}
                     >
-                        <img src={skinPlacehoder} />
+                         <img src={skin.image_url || skinPlaceholder} />
                     </button>
                 ))}
             </div>
