@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import styles from './StatisticsCard.module.scss';
-import CoinIcon from '../../../assets/Icons/coin.svg';
-import view from '../../../assets/Icons/views.svg';
-import logo from '../../../assets/Icons/logo.svg';
-import integrations from '../../../assets/Icons/integrations.svg';
+import CoinIcon from '../../../assets/icons/coin.svg';
+import view from '../../../assets/icons/views.svg';
+import logo from '../../../assets/icons/logo.svg';
+import integrations from '../../../assets/icons/integrations.svg';
 
 interface Props {
   id: string;

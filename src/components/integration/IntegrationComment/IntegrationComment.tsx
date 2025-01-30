@@ -1,6 +1,6 @@
 import styles from './IntegrationComment.module.scss';
 
-import CoinIcon from '../../../assets/Icons/coin.svg'
+import coinIcon from '../../../assets/icons/coin.svg'
 import ProgressLine from '../../shared/ProgressLine/ProgressLine';
 
 
@@ -30,7 +30,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({ username
                     <p className={styles.amount}>{progres}/5</p>
                     <div className={styles.rewardWrp}>
                         <p className={styles.reward}>+100</p>
-                        <img src={CoinIcon} />
+                        <img src={coinIcon} width={12} height={12}/>
                     </div>
                 </div>
                 <ProgressLine level={progres} color='blue'/>

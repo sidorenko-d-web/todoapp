@@ -5,6 +5,7 @@ import styles from './ProfileStatsMini.module.scss';
 import clanIcon from '../../../assets/icons/clan-red.svg';
 import subscriberIcon from '../../../assets/icons/subscribers.svg';
 import fireIcon from '../../../assets/images/fire-red.svg';
+import { Link } from "react-router-dom";
 
 interface ProfileStatsMiniProps {
     subscribers: number;
@@ -13,6 +14,7 @@ interface ProfileStatsMiniProps {
 }
 
 export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({subscribers, daysInARow, position}) => {
+
     return (
         <div className={styles.wrp}>
             <div className={styles.toCenterStats}/>
@@ -34,7 +36,9 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({subscribers, 
                 </div>
             </div>
 
-            <div className={styles.wardrobeButton}/>
+            <Link to={'../wardrobe'}>
+                <div className={styles.wardrobeButton}/>
+            </Link>
         </div>
     );
 }

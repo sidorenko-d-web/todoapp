@@ -32,7 +32,7 @@ export interface IShopSkinsResponse {
   skins: IShopSkin[];
 }
 
-export type TypeWearLocation = 'head' | 'upper_body' | 'legs' | 'feet' | 'entire_body';
+export type TypeWearLocation = 'head' | 'face' | 'upper_body' | 'legs' | 'feet' | 'entire_body';
 export type TypeItemCategory = 'text' | 'image' | 'video' | 'decor';
 export type TypeItemQuality = 'lowcost' | 'prem' | 'lux';
 export type TypeItemRarity = 'red' | 'yellow' | 'green';

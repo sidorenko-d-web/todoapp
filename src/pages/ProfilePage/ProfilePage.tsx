@@ -67,6 +67,7 @@ export const ProfilePage: React.FC = () => {
                         <p className={styles.statsTitle}>Награды</p>
                         <RewardsList />
                     </div>
+
                 </div>}
         </>
     );

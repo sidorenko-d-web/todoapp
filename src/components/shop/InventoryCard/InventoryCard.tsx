@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import styles from './InventoryCart.module.scss';
 import clsx from 'clsx';
-import LockIconSvg from '../../../assets/icons/lock-closed';
+import LockIconSvg from '../../../assets/Icons/lock-closed';
 import ChestBlueIcon from '../../../assets/Icons/chest-blue.svg';
 import ChestPurpleIcon from '../../../assets/Icons/chest-purple.svg';
 import ChestRedIcon from '../../../assets/Icons/chest-red.svg';
