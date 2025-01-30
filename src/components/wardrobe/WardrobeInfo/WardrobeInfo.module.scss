@@ -1,0 +1,77 @@
+@use '../../../assets/styles/index.scss' as var;
+
+
+.wrp {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .backBtn {
+        border: none;
+        border-radius: 10px;
+        background-color: var.$color-gray;
+        height: 40px;
+        width: 40px;
+        background-image: url('../../../assets/icons/arrow_back.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        background-size: 50%;
+    }
+
+
+    .infoWrp {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        .title {
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .statsWrp {
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+            justify-content: center;
+            .statWrp {
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                color: white;
+                padding: 4px 7px;
+                background-color: var.$color-badge-bg;
+                gap: 2px;
+
+                .stat {
+                    font-size: 14px;
+                }
+            }
+        }
+
+        .statusWrp {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            padding: 4px 7px;
+            border-radius: 10px;
+            width: fit-content;
+            height: fit-content;
+            align-self: center;
+            .status {
+                color: var.$color-text-super-transparent;
+                font-size: 14px;
+            }
+        }
+    }
+
+    .toCenterInfo {
+        width: 40px;
+        height: 40px;
+    }
+}

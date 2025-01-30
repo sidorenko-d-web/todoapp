@@ -2,14 +2,14 @@ import { FC } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
 import LockIconSvg from '../../../assets/icons/lock-closed';
-import ChestBlueIcon from '../../../assets/Icons/chest-blue.svg';
-import ChestPurpleIcon from '../../../assets/Icons/chest-purple.svg';
-import ChestRedIcon from '../../../assets/Icons/chest-red.svg';
+import ChestBlueIcon from '../../../assets/icons/chest-blue.svg';
+import ChestPurpleIcon from '../../../assets/icons/chest-purple.svg';
+import ChestRedIcon from '../../../assets/icons/chest-red.svg';
 import { useBuyItemMutation } from '../../../redux';
 import { TypeItemQuality, IShopItem } from '../../../redux';
-import CoinIcon from '../../../assets/Icons/coin.svg'
-import SubscriberCoin from '../../../assets/Icons/subscriber_coin.svg'
-import LockIcon from '../../../assets/Icons/lock_icon.svg'
+import CoinIcon from '../../../assets/icons/coin.svg'
+import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg'
+import LockIcon from '../../../assets/icons/lock_icon.svg'
 
 interface Props {
   disabled?: boolean;
