@@ -4,7 +4,8 @@ import styles from './ProfileStatsMini.module.scss';
 
 import clanIcon from '../../../assets/icons/clan-red.svg';
 import subscriberIcon from '../../../assets/icons/subscribers.svg';
-import fireIcon from '../../../assets/images/fire-red.svg';
+import fireIcon from '../../../assets/icons/fire-red.svg';
+import { Link } from "react-router-dom";
 
 interface ProfileStatsMiniProps {
   subscribers: number;
@@ -41,7 +42,11 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
         </div>
       </div>
 
-      {!onlyBadges && <div className={styles.wardrobeButton} />}
+      {!onlyBadges && (
+        <Link to={'../wardrobe'}>
+          <div className={styles.wardrobeButton}/>
+        </Link>
+      )}
     </div>
   );
 };

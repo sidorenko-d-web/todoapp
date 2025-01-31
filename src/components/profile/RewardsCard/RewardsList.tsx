@@ -1,23 +1,53 @@
 import React from "react";
-
 import styles from "./RewardsList.module.scss";
 import Reward from "./Reward/Reward";
+import { useGetInventoryAchievementsQuery } from "../../../redux/api/inventory/api";
 
-const rewardsData = [
-  { name: "Награда Mike", stars: 3, medal: "gold" as "gold", isActive: true },
-  { name: "Награда Advdas", stars: 2, medal: "silver" as "silver", isActive: false },
-  { name: "Награда Purna", stars: 1, medal: "bronze" as "bronze", isActive: false },
-];
+interface RewardItem {
+  name: string;
+  stars: number;
+  medal: "gold" | "silver" | "bronze";
+  isActive: boolean;
+}
 
 const RewardsList: React.FC = () => {
+  const { data: awardsData, error: awardsError, isLoading: awardsLoading } = useGetInventoryAchievementsQuery();
+
+  const mappedRewards: RewardItem[] = React.useMemo(() => {
+    if (!awardsData || !awardsData.achievements) return [];
+
+    return awardsData.achievements
+      .map((achievement: { level: number; name: any; is_unlocked: any; }): RewardItem => {
+        const medal: "gold" | "silver" | "bronze" =
+          achievement.level === 3 ? "gold" : achievement.level === 2 ? "silver" : "bronze";
+
+        return {
+          name: achievement.name,
+          stars: achievement.level,
+          medal,
+          isActive: achievement.is_unlocked,
+        };
+      })
+      .sort((a, b) => {
+        const medalOrder: Record<"gold" | "silver" | "bronze", number> = { gold: 3, silver: 2, bronze: 1 };
+        return medalOrder[b.medal] - medalOrder[a.medal];
+      });
+  }, [awardsData]);
+
   return (
-    <div className={styles.rewardsList}>
-      <div className={styles.list}>
-        {rewardsData.map((reward, index) => (
-          <Reward key={index} {...reward} />
-        ))}
-      </div>
-    </div>
+    <>
+      {awardsLoading && <p>Загрузка...</p>}
+      {awardsError && <p>Ошибка при загрузке наград</p>}
+      {!awardsLoading && !awardsError && (
+        <div className={styles.rewardsList}>
+          <div className={styles.list}>
+            {mappedRewards.map((reward: RewardItem, index: number) => (
+              <Reward key={index} {...reward} />
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -1,0 +1,14 @@
+@use '../../../assets/styles/index.scss' as var;
+
+
+.wrp {
+    display: flex;
+    justify-content: center;
+    align-items: center;   
+    width: 100%;
+    aspect-ratio: 1/1;
+    padding: 20px 15px;
+    background-color: #2D2D35;
+    border-radius: 12px;
+    border: 2px solid var.$color-dark-gray-stroke;
+}

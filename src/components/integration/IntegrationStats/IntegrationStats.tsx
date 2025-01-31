@@ -4,7 +4,7 @@ import styles from './IntegrationStats.module.scss';
 
 import subscribersIcon from '../../../assets/icons/subscribers.svg';
 import viewsIcon from '../../../assets/icons/views.svg';
-import CoinIcon from '../../../assets/Icons/coin.svg'
+import coinIcon from '../../../assets/icons/coin.svg'
 
 interface IntegrationStatsProps {
     subscribers: number;
@@ -18,21 +18,21 @@ export const IntegrationStats: React.FC<IntegrationStatsProps> = ({subscribers, 
             <div className={styles.IntegrationStat}>
                 <p className={styles.amount}>{subscribers}</p>
                 <div className={styles.typeWrp}>
-                    <img src={subscribersIcon} />
-                    <p className={styles.type}>  Подписчики</p>
+                    <img src={subscribersIcon} width={12} height={12}/>
+                    <p className={styles.type}>Подписчики</p>
                 </div>
             </div>
             <div className={styles.IntegrationStat}>
                 <p className={styles.amount}>{views}</p>
                 <div className={styles.typeWrp}>
-                    <img src={viewsIcon} />
+                    <img src={viewsIcon} width={12} height={12}/>
                     <p className={styles.type}>Просмотры</p>
                 </div>
             </div>
             <div className={styles.IntegrationStat}>
                 <p className={styles.amount}>{income}</p>
                 <div className={styles.typeWrp}>
-                    <img src={CoinIcon} />
+                    <img src={coinIcon} width={12} height={12}/>
                     <p className={styles.type}>Доход</p>
                 </div>
             </div>

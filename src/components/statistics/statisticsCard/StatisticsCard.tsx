@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import styles from './StatisticsCard.module.scss';
-import CoinIcon from '../../../assets/Icons/coin.svg';
-import view from '../../../assets/Icons/views.svg';
-import logo from '../../../assets/Icons/logo.svg';
-import integrations from '../../../assets/Icons/integrations.svg';
+import CoinIcon from '../../../assets/icons/coin.svg';
+import view from '../../../assets/icons/views.svg';
+import logo from '../../../assets/icons/logo.svg';
+import integrations from '../../../assets/icons/integrations.svg';
 
 interface Props {
   id: string;
@@ -31,11 +31,11 @@ const StatisticsCard: FC<Props> = ({ views, points, companyName, onClick }) => {
           <div className={styles.scores}>
             <div className={styles.item}>
               <p>{views}</p>
-              <img src={view} alt="" />
+              <img src={view} alt="" width={14} height={14}/>
             </div>
             <div className={styles.item}>
               <p>{points}</p>
-              <img src={CoinIcon} alt="" />
+              <img src={CoinIcon} alt="" width={14} height={14}/>
             </div>
           </div>
         </div>

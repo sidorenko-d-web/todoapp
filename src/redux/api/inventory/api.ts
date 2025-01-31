@@ -1,11 +1,11 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import { IShopSkinsResponse, IShopItemsResponse, IShopItemsRequest, IBoosts } from '../shop';
+import { IShopSkinsResponse, IShopItemsResponse, IShopItemsRequest, IBoosts, IAchievementsResponse } from '../shop';
 
 export const inventoryApi = createApi({
   reducerPath: 'inventoryApi',
   baseQuery: baseQueryReauth,
-  tagTypes: ['items', 'skins'],
+  tagTypes: ['items', 'skins', 'achievements'],
   endpoints: builder => ({
     getInventorySkins: builder.query<IShopSkinsResponse, void>({
       query: () => ({
@@ -29,7 +29,14 @@ export const inventoryApi = createApi({
       }),
       providesTags: ['skins', 'items'],
     }),
+    getInventoryAchievements: builder.query<IAchievementsResponse, void>({
+      query: () => ({
+        url: '/inventory/achievements',
+        method: 'GET'
+      }),
+      providesTags: ['achievements']
+    })
   }),
 });
 
-export const { useGetInventoryItemsQuery, useGetInventoryBoostQuery, useGetInventorySkinsQuery } = inventoryApi;
+export const { useGetInventoryItemsQuery, useGetInventoryBoostQuery, useGetInventorySkinsQuery, useGetInventoryAchievementsQuery } = inventoryApi;
