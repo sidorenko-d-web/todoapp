@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import giftIcon from '../../../../assets/icons/gift.svg';
 import coinIcon from '../../../../assets/icons/coin.svg';
 import classNames from 'classnames';
@@ -14,9 +14,10 @@ import CrossRedIcon from '../../../../assets/icons/cross-red-in-circle.svg';
 interface ModalDailyTasksProps {
   modalId: string;
   onClose: () => void;
+  onStateChange?: (states: QuestionState[]) => void;
 }
 
-// Сначала создадим типы для вопросов
+type QuestionState = 'solved' | 'current' | 'closed';
 interface Question {
   id: number;
   text: string;
@@ -27,7 +28,6 @@ interface Question {
   correctAnswer: string;
 }
 
-// Массив вопросов
 const QUESTIONS: Question[] = [
   {
     id: 1,
@@ -61,18 +61,39 @@ const QUESTIONS: Question[] = [
   },
 ];
 
-export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({ modalId, onClose }) => {
+export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
+                                                            modalId,
+                                                            onClose,
+                                                            onStateChange
+                                                          }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
-  const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>(Array(QUESTIONS.length).fill(false));
+  const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>(
+    Array(QUESTIONS.length).fill(false)
+  );
+
+  const getQuestionStates = (): QuestionState[] => {
+    return QUESTIONS.map((_, index) => {
+      if (answeredQuestions[index]) {
+        return 'solved';
+      } else if (index === currentQuestionIndex) {
+        return 'current';
+      }
+      return 'closed';
+    });
+  };
+
+  useEffect(() => {
+    onStateChange?.(getQuestionStates());
+  }, [currentQuestionIndex, answeredQuestions]);
 
   const currentQuestion = QUESTIONS[currentQuestionIndex];
   const isCorrectAnswer = selectedOption === currentQuestion.correctAnswer;
 
   const handleSelectOption = (optionId: string) => {
     setSelectedOption(optionId);
-    setShowResult(false); // Сбрасываем показ результата при выборе нового ответа
+    setShowResult(false);
   };
 
   const handleNext = () => {
@@ -82,8 +103,8 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({ modalId, onClose }) 
       setAnsweredQuestions(newAnsweredQuestions);
 
       if (currentQuestionIndex === QUESTIONS.length - 1) {
-        setShowResult(true); // Показываем результат для последнего вопроса
-        setTimeout(() => onClose(), 1000); // Закрываем с небольшой задержкой
+        setShowResult(true);
+        setTimeout(() => onClose(), 1000);
         return;
       }
 
@@ -93,12 +114,12 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({ modalId, onClose }) 
       setShowResult(true);
     }
   };
+
   const handleDotClick = (index: number) => {
-    // Позволяем переходить только к отвеченным вопросам
     if (answeredQuestions[index]) {
       setCurrentQuestionIndex(index);
-      setSelectedOption(QUESTIONS[index].correctAnswer); // Устанавливаем правильный ответ
-      setShowResult(true); // Показываем результат
+      setSelectedOption(QUESTIONS[index].correctAnswer);
+      setShowResult(true);
     }
   };
   return (
@@ -120,29 +141,33 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({ modalId, onClose }) 
           </span>
         </div>
 
-        {/* Индикатор прогресса */}
+        {/* Progress indicator using question states */}
         <div className={s.progress}>
           <span className={s.step}>{currentQuestionIndex + 1}/{QUESTIONS.length}</span>
           <div className={s.dots}>
-            {QUESTIONS.map((_, index) => (
-              <img
-                key={index}
-                src={
-                  answeredQuestions[index] || (index === currentQuestionIndex && isCorrectAnswer && showResult)
-                    ? checkIcon
-                    : index === currentQuestionIndex
-                      ? circleWhiteIcon
-                      : circleIcon
-                }
-                alt="step"
-                width={18}
-                height={18}
-                onClick={() => handleDotClick(index)}
-                style={{ cursor: answeredQuestions[index] ? 'pointer' : 'default' }}
-              />
-            ))}
+            {QUESTIONS.map((_, index) => {
+              const state = getQuestionStates()[index];
+              const iconSrc = state === 'solved'
+                ? checkIcon
+                : state === 'current'
+                  ? circleWhiteIcon
+                  : circleIcon;
+
+              return (
+                <img
+                  key={index}
+                  src={iconSrc}
+                  alt="step"
+                  width={18}
+                  height={18}
+                  onClick={() => handleDotClick(index)}
+                  style={{ cursor: state === 'solved' ? 'pointer' : 'default' }}
+                />
+              );
+            })}
           </div>
         </div>
+
 
         {/* Вопрос */}
         <div className={s.question}>

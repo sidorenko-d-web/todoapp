@@ -1,37 +1,57 @@
+import { FC, useState, useMemo } from 'react';
 import { TaskCard } from '../';
 import giftIcon from '../../../assets/icons/gift.svg';
 import { MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
-
 import s from '../styles.module.scss';
 import { ModalDailyTasks } from './ModalDailyTasks';
 
-export const DailyTasks = () => {
+type QuestionState = 'solved' | 'current' | 'closed';
+
+export const DailyTasks: FC = () => {
   const { openModal, closeModal } = useModal();
+  const [questionStates, setQuestionStates] = useState<QuestionState[]>(['current', 'closed', 'closed']);
+
+  const completedCount = useMemo(() => {
+    return questionStates.filter(state => state === 'solved').length;
+  }, [questionStates]);
 
   const handleOpenGift = () => {
     openModal(MODALS.DAILY_TASKS);
   };
 
+  const handleCloseModal = () => {
+    closeModal(MODALS.DAILY_TASKS);
+  };
+
+  const handleQuestionStatesChange = (newStates: QuestionState[]) => {
+    setQuestionStates(newStates);
+  };
+
+  const isCompleted = questionStates.every(state => state === 'solved');
+
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
         <h2 className={s.sectionTitle}>Ежедневное</h2>
-        <span className={s.count}>0/1</span>
+        <span className={s.count}>{completedCount}/3</span>
       </div>
       <div className={s.tasksList}>
         <TaskCard
-          title={'Ежедневный подарок'}
-          description={'Ответьте на 3 вопроса, чтобы открыть.'}
-          type={'progress'}
+          title="Ежедневный подарок"
+          description="Ответьте на 3 вопроса, чтобы открыть."
+          type="progress"
           icon={giftIcon}
-          buttonText={'Открыть подарок'}
+          buttonText={isCompleted ? 'Забрать награду' : 'Открыть подарок'}
+          disabled={isCompleted}
           onClick={handleOpenGift}
+          questionStates={questionStates}
         />
       </div>
       <ModalDailyTasks
         modalId={MODALS.DAILY_TASKS}
-        onClose={() => closeModal(MODALS.DAILY_TASKS)}
+        onClose={handleCloseModal}
+        onStateChange={handleQuestionStatesChange}
       />
     </section>
   );
