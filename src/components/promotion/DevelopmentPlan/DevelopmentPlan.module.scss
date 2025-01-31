@@ -52,10 +52,10 @@
 .namePlan {
   display: flex;
   flex-direction: row;
+  max-width: 70%;
   align-items: center;
   gap: 10px;
-  height: 37px;
-  max-width: 290px;
+  min-height: 37px;
   padding: 10px;
   border-radius: 8px;
   background: var.$color-blue-primary;
@@ -64,6 +64,11 @@
   line-height: 16.8px;
   margin: 0;
 }
+
+.locked {
+  background: var.$color-gray;
+}
+
 
 .text {
   font-size: 14px;
@@ -81,12 +86,17 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: fit-content;
+  padding: 4px 8px;
   gap: 5px;
+  border-radius: 4px;
+  background-color: var.$color-dark-gray;
 }
 
 .textInfoPlan {
   margin: 10px 0;
   font-size: 14px;
+  text-align: left;
   font-weight: 500;
   line-height: 16.8px;
   color: var.$color-text-semi-transparent;
@@ -157,8 +167,4 @@
   font-size: 14px;
   font-weight: 500;
   line-height: 14px;
-}
-
-.info {
-  margin: 0;
 }
