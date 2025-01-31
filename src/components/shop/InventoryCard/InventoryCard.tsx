@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import styles from './InventoryCart.module.scss';
+import styles from './InventoryCard.module.scss';
 import clsx from 'clsx';
 import LockIconSvg from '../../../assets/icons/lock-closed';
 import ChestBlueIcon from '../../../assets/icons/chest-blue.svg';
@@ -11,6 +11,8 @@ import CoinIcon from '../../../assets/icons/coin.svg';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.svg';
+import { useModal } from '../../../hooks';
+import { MODALS } from '../../../constants';
 
 interface Props {
   disabled?: boolean;
@@ -34,7 +36,9 @@ export const InventoryCard: FC<Props> = ({
 }) => {
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const { refetch } = useGetCurrentUserProfileInfoQuery();
-  const { data } = useGetShopItemsQuery({ level: item.level === 50? 50 : item.level + 1, name: item.name });
+  const { data } = useGetShopItemsQuery({ level: item.level === 50 ? 50 : item.level + 1, name: item.name });
+
+  const { openModal } = useModal();
 
   const handleBuyItem = async () => {
     try {
@@ -43,7 +47,7 @@ export const InventoryCard: FC<Props> = ({
         refetchAll();
         refetch();
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   return (
@@ -152,11 +156,13 @@ export const InventoryCard: FC<Props> = ({
           <p>Прокачайте основной предмет</p>
           <img src={LockIcon} alt="" />
         </div>
-      ) : item.level === 50 ? <div className={styles.disabledUpgradeActions}>
-        <img src={LockIcon} alt="" />
-        <p>Достигнут макс. уровень</p>
-        <img src={LockIcon} alt="" />
-      </div> : disabled ? (
+      ) : item.level === 50 ? (
+        <div className={styles.disabledUpgradeActions}>
+          <img src={LockIcon} alt="" />
+          <p>Достигнут макс. уровень</p>
+          <img src={LockIcon} alt="" />
+        </div>
+      ) : disabled ? (
         <button className={styles.disabledActions}>
           <p>Активировать</p>
         </button>
@@ -171,8 +177,8 @@ export const InventoryCard: FC<Props> = ({
               </>
             )}
           </button>
-          <button>Задание</button>
-          <button disabled>{data?.items[0].price_usdt} $USDT</button>
+          <button onClick={() => openModal(MODALS.UPGRADED_ITEM, { item, reward: 'Каменный сундук' })}>Задание</button>
+          <button onClick={() => openModal(MODALS.UPGRADED_SHOP, { item })}>{data?.items[0].price_usdt} $USDT</button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>

@@ -6,5 +6,8 @@ export const MODALS = {
   SUBSCRIBE: 'subscribe',
   SUCCESSFULLY_SUBSCRIBED: 'successfullySubscribed',
   DAYS_IN_A_ROW: 'daysInARow',
-  STRANGER_PROFILE: 'strangerProfile'
+  STRANGER_PROFILE: 'strangerProfile',
+  NEW_ITEM: 'newItem',
+  UPGRADED_ITEM: 'upgradedItem',
+  UPGRADED_SHOP: 'upgradedShop',
 };

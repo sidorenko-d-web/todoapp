@@ -1,0 +1,75 @@
+@use '../../../../assets/styles/abstracts/colors' as *;
+
+.images {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  .bgLight {
+    position: absolute;
+  }
+
+  .itemImage {
+    width: 60px;
+    height: 60px;
+    background: $color-gray;
+    border: 2px solid $color-primary;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    margin: 40px 0 50px 0;
+  }
+
+  .itemImagePurple {
+    @extend .itemImage;
+    border-color: $color-purple;
+  }
+  .itemImageRed {
+    @extend .itemImage;
+    border-color: $color-red;
+  }
+}
+
+.text {
+  width: 100%;
+  margin-bottom: 30px;
+  p {
+    color: $color-text-semi-transparent;
+    font-weight: 500;
+    font-size: 12px;
+    text-wrap: wrap;
+    text-align: center;
+
+    span {
+      color: $color-primary;
+    }
+
+    .spanPurple {
+      color: $color-purple;
+    }
+    .spanRed {
+      color: $color-red;
+    }
+  }
+}
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 15px;
+
+  .statItem {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: $color-white;
+
+    img {
+      width: 14px;
+      aspect-ratio: 14px;
+    }
+  }
+}

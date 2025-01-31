@@ -7,6 +7,8 @@ import CoinIcon from '../../../assets/icons/coin.svg';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.svg';
+import { useModal } from '../../../hooks';
+import { MODALS } from '../../../constants';
 
 interface Props {
   disabled?: boolean;
@@ -19,6 +21,8 @@ interface Props {
 export const ShopItemCard: FC<Props> = ({ disabled, variant = 'lowcost', item, refetchAll }) => {
   const [buyItem, { isLoading }] = useBuyItemMutation();
 
+  const { openModal } = useModal();
+
   const { refetch } = useGetCurrentUserProfileInfoQuery();
   const [error, setError] = useState('');
   const handleBuyItem = async () => {
@@ -28,7 +32,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, variant = 'lowcost', item, r
       if (!res.error) {
         refetchAll();
         refetch();
-        inventoryApi.util.resetApiState()
+        inventoryApi.util.resetApiState();
       } else {
         setError(JSON.stringify(res.error));
       }
@@ -73,7 +77,9 @@ export const ShopItemCard: FC<Props> = ({ disabled, variant = 'lowcost', item, r
 
       {!disabled ? (
         <div className={styles.actions}>
-          <button disabled>{item.price_usdt} $USDT</button>
+          <button onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}>
+            {item.price_usdt} $USDT
+          </button>
           <button onClick={handleBuyItem}>
             {isLoading ? (
               <p>loading</p>

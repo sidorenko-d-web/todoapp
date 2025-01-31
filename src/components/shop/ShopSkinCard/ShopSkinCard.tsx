@@ -12,6 +12,8 @@ import LegsIcon from '../../../assets/icons/face_icon.svg';
 import FeetIcon from '../../../assets/icons/face_icon.svg';
 import VIPIcon from '../../../assets/icons/star_check_icon.svg';
 import ListIcon from '../../../assets/icons/list.svg';
+import { useModal } from '../../../hooks';
+import { MODALS } from '../../../constants';
 
 interface Props {
   item: IShopSkin;
@@ -35,6 +37,8 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
       console.error(error);
     }
   };
+
+  const { openModal } = useModal();
 
   return (
     <div className={styles.storeCard}>
@@ -77,7 +81,9 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
           </button>
         ) : mode === 'shop' ? (
           <>
-            <button className={styles.button}>{item.price_usdt} $USDT</button>
+            <button className={styles.button} onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' })}>
+              {item.price_usdt} $USDT
+            </button>
             <button className={styles.priceButton} onClick={handleBuySkin}>
               {isLoading ? (
                 <p>Загрузка</p>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ShopLayout } from '../../../layout/ShopLayout/ShopLayout';
 import { useGetInventoryItemsQuery } from '../../../redux/api/inventory/api';
-import { ItemsTab, SkinTab } from '../../../components';
+import { ItemUpgradedModal, ItemsTab, ShopUpgradedModal, SkinTab } from '../../../components';
 import { TypeItemCategory, TypeItemQuality } from '../../../redux';
 
 type TypeTab<T> = { title: string; value: T };
@@ -35,6 +35,9 @@ export const ShopInvewntoryPage = () => {
       ) : (
         <SkinTab mode="inventory" />
       )}
+
+      <ItemUpgradedModal />
+      <ShopUpgradedModal />
     </ShopLayout>
   );
 };

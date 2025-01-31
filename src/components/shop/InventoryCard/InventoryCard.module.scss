@@ -20,6 +20,12 @@
       justify-content: center;
       min-width: 60px;
       height: 60px;
+
+      
+      @media (min-width: var.$breakpoint-md) {
+        min-width: 66px;
+        height: 66px;
+      }
       p {
         background: var.$color-primary;
         position: absolute;
@@ -28,6 +34,11 @@
         font-size: 12px;
         padding: 2px 5px;
         border-radius: 4px;
+
+        @media (min-width: var.$breakpoint-md) {
+          font-size: 13.2px;
+          line-height: 13.2px;
+        }
       }
       .disabledImageIcon {
         position: absolute;
@@ -101,6 +112,10 @@
         font-size: 12px;
         color: var.$color-primary;
         line-height: 12px;
+
+        @media (min-width: var.$breakpoint-md) {
+          font-size: 14px;
+        }
       }
 
       .colorPurple {
@@ -127,10 +142,18 @@
           img {
             width: 14px;
             height: 14px;
+            @media (min-width: var.$breakpoint-md) {
+              width: 18px;
+              height: 18px;
+            }
           }
           p {
             color: var.$color-white;
             font-size: 14px;
+
+            @media (min-width: var.$breakpoint-md) {
+              font-size: 16px;
+            }
           }
         }
       }
@@ -151,6 +174,11 @@
         line-height: 12px;
         color: var.$color-text-semi-transparent;
         font-weight: 500;
+
+        @media (min-width: var.$breakpoint-md) {
+          font-size: 16px;
+          line-height: 16px;
+        }
       }
       .goal {
         display: flex;
@@ -159,6 +187,11 @@
         img {
           width: 12px;
           aspect-ratio: 1;
+
+          
+        @media (min-width: var.$breakpoint-md) {
+          width: 18px;
+        }
         }
       }
     }
@@ -197,11 +230,21 @@
         position: relative;
         background: var.$footer-bg;
         overflow: hidden;
+        @media (min-width: var.$breakpoint-md) {
+          border-radius: 5px;
+
+          .itemImage {
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
+          }
+        }
         .itemImage {
           width: 24px;
           height: 24px;
           border: none;
           background: none;
+          border-radius: 5px;
         }
 
         .lock {
@@ -249,6 +292,7 @@
       border: 1px solid var.$color-dark-gray-stroke;
       color: var.$color-white;
       gap: 5px;
+      box-sizing: border-box;
 
       &:first-child {
         background: var.$color-primary;
@@ -258,6 +302,10 @@
         img {
           width: 14px;
           aspect-ratio: 1;
+
+          @media (min-width: var.$breakpoint-md) {
+            width: 18px;
+          }
         }
       }
 
@@ -266,6 +314,11 @@
         opacity: 0.3;
         flex: 1;
         border: none;
+      }
+
+      @media (min-width: var.$breakpoint-md) {
+        font-size: 16px;
+        line-height: 16px;
       }
     }
   }
@@ -287,6 +340,18 @@
       line-height: 14px;
       color: var.$grayed-white;
       font-weight: 500;
+    }
+
+    @media (min-width: var.$breakpoint-md) {
+      padding: 12px 0;
+      p {
+        font-size: 16px;
+        line-height: 16px;
+      }
+      img {
+        width: 18px;
+        height: 18px;
+      }
     }
   }
 

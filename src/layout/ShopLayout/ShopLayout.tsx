@@ -42,7 +42,11 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const [shopCategory, setShopCategory] = useState(shopItemCategories[0]);
   const [itemsQuality, setItemsQuality] = useState(shopItemQualities[0]);
 
-  const { data: inventory, isSuccess, isFetching } = useGetInventoryItemsQuery({ item_category: shopCategory.value as TypeItemCategory });
+  const {
+    data: inventory,
+    isSuccess,
+    isFetching,
+  } = useGetInventoryItemsQuery({ item_category: shopCategory.value as TypeItemCategory });
 
   useEffect(() => {
     onItemCategoryChange(shopCategory as TypeTab<TypeItemCategory>);
@@ -53,36 +57,37 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const shopQualityTabs =
     isSuccess && !isFetching && inventory && inventory?.items.findIndex(item => item.level === 50) !== -1
-      ? inventory?.items.findIndex(item => item.level === 50 && item.name.includes('Prem')) !== -1 ? shopItemQualities : shopItemQualities.slice(0, 2)
+      ? inventory?.items.findIndex(item => item.level === 50 && item.name.includes('Prem')) !== -1
+        ? shopItemQualities
+        : shopItemQualities.slice(0, 2)
       : shopItemQualities.slice(0, 1);
-  console.log(inventory?.items);
 
-  const inventoryQualityTabs = isSuccess ? (inventory?.items.find(item => item.name.includes('Pro')) ? shopItemQualities :
-    inventory?.items.find(item => item.name.includes('Prem')) ? shopItemQualities.slice(0, 2) : shopItemQualities.slice(0, 1)) : shopItemQualities.slice(0, 1)
+  const inventoryQualityTabs = isSuccess
+    ? inventory?.items.find(item => item.name.includes('Pro'))
+      ? shopItemQualities
+      : inventory?.items.find(item => item.name.includes('Prem'))
+      ? shopItemQualities.slice(0, 2)
+      : shopItemQualities.slice(0, 1)
+    : shopItemQualities.slice(0, 1);
 
-    const handleShop = () => {
-      setItemsQuality(shopItemQualities[0])
-      navigate(AppRoute.Shop)
-    }
-    const handleInventory = () => {
-      setItemsQuality(shopItemQualities[0])
-      
-      navigate(AppRoute.ShopInventory)
-    }
+  const handleShop = () => {
+    setItemsQuality(shopItemQualities[0]);
+    navigate(AppRoute.Shop);
+  };
+  const handleInventory = () => {
+    setItemsQuality(shopItemQualities[0]);
 
+    navigate(AppRoute.ShopInventory);
+  };
 
-useEffect(() => {
-  setItemsQuality(shopItemQualities[0])
-}, [shopCategory])
+  useEffect(() => {
+    setItemsQuality(shopItemQualities[0]);
+  }, [shopCategory]);
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.titleWrapper}>
-        <button
-          className={styles.linkBack}
-          onClick={handleShop}
-          style={{ opacity: mode === 'inventory' ? 1 : 0 }}
-        >
+        <button className={styles.linkBack} onClick={handleShop} style={{ opacity: mode === 'inventory' ? 1 : 0 }}>
           <img src={ArrowLeftIcon} />
         </button>
         <div className={styles.mainHeader}>
@@ -106,11 +111,7 @@ useEffect(() => {
             </div>
           </div>
         </div>
-        <button
-          className={styles.linkInventory}
-          onClick={handleInventory}
-          style={{ opacity: mode === 'shop' ? 1 : 0 }}
-        >
+        <button className={styles.linkInventory} onClick={handleInventory} style={{ opacity: mode === 'shop' ? 1 : 0 }}>
           <img src={InventoryBox} />
         </button>
       </div>
@@ -123,8 +124,8 @@ useEffect(() => {
               itemsQuality.title === 'Эконом'
                 ? 'tabItemSelectedBlue'
                 : itemsQuality.title === 'Премиум'
-                  ? 'tabItemSelectedPurple'
-                  : 'tabItemSelectedRed'
+                ? 'tabItemSelectedPurple'
+                : 'tabItemSelectedRed'
             }
             tabs={mode === 'inventory' ? inventoryQualityTabs : shopQualityTabs}
             currentTab={itemsQuality.title}
@@ -137,4 +138,3 @@ useEffect(() => {
     </div>
   );
 };
-
