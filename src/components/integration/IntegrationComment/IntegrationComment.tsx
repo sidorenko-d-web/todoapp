@@ -1,44 +1,49 @@
+import coinIcon from '../../../assets/icons/coin.svg';
+import ProgressLine from '../../shared/ProgressLine/ProgressLine';
 import styles from './IntegrationComment.module.scss';
 
-import coinIcon from '../../../assets/icons/coin.svg'
-import ProgressLine from '../../shared/ProgressLine/ProgressLine';
-
-
-
 interface IntegrationCommentProps {
-    username: string;
-    comment: string;
-    isPositive: boolean;
+    author_username: string;
+    comment_text: string;
+    id: string;
     progres: number;
-    onVote: (isThumbsUp: boolean) => void;
+    onVote: (isThumbsUp: boolean, id: string) => void;
     finished: boolean;
 }
 
-export const IntegrationComment: React.FC<IntegrationCommentProps> = ({ username, comment, isPositive, progres, onVote, finished }) => {
+export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
+                                                                          author_username,
+                                                                          comment_text,
+                                                                          id,
+                                                                          progres,
+                                                                          onVote,
+                                                                          finished,
+                                                                      }) => {
     return (
-        <div className={styles.wrp}>
-            {!finished ? <div className={styles.usernameAndComment}>
-                <p className={styles.username}>{username}:</p>
-                {isPositive
-                    ? <p className={styles.positiveCommentText}>{comment}</p>
-                    : <p className={styles.negativeCommentText}>{comment}</p>
-                }
-            </div> : null}
-            <div className={styles.progressWrp}>
-                {finished ? <p className={styles.noComment}>Нет новых комментариев</p> : null}
-                <div className={styles.amountAndRewardWrp}>
-                    <p className={styles.amount}>{progres}/5</p>
-                    <div className={styles.rewardWrp}>
-                        <p className={styles.reward}>+100</p>
-                        <img src={coinIcon} width={12} height={12}/>
-                    </div>
-                </div>
-                <ProgressLine level={progres} color='blue'/>
+      <div className={styles.wrp}>
+          {!finished ? (
+            <div className={styles.usernameAndComment}>
+                <p className={styles.username}>{author_username}:</p>
+                <p className={styles.commentText}>{comment_text}</p>
             </div>
-            {!finished ? <div className={styles.thumbs}>
-                <button className={styles.thumbsUp} onClick={() => onVote(true)} />
-                <button className={styles.thumbsDown} onClick={() => onVote(false)} />
-            </div> : null}
-        </div>
-    )
-}
+          ) : <p className={styles.noComment}>Нет новых комментариев</p>}
+          <div className={styles.progressWrp}>
+              <div className={styles.amountAndRewardWrp}>
+                  <p className={styles.amount}>{progres}/5</p>
+                  <div className={styles.rewardWrp}>
+                      <p className={styles.reward}>+100</p>
+                      <img src={coinIcon} width={12} height={12} />
+                  </div>
+              </div>
+              <ProgressLine level={progres} color="blue" />
+          </div>
+
+          {!finished && (
+            <div className={styles.thumbs}>
+                <button className={styles.thumbsUp} onClick={() => onVote(true, id)} />
+                <button className={styles.thumbsDown} onClick={() => onVote(false, id)} />
+            </div>
+          )}
+      </div>
+    );
+};

@@ -7,9 +7,24 @@ import { useModal } from '../../../hooks';
 
 import s from './TopInfluencers.module.scss';
 import classNames from 'classnames';
+import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../../redux';
 
 export const TopInfluencers = () => {
   const { openModal, closeModal } = useModal();
+
+  const { data } = useGetTopProfilesQuery();
+  const topProfiles = data?.profiles || [];
+
+  const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
+
+
+
+  const userPosition = userProfileData && topProfiles
+    ? topProfiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
+    : -1;
+
+
+  const position = userPosition !== -1 ? userPosition + 1 : topProfiles.length!;
 
   return (
     <>
@@ -23,7 +38,7 @@ export const TopInfluencers = () => {
         <SliderSelect />
         <div className={s.contentChest}>
           <div className={s.chestText}>
-            <span className={classNames(s.infoName, s.text)}>#345</span>
+            <span className={classNames(s.infoName, s.text)}>{`#${position}`}</span>
             <div className={classNames(s.infoName, s.text)}>
               <span>Драгоценный сундук</span>
               <img src={chest} height={14} width={14} alt="chest" />
@@ -41,7 +56,7 @@ export const TopInfluencers = () => {
         <button className={classNames(s.buttonContainer, s.text)} onClick={() => openModal(MODALS.TOP_USERS)}>
           Смотреть список
         </button>
-        <TopUsers modalId={MODALS.TOP_USERS} onClose={() => closeModal(MODALS.TOP_USERS)}/>
+        <TopUsers modalId={MODALS.TOP_USERS} onClose={() => closeModal(MODALS.TOP_USERS)} />
       </section>
     </>
   );

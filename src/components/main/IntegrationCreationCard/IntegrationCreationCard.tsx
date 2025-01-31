@@ -11,36 +11,41 @@ interface CreatingIntegrationCardProps {
 }
 
 export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration }) => {
+  const dispatch = useDispatch();
   const initialTime = 3600;
   const [ timeLeft, setTimeLeft ] = useState(integration.time_left);
-  const dispatch = useDispatch();
+  const [ isExpired, setIsExpired ] = useState(false);
 
   const calculateProgress = () => ((initialTime - timeLeft) / initialTime) * 100;
 
   useEffect(() => {
     if (timeLeft <= 0) {
+      setIsExpired(true);
       dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
-      return;
     }
   }, [ timeLeft, dispatch ]);
 
   useEffect(() => {
-    console.log('creating interval');
     const timerId = setInterval(() => {
       setTimeLeft((prevTime) => Math.max(prevTime - 1, 0));
     }, 1000);
 
+    if (isExpired) {
+      clearInterval(timerId);
+    }
+
     return () => {
-      console.log('clear');
       clearInterval(timerId);
     };
-  }, []);
+  }, [ isExpired ]);
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
   };
+
+  if (isExpired) return null;
 
   return (
     <div className={s.integration}>

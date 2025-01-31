@@ -17,15 +17,20 @@
     }
 
     .statsUnderTitle {
+        width: 225px;
         display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
         align-self: center;
         gap: 5px;
         margin-top: 5px;
 
         .statWrp {
+            align-items: baseline;
             display: flex;
-            align-items: center;
-            gap: 3px;   
+            //align-items: center;
+            gap: 3px;
 
             height: fit-content;
             padding: 5px;

@@ -2,7 +2,7 @@ import styles from "./Header.module.scss"
 import CoinIcon from "../../assets/icons/coin.svg"
 import AvatarIcon from "../../assets/icons/new-avatar.svg"
 import FireIcon from "../../assets/icons/avatar-fire.svg"
-import SubscribersIcon from "../../assets/images/subscribers.png"
+import SubscribersIcon from "../../assets/icons/subscribers.png"
 import { useGetCurrentUserProfileInfoQuery } from '../../redux';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../constants'
