@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { ShopLayout } from '../../layout/ShopLayout/ShopLayout';
 import { ItemsTab, SkinTab } from '../../components';
 import { useGetShopItemsQuery } from '../../redux/api/shop/api';
@@ -33,12 +33,12 @@ const StorePage: FC = () => {
 
   const items = shop?.items.filter(item => !inventory?.items.map(_item => _item.name).includes(item.name));
 
+
+
   const refetch = () => {
     refetchInventory();
     refetchShop();
   };
-
-  console.log(shop?.items)
 
   return (
     <ShopLayout mode="shop" onItemCategoryChange={setShopCategory} onItemQualityChange={setItemsQuality}>
@@ -47,6 +47,7 @@ const StorePage: FC = () => {
       ) : !shopCategory || !itemsQuality ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
       ) : shopCategory?.title !== 'Вы' ? (
+
         <ItemsTab shopCategory={shopCategory} itemsQuality={itemsQuality} shopItems={items} refetchFn={refetch} />
       ) : (
         <SkinTab mode="shop" />

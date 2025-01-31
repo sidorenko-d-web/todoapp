@@ -1,8 +1,7 @@
 import { FC } from 'react';
-import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
-import { useGetShopSkinsQuery } from '../../../redux/api/shop/api';
 import { ShopSkinCard } from '../ShopSkinCard/ShopSkinCard';
 import styles from './SkinTab.module.scss';
+import { useGetShopSkinsQuery, useGetInventorySkinsQuery} from '../../../redux';
 
 interface Props {
   mode: 'shop' | 'inventory';
@@ -13,7 +12,7 @@ export const SkinTab: FC<Props> = ({ mode }) => {
 
   const { data: inventory } = useGetInventorySkinsQuery();
 
-const skinsData = shop?.skins.filter(item => inventory?.skins.findIndex(_item => _item.id === item.id) === -1)
+  let skinsData = shop?.skins.filter(item => inventory?.skins.findIndex(_item => _item.id === item.id) === -1)
 
   let skins;
 

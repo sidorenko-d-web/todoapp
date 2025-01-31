@@ -34,7 +34,7 @@ export const InventoryCard: FC<Props> = ({
 }) => {
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const { refetch } = useGetCurrentUserProfileInfoQuery();
-  const { data } = useGetShopItemsQuery({ level: item.level + 1, name: item.name });
+  const { data } = useGetShopItemsQuery({ level: item.level === 50? 50 : item.level + 1, name: item.name });
 
   const handleBuyItem = async () => {
     try {
@@ -43,7 +43,7 @@ export const InventoryCard: FC<Props> = ({
         refetchAll();
         refetch();
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
@@ -152,13 +152,17 @@ export const InventoryCard: FC<Props> = ({
           <p>Прокачайте основной предмет</p>
           <img src={LockIcon} alt="" />
         </div>
-      ) : disabled ? (
+      ) : item.level === 50 ? <div className={styles.disabledUpgradeActions}>
+        <img src={LockIcon} alt="" />
+        <p>Достигнут макс. уровень</p>
+        <img src={LockIcon} alt="" />
+      </div> : disabled ? (
         <button className={styles.disabledActions}>
           <p>Активировать</p>
         </button>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
-          <button onClick={handleBuyItem}>
+          <button disabled={item.level === 50} onClick={handleBuyItem}>
             {isLoading ? (
               <p>loading</p>
             ) : (

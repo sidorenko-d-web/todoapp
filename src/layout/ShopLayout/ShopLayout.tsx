@@ -1,6 +1,6 @@
 import { PropsWithChildren, useEffect, useState, type Dispatch, type FC, type SetStateAction } from 'react';
 import styles from './ShopLayout.module.scss';
-import { useGetInventoryBoostQuery } from '../../redux/api/inventory/api';
+import { useGetInventoryBoostQuery, useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
 import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
 import { AppRoute } from '../../constants';
 import ArrowLeftIcon from '../../assets/icons/arrow-left.svg';
@@ -42,6 +42,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const [shopCategory, setShopCategory] = useState(shopItemCategories[0]);
   const [itemsQuality, setItemsQuality] = useState(shopItemQualities[0]);
 
+  const { data: inventory, isSuccess, isFetching } = useGetInventoryItemsQuery({ item_category: shopCategory.value as TypeItemCategory });
+
   useEffect(() => {
     onItemCategoryChange(shopCategory as TypeTab<TypeItemCategory>);
     onItemQualityChange(itemsQuality as TypeTab<TypeItemQuality>);
@@ -49,12 +51,36 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const navigate = useNavigate();
 
+  const shopQualityTabs =
+    isSuccess && !isFetching && inventory && inventory?.items.findIndex(item => item.level === 50) !== -1
+      ? inventory?.items.findIndex(item => item.level === 50 && item.name.includes('Prem')) !== -1 ? shopItemQualities : shopItemQualities.slice(0, 2)
+      : shopItemQualities.slice(0, 1);
+  console.log(inventory?.items);
+
+  const inventoryQualityTabs = isSuccess ? (inventory?.items.find(item => item.name.includes('Pro')) ? shopItemQualities :
+    inventory?.items.find(item => item.name.includes('Prem')) ? shopItemQualities.slice(0, 2) : shopItemQualities.slice(0, 1)) : shopItemQualities.slice(0, 1)
+
+    const handleShop = () => {
+      setItemsQuality(shopItemQualities[0])
+      navigate(AppRoute.Shop)
+    }
+    const handleInventory = () => {
+      setItemsQuality(shopItemQualities[0])
+      
+      navigate(AppRoute.ShopInventory)
+    }
+
+
+useEffect(() => {
+  setItemsQuality(shopItemQualities[0])
+}, [shopCategory])
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.titleWrapper}>
         <button
           className={styles.linkBack}
-          onClick={() => navigate(AppRoute.Shop)}
+          onClick={handleShop}
           style={{ opacity: mode === 'inventory' ? 1 : 0 }}
         >
           <img src={ArrowLeftIcon} />
@@ -82,7 +108,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         </div>
         <button
           className={styles.linkInventory}
-          onClick={() => navigate(AppRoute.ShopInventory)}
+          onClick={handleInventory}
           style={{ opacity: mode === 'shop' ? 1 : 0 }}
         >
           <img src={InventoryBox} />
@@ -97,10 +123,10 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
               itemsQuality.title === 'Эконом'
                 ? 'tabItemSelectedBlue'
                 : itemsQuality.title === 'Премиум'
-                ? 'tabItemSelectedPurple'
-                : 'tabItemSelectedRed'
+                  ? 'tabItemSelectedPurple'
+                  : 'tabItemSelectedRed'
             }
-            tabs={mode === 'inventory' ? shopItemQualities: [shopItemQualities[0]]}
+            tabs={mode === 'inventory' ? inventoryQualityTabs : shopQualityTabs}
             currentTab={itemsQuality.title}
             onChange={setItemsQuality}
           />
@@ -111,3 +137,4 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     </div>
   );
 };
+
