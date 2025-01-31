@@ -43,7 +43,7 @@ export const SliderSelect = () => {
   return (
     <div className={s.sliderContainer}>
       <Slider {...settings}>
-        {topProfiles.map(profile => (
+        {topProfiles.map((profile, index) => (
           <Link
             draggable={false}
             to={`/profile/${profile.id}`}
@@ -53,7 +53,7 @@ export const SliderSelect = () => {
             <div className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
               <div className={s.card}>
                 <div className={s.infoRang}>
-                  <span className={s.seat}>#12</span>
+                  <span className={s.seat}>{`#${index+1}`}</span>
                   { /*profile.fire true !== undefined &&*/ (
                     <div className={s.fireIcon}>
                       <img src={fire} alt="fire" />
