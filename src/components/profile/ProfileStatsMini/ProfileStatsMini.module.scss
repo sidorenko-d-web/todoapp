@@ -1,50 +1,55 @@
 @use '../../../assets/styles/index.scss' as var;
 
 .wrp {
-    width: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  &.justifyCenter {
+    justify-content: center;
+  }
+
+  .toCenterStats {
+    width: 40px;
+    height: 40px;
+  }
+
+  .statsWrp {
     display: flex;
-    justify-content: space-between;
-    .toCenterStats {
-        width: 40px;
-        height: 40px;
+    gap: 5px;
+    align-items: end;
+
+    .statWrp {
+      height: fit-content;
+      border-radius: 10px;
+      background-color: var.$color-badge-bg;
+      display: flex;
+      padding: 4px;
+      padding-left: 7px;
+      gap: 2px;
+      justify-content: center;
+      align-items: center;
+
+      .stat {
+        margin: 0;
+        padding: 0;
+        font-weight: 500;
+        font-size: 14px;
+      }
     }
+  }
 
-    .statsWrp {
-        display: flex;
-        gap: 5px;
-        align-items: end;
+  .wardrobeButton {
+    height: 40px;
+    width: 40px;
+    border-radius: 10px;
+    background-color: var.$color-primary;
 
-        .statWrp {
-            height: fit-content;
-            border-radius: 10px;
-            background-color: var.$color-badge-bg;
-            display: flex;
-            padding: 4px;
-            padding-left: 7px;
-            gap: 2px;
-            justify-content: center;
-            align-items: center;
-    
-            .stat {
-                margin: 0;
-                padding: 0;
-                font-weight: 500;
-                font-size: 14px;
-            }
-        }
-    }
-
-    .wardrobeButton {
-        height: 40px;
-        width: 40px;
-        border-radius: 10px;
-        background-color: var.$color-primary;
-
-        border: none;
-        background-image: url('../../../assets/icons/wardrobe.svg');
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
-        background-size: 60%;
-    }
+    border: none;
+    background-image: url('../../../assets/icons/wardrobe.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-size: 60%;
+  }
 }

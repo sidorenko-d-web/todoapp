@@ -12,12 +12,13 @@ import { StreakDay } from './StreakDay';
 
 interface StreakCardProps {
   streakCount: number;
-  freezeCount: number;
-  days: { day: number; type: DayType }[];
-  progress: number;
+  freezeCount?: number;
+  days?: { day: number; type: DayType }[];
+  progress?: number;
+  onlyStreak?: boolean;
 }
 
-export const StreakCard: React.FC<StreakCardProps> = ({ streakCount, freezeCount, days, progress }) => {
+export const StreakCard: React.FC<StreakCardProps> = ({ streakCount, freezeCount, days, progress, onlyStreak }) => {
   return (
     <div className={styles.wrp}>
       <div className={styles.header}>
@@ -26,35 +27,39 @@ export const StreakCard: React.FC<StreakCardProps> = ({ streakCount, freezeCount
 
           <div className={styles.title}>
             <h2 className={styles.daysInARow}>{streakCount} дней в блоге!</h2>
-            <div className={styles.freezeCount}>
+            {!onlyStreak && <div className={styles.freezeCount}>
               <span>{freezeCount}</span>
               <img src={snowflake} />
-            </div>
+            </div>}
           </div>
         </div>
         <div className={styles.fire} />
 
       </div>
 
-      <div className={styles.streakDays}>
-        {days.map(({ day, type }, index) => (
-          <StreakDay key={day} dayNumber={day} type={type} weekIndex={index} />
-        ))}
-      </div>
+      {!onlyStreak && (
+        <>
+          {days && <div className={styles.streakDays}>
+            {days.map(({ day, type }, index) => (
+              <StreakDay key={day} dayNumber={day} type={type} weekIndex={index} />
+            ))}
+          </div>}
 
 
-      <div className={styles.progressContainer}>
-        <div className={`${styles['progressBarTextWrp']} ${styles['progressText']}`}>
-          <span>{progress}/30 дней</span>
-          <span className={styles.reward}>
+          <div className={styles.progressContainer}>
+            <div className={`${styles['progressBarTextWrp']} ${styles['progressText']}`}>
+              <span>{progress}/30 дней</span>
+              <span className={styles.reward}>
             Легендарный сундук
             <div className={styles.chestImgContainer}>
               <img src={chestIcon} className={styles.chestImg} />
             </div>
           </span>
-        </div>
-        <ProgressLine level={3} color='red' />
-      </div>
+            </div>
+            <ProgressLine level={3} color="red" />
+          </div>
+        </>
+      )}
     </div>
   );
 };

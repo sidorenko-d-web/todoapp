@@ -1,26 +1,27 @@
 @use '../../../assets/styles/index.scss' as var;
 
 .profileStats {
-    background-color: var.$color-card-bg;
-    padding: 10px;
-    border-radius: 12px;
-    font-family: Arial, sans-serif;
-    display: grid;
-    gap: 10px;
-    font-size: 14px;
-  
-    .stat {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-  
-      .label {
-        color: var.$color-text-semi-transparent;
-      }
-  
-      .value {
-        color: #fff;
-      }
+  width: 100%;
+  background-color: var.$color-card-bg;
+  padding: 10px;
+  border-radius: 12px;
+  font-family: Arial, sans-serif;
+  display: grid;
+  gap: 10px;
+  font-size: 14px;
+
+  .stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .label {
+      color: var.$color-text-semi-transparent;
+    }
+
+    .value {
+      color: #fff;
     }
   }
+}
   

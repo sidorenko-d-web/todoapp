@@ -1,6 +1,7 @@
 @use '../../../assets/styles/index.scss' as var;
 
 .wrp {
+    width: 100%;
     display: flex;
     gap: 10px;
     height: 118px;
