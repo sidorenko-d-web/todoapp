@@ -1,12 +1,12 @@
 import BottomModal from '../../../components/shared/BottomModal/BottomModal';
 import { MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
-import BgLightBlue from '../../../assets/images/bg-light-blue.svg';
-import BgRedBlue from '../../../assets/images/bg-light-red.svg';
-import BgRedPurple from '../../../assets/images/bg-light-purple.svg';
-import FireBlue from '../../../assets/images/fire-blue.svg';
-import FireRed from '../../../assets/images/fire-red.svg';
-import FirePurple from '../../../assets/images/fire-purple.svg';
+import BgLightBlue from '../../../assets/icons/bg-light-blue.svg';
+import BgRedBlue from '../../../assets/icons/bg-light-red.svg';
+import BgRedPurple from '../../../assets/icons/bg-light-purple.svg';
+import FireBlue from '../../../assets/icons/fire-blue.svg';
+import FireRed from '../../../assets/icons/fire-red.svg';
+import FirePurple from '../../../assets/icons/fire-purple.svg';
 import styles from './DaysInARowModal.module.scss';
 import SnowflakeIcon from '../../../assets/icons/snowflake-icon.svg';
 import FireIcon from '../../../assets/icons/fire-icon.svg';

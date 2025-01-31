@@ -9,8 +9,8 @@ interface LanguageSelectProps {
 }
 
 const LANGUAGES = [
-  { id: 'en', flag: '/us-flag.svg', label: 'English language' },
-  { id: 'ru', flag: '/ru-flag.svg', label: 'Русский язык' },
+  { id: 'en', flag: '../../../src/assets/icons/us-flag.svg', label: 'English language' },
+  { id: 'ru', flag: '../../../src/assets/icons/ru-flag.svg', label: 'Русский язык' },
 ];
 
 export const LanguageSelect = ({ selectedLanguage, onLanguageSelect, onContinue }: LanguageSelectProps) => {

@@ -56,3 +56,24 @@ export interface IBuyItemRequest {
   payment_method: 'internal_wallet';
   id: string;
 }
+
+export interface IAchievementBoost {
+  income_per_second: string;
+}
+
+export interface IAchievement {
+  id: string;
+  name: string;
+  company_name: string;
+  total_integrations: number;
+  level: number;
+  boost: IAchievementBoost;
+  image_url: string;
+  is_unlocked: boolean;
+  unlocked_at: string | null; 
+}
+
+export interface IAchievementsResponse {
+  count: number;
+  achievements: IAchievement[];
+}

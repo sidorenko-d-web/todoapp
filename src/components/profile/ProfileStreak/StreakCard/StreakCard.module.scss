@@ -1,6 +1,7 @@
 @use '../../../../assets/styles/index.scss' as var;
 
 .wrp {
+    width: 100%;
     background-color: var.$color-card-bg;
     padding: 10px;
     border-radius: 12px;
@@ -20,7 +21,7 @@
             padding: 10px;
             background-color: var.$footer-bg;
             width: 65px;
-            background-image: url('../../../../assets/images/fire-red.svg');
+            background-image: url('../../../../assets/icons/fire-red.svg');
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;

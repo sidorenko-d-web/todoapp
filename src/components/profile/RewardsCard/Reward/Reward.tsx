@@ -37,7 +37,7 @@ const Reward: React.FC<RewardProps> = ({ name, stars, medal, isActive }) => {
             </div>
 
             <div className={styles.status}>
-                <img src={isActive ? trophyActive : trophyInactive} alt="Trophy icon" className={styles.trophy} />
+                <img src={isActive ? trophyActive : trophyInactive} className={styles.trophy} />
                 <span className={isActive ? styles.activeText : styles.inactiveText}>
                     {isActive ? "Активно!" : "Не активно"}
                 </span>
