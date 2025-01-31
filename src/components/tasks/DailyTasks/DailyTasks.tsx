@@ -1,20 +1,16 @@
 import { TaskCard } from '../';
 import giftIcon from '../../../assets/icons/gift.svg';
+import { MODALS } from '../../../constants';
+import { useModal } from '../../../hooks';
 
 import s from '../styles.module.scss';
-import { useState } from 'react';
 import { ModalDailyTasks } from './ModalDailyTasks';
 
 export const DailyTasks = () => {
+  const { openModal, closeModal } = useModal();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleOpenGift = () => {
+    openModal(MODALS.DAILY_TASKS);
   };
 
   return (
@@ -30,10 +26,13 @@ export const DailyTasks = () => {
           type={'progress'}
           icon={giftIcon}
           buttonText={'Открыть подарок'}
-          onButtonClick={handleOpenModal} // Передаем обработчик клика
+          onClick={handleOpenGift}
         />
       </div>
-      {isModalOpen && <ModalDailyTasks onClose={handleCloseModal} />}
+      <ModalDailyTasks
+        modalId={MODALS.DAILY_TASKS}
+        onClose={() => closeModal(MODALS.DAILY_TASKS)}
+      />
     </section>
-  )
-}
+  );
+};
