@@ -4,7 +4,7 @@ import {
   CreateIntegrationRequestDTO,
   IntegrationResponseDTO,
   IntegrationsQueryRequestDTO,
-  IntegrationsResponseDTO,
+  IntegrationsResponseDTO, UnansweredIntegrationCommentDTO,
 } from '.';
 
 export const integrationsApi = createApi({
@@ -23,6 +23,19 @@ export const integrationsApi = createApi({
         url: '/integrations',
         method: 'POST',
         body,
+      }),
+    }),
+    postCommentIntegrations: builder.mutation<boolean, { commentId: string; isHate: boolean }>({
+      query: ({ commentId, isHate }) => ({
+        url: `/integrations/comments/${commentId}`,
+        method: 'POST',
+        body: { is_hate: isHate },
+      }),
+    }),
+    getUnansweredIntegrationComment: builder.query<UnansweredIntegrationCommentDTO, string>({
+      query: (integrationId) => ({
+        url: `/integrations/comments/${integrationId}`,
+        method: 'GET',
       }),
     }),
     getIntegrations: builder.query<IntegrationsResponseDTO, IntegrationsQueryRequestDTO | void>({
@@ -56,4 +69,6 @@ export const {
   useCreateIntegrationMutation,
   useGetIntegrationsQuery,
   useGetAllIntegrationsQuery,
+  usePostCommentIntegrationsMutation,
+  useGetUnansweredIntegrationCommentQuery,
 } = integrationsApi;
