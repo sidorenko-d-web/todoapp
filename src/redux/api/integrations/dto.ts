@@ -30,7 +30,18 @@ export type IntegrationsQueryRequestDTO = {
   limit?: number;
 }
 
+export type UnansweredIntegrationCommentDTO = {
+  id: string,
+  author_username: string,
+  comment_text: string,
+}
+
+
 export type CreateIntegrationRequestDTO = {
   campaign_id: string;
   content_type: string
+}
+
+export type CreateIntegrationCommentDTO = {
+  is_hate: boolean
 }
