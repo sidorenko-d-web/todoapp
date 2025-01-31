@@ -23,7 +23,7 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
       <section className={s.component}>
         <ul className={s.list}>
           {INFO_TEXT.map((item) => {
-            const isUnlocked = 10000 >= item.userCount;
+            const isUnlocked = usersCount >= item.userCount;
 
             return (
               <li key={item.id} className={s.wrapperList}>
