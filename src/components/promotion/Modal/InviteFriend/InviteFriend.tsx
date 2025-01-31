@@ -5,6 +5,7 @@ import arrow from '../../../../assets/icons/arrow.svg';
 import BottomModal from '../../../shared/BottomModal/BottomModal.tsx';
 import s from './InviteFriend.module.scss';
 import classNames from 'classnames';
+import { useGetCurrentUserProfileInfoQuery } from '../../../../redux/index.ts';
 
 interface InviteFriendProps {
   modalId: string;
@@ -15,11 +16,15 @@ export const InviteFriend: FC<InviteFriendProps> = ({
                                                       modalId,
                                                       onClose,
                                                     }: InviteFriendProps) => {
+
+  
+  const {data} = useGetCurrentUserProfileInfoQuery();
+
   const inviteTG = () => {
     const shareData = {
       title: 'Приглашение в MiniApp',
       text: 'Присоединяйся ко мне в MiniApp и получи бонусы!',
-      url: 'https://t.me/STR_Viktor',
+      url: `https://t.me/wished_sentry_robot?start=${data?.id}`,
     };
 
     if (navigator.share) {
@@ -28,6 +33,8 @@ export const InviteFriend: FC<InviteFriendProps> = ({
       window.open(`https://t.me/share/url?url=${encodeURIComponent(shareData.url)}&text=${encodeURIComponent(shareData.text)}`, '_blank');
     }
   }
+
+
 
   return (
     <BottomModal modalId={modalId} title={'Пригласить друга'} onClose={onClose}>
@@ -52,8 +59,8 @@ export const InviteFriend: FC<InviteFriendProps> = ({
           приглашать ещё<br /> кого-то, вы
           также будете получать бонус.</p>
         <div className={s.blockInput}>
-          <input type="text" value="https://t.me/bissektr1sa" readOnly className={s.inputLink} />
-          <button onClick={() => navigator.clipboard.writeText('https://t.me/bissektr1sa')} className={s.copyButton}>
+          <input type="text" value={`https://t.me/wished_sentry_robot?start=${data?.id}`} readOnly className={s.inputLink} />
+          <button onClick={() => navigator.clipboard.writeText(`https://t.me/wished_sentry_robot?start=${data?.id}`)} className={s.copyButton}>
             <img src={copy} height={14} width={14} alt="copy" />
           </button>
         </div>
