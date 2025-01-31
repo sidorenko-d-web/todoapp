@@ -7,7 +7,7 @@ import user from '../../../../assets/icons/user.svg';
 import close from '../../../../assets/icons/close.svg';
 import classNames from 'classnames';
 import BottomModal from '../../../shared/BottomModal/BottomModal.tsx';
-import { useGetTopProfilesQuery } from '../../../../redux/index.ts';
+import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../../../redux/index.ts';
 import { Link } from 'react-router-dom';
 
 interface InviteFriendProps {
@@ -16,29 +16,40 @@ interface InviteFriendProps {
 }
 
 export const TopUsers: FC<InviteFriendProps> = ({
-                                                  modalId,
-                                                  onClose,
-                                                }: InviteFriendProps) => {
+  modalId,
+  onClose,
+}: InviteFriendProps) => {
   const { data } = useGetTopProfilesQuery();
   const topProfiles = data?.profiles || [];
+
+  const { data: userProfileData} = useGetCurrentUserProfileInfoQuery();
+
+
+
+  const userPosition = userProfileData && topProfiles
+    ? topProfiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
+    : -1;
+
+
+  const position = userPosition !== -1 ? userPosition + 1 : topProfiles.length!;
 
   // TODO: Раскомментировать когда на бэке будет vip данные
   return (
     <BottomModal modalId={modalId} title={'Топ 10 000 инфлюенсеров'} onClose={onClose} titleIcon={cup}>
       <ul className={classNames(s.subscribers, s.ulBlock)}>
         <li className={s.listBadge}>
-            <span className={s.badge}>
-             #345 <img src={clanRed} height={14} width={14} alt={'clanRed'} />
-            </span>
+          <span className={s.badge}>
+            {`#${position}`} <img src={clanRed} height={14} width={14} alt={'clanRed'} />
+          </span>
         </li>
         <li className={s.listBadge}>
-            <span className={classNames(s.badgeText, s.text)}>
-              Осталось 3 д.
-            </span>
+          <span className={classNames(s.badgeText, s.text)}>
+            Осталось 3 д.
+          </span>
         </li>
       </ul>
       <ul className={classNames(s.ulBlock, s.blogUsers)}>
-        {topProfiles.map(profile => (
+        {topProfiles.map((profile, index) => (
           <Link to={`/profile/${profile.id}`} key={profile.id} className={s.listUser}>
             <div
               className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
@@ -63,7 +74,7 @@ export const TopUsers: FC<InviteFriendProps> = ({
                 </ul>
               </div>
               <div className={s.numUser}>
-                #122 <img src={clanRed} height={14} width={14} alt={'clanRed'} />
+                {`${index+1}`}<img src={clanRed} height={14} width={14} alt={'clanRed'} />
               </div>
             </div>
             <div className={classNames(s.cardBox, {/*{ [s.vipCardBox]: profile.vip }*/ })}>
