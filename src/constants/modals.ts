@@ -11,5 +11,7 @@ export const MODALS = {
   TASK_COMPLETED: 'taskCompleted',
   TASK_CHEST: 'taskChest',
   STRANGER_PROFILE: 'strangerProfile',
+  DAILY_TASKS: 'daily-tasks-modal'
 };
+
 
