@@ -14,6 +14,7 @@ import { useGetCurrentUsersReferralsQuery } from '../../../redux';
 export const IncreaseIncome = () => {
   const [showAll, setShowAll] = useState(false);
   const { openModal, closeModal } = useModal();
+  
   const { data, isLoading, error } = useGetCurrentUsersReferralsQuery();
 
 
@@ -54,6 +55,7 @@ export const IncreaseIncome = () => {
         {isLoading && <p>Загрузка данных о рефералах...</p>}
 
         {error && <p>Не удалось загрузить данные о рефералах</p>}
+        
         {data && <>
           {data.referrals.length > 0 ?
             <div className={s.referralsList}>
