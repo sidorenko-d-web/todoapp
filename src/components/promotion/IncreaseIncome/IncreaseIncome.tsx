@@ -6,9 +6,8 @@ import s from './IncreaseIncome.module.scss';
 import classNames from 'classnames';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants';
-import { InviteFriend } from '../Modal';
+import { InviteFriend, UserReferrals } from '../Modal';
 
-import { UserReferrals } from '../Modal/UsersReferrals/UsersReferrals';
 import { ReferralCard } from '../ReferralCard/ReferralCard';
 import { useGetCurrentUsersReferralsQuery } from '../../../redux';
 
