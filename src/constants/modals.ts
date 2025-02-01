@@ -7,5 +7,6 @@ export const MODALS = {
   SUCCESSFULLY_SUBSCRIBED: 'successfullySubscribed',
   DAYS_IN_A_ROW: 'daysInARow',
   STRANGER_PROFILE: 'strangerProfile',
-  USERS_REFERRALS: 'usersReferrals'
+  USERS_REFERRALS: 'usersReferrals',
+  DAILY_TASKS: 'daily-tasks-modal'
 };
