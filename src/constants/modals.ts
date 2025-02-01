@@ -10,4 +10,6 @@ export const MODALS = {
   GET_REWARD: 'getReward',
   TASK_COMPLETED: 'taskCompleted',
   TASK_CHEST: 'taskChest',
+  STRANGER_PROFILE: 'strangerProfile',
 };
+

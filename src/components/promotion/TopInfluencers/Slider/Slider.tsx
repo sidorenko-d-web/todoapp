@@ -7,8 +7,8 @@ import s from './Slider.module.scss';
 
 import face from '../../../../assets/icons/face.svg';
 import fire from '../../../../assets/icons/fire-icon.svg';
-import star from '../../../../assets/icons/star.svg';
-import { CARDS } from './constantSlider.ts';
+import { useGetTopProfilesQuery } from '../../../../redux/index.ts';
+import { Link } from 'react-router-dom';
 
 export const SliderSelect = () => {
   const settings = {
@@ -34,37 +34,45 @@ export const SliderSelect = () => {
     ],
   };
 
+  const { data } = useGetTopProfilesQuery();
+  const topProfiles = data?.profiles;
+
+  if (!topProfiles) return null
+
+  // TODO: Раскомментировать когда на бэке будет vip данные
   return (
     <div className={s.sliderContainer}>
       <Slider {...settings}>
-        {CARDS.map(card => (
-          <div
-            key={card.id}
+        {topProfiles.map((profile, index) => (
+          <Link
+            draggable={false}
+            to={`/profile/${profile.id}`}
+            key={profile.id}
             className={s.cardWrapper}
           >
-            <div className={classNames(s.cardBlock, {[s.vipCard]: card.vip})}>
+            <div className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
               <div className={s.card}>
                 <div className={s.infoRang}>
-                  <span className={s.seat}>{card.seat}</span>
-                  {card.fire !== undefined && (
+                  <span className={s.seat}>{`#${index+1}`}</span>
+                  { /*profile.fire true !== undefined &&*/ (
                     <div className={s.fireIcon}>
                       <img src={fire} alt="fire" />
-                      <span>{card.fire}</span>
+                      <span>6</span>
                     </div>
                   )}
-              </div>
+                </div>
                 <div className={s.middleRow}>
                   <img src={face} alt="face" />
-              </div>
-                {card.vip && (
-                  <div className={s.vip}>
-                    <img src={star} alt="star" />
-                    <span>VIP</span>
-                  </div>
-                )}
+                </div>
+                {/*{profile.vip && (*/}
+                {/*  <div className={s.vip}>*/}
+                {/*    <img src={star} alt="star" />*/}
+                {/*    <span>VIP</span>*/}
+                {/*  </div>*/}
+                {/*)}*/}
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </Slider>
     </div>

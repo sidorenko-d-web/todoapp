@@ -1,5 +1,5 @@
 import { TaskCard } from '../TaskCard';
-import magicBallIcon from '/magic-ball.png';
+import magicBallIcon from '../../../assets/icons/magic-ball.png';
 import chestIcon from '../../../assets/icons/chest-purple.svg';
 
 import s from '../styles.module.scss';
