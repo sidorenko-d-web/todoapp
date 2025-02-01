@@ -18,12 +18,31 @@
 
 .badge {
   display: flex;
+  align-items: center;
   gap: 5px;
   border-radius: 10px;
   font-size: 14px;
   line-height: 100%;
   color: white;
 }
+
+.iconWrapper {
+  position: relative; 
+  display: inline-block;
+}
+
+.level {
+  position: absolute;
+  top: -3px;
+  left: 15px;
+  font-size: 10px;
+  color: var.$color-text-semi-transparent;
+  padding: 1px 4px;
+  border-radius: 5px;
+  line-height: 1;
+  white-space: nowrap;;
+}
+
 
 .textName {
   color: var.$color-text-semi-transparent;
@@ -86,13 +105,13 @@
   color: var.$color-white;
 }
 
-.level {
-  font-size: 10px;
-  position: absolute;
-  top: -3px;
-  right: -20px;
-  color: var.$color-text-semi-transparent
-}
+// .level {
+//   font-size: 10px;
+//   position: absolute;
+//   top: -13px;
+//   right: -1;
+//   color: var.$color-text-semi-transparent
+// }
 
 .noReferrals {
   color: var.$color-text-super-transparent;

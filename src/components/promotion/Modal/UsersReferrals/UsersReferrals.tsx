@@ -16,7 +16,9 @@ interface UserReferralsProps {
 
 
 export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }: UserReferralsProps) => {
-    
+
+   
+
     const { data, isLoading, error } = useGetCurrentUsersReferralsQuery();
 
 
@@ -26,14 +28,19 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
             <div className={s.userCardBottom} style={{ justifyContent: 'center', margin: '10px' }}>
                 <div className={s.userCardBonus} style={{ background: '#212129', padding: '4px 6px', borderRadius: '35px' }}>
                     <span className={s.badge}>
-                        +120 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
-                        <span className={classNames(s.level, s.text)}>1ур.</span>
+                        +120 <div className={s.iconWrapper}>
+                            <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+                            <span className={s.level}>1ур.</span>
+                        </div>
                     </span>
 
                 </div>
                 <div className={s.userCardBonus} style={{ background: '#212129', padding: '4px 6px', borderRadius: '35px' }}>
                     <span className={s.badge}>
-                        +40 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+                        +40 <div className={s.iconWrapper}>
+                            <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+                            <span className={s.level}>2ур.</span>
+                        </div>
                     </span>
                     <span className={classNames(s.level, s.text)}>2ур.</span>
                 </div>
@@ -47,13 +54,13 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
             {data &&
                 <>
                     {data.referrals.map((referral: any, index: number) => (
-                        <ReferralCard position={index} name={referral.name} total_invited={referral.total_invited} />
+                        <ReferralCard position={index+1} name={referral.name} total_invited={referral.total_invited} />
                     ))}
 
                     {data.referrals.length === 0 && <p className={s.noReferrals}>У вас пока нет рефералов</p>}
                 </>
 
-                
+
             }
         </BottomModal>
     )
