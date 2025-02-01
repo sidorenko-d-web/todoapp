@@ -1,4 +1,4 @@
-@use '../../../assets/styles/index.scss' as var;
+@use    '../../../../assets/styles/index.scss' as var;
 
 .headerIncrease {
   width: 100%;
@@ -9,6 +9,7 @@
   font-size: 14px;
   font-weight: 500;
   margin: 10px 0 0;
+  color: white;
 }
 
 .listBadge {
@@ -21,6 +22,7 @@
   border-radius: 10px;
   font-size: 14px;
   line-height: 100%;
+  color: white;
 }
 
 .textName {
@@ -66,8 +68,6 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
-
 }
 
 .userCard {
@@ -160,4 +160,8 @@
   border-radius: 8px;
   background: var.$color-dark-gray;
   border: 1px solid var.$color-dark-gray-stroke;
+}
+
+.statWrp {
+    
 }
