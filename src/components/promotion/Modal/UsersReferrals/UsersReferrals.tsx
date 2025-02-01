@@ -42,7 +42,6 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
                             <span className={s.level}>2ур.</span>
                         </div>
                     </span>
-                    <span className={classNames(s.level, s.text)}>2ур.</span>
                 </div>
 
             </div>
