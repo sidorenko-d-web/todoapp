@@ -1,16 +1,14 @@
-import { useState, useEffect } from 'react';
 import CentralModal from '../../../components/shared/CentralModal/CentralModal';
 import { MODALS } from '../../../constants/modals';
 import { useModal } from '../../../hooks';
 import styles from './GetRewardChestModal.module.scss';
-import BlueChest from '../../../assets/icons/chest-blue.svg';
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.svg';
 import integration from '../../../assets/icons/integration-white.svg';
 import snowflake from '../../../assets/icons/snowflake.svg';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
-import chestAnimation from '../../../assets/animations/kamen.json';
+import chestAnimation from '../../../assets/animations/kamen_fixed.json';
 import reward from '../../../assets/animations/reward.json';
 
 export default function GetRewardChestModal() {
