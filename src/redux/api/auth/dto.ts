@@ -1,7 +1,5 @@
 export type SignInDTO = {
   init_data: string,
-  ip: string,
-  country: string
 };
 
 export type SignInResponseDTO = {

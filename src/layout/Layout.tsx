@@ -1,23 +1,20 @@
-import { FC } from 'react';
 import { Footer } from '../components/Footer';
-import { Outlet } from 'react-router-dom';
-import styles from './Layout.module.scss'
+import { Outlet, useLocation } from 'react-router-dom';
+import styles from './Layout.module.scss';
 import { Header } from '../components/Header/';
 
-interface LayoutProps {
+const Layout = () => {
+  const location = useLocation();
 
-}
-
-const Layout: FC<LayoutProps> = ({}: LayoutProps) => {
-
+  const showHeader = !location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/);
 
   return (
     <div className={styles.wrp}>
-      <Header />
-      <main className={styles.content}>
-        <Outlet/>
+      {showHeader && <Header />}
+      <main className={styles.content + ' ' + (showHeader ? styles.withHeader : '')}>
+        <Outlet />
       </main>
-        <Footer/>
+      <Footer />
     </div>
   );
 };
