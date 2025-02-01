@@ -49,7 +49,11 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
                     {data.referrals.map((referral: any, index: number) => (
                         <ReferralCard position={index} name={referral.name} total_invited={referral.total_invited} />
                     ))}
+
+                    {data.referrals.length === 0 && <p className={s.noReferrals}>У вас пока нет рефералов</p>}
                 </>
+
+                
             }
         </BottomModal>
     )
