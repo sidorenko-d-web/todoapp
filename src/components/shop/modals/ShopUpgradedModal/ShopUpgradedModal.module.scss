@@ -1,4 +1,5 @@
 @use '../../../../assets/styles/abstracts/colors' as *;
+$timing: 1s;
 
 .images {
   width: 100%;
@@ -9,13 +10,12 @@
 
   .bgLight {
     position: absolute;
-    width: 60%;
+    width: 80%;
   }
 
   .itemImage {
     width: 60px;
     height: 60px;
-    background: $color-red;
     border: 2px solid $color-dark-gray-stroke;
     border-radius: 8px;
     position: relative;
@@ -23,6 +23,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    animation: img-scale-anim $timing forwards ease;
 
     svg {
       width: 24px;
@@ -51,20 +52,22 @@
     .purple {
       @extend .blue;
       background: $color-purple;
+      animation: bg-reveal-purple $timing * 0.8 forwards ease;
     }
     .red {
       @extend .blue;
       background: $color-red;
+      animation: img-reveal-red $timing * 0.8 forwards ease;
     }
   }
 
   .itemImagePurple {
     @extend .itemImage;
-    background: $color-purple;
+    animation: bg-reveal-purple $timing forwards ease, img-scale-anim $timing forwards ease;
   }
   .itemImageRed {
     @extend .itemImage;
-    background: $color-red;
+    animation: img-reveal-red $timing * 0.8 forwards ease, img-scale-anim $timing forwards ease;
   }
 }
 
@@ -108,5 +111,51 @@
       width: 14px;
       aspect-ratio: 14px;
     }
+  }
+}
+
+@keyframes img-scale-anim {
+  0% {
+    scale: 1;
+  }
+
+  70% {
+    scale: 1.25;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes bg-reveal-purple {
+  0% {
+    background-color: $color-primary;
+  }
+  40% {
+    background-color: $color-primary;
+  }
+  80% {
+    background-color: $color-purple;
+  }
+
+  100% {
+    background-color: $color-purple;
+  }
+}
+
+@keyframes img-reveal-red {
+  0% {
+    background-color: $color-purple;
+  }
+  40% {
+    background-color: $color-purple;
+  }
+
+  80% {
+    background-color: $color-red;
+  }
+
+  100% {
+    background-color: $color-red;
   }
 }

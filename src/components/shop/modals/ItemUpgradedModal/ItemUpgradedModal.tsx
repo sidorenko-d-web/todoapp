@@ -2,17 +2,18 @@ import styles from './ItemUpgradedModal.module.scss';
 import { MODALS } from '../../../../constants';
 import { useModal } from '../../../../hooks';
 import CentralModal from '../../../shared/CentralModal/CentralModal';
-import BlueLight from '../../../../assets/icons/bg-light-blue.svg';
-import PurpleLight from '../../../../assets/icons/bg-light-purple.svg';
-import RedLight from '../../../../assets/icons/bg-light-red.svg';
 import { IShopItem } from '../../../../redux';
 import Button from '../partials/Button';
 import ViewsIcon from '../../../../assets/icons/views.svg';
 import SubsIcon from '../../../../assets/icons/subscriber_coin.svg';
 import CoinIcon from '../../../../assets/icons/coin.svg';
 import BlueChest from '../../../../assets/icons/chest-blue.svg';
+import Chair1 from '../../../../assets/icons/chair-1.svg';
+import Chair2 from '../../../../assets/icons/chair-2.svg';
 // import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
+import Lottie from 'lottie-react';
+import { blueLight, purpleLight, redLight } from '../../../../assets/animations';
 
 export const ItemUpgradedModal = () => {
   const { closeModal, getModalState } = useModal();
@@ -34,15 +35,17 @@ export const ItemUpgradedModal = () => {
       modalId={MODALS.UPGRADED_ITEM}
     >
       <div className={styles.images}>
-        <img
-          src={isPrem ? PurpleLight : isPro ? RedLight : BlueLight}
-          className={clsx(styles.bgLight)}
-          alt="bg-light"
+        <Lottie
+          animationData={isPrem ? purpleLight : isPro ? redLight : blueLight}
+          loop={true}
+          className={styles.bgLight}
         />
         <div className={clsx(styles.itemImage, isPrem && styles.itemImagePurple, isPro && styles.itemImageRed)}>
-          <img src={state.args?.item.image_url} alt="item-image" />
+          {/* <img src={state.args?.item.image_url} alt="item-image" /> */}
+          <img src={Chair1} alt="item-image" className={styles.imageOld} />
+          <img src={Chair2} alt="item-image" className={styles.imageNew} />
           <p className={isPrem ? styles.purple : isPro ? styles.red : styles.blue}>
-            {state.args?.item.name.split(' ')[1]}
+            {state.args?.item.name.split(' ')[1] ?? 'bad status'}
           </p>
         </div>
       </div>

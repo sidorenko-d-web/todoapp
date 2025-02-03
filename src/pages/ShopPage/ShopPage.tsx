@@ -2,14 +2,14 @@ import { FC, useState } from 'react';
 import { ShopLayout } from '../../layout/ShopLayout/ShopLayout';
 import { ItemsTab, NewItemModal, SkinTab } from '../../components';
 import { useGetShopItemsQuery } from '../../redux/api/shop/api';
-import { TypeItemCategory, TypeItemQuality } from '../../redux';
+import { TypeItemCategory, TypeItemRarity } from '../../redux';
 import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
 
 type TypeTab<T> = { title: string; value: T };
 
 const StorePage: FC = () => {
   const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
-  const [itemsQuality, setItemsQuality] = useState<TypeTab<TypeItemQuality>>();
+  const [itemsRarity, setItemsQuality] = useState<TypeTab<TypeItemRarity>>();
 
   const {
     data: shop,
@@ -18,7 +18,7 @@ const StorePage: FC = () => {
   } = useGetShopItemsQuery({
     item_category: shopCategory?.value as TypeItemCategory,
     level: 1,
-    item_rarity: 'red',
+    item_rarity: itemsRarity?.value,
   });
 
   const {
@@ -42,10 +42,10 @@ const StorePage: FC = () => {
     <ShopLayout mode="shop" onItemCategoryChange={setShopCategory} onItemQualityChange={setItemsQuality}>
       {isShopFetching || isInventoryFetching ? (
         <p style={{ color: '#fff' }}>Loading...</p>
-      ) : !shopCategory || !itemsQuality ? (
+      ) : !shopCategory || !itemsRarity ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
       ) : shopCategory?.title !== 'Вы' ? (
-        <ItemsTab shopCategory={shopCategory} itemsQuality={itemsQuality} shopItems={items} refetchFn={refetch} />
+        <ItemsTab shopCategory={shopCategory} shopItems={items} refetchFn={refetch} />
       ) : (
         <SkinTab mode="shop" />
       )}

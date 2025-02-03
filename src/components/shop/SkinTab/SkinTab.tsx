@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { ShopSkinCard } from '../ShopSkinCard/ShopSkinCard';
 import styles from './SkinTab.module.scss';
-import { useGetShopSkinsQuery, useGetInventorySkinsQuery} from '../../../redux';
+import { useGetShopSkinsQuery, useGetInventorySkinsQuery } from '../../../redux';
 
 interface Props {
   mode: 'shop' | 'inventory';
@@ -12,7 +12,7 @@ export const SkinTab: FC<Props> = ({ mode }) => {
 
   const { data: inventory } = useGetInventorySkinsQuery();
 
-  let skinsData = shop?.skins.filter(item => inventory?.skins.findIndex(_item => _item.id === item.id) === -1)
+  let skinsData = shop?.skins.filter(item => inventory?.skins.findIndex(_item => _item.id === item.id) === -1);
 
   let skins;
 
@@ -47,7 +47,7 @@ export const SkinTab: FC<Props> = ({ mode }) => {
         </div>
       )}
 
-      {skins.upper_body && skins.upper_body.length > 0 && (
+      {skins?.upper_body && skins.upper_body.length > 0 && (
         <div className={styles.personCards}>
           <h2>Вверх</h2>
           {skins.upper_body?.map(item => (
@@ -56,7 +56,7 @@ export const SkinTab: FC<Props> = ({ mode }) => {
         </div>
       )}
 
-      {skins.entire_body && skins.entire_body.length > 0 && (
+      {skins?.entire_body && skins.entire_body.length > 0 && (
         <div className={styles.personCards}>
           <h2>Тело</h2>
           {skins.entire_body?.map(item => (
@@ -65,7 +65,7 @@ export const SkinTab: FC<Props> = ({ mode }) => {
         </div>
       )}
 
-      {skins.legs && skins.legs.length > 0 && (
+      {skins?.legs && skins.legs.length > 0 && (
         <div className={styles.personCards}>
           <h2>Низ</h2>
           {skins.legs?.map(item => (
@@ -74,7 +74,7 @@ export const SkinTab: FC<Props> = ({ mode }) => {
         </div>
       )}
 
-      {skins.feet && skins.feet.length > 0 && (
+      {skins?.feet && skins.feet.length > 0 && (
         <div className={styles.personCards}>
           <h2>Обувь</h2>
           {skins.feet?.map(item => (
@@ -82,7 +82,7 @@ export const SkinTab: FC<Props> = ({ mode }) => {
           ))}
         </div>
       )}
-      {skins.vip && skins.vip.length > 0 && (
+      {skins?.vip && skins.vip.length > 0 && (
         <div className={styles.personCards}>
           <h2 className={styles.vipTitle}>VIP скины</h2>
           {skins.vip?.map(item => (

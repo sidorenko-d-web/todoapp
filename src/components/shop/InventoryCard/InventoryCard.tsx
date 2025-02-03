@@ -5,8 +5,13 @@ import LockIconSvg from '../../../assets/icons/lock-closed';
 import ChestBlueIcon from '../../../assets/icons/chest-blue.svg';
 import ChestPurpleIcon from '../../../assets/icons/chest-purple.svg';
 import ChestRedIcon from '../../../assets/icons/chest-red.svg';
-import { useGetCurrentUserProfileInfoQuery, useGetShopItemsQuery, useUpgradeItemMutation } from '../../../redux';
-import { TypeItemQuality, IShopItem } from '../../../redux';
+import {
+  TypeItemRarity,
+  useGetCurrentUserProfileInfoQuery,
+  useGetShopItemsQuery,
+  useUpgradeItemMutation,
+} from '../../../redux';
+import { IShopItem } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.svg';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
@@ -20,7 +25,7 @@ interface Props {
   isBlocked?: boolean;
   isB?: boolean;
   refetchAll: () => void;
-  variant?: TypeItemQuality;
+  variant?: TypeItemRarity;
 
   item: IShopItem;
 }
@@ -29,7 +34,7 @@ export const InventoryCard: FC<Props> = ({
   disabled,
   isBlocked,
   isUpgradeEnabled = true,
-  variant = 'lowcost',
+  variant = 'red',
   item,
   isB,
   refetchAll,
@@ -46,6 +51,10 @@ export const InventoryCard: FC<Props> = ({
       if (!res.error) {
         refetchAll();
         refetch();
+
+        if (item.level === 49 && item.name.includes('Pro')) {
+          openModal(MODALS.UPGRADED_SHOP, { item, isYellow: item.item_rarity === 'red' });
+        }
       }
     } catch (error) {}
   };
@@ -54,7 +63,10 @@ export const InventoryCard: FC<Props> = ({
     <div className={styles.storeCard}>
       <div className={styles.header}>
         <div
-          className={clsx(styles.image, variant === 'prem' ? styles.purpleImage : variant === 'lux' && styles.redImage)}
+          className={clsx(
+            styles.image,
+            variant === 'yellow' ? styles.purpleImage : variant === 'green' && styles.redImage,
+          )}
         >
           <img src={item.image_url} className={clsx(isBlocked && styles.disabledImage)} alt="" />
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
@@ -63,11 +75,11 @@ export const InventoryCard: FC<Props> = ({
         <div className={styles.title}>
           <div className={styles.headline}>
             <h3>{item.name}</h3>
-            {variant === 'lowcost' ? (
+            {variant === 'red' ? (
               <div className={styles.variant}>
                 <p>Эконом</p>
               </div>
-            ) : variant === 'prem' ? (
+            ) : variant === 'yellow' ? (
               <div className={styles.variantPurple}>
                 <p>Премиум</p>
               </div>
@@ -77,7 +89,9 @@ export const InventoryCard: FC<Props> = ({
               </div>
             )}
           </div>
-          <p className={variant === 'lux' ? styles.colorRed : variant === 'prem' ? styles.colorPurple : styles.level}>
+          <p
+            className={variant === 'green' ? styles.colorRed : variant === 'yellow' ? styles.colorPurple : styles.level}
+          >
             Уровень {item.level} {isB && 'Предмет куплен'}
           </p>
           <div className={clsx(styles.stats, (isBlocked || disabled) && styles.disabledStats)}>
@@ -102,7 +116,7 @@ export const InventoryCard: FC<Props> = ({
         (disabled ? (
           <p className={styles.disabledText}>
             Сейчас активен “
-            <span className={variant === 'prem' ? styles.itemNameBlue : styles.itemNamePurple}>
+            <span className={variant === 'yellow' ? styles.itemNameBlue : styles.itemNamePurple}>
               Компьютерный стул - Base
             </span>
             ”. Вы можете заменить его на текущий предмет, сделав его активным.
@@ -114,7 +128,7 @@ export const InventoryCard: FC<Props> = ({
               <div className={styles.goal}>
                 <p>Каменный сундук</p>
                 <img
-                  src={variant === 'lowcost' ? ChestBlueIcon : variant === 'prem' ? ChestPurpleIcon : ChestRedIcon}
+                  src={variant === 'red' ? ChestBlueIcon : variant === 'yellow' ? ChestPurpleIcon : ChestRedIcon}
                   alt=""
                 />
               </div>
@@ -122,18 +136,14 @@ export const InventoryCard: FC<Props> = ({
 
             <div className={styles.progressBar}>
               <div
-                className={
-                  variant === 'lowcost' ? styles.done : variant === 'prem' ? styles.donePurple : styles.doneRed
-                }
+                className={variant === 'red' ? styles.done : variant === 'yellow' ? styles.donePurple : styles.doneRed}
                 style={{ width: item.level * 2 + '%' }}
               />
             </div>
 
             <div className={styles.items}>
               <div
-                className={
-                  variant === 'lowcost' ? styles.item : variant === 'prem' ? styles.itemPurple : styles.itemRed
-                }
+                className={variant === 'red' ? styles.item : variant === 'yellow' ? styles.itemPurple : styles.itemRed}
               >
                 <img src={item.image_url} className={styles.itemImage} alt="" />
                 <img src={LockIcon} className={styles.lock} alt="" />
@@ -177,8 +187,8 @@ export const InventoryCard: FC<Props> = ({
               </>
             )}
           </button>
-          <button onClick={() => openModal(MODALS.UPGRADED_ITEM, { item, reward: 'Каменный сундук' })}>Задание</button>
-          <button onClick={() => openModal(MODALS.UPGRADED_SHOP, { item })}>{data?.items[0].price_usdt} $USDT</button>
+          <button>Задание</button>
+          <button>{data?.items[0].price_usdt} $USDT</button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>

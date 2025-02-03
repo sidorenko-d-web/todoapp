@@ -9,6 +9,7 @@
 
   .bgLight {
     position: absolute;
+    width: 80%;
   }
 
   .itemImage {
@@ -20,6 +21,7 @@
     overflow: hidden;
     position: relative;
     margin: 40px 0 50px 0;
+    animation: img-scale-anim 0.8s forwards ease;
   }
 
   .itemImagePurple {
@@ -71,5 +73,18 @@
       width: 14px;
       aspect-ratio: 14px;
     }
+  }
+}
+
+@keyframes img-scale-anim {
+  0% {
+    scale: 1;
+  }
+
+  70% {
+    scale: 1.25;
+  }
+  100% {
+    scale: 1;
   }
 }

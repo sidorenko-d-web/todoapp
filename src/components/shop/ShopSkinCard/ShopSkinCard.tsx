@@ -24,6 +24,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
   const [buySkin, { isLoading }] = useBuySkinMutation();
   const { refetch: refetchShop } = useGetShopSkinsQuery();
   const { refetch: refetchInventory } = useGetInventorySkinsQuery();
+  const { openModal } = useModal();
 
   const handleBuySkin = async () => {
     try {
@@ -32,13 +33,14 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
       if (!res.error) {
         refetchInventory();
         refetchShop();
+        openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' });
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const { openModal } = useModal();
+  console.log(mode);
 
   return (
     <div className={styles.storeCard}>
@@ -99,12 +101,12 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
           </>
         ) : (
           <>
-            <button className={styles.button}>
+            <button className={styles.buttonInventory}>
               {isLoading ? (
                 <p>Загрузка</p>
               ) : (
                 <>
-                  {item.price_internal} <img src={CoinIcon} />
+                  <p>Надеть</p>
                 </>
               )}
             </button>

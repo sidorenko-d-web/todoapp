@@ -9,7 +9,7 @@
 
   .bgLight {
     position: absolute;
-    width: 60%;
+    width: 80%;
   }
 
   .itemImage {
@@ -20,9 +20,21 @@
     border-radius: 8px;
     position: relative;
     margin: 30px 0;
+    animation: img-scale-anim 0.8s forwards ease;
 
     img {
       border-radius: 6px;
+    }
+
+    .imageOld {
+      position: absolute;
+      top: 0;
+      animation: img-reveal-in-anim 0.48s forwards ease;
+    }
+    .imageNew {
+      position: absolute;
+      top: 0;
+      animation: img-reveal-out-anim 0.48s forwards ease;
     }
 
     .blue {
@@ -98,5 +110,51 @@
       width: 14px;
       aspect-ratio: 14px;
     }
+  }
+}
+
+@keyframes img-scale-anim {
+  0% {
+    scale: 1;
+  }
+
+  70% {
+    scale: 1.25;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes img-reveal-in-anim {
+  0% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes img-reveal-out-anim {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
   }
 }

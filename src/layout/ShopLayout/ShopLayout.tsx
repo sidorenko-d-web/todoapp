@@ -5,7 +5,7 @@ import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
 import { AppRoute } from '../../constants';
 import ArrowLeftIcon from '../../assets/icons/arrow-left.svg';
 import InventoryBox from '../../assets/icons/inventory-box.svg';
-import { TypeItemCategory, TypeItemQuality } from '../../redux';
+import { TypeItemCategory, TypeItemRarity } from '../../redux';
 import { useNavigate } from 'react-router-dom';
 import CoinIcon from '../../assets/icons/coin.svg';
 import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
@@ -17,17 +17,17 @@ const shopItemCategories = [
   { title: 'Декор', value: 'decor' },
   { title: 'Вы', value: 'decor' },
 ];
-const shopItemQualities = [
-  { title: 'Эконом', value: 'lowcost' },
-  { title: 'Премиум', value: 'prem' },
-  { title: 'Люкс', value: 'lux' },
+const shopItemRarity = [
+  { title: 'Эконом', value: 'red' },
+  { title: 'Премиум', value: 'yellow' },
+  { title: 'Люкс', value: 'green' },
 ];
 
 type TypeTab<T> = { title: string; value: T };
 
 interface Props {
   onItemCategoryChange: Dispatch<SetStateAction<TypeTab<TypeItemCategory> | undefined>>;
-  onItemQualityChange: Dispatch<SetStateAction<TypeTab<TypeItemQuality> | undefined>>;
+  onItemQualityChange: Dispatch<SetStateAction<TypeTab<TypeItemRarity> | undefined>>;
   mode: 'shop' | 'inventory';
 }
 
@@ -40,7 +40,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const { data: boosts } = useGetInventoryBoostQuery();
 
   const [shopCategory, setShopCategory] = useState(shopItemCategories[0]);
-  const [itemsQuality, setItemsQuality] = useState(shopItemQualities[0]);
+  const [itemsQuality, setItemsQuality] = useState(shopItemRarity[0]);
 
   const {
     data: inventory,
@@ -50,7 +50,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     onItemCategoryChange(shopCategory as TypeTab<TypeItemCategory>);
-    onItemQualityChange(itemsQuality as TypeTab<TypeItemQuality>);
+    onItemQualityChange(itemsQuality as TypeTab<TypeItemRarity>);
   }, [shopCategory, itemsQuality]);
 
   const navigate = useNavigate();
@@ -58,30 +58,30 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const shopQualityTabs =
     isSuccess && !isFetching && inventory && inventory?.items.findIndex(item => item.level === 50) !== -1
       ? inventory?.items.findIndex(item => item.level === 50 && item.name.includes('Prem')) !== -1
-        ? shopItemQualities
-        : shopItemQualities.slice(0, 2)
-      : shopItemQualities.slice(0, 1);
+        ? shopItemRarity
+        : shopItemRarity.slice(0, 2)
+      : shopItemRarity.slice(0, 1);
 
   const inventoryQualityTabs = isSuccess
     ? inventory?.items.find(item => item.name.includes('Pro'))
-      ? shopItemQualities
+      ? shopItemRarity
       : inventory?.items.find(item => item.name.includes('Prem'))
-      ? shopItemQualities.slice(0, 2)
-      : shopItemQualities.slice(0, 1)
-    : shopItemQualities.slice(0, 1);
+      ? shopItemRarity.slice(0, 2)
+      : shopItemRarity.slice(0, 1)
+    : shopItemRarity.slice(0, 1);
 
   const handleShop = () => {
-    setItemsQuality(shopItemQualities[0]);
+    setItemsQuality(shopItemRarity[0]);
     navigate(AppRoute.Shop);
   };
   const handleInventory = () => {
-    setItemsQuality(shopItemQualities[0]);
+    setItemsQuality(shopItemRarity[0]);
 
     navigate(AppRoute.ShopInventory);
   };
 
   useEffect(() => {
-    setItemsQuality(shopItemQualities[0]);
+    setItemsQuality(shopItemRarity[0]);
   }, [shopCategory]);
 
   return (
@@ -127,7 +127,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
                 ? 'tabItemSelectedPurple'
                 : 'tabItemSelectedRed'
             }
-            tabs={mode === 'inventory' ? inventoryQualityTabs : shopQualityTabs}
+            tabs={mode === 'inventory' ? inventoryQualityTabs : shopItemRarity}
             currentTab={itemsQuality.title}
             onChange={setItemsQuality}
           />

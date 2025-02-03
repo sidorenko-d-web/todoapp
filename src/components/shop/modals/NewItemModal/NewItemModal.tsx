@@ -2,9 +2,6 @@ import styles from './NewItemModal.module.scss';
 import { AppRoute, MODALS } from '../../../../constants';
 import { useModal } from '../../../../hooks';
 import CentralModal from '../../../shared/CentralModal/CentralModal';
-import BlueLight from '../../../../assets/icons/bg-light-blue.svg';
-import PurpleLight from '../../../../assets/icons/bg-light-purple.svg';
-import RedLight from '../../../../assets/icons/bg-light-red.svg';
 import { IShopItem } from '../../../../redux';
 import Button from '../partials/Button';
 import ViewsIcon from '../../../../assets/icons/views.svg';
@@ -12,6 +9,8 @@ import SubsIcon from '../../../../assets/icons/subscriber_coin.svg';
 import CoinIcon from '../../../../assets/icons/coin.svg';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
+import Lottie from 'lottie-react';
+import { blueLight, purpleLight, redLight } from '../../../../assets/animations';
 
 export const NewItemModal = () => {
   const { closeModal, getModalState } = useModal();
@@ -30,11 +29,12 @@ export const NewItemModal = () => {
   return (
     <CentralModal title="Новый предмет!" onClose={() => closeModal(MODALS.NEW_ITEM)} modalId={MODALS.NEW_ITEM}>
       <div className={styles.images}>
-        <img
-          src={isPrem ? PurpleLight : isPro ? RedLight : BlueLight}
-          className={clsx(styles.bgLight)}
-          alt="bg-light"
+        <Lottie
+          animationData={isPrem ? purpleLight : isPro ? redLight : blueLight}
+          loop={true}
+          className={styles.bgLight}
         />
+
         <div className={clsx(styles.itemImage, isPrem && styles.itemImagePurple, isPro && styles.itemImageRed)}>
           <img src={state.args?.item.image_url} alt="item-image" />
         </div>
