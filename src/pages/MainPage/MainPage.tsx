@@ -21,7 +21,6 @@ export const MainPage: FC = () => {
 
   useEffect(() => {
     if (wasCreatingIntegrationModalOpened && !creatingIntegrationModalState.isOpen) {
-      console.log('get coins!!: ' + getModalState(MODALS.SUBSCRIBE).isOpen)
       setCurrentIntegration(3);
       setWasCreatingIntegrationModalOpened(false);
     }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from './GetCoinsGuide.module.scss';
 
-import img1 from '../../../assets/gif/guide1.gif';
+import img1 from '../../../assets/gif/guide4.gif';
 import { Guide } from "../Guide/Guide";
 
 import coin from '../../../assets/icons/coin.svg';
