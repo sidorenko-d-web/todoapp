@@ -19,6 +19,7 @@
         background-color: var.$color-bg;
         border-radius: 12px;
         border: 1px solid var.$color-dark-gray;
+        animation: fadeIn 0.3s ease-in-out;
 
         &.left {
             left: 20px;
@@ -46,8 +47,4 @@
         opacity: 1;
         transform: scale(1);
     }
-}
-
-.wrp {
-    animation: fadeIn 0.3s ease-in-out;
 }

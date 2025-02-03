@@ -37,7 +37,7 @@ export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose, isReferra
                 </>
             }
             onClose={onClose}>
-            <button className={styles.nextBtn} onClick={handleClose}>Вперёд! <img src={coin} width={14} height={14} /></button>
+            <button className={styles.nextBtn} onClick={handleClose}>Забрать 400 <img src={coin} width={14} height={14} /></button>
             <img src={img1} className={styles.gifImage} height={146} width={140} />
         </Guide>
     );

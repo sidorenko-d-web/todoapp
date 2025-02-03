@@ -10,10 +10,14 @@
     border-radius: 8px;
     font-size: 14px;
     margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
 }
 
 .gifImage {
     position: absolute;
-    top: 50%;
-    right: -20px;
+    top: 80%;
+    right: -50px;
 }
