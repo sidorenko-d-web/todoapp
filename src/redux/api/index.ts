@@ -4,3 +4,4 @@ export * from './profile';
 export * from './companies';
 export * from './shop';
 export * from './referrals';
+export * from './users';

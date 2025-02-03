@@ -1,8 +1,6 @@
 import React from "react";
 import BottomModal from "../../../shared/BottomModal/BottomModal";
 
-import classNames from 'classnames';
-
 import s from './UserReferrals.module.scss';
 import subscribersIcon from '../../../../assets/icons/subscribers.svg';
 

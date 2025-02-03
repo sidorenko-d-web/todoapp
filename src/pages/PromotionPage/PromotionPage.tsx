@@ -5,7 +5,7 @@ import coin from '../../assets/icons/coin.svg';
 import { DevelopmentPlan, IncreaseIncome, TopInfluencers } from '../../components';
 
 import s from './PromotionPage.module.scss';
-import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../redux';
+import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUsersCountQuery } from '../../redux';
 
 export const PromotionPage: React.FC = () => {
   
@@ -13,6 +13,7 @@ export const PromotionPage: React.FC = () => {
 
   const { data: topProfilesData, error: topProfilesError, isLoading: isTopProfilesLoading } = useGetTopProfilesQuery();
 
+  const {data: usersCountData} = useGetUsersCountQuery();
 
   const userPosition = userProfileData && topProfilesData?.profiles
     ? topProfilesData.profiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
@@ -39,7 +40,7 @@ export const PromotionPage: React.FC = () => {
             </div>
             <IncreaseIncome />
             <TopInfluencers />
-            <DevelopmentPlan usersCount={topProfilesData.count} />
+            <DevelopmentPlan usersCount={usersCountData.players} />
           </section>
         </main>}
     </>
