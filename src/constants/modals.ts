@@ -6,6 +6,12 @@ export const MODALS = {
   SUBSCRIBE: 'subscribe',
   SUCCESSFULLY_SUBSCRIBED: 'successfullySubscribed',
   DAYS_IN_A_ROW: 'daysInARow',
+  INTEGRATION_REWARD: 'integrationReward',
+  GET_REWARD: 'getReward',
+  TASK_COMPLETED: 'taskCompleted',
+  TASK_CHEST: 'taskChest',
   STRANGER_PROFILE: 'strangerProfile',
   DAILY_TASKS: 'daily-tasks-modal'
 };
+
+
