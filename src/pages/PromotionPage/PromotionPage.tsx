@@ -21,6 +21,7 @@ export const PromotionPage: React.FC = () => {
 
 
   const position = userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length!;
+
   return (
     <>
       {(isTopProfilesLoading || isUserLoading) && <p>Загрузка...</p>}
@@ -40,7 +41,7 @@ export const PromotionPage: React.FC = () => {
             </div>
             <IncreaseIncome />
             <TopInfluencers />
-            <DevelopmentPlan usersCount={usersCountData.players} />
+            {usersCountData && <DevelopmentPlan usersCount={usersCountData.players} />}
           </section>
         </main>}
     </>
