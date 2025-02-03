@@ -9,6 +9,7 @@
   right: 15px;
   bottom: calc(80px + 15px); // 80px - footer height, 15px - padding from footer
   left: 15px;
+  z-index: 5;
 
   .button {
     display: flex;
