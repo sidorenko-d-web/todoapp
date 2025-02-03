@@ -2,7 +2,7 @@ import CentralModal from '../../../components/shared/CentralModal/CentralModal';
 import { MODALS } from '../../../constants/modals';
 import { useModal } from '../../../hooks';
 import styles from './TaskCompletedModal.module.scss';
-import BgLightBlue from '../../../assets/images/bg-light-blue.svg';
+
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.svg';
 import subscribers from '../../../assets/icons/subscribers.svg';

@@ -40,7 +40,7 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({position, name, total
                         <span className={classNames(s.level, s.text)}>2ур.</span>
                     </div>
                     <button className={classNames(s.userCardRefs, s.text)}>
-                        (ещё 2 реф.)
+                        {`(ещё ${total_invited} реф.)`}
                     </button>
                 </div>
             </div>
