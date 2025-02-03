@@ -22,7 +22,8 @@ export const InitialGuide: React.FC<InitialGuideProps> = ({onClose}) => {
         <Guide align="left"
             zIndex={110}
             top={'35%'}
-            description="Меня зовут Push! Давай покажу, как тут все устроено и как ты сможешь заработать реальные деньги с Apusher! ">
+            description="Меня зовут Push! Давай покажу, как тут все устроено и как ты сможешь заработать реальные деньги с Apusher! "
+            onClose={onClose}>
             <button className={styles.nextBtn} onClick={handleClose}>Вперёд!</button>
             <img src={img1} className={styles.gifImage} height={146} width={140}/>
         </Guide>
