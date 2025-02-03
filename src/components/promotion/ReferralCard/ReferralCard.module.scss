@@ -1,0 +1,82 @@
+@use '../../../assets/styles/index.scss' as var;
+
+.listBadge {
+  position: relative;
+}
+
+.badge {
+  display: flex;
+  gap: 5px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 100%;
+  color: white;
+}
+
+.userCard {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background: var.$footer-bg;
+  margin-top: 10px;
+}
+
+.userCardBottom {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  gap: 31px;
+}
+
+.userCardAvatar {
+  padding: 5px;
+  border-radius: 3px;
+  background: var.$color-gray;
+}
+
+.userCardTop {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.infoUser {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.userCardBonus {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 20px;
+  position: relative;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 14px;
+  color: var.$color-white;
+}
+
+.level {
+  font-size: 10px;
+  position: absolute;
+  top: -3px;
+  right: -20px;
+  color: var.$color-text-semi-transparent
+}
+
+.userCardRank, .userCardRefs {
+  color: var.$color-blue-primary;
+}
+
+.userCardRefs {
+  background: none;
+  border: none;
+}
+

@@ -1,0 +1,43 @@
+@use    '../../../../assets/styles/index.scss' as var;
+
+
+.badgesWrp {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  justify-content: center;
+  gap: 3px;
+
+  .badge {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 14px;
+    color: white;
+    padding: 4px;
+    padding-left: 7px;
+    background: #212129;
+  }
+  
+  .value {
+    font-size: 14px;
+  }
+
+  .icon {
+    margin-left: 5px;
+  }
+  
+  .level {
+    font-size: 10px;
+    color: var.$color-text-semi-transparent;
+  }
+  
+  
+}
+
+.noReferrals {
+  color: var.$color-text-super-transparent;
+  width: 100%;
+  text-align: center;
+  margin: 15px 0;
+}
