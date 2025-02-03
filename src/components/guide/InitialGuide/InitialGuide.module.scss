@@ -1,6 +1,6 @@
 @use '../../../assets/styles/index.scss' as var;
 
-button {
+.nextBtn {
     width: 100%;
     background-color: var.$color-gray;
     color: white;
@@ -9,10 +9,11 @@ button {
     border: 1px solid var.$color-dark-gray;
     border-radius: 8px;
     font-size: 14px;
+    margin-top: 20px;
 }
 
-.image {
+.gifImage {
     position: absolute;
     top: 50%;
-    right: 40px;
+    right: -20px;
 }

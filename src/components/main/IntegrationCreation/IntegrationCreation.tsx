@@ -8,8 +8,13 @@ import { useDispatch } from 'react-redux';
 
 import s from './IntegrationCreation.module.scss';
 
-export const IntegrationCreation = () => {
+interface IntegrationCreationProps {
+  isButtonGlowing: boolean;
+}
+
+export const IntegrationCreation: React.FC<IntegrationCreationProps> = ({isButtonGlowing}) => {
   const dispatch = useDispatch();
+
 
   const { data: profile } = useGetCurrentUserProfileInfoQuery();
   const {
@@ -39,7 +44,7 @@ export const IntegrationCreation = () => {
 
   return (
     <section className={s.integrationsControls}>
-      <button className={s.button} disabled={!profile} onClick={handleIntegrationCreation}>
+      <button className={`${s.button} ${isButtonGlowing ? s.glowing : ''}`} disabled={!profile} onClick={handleIntegrationCreation}>
         Создать интеграцию
         <span className={s.buttonBadge}>
           {profile?.subscription_integrations_left || 0}/5 <img src={integrationIcon} height={12} width={12}

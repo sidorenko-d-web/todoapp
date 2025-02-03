@@ -31,6 +31,11 @@
       pointer-events: none;
     }
 
+    &.glowing {
+      //animation: glow 1.5s infinite;
+      box-shadow: 0 0 100px 20px var.$color-blue-primary;
+    }
+
     .buttonBadge {
       position: absolute;
       top: -25%;
@@ -49,3 +54,19 @@
     }
   }
 }
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px var.$color-blue-primary, 0 0 10px var.$color-blue-primary, 0 0 15px var.$color-blue-primary;
+  }
+  50% {
+    box-shadow: 0 0 10px var.$color-blue-primary, 0 0 20px var.$color-blue-primary, 0 0 30px var.$color-blue-primary;
+  }
+  100% {
+    box-shadow: 0 0 5px var.$color-blue-primary, 0 0 10px var.$color-blue-primary, 0 0 15px var.$color-blue-primary;
+  }
+}
+
+// .glowing {
+//   animation: glow 1.5s infinite;
+// }
