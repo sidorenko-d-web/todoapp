@@ -1,117 +1,39 @@
 @use    '../../../../assets/styles/index.scss' as var;
 
-.headerIncrease {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  font-weight: 500;
-  margin: 10px 0 0;
-  color: white;
-}
 
-.listBadge {
-  position: relative;
-}
-
-.badge {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  border-radius: 10px;
-  font-size: 14px;
-  line-height: 100%;
-  color: white;
-}
-
-.iconWrapper {
-  position: relative; 
-  display: inline-block;
-}
-
-.level {
-  position: absolute;
-  top: -3px;
-  left: 15px;
-  font-size: 10px;
-  color: var.$color-text-semi-transparent;
-  padding: 1px 4px;
-  border-radius: 5px;
-  line-height: 1;
-  white-space: nowrap;;
-}
-
-
-.textName {
-  color: var.$color-text-semi-transparent;
-}
-
-.wrapperIncrease {
-  width: 100%;
-  background: var.$color-card-bg;
-  padding: 10px;
-  border-radius: 12px;
-}
-
-.subscribers {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 15px;
-}
-
-.contentFriends {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.nameFriends {
-  font-size: 16px;
-  font-weight: 500;
-  margin: 0;
-  line-height: 16px;
-  letter-spacing: -0.05em;
-}
-
-.subscribers {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-
-.userCardBottom {
+.badgesWrp {
   display: flex;
   flex-direction: row;
   margin-top: 10px;
-  gap: 31px;
+  justify-content: center;
+  gap: 3px;
+
+  .badge {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 14px;
+    color: white;
+    padding: 4px;
+    padding-left: 7px;
+    background: #212129;
+  }
+  
+  .value {
+    font-size: 14px;
+  }
+
+  .icon {
+    margin-left: 5px;
+  }
+  
+  .level {
+    font-size: 10px;
+    color: var.$color-text-semi-transparent;
+  }
+  
+  
 }
-
-
-.text {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 14px;
-  color: var.$color-white;
-}
-
-// .level {
-//   font-size: 10px;
-//   position: absolute;
-//   top: -13px;
-//   right: -1;
-//   color: var.$color-text-semi-transparent
-// }
 
 .noReferrals {
   color: var.$color-text-super-transparent;
