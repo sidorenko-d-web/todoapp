@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './IntegrationPage.module.scss';
 import { useParams } from 'react-router-dom';
 import {
@@ -17,31 +17,21 @@ export const IntegrationPage: React.FC = () => {
 
     const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
     const [progress, setProgress] = useState(0);
-    const [finished, setFinished] = useState(false);
 
     const comments = commentData ? (Array.isArray(commentData) ? commentData : [commentData]) : [];
 
-    useEffect(() => {
-        if (comments.length === 0) {
-            setFinished(true);
-        }
-    }, [comments]);
-
     const handleVote = async (isThumbsUp: boolean, commentId: string) => {
         await postComment({ commentId, isHate: isThumbsUp });
+        await refetch();
 
         setProgress((prevProgress) => (prevProgress + 1) % 5);
 
         if (currentCommentIndex + 1 < comments.length) {
             setCurrentCommentIndex((prevIndex) => prevIndex + 1);
         } else {
-            setFinished(true);
-            await refetch();
             setCurrentCommentIndex(0);
-            setFinished(false);
         }
     };
-
 
     return (
       <div className={styles.wrp}>
@@ -70,10 +60,9 @@ export const IntegrationPage: React.FC = () => {
             </>
           )}
             <IntegrationComment
-              progres={progress}
+              progress={progress}
               {...comments[currentCommentIndex]}
               onVote={handleVote}
-              finished={finished}
             />
       </div>
     );

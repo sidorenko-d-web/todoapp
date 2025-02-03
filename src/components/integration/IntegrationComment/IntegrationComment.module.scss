@@ -13,24 +13,19 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
+
         .username {
             font-size: 14px;
             font-weight: 500;
             margin: 0;
             color: var.$color-blue-primary;
         }
-    
-        .positiveCommentText {
-            font-size: 14px;
-            font-weight: 500;
-            margin: 0;
+
+        .commentText {
             color: var.$color-green;
         }
 
-        .negativeCommentText {
-            font-size: 14px;
-            font-weight: 500;
-            margin: 0;
+        .commentHate{
             color: var.$color-red;
         }
     }
