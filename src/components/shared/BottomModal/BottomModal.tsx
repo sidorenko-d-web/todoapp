@@ -21,19 +21,20 @@ interface BottomModalProps {
 }
 
 const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
-  modalId,
-  title,
-  onClose,
-  disabled = false,
-  disableScrollLock = false,
-  containerStyles,
-  modalStyles,
-  children,
-  titleWrapperStyles,
+                                                                modalId,
+                                                                title,
+                                                                onClose,
+                                                                disabled = false,
+                                                                disableScrollLock = false,
+                                                                containerStyles,
+                                                                modalStyles,
+                                                                children,
+                                                                titleWrapperStyles,
 
-  headerStyles,
-  titleIcon,
-}) => {
+                                                                headerStyles,
+                                                                titleIcon,
+}) =>
+{
   const { getModalState } = useModal();
 
   const { isOpen } = getModalState(modalId);
@@ -70,6 +71,7 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
       </Fade>
     </Overlay>
   );
-};
+}
+
 
 export default BottomModal;
