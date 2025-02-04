@@ -79,6 +79,16 @@
   top: -47px;
   right: 80px;
   z-index: -2;
+  animation: spin 6s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .imgPrize, .imgPrizeActive {
