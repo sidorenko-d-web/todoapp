@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import giftIcon from '../../../../assets/icons/gift.svg';
-import coinIcon from '../../../../assets/icons/coin.svg';
+import coinIcon from '../../../../assets/icons/coin.png';
 import classNames from 'classnames';
 import s from './ModalDailyTasks.module.scss';
 import BottomModal from '../../../shared/BottomModal/BottomModal';

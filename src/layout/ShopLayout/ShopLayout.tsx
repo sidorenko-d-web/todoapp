@@ -7,8 +7,8 @@ import ArrowLeftIcon from '../../assets/icons/arrow-left.svg';
 import InventoryBox from '../../assets/icons/inventory-box.svg';
 import { TypeItemCategory, TypeItemQuality } from '../../redux';
 import { useNavigate } from 'react-router-dom';
-import CoinIcon from '../../assets/icons/coin.svg';
-import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
+import CoinIcon from '../../assets/icons/coin.png';
+import SubscriberCoin from '../../assets/icons/subscriber_coin.png';
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
   { title: 'Фото', value: 'image' },

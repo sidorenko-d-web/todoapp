@@ -2,7 +2,7 @@ import CentralModal from '../../../components/shared/CentralModal/CentralModal';
 import { MODALS } from '../../../constants/modals';
 import { useModal } from '../../../hooks';
 import styles from './GetRewardModal.module.scss';
-import coin from '../../../assets/icons/coin.svg';
+import coin from '../../../assets/icons/coin.png';
 import Button from '../partials/Button';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';

@@ -2,9 +2,9 @@ import React from 'react';
 
 import styles from './IntegrationStatsMini.module.scss';
 
-import coin from '../../../assets/icons/coin.svg';
-import viewsIcon from '../../../assets/icons/views.svg';
-import subscribersIcon from '../../../assets/icons/subscribers.svg';
+import coin from '../../../assets/icons/coin.png';
+import viewsIcon from '../../../assets/icons/views.png';
+import subscribersIcon from '../../../assets/icons/subscribers.png';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../../constants';
 

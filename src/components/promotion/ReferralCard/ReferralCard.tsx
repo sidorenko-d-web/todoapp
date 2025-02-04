@@ -3,7 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 import s from './ReferralCard.module.scss';
-import subscribersIcon from '../../../assets/icons/subscribers.svg';
+import subscribersIcon from '../../../assets/icons/subscribers.png';
 
 import profileIconPlaceholder from '../../../assets/icons/referral-icon-placeholder.svg';
 

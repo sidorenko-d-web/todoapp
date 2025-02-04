@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import styles from './StatisticsPage.module.scss';
 import views from '../../assets/icons/views.svg';
 import subscribers from '../../assets/icons/subscribers.svg';
-import logo from '../../assets/icons/logo.svg';
+import logo from '../../assets/icons/dot.png';
 import back from '../../assets/icons/arrow-back.svg';
 import StatisticsCard from '../../components/statistics/statisticsCard/StatisticsCard';
-import coin from '../../assets/icons/coin.svg';
+import coin from '../../assets/icons/coin.png';
 import { useGetAllIntegrationsQuery, useGetCurrentUserProfileInfoQuery } from '../../redux';
 
 const StatisticsPage: FC = () => {

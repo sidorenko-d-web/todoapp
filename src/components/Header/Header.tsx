@@ -1,5 +1,5 @@
 import styles from "./Header.module.scss"
-import CoinIcon from "../../assets/icons/coin.svg"
+import CoinIcon from "../../assets/icons/coin.png"
 import AvatarIcon from "../../assets/icons/new-avatar.svg"
 import FireIcon from "../../assets/icons/avatar-fire.svg"
 import SubscribersIcon from "../../assets/icons/subscribers.png"

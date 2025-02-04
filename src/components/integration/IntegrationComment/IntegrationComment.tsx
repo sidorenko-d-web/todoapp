@@ -1,4 +1,4 @@
-import coinIcon from '../../../assets/icons/coin.svg';
+import coinIcon from '../../../assets/icons/coin.png';
 import ProgressLine from '../../shared/ProgressLine/ProgressLine';
 import styles from './IntegrationComment.module.scss';
 
