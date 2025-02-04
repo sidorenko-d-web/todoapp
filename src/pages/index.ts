@@ -6,3 +6,4 @@ export * from './PromotionPage';
 export * from './ProfilePage';
 export * from './WardrobePage';
 export * from './StrangerProfilePage';
+export * from './ProgressTreePage';

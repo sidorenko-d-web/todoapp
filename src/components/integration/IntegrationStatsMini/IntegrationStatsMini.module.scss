@@ -2,63 +2,61 @@
 
 
 .statsUnderTitleWrp {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 20px;
+
+
+  .toCenterStats {
+    width: 40px;
+    height: 40px;
+  }
+
+  .statsUnderTitle {
+    width: 225px;
     display: flex;
     flex-direction: row;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-self: center;
     gap: 5px;
-    margin-bottom: 20px;
+    margin-top: 5px;
 
-    
-    .toCenterStats {
-        width: 40px;
-        height: 40px;
+    .statWrp {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+
+      height: fit-content;
+      padding: 5px 5px 5px 7px;
+      border-radius: 10px;
+      background-color: var.$color-badge-bg;
+
+      .stat {
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0;
+        white-space: nowrap;
+      }
     }
+  }
 
-    .statsUnderTitle {
-        width: 225px;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-self: center;
-        gap: 5px;
-        margin-top: 5px;
-
-        .statWrp {
-            align-items: baseline;
-            display: flex;
-            //align-items: center;
-            gap: 3px;
-
-            height: fit-content;
-            padding: 5px;
-            padding-left: 7px;
-            border-radius: 10px;
-            background-color: var.$color-badge-bg;
-
-            .stat {
-                font-size: 14px;
-                font-weight: 500;
-                margin: 0;
-                white-space: nowrap;
-            }
-        }
-    }
-
-    .seeStatsButton {
-        height: 40px;
-        width: 40px;
-        border-radius: 10px;
-        background-color: var.$color-blue-primary;
-        border: none;
-        background-image: url('../../../assets/icons/stats-button.svg');
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
-        margin-right: 15px;
-        background-size: 45%;
-    }
+  .seeStatsButton {
+    height: 40px;
+    width: 40px;
+    border-radius: 10px;
+    background-color: var.$color-blue-primary;
+    border: none;
+    background-image: url('../../../assets/icons/stats-button.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    margin-right: 15px;
+    background-size: 45%;
+  }
 
 }

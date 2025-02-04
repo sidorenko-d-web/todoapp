@@ -5,3 +5,4 @@ export * from './integration';
 export * from './subscription';
 export * from './promotion';
 export * from './wardrobe';
+export * from './tree';

@@ -7,7 +7,7 @@ import s from './Slider.module.scss';
 
 import face from '../../../../assets/icons/face.svg';
 import fire from '../../../../assets/icons/fire-icon.svg';
-import { useGetTopProfilesQuery } from '../../../../redux/index.ts';
+import { useGetTopProfilesQuery } from '../../../../redux';
 import { Link } from 'react-router-dom';
 
 export const SliderSelect = () => {
@@ -37,7 +37,7 @@ export const SliderSelect = () => {
   const { data } = useGetTopProfilesQuery();
   const topProfiles = data?.profiles;
 
-  if (!topProfiles) return null
+  if (!topProfiles) return null;
 
   // TODO: Раскомментировать когда на бэке будет vip данные
   return (
@@ -53,10 +53,10 @@ export const SliderSelect = () => {
             <div className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
               <div className={s.card}>
                 <div className={s.infoRang}>
-                  <span className={s.seat}>{`#${index+1}`}</span>
+                  <span className={s.seat}>{`#${index + 1}`}</span>
                   { /*profile.fire true !== undefined &&*/ (
                     <div className={s.fireIcon}>
-                      <img src={fire} alt="fire" />
+                      <img src={fire} alt="fire" width={12} height={12} />
                       <span>6</span>
                     </div>
                   )}

@@ -1,80 +1,85 @@
 import React, { useEffect, useState } from 'react';
 import styles from './IntegrationPage.module.scss';
-import { useParams } from 'react-router-dom';
 import {
-    useGetIntegrationQuery,
-    useGetUnansweredIntegrationCommentQuery,
-    usePostCommentIntegrationsMutation,
+  useGetIntegrationQuery,
+  useGetIntegrationsQuery,
+  useGetUnansweredIntegrationCommentQuery,
+  usePostCommentIntegrationsMutation,
 } from '../../redux';
 import { Integration, IntegrationComment, IntegrationStats, IntegrationStatsMini } from '../../components';
 import integrationIcon from '../../assets/icons/integration-icon.svg';
+import { useParams } from 'react-router-dom';
 
 export const IntegrationPage: React.FC = () => {
-    const { integrationId } = useParams<{ integrationId: string }>();
-    const { data, error, isLoading } = useGetIntegrationQuery(`${integrationId}`);
-    const { data: commentData, refetch } = useGetUnansweredIntegrationCommentQuery(`${integrationId}`);
-    const [postComment] = usePostCommentIntegrationsMutation();
+  const { integrationId: queryIntegrationId } = useParams<{ integrationId: string | undefined }>();
+  const { data: integrations } = useGetIntegrationsQuery(undefined, { skip: !!queryIntegrationId && queryIntegrationId !== 'undefined' });
 
-    const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
-    const [progress, setProgress] = useState(0);
-    const [finished, setFinished] = useState(false);
+  const integrationId = queryIntegrationId !== 'undefined' ? queryIntegrationId : integrations?.integrations[0].id;
 
-    const comments = commentData ? (Array.isArray(commentData) ? commentData : [commentData]) : [];
+  const { data, error, isLoading } = useGetIntegrationQuery(`${integrationId}`);
+  const { data: commentData, refetch } = useGetUnansweredIntegrationCommentQuery(`${integrationId}`);
+  const [ postComment ] = usePostCommentIntegrationsMutation();
 
-    useEffect(() => {
-        if (comments.length === 0) {
-            setFinished(true);
-        }
-    }, [comments]);
+  const [ currentCommentIndex, setCurrentCommentIndex ] = useState<number>(0);
+  const [ progress, setProgress ] = useState(0);
+  const [ finished, setFinished ] = useState(false);
 
-    const handleVote = async (isThumbsUp: boolean, commentId: string) => {
-        await postComment({ commentId, isHate: isThumbsUp });
+  const comments = commentData ? (Array.isArray(commentData) ? commentData : [ commentData ]) : [];
 
-        setProgress((prevProgress) => (prevProgress + 1) % 5);
+  useEffect(() => {
+    if (comments.length === 0) {
+      setFinished(true);
+    }
+  }, [ comments ]);
 
-        if (currentCommentIndex + 1 < comments.length) {
-            setCurrentCommentIndex((prevIndex) => prevIndex + 1);
-        } else {
-            setFinished(true);
-            await refetch();
-            setCurrentCommentIndex(0);
-            setFinished(false);
-        }
-    };
+  const handleVote = async (isThumbsUp: boolean, commentId: string) => {
+    await postComment({ commentId, isHate: isThumbsUp });
+
+    setProgress((prevProgress) => (prevProgress + 1) % 5);
+
+    if (currentCommentIndex + 1 < comments.length) {
+      setCurrentCommentIndex((prevIndex) => prevIndex + 1);
+    } else {
+      setFinished(true);
+      await refetch();
+      setCurrentCommentIndex(0);
+      setFinished(false);
+    }
+  };
 
 
-    return (
-      <div className={styles.wrp}>
-          <h1 className={styles.pageTitle}>Интеграции</h1>
+  return (
+    <div className={styles.wrp}>
+      <h1 className={styles.pageTitle}>Интеграции</h1>
 
-          {isLoading && <p>Загрузка...</p>}
-          {error && <p>Интеграция не найдена</p>}
+      {isLoading && <p>Загрузка...</p>}
+      {(error || !integrationId) && <p>Интеграция не найдена</p>}
 
-          {data && (
-            <>
-                <IntegrationStatsMini views={data.views} subscribers={data.subscribers} income={data.income} />
-                <div className={styles.integrationNameWrp}>
-                    <p className={styles.integrationTitle}>Интеграция {data.campaign.company_name}</p>
-                    <div className={styles.integrationLevelWrp}>
-                        <p className={styles.integrationLevel}>Brilliant</p>
-                        <img src={integrationIcon} height={12} width={12} />
-                    </div>
-                </div>
-                <Integration />
-                <IntegrationStats views={data.views} income={data.income} subscribers={data.subscribers} />
-                <div className={styles.commentsSectionTitleWrp}>
-                    <p className={styles.commentsSectionTitle}>Комментарии</p>
-                    <p
-                      className={styles.commentsAmount}>{comments.length === 0 ? 0 : currentCommentIndex + 1}/{comments.length}</p>
-                </div>
-            </>
-          )}
-            <IntegrationComment
-              progres={progress}
-              {...comments[currentCommentIndex]}
-              onVote={handleVote}
-              finished={finished}
-            />
-      </div>
-    );
+      {data && (
+        <>
+          <IntegrationStatsMini views={data.views} subscribers={data.subscribers} income={data.income} />
+          <div className={styles.integrationNameWrp}>
+            <p className={styles.integrationTitle}>Интеграция 1</p>
+            <div className={styles.integrationLevelWrp}>
+              <p className={styles.integrationLevel}>{data.campaign.company_name}</p>
+              <img src={integrationIcon} height={12} width={12} />
+            </div>
+          </div>
+          <Integration />
+          <IntegrationStats views={data.views} income={data.income} subscribers={data.subscribers} />
+          <div className={styles.commentsSectionTitleWrp}>
+            <p className={styles.commentsSectionTitle}>Комментарии</p>
+            <p
+              className={styles.commentsAmount}>{comments.length === 0 ? 0 : currentCommentIndex + 1}/{comments.length}</p>
+          </div>
+          <IntegrationComment
+            progres={progress}
+            {...comments[currentCommentIndex]}
+            onVote={handleVote}
+            finished={finished}
+          />
+        </>
+      )}
+    </div>
+  );
 };

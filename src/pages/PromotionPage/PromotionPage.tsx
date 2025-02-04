@@ -1,7 +1,7 @@
 import React from 'react';
-import subscribersIcon from '../../assets/icons/subscribers.svg';
+import subscribersIcon from '../../assets/icons/subscribers.png';
 import clanRed from '../../assets/icons/clanRed.svg';
-import coin from '../../assets/icons/coin.svg';
+import coin from '../../assets/icons/coin.png';
 import { DevelopmentPlan, IncreaseIncome, TopInfluencers } from '../../components';
 
 import s from './PromotionPage.module.scss';

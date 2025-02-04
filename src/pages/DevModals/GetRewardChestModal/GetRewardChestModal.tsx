@@ -3,7 +3,7 @@ import { MODALS } from '../../../constants/modals';
 import { useModal } from '../../../hooks';
 import styles from './GetRewardChestModal.module.scss';
 import Button from '../partials/Button';
-import coin from '../../../assets/icons/coin.svg';
+import coin from '../../../assets/icons/coin.png';
 import integration from '../../../assets/icons/integration-white.svg';
 import snowflake from '../../../assets/icons/snowflake.svg';
 import Lottie from 'lottie-react';

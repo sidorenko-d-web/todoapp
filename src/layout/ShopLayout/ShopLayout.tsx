@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState, type Dispatch, type FC, type SetStateAction } from 'react';
+import { type Dispatch, type FC, PropsWithChildren, type SetStateAction, useEffect, useState } from 'react';
 import styles from './ShopLayout.module.scss';
 import { useGetInventoryBoostQuery } from '../../redux/api/inventory/api';
 import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
@@ -7,8 +7,9 @@ import ArrowLeftIcon from '../../assets/icons/arrow-left.svg';
 import InventoryBox from '../../assets/icons/inventory-box.svg';
 import { TypeItemCategory, TypeItemQuality } from '../../redux';
 import { useNavigate } from 'react-router-dom';
-import CoinIcon from '../../assets/icons/coin.svg';
-import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
+import CoinIcon from '../../assets/icons/coin.png';
+import SubscriberCoin from '../../assets/icons/subscribers.png';
+
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
   { title: 'Фото', value: 'image' },
