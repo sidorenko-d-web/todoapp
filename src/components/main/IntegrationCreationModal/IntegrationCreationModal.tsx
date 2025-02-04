@@ -75,18 +75,25 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     return null;
   })();
 
+  const lightningsGlowing = sessionStorage.getItem('createIntegrationLightningsGlowing') === '1'
+  const tabsGlowing = sessionStorage.getItem('createIntegrationTabsGlowing') === '1';
+  const buttonGlowing = sessionStorage.getItem('goToStoreBtnGlowing') === '1';
+
+  console.log('button glowing: ' + sessionStorage.getItem('goToStoreBtnGlowing'));
+
+
   return (
     <CentralModal modalId={modalId} title="Создание интеграции" onClose={onClose} titleIcon={integrationWhiteIcon}>
       <div className={s.content}>
         <div className={s.skinsWrapper}>
           {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
-            <div key={index} className={s.skin}>
+            <div key={index} className={`${s.skin} ${lightningsGlowing ? s.glowing : ''}`} >
               <img src={lightningIcon} alt="Lightning" width={20} height={20} />
             </div>
           ))}
         </div>
 
-        <div className={s.tabs}>
+        <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
           {contentOptions.map((option, index) => (
             <span
               key={index}
@@ -123,7 +130,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         }
 
         <button
-          className={s.button}
+          className={`${s.button} ${buttonGlowing ? s.glowingBtn : ''}`}
           disabled={submitDisabled && !noItemsMessage}
           onClick={noItemsMessage ? goToShop : submitCreation}
         >

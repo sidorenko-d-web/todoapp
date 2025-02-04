@@ -8,8 +8,10 @@ interface CreatingIntegrationGuideProps {
     onClose: () => void;
     description: ReactNode;
     buttonText: string;
+    align: 'left' | 'right';
+    top: string;
 }
-export const CreatingIntegrationGuide: React.FC<CreatingIntegrationGuideProps> = ({ onClose, description, buttonText }) => {
+export const CreatingIntegrationGuide: React.FC<CreatingIntegrationGuideProps> = ({ onClose, description, buttonText, align, top}) => {
     const [isOpen, setIsOpen] = useState(true);
 
     const handleClose = () => {
@@ -21,15 +23,16 @@ export const CreatingIntegrationGuide: React.FC<CreatingIntegrationGuideProps> =
 
     return (
 
-        <Guide align="left"
+        <Guide align={align}
             zIndex={110}
-            top={'65%'}
+            top={top}
             description={
                description
             }
+            dimBackground={false}
             onClose={onClose}>
             <button className={styles.nextBtn} onClick={handleClose}>{buttonText}</button>
-            <img src={img1} className={styles.gifImage} height={146} width={140} />
+            <img src={img1} className={top=='63%' ? styles.gifImageRight : styles.gifImageLeft} height={146} width={140} />
         </Guide>
     );
 };

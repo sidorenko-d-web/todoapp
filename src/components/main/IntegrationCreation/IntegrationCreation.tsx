@@ -12,7 +12,7 @@ interface IntegrationCreationProps {
   isButtonGlowing: boolean;
 }
 
-export const IntegrationCreation: React.FC<IntegrationCreationProps> = ({isButtonGlowing}) => {
+export const IntegrationCreation: React.FC<IntegrationCreationProps> = ({ isButtonGlowing }) => {
   const dispatch = useDispatch();
 
 
@@ -38,7 +38,7 @@ export const IntegrationCreation: React.FC<IntegrationCreationProps> = ({isButto
 
   const handleSuccessfullySubscribed = () => {
     closeModal(MODALS.SUBSCRIBE);
-    dispatch(profileApi.util.invalidateTags([ 'Me' ]));
+    dispatch(profileApi.util.invalidateTags(['Me']));
     openModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
   };
 
@@ -48,7 +48,7 @@ export const IntegrationCreation: React.FC<IntegrationCreationProps> = ({isButto
         Создать интеграцию
         <span className={s.buttonBadge}>
           {profile?.subscription_integrations_left || 0}/5 <img src={integrationIcon} height={12} width={12}
-                                                                alt="integration" />
+            alt="integration" />
         </span>
       </button>
       {
@@ -69,7 +69,11 @@ export const IntegrationCreation: React.FC<IntegrationCreationProps> = ({isButto
       />
       <SuccessfullySubscribedModal
         modalId={MODALS.SUCCESSFULLY_SUBSCRIBED}
-        onClose={() => closeModal(MODALS.SUCCESSFULLY_SUBSCRIBED)}
+        onClose={() => {
+          closeModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
+          sessionStorage.setItem('subscriptionBought', '1');
+          sessionStorage.setItem('createIntegrationLightningsGlowing', '1');
+        }}
       />
     </section>
   );

@@ -22,7 +22,6 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
   const buyBtnGlowing = sessionStorage.getItem('hasToBuySubscriptionGuide') === '1';
 
   const handleBuySubscription = () => {
-    sessionStorage.setItem('subscriptionBought', '1');
     buySubscription().unwrap().then(() => onSuccess());
   };
 

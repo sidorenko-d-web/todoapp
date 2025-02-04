@@ -9,7 +9,7 @@
   .skinsWrapper {
     display: flex;
     gap: 5px;
-
+    
     .skin {
       display: flex;
       padding: 10px;
@@ -32,6 +32,7 @@
 
     border-radius: 30px;
     background-color: var.$color-card-bg;
+
 
     .tab {
       cursor: pointer;
@@ -98,4 +99,13 @@
       pointer-events: none;
     }
   }
+}
+
+.glowing {
+  box-shadow: 2px 3px 40px var.$color-primary;
+  border: 2px solid var.$color-primary;
+}
+
+.glowingBtn {
+  box-shadow: 0 0 50px var.$color-primary;
 }
