@@ -8,14 +8,14 @@ interface CreateIntegrationGuideProps {
     description: ReactNode;
     zIndex: number;
     top: string;
-    onClose: () => void; // Add onClose prop
+    onClose: () => void;
 }
 
 export const CreateIntegrationGuide: React.FC<CreateIntegrationGuideProps> = ({
     description,
     zIndex,
     top,
-    onClose, // Destructure onClose
+    onClose,
 }) => {
     return (
         <Guide
@@ -23,9 +23,10 @@ export const CreateIntegrationGuide: React.FC<CreateIntegrationGuideProps> = ({
             zIndex={zIndex}
             description={description}
             top={top}
-            onClose={onClose} // Pass onClose to Guide
+            onClose={onClose}
+            dimBackground={false}
         >
-            <img src={img1} className={styles.image} height={146} width={140} alt="Guide GIF" />
+            <img src={img1} className={styles.image} height={146} width={140} />
         </Guide>
     );
 };

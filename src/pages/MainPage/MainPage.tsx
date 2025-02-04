@@ -2,10 +2,11 @@ import { FC, useEffect, useState } from 'react';
 import { IntegrationCreation } from '../../components';
 
 import s from './MainPage.module.scss';
-import { InitialGuide } from '../../components/guide/MainPageGuides/InitialGuide/InitialGuide';
-import { CreateIntegrationGuide } from '../../components/guide/MainPageGuides/CreateIntegrationGuide/CreateIntegrationGuide';
+
 import { MODALS } from '../../constants';
 import { useModal } from '../../hooks';
+import { InitialGuide } from '../../components/guide/MainPageGuides/InitialGuide/InitialGuide';
+import { CreateIntegrationGuide } from '../../components/guide/MainPageGuides/CreateIntegrationGuide/CreateIntegrationGuide';
 import { GetCoinsGuide } from '../../components/guide/MainPageGuides/GetCoinsGuide/GetCoinsGuide';
 
 
@@ -18,7 +19,7 @@ export const MainPage: FC = () => {
   const { getModalState } = useModal();
 
   const creatingIntegrationModalState = getModalState(MODALS.SUBSCRIBE);
-  //TODO: change to MODALS.SUBSCRIBE
+
 
   useEffect(() => {
     if (wasCreatingIntegrationModalOpened && !creatingIntegrationModalState.isOpen) {
@@ -52,7 +53,7 @@ export const MainPage: FC = () => {
 
       {currentIntegration === 1 && (
         <CreateIntegrationGuide
-          onClose={() => setCurrentIntegration(-1)}
+          onClose={() => setCurrentIntegration(-1)} 
           top="50%"
           zIndex={1500}
           description={
@@ -85,7 +86,7 @@ export const MainPage: FC = () => {
 
       {currentIntegration === 3 && (
         <GetCoinsGuide
-          onClose={() => setCurrentIntegration(-1)}
+          onClose={() => setCurrentIntegration(-1)} 
           isReferral={true}
         />
       )}
