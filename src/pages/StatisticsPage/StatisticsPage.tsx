@@ -4,6 +4,7 @@ import styles from './StatisticsPage.module.scss';
 import views from '../../assets/icons/views.svg';
 import subscribers from '../../assets/icons/subscribers.svg';
 import logo from '../../assets/icons/logo.svg';
+import back from '../../assets/icons/arrow-back.svg';
 import StatisticsCard from '../../components/statistics/statisticsCard/StatisticsCard';
 
 import { useGetAllIntegrationsQuery, useGetCurrentUserProfileInfoQuery } from '../../redux';
@@ -11,11 +12,13 @@ import { useGetAllIntegrationsQuery, useGetCurrentUserProfileInfoQuery } from '.
 const StatisticsPage: FC = () => {
   const navigate = useNavigate();
   const { data: statisticData, isLoading } = useGetAllIntegrationsQuery();
-  const { data: userProfileData, isLoading: isUserLoading} = useGetCurrentUserProfileInfoQuery();
+  const { data: userProfileData, isLoading: isUserLoading } = useGetCurrentUserProfileInfoQuery();
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.titleWrapper}>
+        <button className={styles.backButton} onClick={() => navigate(-1)}><img src={back} alt="Back" width={22}
+                                                                                height={22} /></button>
         <h1 className={styles.title}>Статистика</h1>
         <div className={styles.scores}>
           <div className={styles.scoresItem}>

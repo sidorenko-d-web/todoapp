@@ -1,6 +1,7 @@
 @use '/src/assets/styles' as *;
 
 .statisticsCard {
+  width: 100%;
   display: flex;
   gap: 15px;
   align-items: center;
@@ -8,7 +9,6 @@
   align-self: stretch;
   padding: 10px;
   border-radius: 12px;
-  width: 345px;
   .left {
     background-color: $footer-bg;
     border-radius: 8px;

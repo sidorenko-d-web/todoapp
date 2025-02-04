@@ -1,126 +1,126 @@
 @use '../../../../assets/styles/index.scss' as var;
 
 .wrp {
-    width: 100%;
-    background-color: var.$color-card-bg;
-    padding: 10px;
-    border-radius: 12px;
-    color: white;
-    font-family: Arial, sans-serif;
+  width: 100%;
+  background-color: var.$color-card-bg;
+  padding: 10px;
+  border-radius: 12px;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+
+    .fire {
+      aspect-ratio: 1/1;
+      border-radius: 10px;
+      padding: 10px;
+      background-color: var.$footer-bg;
+      width: 65px;
+      background-image: url('../../../../assets/icons/fire-red.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      background-size: 50%;
+    }
+
+    .daysInARowWrp {
+      display: flex;
+      flex-direction: column;
+
+      .daysInARow {
+        margin: 0;
+        color: var.$color-grayish-white;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .badge {
+        color: var.$color-red;
+        padding: 5px;
+        width: fit-content;
+        border-radius: 4px;
+        font-size: 14px;
+        background-color: var.$color-gray;
+      }
+    }
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    margin: 0;
+    margin-top: 10px;
+  }
+
+  .freezeCount {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    gap: 5px;
+    font-size: 20px;
+    height: fit-content;
+    padding: 3px 4px;
+    border-radius: 4px;
+    background: var.$footer-bg;
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .icon img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .streakDays {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .progressContainer {
+    margin-top: -5px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    font-size: 14px;
 
-    .header {
-        display: flex;
-        justify-content: space-between;
-
-        .fire {
-            aspect-ratio: 1/1;
-            border-radius: 10px;
-            padding: 10px;
-            background-color: var.$footer-bg;
-            width: 65px;
-            background-image: url('../../../../assets/icons/fire-red.svg');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            background-size: 50%;
-        }
-
-        .daysInARowWrp {
-            display: flex;
-            flex-direction: column;
-
-            .daysInARow {
-                margin: 0;
-                color: var.$color-grayish-white;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-            }
-
-            .badge {
-                color: var.$color-red;
-                padding: 5px;
-                width: fit-content;
-                border-radius: 4px;
-                font-size: 14px;
-                background-color: var.$color-gray;
-            }
-        }
+    .progressText {
+      font-size: 12px;
+      font-weight: 500;
+      color: var.$color-text-semi-transparent;
     }
+  }
 
-    .title {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-weight: 600;
-        margin: 0;
-        margin-top: 10px;
+  .reward {
+    display: flex;
+    align-items: center;
+    height: 12px;
+
+    .chestImgContainer {
+      width: 25px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 10px;
     }
+  }
 
-    .freezeCount {
-        display: flex;
-        align-items: center;
-        font-weight: 500;
-        gap: 5px;
-        font-size: 20px;
-        height: fit-content;
-        padding: 3px 4px;
-        border-radius: 4px;
-        background: var.$footer-bg;
+  .progressBarTextWrp {
+    display: flex;
+    justify-content: space-between;
+  }
 
-        img {
-            width: 20px;
-            height: 20px;
-        }
-    }
-
-    .icon img {
-        width: 50px;
-        height: 50px;
-    }
-
-    .streakDays {
-        display: flex;
-        justify-content: space-between;
-        margin: 10px 0;
-    }
-
-    .progressContainer {
-        display: flex;
-        flex-direction: column;
-        font-size: 14px;
-
-        .progressText {
-            font-size: 12px;
-            font-weight: 500;
-            color: var.$color-text-semi-transparent;
-        }
-    }
-
-    .reward {
-        display: flex;
-        align-items: center;
-        height: 12px;
-
-        .chestImgContainer {
-            width: 25px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-left: 10px;
-        }
-    }
-
-    .progressBarTextWrp {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .progress {
-        height: 100%;
-        background: #e63946;
-    }
+  .progress {
+    height: 100%;
+    background: #e63946;
+  }
 }

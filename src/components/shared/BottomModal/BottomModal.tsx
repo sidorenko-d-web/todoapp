@@ -65,7 +65,7 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
                 </button>
               </div>
             </header>
-            <div>{children}</div>
+            <div className={s.content}>{children}</div>
           </div>
         </div>
       </Fade>

@@ -6,6 +6,7 @@ import coin from '../../../assets/icons/coin.svg';
 import viewsIcon from '../../../assets/icons/views.svg';
 import subscribersIcon from '../../../assets/icons/subscribers.svg';
 import { useNavigate } from 'react-router-dom';
+import { AppRoute } from '../../../constants';
 
 
 interface IntegrationStatsMiniProps {
@@ -23,18 +24,18 @@ export const IntegrationStatsMini:React.FC<IntegrationStatsMiniProps> = ({views,
             <div className={styles.statsUnderTitle}>
                 <div className={styles.statWrp}>
                     <p className={styles.stat}>{views}</p>
-                    <img src={viewsIcon} height={12} width={12} alt=''/>
+                    <img src={viewsIcon} height={14} width={14} alt=''/>
                 </div>
                 <div className={styles.statWrp}>
                     <p className={styles.stat}>{subscribers}</p>
-                    <img src={subscribersIcon} height={12} width={12} alt=''/>
+                    <img src={subscribersIcon} height={14} width={14} alt=''/>
                 </div>
               <div className={styles.statWrp}>
                 <p className={styles.stat}>+ {income}</p>
-                <img src={coin} height={12} width={12} alt="" />
+                <img src={coin} height={14} width={14} alt="" />
                 </div>
             </div>
-            <button onClick={() => navigate(`/integrations`)} className={styles.seeStatsButton}></button>
+            <button onClick={() => navigate(AppRoute.Statistics)} className={styles.seeStatsButton}></button>
         </div>
     )
 }

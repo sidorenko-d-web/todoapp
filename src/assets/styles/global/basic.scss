@@ -1,4 +1,4 @@
-@use '../abstracts' as *;
+@use '../abstracts' as var;
 
 *,
 *::before,
@@ -23,8 +23,8 @@ html {
 body {
   position: relative;
 
-  color: $color-black;
-  font-family: $font-default;
+  color: var.$color-black;
+  font-family: var.$font-default;
   font-size: 14px;
   line-height: 17px;
   font-weight: 400;
@@ -33,7 +33,7 @@ body {
   letter-spacing: -0.015em;
   word-break: break-word;
 
-  background-color: $color-bg;
+  background-color: var.$color-bg;
 
   height: 100%;
   min-height: 100%;
