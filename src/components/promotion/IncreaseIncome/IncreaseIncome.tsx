@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import peeps from '../../../assets/icons/peeps.svg';
 import piggy from '../../../assets/icons/piggy.svg';
-import subscribersIcon from '../../../assets/icons/subscribers.svg';
+import subscribersIcon from '../../../assets/icons/subscribers.png';
 import s from './IncreaseIncome.module.scss';
 import classNames from 'classnames';
 import { useModal } from '../../../hooks';

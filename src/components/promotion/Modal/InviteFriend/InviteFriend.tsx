@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import subscribersIcon from '../../../../assets/icons/subscribers.svg';
+import subscribersIcon from '../../../../assets/icons/subscribers.png';
 import copy from '../../../../assets/icons/copy.svg';
 import arrow from '../../../../assets/icons/arrow.svg';
 import BottomModal from '../../../shared/BottomModal/BottomModal.tsx';

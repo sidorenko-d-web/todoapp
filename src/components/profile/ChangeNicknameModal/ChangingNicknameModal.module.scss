@@ -3,7 +3,7 @@
 .inputGroup {
   position: relative;
   width: 100%;
-  
+
 
   label {
     display: block;
@@ -14,9 +14,7 @@
 
   .input {
     width: 100%;
-    padding: 6px;
-    padding-left: 8px;
-    padding-right: 40px;
+    padding: 6px 40px 6px 8px;
     height: 36px;
     border: 1px solid var.$color-dark-gray-stroke;
     border-radius: 8px;
@@ -29,11 +27,11 @@
     border-color: var.$color-red !important;
   }
 
-  
+
   .statusIcon {
     position: absolute;
-    right: 10px;
-    top: 50%;
+    right: 6px;
+    top: 28px;
     width: 24px;
     height: 24px;
     background-color: var.$color-dark-gray;

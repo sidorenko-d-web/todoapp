@@ -3,13 +3,20 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import { AppRoute } from '../constants';
 
 import ShopPage from '../pages/ShopPage/ShopPage.tsx';
-import { IntegrationPage, MainPage, ProfilePage, PromotionPage, StrangerProfilePage, TasksPage } from '../pages';
+import {
+  IntegrationPage,
+  MainPage,
+  ProfilePage,
+  PromotionPage,
+  StrangerProfilePage,
+  TasksPage,
+  WardrobePage,
+} from '../pages';
 import Layout from '../layout/Layout.tsx';
 import StatisticsPage from '../pages/StatisticsPage/StatisticsPage';
 
 import DevModals from '../pages/DevModals/DevModals.tsx';
 import { ShopInvewntoryPage } from '../pages/ShopPage';
-import { WardrobePage } from '../pages';
 
 function AppRouter(): JSX.Element | null {
   const location = useLocation();
@@ -24,7 +31,7 @@ function AppRouter(): JSX.Element | null {
         <Route path={AppRoute.Main} element={<MainPage />} />
         <Route path={AppRoute.Shop} element={<ShopPage />} />
         <Route path={AppRoute.Integration} element={<IntegrationPage />} />
-        <Route path={AppRoute.Integrations} element={<StatisticsPage />} />
+        <Route path={AppRoute.Statistics} element={<StatisticsPage />} />
         <Route path={AppRoute.Tasks} element={<TasksPage />} />
         <Route path={AppRoute.Profile} element={<ProfilePage />} />
         <Route path={AppRoute.StrangerProfile} element={<StrangerProfilePage />} />

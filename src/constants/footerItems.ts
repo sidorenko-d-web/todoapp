@@ -1,8 +1,8 @@
-import { EyeIcon }  from '../assets/icons/eye';
+import { EyeIcon } from '../assets/icons/eye';
 import { HomeIcon } from '../assets/icons/home';
 import { FlagIcon } from '../assets/icons/flag';
-import { ListIcon } from "../assets/icons/list";
-import { ShopIcon }  from "../assets/icons/shop";
+import { ListIcon } from '../assets/icons/list';
+import { ShopIcon } from '../assets/icons/shop';
 
 import { AppRoute } from './appRoute';
 
@@ -17,7 +17,7 @@ export const footerItems = [
         id: 1, 
         title: "Интеграции",
         icon: EyeIcon,
-        redirectTo: AppRoute.Integrations
+        redirectTo: '/integrations/undefined'
     },
     {
         id: 2,

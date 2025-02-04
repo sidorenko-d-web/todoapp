@@ -4,8 +4,8 @@ import { useModal } from '../../../hooks';
 import styles from './TaskCompletedModal.module.scss';
 
 import Button from '../partials/Button';
-import coin from '../../../assets/icons/coin.svg';
-import subscribers from '../../../assets/icons/subscribers.svg';
+import coin from '../../../assets/icons/coin.png';
+import subscribers from '../../../assets/icons/subscribers.png';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import reward from '../../../assets/animations/reward.json';

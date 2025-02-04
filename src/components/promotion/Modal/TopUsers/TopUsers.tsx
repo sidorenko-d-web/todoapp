@@ -83,7 +83,41 @@ export const TopUsers: FC<InviteFriendProps> = ({
               {/*}*/}
             </div>
           </Link>
-        ))}
+        ))}{topProfiles.map((profile, index) => (
+        <Link to={`/profile/${profile.id}`} key={profile.id} className={s.listUser}>
+          <div
+            className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
+            <div className={s.card}>
+              <img src={user} alt="user" width={27} height={36} />
+            </div>
+          </div>
+          <div className={s.userBlock}>
+            <div className={s.userInfo}>
+              <h3 className={s.text}>{profile.username}</h3>
+              <ul className={classNames(s.ulBlock, s.infoRang)}>
+                <li className={s.number}>6</li>
+                <li className={s.fireIcon}>
+                  <img src={fire} alt="fire" width={12} height={12} />
+                  <span>{profile.points}</span>
+                </li>
+                {/*{profile.vip &&*/}
+                {/*  <li className={s.vip}>*/}
+                {/*    <img src={star} alt="star" width={12} height={12} />*/}
+                {/*    <span>VIP</span>*/}
+                {/*  </li>}*/}
+              </ul>
+            </div>
+            <div className={s.numUser}>
+              {`${index + 1}`}<img src={clanRed} height={14} width={14} alt={'clanRed'} />
+            </div>
+          </div>
+          <div className={classNames(s.cardBox, {/*{ [s.vipCardBox]: profile.vip }*/ })}>
+            {/*{profile.vip ? <img src={chest} height={20} width={20} alt="chest" /> :*/}
+            <img src={close} alt="close" width={20} height={20} />
+            {/*}*/}
+          </div>
+        </Link>
+      ))}
       </ul>
     </BottomModal>
   );

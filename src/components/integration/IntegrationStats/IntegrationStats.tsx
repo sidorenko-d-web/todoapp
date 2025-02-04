@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
 import styles from './IntegrationStats.module.scss';
 
-import subscribersIcon from '../../../assets/icons/subscribers.svg';
-import viewsIcon from '../../../assets/icons/views.svg';
-import coinIcon from '../../../assets/icons/coin.svg'
+import subscribersIcon from '../../../assets/icons/subscribers.png';
+import viewsIcon from '../../../assets/icons/views.png';
+import coinIcon from '../../../assets/icons/coin.png';
 
 interface IntegrationStatsProps {
     subscribers: number;
