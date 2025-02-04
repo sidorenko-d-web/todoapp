@@ -32,7 +32,7 @@ export const CreatingIntegrationGuide: React.FC<CreatingIntegrationGuideProps> =
             dimBackground={false}
             onClose={onClose}>
             <button className={styles.nextBtn} onClick={handleClose}>{buttonText}</button>
-            <img src={img1} className={top=='63%' ? styles.gifImageRight : styles.gifImageLeft} height={146} width={140} />
+            <img src={img1} className={top=='66%' ? styles.gifImageRight : styles.gifImageLeft} height={146} width={140} />
         </Guide>
     );
 };

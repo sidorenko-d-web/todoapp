@@ -138,7 +138,7 @@ export const MainPage: FC = () => {
             </>
           }
           align='left'
-          top='68%' />
+          top='69%' />
       )}
 
       {currentIntegration == 5 && (
@@ -159,7 +159,7 @@ export const MainPage: FC = () => {
             </>
           }
           align='right'
-          top='63%' />
+          top='66%' />
       )}
     </main>
   );
