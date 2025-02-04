@@ -4,19 +4,22 @@ import classNames from 'classnames';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
 import gift from '../../assets/icons/gift.svg';
+import spinner from '../../assets/icons/spinner-blue.svg';
 import { useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery } from '../../redux';
-
-let userLevel = 0;
-let currentLevelSubscribers = 0;
-let nextLevelSubscribers = 0;
-let progressPercent = 0;
+import { useTreeProgress } from '../../hooks';
 
 export const Tree = () => {
   const { data: treeData } = useGetTreeInfoQuery();
   const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
-
   const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
   const lastActiveLevelRef = useRef<HTMLDivElement | null>(null);
+
+  const userSubscribers = userProfileData?.subscribers || 0;
+
+  const { progressPercent } = useTreeProgress({
+    treeData,
+    userSubscribers
+  });
 
   useEffect(() => {
     if (lastActiveLevelRef.current) {
@@ -27,27 +30,14 @@ export const Tree = () => {
     }
   }, [progressPercent]);
 
-  const userSubscribers = userProfileData?.subscribers || 0;
-  const levelsCount = treeData?.growth_tree_stages.length || 0;
-
-  const progressBarHeight = 150 + (levelsCount - 1) * 300;
-
-  treeData?.growth_tree_stages.forEach((stage, index) => {
-    if (userSubscribers >= stage.subscribers) {
-      userLevel = index + 1;
-      currentLevelSubscribers = stage.subscribers;
-      nextLevelSubscribers = treeData?.growth_tree_stages[userLevel]?.subscribers || currentLevelSubscribers;
-    }
-  });
-
-  if (currentLevelSubscribers && nextLevelSubscribers) {
-    progressPercent = (currentLevelSubscribers * 100) / nextLevelSubscribers;
+  if (!treeData) {
+    return null;
   }
 
   return (
     <div className={s.container}>
       <div className={s.progressBarContainer}>
-        <div className={s.progressBar} style={{ height: `${progressBarHeight}px` }}>
+        <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300}px` }}>
           <div
             className={s.progressFill}
             style={{ height: `${progressPercent}%` }}
@@ -68,20 +58,28 @@ export const Tree = () => {
                   {stage.stage_number}
                 </div>
                 {stage.id > 1 && (
-                  <div className={classNames(s.prize, {[s.priseSubscribers]: !stage.achievement}, {[s.prizeActive]: isActive})}>
+                  <div
+                    className={classNames(s.prize, {
+                      [s.priseSubscribers]: !stage.achievement,
+                      [s.prizeActive]: isActive || stage.stage_number % 10 === 0,
+                    })}
+                  >
+                    {stage.stage_number % 10 === 0 && (
+                      <img className={s.spiner} src={spinner} height={120} width={120} alt="spinner" />
+                    )}
                     {stage.achievement && (
-                      <div className={classNames(s.imgPrize,{[s.imgPrizeActive]: isActive})}>
+                      <div className={classNames(s.imgPrize, { [s.imgPrizeActive]: isActive })}>
                         <div className={classNames({ [s.blur]: !isActive })} />
                         <img src={gift} height={20} width={20} alt="gift" />
                       </div>
                     )}
-                    <p className={s.text}>{stage.subscribers} <br />
-                      подписчиков</p>
+                    <p className={classNames(s.text, { [s.textActive]: isActive})}>
+                      {stage.subscribers} <br />
+                      подписчиков
+                    </p>
                   </div>
                 )}
-                {isActive && (
-                  <div ref={lastActiveLevelRef} />
-                )}
+                {isActive && <div ref={lastActiveLevelRef} />}
               </div>
             );
           })}

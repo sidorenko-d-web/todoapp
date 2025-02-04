@@ -1,4 +1,5 @@
 @use '../../assets/styles/index.scss' as var;
+
 .container {
   height: 100%;
   display: flex;
@@ -51,7 +52,9 @@
   border: 2px solid var.$color-border-primary;
 }
 
-.prize, .priseSubscribers, .prizeActive {
+.prize,
+.priseSubscribers,
+.prizeActive {
   position: absolute;
   top: 20px;
   right: 70px;
@@ -68,13 +71,19 @@
 }
 
 .prizeActive {
-  border: 2px solid var.$color-primary;
+  right: -115px;
 }
 
+.spiner {
+  position: absolute;
+  top: -47px;
+  right: 80px;
+  z-index: -2;
+}
 
 .imgPrize, .imgPrizeActive {
   position: absolute;
-  right: 20px;
+  right: 23px;
   top: -37px;
   display: flex;
   justify-content: center;
@@ -87,7 +96,8 @@
 }
 
 .imgPrizeActive {
-  border: 2px solid var.$color-primary;
+  background: var.$color-prize-primary;
+  border: 2px solid var.$color-prize-primary;
 }
 
 .blur {
@@ -109,4 +119,8 @@
   text-align: center;
   overflow: hidden;
   color: var.$color-text-super-transparent;
+}
+
+.textActive {
+  color: var.$color-primary;
 }

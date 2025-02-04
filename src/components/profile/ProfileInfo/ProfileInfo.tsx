@@ -11,7 +11,10 @@ import subscriptionLeveIcon from '../../../assets/icons/subscription-level.svg';
 
 import ProgressLine from '../../shared/ProgressLine/ProgressLine';
 import { useModal } from '../../../hooks';
-import { MODALS } from '../../../constants';
+import { AppRoute, MODALS } from '../../../constants';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux';
 
 interface ProfileInfoProps {
   nickname: string;
@@ -33,6 +36,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
 
 
   const { openModal } = useModal();
+  const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
 
   return (
     <div className={styles.wrp}>
@@ -64,7 +68,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         <div className={styles.info}>
           <div className={styles.nicknameWrp}>
             <span className={styles.nickname}>{nickname}</span>
-            <span className={styles.subscribers}>999</span>
+            <Link to={AppRoute.ProgressTree} className={styles.subscribers}>{lastActiveStage}</Link>
             {
               !nonEditable &&
               <img className={styles.edit} src={editIcon} onClick={() => openModal(MODALS.CHANGING_NICKNAME)} alt="" />
