@@ -4,11 +4,14 @@ import classNames from 'classnames';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
 import gift from '../../assets/icons/gift.svg';
+import { useGetTreeInfoQuery } from '../../redux';
 
 export const Tree = () => {
   const [currentLevel, setCurrentLevel] = useState(5);
   const [progress, setProgress] = useState(0);
 
+  const { data} = useGetTreeInfoQuery();
+  console.log(data)
   const maxProgressPerLevel = 100;
 
   useEffect(() => {

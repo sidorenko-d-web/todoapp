@@ -1,9 +1,9 @@
 import { Action, combineReducers } from 'redux';
 import { authReducer } from './slices';
-import { authApi, companiesApi, integrationsApi, profileApi, usersApi } from './api';
-import { shopApi } from './api/shop/api';
+import { authApi, companiesApi, integrationsApi, profileApi, treeApi, usersApi } from './api';
+import { shopApi } from './api';
 import { inventoryApi } from './api/inventory/api';
-import { refferalsApi } from './api/referrals/api';
+import { refferalsApi } from './api';
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -15,6 +15,7 @@ const appReducer = combineReducers({
   [companiesApi.reducerPath]: companiesApi.reducer,
   [refferalsApi.reducerPath]: refferalsApi.reducer,
   [usersApi.reducerPath]: usersApi.reducer,
+  [treeApi.reducerPath]: treeApi.reducer,
 });
 
 export const rootReducer = (state: any, action: Action) => {
