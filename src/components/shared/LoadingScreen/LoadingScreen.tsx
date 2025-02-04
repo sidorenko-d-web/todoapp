@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import styles from './LoadingScreen.module.scss';
 import coinIcon from '../../../../src/assets/icons/coin.png';
 import { ProgressBar } from './ProgressBar';
+
 export const LoadingScreen = () => {
   const [dots, setDots] = useState('.');
   const [progress, setProgress] = useState(0);
@@ -31,7 +32,7 @@ export const LoadingScreen = () => {
 
   return (
     <div className={styles.root}>
-      <img className={styles.coin} src={coinIcon} alt="Coin" />
+      <img className={styles.coin} src={coinIcon} alt="Coin"/>
       <div className={styles.loadingWrp}>
         <ProgressBar progress={progress} />
         <div className={styles.text}>Загрузка{dots}</div>
