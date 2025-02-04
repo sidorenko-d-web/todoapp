@@ -19,7 +19,10 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
                                                         }: SubscribeModalProps) => {
   const [ buySubscription ] = useBuySubscriptionMutation();
 
+  const buyBtnGlowing = sessionStorage.getItem('hasToBuySubscriptionGuide') === '1';
+
   const handleBuySubscription = () => {
+    sessionStorage.setItem('subscriptionBought', '1');
     buySubscription().unwrap().then(() => onSuccess());
   };
 
@@ -44,7 +47,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
           </span>
         </div>
         <div className={s.buttons}>
-          <button className={s.button} onClick={handleBuySubscription}>450 <img src={coinIcon} height={14} width={14}
+          <button className={`${s.button} ${buyBtnGlowing ? s.glowing : ''}`} onClick={handleBuySubscription}>450 <img src={coinIcon} height={14} width={14}
                                                                                 alt={'Coin'} /></button>
           <button className={s.button + ' ' + s.gray}>Задание</button>
           <button className={s.button} disabled>1.99 $USDT</button>

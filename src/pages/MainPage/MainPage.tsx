@@ -16,7 +16,7 @@ export const MainPage: FC = () => {
 
   const [wasCreatingIntegrationModalOpened, setWasCreatingIntegrationModalOpened] = useState(false);
 
-  const { getModalState } = useModal();
+  const { getModalState, closeModal } = useModal();
 
   const creatingIntegrationModalState = getModalState(MODALS.SUBSCRIBE);
 
@@ -33,9 +33,13 @@ export const MainPage: FC = () => {
     <main className={s.page}>
       <div
         onClick={() => {
-          setCurrentIntegration(2);
-          setIsButtonGlowing(false);
-          setWasCreatingIntegrationModalOpened(true);
+          const wasSubscribeGuideShown = sessionStorage.getItem('needToSubscribeGuideShown') === '1';
+          
+          if (!wasSubscribeGuideShown) {
+            setCurrentIntegration(2);
+            setIsButtonGlowing(false);
+            setWasCreatingIntegrationModalOpened(true);
+          }
         }}
         style={{ zIndex: isButtonGlowing ? '2000' : '5' }}
       >
@@ -53,7 +57,9 @@ export const MainPage: FC = () => {
 
       {currentIntegration === 1 && (
         <CreateIntegrationGuide
-          onClose={() => setCurrentIntegration(-1)} 
+          onClose={() => {
+            setCurrentIntegration(-1);
+          }}
           top="50%"
           zIndex={1500}
           description={
@@ -69,7 +75,12 @@ export const MainPage: FC = () => {
 
       {currentIntegration === 2 && (
         <CreateIntegrationGuide
-          onClose={() => setCurrentIntegration(-1)} 
+          onClose={() => {
+            setIsButtonGlowing(false);
+            setCurrentIntegration(-1);
+            closeModal(MODALS.SUBSCRIBE);
+            sessionStorage.setItem('needToSubscribeGuideShown', '1');
+          }}
           top="65%"
           zIndex={1500}
           description={
@@ -86,9 +97,16 @@ export const MainPage: FC = () => {
 
       {currentIntegration === 3 && (
         <GetCoinsGuide
-          onClose={() => setCurrentIntegration(-1)} 
+          onClose={() => {
+            setCurrentIntegration(-1);
+            sessionStorage.setItem('hasToBuySubscriptionGuide', '1');
+          }}
           isReferral={true}
         />
+      )}
+
+      {sessionStorage.getItem('subscriptionBought') === '1' && (
+        <div>cool</div>
       )}
     </main>
   );
