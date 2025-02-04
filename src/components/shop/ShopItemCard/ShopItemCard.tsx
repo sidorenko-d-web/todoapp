@@ -5,11 +5,10 @@ import LockIconSvg from '../../../assets/icons/lock-closed';
 import ChestBlueIcon from '../../../assets/icons/chest-blue.svg';
 import ChestPurpleIcon from '../../../assets/icons/chest-purple.svg';
 import ChestRedIcon from '../../../assets/icons/chest-red.svg';
-import { useBuyItemMutation } from '../../../redux';
-import { TypeItemQuality, IShopItem } from '../../../redux';
-import CoinIcon from '../../../assets/icons/coin.png'
-import SubscriberCoin from '../../../assets/icons/subscriber_coin.png'
-import LockIcon from '../../../assets/icons/lock_icon.svg'
+import { IShopItem, TypeItemQuality, useBuyItemMutation } from '../../../redux';
+import CoinIcon from '../../../assets/icons/coin.png';
+import SubscriberCoin from '../../../assets/icons/subscribers.png';
+import LockIcon from '../../../assets/icons/lock_icon.svg';
 
 interface Props {
   disabled?: boolean;
@@ -23,15 +22,15 @@ interface Props {
 }
 
 export const ShopItemCard: FC<Props> = ({
-  disabled,
-  isBlocked,
-  isUpgradeEnabled = true,
-  variant = 'lowcost',
-  item,
-  isB,
-  refetchAll,
-}) => {
-  const [buyItem, { isLoading }] = useBuyItemMutation();
+                                          disabled,
+                                          isBlocked,
+                                          isUpgradeEnabled = true,
+                                          variant = 'lowcost',
+                                          item,
+                                          isB,
+                                          refetchAll,
+                                        }) => {
+  const [ buyItem, { isLoading } ] = useBuyItemMutation();
 
   const handleBuyItem = async () => {
     try {
@@ -40,7 +39,8 @@ export const ShopItemCard: FC<Props> = ({
       if (!res.error) {
         refetchAll();
       }
-    } catch (error) {}
+    } catch (error) {
+    }
   };
 
   return (
@@ -49,7 +49,7 @@ export const ShopItemCard: FC<Props> = ({
         <div
           className={clsx(styles.image, variant === 'prem' ? styles.purpleImage : variant === 'lux' && styles.redImage)}
         >
-          <img src={item.image_url} className={clsx(isBlocked && styles.disabledImage)} alt=''/>
+          <img src={item.image_url} className={clsx(isBlocked && styles.disabledImage)} alt="" />
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
           {!isBlocked && <p>Base</p>}
         </div>
@@ -76,15 +76,15 @@ export const ShopItemCard: FC<Props> = ({
           <div className={clsx(styles.stats, (isBlocked || disabled) && styles.disabledStats)}>
             <div className={styles.statsItem}>
               <p>+{item.boost.income_per_integration}</p>
-              <img src={CoinIcon} alt=''/>
+              <img src={CoinIcon} alt="" />
             </div>
             <div className={styles.statsItem}>
               <p>+{item.boost.subscribers}</p>
-              <img  src={SubscriberCoin}  alt=''/>
+              <img src={SubscriberCoin} alt="" />
             </div>
             <div className={styles.statsItem}>
               <p>+{item.boost.income_per_second}</p>
-              <img src={CoinIcon} alt=''/>
+              <img src={CoinIcon} alt="" />
               <p>/сек</p>
             </div>
           </div>
@@ -107,7 +107,8 @@ export const ShopItemCard: FC<Props> = ({
               <div className={styles.goal}>
                 <p>Каменный сундук</p>
                 <img
-                  src={variant === 'lowcost' ? ChestBlueIcon : variant === 'prem' ? ChestPurpleIcon : ChestRedIcon} alt=''
+                  src={variant === 'lowcost' ? ChestBlueIcon : variant === 'prem' ? ChestPurpleIcon : ChestRedIcon}
+                  alt=""
                 />
               </div>
             </div>
@@ -127,16 +128,16 @@ export const ShopItemCard: FC<Props> = ({
                   variant === 'lowcost' ? styles.item : variant === 'prem' ? styles.itemPurple : styles.itemRed
                 }
               >
-                <img src={item.image_url} className={styles.itemImage} alt=''/>
-                <img src={LockIcon} className={styles.lock} alt=''/>
+                <img src={item.image_url} className={styles.itemImage} alt="" />
+                <img src={LockIcon} className={styles.lock} alt="" />
               </div>
               <div className={styles.itemLocked}>
-                <img src={item.image_url} className={styles.itemImage} alt=''/>
-                <img src={LockIcon} className={styles.lock} alt=''/>
+                <img src={item.image_url} className={styles.itemImage} alt="" />
+                <img src={LockIcon} className={styles.lock} alt="" />
               </div>
               <div className={styles.itemLocked}>
-                <img src={item.image_url} className={styles.itemImage} alt=''/>
-                <img src={LockIcon} className={styles.lock} alt=''/>
+                <img src={item.image_url} className={styles.itemImage} alt="" />
+                <img src={LockIcon} className={styles.lock} alt="" />
               </div>
             </div>
           </div>
@@ -144,9 +145,9 @@ export const ShopItemCard: FC<Props> = ({
 
       {isBlocked ? (
         <div className={styles.disabledUpgradeActions}>
-          <img src={LockIcon} alt=''/>
+          <img src={LockIcon} alt="" />
           <p>Прокачайте основной предмет</p>
-          <img src={LockIcon} alt=''/>
+          <img src={LockIcon} alt="" />
         </div>
       ) : disabled ? (
         <button className={styles.disabledActions}>
@@ -159,7 +160,7 @@ export const ShopItemCard: FC<Props> = ({
               <p>loading</p>
             ) : (
               <>
-                {item.price_internal} <img src={CoinIcon} alt=''/>
+                {item.price_internal} <img src={CoinIcon} alt="" />
               </>
             )}
           </button>
@@ -168,9 +169,9 @@ export const ShopItemCard: FC<Props> = ({
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>
-          <img src={LockIcon} alt=''/>
+          <img src={LockIcon} alt="" />
           <p>Нужен уровень Древа 7</p>
-          <img src={LockIcon} alt=''/>
+          <img src={LockIcon} alt="" />
         </div>
       )}
     </div>

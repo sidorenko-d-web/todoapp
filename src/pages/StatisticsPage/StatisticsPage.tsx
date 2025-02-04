@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './StatisticsPage.module.scss';
-import views from '../../assets/icons/views.svg';
+import views from '../../assets/icons/views.png';
 import subscribers from '../../assets/icons/subscribers.svg';
 import logo from '../../assets/icons/dot.png';
 import back from '../../assets/icons/arrow-back.svg';
