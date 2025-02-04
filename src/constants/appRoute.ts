@@ -1,6 +1,6 @@
 export enum AppRoute {
   Main = '/',
-  Integrations = '/integrations',
+  Statistics = '/statistics',
   Integration = '/integrations/:integrationId',
   Tasks = '/tasks',
   Profile = '/profile',
@@ -9,5 +9,6 @@ export enum AppRoute {
   ShopInventory = '/shop/inventory',
   Promotion = '/promotion',
   Wardrobe = '/wardrobe',
+  ProgressTree = '/progressTree',
   NotFound = '*',
 }

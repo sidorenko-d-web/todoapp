@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState, type Dispatch, type FC, type SetStateAction } from 'react';
+import { type Dispatch, type FC, PropsWithChildren, type SetStateAction, useEffect, useState } from 'react';
 import styles from './ShopLayout.module.scss';
 import { useGetInventoryBoostQuery, useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
 import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';

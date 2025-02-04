@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from './LoadingScreen.module.scss';
-import coinIcon from '../../../../src/assets/icons/coin.svg';
+import coinIcon from '../../../../src/assets/icons/coin.png';
 import { ProgressBar } from './ProgressBar';
 export const LoadingScreen = () => {
   const [dots, setDots] = useState('.');

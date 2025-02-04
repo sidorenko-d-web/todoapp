@@ -5,19 +5,10 @@ import LockIconSvg from '../../../assets/icons/lock-closed';
 import ChestBlueIcon from '../../../assets/icons/chest-blue.svg';
 import ChestPurpleIcon from '../../../assets/icons/chest-purple.svg';
 import ChestRedIcon from '../../../assets/icons/chest-red.svg';
-import {
-  TypeItemRarity,
-  useGetCurrentUserProfileInfoQuery,
-  useGetShopItemsQuery,
-  useUpgradeItemMutation,
-} from '../../../redux';
-import { IShopItem } from '../../../redux';
-import CoinIcon from '../../../assets/icons/coin.svg';
-import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
+import { IShopItem, TypeItemQuality, useBuyItemMutation } from '../../../redux';
+import CoinIcon from '../../../assets/icons/coin.png';
+import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
-import ViewsIcon from '../../../assets/icons/views.svg';
-import { useModal } from '../../../hooks';
-import { MODALS } from '../../../constants';
 
 interface Props {
   disabled?: boolean;

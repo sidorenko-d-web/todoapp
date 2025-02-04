@@ -10,7 +10,7 @@ import {
 export const integrationsApi = createApi({
   reducerPath: 'integrationsApi',
   baseQuery: baseQueryReauth,
-  tagTypes: ['Integrations'],
+  tagTypes: ['Integrations', 'IntegrationComments'],
   endpoints: (builder) => ({
     getIntegration: builder.query<IntegrationResponseDTO, string>({
       query: (integrationId) => ({
@@ -32,11 +32,15 @@ export const integrationsApi = createApi({
         body: { is_hate: isHate },
       }),
     }),
+
     getUnansweredIntegrationComment: builder.query<UnansweredIntegrationCommentDTO, string>({
       query: (integrationId) => ({
         url: `/integrations/comments/${integrationId}`,
         method: 'GET',
       }),
+      providesTags: (_error, _result, integrationId) => [
+        { type: 'IntegrationComments' as const, id: integrationId }
+      ],
     }),
     getIntegrations: builder.query<IntegrationsResponseDTO, IntegrationsQueryRequestDTO | void>({
       query: (queryParams) => {

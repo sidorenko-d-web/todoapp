@@ -37,7 +37,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, variant = 'lowcost', item, r
       } else {
         setError(JSON.stringify(res.error));
       }
-    } catch (error) {}
+    } catch (error) {
+    }
   };
 
   return (
@@ -70,6 +71,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, variant = 'lowcost', item, r
             <div className={styles.statsItem}>
               <p>+{item.boost.income_per_second}</p>
               <img src={CoinIcon} alt="" />
+              <img src={CoinIcon} alt="" />
               <p>/сек</p>
             </div>
           </div>
@@ -87,6 +89,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, variant = 'lowcost', item, r
             ) : (
               <>
                 {item.price_internal} <img src={CoinIcon} alt="" />
+                {item.price_internal} <img src={CoinIcon} alt="" />
               </>
             )}
           </button>
@@ -94,7 +97,9 @@ export const ShopItemCard: FC<Props> = ({ disabled, variant = 'lowcost', item, r
       ) : (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
+          <img src={LockIcon} alt="" />
           <p>Нужен уровень Древа 7</p>
+          <img src={LockIcon} alt="" />
           <img src={LockIcon} alt="" />
         </div>
       )}

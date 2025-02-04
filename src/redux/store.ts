@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReducer } from './rootReducer';
-import { authApi, companiesApi, usersApi } from './api';
-import { shopApi } from './api/shop/api';
+import { authApi, companiesApi, treeApi, usersApi } from './api';
+import { shopApi } from './api';
 import { inventoryApi } from './api/inventory/api';
 import { integrationsApi } from './api';
 import { profileApi } from './api';
-import { refferalsApi } from './api/referrals/api';
+import { refferalsApi } from './api';
 
 export const store = configureStore({
   reducer: rootReducer,
@@ -18,7 +18,8 @@ export const store = configureStore({
       profileApi.middleware,
       companiesApi.middleware,
       refferalsApi.middleware,
-      usersApi.middleware
+      usersApi.middleware,
+      treeApi.middleware,
     ),
 });
 
