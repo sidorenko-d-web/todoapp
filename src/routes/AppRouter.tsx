@@ -3,7 +3,15 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import { AppRoute } from '../constants';
 
 import ShopPage from '../pages/ShopPage/ShopPage.tsx';
-import { IntegrationPage, MainPage, ProfilePage, PromotionPage, StrangerProfilePage, TasksPage } from '../pages';
+import {
+  IntegrationPage,
+  MainPage,
+  ProfilePage,
+  ProgressTreePage,
+  PromotionPage,
+  StrangerProfilePage,
+  TasksPage,
+} from '../pages';
 import Layout from '../layout/Layout.tsx';
 import StatisticsPage from '../pages/StatisticsPage/StatisticsPage';
 
@@ -32,6 +40,7 @@ function AppRouter(): JSX.Element | null {
         <Route path={AppRoute.ShopInventory} element={<ShopInvewntoryPage />} />
         <Route path={'dev-modals'} element={<DevModals />} />
         <Route path={AppRoute.Wardrobe} element={<WardrobePage/>} />
+        <Route path={AppRoute.ProgressTree} element={<ProgressTreePage/>} />
       </Route>
     </Routes>
   );

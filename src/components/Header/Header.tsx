@@ -4,7 +4,7 @@ import AvatarIcon from "../../assets/icons/new-avatar.svg"
 import FireIcon from "../../assets/icons/avatar-fire.svg"
 import SubscribersIcon from "../../assets/icons/subscribers.png"
 import { useGetCurrentUserProfileInfoQuery } from '../../redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../constants'
 
 
@@ -36,7 +36,7 @@ export const Header = () => {
                   </div>
 
                   <div className={styles.levelInfo}>
-                      <p className={styles.levelNumber}>{6}</p>
+                      <Link to={AppRoute.ProgressTree} className={styles.levelNumber}>{6}</Link>
                       <progress max={10} value={6} className={styles.levelProgressBar}></progress>
                   </div>
               </div>

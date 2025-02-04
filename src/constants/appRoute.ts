@@ -9,5 +9,6 @@ export enum AppRoute {
   ShopInventory = '/shop/inventory',
   Promotion = '/promotion',
   Wardrobe = '/wardrobe',
+  ProgressTree = '/progressTree',
   NotFound = '*',
 }
