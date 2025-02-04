@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styles from './InitialGuide.module.scss';
 
-import img1 from '../../../assets/gif/guide1.gif';
-import { Guide } from "../Guide/Guide";
+import img1 from '../../../../assets/gif/guide1.gif';
+import { Guide } from "../../Guide/Guide";
 
 interface InitialGuideProps {
     onClose: () => void;

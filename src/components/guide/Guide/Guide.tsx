@@ -7,24 +7,21 @@ interface GuideProps {
     children?: ReactNode;
     zIndex?: number;
     top?: number | string;
-    onClose: () => void; // Add onClose prop to handle closing the guide
+    onClose: () => void; 
 }
 
 export const Guide = ({ align = 'left', description, children, zIndex, top, onClose }: GuideProps) => {
-    const contentRef = useRef<HTMLDivElement>(null); // Ref for the content div
+    const contentRef = useRef<HTMLDivElement>(null);
 
-    // Handle clicks outside the content
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (contentRef.current && !contentRef.current.contains(event.target as Node)) {
-                onClose(); // Close the guide if clicked outside the content
+                onClose(); 
             }
         };
 
-        // Attach the event listener
         document.addEventListener('mousedown', handleClickOutside);
 
-        // Clean up the event listener
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
@@ -33,7 +30,7 @@ export const Guide = ({ align = 'left', description, children, zIndex, top, onCl
     return (
         <div className={styles.wrp} style={{ zIndex: zIndex }}>
             <div
-                ref={contentRef} // Attach the ref to the content div
+                ref={contentRef} 
                 className={`${styles.content} ${align === 'left' ? styles.left : styles.right}`}
                 style={{ top: top }}
             >

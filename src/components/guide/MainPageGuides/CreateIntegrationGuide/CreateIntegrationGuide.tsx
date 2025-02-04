@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react";
 import styles from './CreateIntegrationGuide.module.scss';
 
-import img1 from '../../../assets/gif/guide1.gif';
-import { Guide } from "../Guide/Guide";
+import img1 from '../../../../assets/gif/guide1.gif';
+import { Guide } from "../../Guide/Guide";
 
 interface CreateIntegrationGuideProps {
     description: ReactNode;
