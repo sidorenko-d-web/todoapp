@@ -1,6 +1,6 @@
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
-import { MODALS } from '../../../constants';
+import { MODALS } from '../../../constants/modals.ts';
 import { profileApi, useGetCurrentUserProfileInfoQuery, useGetIntegrationsQuery } from '../../../redux';
 import { IntegrationCreationCard, IntegrationCreationModal } from '../';
 import { SubscribeModal, SuccessfullySubscribedModal } from '../../';

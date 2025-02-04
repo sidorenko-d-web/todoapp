@@ -87,7 +87,7 @@ export function AuthInit({ children }: AuthInitProps) {
     saveCurrentStep('completed');
   };
 
-  if (!isLoading || !isInitializing) {
+  if (isLoading || isInitializing) {
     return <LoadingScreen />;
   }
 
