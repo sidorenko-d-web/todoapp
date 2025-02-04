@@ -5,3 +5,4 @@ export * from './companies';
 export * from './shop';
 export * from './referrals';
 export * from './users';
+export * from './tree'

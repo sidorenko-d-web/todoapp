@@ -7,6 +7,7 @@ import {
   IntegrationPage,
   MainPage,
   ProfilePage,
+  ProgressTreePage,
   PromotionPage,
   StrangerProfilePage,
   TasksPage,
@@ -39,6 +40,7 @@ function AppRouter(): JSX.Element | null {
         <Route path={AppRoute.ShopInventory} element={<ShopInvewntoryPage />} />
         <Route path={'dev-modals'} element={<DevModals />} />
         <Route path={AppRoute.Wardrobe} element={<WardrobePage/>} />
+        <Route path={AppRoute.ProgressTree} element={<ProgressTreePage/>} />
       </Route>
     </Routes>
   );

@@ -1,0 +1,136 @@
+@use '../../assets/styles/index.scss' as var;
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.progressBar {
+  position: absolute;
+  width: 30px;
+  height: 100%;
+  border: 2px solid var.$color-dark-gray-stroke;
+  background: var.$footer-bg;
+  border-bottom: none;
+  border-top: none;
+}
+
+.progressFill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: var.$gradient-progress-tree;
+  transition: height 0.3s ease;
+}
+
+.levelMarker {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.levelCircle {
+  width: 55px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: background 0.3s, border 0.3s;
+  background: var.$color-card-bg;
+  border: 2px solid var.$color-dark-gray-stroke;
+}
+
+.active {
+  background: var.$gradient-progress-tree;
+  border: 2px solid var.$color-border-primary;
+}
+
+.prize,
+.priseSubscribers,
+.prizeActive {
+  position: absolute;
+  top: 20px;
+  right: 70px;
+  width: 90px;
+  height: auto;
+  border-radius: 4px;
+  padding: 3px 6px;
+  background: var.$color-card-bg;
+  border: 2px solid var.$color-dark-gray-stroke;
+}
+
+.priseSubscribers {
+  top: 0;
+}
+
+.prizeActive {
+  right: -115px;
+}
+
+.spiner {
+  position: absolute;
+  top: -47px;
+  right: 80px;
+  z-index: -2;
+  animation: spin 6s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.imgPrize, .imgPrizeActive {
+  position: absolute;
+  right: 23px;
+  top: -37px;
+  display: flex;
+  justify-content: center;
+  width: 40px;
+  height: auto;
+  border-radius: 4px;
+  padding: 3px 6px;
+  background: var.$color-card-bg;
+  border: 2px solid var.$color-dark-gray-stroke;
+}
+
+.imgPrizeActive {
+  background: var.$color-prize-primary;
+  border: 2px solid var.$color-prize-primary;
+}
+
+.blur {
+  position: absolute;
+  top: -1px;
+  width: 40px;
+  height: 28px;
+  border-radius: 4px;
+  padding: 3px 6px;
+  opacity: 0.6;
+  background: var.$color-gray;
+}
+
+.text {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 13.2px;
+  letter-spacing: -0.05em;
+  text-align: center;
+  overflow: hidden;
+  color: var.$color-text-super-transparent;
+}
+
+.textActive {
+  color: var.$color-primary;
+}
