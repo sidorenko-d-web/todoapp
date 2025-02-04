@@ -1,97 +1,105 @@
 @use '../../../assets/styles/index.scss' as var;
 
 .wrp {
-    width: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #1C1D22;
+  border-radius: 10px;
+  gap: 20px;
+  padding: 10px;
+
+  .usernameAndComment {
     display: flex;
     flex-direction: column;
-    background-color: #1C1D22;
-    border-radius: 10px;
-    gap: 20px;
-    padding: 10px;
+    gap: 10px;
 
-    .usernameAndComment {
+    .username {
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0;
+      color: var.$color-blue-primary;
+    }
+
+    .positiveCommentText {
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0;
+      color: var.$color-green;
+    }
+
+    .negativeCommentText {
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0;
+      color: var.$color-red;
+    }
+  }
+
+  .progressWrp {
+    .amountAndRewardWrp {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+
+      .amount {
+        font-size: 12px;
+        font-weight: 500;
+        color: var.$color-text-semi-transparent;
+        margin: 0;
+      }
+
+      .rewardWrp {
         display: flex;
-        flex-direction: column;
-        gap: 10px;
+        align-items: center;
+        gap: 5px;
 
-        .username {
-            font-size: 14px;
-            font-weight: 500;
-            margin: 0;
-            color: var.$color-blue-primary;
+        .reward {
+          color: #fff;
+          font-size: 12px;
+          font-weight: 500;
+          margin: 0;
         }
+      }
+    }
+  }
 
-        .commentText {
-            color: var.$color-green;
-        }
+  .thumbs {
+    display: flex;
+    gap: 10px;
 
-        .commentHate{
-            color: var.$color-red;
-        }
+    .thumbsUp {
+      height: 40px;
+      width: 40px;
+      border-radius: 10px;
+      background-color: var.$color-green;
+
+      border: none;
+      background-image: url('../../../assets/icons/thumbs-up.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      background-size: 50%;
     }
 
-    .progressWrp {
-        .amountAndRewardWrp {
-            display: flex;
-            width: 100%;
-            justify-content: space-between;
-            .amount {
-                font-size: 12px;
-                font-weight: 500;
-                color: var.$color-text-semi-transparent;
-                margin: 0;
-            }
+    .thumbsDown {
+      height: 40px;
+      width: 40px;
+      border-radius: 10px;
+      background-color: var.$color-red;
 
-            .rewardWrp {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-                .reward {
-                    color: #fff;
-                    font-size: 12px;
-                    font-weight: 500;
-                    margin: 0;
-                }
-            }
-        }
+      border: none;
+      background-image: url('../../../assets/icons/thumbs-down.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      background-size: 50%;
     }
+  }
 
-    .thumbs {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;        
-        .thumbsUp {
-            height: 40px;
-            width: 40px;
-            border-radius: 10px;
-            background-color: var.$color-green;
-
-            border: none;
-            background-image: url('../../../assets/icons/thumbs-up.svg');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            background-size: 50%;
-        }
-
-        .thumbsDown {
-            height: 40px;
-            width: 40px;
-            border-radius: 10px;
-            background-color: var.$color-red;
-
-            border: none;
-            background-image: url('../../../assets/icons/thumbs-down.svg');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            background-size: 50%;
-        }
-    }
-
-    .noComment {
-        width: 100%;
-        text-align: center;
-        font-size: 14px;
-    }
+  .noComment {
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+  }
 }

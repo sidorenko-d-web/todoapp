@@ -1,11 +1,11 @@
-import React from "react";
-import BottomModal from "../../../shared/BottomModal/BottomModal";
+import React from 'react';
+import BottomModal from '../../../shared/BottomModal/BottomModal';
 
 import s from './UserReferrals.module.scss';
-import subscribersIcon from '../../../../assets/icons/subscribers.svg';
+import subscribersIcon from '../../../../assets/icons/subscribers.png';
 
-import { ReferralCard } from "../../ReferralCard/ReferralCard";
-import { useGetCurrentUsersReferralsQuery } from "../../../../redux";
+import { ReferralCard } from '../../ReferralCard/ReferralCard';
+import { useGetCurrentUsersReferralsQuery } from '../../../../redux';
 
 interface UserReferralsProps {
     modalId: string;

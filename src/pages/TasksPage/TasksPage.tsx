@@ -1,6 +1,6 @@
 import React from 'react';
-import subscribersIcon from '../../assets/icons/subscribers.svg';
-import coinIcon from '../../assets/icons/coin.svg';
+import subscribersIcon from '../../assets/icons/subscribers.png';
+import coinIcon from '../../assets/icons/coin.png';
 
 import s from './TasksPage.module.scss';
 import { DailyTasks, SocialTasks, TopTasks } from '../../components';

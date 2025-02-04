@@ -7,7 +7,6 @@
 }
 
 .modal {
-  padding: 5px 12px 12px;
   background-color: var.$color-bg;
   border: 1px solid var.$color-dark-gray;
   border-bottom: none;
@@ -37,8 +36,8 @@
   align-items: center;
   gap: 5px;
 
-  padding: 5px 12px 10px;
   margin-bottom: 5px;
+  padding: 5px 12px 10px;
 }
 
 .titleWrapper {
@@ -80,4 +79,8 @@
   &:hover {
     color: var.$color-black;
   }
+}
+
+.content {
+  padding: 10px 15px 40px 15px;
 }

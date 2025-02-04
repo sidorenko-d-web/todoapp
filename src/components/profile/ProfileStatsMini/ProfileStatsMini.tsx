@@ -3,9 +3,9 @@ import React from 'react';
 import styles from './ProfileStatsMini.module.scss';
 
 import clanIcon from '../../../assets/icons/clan-red.svg';
-import subscriberIcon from '../../../assets/icons/subscribers.svg';
+import subscriberIcon from '../../../assets/icons/subscribers.png';
 import fireIcon from '../../../assets/icons/fire-red.svg';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 interface ProfileStatsMiniProps {
   subscribers: number;
