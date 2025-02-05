@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { isGuideShown } from "../../utils";
+import { GUIDE_ITEMS } from "../../constants";
 
 interface GuideState {
   getCoinsGuideShown: boolean;
 }
 
 const initialState: GuideState = {
-  getCoinsGuideShown: false,
+  getCoinsGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN),
 };
 
 const guideSlice = createSlice({

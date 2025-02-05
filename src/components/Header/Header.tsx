@@ -5,11 +5,11 @@ import FireIcon from "../../assets/icons/avatar-fire.svg"
 import SubscribersIcon from "../../assets/icons/subscribers.png"
 import { RootState, useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery } from '../../redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppRoute, GUIDE_ITEMS } from '../../constants'
+import { AppRoute } from '../../constants'
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { setLastActiveStage } from '../../redux/slices/tree.ts';
-import { isGuideShown } from "../../utils/guide-functions.ts"
+
 
 export const Header = () => {
   const { data, isLoading } = useGetCurrentUserProfileInfoQuery();
@@ -66,7 +66,7 @@ export const Header = () => {
 
           <div className={styles.coinsWrapper}>
               <p className={styles.coins}>
-                  {(showCoins || isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN)) ? data?.points : 0}
+                  {showCoins ? data?.points : 0}
               </p>
               <img className={styles.coinIcon} src={CoinIcon} alt="CoinIcon" />
           </div>
