@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useReducer } from 'react';
 import { CreatingIntegrationGuide, GetCoinsGuide, InitialGuide, IntegrationCreation, SubscrieGuide } from '../../components';
 import s from './MainPage.module.scss';
 import { MODALS } from '../../constants';
@@ -10,26 +10,34 @@ import { isGuideShown, setGuideShown } from '../../utils';
 export const MainPage: FC = () => {
   const { getModalState, closeModal, openModal } = useModal();
 
-  const [guideVisibility, setGuideVisibility] = useState({
+  const initialState = {
     firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
     secondGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN),
     subscribeModalOpened: isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED),
     getCoinsGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN),
     createIntegrationFirstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN),
     createIntegrationSecondGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN),
-  });
+  };
+
+  function guideReducer(state: any, action: { type: any; payload: string; }) {
+    switch (action.type) {
+      case 'SET_GUIDE_SHOWN':
+        setGuideShown(action.payload); 
+        return { ...state, [action.payload]: true };
+      default:
+        return state;
+    }
+  }
+
+  const [guideVisibility, dispatch] = useReducer(guideReducer, initialState);
 
   const purchasingSubscriptionModalState = getModalState(MODALS.SUBSCRIBE);
   const creatingIntegrationModalState = getModalState(MODALS.CREATING_INTEGRATION);
 
   const handleGuideClose = (guideId: string) => {
-    setGuideShown(guideId);
-    setGuideVisibility((prev) => ({
-      ...prev,
-      [guideId]: true,
-    }));
+    dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
-
+  
   
   return (
     <main className={s.page}>
@@ -43,7 +51,7 @@ export const MainPage: FC = () => {
       )}
 
       {/* Second Guide */}
-      {!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown && (
+      {(!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown) && (
         <SubscrieGuide
           onClose={() => {
             handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
@@ -63,9 +71,9 @@ export const MainPage: FC = () => {
       )}
 
       {/* Subscription Modal Guide */}
-      {guideVisibility.secondGuideShown &&
+      {(guideVisibility.secondGuideShown &&
         !guideVisibility.subscribeModalOpened &&
-        purchasingSubscriptionModalState.isOpen && (
+        purchasingSubscriptionModalState.isOpen) && (
           <SubscrieGuide
             onClose={() => {
               closeModal(MODALS.SUBSCRIBE);
@@ -86,9 +94,9 @@ export const MainPage: FC = () => {
         )}
 
       {/* Get Coins Guide */}
-      {!purchasingSubscriptionModalState.isOpen &&
+      {(!purchasingSubscriptionModalState.isOpen &&
         guideVisibility.subscribeModalOpened &&
-        !guideVisibility.getCoinsGuideShown && (
+        !guideVisibility.getCoinsGuideShown) && (
           <GetCoinsGuide
             onClose={() => {
               handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
@@ -99,8 +107,8 @@ export const MainPage: FC = () => {
         )}
 
       {/* Creating Integration First Guide */}
-      {creatingIntegrationModalState.isOpen &&
-        !guideVisibility.createIntegrationFirstGuideShown && (
+      {(creatingIntegrationModalState.isOpen &&
+        !guideVisibility.createIntegrationFirstGuideShown) && (
           <CreatingIntegrationGuide
             onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)}
             buttonText="Отлично!"
@@ -118,9 +126,9 @@ export const MainPage: FC = () => {
         )}
 
       {/* Creating Integration Second Guide */}
-      {creatingIntegrationModalState.isOpen &&
+      {(creatingIntegrationModalState.isOpen &&
         guideVisibility.createIntegrationFirstGuideShown &&
-        !guideVisibility.createIntegrationSecondGuideShown && (
+        !guideVisibility.createIntegrationSecondGuideShown) && (
           <CreatingIntegrationGuide
             onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)}
             buttonText="Хорошо!"
