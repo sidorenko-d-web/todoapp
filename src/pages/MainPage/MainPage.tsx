@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 export const MainPage: FC = () => {
   const { getModalState, closeModal, openModal } = useModal();
 
-  const guideDispatch = useDispatch();
+  const reduxDispatch = useDispatch();
   
   const initialState = {
     firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
@@ -106,7 +106,7 @@ export const MainPage: FC = () => {
           <GetCoinsGuide
             onClose={() => {
               //window.dispatchEvent(new Event("coinsGuideUpdated"));
-              guideDispatch(setGetCoinsGuideShown(true));
+              reduxDispatch(setGetCoinsGuideShown(true));
               handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
               openModal(MODALS.SUBSCRIBE);
             }}
