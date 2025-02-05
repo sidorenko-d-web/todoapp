@@ -10,8 +10,6 @@ import s from './IntegrationCreation.module.scss';
 
 import { isIntegrationCreationButtonGlowing } from '../../../utils/guide-functions.ts';
 
-
-
 export const IntegrationCreation: React.FC = () => {
   const dispatch = useDispatch();
 

@@ -47,7 +47,10 @@ export const MainPage: FC = () => {
       {/* Second Guide */}
       {!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown && (
         <CreateIntegrationGuide
-          onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)}
+          onClose={() => {
+            handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+            openModal(MODALS.SUBSCRIBE);
+          }}
           top="50%"
           zIndex={1500}
           description={

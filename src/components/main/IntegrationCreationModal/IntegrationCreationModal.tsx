@@ -15,6 +15,8 @@ import { useInventoryItemsFilter } from '../../../hooks';
 
 import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
+import { isGuideShown, setGuideShown } from '../../../utils/guide-functions.ts';
+import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 
 interface CreatingIntegrationModalProps {
   modalId: string;
@@ -45,7 +47,9 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const { data } = useGetCompaniesQuery();
   const companies = data?.campaigns;
 
+
   const goToShop = () => {
+    setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
     onClose();
     navigate('/shop');
   };
@@ -75,12 +79,15 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     return null;
   })();
 
-  const lightningsGlowing = sessionStorage.getItem('createIntegrationLightningsGlowing') === '1'
-  const tabsGlowing = sessionStorage.getItem('createIntegrationTabsGlowing') === '1';
-  const buttonGlowing = sessionStorage.getItem('goToStoreBtnGlowing') === '1';
+  const lightningsGlowing = !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
+    && !isGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
 
-  console.log('button glowing: ' + sessionStorage.getItem('goToStoreBtnGlowing'));
-
+  const tabsGlowing = isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)
+    && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+    
+  const buttonGlowing = isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)
+    && isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
+    && !isGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
 
   return (
     <CentralModal modalId={modalId} title="Создание интеграции" onClose={onClose} titleIcon={integrationWhiteIcon}>
