@@ -5,6 +5,8 @@ import RewardForIntegrationModal from './RewardForIntegrationModal/RewardForInte
 import GetRewardModal from './GetRewardModal/GetRewardModal';
 import TaskCompletedModal from './TaskCompletedModal/TaskCompletedModal';
 import GetRewardChestModal from './GetRewardChestModal/GetRewardChestModal';
+import LossOfProgress from './LossOfProgress/LossOfProgress';
+import GetGift from './GetGift/GetGift';
 
 export default function DevModals() {
   const { openModal } = useModal();
@@ -29,6 +31,14 @@ export default function DevModals() {
       <div>
         <button onClick={() => openModal(MODALS.TASK_CHEST)}>Task Chest</button>
         <GetRewardChestModal />
+      </div>
+      <div>
+        <button onClick={() => openModal(MODALS.LOSS_PROGRESS)}>Loss Progress</button>
+        <LossOfProgress />
+      </div>
+      <div>
+        <button onClick={() => openModal(MODALS.GET_GIFT)}>Get Gift</button>
+        <GetGift />
       </div>
     </>
   );

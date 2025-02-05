@@ -12,7 +12,7 @@ export const MODALS = {
   TASK_CHEST: 'taskChest',
   STRANGER_PROFILE: 'strangerProfile',
   USERS_REFERRALS: 'usersReferrals',
-  DAILY_TASKS: 'daily-tasks-modal'
+  DAILY_TASKS: 'daily-tasks-modal',
+  LOSS_PROGRESS: 'loss-of-progress',
+  GET_GIFT: 'get-gift',
 };
-
-
