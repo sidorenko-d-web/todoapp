@@ -13,6 +13,8 @@ export const MODALS = {
   STRANGER_PROFILE: 'strangerProfile',
   USERS_REFERRALS: 'usersReferrals',
   DAILY_TASKS: 'daily-tasks-modal',
+  LOSS_PROGRESS: 'loss-of-progress',
+  GET_GIFT: 'get-gift',
   NEW_ITEM: 'newItem',
   UPGRADED_ITEM: 'upgradedItem',
   UPGRADED_SHOP: 'upgradedShop',

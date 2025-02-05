@@ -45,3 +45,8 @@ export type CreateIntegrationRequestDTO = {
 export type CreateIntegrationCommentDTO = {
   is_hate: boolean
 }
+
+export interface IntegrationUpdateRequestDTO {
+  integrationId: string;
+  timeLeftDelta: number;
+}
