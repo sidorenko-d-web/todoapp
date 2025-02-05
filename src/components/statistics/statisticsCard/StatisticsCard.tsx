@@ -18,14 +18,14 @@ const StatisticsCard: FC<Props> = ({ views, points, companyName, onClick }) => {
     <>
       <div className={styles.statisticsCard} onClick={onClick} style={{ cursor: 'pointer' }}>
         <div className={styles.left}>
-          <img src={integrations} alt="" />
+          <img src={integrations} alt="" width={40} height={40}/>
         </div>
         <div className={styles.right}>
           <div className={styles.header}>
             <p className={styles.title}>Интеграция 1</p>
             <div className={styles.logo}>
               <p>{companyName}</p>
-              <img src={logo} alt="" />
+              <img src={logo} alt="" width={14} height={14}/>
             </div>
           </div>
           <div className={styles.scores}>
