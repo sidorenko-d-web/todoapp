@@ -3,6 +3,7 @@ export const GUIDE_ITEMS = {
         FIRST_GUIDE_SHOWN: 'firstGuideShown',
         SECOND_GUIDE_SHOWN: 'secondGuideShown',
         SUBSCRIBE_MODAL_OPENED: 'subscribeModalOpened',
+        SUBSCRIPTION_BOUGHT: 'subscriptionBought',
         SUBSCRIPTION_GUIDE_SHOWN: 'subscriptionGuideShown',
         GET_COINS_GUIDE_SHOWN: 'getCoinsGuideShown',
         CREATE_INTEGRATION_FIRST_GUIDE_SHOWN: 'createIntegrationFirstGuideShown',

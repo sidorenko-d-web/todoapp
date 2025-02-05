@@ -15,7 +15,7 @@ import { useInventoryItemsFilter } from '../../../hooks';
 
 import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { isGuideShown, setGuideShown } from '../../../utils/guide-functions.ts';
+import { integrationCreatingModalButtonGlowing, integrationCreatingModalLightningsGlowing, integrationCreatingModalTabsGlowing, setGuideShown } from '../../../utils/guide-functions.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 
 interface CreatingIntegrationModalProps {
@@ -79,22 +79,18 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     return null;
   })();
 
-  const lightningsGlowing = !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
-    && !isGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
+  const lightningsGlowing = integrationCreatingModalLightningsGlowing();
 
-  const tabsGlowing = isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)
-    && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-    
-  const buttonGlowing = isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)
-    && isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
-    && !isGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
+  const tabsGlowing = integrationCreatingModalTabsGlowing();
+
+  const buttonGlowing = integrationCreatingModalButtonGlowing();
 
   return (
     <CentralModal modalId={modalId} title="Создание интеграции" onClose={onClose} titleIcon={integrationWhiteIcon}>
       <div className={s.content}>
         <div className={s.skinsWrapper}>
           {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
-            <div key={index} className={`${s.skin} ${lightningsGlowing ? s.glowing : ''}`} >
+            <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`} >
               <img src={lightningIcon} alt="Lightning" width={20} height={20} />
             </div>
           ))}

@@ -1,12 +1,9 @@
 import { FC, useState } from 'react';
-import { IntegrationCreation } from '../../components';
+import { CreatingIntegrationGuide, GetCoinsGuide, InitialGuide, IntegrationCreation, SubscrieGuide } from '../../components';
 import s from './MainPage.module.scss';
 import { MODALS } from '../../constants';
 import { useModal } from '../../hooks';
-import { InitialGuide } from '../../components/guide/MainPageGuides/InitialGuide/InitialGuide';
-import { CreateIntegrationGuide } from '../../components/guide/MainPageGuides/CreateIntegrationGuide/CreateIntegrationGuide';
-import { GetCoinsGuide } from '../../components/guide/MainPageGuides/GetCoinsGuide/GetCoinsGuide';
-import { CreatingIntegrationGuide } from '../../components/guide/MainPageGuides/CreatingIntegrationGuide/CreatingIntegrationGuide';
+
 import { GUIDE_ITEMS } from '../../constants/guidesConstants';
 import { isGuideShown, setGuideShown } from '../../utils';
 
@@ -46,7 +43,7 @@ export const MainPage: FC = () => {
 
       {/* Second Guide */}
       {!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown && (
-        <CreateIntegrationGuide
+        <SubscrieGuide
           onClose={() => {
             handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
             openModal(MODALS.SUBSCRIBE);
@@ -68,7 +65,7 @@ export const MainPage: FC = () => {
       {guideVisibility.secondGuideShown &&
         !guideVisibility.subscribeModalOpened &&
         purchasingSubscriptionModalState.isOpen && (
-          <CreateIntegrationGuide
+          <SubscrieGuide
             onClose={() => {
               closeModal(MODALS.SUBSCRIBE);
               handleGuideClose(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED);

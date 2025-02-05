@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from "react";
-import styles from './CreateIntegrationGuide.module.scss';
+import styles from './SubscribeGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
 import { Guide } from "../../Guide/Guide";
@@ -11,7 +11,7 @@ interface CreateIntegrationGuideProps {
     onClose: () => void;
 }
 
-export const CreateIntegrationGuide: React.FC<CreateIntegrationGuideProps> = ({
+export const SubscrieGuide: React.FC<CreateIntegrationGuideProps> = ({
     description,
     zIndex,
     top,
