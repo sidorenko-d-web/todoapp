@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 
 import s from './IntegrationCreation.module.scss';
 
-import { getSubscriptionPurchased, isIntegrationCreationButtonGlowing } from '../../../utils/guide-functions.ts';
+import { getSubscriptionPurchased, isIntegrationCreationButtonGlowing, setSubscriptionPurchased } from '../../../utils/guide-functions.ts';
 
 export const IntegrationCreation: React.FC = () => {
   const dispatch = useDispatch();
@@ -73,6 +73,7 @@ export const IntegrationCreation: React.FC = () => {
         onClose={() => {
           closeModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
           if(!getSubscriptionPurchased()) {
+            setSubscriptionPurchased();
             openModal(MODALS.CREATING_INTEGRATION);
           }
         }}
