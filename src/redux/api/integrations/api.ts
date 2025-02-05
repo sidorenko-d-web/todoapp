@@ -4,7 +4,9 @@ import {
   CreateIntegrationRequestDTO,
   IntegrationResponseDTO,
   IntegrationsQueryRequestDTO,
-  IntegrationsResponseDTO, UnansweredIntegrationCommentDTO,
+  IntegrationsResponseDTO,
+  IntegrationUpdateRequestDTO,
+  UnansweredIntegrationCommentDTO,
 } from '.';
 
 export const integrationsApi = createApi({
@@ -65,6 +67,14 @@ export const integrationsApi = createApi({
         method: 'GET',
       }),
     }),
+    updateTimeLeft: builder.mutation<IntegrationResponseDTO, IntegrationUpdateRequestDTO>({
+      query: ({ integrationId, timeLeftDelta }) => ({
+        url: `/integrations/${integrationId}/time_left`,
+        method: 'PATCH',
+        params: { time_left_delta: timeLeftDelta },
+      }),
+      invalidatesTags: ['Integrations'],
+    }),
   }),
 });
 
@@ -75,4 +85,5 @@ export const {
   useGetAllIntegrationsQuery,
   usePostCommentIntegrationsMutation,
   useGetUnansweredIntegrationCommentQuery,
+  useUpdateTimeLeftMutation
 } = integrationsApi;

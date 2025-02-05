@@ -5,6 +5,7 @@ import rocketIcon from '../../../assets/icons/rocket.svg';
 import { IntegrationResponseDTO, integrationsApi } from '../../../redux';
 
 import s from './IntegrationCreationCard.module.scss';
+import { useAccelerateIntegration } from '../../../hooks';
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
@@ -45,6 +46,18 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
   };
 
+  const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
+    integrationId: integration.id,
+    onSuccess: (newTimeLeft) => setTimeLeft(newTimeLeft),
+  });
+
+  const handleAccelerateClick = () => {
+    if (!isExpired) {
+      void accelerateIntegration();
+    }
+  };
+
+
   if (isExpired) return null;
 
   return (
@@ -68,9 +81,15 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
             />
           </div>
         </div>
-        <button className={s.iconButton}>
+        <button
+          className={s.iconButton}
+          onClick={handleAccelerateClick}
+          disabled={isExpired || isAccelerating}
+          aria-label="Ускорить интеграцию"
+        >
           <img src={rocketIcon} alt="rocket" />
         </button>
+
       </div>
     </div>
   );
