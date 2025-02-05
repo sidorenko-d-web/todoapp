@@ -42,7 +42,7 @@ const StatisticsPage: FC = () => {
         <h2 className={styles.sectionTitle}>Все интеграции</h2>
         <div className={styles.sectionCount}>
           <p>{statisticData?.count || 0}</p>
-          <img src={logo} alt="logo" />
+          <img src={logo} alt="logo" width={14} height={14}/>
         </div>
       </div>
       <div className={styles.integrationsWrapper}>
