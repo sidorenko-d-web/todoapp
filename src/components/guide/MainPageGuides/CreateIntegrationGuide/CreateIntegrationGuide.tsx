@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import styles from './CreateIntegrationGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
@@ -17,13 +17,22 @@ export const CreateIntegrationGuide: React.FC<CreateIntegrationGuideProps> = ({
     top,
     onClose,
 }) => {
+     const [isOpen, setIsOpen] = useState(true);
+    
+     const handleClose = () => {
+        onClose();
+        setIsOpen(false);
+    };
+
+    if (!isOpen) return null;
+    
     return (
         <Guide
             align="right"
             zIndex={zIndex}
             description={description}
             top={top}
-            onClose={onClose}
+            onClose={handleClose}
             dimBackground={false}
         >
             <img src={img1} className={styles.image} height={146} width={140} />

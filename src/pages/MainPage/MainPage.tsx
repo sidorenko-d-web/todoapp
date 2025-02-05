@@ -1,80 +1,53 @@
-import { FC, useEffect, useState } from 'react';
-import { IntegrationCreation, IntegrationCreationModal } from '../../components';
-
+import { FC, useState } from 'react';
+import { IntegrationCreation } from '../../components';
 import s from './MainPage.module.scss';
-
 import { MODALS } from '../../constants';
 import { useModal } from '../../hooks';
 import { InitialGuide } from '../../components/guide/MainPageGuides/InitialGuide/InitialGuide';
 import { CreateIntegrationGuide } from '../../components/guide/MainPageGuides/CreateIntegrationGuide/CreateIntegrationGuide';
 import { GetCoinsGuide } from '../../components/guide/MainPageGuides/GetCoinsGuide/GetCoinsGuide';
 import { CreatingIntegrationGuide } from '../../components/guide/MainPageGuides/CreatingIntegrationGuide/CreatingIntegrationGuide';
-
+import { GUIDE_ITEMS } from '../../constants/guidesConstants';
+import { isGuideShown, setGuideShown } from '../../utils';
 
 export const MainPage: FC = () => {
-  const [currentIntegration, setCurrentIntegration] = useState(0);
-  const [isButtonGlowing, setIsButtonGlowing] = useState(false);
-
-  const [wasCreatingIntegrationModalOpened, setWasCreatingIntegrationModalOpened] = useState(false);
-
   const { getModalState, closeModal, openModal } = useModal();
+
+  const [guideVisibility, setGuideVisibility] = useState({
+    firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
+    secondGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN),
+    subscribeModalOpened: isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED),
+    getCoinsGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN),
+    createIntegrationFirstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN),
+    createIntegrationSecondGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN),
+  });
 
   const purchasingSubscriptionModalState = getModalState(MODALS.SUBSCRIBE);
   const creatingIntegrationModalState = getModalState(MODALS.CREATING_INTEGRATION);
 
-
-  useEffect(() => {
-    if (wasCreatingIntegrationModalOpened && !purchasingSubscriptionModalState.isOpen) {
-      setCurrentIntegration(3);
-      setWasCreatingIntegrationModalOpened(false);
-    }
-  }, [purchasingSubscriptionModalState.isOpen, wasCreatingIntegrationModalOpened]);
-
-  useEffect(() => {
-    if (creatingIntegrationModalState.isOpen) {
-      console.log('CREATING INTEGRATION!!!!! ');
-    }
-  }, [creatingIntegrationModalState.isOpen]);
-
-  useEffect(() => {
-    sessionStorage.setItem('currentTrendsGuideShown', '1');
-    sessionStorage.setItem('createIntegrationLightningsGlowing', '1');
-  }, []);
-  // useEffect(() => {
-  //   openModal(MODALS.CREATING_INTEGRATION)
-  // }, []);
+  const handleGuideClose = (guideId: string) => {
+    setGuideShown(guideId);
+    setGuideVisibility((prev) => ({
+      ...prev,
+      [guideId]: true,
+    }));
+  };
 
   return (
     <main className={s.page}>
-      <div
-        onClick={() => {
-          const wasSubscribeGuideShown = sessionStorage.getItem('needToSubscribeGuideShown') === '1';
+      <IntegrationCreation />
 
-          if (!wasSubscribeGuideShown) {
-            setCurrentIntegration(2);
-            setIsButtonGlowing(false);
-            setWasCreatingIntegrationModalOpened(true);
-          }
-        }}
-        style={{ zIndex: isButtonGlowing ? '2000' : '5' }}
-      >
-        <IntegrationCreation isButtonGlowing={isButtonGlowing} />
-      </div>
-
-      {/* {currentIntegration === 0 && (
+      {/* Initial Guide */}
+      {!guideVisibility.firstGuideShown && (
         <InitialGuide
-          onClose={() => {
-            setCurrentIntegration(1);
-            setIsButtonGlowing(true);
-          }}
+          onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)}
         />
       )}
 
-      {currentIntegration === 1 && (
+      {/* Second Guide */}
+      {!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown && (
         <CreateIntegrationGuide
-          onClose={() => {
-            setCurrentIntegration(-1);
-          }}
+          onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)}
           top="50%"
           zIndex={1500}
           description={
@@ -88,79 +61,80 @@ export const MainPage: FC = () => {
         />
       )}
 
-      {currentIntegration === 2 && (
-        <CreateIntegrationGuide
-          onClose={() => {
-            setIsButtonGlowing(false);
-            setCurrentIntegration(-1);
-            closeModal(MODALS.SUBSCRIBE);
-            sessionStorage.setItem('needToSubscribeGuideShown', '1');
-          }}
-          top="65%"
-          zIndex={1500}
-          description={
-            <>
-              Чтобы получить доступ к интеграциям от разных брендов,{' '}
-              <span style={{ color: '#2F80ED' }}>надо оформить подписку!</span>
-              <br />
-              <br />
-              Пока подписка активна, ты можешь делать любые интеграции на выбор: фото, видео или текст!
-            </>
-          }
-        />
-      )}
+      {/* Subscription Modal Guide */}
+      {guideVisibility.secondGuideShown &&
+        !guideVisibility.subscribeModalOpened &&
+        purchasingSubscriptionModalState.isOpen && (
+          <CreateIntegrationGuide
+            onClose={() => {
+              closeModal(MODALS.SUBSCRIBE);
+              handleGuideClose(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED);
+            }}
+            top="65%"
+            zIndex={1500}
+            description={
+              <>
+                Чтобы получить доступ к интеграциям от разных брендов,{' '}
+                <span style={{ color: '#2F80ED' }}>надо оформить подписку!</span>
+                <br />
+                <br />
+                Пока подписка активна, ты можешь делать любые интеграции на выбор: фото, видео или текст!
+              </>
+            }
+          />
+        )}
 
-      {currentIntegration === 3 && (
-        <GetCoinsGuide
-          onClose={() => {
-            setCurrentIntegration(-1);
-            sessionStorage.setItem('hasToBuySubscriptionGuide', '1');
-          }}
-          isReferral={true}
-        />
-      )}
-       */}
-      {(creatingIntegrationModalState.isOpen && sessionStorage.getItem('currentTrendsGuideShown') === '1') && (
-        <CreatingIntegrationGuide onClose={() => {
-          setCurrentIntegration(5);
-          sessionStorage.setItem('subscriptionBought', '0');
-          sessionStorage.setItem('currentTrendsGuideShown', '0');
-          sessionStorage.setItem('createIntegrationLightningsGlowing', '0');
-          sessionStorage.setItem('createIntegrationTabsGlowing', '1');
-        }}
-          buttonText='Отлично!'
-          description={
-            <>
-              Вверху можно увидеть <span style={{ color: '#2F80ED' }}>актуальные тренды.</span>
-              <br />
-              <br />
-              Если будешь делать интеграции о том, что сейчас актуально - твой заработок будет больше!
-            </>
-          }
-          align='left'
-          top='69%' />
-      )}
+      {/* Get Coins Guide */}
+      {!purchasingSubscriptionModalState.isOpen &&
+        guideVisibility.subscribeModalOpened &&
+        !guideVisibility.getCoinsGuideShown && (
+          <GetCoinsGuide
+            onClose={() => {
+              handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+              openModal(MODALS.CREATING_INTEGRATION);
+            }}
+            isReferral={true}
+          />
+        )}
 
-      {currentIntegration == 5 && (
-        <CreatingIntegrationGuide onClose={() => {
-          console.log('abc')
-          setCurrentIntegration(-1);
-          sessionStorage.setItem('createIntegrationTabsGlowing', '0');
-          sessionStorage.setItem('goToStoreBtnGlowing', '1');
-          console.log('bca')
-        }}
-          buttonText='Хорошо!'
-          description={
-            <>
-              Интеграции бывают трех видов:  <span style={{ color: '#2F80ED' }}>Текстовые, Фото и Видео. </span>
-              <br />
-              <br />
-              Ты можешь делать любые интеграции, но для начала нужно купить необходимую аппаратуру.
-            </>
-          }
-          align='right'
-          top='66%' />
-      )}
+      {/* Creating Integration First Guide */}
+      {creatingIntegrationModalState.isOpen &&
+        !guideVisibility.createIntegrationFirstGuideShown && (
+          <CreatingIntegrationGuide
+            onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)}
+            buttonText="Отлично!"
+            description={
+              <>
+                Вверху можно увидеть <span style={{ color: '#2F80ED' }}>актуальные тренды.</span>
+                <br />
+                <br />
+                Если будешь делать интеграции о том, что сейчас актуально - твой заработок будет больше!
+              </>
+            }
+            align="left"
+            top="69%"
+          />
+        )}
+
+      {/* Creating Integration Second Guide */}
+      {creatingIntegrationModalState.isOpen &&
+        guideVisibility.createIntegrationFirstGuideShown &&
+        !guideVisibility.createIntegrationSecondGuideShown && (
+          <CreatingIntegrationGuide
+            onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)}
+            buttonText="Хорошо!"
+            description={
+              <>
+                Интеграции бывают трех видов: <span style={{ color: '#2F80ED' }}>Текстовые, Фото и Видео. </span>
+                <br />
+                <br />
+                Ты можешь делать любые интеграции, но для начала нужно купить необходимую аппаратуру.
+              </>
+            }
+            align="right"
+            top="66%"
+          />
+        )}
     </main>
   );
 };

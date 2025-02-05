@@ -35,9 +35,9 @@ export function AuthInit({ children }: AuthInitProps) {
 
         // const init_data = window.Telegram.WebApp.initData;
 
-        const init_data = `query_id%3DAAEYoFtBAAAAABigW0G_6mBe%26user%3D%257B%2522id%2522%253A1096523800%252C%2522first_name%2522%253A%2522%25D0%2594%25D0%25BC%25D0%25B8%25D1%2582%25D1%2580%25D0%25B8%25D0%25B9%2522%252C%2522last_name%2522%253A%2522%25D0%25A1%25D0%25B8%25D0%25B4%25D0%25BE%25D1%2580%25D0%25B5%25D0%25BD%25D0%25BA%25D0%25BE%2522%252C%2522username%2522%253A%2522big_banka%2522%252C%2522language_code%2522%253A%2522ru%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FUIap5sUEQ_kQmYD3jRj-ne9SxNjI5c3BYBgY6A_pxBk.svg%2522%257D%26auth_date%3D1738064202%26signature%3Ddvpa79sYVtw8twVoRcHu-w0AYh-bz7pg0G6uM1wl3x9TuBJS2mucaSINijOLf9EDrQK0ehAXQwAtSBjVeFsfDA%26hash%3D04d4cdc1296901e411621ca7b16cf2ea6fd2ac62ac6d13734509e79d53fc3582&tgWebAppVersion=8.0&tgWebAppPlatform=weba&tgWebAppThemeParams=%7B"bg_color"%3A"%23212121"%2C"text_color"%3A"%23ffffff"%2C"hint_color"%3A"%23aaaaaa"%2C"link_color"%3A"%238774e1"%2C"button_color"%3A"%238774e1"%2C"button_text_color"%3A"%23ffffff"%2C"secondary_bg_color"%3A"%230f0f0f"%2C"header_bg_color"%3A"%23212121"%2C"accent_text_color"%3A"%238774e1"%2C"section_bg_color"%3A"%23212121"%2C"section_header_text_color"%3A"%23aaaaaa"%2C"subtitle_text_color"%3A"%23aaaaaa"%2C"destructive_text_color"%3A"%23e53935"%7D`;
-
-
+        const init_data = 
+        "query_id=AAEJqZMZAAAAAAmpkxluA12V&user=%7B%22id%22%3A429107465%2C%22first_name%22%3A%22Kiryl%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22UseNameKiryl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FRBi5fqzvkaFYBv7fi7y6iDpojRJtZPm9dHKm_PjZ-5U.svg%22%7D&auth_date=1738663277&signature=tnVGXH_l5-MfNwSqvAuWUIAnCvU-0XbBO8ZWDxyZUqwYgvd4JcEI6Rf3P9wxO8nF7sFVU_eRCKj65bPiX4OvDQ&hash=c1c1a3bc876c5318043e700a988842dc3114e5582caf9c554a399a6457519304";
+        
         const authResponse = await signIn({
           init_data,
         }).unwrap();
@@ -117,3 +117,4 @@ export function AuthInit({ children }: AuthInitProps) {
       return <LoadingScreen />;
   }
 }
+

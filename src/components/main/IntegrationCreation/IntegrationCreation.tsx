@@ -8,11 +8,11 @@ import { useDispatch } from 'react-redux';
 
 import s from './IntegrationCreation.module.scss';
 
-interface IntegrationCreationProps {
-  isButtonGlowing: boolean;
-}
+import { isIntegrationCreationButtonGlowing } from '../../../utils/guide-functions.ts';
 
-export const IntegrationCreation: React.FC<IntegrationCreationProps> = ({ isButtonGlowing }) => {
+
+
+export const IntegrationCreation: React.FC = () => {
   const dispatch = useDispatch();
 
 
@@ -41,6 +41,9 @@ export const IntegrationCreation: React.FC<IntegrationCreationProps> = ({ isButt
     dispatch(profileApi.util.invalidateTags(['Me']));
     openModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
   };
+
+  const isButtonGlowing = isIntegrationCreationButtonGlowing();
+  
 
   return (
     <section className={s.integrationsControls}>

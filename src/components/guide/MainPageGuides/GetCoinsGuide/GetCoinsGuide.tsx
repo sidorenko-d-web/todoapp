@@ -4,7 +4,7 @@ import styles from './GetCoinsGuide.module.scss';
 import img1 from '../../../../assets/gif/guide4.gif';
 import { Guide } from "../../Guide/Guide";
 
-import coin from '../../../../assets/icons/coin.svg';
+import coin from '../../../../assets/icons/coin.png';
 
 interface GetCoinsGuideProps {
     onClose: () => void;
