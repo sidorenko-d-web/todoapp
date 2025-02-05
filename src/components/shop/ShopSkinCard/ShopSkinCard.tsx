@@ -4,22 +4,27 @@ import clsx from 'clsx';
 import { useBuySkinMutation, useGetShopSkinsQuery } from '../../../redux/api/shop/api';
 import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
 import { IShopSkin } from '../../../redux';
-import CoinIcon from '../../../assets/icons/coin.png'
-import HeadIcon from '../../../assets/icons/head_icon.svg'
-import FaceIcon from '../../../assets/icons/face_icon.svg'
-import PersonIcon from '../../../assets/icons/person_icon.svg'
-import LegsIcon from '../../../assets/icons/face_icon.svg'
-import FeetIcon from '../../../assets/icons/face_icon.svg'
-import VIPIcon from '../../../assets/icons/star_check_icon.svg'
+import CoinIcon from '../../../assets/icons/coin.png';
+import HeadIcon from '../../../assets/icons/head_icon.svg';
+import FaceIcon from '../../../assets/icons/face_icon.svg';
+import PersonIcon from '../../../assets/icons/person_icon.svg';
+import LegsIcon from '../../../assets/icons/face_icon.svg';
+import FeetIcon from '../../../assets/icons/face_icon.svg';
+import VIPIcon from '../../../assets/icons/star_check_icon.svg';
+import ListIcon from '../../../assets/icons/list.svg';
+import { useModal } from '../../../hooks';
+import { MODALS } from '../../../constants';
 
 interface Props {
   item: IShopSkin;
+  mode: 'shop' | 'inventory';
 }
 
-export const ShopSkinCard: FC<Props> = ({ item }) => {
+export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
   const [buySkin, { isLoading }] = useBuySkinMutation();
   const { refetch: refetchShop } = useGetShopSkinsQuery();
   const { refetch: refetchInventory } = useGetInventorySkinsQuery();
+  const { openModal } = useModal();
 
   const handleBuySkin = async () => {
     try {
@@ -28,11 +33,14 @@ export const ShopSkinCard: FC<Props> = ({ item }) => {
       if (!res.error) {
         refetchInventory();
         refetchShop();
+        openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' });
       }
     } catch (error) {
       console.error(error);
     }
   };
+
+  console.log(mode);
 
   return (
     <div className={styles.storeCard}>
@@ -73,9 +81,12 @@ export const ShopSkinCard: FC<Props> = ({ item }) => {
           <button className={styles.vipButton}>
             {item.price_usdt} $USDT (осталось {item.quantity} шт.)
           </button>
-        ) : (
+        ) : mode === 'shop' ? (
           <>
-            <button className={styles.button} onClick={handleBuySkin}>
+            <button className={styles.button} onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' })}>
+              {item.price_usdt} $USDT
+            </button>
+            <button className={styles.priceButton} onClick={handleBuySkin}>
               {isLoading ? (
                 <p>Загрузка</p>
               ) : (
@@ -84,9 +95,20 @@ export const ShopSkinCard: FC<Props> = ({ item }) => {
                 </>
               )}
             </button>
-            <button className={styles.button}>Задание</button>
-            <button disabled className={styles.button}>
-              {item.price_usdt} $USD
+            <button className={styles.listButton}>
+              <img src={ListIcon} alt="" />
+            </button>
+          </>
+        ) : (
+          <>
+            <button className={styles.buttonInventory}>
+              {isLoading ? (
+                <p>Загрузка</p>
+              ) : (
+                <>
+                  <p>Надеть</p>
+                </>
+              )}
             </button>
           </>
         )}
@@ -94,4 +116,3 @@ export const ShopSkinCard: FC<Props> = ({ item }) => {
     </div>
   );
 };
-

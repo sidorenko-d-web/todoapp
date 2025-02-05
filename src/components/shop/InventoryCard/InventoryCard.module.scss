@@ -20,7 +20,18 @@
       justify-content: center;
       min-width: 60px;
       height: 60px;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+
+      @media (min-width: var.$breakpoint-md) {
+        min-width: 66px;
+        height: 66px;
+      }
       p {
+        text-transform: capitalize;
         background: var.$color-primary;
         position: absolute;
         bottom: 0;
@@ -28,6 +39,11 @@
         font-size: 12px;
         padding: 2px 5px;
         border-radius: 4px;
+
+        @media (min-width: var.$breakpoint-md) {
+          font-size: 13.2px;
+          line-height: 13.2px;
+        }
       }
       .disabledImageIcon {
         position: absolute;
@@ -52,9 +68,9 @@
     }
     .redImage {
       @extend .image;
-      border-color: red;
+      border-color: var.$color-red;
       p {
-        background-color: red;
+        background-color: var.$color-red;
       }
     }
 
@@ -93,7 +109,7 @@
         }
         .variantRed {
           @extend .variant;
-          background-color: red;
+          background-color: var.$color-red;
         }
       }
       .level {
@@ -101,6 +117,10 @@
         font-size: 12px;
         color: var.$color-primary;
         line-height: 12px;
+
+        @media (min-width: var.$breakpoint-md) {
+          font-size: 14px;
+        }
       }
 
       .colorPurple {
@@ -110,7 +130,7 @@
 
       .colorRed {
         @extend .level;
-        color: red;
+        color: var.$color-red;
       }
 
       .stats {
@@ -127,10 +147,18 @@
           img {
             width: 14px;
             height: 14px;
+            @media (min-width: var.$breakpoint-md) {
+              width: 18px;
+              height: 18px;
+            }
           }
           p {
             color: var.$color-white;
             font-size: 14px;
+
+            @media (min-width: var.$breakpoint-md) {
+              font-size: 16px;
+            }
           }
         }
       }
@@ -151,6 +179,11 @@
         line-height: 12px;
         color: var.$color-text-semi-transparent;
         font-weight: 500;
+
+        @media (min-width: var.$breakpoint-md) {
+          font-size: 16px;
+          line-height: 16px;
+        }
       }
       .goal {
         display: flex;
@@ -159,6 +192,10 @@
         img {
           width: 12px;
           aspect-ratio: 1;
+
+          @media (min-width: var.$breakpoint-md) {
+            width: 18px;
+          }
         }
       }
     }
@@ -180,7 +217,7 @@
       }
       .doneRed {
         @extend .done;
-        background-color: red;
+        background-color: var.$color-red;
       }
     }
 
@@ -196,9 +233,22 @@
         justify-content: center;
         position: relative;
         background: var.$footer-bg;
+        overflow: hidden;
+        @media (min-width: var.$breakpoint-md) {
+          border-radius: 5px;
+
+          .itemImage {
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
+          }
+        }
         .itemImage {
           width: 24px;
           height: 24px;
+          border: none;
+          background: none;
+          border-radius: 5px;
         }
 
         .lock {
@@ -225,7 +275,7 @@
       }
       .itemRed {
         @extend .item;
-        border-color: red;
+        border-color: var.$color-red;
       }
     }
   }
@@ -246,6 +296,7 @@
       border: 1px solid var.$color-dark-gray-stroke;
       color: var.$color-white;
       gap: 5px;
+      box-sizing: border-box;
 
       &:first-child {
         background: var.$color-primary;
@@ -255,6 +306,10 @@
         img {
           width: 14px;
           aspect-ratio: 1;
+
+          @media (min-width: var.$breakpoint-md) {
+            width: 18px;
+          }
         }
       }
 
@@ -264,6 +319,20 @@
         flex: 1;
         border: none;
       }
+
+      @media (min-width: var.$breakpoint-md) {
+        font-size: 16px;
+        line-height: 16px;
+      }
+    }
+
+    .upgradeItemPurple {
+      background: var.$color-purple !important;
+      border: 1px solid var.$color-border-secondary !important;
+    }
+    .upgradeItemRed {
+      background: var.$color-red !important;
+      border: 1px solid var.$color-border-red !important;
     }
   }
 
@@ -284,6 +353,18 @@
       line-height: 14px;
       color: var.$grayed-white;
       font-weight: 500;
+    }
+
+    @media (min-width: var.$breakpoint-md) {
+      padding: 12px 0;
+      p {
+        font-size: 16px;
+        line-height: 16px;
+      }
+      img {
+        width: 18px;
+        height: 18px;
+      }
     }
   }
 

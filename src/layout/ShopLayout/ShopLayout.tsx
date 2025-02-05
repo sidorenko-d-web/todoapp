@@ -1,15 +1,23 @@
-import { type Dispatch, type FC, PropsWithChildren, type SetStateAction, useEffect, useState } from 'react';
+import {
+  type Dispatch,
+  type FC,
+  PropsWithChildren,
+  type SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import styles from './ShopLayout.module.scss';
-import { useGetInventoryBoostQuery } from '../../redux/api/inventory/api';
+import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
 import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
 import { AppRoute } from '../../constants';
 import ArrowLeftIcon from '../../assets/icons/arrow-left.svg';
 import InventoryBox from '../../assets/icons/inventory-box.svg';
-import { TypeItemCategory, TypeItemQuality } from '../../redux';
+import { TypeItemCategory, TypeItemRarity, useGetShopItemsQuery } from '../../redux';
 import { useNavigate } from 'react-router-dom';
 import CoinIcon from '../../assets/icons/coin.png';
-import SubscriberCoin from '../../assets/icons/subscribers.png';
-
+import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
+import ViewsCoin from '../../assets/icons/views.png';
+import { itemsInTab } from '../../helpers';
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
   { title: 'Фото', value: 'image' },
@@ -17,17 +25,17 @@ const shopItemCategories = [
   { title: 'Декор', value: 'decor' },
   { title: 'Вы', value: 'decor' },
 ];
-const shopItemQualities = [
-  { title: 'Эконом', value: 'lowcost' },
-  { title: 'Премиум', value: 'prem' },
-  { title: 'Люкс', value: 'lux' },
+const shopItemRarity = [
+  { title: 'Эконом', value: 'red' },
+  { title: 'Премиум', value: 'yellow' },
+  { title: 'Люкс', value: 'green' },
 ];
 
 type TypeTab<T> = { title: string; value: T };
 
 interface Props {
   onItemCategoryChange: Dispatch<SetStateAction<TypeTab<TypeItemCategory> | undefined>>;
-  onItemQualityChange: Dispatch<SetStateAction<TypeTab<TypeItemQuality> | undefined>>;
+  onItemQualityChange: Dispatch<SetStateAction<TypeTab<TypeItemRarity> | undefined>>;
   mode: 'shop' | 'inventory';
 }
 
@@ -37,39 +45,86 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   onItemQualityChange,
   mode,
 }) => {
-  const { data: boosts } = useGetInventoryBoostQuery();
-
   const [shopCategory, setShopCategory] = useState(shopItemCategories[0]);
-  const [itemsQuality, setItemsQuality] = useState(shopItemQualities[0]);
+  const [itemsQuality, setItemsQuality] = useState(shopItemRarity[0]);
+
+  const { data: inventory, isSuccess } = useGetInventoryItemsQuery({});
+  const { data: shop } = useGetShopItemsQuery({
+    level: 1,
+    item_category: shopCategory.value as TypeItemCategory,
+  });
 
   useEffect(() => {
     onItemCategoryChange(shopCategory as TypeTab<TypeItemCategory>);
-    onItemQualityChange(itemsQuality as TypeTab<TypeItemQuality>);
+    onItemQualityChange(itemsQuality as TypeTab<TypeItemRarity>);
   }, [shopCategory, itemsQuality]);
 
   const navigate = useNavigate();
+
+  const itemsInTabs = itemsInTab(shop?.items, inventory?.items);
+  const tabs = [];
+  itemsInTabs?.red?.length &&
+    itemsInTabs?.red?.length > 0 &&
+    tabs.push(shopItemRarity[0]);
+  itemsInTabs?.yellow?.length &&
+    itemsInTabs?.yellow?.length > 0 &&
+    tabs.push(shopItemRarity[1]);
+  itemsInTabs?.green?.length &&
+    itemsInTabs?.green?.length > 0 &&
+    tabs.push(shopItemRarity[2]);
+
+  const inventoryTabs = [shopItemRarity[0]];
+  isSuccess &&
+    inventory?.items.find(
+      item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value,
+    ) &&
+    inventoryTabs.push(shopItemRarity[1]);
+  isSuccess &&
+    inventory?.items.find(
+      item => item.item_rarity === 'green' && item.item_category === shopCategory.value,
+    ) &&
+    inventoryTabs.push(shopItemRarity[2]);
+
+  const handleShop = () => {
+    setItemsQuality(shopItemRarity[0]);
+    navigate(AppRoute.Shop);
+  };
+  const handleInventory = () => {
+    setItemsQuality(shopItemRarity[0]);
+
+    navigate(AppRoute.ShopInventory);
+  };
+
+  useEffect(() => {
+    setItemsQuality(shopItemRarity[0]);
+  }, [shopCategory]);
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.titleWrapper}>
         <button
           className={styles.linkBack}
-          onClick={() => navigate(AppRoute.Shop)}
+          onClick={handleShop}
           style={{ opacity: mode === 'inventory' ? 1 : 0 }}
         >
           <img src={ArrowLeftIcon} />
         </button>
         <div className={styles.mainHeader}>
-          <h1 className={styles.title}>Магазин</h1>
+          <h1 className={styles.title}>{mode === 'shop' ? 'Магазин' : 'Инвентарь '}</h1>
 
           <div className={styles.scores}>
             <div className={styles.scoresItem}>
-              <p>+{boosts?.income_per_integration ?? 0}</p>
+              <p>+{0}</p>
+              <img src={ViewsCoin} />
+              <p>/инт.</p>
+            </div>
+            <div className={styles.scoresItem}>
+              <p>+{0}</p>
               <img src={SubscriberCoin} />
               <p>/инт.</p>
             </div>
             <div className={styles.scoresItem}>
-              <p>+{boosts?.income_per_second ?? 0}</p>
+              <p>+{0}</p>
               <img src={CoinIcon} />
               <p>/сек.</p>
             </div>
@@ -77,7 +132,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         </div>
         <button
           className={styles.linkInventory}
-          onClick={() => navigate(AppRoute.ShopInventory)}
+          onClick={handleInventory}
           style={{ opacity: mode === 'shop' ? 1 : 0 }}
         >
           <img src={InventoryBox} />
@@ -85,7 +140,11 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
       </div>
 
       <div className={styles.navs}>
-        <TabsNavigation tabs={shopItemCategories} currentTab={shopCategory.title} onChange={setShopCategory} />
+        <TabsNavigation
+          tabs={shopItemCategories}
+          currentTab={shopCategory.title}
+          onChange={setShopCategory}
+        />
         {shopCategory.title !== 'Вы' && (
           <TabsNavigation
             colorClass={
@@ -95,7 +154,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
                 ? 'tabItemSelectedPurple'
                 : 'tabItemSelectedRed'
             }
-            tabs={shopItemQualities}
+            tabs={mode === 'shop' ? tabs : inventoryTabs}
             currentTab={itemsQuality.title}
             onChange={setItemsQuality}
           />
