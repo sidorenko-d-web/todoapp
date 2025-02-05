@@ -38,7 +38,7 @@ export const Header = () => {
   return (
     <header className={styles.header}>
       <div className={styles.lowerHeader}>
-        {isFetching && <p>Loading...</p>}
+        {isLoading && <p>Loading...</p>}
 
         <div className={styles.levelWrapper}>
           <div className={styles.avatarWrapper} onClick={handleNavigateToProfile}>

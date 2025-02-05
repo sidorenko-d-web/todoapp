@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useBuySkinMutation, useGetShopSkinsQuery } from '../../../redux/api/shop/api';
 import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
 import { IShopSkin } from '../../../redux';
-import CoinIcon from '../../../assets/icons/coin.svg';
+import CoinIcon from '../../../assets/icons/coin.png';
 import HeadIcon from '../../../assets/icons/head_icon.svg';
 import FaceIcon from '../../../assets/icons/face_icon.svg';
 import PersonIcon from '../../../assets/icons/person_icon.svg';

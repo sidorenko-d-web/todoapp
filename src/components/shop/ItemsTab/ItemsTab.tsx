@@ -11,21 +11,18 @@ interface props {
   };
   shopItems?: IShopItem[];
   inventoryItems?: IShopItem[];
-  refetchFn: () => void;
 }
 
-export const ItemsTab: FC<props> = ({ inventoryItems, shopItems, refetchFn }) => {
-  const refetchAll = () => {
-    refetchFn();
-  };
+export const ItemsTab: FC<props> = ({ inventoryItems, shopItems }) => {
+
 
   return (
     <div className={styles.cardsWrapper}>
       {shopItems?.map(item => (
-        <ShopItemCard key={item.id} variant={item.item_rarity} item={item} refetchAll={refetchAll} />
+        <ShopItemCard key={item.id} item={item} />
       ))}
       {inventoryItems?.map(item => (
-        <InventoryCard key={item.id} variant={item.item_rarity} item={item} refetchAll={refetchAll} />
+        <InventoryCard key={item.id} item={item} />
       ))}
     </div>
   );

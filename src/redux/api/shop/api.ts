@@ -5,7 +5,7 @@ import { IShopItemsResponse, IShopItemsRequest, IShopSkinsResponse, IBuyItemRequ
 export const shopApi = createApi({
   reducerPath: 'shopApi',
   baseQuery: baseQueryReauth,
-  tagTypes: ['items', 'skins'],
+  tagTypes: ['items', 'skins', 'achievements'],
   endpoints: builder => ({
     getShopItems: builder.query<IShopItemsResponse, IShopItemsRequest>({
       query: params => ({
@@ -41,14 +41,7 @@ export const shopApi = createApi({
       invalidatesTags: ['items'],
     }),
 
-    upgradeItem: builder.mutation<any, IBuyItemRequest>({
-      query: ({ id, ...params }) => ({
-        url: `/inventory/upgrade/${id}`,
-        method: 'PATCH',
-        params,
-      }),
-      invalidatesTags: ['skins'],
-    }),
+   
   }),
 });
 
@@ -57,5 +50,4 @@ export const {
   useGetShopSkinsQuery,
   useBuyItemMutation,
   useBuySkinMutation,
-  useUpgradeItemMutation,
 } = shopApi;

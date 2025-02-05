@@ -9,6 +9,7 @@ export interface IShopItem {
   price_usdt: string;
   boost: IBoosts;
   image_url: string;
+  item_premium_level: TypeItemQuality;
 }
 
 export interface IShopItemsResponse {
@@ -34,7 +35,7 @@ export interface IShopSkinsResponse {
 
 export type TypeWearLocation = 'head' | 'face' | 'upper_body' | 'legs' | 'feet' | 'entire_body';
 export type TypeItemCategory = 'text' | 'image' | 'video' | 'decor';
-export type TypeItemQuality = 'lowcost' | 'prem' | 'lux';
+export type TypeItemQuality = 'base' | 'advanced' | 'pro';
 export type TypeItemRarity = 'red' | 'yellow' | 'green';
 
 export interface IShopItemsRequest {
@@ -43,8 +44,9 @@ export interface IShopItemsRequest {
   offset?: number;
   asc?: boolean;
   level?: number;
-  name?: string
-  item_rarity?: TypeItemRarity
+  name?: string;
+  item_rarity?: TypeItemRarity;
+  item_premium_level?: TypeItemQuality;
 }
 
 export interface IBoosts {
@@ -70,7 +72,7 @@ export interface IAchievement {
   boost: IAchievementBoost;
   image_url: string;
   is_unlocked: boolean;
-  unlocked_at: string | null; 
+  unlocked_at: string | null;
 }
 
 export interface IAchievementsResponse {

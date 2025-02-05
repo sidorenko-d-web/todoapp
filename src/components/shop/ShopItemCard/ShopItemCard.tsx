@@ -2,60 +2,70 @@ import { FC, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
-import { IShopItem, useGetCurrentUserProfileInfoQuery, inventoryApi, TypeItemRarity } from '../../../redux';
-import CoinIcon from '../../../assets/icons/coin.svg';
+import { IShopItem } from '../../../redux';
+import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
-import ViewsIcon from '../../../assets/icons/views.svg';
+import ViewsIcon from '../../../assets/icons/views.png';
 import { useModal } from '../../../hooks';
-import { MODALS } from '../../../constants';
+import { MODALS, svgHeadersString } from '../../../constants';
 
 interface Props {
   disabled?: boolean;
-  refetchAll: () => void;
-  variant?: TypeItemRarity;
-
   item: IShopItem;
 }
 
-export const ShopItemCard: FC<Props> = ({ disabled, variant = 'lowcost', item, refetchAll }) => {
+export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [buyItem, { isLoading }] = useBuyItemMutation();
 
   const { openModal } = useModal();
 
-  const { refetch } = useGetCurrentUserProfileInfoQuery();
   const [error, setError] = useState('');
   const handleBuyItem = async () => {
     try {
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
       console.log(res);
       if (!res.error) {
-        refetchAll();
-        refetch();
-        inventoryApi.util.resetApiState();
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
       } else {
         setError(JSON.stringify(res.error));
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return (
     <div className={styles.storeCard}>
       <div className={styles.header}>
         <div className={clsx(styles.image)}>
-          <img src={item.image_url} />
+          <img src={item.image_url + svgHeadersString} />
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>
-            <h3>{item.name}</h3>
+            <h3>
+              {item.name} {item.item_rarity} {item.item_premium_level}
+            </h3>
           </div>
-          <p className={variant === 'lux' ? styles.colorRed : variant === 'prem' ? styles.colorPurple : styles.level}>
+          <p
+            className={
+              item.item_rarity === 'green'
+                ? styles.colorRed
+                : item.item_rarity === 'yellow'
+                ? styles.colorPurple
+                : styles.level
+            }
+          >
             Не куплено
           </p>
           {error && (
-            <p className={variant === 'lux' ? styles.colorRed : variant === 'prem' ? styles.colorPurple : styles.level}>
+            <p
+              className={
+                item.item_rarity === 'green'
+                  ? styles.colorRed
+                  : item.item_rarity === 'yellow'
+                  ? styles.colorPurple
+                  : styles.level
+              }
+            >
               {error}
             </p>
           )}
@@ -71,7 +81,6 @@ export const ShopItemCard: FC<Props> = ({ disabled, variant = 'lowcost', item, r
             <div className={styles.statsItem}>
               <p>+{item.boost.income_per_second}</p>
               <img src={CoinIcon} alt="" />
-              <img src={CoinIcon} alt="" />
               <p>/сек</p>
             </div>
           </div>
@@ -80,7 +89,9 @@ export const ShopItemCard: FC<Props> = ({ disabled, variant = 'lowcost', item, r
 
       {!disabled ? (
         <div className={styles.actions}>
-          <button onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}>
+          <button
+            onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
+          >
             {item.price_usdt} $USDT
           </button>
           <button onClick={handleBuyItem}>
@@ -88,7 +99,6 @@ export const ShopItemCard: FC<Props> = ({ disabled, variant = 'lowcost', item, r
               <p>loading</p>
             ) : (
               <>
-                {item.price_internal} <img src={CoinIcon} alt="" />
                 {item.price_internal} <img src={CoinIcon} alt="" />
               </>
             )}
