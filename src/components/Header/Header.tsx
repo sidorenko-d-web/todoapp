@@ -36,24 +36,7 @@ export const Header = () => {
     navigate(AppRoute.Profile);
   };
 
-  // const [showCoins, setShowCoins] = useState(() => 
-  //   isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN)
-  // );
-  
-  // useEffect(() => {
-  //   const handleGuideUpdate = () => {
-  //     setShowCoins(isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN));
-  //   };
-  
-  //   window.addEventListener("coinsGuideUpdated", handleGuideUpdate);
-  
-  //   return () => {
-  //     window.removeEventListener("coinsGuideUpdated", handleGuideUpdate);
-  //   };
-  // }, []);
-
   const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
-
 
   return (
     <header className={styles.header}>
