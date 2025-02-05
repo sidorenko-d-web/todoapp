@@ -30,6 +30,7 @@ export const MainPage: FC = () => {
     }));
   };
 
+  
   return (
     <main className={s.page}>
       <IntegrationCreation />
@@ -91,7 +92,7 @@ export const MainPage: FC = () => {
           <GetCoinsGuide
             onClose={() => {
               handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-              openModal(MODALS.CREATING_INTEGRATION);
+              openModal(MODALS.SUBSCRIBE);
             }}
             isReferral={true}
           />

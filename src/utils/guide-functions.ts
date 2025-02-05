@@ -14,6 +14,15 @@ export const isIntegrationCreationButtonGlowing = () => {
         || (isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN));
 }
 
+export const setSubscriptionPurchased = () => {
+    sessionStorage.setItem(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT, '1');
+}
+
+export const getSubscriptionPurchased = () => {
+    return sessionStorage.getItem(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) === '1';
+}
+
+
 export const integrationCreatingModalLightningsGlowing = () => {
     return (
         !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
