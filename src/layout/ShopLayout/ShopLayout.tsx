@@ -18,6 +18,8 @@ import CoinIcon from '../../assets/icons/coin.png';
 import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
 import ViewsCoin from '../../assets/icons/views.png';
 import { itemsInTab } from '../../helpers';
+import { WelcomeToShopGuide } from '../../components/guide/ShopPageGuides/WelcomeToShopGuide/WelcomeToShopGuide';
+import { BackToMainPageGuide } from '../../components/guide/ShopPageGuides/BackToMainPageGuide/BackToMainPageGuide';
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
   { title: 'Фото', value: 'image' },
@@ -100,68 +102,72 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   }, [shopCategory]);
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.titleWrapper}>
-        <button
-          className={styles.linkBack}
-          onClick={handleShop}
-          style={{ opacity: mode === 'inventory' ? 1 : 0 }}
-        >
-          <img src={ArrowLeftIcon} />
-        </button>
-        <div className={styles.mainHeader}>
-          <h1 className={styles.title}>{mode === 'shop' ? 'Магазин' : 'Инвентарь '}</h1>
+    <>
+      <div className={styles.wrapper}>
+        <div className={styles.titleWrapper}>
+          <button
+            className={styles.linkBack}
+            onClick={handleShop}
+            style={{ opacity: mode === 'inventory' ? 1 : 0 }}
+          >
+            <img src={ArrowLeftIcon} />
+          </button>
+          <div className={styles.mainHeader}>
+            <h1 className={styles.title}>{mode === 'shop' ? 'Магазин' : 'Инвентарь '}</h1>
 
-          <div className={styles.scores}>
-            <div className={styles.scoresItem}>
-              <p>+{0}</p>
-              <img src={ViewsCoin} />
-              <p>/инт.</p>
-            </div>
-            <div className={styles.scoresItem}>
-              <p>+{0}</p>
-              <img src={SubscriberCoin} />
-              <p>/инт.</p>
-            </div>
-            <div className={styles.scoresItem}>
-              <p>+{0}</p>
-              <img src={CoinIcon} />
-              <p>/сек.</p>
+            <div className={styles.scores}>
+              <div className={styles.scoresItem}>
+                <p>+{0}</p>
+                <img src={ViewsCoin} />
+                <p>/инт.</p>
+              </div>
+              <div className={styles.scoresItem}>
+                <p>+{0}</p>
+                <img src={SubscriberCoin} />
+                <p>/инт.</p>
+              </div>
+              <div className={styles.scoresItem}>
+                <p>+{0}</p>
+                <img src={CoinIcon} />
+                <p>/сек.</p>
+              </div>
             </div>
           </div>
+          <button
+            className={styles.linkInventory}
+            onClick={handleInventory}
+            style={{ opacity: mode === 'shop' ? 1 : 0 }}
+          >
+            <img src={InventoryBox} />
+          </button>
         </div>
-        <button
-          className={styles.linkInventory}
-          onClick={handleInventory}
-          style={{ opacity: mode === 'shop' ? 1 : 0 }}
-        >
-          <img src={InventoryBox} />
-        </button>
-      </div>
 
-      <div className={styles.navs}>
-        <TabsNavigation
-          tabs={shopItemCategories}
-          currentTab={shopCategory.title}
-          onChange={setShopCategory}
-        />
-        {shopCategory.title !== 'Вы' && (
+        <div className={styles.navs}>
           <TabsNavigation
-            colorClass={
-              itemsQuality.title === 'Эконом'
-                ? 'tabItemSelectedBlue'
-                : itemsQuality.title === 'Премиум'
-                ? 'tabItemSelectedPurple'
-                : 'tabItemSelectedRed'
-            }
-            tabs={mode === 'shop' ? tabs : inventoryTabs}
-            currentTab={itemsQuality.title}
-            onChange={setItemsQuality}
+            tabs={shopItemCategories}
+            currentTab={shopCategory.title}
+            onChange={setShopCategory}
           />
-        )}
+          {shopCategory.title !== 'Вы' && (
+            <TabsNavigation
+              colorClass={
+                itemsQuality.title === 'Эконом'
+                  ? 'tabItemSelectedBlue'
+                  : itemsQuality.title === 'Премиум'
+                    ? 'tabItemSelectedPurple'
+                    : 'tabItemSelectedRed'
+              }
+              tabs={mode === 'shop' ? tabs : inventoryTabs}
+              currentTab={itemsQuality.title}
+              onChange={setItemsQuality}
+            />
+          )}
+        </div>
+
+        {children}
       </div>
 
-      {children}
-    </div>
+      <BackToMainPageGuide onClose={() => {console.log('closed')}}/>
+    </>
   );
 };

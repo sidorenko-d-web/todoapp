@@ -9,6 +9,7 @@ import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
 import { useModal } from '../../../hooks';
 import { MODALS, svgHeadersString } from '../../../constants';
+import { buyShopItemButtonGlowing } from '../../../utils';
 
 interface Props {
   disabled?: boolean;
@@ -94,7 +95,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
           >
             {item.price_usdt} $USDT
           </button>
-          <button onClick={handleBuyItem}>
+          <button onClick={handleBuyItem} className={buyShopItemButtonGlowing(item.name) ? styles.glowingBtn : ''}>
             {isLoading ? (
               <p>loading</p>
             ) : (

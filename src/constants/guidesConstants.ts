@@ -9,5 +9,11 @@ export const GUIDE_ITEMS = {
         CREATE_INTEGRATION_FIRST_GUIDE_SHOWN: 'createIntegrationFirstGuideShown',
         CREATE_INTEGRATION_SECOND_GUIDE_SHOWN: 'createIntegrationSecondGuideShown',
         MAIN_PAGE_GUIDE_FINISHED: 'mainPageGuideFinished'
+    },
+
+    shopPage: {
+        SHOP_VISITED: 'shopVisited',
+        WELCOME_TO_SHOP_GUIDE_SHOWN: 'welcomeToShopGuideShown',
+        
     }
 }

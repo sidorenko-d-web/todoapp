@@ -45,3 +45,17 @@ export const integrationCreatingModalButtonGlowing = () => {
         && !isGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED)
     );
 }
+
+
+//shop
+
+export const isShopVisited = () => {
+    return isGuideShown(GUIDE_ITEMS.shopPage.SHOP_VISITED);
+}
+
+export const buyShopItemButtonGlowing = (itemName: string) => {
+    console.log('item name: ' + itemName.trim().toLowerCase());
+    return (
+        !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) && itemName.trim().toLowerCase().includes('печатная машинка')
+    );
+}
