@@ -1,0 +1,125 @@
+@use "../../../assets/styles/abstracts" as var;
+
+// Variables for colors
+$border-default: #282830;
+$border-selected: #2F80ED;
+$text-default: #FFF;
+$text-selected: #2F80ED;
+$background-icon: #373A43;
+
+.titleStyles {
+    display: flex;
+    padding: 10px 12px 10px 12px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    align-self: stretch;
+}
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.walletSection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.walletWrapper {
+    display: flex;
+    padding: 6px;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 10px;
+    border-radius: 8px;
+    border: 1px solid $border-default;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    .text {
+        overflow: hidden;
+        color: #FFF;
+        font-family: var.$font-default;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+    }
+
+    .icon {
+        display: flex;
+        padding: 5px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 3px;
+        border-radius: 6px;
+        background: #282830;
+    }
+
+    &.active {
+        border-color: #2F80ED;
+        .text {
+            color: #2F80ED;
+        }
+    }
+}
+
+.walletButtons {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+
+    .okButton {
+        display: flex;
+        padding: 10px;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        flex: 1 0 0;
+        border-radius: 8px;
+        border: 1px solid #282830;
+        background: #373A43;
+
+        color: #FFF;
+        text-align: center;
+        font-family: var.$font-default;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+    }
+
+    .disconnectButton {
+        display: flex;
+        padding: 10px;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        flex: 1 0 0;
+        border-radius: 8px;
+        border: 1px solid #2064C0;
+        background: #2F80ED;
+
+        color: #FFF;
+        text-align: center;
+        font-family: var.$font-default;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        
+    }
+}
+
+
+
+
+
+
+

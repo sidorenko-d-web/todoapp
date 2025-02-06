@@ -7,7 +7,7 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { useModal } from '../../../hooks';
+import { useModal} from '../../../hooks';
 import { MODALS, svgHeadersString } from '../../../constants';
 
 interface Props {
