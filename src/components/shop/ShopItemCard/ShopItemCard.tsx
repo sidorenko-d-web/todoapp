@@ -8,8 +8,9 @@ import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
 import { useModal } from '../../../hooks';
-import { MODALS, svgHeadersString } from '../../../constants';
+import { GUIDE_ITEMS, MODALS, svgHeadersString } from '../../../constants';
 import { useSelector } from 'react-redux';
+import { isGuideShown } from '../../../utils';
 
 interface Props {
   disabled?: boolean;
@@ -92,7 +93,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
       {!disabled ? (
         <div className={styles.actions}>
-          {!(buyButtonGlowing && item.name.toLowerCase().trim().includes('печатная')) && 
+          {isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) && 
             <button
             onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
           >
@@ -102,7 +103,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
           <button onClick={handleBuyItem} className={(buyButtonGlowing
             && item.name.toLowerCase().trim().includes('печатная')) ? styles.glowingBtn : ''}>
             {isLoading ? (
-              <p>loading</p>
+              <p>Загрузка...</p>
             ) : (
               <>
                 {item.price_internal} <img src={CoinIcon} alt="" />
