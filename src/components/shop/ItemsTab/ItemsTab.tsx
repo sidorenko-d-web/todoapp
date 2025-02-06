@@ -1,46 +1,28 @@
 import { FC } from 'react';
 import { ShopItemCard } from '../ShopItemCard/ShopItemCard';
 import styles from './ItemsTab.module.scss';
-import { IShopItem, TypeItemQuality } from '../../../redux';
+import { IShopItem } from '../../../redux';
+import { InventoryCard } from '../InventoryCard';
 
 interface props {
-  itemsQuality: {
-    title: string;
-    value: string;
-  };
   shopCategory: {
     title: string;
     value: string;
   };
   shopItems?: IShopItem[];
   inventoryItems?: IShopItem[];
-  refetchFn: () => void;
 }
 
-export const ItemsTab: FC<props> = ({ itemsQuality, shopItems, refetchFn }) => {
-  const shopItemsFiltered = shopItems?.filter(item => {
-    if (itemsQuality.value === 'lux') {
-      return ['Pro', 'РАСТЁТ'].some(_item => _item === item.name);
-    } else if (itemsQuality.value === 'prem') {
-      return item.name.includes('Prem');
-    } else {
-      return !item.name.includes('Prem') && !item.name.includes('Pro');
-    }
-  });
+export const ItemsTab: FC<props> = ({ inventoryItems, shopItems }) => {
 
-  const refetchAll = () => {
-    refetchFn();
-  };
 
   return (
     <div className={styles.cardsWrapper}>
-      {shopItemsFiltered?.map(item => (
-        <ShopItemCard
-          key={item.id}
-          variant={itemsQuality.value as TypeItemQuality}
-          item={item}
-          refetchAll={refetchAll}
-        />
+      {shopItems?.map(item => (
+        <ShopItemCard key={item.id} item={item} />
+      ))}
+      {inventoryItems?.map(item => (
+        <InventoryCard key={item.id} item={item} />
       ))}
     </div>
   );

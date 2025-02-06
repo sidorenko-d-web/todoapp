@@ -1,0 +1,161 @@
+@use '../../../../assets/styles/abstracts/colors' as *;
+$timing: 1s;
+
+.images {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  .bgLight {
+    position: absolute;
+    width: 80%;
+  }
+
+  .itemImage {
+    width: 60px;
+    height: 60px;
+    border: 2px solid $color-dark-gray-stroke;
+    border-radius: 8px;
+    position: relative;
+    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: img-scale-anim $timing forwards ease;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      path {
+        width: 24px;
+        height: 24px;
+        fill: $color-white;
+      }
+    }
+
+    .blue {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      background: $color-red;
+      padding: 2px 5px;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 12px;
+      color: $color-dark-gray-stroke;
+      border-radius: 4px;
+      border: 2px solid $color-dark-gray-stroke;
+    }
+    .purple {
+      @extend .blue;
+      background: $color-purple;
+      animation: bg-reveal-purple $timing * 0.8 forwards ease;
+    }
+    .red {
+      @extend .blue;
+      background: $color-red;
+      animation: img-reveal-red $timing * 0.8 forwards ease;
+    }
+  }
+
+  .itemImagePurple {
+    @extend .itemImage;
+    animation: bg-reveal-purple $timing forwards ease, img-scale-anim $timing forwards ease;
+  }
+  .itemImageRed {
+    @extend .itemImage;
+    animation: img-reveal-red $timing * 0.8 forwards ease, img-scale-anim $timing forwards ease;
+  }
+}
+
+.text {
+  width: 100%;
+  margin-bottom: 30px;
+  p {
+    color: $color-text-semi-transparent;
+    font-weight: 500;
+    font-size: 12px;
+    text-wrap: wrap;
+    text-align: center;
+
+    span {
+      color: $color-red;
+    }
+
+    .spanPurple {
+      color: $color-purple;
+    }
+    .spanRed {
+      color: $color-red;
+    }
+  }
+}
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+
+  .statItem {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: $color-white;
+
+    img {
+      width: 14px;
+      aspect-ratio: 14px;
+    }
+  }
+}
+
+@keyframes img-scale-anim {
+  0% {
+    scale: 1;
+  }
+
+  70% {
+    scale: 1.25;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes bg-reveal-purple {
+  0% {
+    background-color: $color-primary;
+  }
+  40% {
+    background-color: $color-primary;
+  }
+  80% {
+    background-color: $color-purple;
+  }
+
+  100% {
+    background-color: $color-purple;
+  }
+}
+
+@keyframes img-reveal-red {
+  0% {
+    background-color: $color-purple;
+  }
+  40% {
+    background-color: $color-purple;
+  }
+
+  80% {
+    background-color: $color-red;
+  }
+
+  100% {
+    background-color: $color-red;
+  }
+}

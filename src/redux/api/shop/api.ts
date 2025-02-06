@@ -5,7 +5,7 @@ import { IShopItemsResponse, IShopItemsRequest, IShopSkinsResponse, IBuyItemRequ
 export const shopApi = createApi({
   reducerPath: 'shopApi',
   baseQuery: baseQueryReauth,
-  tagTypes: ['items', 'skins'],
+  tagTypes: ['items', 'skins', 'achievements'],
   endpoints: builder => ({
     getShopItems: builder.query<IShopItemsResponse, IShopItemsRequest>({
       query: params => ({
@@ -32,16 +32,22 @@ export const shopApi = createApi({
       }),
       invalidatesTags: ['items'],
     }),
-
     buySkin: builder.mutation<any, IBuyItemRequest>({
       query: ({ id, ...params }) => ({
         url: `/shop/skins/buy/${id}`,
         method: 'POST',
         params,
       }),
-      invalidatesTags: ['skins'],
+      invalidatesTags: ['items'],
     }),
+
+   
   }),
 });
 
-export const { useGetShopItemsQuery, useGetShopSkinsQuery, useBuyItemMutation, useBuySkinMutation } = shopApi;
+export const {
+  useGetShopItemsQuery,
+  useGetShopSkinsQuery,
+  useBuyItemMutation,
+  useBuySkinMutation,
+} = shopApi;

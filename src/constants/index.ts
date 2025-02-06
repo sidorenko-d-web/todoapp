@@ -1,4 +1,5 @@
 export * from './appRoute';
-export * from './footerItems'
-export * from './modals'
+export * from './footerItems';
+export * from './modals';
 export * from './guidesConstants';
+export * from './imageSvgString';

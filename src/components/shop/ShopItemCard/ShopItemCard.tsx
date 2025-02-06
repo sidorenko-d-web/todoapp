@@ -1,86 +1,82 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
-import LockIconSvg from '../../../assets/icons/lock-closed';
-import ChestBlueIcon from '../../../assets/icons/chest-blue.svg';
-import ChestPurpleIcon from '../../../assets/icons/chest-purple.svg';
-import ChestRedIcon from '../../../assets/icons/chest-red.svg';
-import { IShopItem, TypeItemQuality, useBuyItemMutation } from '../../../redux';
+import { useBuyItemMutation } from '../../../redux/api/shop/api';
+import { IShopItem } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
-import SubscriberCoin from '../../../assets/icons/subscribers.png';
+import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
+import ViewsIcon from '../../../assets/icons/views.png';
+import { useModal } from '../../../hooks';
+import { MODALS, svgHeadersString } from '../../../constants';
 
 interface Props {
   disabled?: boolean;
-  isUpgradeEnabled?: boolean;
-  isBlocked?: boolean;
-  isB?: boolean;
-  refetchAll: () => void;
-  variant?: TypeItemQuality;
-
   item: IShopItem;
 }
 
-export const ShopItemCard: FC<Props> = ({
-                                          disabled,
-                                          isBlocked,
-                                          isUpgradeEnabled = true,
-                                          variant = 'lowcost',
-                                          item,
-                                          isB,
-                                          refetchAll,
-                                        }) => {
-  const [ buyItem, { isLoading } ] = useBuyItemMutation();
+export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
+  const [buyItem, { isLoading }] = useBuyItemMutation();
 
+  const { openModal } = useModal();
+
+  const [error, setError] = useState('');
   const handleBuyItem = async () => {
     try {
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
       console.log(res);
       if (!res.error) {
-        refetchAll();
+        openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
+      } else {
+        setError(JSON.stringify(res.error));
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return (
     <div className={styles.storeCard}>
       <div className={styles.header}>
-        <div
-          className={clsx(styles.image, variant === 'prem' ? styles.purpleImage : variant === 'lux' && styles.redImage)}
-        >
-          <img src={item.image_url} className={clsx(isBlocked && styles.disabledImage)} alt="" />
-          {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
-          {!isBlocked && <p>Base</p>}
+        <div className={clsx(styles.image)}>
+          <img src={item.image_url + svgHeadersString} />
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>
-            <h3>{item.name}</h3>
-            {variant === 'lowcost' ? (
-              <div className={styles.variant}>
-                <p>Эконом</p>
-              </div>
-            ) : variant === 'prem' ? (
-              <div className={styles.variantPurple}>
-                <p>Премиум</p>
-              </div>
-            ) : (
-              <div className={styles.variantRed}>
-                <p>Люкс</p>
-              </div>
-            )}
+            <h3>
+              {item.name} {item.item_rarity} {item.item_premium_level}
+            </h3>
           </div>
-          <p className={variant === 'lux' ? styles.colorRed : variant === 'prem' ? styles.colorPurple : styles.level}>
-            Уровень {item.level} {isB && 'Предмет куплен'}
+          <p
+            className={
+              item.item_rarity === 'green'
+                ? styles.colorRed
+                : item.item_rarity === 'yellow'
+                ? styles.colorPurple
+                : styles.level
+            }
+          >
+            Не куплено
           </p>
-          <div className={clsx(styles.stats, (isBlocked || disabled) && styles.disabledStats)}>
+          {error && (
+            <p
+              className={
+                item.item_rarity === 'green'
+                  ? styles.colorRed
+                  : item.item_rarity === 'yellow'
+                  ? styles.colorPurple
+                  : styles.level
+              }
+            >
+              {error}
+            </p>
+          )}
+          <div className={styles.stats}>
             <div className={styles.statsItem}>
-              <p>+{item.boost.income_per_integration}</p>
-              <img src={CoinIcon} alt="" />
+              <p>+{item.boost.views}</p>
+              <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
               <p>+{item.boost.subscribers}</p>
-              <img src={SubscriberCoin} alt="" />
+              <img src={SubscriberCoin} />
             </div>
             <div className={styles.statsItem}>
               <p>+{item.boost.income_per_second}</p>
@@ -91,70 +87,13 @@ export const ShopItemCard: FC<Props> = ({
         </div>
       </div>
 
-      {!isBlocked &&
-        (disabled ? (
-          <p className={styles.disabledText}>
-            Сейчас активен “
-            <span className={variant === 'prem' ? styles.itemNameBlue : styles.itemNamePurple}>
-              Компьютерный стул - Base
-            </span>
-            ”. Вы можете заменить его на текущий предмет, сделав его активным.
-          </p>
-        ) : (
-          <div className={styles.progress}>
-            <div className={styles.text}>
-              <p>{item.level}/50 уровней </p>
-              <div className={styles.goal}>
-                <p>Каменный сундук</p>
-                <img
-                  src={variant === 'lowcost' ? ChestBlueIcon : variant === 'prem' ? ChestPurpleIcon : ChestRedIcon}
-                  alt=""
-                />
-              </div>
-            </div>
-
-            <div className={styles.progressBar}>
-              <div
-                className={
-                  variant === 'lowcost' ? styles.done : variant === 'prem' ? styles.donePurple : styles.doneRed
-                }
-                style={{ width: item.level * 2 + '%' }}
-              />
-            </div>
-
-            <div className={styles.items}>
-              <div
-                className={
-                  variant === 'lowcost' ? styles.item : variant === 'prem' ? styles.itemPurple : styles.itemRed
-                }
-              >
-                <img src={item.image_url} className={styles.itemImage} alt="" />
-                <img src={LockIcon} className={styles.lock} alt="" />
-              </div>
-              <div className={styles.itemLocked}>
-                <img src={item.image_url} className={styles.itemImage} alt="" />
-                <img src={LockIcon} className={styles.lock} alt="" />
-              </div>
-              <div className={styles.itemLocked}>
-                <img src={item.image_url} className={styles.itemImage} alt="" />
-                <img src={LockIcon} className={styles.lock} alt="" />
-              </div>
-            </div>
-          </div>
-        ))}
-
-      {isBlocked ? (
-        <div className={styles.disabledUpgradeActions}>
-          <img src={LockIcon} alt="" />
-          <p>Прокачайте основной предмет</p>
-          <img src={LockIcon} alt="" />
-        </div>
-      ) : disabled ? (
-        <button className={styles.disabledActions}>
-          <p>Активировать</p>
-        </button>
-      ) : isUpgradeEnabled ? (
+      {!disabled ? (
         <div className={styles.actions}>
+          <button
+            onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
+          >
+            {item.price_usdt} $USDT
+          </button>
           <button onClick={handleBuyItem}>
             {isLoading ? (
               <p>loading</p>
@@ -164,13 +103,13 @@ export const ShopItemCard: FC<Props> = ({
               </>
             )}
           </button>
-          <button>Задание</button>
-          <button disabled>{item.price_usdt} $USDT</button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
+          <img src={LockIcon} alt="" />
           <p>Нужен уровень Древа 7</p>
+          <img src={LockIcon} alt="" />
           <img src={LockIcon} alt="" />
         </div>
       )}

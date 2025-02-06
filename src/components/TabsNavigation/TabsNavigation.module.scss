@@ -1,7 +1,6 @@
 @use 'sass:color';
 @use '../../assets/styles' as var;
 
-
 .tabNav {
   display: flex;
   flex-direction: row;
@@ -18,12 +17,13 @@
     background: none;
     border: none;
 
-    @media (max-width: 340px) {
-      
-    padding: 5px 3vw;
+    @media (max-width: var.$breakpoint-sm) {
+      padding: 5px 3vw;
     }
   }
-
+  @media (min-width: var.$breakpoint-md) {
+    font-size: 14px;
+  }
   .tabItemSelectedWhite {
     @extend .tabItem;
     color: var.$color-black;
@@ -46,6 +46,6 @@
     @extend .tabItem;
 
     color: var.$color-white;
-    background-color: red;
+    background-color: var.$color-red;
   }
 }

@@ -41,21 +41,19 @@ export const Header = () => {
   return (
     <header className={styles.header}>
       <div className={styles.lowerHeader}>
-
         {isLoading && <p>Loading...</p>}
 
-          <div className={styles.levelWrapper}>
-              <div className={styles.avatarWrapper} onClick={handleNavigateToProfile}>
-                  <img className={styles.avatarIcon} src={AvatarIcon} alt="AvatarIcon" />
-                  <img className={styles.fireIcon} src={FireIcon} alt="FireIcon" />
-              </div>
+        <div className={styles.levelWrapper}>
+          <div className={styles.avatarWrapper} onClick={handleNavigateToProfile}>
+            <img className={styles.avatarIcon} src={AvatarIcon} alt="AvatarIcon" />
+            <img className={styles.fireIcon} src={FireIcon} alt="FireIcon" />
+          </div>
 
-
-              <div className={styles.info}>
-                  <div className={styles.subscribers}>
-                      <p className={styles.subscribersNumber}>{data?.subscribers || 0}</p>
-                      <img className={styles.subscribersIcon} src={SubscribersIcon} alt="SubscribersIcon" />
-                  </div>
+          <div className={styles.info}>
+            <div className={styles.subscribers}>
+              <p className={styles.subscribersNumber}>{data?.subscribers || 0}</p>
+              <img className={styles.subscribersIcon} src={SubscribersIcon} alt="SubscribersIcon" />
+            </div>
 
                   <div className={styles.levelInfo}>
                       <Link to={AppRoute.ProgressTree} className={styles.levelNumber}>{lastActiveStage}</Link>
@@ -72,7 +70,7 @@ export const Header = () => {
           </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
