@@ -7,6 +7,7 @@ import bronzeMedal from '../../../assets/icons/medal-bronze.svg';
 import { useGetUserProfileInfoByIdQuery } from '../../../redux';
 
 import s from './StrangerProfileModal.module.scss';
+import { useTranslation } from 'react-i18next';
 
 interface StrangerProfileModalProps {
   modalId: string;
@@ -19,6 +20,7 @@ export const StrangerProfileModal: FC<StrangerProfileModalProps> = ({
                                                                       onClose,
                                                                       profileId,
                                                                     }) => {
+  const { t } = useTranslation('profile');
   const { data: profile } = useGetUserProfileInfoByIdQuery(profileId);
 
   const { position, subscribers, daysInARow } = {
@@ -44,7 +46,7 @@ export const StrangerProfileModal: FC<StrangerProfileModalProps> = ({
   }
 
   return (
-    <BottomModal modalId={modalId} title={`Инфо о ${profile.username}`} onClose={onClose}>
+    <BottomModal modalId={modalId} title={`${t('p20')} ${profile.username}`} onClose={onClose}>
       <div className={s.content}>
         <ProfileStatsMini onlyBadges position={position} subscribers={subscribers} daysInARow={daysInARow} />
         <ProfileInfo

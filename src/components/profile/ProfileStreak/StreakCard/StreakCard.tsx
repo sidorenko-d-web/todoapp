@@ -8,6 +8,7 @@ import ProgressLine from '../../../shared/ProgressLine/ProgressLine';
 
 import { DayType } from '../../../../types';
 import { StreakDay } from './StreakDay';
+import { useTranslation } from 'react-i18next';
 
 
 interface StreakCardProps {
@@ -19,14 +20,16 @@ interface StreakCardProps {
 }
 
 export const StreakCard: React.FC<StreakCardProps> = ({ streakCount, freezeCount, days, progress, onlyStreak }) => {
+  const { t } = useTranslation('profile');
+
   return (
     <div className={styles.wrp}>
       <div className={styles.header}>
         <div className={styles.daysInARowWrp}>
-          <span className={styles.badge}>Новичок</span>
+          <span className={styles.badge}>{t('p12')}</span>
 
           <div className={styles.title}>
-            <h2 className={styles.daysInARow}>{streakCount} дней в блоге!</h2>
+            <h2 className={styles.daysInARow}>{streakCount} {t('p13')}</h2>
             {!onlyStreak && <div className={styles.freezeCount}>
               <span>{freezeCount}</span>
               <img src={snowflake} />
@@ -48,9 +51,9 @@ export const StreakCard: React.FC<StreakCardProps> = ({ streakCount, freezeCount
 
           <div className={styles.progressContainer}>
             <div className={`${styles['progressBarTextWrp']} ${styles['progressText']}`}>
-              <span>{progress}/30 дней</span>
+              <span>{progress}/{t('p14')}</span>
               <span className={styles.reward}>
-            Легендарный сундук
+            {t('p15')}
             <div className={styles.chestImgContainer}>
               <img src={chestIcon} className={styles.chestImg} />
             </div>
