@@ -156,7 +156,6 @@
       }
 
       &:last-child {
-        background: var.$color-gray;
         flex: 1;
         border: none;
       }
@@ -210,4 +209,5 @@
 
 .glowingBtn {
   box-shadow: 0 0 60px var.$color-primary;
+  background: var.$color-primary;
 }
