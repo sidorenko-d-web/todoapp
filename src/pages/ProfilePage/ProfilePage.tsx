@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import styles from './ProfilePage.module.scss';
 import { ProfileInfo, ProfileStats, ProfileStatsMini, StreakCard } from '../../components/profile';
@@ -9,8 +10,8 @@ import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 
-
 export const ProfilePage: React.FC = () => {
+  const { t } = useTranslation('profile');
 
   const { closeModal } = useModal();
 
@@ -30,7 +31,6 @@ export const ProfilePage: React.FC = () => {
 
   const weekData = getWeekData(streakDays, freezeDays);
 
-
   return (
     <>
       {(isUserLoading || isTopProfilesLoading) && <p>Загрузка...</p>}
@@ -40,7 +40,7 @@ export const ProfilePage: React.FC = () => {
       {(userProfileData && topProfilesData) &&
         <div className={styles.wrp}>
           <div>
-            <h1 className={styles.pageTitle}>Профиль</h1>
+            <h1 className={styles.pageTitle}>{t("p0")}</h1>
 
             <ProfileStatsMini subscribers={userProfileData.subscribers} position={position} daysInARow={10} totalViews={userProfileData.total_views} />
           </div>
