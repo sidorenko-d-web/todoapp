@@ -23,7 +23,7 @@ import { WelcomeToShopGuide } from '../../components/guide/ShopPageGuides/Welcom
 import { BackToMainPageGuide } from '../../components/guide/ShopPageGuides/BackToMainPageGuide/BackToMainPageGuide';
 import { isGuideShown, setGuideShown } from '../../utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { setShopStatsGlowing } from '../../redux/slices/guideSlice';
+import { setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
   { title: 'Фото', value: 'image' },
@@ -205,7 +205,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
       {!guideVisibility.welcomeGuideShown && mode === 'shop' && (
         <WelcomeToShopGuide onClose={() => {
           reduxDispatch(setShopStatsGlowing(false));
-          setShopStatsGlowing(false);
+          reduxDispatch(setBuyItemButtonGlowing(true));
           handleGuideClose(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
         }} />
       )}

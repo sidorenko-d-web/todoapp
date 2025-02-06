@@ -2,14 +2,14 @@ import { FC, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
-import { IShopItem } from '../../../redux';
+import { IShopItem, RootState } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
 import { useModal } from '../../../hooks';
 import { MODALS, svgHeadersString } from '../../../constants';
-import { buyShopItemButtonGlowing } from '../../../utils';
+import { useSelector } from 'react-redux';
 
 interface Props {
   disabled?: boolean;
@@ -33,6 +33,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       }
     } catch (error) { }
   };
+
+  const buyButtonGlowing = useSelector((state: RootState) => state.guide.buyItemButtonGlowing);
 
   return (
     <div className={styles.storeCard}>
@@ -90,14 +92,15 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
       {!disabled ? (
         <div className={styles.actions}>
-          {!buyShopItemButtonGlowing(item.name) && 
+          {!(buyButtonGlowing && item.name.toLowerCase().trim().includes('печатная')) && 
             <button
             onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
           >
             {item.price_usdt} $USDT
           </button>
           }
-          <button onClick={handleBuyItem} className={buyShopItemButtonGlowing(item.name) ? styles.glowingBtn : ''}>
+          <button onClick={handleBuyItem} className={(buyButtonGlowing
+            && item.name.toLowerCase().trim().includes('печатная')) ? styles.glowingBtn : ''}>
             {isLoading ? (
               <p>loading</p>
             ) : (

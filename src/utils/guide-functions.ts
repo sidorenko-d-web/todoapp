@@ -49,15 +49,6 @@ export const integrationCreatingModalButtonGlowing = () => {
 
 //shop
 
-export const buyShopItemButtonGlowing = (itemName: string) => {
-    console.log('item name: ' + itemName.trim().toLowerCase());
-    return (
-        !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)
-        && isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) 
-        && itemName.trim().toLowerCase().includes('печатная')
-    );
-}
-
 export const setItemBought = () => {
     setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
 }
