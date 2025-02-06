@@ -15,6 +15,7 @@ import {
 } from '../../../redux';
 import { compareItems } from '../../../helpers';
 import styles from '../ShopPage.module.scss'
+import GetRewardChestModal from '../../DevModals/GetRewardChestModal/GetRewardChestModal';
 
 type TypeTab<T> = { title: string; value: T };
 
@@ -113,6 +114,7 @@ export const ShopInvewntoryPage = () => {
 
       <ItemUpgradedModal />
       <ShopUpgradedModal />
+      <GetRewardChestModal/>
     </ShopLayout>
   );
 };

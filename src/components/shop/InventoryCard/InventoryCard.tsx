@@ -16,7 +16,7 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { MODALS, svgHeadersString } from '../../../constants';
+import { MODALS, localStorageConsts, svgHeadersString } from '../../../constants';
 import { useModal } from '../../../hooks';
 
 interface Props {
@@ -76,6 +76,7 @@ export const InventoryCard: FC<Props> = ({
               isYellow: item.item_rarity === 'red',
             });
           } else {
+            localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
             openModal(MODALS.UPGRADED_ITEM, {
               item,
               mode: 'item',
@@ -273,7 +274,17 @@ export const InventoryCard: FC<Props> = ({
               </>
             )}
           </button>
-          <button>Задание</button>
+          <button
+            onClick={() =>
+              openModal(MODALS.UPGRADED_ITEM, {
+                item,
+                mode: 'item',
+                reward: 'reward of item',
+              })
+            }
+          >
+            Задание
+          </button>
           <button>{data?.items[0].price_usdt} $USDT</button>
         </div>
       ) : (
