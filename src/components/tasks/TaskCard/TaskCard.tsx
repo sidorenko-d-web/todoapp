@@ -7,6 +7,7 @@ import checkIcon from '../../../assets/icons/checkmark-in-the-circle.svg';
 import giftIcon from '../../../assets/icons/gift.svg';
 
 import s from './TaskCard.module.scss';
+import { ProgressBarTasks } from '../ProgressBarTasks';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -54,9 +55,9 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      income,
                                                      subscribers,
                                                      passiveIncome,
-                                                     currentStep,
-                                                     totalSteps,
-                                                     progress,
+                                                     currentStep = 0,
+                                                     totalSteps = 0,
+                                                     progress = 0,
                                                      progressReward,
                                                      progressRewardIcon,
                                                      buttonText = 'Выполнить',
@@ -118,18 +119,13 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       )}
 
       {showProgressBar && (
-        <section className={s.progressBarSection}>
-          <div className={s.progressBarSectionHeader}>
-            <span>{currentStep}/{totalSteps}</span>
-            <span className={s.progressReward}>
-              {progressReward}
-              {progressRewardIcon && <img src={progressRewardIcon} height={12} width={12} alt="reward" />}
-            </span>
-          </div>
-          <div className={s.progressBar}>
-            <div className={s.progressBarInner} style={{ width: `${progress}%` }} />
-          </div>
-        </section>
+        <ProgressBarTasks
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+          progress={progress}
+          progressReward={progressReward}
+          progressRewardIcon={progressRewardIcon}
+        />
       )}
 
       <section className={s.buttons}>

@@ -8,6 +8,8 @@ import dotsIcon from '../../../../assets/icons/dots.svg';
 import checkIcon from '../../../../assets/icons/checkmark-in-the-circle.svg';
 import bookIcon from '../../../../assets/icons/book.svg';
 import coinBlueIcon from '../../../../assets/icons/coin-blue-human.svg';
+import { ProgressBarTasks } from '../../ProgressBarTasks';
+import chestIcon from '../../../../assets/icons/chest-purple.svg';
 
 interface ModalTopTasksProps {
   modalId: string;
@@ -67,6 +69,7 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
   const [channelLink, setChannelLink] = useState('');
 
   const currentStep = TASK_STEPS[currentStepIndex];
+  const progress = ((currentStepIndex + 1) / TASK_STEPS.length) * 100;
 
   useEffect(() => {
     onStateChange?.({
@@ -117,6 +120,17 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
             Этап {currentStepIndex + 1}: {currentStep.title}
           </span>
         </div>
+
+        <div className={s.containerPG}>
+          <ProgressBarTasks
+            currentStep={currentStepIndex + 1}
+            totalSteps={TASK_STEPS.length}
+            progress={progress}
+            progressReward="Драгоценный сундук"
+            progressRewardIcon={chestIcon}
+          />
+        </div>
+
 
         <div className={s.question}>
           <span className={s.linkLabel}>Ссылка на канал</span>

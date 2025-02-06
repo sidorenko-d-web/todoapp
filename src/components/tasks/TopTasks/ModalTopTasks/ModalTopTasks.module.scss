@@ -4,7 +4,7 @@
   padding: 0 3px 0;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+
 }
 
 .rewards {
@@ -12,19 +12,22 @@
   justify-content: center;
   align-items: center;
   gap: 3px;
+
+  .reward {
+    display: flex;
+    align-items: center;
+    color: var.$color-text;
+    font-size: 14px;
+    background: var.$color-badge-bg;
+    border-radius: 10px;
+    padding: 4px 4px 4px 7px;
+    justify-content: center;
+    gap: 3px;
+  }
+  padding-bottom: 20px;
 }
 
-.reward {
-  display: flex;
-  align-items: center;
-  color: var.$color-text;
-  font-size: 14px;
-  background: var.$color-badge-bg;
-  border-radius: 10px;
-  padding: 4px 4px 4px 7px;
-  justify-content: center;
-  gap: 3px;
-}
+
 
 .progress {
   display: flex;
@@ -34,30 +37,37 @@
   border-radius: 5px;
   background: var.$color-badge-bg;
   width: fit-content;
+
+
+  .step {
+    color: var.$color-text;
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 100%; /* 14px */
+    letter-spacing: -0.7px;
+  }
+
+  .dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+  }
+
 }
 
-.step {
-  color: var.$color-text;
-  text-align: center;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 100%; /* 14px */
-  letter-spacing: -0.7px;
+.containerPG {
+  padding-top: 10px;
+  padding-bottom: 20px;
 }
-
-.dots {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-}
-
 
 .question {
   display: flex;
   flex-direction: column;
-  padding-bottom: 10px;
+  padding-bottom: 30px;
+
 }
 
 .questionText {
