@@ -11,8 +11,9 @@ import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import Lottie from 'lottie-react';
 import { blueLight, purpleLight, redLight } from '../../../../assets/animations';
+import { isItemBought, setItemBought } from '../../../../utils';
 
-export const NewItemModal = () => {
+export const NewItemModal: React.FC = () => {
   const { closeModal, getModalState } = useModal();
 
   const state = getModalState<{ item: IShopItem; mode: 'skin' | 'item' }>(
@@ -22,7 +23,6 @@ export const NewItemModal = () => {
 
   const handleClose = () => {
     closeModal(MODALS.NEW_ITEM);
-    navigate(AppRoute.ShopInventory);
   };
 
   const isPrem = state.args?.item.item_rarity === 'yellow';
@@ -31,7 +31,13 @@ export const NewItemModal = () => {
   return (
     <CentralModal
       title="Новый предмет!"
-      onClose={() => closeModal(MODALS.NEW_ITEM)}
+      onClose={() => {
+        if(!isItemBought()) {
+          setItemBought();
+          navigate(AppRoute.ShopInventory);
+        }
+        closeModal(MODALS.NEW_ITEM);
+      }}
       modalId={MODALS.NEW_ITEM}
     >
       <div className={styles.images}>

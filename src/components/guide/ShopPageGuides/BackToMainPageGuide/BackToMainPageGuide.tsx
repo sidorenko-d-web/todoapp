@@ -33,7 +33,7 @@ export const BackToMainPageGuide: React.FC<BackToMainPageGuideProps> = ({ onClos
             top={'50%'}
             onClose={handleClose}
         >
-            <button className={styles.nextBtn}>В комнату!</button>
+            <button className={styles.nextBtn} onClick={handleClose}>В комнату!</button>
             <img src={gif} className={styles.gifImage} />
         </Guide>
     )

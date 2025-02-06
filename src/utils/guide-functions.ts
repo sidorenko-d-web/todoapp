@@ -49,13 +49,20 @@ export const integrationCreatingModalButtonGlowing = () => {
 
 //shop
 
-export const isShopVisited = () => {
-    return isGuideShown(GUIDE_ITEMS.shopPage.SHOP_VISITED);
-}
-
 export const buyShopItemButtonGlowing = (itemName: string) => {
     console.log('item name: ' + itemName.trim().toLowerCase());
     return (
-        !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) && itemName.trim().toLowerCase().includes('печатная машинка')
+        !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)
+        && isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) 
+        && itemName.trim().toLowerCase().includes('печатная машинка')
     );
 }
+
+export const setItemBought = () => {
+    setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
+}
+
+export const isItemBought = () => {
+    return isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
+}
+

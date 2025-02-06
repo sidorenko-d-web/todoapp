@@ -12,8 +12,8 @@ export const GUIDE_ITEMS = {
     },
 
     shopPage: {
-        SHOP_VISITED: 'shopVisited',
         WELCOME_TO_SHOP_GUIDE_SHOWN: 'welcomeToShopGuideShown',
-        
+        ITEM_BOUGHT: 'itemBought',
+        BACK_TO_MAIN_PAGE_GUIDE: 'backToMainPageGuide'
     }
 }

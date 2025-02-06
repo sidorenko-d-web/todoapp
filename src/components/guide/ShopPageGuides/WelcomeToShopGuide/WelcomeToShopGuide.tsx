@@ -31,7 +31,7 @@ export const WelcomeToShopGuide: React.FC<WelcomeToShopGuideProps> = ({ onClose 
             top={'55%'}
             onClose={handleClose}
         >
-            <button className={styles.nextBtn}>Вперёд!</button>
+            <button className={styles.nextBtn} onClick={handleClose}>Вперёд!</button>
             <img src={gif} className={styles.gifImage} />
         </Guide>
     )

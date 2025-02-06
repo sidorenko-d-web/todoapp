@@ -4,15 +4,16 @@ import {
   PropsWithChildren,
   type SetStateAction,
   useEffect,
+  useReducer,
   useState,
 } from 'react';
 import styles from './ShopLayout.module.scss';
 import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
 import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
-import { AppRoute } from '../../constants';
+import { AppRoute, GUIDE_ITEMS } from '../../constants';
 import ArrowLeftIcon from '../../assets/icons/arrow-left.svg';
 import InventoryBox from '../../assets/icons/inventory-box.svg';
-import { TypeItemCategory, TypeItemRarity, useGetShopItemsQuery } from '../../redux';
+import { RootState, TypeItemCategory, TypeItemRarity, useGetShopItemsQuery } from '../../redux';
 import { useNavigate } from 'react-router-dom';
 import CoinIcon from '../../assets/icons/coin.png';
 import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
@@ -20,6 +21,9 @@ import ViewsCoin from '../../assets/icons/views.png';
 import { itemsInTab } from '../../helpers';
 import { WelcomeToShopGuide } from '../../components/guide/ShopPageGuides/WelcomeToShopGuide/WelcomeToShopGuide';
 import { BackToMainPageGuide } from '../../components/guide/ShopPageGuides/BackToMainPageGuide/BackToMainPageGuide';
+import { isGuideShown, setGuideShown } from '../../utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { setShopStatsGlowing } from '../../redux/slices/guideSlice';
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
   { title: 'Фото', value: 'image' },
@@ -101,6 +105,35 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     setItemsQuality(shopItemRarity[0]);
   }, [shopCategory]);
 
+
+  const reduxDispatch = useDispatch();
+
+  const initialGuideState = {
+    welcomeGuideShown: isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN),
+    itemBought: isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT),
+    backToMainGuideShown: isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE),
+  };
+
+
+  function guideReducer(state: any, action: { type: any; payload: string; }) {
+    switch (action.type) {
+      case 'SET_GUIDE_SHOWN':
+        setGuideShown(action.payload);
+        return { ...state, [action.payload]: true };
+      default:
+        return state;
+    }
+  }
+
+  const [guideVisibility, dispatch] = useReducer(guideReducer, initialGuideState);
+
+  const handleGuideClose = (guideId: string) => {
+    dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
+  };
+
+
+  const statsGlowing = useSelector((state: RootState) => state.guide.getShopStatsGlowing);
+
   return (
     <>
       <div className={styles.wrapper}>
@@ -113,15 +146,15 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             <img src={ArrowLeftIcon} />
           </button>
           <div className={styles.mainHeader}>
-            <h1 className={styles.title}>{mode === 'shop' ? 'Магазин' : 'Инвентарь '}</h1>
+            <h1 className={`${styles.title} ${statsGlowing ? styles.elevated : ''}`}>{mode === 'shop' ? 'Магазин' : 'Инвентарь '}</h1>
 
-            <div className={styles.scores}>
-              <div className={styles.scoresItem}>
+            <div className={`${styles.scores} ${statsGlowing ? styles.elevated : ''}`}>
+              <div className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
                 <p>+{0}</p>
                 <img src={ViewsCoin} />
                 <p>/инт.</p>
               </div>
-              <div className={styles.scoresItem}>
+              <div className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
                 <p>+{0}</p>
                 <img src={SubscriberCoin} />
                 <p>/инт.</p>
@@ -167,7 +200,24 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         {children}
       </div>
 
-      <BackToMainPageGuide onClose={() => {console.log('closed')}}/>
+      {!guideVisibility.welcomeGuideShown && mode === 'shop' && (
+        <WelcomeToShopGuide onClose={() => {
+          reduxDispatch(setShopStatsGlowing(false));
+          setShopStatsGlowing(false);
+          handleGuideClose(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+        }} />
+      )}
+
+      {guideVisibility.itemBought &&
+        guideVisibility.welcomeGuideShown &&
+        !guideVisibility.backToMainGuideShown &&
+        mode === 'inventory' && (
+          <BackToMainPageGuide onClose={() => {
+            handleGuideClose(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+            navigate(AppRoute.Main);
+          }} />
+        )}
+
     </>
   );
 };
