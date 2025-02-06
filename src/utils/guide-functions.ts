@@ -54,7 +54,7 @@ export const buyShopItemButtonGlowing = (itemName: string) => {
     return (
         !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)
         && isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) 
-        && itemName.trim().toLowerCase().includes('печатная машинка')
+        && itemName.trim().toLowerCase().includes('диванчик')
     );
 }
 

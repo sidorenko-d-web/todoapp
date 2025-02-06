@@ -31,7 +31,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       } else {
         setError(JSON.stringify(res.error));
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
@@ -51,8 +51,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                ? styles.colorPurple
-                : styles.level
+                  ? styles.colorPurple
+                  : styles.level
             }
           >
             Не куплено
@@ -63,8 +63,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 item.item_rarity === 'green'
                   ? styles.colorRed
                   : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                    ? styles.colorPurple
+                    : styles.level
               }
             >
               {error}
@@ -90,11 +90,13 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
       {!disabled ? (
         <div className={styles.actions}>
-          <button
+          {!buyShopItemButtonGlowing(item.name) && 
+            <button
             onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
           >
             {item.price_usdt} $USDT
           </button>
+          }
           <button onClick={handleBuyItem} className={buyShopItemButtonGlowing(item.name) ? styles.glowingBtn : ''}>
             {isLoading ? (
               <p>loading</p>

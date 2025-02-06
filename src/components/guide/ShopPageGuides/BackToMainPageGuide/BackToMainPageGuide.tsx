@@ -4,6 +4,8 @@ import { Guide } from "../../Guide";
 import styles from './BackToMainPageGuide.module.scss';
 
 import gif from '../../../../assets/gif/guide1.gif';
+import { setGuideShown } from "../../../../utils";
+import { GUIDE_ITEMS } from "../../../../constants";
 
 
 interface BackToMainPageGuideProps {
@@ -13,6 +15,7 @@ export const BackToMainPageGuide: React.FC<BackToMainPageGuideProps> = ({ onClos
     const [isOpen, setIsOpen] = useState(true);
 
     const handleClose = () => {
+        setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)
         onClose();
         setIsOpen(false);
     };

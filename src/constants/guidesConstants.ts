@@ -14,6 +14,6 @@ export const GUIDE_ITEMS = {
     shopPage: {
         WELCOME_TO_SHOP_GUIDE_SHOWN: 'welcomeToShopGuideShown',
         ITEM_BOUGHT: 'itemBought',
-        BACK_TO_MAIN_PAGE_GUIDE: 'backToMainPageGuide'
+        BACK_TO_MAIN_PAGE_GUIDE: 'backToMainPageGuideShown'
     }
 }
