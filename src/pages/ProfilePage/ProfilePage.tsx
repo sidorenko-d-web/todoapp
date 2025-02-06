@@ -33,7 +33,7 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <>
-      {(isUserLoading || isTopProfilesLoading) && <p>Загрузка...</p>}
+      {(isUserLoading || isTopProfilesLoading) && <p>{t('p3')}</p>}
 
       {(userError || topProfilesError) && <p>Ошибка при загрузке данных профиля</p>}
 
