@@ -4,13 +4,15 @@ import {
   CreateIntegrationRequestDTO,
   IntegrationResponseDTO,
   IntegrationsQueryRequestDTO,
-  IntegrationsResponseDTO, UnansweredIntegrationCommentDTO,
+  IntegrationsResponseDTO,
+  IntegrationUpdateRequestDTO,
+  UnansweredIntegrationCommentDTO,
 } from '.';
 
 export const integrationsApi = createApi({
   reducerPath: 'integrationsApi',
   baseQuery: baseQueryReauth,
-  tagTypes: ['Integrations'],
+  tagTypes: ['Integrations', 'IntegrationComments'],
   endpoints: (builder) => ({
     getIntegration: builder.query<IntegrationResponseDTO, string>({
       query: (integrationId) => ({
@@ -32,11 +34,15 @@ export const integrationsApi = createApi({
         body: { is_hate: isHate },
       }),
     }),
+
     getUnansweredIntegrationComment: builder.query<UnansweredIntegrationCommentDTO, string>({
       query: (integrationId) => ({
         url: `/integrations/comments/${integrationId}`,
         method: 'GET',
       }),
+      providesTags: (_error, _result, integrationId) => [
+        { type: 'IntegrationComments' as const, id: integrationId }
+      ],
     }),
     getIntegrations: builder.query<IntegrationsResponseDTO, IntegrationsQueryRequestDTO | void>({
       query: (queryParams) => {
@@ -61,6 +67,14 @@ export const integrationsApi = createApi({
         method: 'GET',
       }),
     }),
+    updateTimeLeft: builder.mutation<IntegrationResponseDTO, IntegrationUpdateRequestDTO>({
+      query: ({ integrationId, timeLeftDelta }) => ({
+        url: `/integrations/${integrationId}/time_left`,
+        method: 'PATCH',
+        params: { time_left_delta: timeLeftDelta },
+      }),
+      invalidatesTags: ['Integrations'],
+    }),
   }),
 });
 
@@ -71,4 +85,5 @@ export const {
   useGetAllIntegrationsQuery,
   usePostCommentIntegrationsMutation,
   useGetUnansweredIntegrationCommentQuery,
+  useUpdateTimeLeftMutation
 } = integrationsApi;

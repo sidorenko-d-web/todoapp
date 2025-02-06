@@ -1,0 +1,1 @@
+export const svgHeadersString = '?response-content-type=image%2Fsvg%2Bxml'

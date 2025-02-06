@@ -7,7 +7,7 @@ import s from './Slider.module.scss';
 
 import face from '../../../../assets/icons/face.svg';
 import fire from '../../../../assets/icons/fire-icon.svg';
-import { useGetTopProfilesQuery } from '../../../../redux/index.ts';
+import { useGetTopProfilesQuery } from '../../../../redux';
 import { Link } from 'react-router-dom';
 
 export const SliderSelect = () => {

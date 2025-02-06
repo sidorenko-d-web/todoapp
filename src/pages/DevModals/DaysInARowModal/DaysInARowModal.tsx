@@ -1,9 +1,7 @@
 import BottomModal from '../../../components/shared/BottomModal/BottomModal';
+import Lottie from 'lottie-react';
 import { MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
-import BgLightBlue from '../../../assets/icons/bg-light-blue.svg';
-import BgRedBlue from '../../../assets/icons/bg-light-red.svg';
-import BgRedPurple from '../../../assets/icons/bg-light-purple.svg';
 import FireBlue from '../../../assets/icons/fire-blue.svg';
 import FireRed from '../../../assets/icons/fire-red.svg';
 import FirePurple from '../../../assets/icons/fire-purple.svg';
@@ -16,7 +14,9 @@ import ChestPurple from '../../../assets/icons/chest-purple.svg';
 import ChestRed from '../../../assets/icons/chest-red.svg';
 import Button from '../partials/Button';
 import { TypeItemQuality } from '../../../redux';
-
+import blueLightAnimation from '../../../assets/animations/blueLight.json';
+import redLightAnimation from '../../../assets/animations/redLight.json';
+import purpleLightAnimation from '../../../assets/animations/purpleLight.json';
 interface Props {
   days?: number;
   quality?: TypeItemQuality;
@@ -32,7 +32,13 @@ export default function DaysInARowModal({ days = 90 }: Props) {
       onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)}
     >
       <div className={styles.images}>
-        <img className={styles.light} src={days < 30 ? BgLightBlue : days < 60 ? BgRedPurple : BgRedBlue} />
+        {days < 30 ? (
+          <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
+        ) : days < 60 ? (
+          <Lottie animationData={purpleLightAnimation} loop={true} className={styles.light} />
+        ) : (
+          <Lottie animationData={redLightAnimation} loop={true} className={styles.light} />
+        )}
         <img className={styles.fire} src={days < 30 ? FireBlue : days < 60 ? FirePurple : FireRed} />
         <div className={styles.days}>
           <p>{days}</p>

@@ -5,6 +5,7 @@ import rocketIcon from '../../../assets/icons/rocket.svg';
 import { IntegrationResponseDTO, integrationsApi } from '../../../redux';
 
 import s from './IntegrationCreationCard.module.scss';
+import { useAccelerateIntegration } from '../../../hooks';
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
@@ -17,6 +18,19 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   const [ isExpired, setIsExpired ] = useState(false);
 
   const calculateProgress = () => ((initialTime - timeLeft) / initialTime) * 100;
+
+  const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
+    integrationId: integration.id,
+    onSuccess: (newTimeLeft) => setTimeLeft(newTimeLeft),
+  });
+
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      if (!isExpired) void accelerateIntegration(3600);
+      setIsExpired(true);
+      dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
+    }
+  }, [ timeLeft, accelerateIntegration ]);
 
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -45,6 +59,12 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
   };
 
+  const handleAccelerateClick = () => {
+    if (!isExpired) {
+      void accelerateIntegration(1);
+    }
+  };
+
   if (isExpired) return null;
 
   return (
@@ -68,7 +88,12 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
             />
           </div>
         </div>
-        <button className={s.iconButton}>
+        <button
+          className={s.iconButton}
+          onClick={handleAccelerateClick}
+          disabled={isExpired || isAccelerating}
+          aria-label="Ускорить интеграцию"
+        >
           <img src={rocketIcon} alt="rocket" />
         </button>
       </div>

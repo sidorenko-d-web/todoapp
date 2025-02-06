@@ -15,7 +15,6 @@ export const IntegrationPage: React.FC = () => {
   const { data: integrations } = useGetIntegrationsQuery(undefined, { skip: !!queryIntegrationId && queryIntegrationId !== 'undefined' });
 
   const integrationId = queryIntegrationId !== 'undefined' ? queryIntegrationId : integrations?.integrations[0].id;
-  console.log(queryIntegrationId);
 
   const { data, error, isLoading } = useGetIntegrationQuery(`${integrationId}`);
   const { data: commentData, refetch } = useGetUnansweredIntegrationCommentQuery(`${integrationId}`);

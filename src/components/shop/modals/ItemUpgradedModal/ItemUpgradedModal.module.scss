@@ -1,0 +1,160 @@
+@use '../../../../assets/styles/abstracts/colors' as *;
+
+.images {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  .bgLight {
+    position: absolute;
+    width: 80%;
+  }
+
+  .itemImage {
+    width: 60px;
+    height: 60px;
+    background: $color-gray;
+    border: 2px solid $color-primary;
+    border-radius: 8px;
+    position: relative;
+    margin: 30px 0;
+    animation: img-scale-anim 0.8s forwards ease;
+
+    img {
+      border-radius: 6px;
+    }
+
+    .imageOld {
+      position: absolute;
+      top: 0;
+      animation: img-reveal-in-anim 0.48s forwards ease;
+    }
+    .imageNew {
+      position: absolute;
+      top: 0;
+      animation: img-reveal-out-anim 0.48s forwards ease;
+    }
+
+    .blue {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      background: $color-primary;
+      padding: 2px 5px;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 12px;
+      color: $color-dark-gray-stroke;
+      border-radius: 4px;
+    }
+    .purple {
+      @extend .blue;
+      background: $color-purple;
+    }
+    .red {
+      @extend .blue;
+      background: $color-red;
+    }
+  }
+
+  .itemImagePurple {
+    @extend .itemImage;
+    border-color: $color-purple;
+  }
+  .itemImageRed {
+    @extend .itemImage;
+    border-color: $color-red;
+  }
+}
+
+.text {
+  width: 100%;
+  margin-bottom: 30px;
+  p {
+    color: $color-text-semi-transparent;
+    font-weight: 500;
+    font-size: 12px;
+    text-wrap: wrap;
+    text-align: center;
+
+    span {
+      color: $color-primary;
+    }
+
+    .spanPurple {
+      color: $color-purple;
+    }
+    .spanRed {
+      color: $color-red;
+    }
+  }
+}
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+
+  .statItem {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: $color-white;
+
+    img {
+      width: 14px;
+      aspect-ratio: 14px;
+    }
+  }
+}
+
+@keyframes img-scale-anim {
+  0% {
+    scale: 1;
+  }
+
+  70% {
+    scale: 1.25;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@keyframes img-reveal-in-anim {
+  0% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes img-reveal-out-anim {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
