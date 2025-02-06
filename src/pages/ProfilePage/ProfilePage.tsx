@@ -40,7 +40,7 @@ export const ProfilePage: React.FC = () => {
       {(userProfileData && topProfilesData) &&
         <div className={styles.wrp}>
           <div>
-            <h1 className={styles.pageTitle}>{t("p0")}</h1>
+            <h1 className={styles.pageTitle}>{t("p1")}</h1>
 
             <ProfileStatsMini subscribers={userProfileData.subscribers} position={position} daysInARow={10} totalViews={userProfileData.total_views} />
           </div>
