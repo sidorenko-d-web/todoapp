@@ -4,6 +4,7 @@ import { ItemsTab, NewItemModal, SkinTab } from '../../components';
 import { useGetShopItemsQuery } from '../../redux/api/shop/api';
 import { IShopItem, TypeItemCategory, TypeItemRarity } from '../../redux';
 import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
+import styles from './ShopPage.module.scss'
 import { itemsInTab } from '../../helpers';
 type TypeTab<T> = { title: string; value: T };
 
@@ -43,7 +44,14 @@ const StorePage: FC = () => {
       ) : !shopCategory || !itemsRarity ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
       ) : shopCategory?.title !== 'Вы' ? (
-        <ItemsTab shopCategory={shopCategory} shopItems={items} />
+        items?.length === 0 ? (
+          <p className={styles.emptyText}>
+            Пока здесь нет новых предметов. Откройте новые предметы с новым уровнем
+            Дерева!
+          </p>
+        ) : (
+          <ItemsTab shopCategory={shopCategory} shopItems={items} />
+        )
       ) : (
         <SkinTab mode="shop" />
       )}
@@ -53,3 +61,4 @@ const StorePage: FC = () => {
 };
 
 export default StorePage;
+

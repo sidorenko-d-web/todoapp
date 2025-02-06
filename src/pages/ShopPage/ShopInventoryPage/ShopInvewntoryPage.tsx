@@ -14,6 +14,7 @@ import {
   useGetShopItemsQuery,
 } from '../../../redux';
 import { compareItems } from '../../../helpers';
+import styles from '../ShopPage.module.scss'
 
 type TypeTab<T> = { title: string; value: T };
 
@@ -94,7 +95,7 @@ export const ShopInvewntoryPage = () => {
       onItemQualityChange={setItemsQuality}
     >
       {!isFetching && !isSuccess && shopCategory?.title !== 'Вы' ? (
-        <p style={{ color: '#fff' }}>No items in inventory</p>
+        <p className={styles.emptyText}>Пока здесь нет приобретенных предметов. Купите новый предмет в магазине.</p>
       ) : !shopCategory || !itemsQuality ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
       ) : shopCategory?.title !== 'Вы' ? (
