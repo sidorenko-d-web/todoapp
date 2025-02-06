@@ -5,7 +5,7 @@ import coinIcon from '../../../assets/icons/coin.png';
 import { useBuySubscriptionMutation } from '../../../redux';
 
 import s from './SubscribeModal.module.scss';
-import { getSubscriptionPurchased, setSubscriptionPurchased } from '../../../utils';
+import { getSubscriptionPurchased } from '../../../utils';
 
 interface SubscribeModalProps {
   modalId: string;
@@ -23,7 +23,6 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
   const buyBtnGlowing = getSubscriptionPurchased();
 
   const handleBuySubscription = () => {
-    setSubscriptionPurchased();
     buySubscription().unwrap().then(() => onSuccess());
   };
 
