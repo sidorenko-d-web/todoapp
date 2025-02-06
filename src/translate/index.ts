@@ -3,8 +3,8 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import * as en from './en/profile.json';
-import * as ru from './ru/profile.json';
+import * as en from './en';
+import * as ru from './ru';
 
 type TupleUnion<U extends string, R extends unknown[] = []> = {
   [S in U]: Exclude<U, S> extends never ? [...R, S] : TupleUnion<Exclude<U, S>, [...R, S]>;
