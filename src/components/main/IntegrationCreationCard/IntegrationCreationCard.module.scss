@@ -7,9 +7,9 @@
   flex-direction: column;
   gap: 10px;
   border-radius: 10px;
-  border: 1px solid var.$color-dark-gray;
+  border: 2px solid var.$color-blue-primary;
   background-color: var.$color-card-bg;
-
+  box-shadow: 0 0 10px 4px rgba(72, 128, 255, 0.6);
   .integrationHeader {
     display: flex;
     justify-content: space-between;
@@ -74,6 +74,34 @@
       border-radius: 8px;
       background-color: var.$color-primary;
       border: none;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      .particle {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: var.$color-blue-primary;
+        pointer-events: none;
+        opacity: 1;
+        transform: scale(1);
+        animation: flyToProgress 0.8s cubic-bezier(0.42, 0, 0.58, 1) forwards;
+      }
+    }
+
+    @keyframes flyToProgress {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(-50px, -30px) scale(1.2);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(-100px, -10px) scale(0.5);
+        opacity: 0;
+      }
     }
   }
 }
