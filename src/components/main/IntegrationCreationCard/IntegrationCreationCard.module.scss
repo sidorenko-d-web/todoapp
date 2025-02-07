@@ -77,3 +77,10 @@
     }
   }
 }
+
+.elevated {
+  z-index: 2000;
+}
+.bordered {
+  border: 2px solid var.$color-primary;
+}

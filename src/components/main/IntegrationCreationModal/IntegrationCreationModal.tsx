@@ -17,6 +17,7 @@ import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { integrationCreatingModalButtonGlowing, integrationCreatingModalLightningsGlowing, integrationCreatingModalTabsGlowing, setGuideShown } from '../../../utils/guide-functions.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
+import { setIntegrationCreated } from '../../../redux/slices/guideSlice.ts';
 
 interface CreatingIntegrationModalProps {
   modalId: string;
@@ -63,6 +64,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     })
       .unwrap()
       .then(() => {
+        dispatch(setIntegrationCreated(true));
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         onClose();
         dispatch(integrationsApi.util.invalidateTags(['Integrations']));
         dispatch(profileApi.util.invalidateTags(['Me']));
@@ -133,7 +136,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         }
 
         <button
-          className={`${s.button} ${buttonGlowing ? s.glowingBtn : ''}`}
+          className={`${s.button} 
+            ${buttonGlowing ? s.glowingBtn : ''} `}
           disabled={submitDisabled && !noItemsMessage}
           onClick={noItemsMessage ? goToShop : submitCreation}
         >

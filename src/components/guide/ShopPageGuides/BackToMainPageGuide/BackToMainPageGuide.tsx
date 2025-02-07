@@ -6,6 +6,8 @@ import styles from './BackToMainPageGuide.module.scss';
 import gif from '../../../../assets/gif/guide1.gif';
 import { setGuideShown } from "../../../../utils";
 import { GUIDE_ITEMS } from "../../../../constants";
+import { useDispatch } from "react-redux";
+import { setCreateIntegrationButtonGlowing } from "../../../../redux/slices/guideSlice";
 
 
 interface BackToMainPageGuideProps {
@@ -14,13 +16,18 @@ interface BackToMainPageGuideProps {
 export const BackToMainPageGuide: React.FC<BackToMainPageGuideProps> = ({ onClose }) => {
     const [isOpen, setIsOpen] = useState(true);
 
+
+    const dispatch = useDispatch();
+
     const handleClose = () => {
-        setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)
+        setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+        dispatch(setCreateIntegrationButtonGlowing(true));
         onClose();
         setIsOpen(false);
     };
 
     if (!isOpen) return null;
+
 
     return (
         <Guide

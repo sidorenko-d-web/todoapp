@@ -7,8 +7,10 @@ import { useModal } from '../../hooks';
 import { GUIDE_ITEMS } from '../../constants/guidesConstants';
 import { isGuideShown, setGuideShown } from '../../utils';
 
-import { setGetCoinsGuideShown } from "../../redux/slices/guideSlice.ts";
-import { useDispatch } from 'react-redux';
+import { setAccelerateIntegrationGuideClosed, setGetCoinsGuideShown } from "../../redux/slices/guideSlice.ts";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux';
+import { AccelerateIntegtrationGuide } from '../../components/guide/IntegrationCreatingGuides/AccelerateIntegrationGuide/AccelerateIntegration.tsx';
 
 
 export const MainPage: FC = () => {
@@ -16,6 +18,8 @@ export const MainPage: FC = () => {
 
   const reduxDispatch = useDispatch();
   
+  const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
+
   const initialState = {
     firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
     secondGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN),
@@ -44,7 +48,7 @@ export const MainPage: FC = () => {
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
   
-  
+  console.log('aaaa, ', useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing));
   return (
     <main className={s.page}>
       <IntegrationCreation />
@@ -152,6 +156,15 @@ export const MainPage: FC = () => {
             top="66%"
           />
         )}
+
+        {
+         (showAccelerateGuide  && !creatingIntegrationModalState.isOpen) && (
+            <AccelerateIntegtrationGuide onClose={() => {
+              reduxDispatch(setAccelerateIntegrationGuideClosed(true));
+            }}/>
+          )
+        }
+
     </main>
   );
 };

@@ -1,10 +1,10 @@
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants/modals.ts';
-import { profileApi, useGetCurrentUserProfileInfoQuery, useGetIntegrationsQuery } from '../../../redux';
+import { profileApi, RootState, useGetCurrentUserProfileInfoQuery, useGetIntegrationsQuery } from '../../../redux';
 import { IntegrationCreationCard, IntegrationCreationModal } from '../';
 import { SubscribeModal, SuccessfullySubscribedModal } from '../../';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import s from './IntegrationCreation.module.scss';
 
@@ -42,10 +42,12 @@ export const IntegrationCreation: React.FC = () => {
 
   const isButtonGlowing = isIntegrationCreationButtonGlowing();
   
-
+  const createIntegrationButtonGlowing = useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing);
+  
+  
   return (
     <section className={s.integrationsControls}>
-      <button className={`${s.button} ${isButtonGlowing ? s.glowing : ''}`} disabled={!profile} onClick={handleIntegrationCreation}>
+      <button className={`${s.button} ${(isButtonGlowing || createIntegrationButtonGlowing) ? s.glowing : ''}`} disabled={!profile} onClick={handleIntegrationCreation}>
         Создать интеграцию
         <span className={s.buttonBadge}>
           {profile?.subscription_integrations_left || 0}/5 <img src={integrationIcon} height={12} width={12}

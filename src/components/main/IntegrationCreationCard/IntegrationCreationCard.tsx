@@ -68,7 +68,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   if (isExpired) return null;
 
   return (
-    <div className={s.integration}>
+    <div className={`${s.integration}`}>
       <div className={s.integrationHeader}>
         <h2 className={s.title}>Интеграция</h2>
         <span className={s.author}>

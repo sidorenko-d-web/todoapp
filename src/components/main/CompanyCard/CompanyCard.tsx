@@ -15,7 +15,7 @@ interface CompanyCardProps {
 
 export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick }) => {
   return (
-    <div className={s.card + ' ' + (selected ? ` ${s.selected}` : '')} onClick={() => onClick && onClick(company.id)}>
+    <div className={s.card + ' ' + (selected ? ` ${s.selected}` : '') + ' ' + (true ? `${s.glowing}` : '')} onClick={() => onClick && onClick(company.id)}>
       <header className={s.header}>
         <div className={s.icon}>
           <img src={lightningIcon} alt="Lightning" width={12} height={12} />

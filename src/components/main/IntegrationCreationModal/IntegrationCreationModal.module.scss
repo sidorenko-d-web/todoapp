@@ -109,3 +109,8 @@
 .glowingBtn {
   box-shadow: 0 0 50px var.$color-primary;
 }
+
+.glowingBtnElevated {
+  box-shadow: 0 0 50px var.$color-primary;
+  z-index: 2000;
+}
