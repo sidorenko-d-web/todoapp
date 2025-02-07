@@ -4,7 +4,7 @@ import { ItemsTab, NewItemModal, SkinTab } from '../../components';
 import { useGetShopItemsQuery } from '../../redux/api/shop/api';
 import { IShopItem, TypeItemCategory, TypeItemRarity } from '../../redux';
 import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
-import styles from './ShopPage.module.scss'
+import styles from './ShopPage.module.scss';
 import { itemsInTab } from '../../helpers';
 type TypeTab<T> = { title: string; value: T };
 
@@ -61,4 +61,3 @@ const StorePage: FC = () => {
 };
 
 export default StorePage;
-

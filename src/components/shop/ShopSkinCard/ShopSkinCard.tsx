@@ -83,7 +83,10 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
           </button>
         ) : mode === 'shop' ? (
           <>
-            <button className={styles.button} onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' })}>
+            <button
+              className={styles.button}
+              onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' })}
+            >
               {item.price_usdt} $USDT
             </button>
             <button className={styles.priceButton} onClick={handleBuySkin}>
