@@ -17,8 +17,8 @@ export const InviteFriend: FC<InviteFriendProps> = ({
                                                       onClose,
                                                     }: InviteFriendProps) => {
 
-  
-  const {data} = useGetCurrentUserProfileInfoQuery();
+
+  const { data } = useGetCurrentUserProfileInfoQuery();
 
   const inviteTG = () => {
     const shareData = {
@@ -32,8 +32,7 @@ export const InviteFriend: FC<InviteFriendProps> = ({
     } else {
       window.open(`https://t.me/share/url?url=${encodeURIComponent(shareData.url)}&text=${encodeURIComponent(shareData.text)}`, '_blank');
     }
-  }
-
+  };
 
 
   return (
@@ -43,13 +42,14 @@ export const InviteFriend: FC<InviteFriendProps> = ({
             <span className={s.badge}>
               +120 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
             </span>
-          <span className={classNames(s.level, s.text)}>1ур.</span>
+          <span className={s.level}>1ур.</span>
         </li>
         <li className={s.listBadge}>
+
             <span className={s.badge}>
               +40 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
             </span>
-          <span className={classNames(s.level, s.text)}>2ур.</span>
+          <span className={s.level}>2ур.</span>
         </li>
       </ul>
       <div>
@@ -59,8 +59,10 @@ export const InviteFriend: FC<InviteFriendProps> = ({
           приглашать ещё<br /> кого-то, вы
           также будете получать бонус.</p>
         <div className={s.blockInput}>
-          <input type="text" value={`https://t.me/wished_sentry_robot?start=${data?.id}`} readOnly className={s.inputLink} />
-          <button onClick={() => navigator.clipboard.writeText(`https://t.me/wished_sentry_robot?start=${data?.id}`)} className={s.copyButton}>
+          <input type="text" value={`https://t.me/wished_sentry_robot?start=${data?.id}`} readOnly
+                 className={s.inputLink} />
+          <button onClick={() => navigator.clipboard.writeText(`https://t.me/wished_sentry_robot?start=${data?.id}`)}
+                  className={s.copyButton}>
             <img src={copy} height={14} width={14} alt="copy" />
           </button>
         </div>
