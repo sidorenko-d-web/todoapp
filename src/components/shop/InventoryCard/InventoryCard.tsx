@@ -5,6 +5,7 @@ import LockIconSvg from '../../../assets/icons/lock-closed';
 import ChestBlueIcon from '../../../assets/icons/chest-blue.svg';
 import ChestPurpleIcon from '../../../assets/icons/chest-purple.svg';
 import ChestRedIcon from '../../../assets/icons/chest-red.svg';
+import ListIcon from '../../../assets/icons/list.svg';
 import {
   IShopItem,
   TypeItemQuality,
@@ -113,19 +114,20 @@ export const InventoryCard: FC<Props> = ({
         <div className={styles.title}>
           <div className={styles.headline}>
             <h3>{item.name}</h3>
-            {item.item_rarity === 'red' ? (
-              <div className={styles.variant}>
-                <p>Эконом</p>
-              </div>
-            ) : item.item_rarity === 'yellow' ? (
-              <div className={styles.variantPurple}>
-                <p>Премиум</p>
-              </div>
-            ) : (
-              <div className={styles.variantRed}>
-                <p>Люкс</p>
-              </div>
-            )}
+            {/* https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284353&m=dev#1121983015 */}
+            {/*{item.item_rarity === 'red' ? (*/}
+            {/*  <div className={styles.variant}>*/}
+            {/*    <p>Эконом</p>*/}
+            {/*  </div>*/}
+            {/*) : item.item_rarity === 'yellow' ? (*/}
+            {/*  <div className={styles.variantPurple}>*/}
+            {/*    <p>Премиум</p>*/}
+            {/*  </div>*/}
+            {/*) : (*/}
+            {/*  <div className={styles.variantRed}>*/}
+            {/*    <p>Люкс</p>*/}
+            {/*  </div>*/}
+            {/*)}*/}
           </div>
           <p
             className={
@@ -256,6 +258,7 @@ export const InventoryCard: FC<Props> = ({
         </button>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
+          <button>{data?.items[0].price_usdt} $USDT</button>
           <button
             className={clsx(
               item.item_rarity === 'yellow'
@@ -273,8 +276,7 @@ export const InventoryCard: FC<Props> = ({
               </>
             )}
           </button>
-          <button>Задание</button>
-          <button>{data?.items[0].price_usdt} $USDT</button>
+          <button><img src={ListIcon} alt="Tasks" /></button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>
