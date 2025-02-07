@@ -13,7 +13,7 @@ import FeetIcon from '../../../assets/icons/face_icon.svg';
 import VIPIcon from '../../../assets/icons/star_check_icon.svg';
 import ListIcon from '../../../assets/icons/list.svg';
 import { useModal } from '../../../hooks';
-import { MODALS } from '../../../constants';
+import { MODALS, svgHeadersString } from '../../../constants';
 
 interface Props {
   item: IShopSkin;
@@ -46,7 +46,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
     <div className={styles.storeCard}>
       <div className={styles.header}>
         <div className={clsx(styles.image, item.quantity && styles.vipImage)}>
-          <img src={item.image_url} alt="item" />
+          <img src={item.image_url + svgHeadersString} alt="item" />
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>

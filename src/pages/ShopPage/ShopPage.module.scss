@@ -1,0 +1,10 @@
+@use '../../assets/styles/abstracts/colors' as *;
+
+.emptyText{
+  color: $color-gray;
+  text-wrap:unset;
+  font-weight: 500;
+  text-align: center;
+
+  width: 100%;
+}

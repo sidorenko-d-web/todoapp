@@ -17,7 +17,7 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { MODALS, svgHeadersString } from '../../../constants';
+import { MODALS, localStorageConsts, svgHeadersString } from '../../../constants';
 import { useModal } from '../../../hooks';
 
 interface Props {
@@ -37,7 +37,7 @@ const getPremiumLevelOrder = (level: TypeItemQuality) =>
   }[level]);
 
 function sortByPremiumLevel(items: IShopItem[]) {
-  return [...items].sort(
+  return [ ...items ].sort(
     (a, b) =>
       getPremiumLevelOrder(a.item_premium_level) -
       getPremiumLevelOrder(b.item_premium_level),
@@ -45,13 +45,13 @@ function sortByPremiumLevel(items: IShopItem[]) {
 }
 
 export const InventoryCard: FC<Props> = ({
-  disabled,
-  isBlocked,
-  isUpgradeEnabled = true,
-  item,
-  isB,
-}) => {
-  const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
+                                           disabled,
+                                           isBlocked,
+                                           isUpgradeEnabled = true,
+                                           item,
+                                           isB,
+                                         }) => {
+  const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
   const { data, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
@@ -77,6 +77,7 @@ export const InventoryCard: FC<Props> = ({
               isYellow: item.item_rarity === 'red',
             });
           } else {
+            localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
             openModal(MODALS.UPGRADED_ITEM, {
               item,
               mode: 'item',
@@ -85,7 +86,8 @@ export const InventoryCard: FC<Props> = ({
           }
         }
       }
-    } catch (error) {}
+    } catch (error) {
+    }
   };
 
   return (
@@ -134,8 +136,8 @@ export const InventoryCard: FC<Props> = ({
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                ? styles.colorPurple
-                : styles.level
+                  ? styles.colorPurple
+                  : styles.level
             }
           >
             Уровень {item.level} {isB && 'Предмет куплен'}
@@ -189,8 +191,8 @@ export const InventoryCard: FC<Props> = ({
                     item.item_rarity === 'red'
                       ? ChestBlueIcon
                       : item.item_rarity === 'yellow'
-                      ? ChestPurpleIcon
-                      : ChestRedIcon
+                        ? ChestPurpleIcon
+                        : ChestRedIcon
                   }
                   alt=""
                 />
@@ -203,8 +205,8 @@ export const InventoryCard: FC<Props> = ({
                   item.item_rarity === 'red'
                     ? styles.done
                     : item.item_rarity === 'yellow'
-                    ? styles.donePurple
-                    : styles.doneRed
+                      ? styles.donePurple
+                      : styles.doneRed
                 }
                 style={{ width: item.level * 2 + '%' }}
               />
@@ -218,13 +220,13 @@ export const InventoryCard: FC<Props> = ({
                       item.item_rarity === 'red'
                         ? styles.item
                         : item.item_rarity === 'yellow'
-                        ? styles.itemPurple
-                        : styles.itemRed,
+                          ? styles.itemPurple
+                          : styles.itemRed,
                       item.item_premium_level === 'advanced'
                         ? index > 1 && styles.itemLocked
                         : item.item_premium_level === 'base' &&
-                            index > 0 &&
-                            styles.itemLocked,
+                        index > 0 &&
+                        styles.itemLocked,
                     )}
                     key={_item.id}
                   >
@@ -276,7 +278,17 @@ export const InventoryCard: FC<Props> = ({
               </>
             )}
           </button>
-          <button><img src={ListIcon} alt="Tasks" /></button>
+          <button
+            onClick={() =>
+              openModal(MODALS.UPGRADED_ITEM, {
+                item,
+                mode: 'item',
+                reward: 'reward of item',
+              })
+            }
+          >
+            <img src={ListIcon} alt="Tasks" />
+          </button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>

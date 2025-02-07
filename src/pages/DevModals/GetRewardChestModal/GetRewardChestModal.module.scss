@@ -72,3 +72,8 @@
   height: 100%;
   object-fit: cover;
 }
+
+.button{
+  position: relative;
+  z-index: 1000;
+}
