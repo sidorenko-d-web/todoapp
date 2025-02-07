@@ -14,3 +14,8 @@ body {
 * {
   box-sizing: border-box;
 }
+
+button:active, a{
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
