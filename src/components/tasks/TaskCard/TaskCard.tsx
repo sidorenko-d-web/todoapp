@@ -8,6 +8,7 @@ import giftIcon from '../../../assets/icons/gift.svg';
 
 import s from './TaskCard.module.scss';
 import { ProgressBarTasks } from '../ProgressBarTasks';
+import classNames from 'classnames';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -26,7 +27,9 @@ type BaseTaskProps = {
   isLoading?: boolean;
   disabled?: boolean;
   onClick?: () => void;
-  // Заменяем customProgressIcons на states
+  errorText?: string;
+  isCompleted?: boolean;
+  isTopTask?: boolean;
   questionStates?: QuestionState[];
 };
 
@@ -66,6 +69,9 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      disabled,
                                                      onClick,
                                                      questionStates = ['closed', 'closed', 'closed'],
+                                                     errorText,
+                                                     isCompleted,
+                                                     isTopTask,
                                                    }) => {
   // Функция для получения иконки на основе состояния
   const getIconByState = (state: QuestionState) => {
@@ -80,7 +86,10 @@ export const TaskCard: React.FC<TasksCardProps> = ({
   };
 
   return (
-    <div className={s.card}>
+    <div className={classNames(s.card, { 
+      [s.completed]: isCompleted,
+      [s.topTask]: isTopTask
+    })}>
       <section className={s.header}>
         {icon && <img className={s.icon} src={icon} height={40} width={40} alt="icon" />}
         <div className={s.info}>
@@ -126,6 +135,12 @@ export const TaskCard: React.FC<TasksCardProps> = ({
           progressReward={progressReward}
           progressRewardIcon={progressRewardIcon}
         />
+      )}
+
+      {errorText && (
+        <div className={s.errorText}>
+          {errorText}
+        </div>
       )}
 
       <section className={s.buttons}>

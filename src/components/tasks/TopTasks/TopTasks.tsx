@@ -7,18 +7,21 @@ import { useModal } from '../../../hooks';
 import s from '../styles.module.scss';
 import { ModalTopTasks } from './ModalTopTasks';
 
+
 interface TaskState {
   currentStep: number;
   totalSteps: number;
   completed: boolean;
+  hasError?: boolean;
 }
 
 export const TopTasks: FC = () => {
   const { openModal, closeModal } = useModal();
   const [taskState, setTaskState] = useState<TaskState>({
-    currentStep: 1,
+    currentStep: 0,
     totalSteps: 4,
-    completed: false
+    completed: false,
+    hasError: false
   });
 
   const handleOpenTopTasks = () => {
@@ -34,6 +37,12 @@ export const TopTasks: FC = () => {
   };
 
   const progress = (taskState.currentStep / taskState.totalSteps) * 100;
+
+  const getButtonText = () => {
+    if (taskState.completed) return 'Забрать награду';
+    if (taskState.currentStep > 0) return 'Продолжить выполнение';
+    return 'Выполнить';
+  };
 
   return (
     <section className={s.section}>
@@ -58,6 +67,10 @@ export const TopTasks: FC = () => {
           progressRewardIcon={chestIcon}
           onClick={handleOpenTopTasks}
           disabled={taskState.completed}
+          buttonText={getButtonText()}
+          errorText={taskState.hasError ? 'Ошибка: повторите попытку' : undefined}
+          isCompleted={taskState.completed}
+          isTopTask={true}
         />
       </div>
       <ModalTopTasks

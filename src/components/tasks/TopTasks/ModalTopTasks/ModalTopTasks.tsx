@@ -67,13 +67,15 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
     Array(TASK_STEPS.length).fill(false),
   );
   const [channelLink, setChannelLink] = useState('');
+  console.log(currentStepIndex);
+  const currentStepInfo = TASK_STEPS[currentStepIndex];
+  console.log(currentStepInfo);
+  const progress = (completedSteps.filter(step => step).length / TASK_STEPS.length) * 100;
 
-  const currentStep = TASK_STEPS[currentStepIndex];
-  const progress = ((currentStepIndex + 1) / TASK_STEPS.length) * 100;
 
   useEffect(() => {
     onStateChange?.({
-      currentStep: currentStepIndex + 1,
+      currentStep: completedSteps.filter(step => step).length,
       totalSteps: TASK_STEPS.length,
       completed: completedSteps.every(step => step),
     });
@@ -85,6 +87,11 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
     setCompletedSteps(newCompletedSteps);
 
     if (currentStepIndex === TASK_STEPS.length - 1) {
+      onStateChange?.({
+        currentStep: TASK_STEPS.length,
+        totalSteps: TASK_STEPS.length,
+        completed: true,
+      });
       setTimeout(() => onClose(), 1000);
       return;
     }
@@ -117,13 +124,14 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
 
         <div className={s.progress}>
           <span className={s.step}>
-            Этап {currentStepIndex + 1}: {currentStep.title}
+            Этап {currentStepIndex + 1}: {currentStepInfo.title}
           </span>
         </div>
 
+
         <div className={s.containerPG}>
           <ProgressBarTasks
-            currentStep={currentStepIndex + 1}
+            currentStep={currentStepIndex}
             totalSteps={TASK_STEPS.length}
             progress={progress}
             progressReward="Драгоценный сундук"
@@ -152,8 +160,9 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
               </div>
             </div>
           </div>
-          <h3 className={s.questionText}>{currentStep.description}</h3>
+          <h3 className={s.questionText}>{currentStepInfo.description}</h3>
         </div>
+
 
         <div className={s.buttons}>
           <button className={s.answerButton}>
