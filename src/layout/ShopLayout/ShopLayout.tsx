@@ -19,11 +19,10 @@ import CoinIcon from '../../assets/icons/coin.png';
 import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
 import ViewsCoin from '../../assets/icons/views.png';
 import { itemsInTab } from '../../helpers';
-import { WelcomeToShopGuide } from '../../components/guide/ShopPageGuides/WelcomeToShopGuide/WelcomeToShopGuide';
-import { BackToMainPageGuide } from '../../components/guide/ShopPageGuides/BackToMainPageGuide/BackToMainPageGuide';
 import { isGuideShown, setGuideShown } from '../../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
+import { BackToMainPageGuide, WelcomeToShopGuide } from '../../components';
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
   { title: 'Фото', value: 'image' },
