@@ -3,3 +3,7 @@ export * from './footerItems';
 export * from './modals';
 export * from './guidesConstants';
 export * from './imageSvgString';
+export * from './footerItems'
+export * from './modals'
+export * from './imageSvgString'
+export * from './localStorage'

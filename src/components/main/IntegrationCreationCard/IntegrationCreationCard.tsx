@@ -19,6 +19,19 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
 
   const calculateProgress = () => ((initialTime - timeLeft) / initialTime) * 100;
 
+  const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
+    integrationId: integration.id,
+    onSuccess: (newTimeLeft) => setTimeLeft(newTimeLeft),
+  });
+
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      if (!isExpired) void accelerateIntegration(3600);
+      setIsExpired(true);
+      dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
+    }
+  }, [ timeLeft, accelerateIntegration ]);
+
   useEffect(() => {
     if (timeLeft <= 0) {
       setIsExpired(true);
@@ -46,17 +59,11 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
   };
 
-  const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
-    integrationId: integration.id,
-    onSuccess: (newTimeLeft) => setTimeLeft(newTimeLeft),
-  });
-
   const handleAccelerateClick = () => {
     if (!isExpired) {
-      void accelerateIntegration();
+      void accelerateIntegration(1);
     }
   };
-
 
   if (isExpired) return null;
 
@@ -89,7 +96,6 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
         >
           <img src={rocketIcon} alt="rocket" />
         </button>
-
       </div>
     </div>
   );
