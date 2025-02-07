@@ -1,4 +1,4 @@
-import Slider from 'react-slick';
+import Slider, { Settings } from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import classNames from 'classnames';
@@ -11,7 +11,8 @@ import { useGetTopProfilesQuery } from '../../../../redux';
 import { Link } from 'react-router-dom';
 
 export const SliderSelect = () => {
-  const settings = {
+  const settings: Settings = {
+    variableWidth: true,
     dots: false,
     arrows: false,
     infinite: false,
