@@ -115,7 +115,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
 
   function guideReducer(state: any, action: { type: any; payload: string; }) {
-    console.log('reducer: ' + action.payload)
     switch (action.type) {
       case 'SET_GUIDE_SHOWN':
         setGuideShown(action.payload);
@@ -128,7 +127,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const [guideVisibility, dispatch] = useReducer(guideReducer, initialGuideState);
 
   const handleGuideClose = (guideId: string) => {
-    console.log('closing guide: ' + guideId);
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
 
@@ -214,9 +212,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         !guideVisibility.backToMainGuideShown &&
         mode === 'inventory' && (
           <BackToMainPageGuide onClose={() => {
-            console.log('visibility second: ' + guideVisibility.backToMainGuideShown)
-            console.log('visibility first: ' + guideVisibility.welcomeGuideShown)
-            console.log('closing!!')
             handleGuideClose(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
             navigate(AppRoute.Main);
           }} />
