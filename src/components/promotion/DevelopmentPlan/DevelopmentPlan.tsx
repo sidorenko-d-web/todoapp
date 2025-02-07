@@ -24,6 +24,7 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
         <ul className={s.list}>
           {INFO_TEXT.map((item, index) => {
             const isUnlocked = usersCount >= item.userCount && !item.isPlatform;
+            const isDescriptionUnlocked = index <= 4;
 
             return (
               <li key={index} className={s.wrapperList}>
@@ -43,7 +44,7 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
                   <img src={lockOpen} height={14} width={14} alt="lockOpen" />
                   <span className={classNames(s.countUsers, s.text)}>{item.userCount} пользователей {item.isPlatform && ' на платформе'}</span>
                 </div>
-                <p className={s.textInfoPlan}>{isUnlocked ? item.description : '*****'}</p>
+                <p className={s.textInfoPlan}>{isDescriptionUnlocked ? item.description : '*****'}</p>
               </li>
             );
           })}
