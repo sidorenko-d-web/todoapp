@@ -15,6 +15,10 @@ import { useTransactionNotificationContext } from '../../../providers/Transactio
 import { useTranslation } from 'react-i18next';
 import { MODALS, svgHeadersString } from '../../../constants';
 import { formatAbbreviation } from '../../../helpers';
+import { MODALS, svgHeadersString } from '../../../constants';
+import { formatAbbreviation } from '../../../helpers';
+import { useTranslation } from 'react-i18next';
+
 
 interface Props {
   disabled?: boolean;
@@ -98,6 +102,28 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   }, [usdtTransactions, currentTrxId]);
 
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  useEffect(() => {
+    // Check latest transaction
+    const latestTransaction = usdtTransactions[0];
+    if (!latestTransaction) return;
+    if (latestTransaction.orderId === currentTrxId && latestTransaction?.status === 'succeeded') {
+      openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
+    }
+  }, [usdtTransactions]);
+
+  const handleUsdtPayment = async () => {
+    try {
+      setError('');
+      const trxId = await sendUSDT(Number(item.price_usdt));
+      if (trxId) {
+        setCurrentTrxId(trxId);
+      } else {
+        setError('Failed to initiate USDT payment');
+      }
+    } catch (error) {
+      setError('Failed to initiate USDT payment');
+    }
+  };
 
   return (
     <div className={styles.storeCard}>
