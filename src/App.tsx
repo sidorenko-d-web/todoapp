@@ -26,7 +26,7 @@ function App() {
         <ModalsProvider>
           <AuthInit>
             <HistoryRouter history={browserHistory}>
-              <TonConnectUIProvider manifestUrl={manifestUrl}>
+              <TonConnectUIProvider manifestUrl={"https://raw.githubusercontent.com/TimurZheksimbaev/First-TON-Project/refs/heads/main/apusher-tonconnect-manifest.json"}>  
                 <TonClientProvider>
                   <AppRouter />
                 </TonClientProvider>

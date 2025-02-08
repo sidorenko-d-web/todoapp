@@ -7,3 +7,4 @@ export * from './useWebApp'
 export * from "./useTonConnect"
 export * from './useSendTransaction'
 export * from './useAsyncInitialize'
+export * from './useUsdtTransactions'

@@ -1,6 +1,6 @@
 import { CHAIN } from "@tonconnect/ui-react";
 import { useCallback } from "react";
-import { toNano } from "@ton/core";
+import { toNano, Transaction} from "@ton/core";
 
 import { JettonMaster } from "@ton/ton";
 import { JettonWallet } from "../utils/JettonWallet";
@@ -8,16 +8,15 @@ import { JettonWallet } from "../utils/JettonWallet";
 import { useTonConnect } from "./useTonConnect";
 import { useGenerateId } from "./useGenerateId";
 import { TESTNET_USDT_MASTER_ADDRESS, TESTNET_RECEIVER_ADDRESS, MAINNET_RECEIVER_ADDRESS, MAINNET_USDT_MASTER_ADDRESS } from "../constants/addresses";
+import { calculateUsdtAmount } from "../helpers";
 
 
 
-export const calculateUsdtAmount = (usdCents: number) => BigInt(usdCents * 10000);
-
-    
 export const useSendTransaction = ():
 {
-  sendTonTransaction: (amount: number) => void;
-  sendUsdtTransaction: (amount: number) => void;
+  sendTON: (amount: number) => void;
+  sendUSDT: (amount: number) => void;
+  getTransactions: () => Promise<Transaction[] | undefined>;
 } => {
 
   const {
@@ -32,7 +31,7 @@ export const useSendTransaction = ():
   const jettonMasterAddress = network === CHAIN.TESTNET ? TESTNET_USDT_MASTER_ADDRESS: MAINNET_USDT_MASTER_ADDRESS
   const receiverAddress = network === CHAIN.TESTNET ? TESTNET_RECEIVER_ADDRESS: MAINNET_RECEIVER_ADDRESS
 
-  const sendTonTransaction = async (amount: number) => {
+  const sendTON = async (amount: number) => {
     if (!tonClient || !walletAddress) return 
 
     try {
@@ -59,7 +58,7 @@ export const useSendTransaction = ():
   };
 
 
-  const sendUsdtTransaction = useCallback(async (amount: number) => {
+  const sendUSDT = useCallback(async (amount: number) => {
     try {
       if (!tonClient || !walletAddress) return;
 
@@ -80,9 +79,23 @@ export const useSendTransaction = ():
     }
   }, [tonClient, walletAddress, sender]);
 
+  const getTransactions = async () => {
+    const transactions: Transaction[] | undefined = await tonClient?.getTransactions(
+      receiverAddress,
+      {
+        limit: 2
+      }
+    )
+
+    if (transactions) {
+      return transactions
+    }
+    return undefined
+  }
 
   return {
-    sendTonTransaction,
-    sendUsdtTransaction,
+    sendTON,
+    sendUSDT,
+    getTransactions
   };
-};
+}

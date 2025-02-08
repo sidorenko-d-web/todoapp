@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
@@ -7,7 +7,7 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { useModal} from '../../../hooks';
+import { useModal } from '../../../hooks';
 import { MODALS, svgHeadersString } from '../../../constants';
 
 interface Props {
@@ -17,9 +17,7 @@ interface Props {
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [buyItem, { isLoading }] = useBuyItemMutation();
-
   const { openModal } = useModal();
-
   const [error, setError] = useState('');
   const handleBuyItem = async () => {
     try {
@@ -101,6 +99,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
               <>
                 {item.price_internal} <img src={CoinIcon} alt="" />
               </>
+
+
             )}
           </button>
         </div>
