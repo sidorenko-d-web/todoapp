@@ -33,7 +33,6 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const usdtTransactions = useUsdtTransactions();
   const [currentTrxId, setCurrentTrxId] = useState("")
 
-  const { data } = useGetCurrentUserProfileInfoQuery();
   const userPoints = data?.points || 0;
   const handleBuyItem = async () => {
     try {

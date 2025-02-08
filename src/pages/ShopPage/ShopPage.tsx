@@ -10,6 +10,8 @@ import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import { useTranslation } from 'react-i18next';
 
+import { useModal, useTonConnect } from '../../hooks';
+import { MODALS } from '../../constants';
 type TypeTab<T> = { title: string; value: T };
 
 const StorePage: FC = () => {
@@ -37,6 +39,8 @@ const StorePage: FC = () => {
       itemsInTab(shop?.items, inventory?.items)[itemsRarity?.value as TypeItemRarity],
     );
   }, [inventory, shop]);
+
+  const {openModal} = useModal()
 
   const {openModal} = useModal()
 
