@@ -6,7 +6,7 @@ import { IShopItem, TypeItemCategory, TypeItemRarity } from '../../redux';
 import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
 import styles from './ShopPage.module.scss';
 import { itemsInTab } from '../../helpers';
-import { useModal, useTonConnect } from '../../hooks';
+import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 type TypeTab<T> = { title: string; value: T };
 
@@ -60,6 +60,10 @@ const StorePage: FC = () => {
         <SkinTab mode="shop" />
       )}
       <NewItemModal />
+
+      <button onClick={() => openModal(MODALS.SETTINGS)}>
+        Connect Wallet
+      </button>
     </ShopLayout>
   );
 };

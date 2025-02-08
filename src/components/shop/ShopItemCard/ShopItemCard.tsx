@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
@@ -7,8 +7,9 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { useModal } from '../../../hooks';
+import { useModal, useSendTransaction, useUsdtTransactions } from '../../../hooks';
 import { MODALS, svgHeadersString } from '../../../constants';
+
 
 interface Props {
   disabled?: boolean;
@@ -19,6 +20,11 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [buyItem, { isLoading }] = useBuyItemMutation();
   const { openModal } = useModal();
   const [error, setError] = useState('');
+
+  const { sendUSDT } = useSendTransaction();
+  const usdtTransactions = useUsdtTransactions();
+  const [currentTrxId, setCurrentTrxId] = useState("")
+
   const handleBuyItem = async () => {
     try {
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
@@ -29,6 +35,29 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
         setError(JSON.stringify(res.error));
       }
     } catch (error) {}
+  };
+
+  useEffect(() => {
+    // Check latest transaction
+    const latestTransaction = usdtTransactions[0];
+    if (!latestTransaction) return;
+    if (latestTransaction.orderId === currentTrxId && latestTransaction?.status === 'succeeded') {
+      openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
+    }
+  }, [usdtTransactions]);
+
+  const handleUsdtPayment = async () => {
+    try {
+      setError('');
+      const trxId = await sendUSDT(Number(item.price_usdt));
+      if (trxId) {
+        setCurrentTrxId(trxId);
+      } else {
+        setError('Failed to initiate USDT payment');
+      }
+    } catch (error) {
+      setError('Failed to initiate USDT payment');
+    }
   };
 
   return (
@@ -88,7 +117,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       {!disabled ? (
         <div className={styles.actions}>
           <button
-            onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
+            // onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
+            onClick={handleUsdtPayment}
           >
             {item.price_usdt} $USDT
           </button>

@@ -15,7 +15,7 @@ import { calculateUsdtAmount } from "../helpers";
 export const useSendTransaction = ():
 {
   sendTON: (amount: number) => void;
-  sendUSDT: (amount: number) => void;
+  sendUSDT: (amount: number) => Promise<string | undefined>;
   getTransactions: () => Promise<Transaction[] | undefined>;
 } => {
 
@@ -74,6 +74,7 @@ export const useSendTransaction = ():
         toAddress: receiverAddress,
         value: toNano('0.038'),
       });
+      return orderId
     } catch (error) {
       console.log('Error during transaction check:', error);
     }
@@ -83,7 +84,7 @@ export const useSendTransaction = ():
     const transactions: Transaction[] | undefined = await tonClient?.getTransactions(
       receiverAddress,
       {
-        limit: 2
+        limit: 10
       }
     )
 
