@@ -56,7 +56,6 @@ export const MainPage: FC = () => {
   };
 
   const integrationId = useSelector((state: RootState) => state.guide.createdIntegrationId);
-  console.log('aaaa, ', useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing));
   return (
     <main className={s.page}>
       {!readyForPublishing && <IntegrationCreation />}

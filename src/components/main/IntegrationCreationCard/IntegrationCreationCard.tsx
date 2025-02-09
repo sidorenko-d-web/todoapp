@@ -17,8 +17,6 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   integration,
 }) => {
  
-  const integrationPublished = isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-
   const dispatch = useDispatch();
   const initialTime = 3600;
   const [timeLeft, setTimeLeft] = useState(3600);
@@ -35,7 +33,6 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     if (timeLeft <= 0) {
       if (!isExpired) void accelerateIntegration(3600);
       setIsExpired(true);
-      console.log('abcde')
       dispatch(integrationsApi.util.invalidateTags(['Integrations']));
     }
   }, [timeLeft, accelerateIntegration]);
@@ -62,7 +59,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
 
   const handleAccelerateClick = () => {
     if (!isExpired) {
-      void accelerateIntegration(integrationPublished ? 1 : timeLeft-1);
+      void accelerateIntegration(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) ? 1 : timeLeft-1);
       createParticles();
     }
   };
@@ -89,10 +86,9 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   };
 
   if (isExpired) {
-    console.log('ready!!')
+    console.log('EXPIRED');
     if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-      //openModal(MODALS.INTEGRATION_REWARD);
       dispatch(setIntegrationReadyForPublishing(true));
     }
     return null;

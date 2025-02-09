@@ -8,7 +8,8 @@ import { useDispatch } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
 
 import { setCreatedIntegrationId, setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice.ts';
-
+import { setGuideShown } from '../../../utils/index.ts';
+import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 
 
 export const PublishIntegrationButton: React.FC = ( ) => {
@@ -25,11 +26,9 @@ export const PublishIntegrationButton: React.FC = ( ) => {
         const createdIntegration = data?.integrations.find(integration => integration.status === 'created');
         dispatch(setIntegrationReadyForPublishing(false));
         if(createdIntegration) {
-            console.log('found created integration');
+            setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
             await publishIntegration(createdIntegration.id).unwrap();
             dispatch(setCreatedIntegrationId(createdIntegration.id));
-        } else {
-            console.log('not found created integration');
         }
         openModal(MODALS.INTEGRATION_REWARD);
     } catch (error) {
