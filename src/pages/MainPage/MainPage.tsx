@@ -1,7 +1,7 @@
 import { FC, useReducer } from 'react';
 import { CreatingIntegrationGuide, GetCoinsGuide, InitialGuide, IntegrationCreation, SubscrieGuide } from '../../components';
 import s from './MainPage.module.scss';
-import { MODALS } from '../../constants';
+import { AppRoute, MODALS } from '../../constants';
 import { useModal } from '../../hooks';
 
 import { GUIDE_ITEMS } from '../../constants/guidesConstants';
@@ -10,15 +10,22 @@ import { isGuideShown, setGuideShown } from '../../utils';
 import { setAccelerateIntegrationGuideClosed, setGetCoinsGuideShown } from "../../redux/slices/guideSlice.ts";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux';
+import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/RewardForIntegrationModal.tsx';
+import { IntegrationCreatedGuide } from '../../components/guide/IntegrationCreatingGuides/IntegrationCreatedGuide/IntegrationCreatedGuide.tsx';
+import { useNavigate } from 'react-router-dom';
+import { PublishIntegrationButton } from '../../components/main/PublishIntegrationButton/PublishIntegrationButton.tsx';
 import { AccelerateIntegtrationGuide } from '../../components/guide/IntegrationCreatingGuides/AccelerateIntegrationGuide/AccelerateIntegration.tsx';
 
 
 export const MainPage: FC = () => {
-  const { getModalState, closeModal, openModal } = useModal();
-
+  const { getModalState, openModal, closeModal } = useModal();
+  const navigate = useNavigate();
   const reduxDispatch = useDispatch();
-  
+
+  const readyForPublishing = useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
+
   const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
+  const publishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
   const initialState = {
     firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
@@ -32,7 +39,7 @@ export const MainPage: FC = () => {
   function guideReducer(state: any, action: { type: any; payload: string; }) {
     switch (action.type) {
       case 'SET_GUIDE_SHOWN':
-        setGuideShown(action.payload); 
+        setGuideShown(action.payload);
         return { ...state, [action.payload]: true };
       default:
         return state;
@@ -47,20 +54,19 @@ export const MainPage: FC = () => {
   const handleGuideClose = (guideId: string) => {
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
-  
+
+  const integrationId = useSelector((state: RootState) => state.guide.createdIntegrationId);
   console.log('aaaa, ', useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing));
   return (
     <main className={s.page}>
-      <IntegrationCreation />
+      {!readyForPublishing && <IntegrationCreation />}
 
-      {/* Initial Guide */}
       {!guideVisibility.firstGuideShown && (
         <InitialGuide
           onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)}
         />
       )}
 
-      {/* Second Guide */}
       {(!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown) && (
         <SubscrieGuide
           onClose={() => {
@@ -80,7 +86,6 @@ export const MainPage: FC = () => {
         />
       )}
 
-      {/* Subscription Modal Guide */}
       {(guideVisibility.secondGuideShown &&
         !guideVisibility.subscribeModalOpened &&
         purchasingSubscriptionModalState.isOpen) && (
@@ -103,13 +108,11 @@ export const MainPage: FC = () => {
           />
         )}
 
-      {/* Get Coins Guide */}
       {(!purchasingSubscriptionModalState.isOpen &&
         guideVisibility.subscribeModalOpened &&
         !guideVisibility.getCoinsGuideShown) && (
           <GetCoinsGuide
             onClose={() => {
-              //window.dispatchEvent(new Event("coinsGuideUpdated"));
               reduxDispatch(setGetCoinsGuideShown(true));
               handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
               openModal(MODALS.SUBSCRIBE);
@@ -118,7 +121,6 @@ export const MainPage: FC = () => {
           />
         )}
 
-      {/* Creating Integration First Guide */}
       {(creatingIntegrationModalState.isOpen &&
         !guideVisibility.createIntegrationFirstGuideShown) && (
           <CreatingIntegrationGuide
@@ -137,7 +139,6 @@ export const MainPage: FC = () => {
           />
         )}
 
-      {/* Creating Integration Second Guide */}
       {(creatingIntegrationModalState.isOpen &&
         guideVisibility.createIntegrationFirstGuideShown &&
         !guideVisibility.createIntegrationSecondGuideShown) && (
@@ -157,13 +158,28 @@ export const MainPage: FC = () => {
           />
         )}
 
-        {
-         (showAccelerateGuide  && !creatingIntegrationModalState.isOpen) && (
-            <AccelerateIntegtrationGuide onClose={() => {
-              reduxDispatch(setAccelerateIntegrationGuideClosed(true));
-            }}/>
-          )
-        }
+      {
+        (showAccelerateGuide && !creatingIntegrationModalState.isOpen && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) && (
+          <AccelerateIntegtrationGuide onClose={() => {
+            setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+            reduxDispatch(setAccelerateIntegrationGuideClosed(true));
+          }} />
+        )
+      }
+
+      {
+        (publishedModalClosed && !isGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN) && (
+          <IntegrationCreatedGuide onClose={() => {
+            setGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN);
+            handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+            navigate(AppRoute.Integration.replace(':integrationId', integrationId))
+          }
+          } />
+        ))
+      }
+
+      {readyForPublishing && <PublishIntegrationButton/>}
+      <RewardForIntegrationModal />
 
     </main>
   );

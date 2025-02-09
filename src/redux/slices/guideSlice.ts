@@ -9,6 +9,10 @@ interface GuideState {
   createIntegrationButtonGlowing: boolean;
   integrationCreated: boolean;
   accelerateIntegrationGuideClosed: boolean;
+  isPublishedModalClosed: boolean;
+  integrationReadyForPublishing: boolean;
+
+  createdIntegrationId: string;
 }
 
 const initialState: GuideState = {
@@ -20,8 +24,11 @@ const initialState: GuideState = {
     !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED),
   integrationCreated: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED) 
     && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN),
+  integrationReadyForPublishing: false,
   accelerateIntegrationGuideClosed: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN)
-    && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)
+    && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED),
+  isPublishedModalClosed: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED),
+  createdIntegrationId: ""
 };
 
 const guideSlice = createSlice({
@@ -44,10 +51,24 @@ const guideSlice = createSlice({
       state.integrationCreated = action.payload;
     },
     setAccelerateIntegrationGuideClosed: (state, action: PayloadAction<boolean>) => {
-      state.integrationCreated = action.payload;
+      state.accelerateIntegrationGuideClosed = action.payload;
+    },
+    setIsPublishedModalClosed: (state, action: PayloadAction<boolean>) => {
+      state.isPublishedModalClosed = action.payload;
+    },
+    setIntegrationReadyForPublishing: (state, action: PayloadAction<boolean>) => {
+      state.integrationReadyForPublishing = action.payload;
+    },
+    setCreatedIntegrationId: (state, action: PayloadAction<string>) => {
+      state.createdIntegrationId = action.payload;
     },
   },
 });
 
-export const { setGetCoinsGuideShown, setShopStatsGlowing, setBuyItemButtonGlowing, setCreateIntegrationButtonGlowing, setIntegrationCreated, setAccelerateIntegrationGuideClosed } = guideSlice.actions;
+export const { setGetCoinsGuideShown, 
+    setShopStatsGlowing, 
+    setBuyItemButtonGlowing,
+    setCreateIntegrationButtonGlowing, 
+    setIntegrationCreated, setAccelerateIntegrationGuideClosed,
+    setIsPublishedModalClosed, setIntegrationReadyForPublishing, setCreatedIntegrationId } = guideSlice.actions;
 export default guideSlice.reducer;

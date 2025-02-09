@@ -19,7 +19,7 @@ export const AccelerateIntegtrationGuide: React.FC<AccelerateIntegtrationGuidePr
 
     return (
         
-        <Guide align="left"
+        <Guide align="right"
             zIndex={110}
             top={'45%'}
             description= {

@@ -24,7 +24,7 @@ export type IntegrationsResponseDTO = {
 
 export type IntegrationsQueryRequestDTO = {
   company_name?: string;
-  status?: 'creating' | 'created';
+  status?: 'creating' | 'created' | 'published';
   asc?: boolean;
   offset?: number;
   limit?: number;

@@ -5,6 +5,9 @@ import rocketIcon from '../../../assets/icons/rocket.svg';
 import { IntegrationResponseDTO, integrationsApi } from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration } from '../../../hooks';
+import { GUIDE_ITEMS } from '../../../constants';
+import { isGuideShown, setGuideShown } from '../../../utils';
+import { setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice';
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
@@ -13,9 +16,12 @@ interface CreatingIntegrationCardProps {
 export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   integration,
 }) => {
+ 
+  const integrationPublished = isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+
   const dispatch = useDispatch();
   const initialTime = 3600;
-  const [timeLeft, setTimeLeft] = useState(integration.time_left);
+  const [timeLeft, setTimeLeft] = useState(3600);
   const [isExpired, setIsExpired] = useState(false);
 
   const calculateProgress = () => ((initialTime - timeLeft) / initialTime) * 100;
@@ -29,6 +35,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     if (timeLeft <= 0) {
       if (!isExpired) void accelerateIntegration(3600);
       setIsExpired(true);
+      console.log('abcde')
       dispatch(integrationsApi.util.invalidateTags(['Integrations']));
     }
   }, [timeLeft, accelerateIntegration]);
@@ -55,7 +62,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
 
   const handleAccelerateClick = () => {
     if (!isExpired) {
-      void accelerateIntegration(1);
+      void accelerateIntegration(integrationPublished ? 1 : timeLeft-1);
       createParticles();
     }
   };
@@ -81,10 +88,18 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     }
   };
 
-  if (isExpired) return null;
+  if (isExpired) {
+    console.log('ready!!')
+    if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
+      setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+      //openModal(MODALS.INTEGRATION_REWARD);
+      dispatch(setIntegrationReadyForPublishing(true));
+    }
+    return null;
+  };
 
   return (
-    <div className={`${s.integration}`}>
+    <div className={`${s.integration} ${s.elevated}`}>
       <div className={s.integrationHeader}>
         <h2 className={s.title}>Интеграция</h2>
         <span className={s.author}>

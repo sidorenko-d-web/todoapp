@@ -21,6 +21,13 @@ export const GUIDE_ITEMS = {
         INTEGRATION_CREATED: 'integrationCreated',
         INTEGRATION_ACCELERATION_GUIDE_SHOWN: 'integrationAccelerationGuideShown',
         INTEGRATION_ACCELERATED: 'integrationAccelerated',
-        INTEGRATION_PUBLISHED: 'integrationPublished'
+        INTEGRATION_ACCELERATED_GUIDE_CLOSED: 'integrationAcceleratedGuideClosed',
+        INTEGRATION_PUBLISHED_MODAL_CLOSED: 'integrationPublishedModalClosed',
+        INTEGRATION_PUBLISHED: 'integrationPublished',
+        GO_TO_INTEGRATION_GUIDE_SHOWN: 'goToIntegrationGuideShown'
+    },
+
+    integration: {
+        INTEGRATION_INITIAL_GUIDE_SHOWN: 'integrationInitialGuideShown'
     }
 }
