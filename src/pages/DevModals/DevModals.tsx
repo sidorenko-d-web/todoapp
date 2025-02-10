@@ -7,9 +7,13 @@ import TaskCompletedModal from './TaskCompletedModal/TaskCompletedModal';
 import GetRewardChestModal from './GetRewardChestModal/GetRewardChestModal';
 import LossOfProgress from './LossOfProgress/LossOfProgress';
 import GetGift from './GetGift/GetGift';
+import { SpinePlayer } from '@esotericsoftware/spine-player';
+import { useLayoutEffect } from 'react';
 
 export default function DevModals() {
   const { openModal } = useModal();
+
+
   return (
     <>
       <div>
@@ -17,7 +21,9 @@ export default function DevModals() {
         <DaysInARowModal />
       </div>
       <div>
-        <button onClick={() => openModal(MODALS.INTEGRATION_REWARD)}>REWARD Integration</button>
+        <button onClick={() => openModal(MODALS.INTEGRATION_REWARD)}>
+          REWARD Integration
+        </button>
         <RewardForIntegrationModal />
       </div>
       <div>

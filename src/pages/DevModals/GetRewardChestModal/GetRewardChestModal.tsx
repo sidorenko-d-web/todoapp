@@ -16,7 +16,7 @@ export default function GetRewardChestModal() {
   const { closeModal } = useModal();
   const handleClose = () => {
     closeModal(MODALS.TASK_CHEST);
-    localStorage.removeItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST)
+    localStorage.removeItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
   };
   return (
     <CentralModal

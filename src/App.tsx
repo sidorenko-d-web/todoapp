@@ -5,6 +5,7 @@ import browserHistory from './routes/browserHistory.ts';
 import AppRouter from './routes/AppRouter.tsx';
 import { AuthInit } from './hooks';
 import { ModalsProvider } from './providers';
+import SpineAnimation from './spine-animation.tsx';
 
 declare global {
   interface Window {
@@ -13,10 +14,10 @@ declare global {
 }
 
 function App() {
-
   return (
     <>
       <Provider store={store}>
+        <SpineAnimation />
         <ModalsProvider>
           <AuthInit>
             <HistoryRouter history={browserHistory}>
@@ -26,7 +27,7 @@ function App() {
         </ModalsProvider>
       </Provider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
