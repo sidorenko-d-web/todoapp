@@ -59,7 +59,7 @@ export const StrangerProfileModal: FC<StrangerProfileModalProps> = ({
           earned={profile.total_earned}
           views={profile.total_views}
           favoriteCompany={'Favourite company'}
-          comments={profile.comments_answered}
+          comments={profile.comments_answered_correctly}
           rewards={12}
           coffee={5} />
 
