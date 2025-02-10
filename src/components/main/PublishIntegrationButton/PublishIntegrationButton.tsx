@@ -1,16 +1,13 @@
+import React, { useEffect, useState } from 'react';
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants/modals.ts';
 import { useGetAllIntegrationsQuery, usePublishIntegrationMutation } from '../../../redux';
-
 import { useDispatch } from 'react-redux';
-
 import s from './PublishIntegrationButton.module.scss';
-
 import { setCreatedIntegrationId, setCreateIntegrationButtonGlowing, setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice.ts';
 import { setGuideShown } from '../../../utils/index.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
-
 
 export const PublishIntegrationButton: React.FC = () => {
   const dispatch = useDispatch();
@@ -18,16 +15,20 @@ export const PublishIntegrationButton: React.FC = () => {
 
   const [publishIntegration] = usePublishIntegrationMutation();
   const { data, refetch } = useGetAllIntegrationsQuery();
+  const [isRefetching, setIsRefetching] = useState(false);
 
   const handlePublish = async () => {
     setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+    setIsRefetching(true); 
+    refetch(); 
+  };
 
-    refetch().then(() => {
-      console.log('REFETCHED');
+  useEffect(() => {
+    if (isRefetching && data?.integrations) {
 
-      if (data?.integrations && data.integrations.length > 0) {
+      if (data.integrations.length > 0) {
+        console.log('data int count: ', data.count, ' ,length: ' + data.integrations.length);
         const createdIntegration = data.integrations[0];
-        console.log('Fetched integrations:', JSON.stringify(data.integrations));
 
         dispatch(setIntegrationReadyForPublishing(false));
         dispatch(setCreateIntegrationButtonGlowing(false));
@@ -46,10 +47,10 @@ export const PublishIntegrationButton: React.FC = () => {
       } else {
         console.error('No integrations found after refetch.');
       }
-    }).catch((error) => {
-      console.error('Failed to refetch integrations:', error);
-    });
-  };
+
+      setIsRefetching(false);
+    }
+  }, [data, isRefetching, dispatch, publishIntegration, openModal]);
 
   return (
     <section className={s.integrationsControls} onClick={handlePublish}>
