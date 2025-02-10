@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import CoinIcon from '../../assets/icons/coin.png';
 import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
 import ViewsCoin from '../../assets/icons/views.png';
-import { itemsInTab } from '../../helpers';
+import { formatAbbreviation, itemsInTab } from '../../helpers';
 
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
@@ -123,17 +123,17 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
           <div className={styles.scores}>
             <div className={styles.scoresItem}>
-              <p>+{0}</p>
+              <p>+{formatAbbreviation(0)}</p>
               <img src={ViewsCoin} />
               <p>/инт.</p>
             </div>
             <div className={styles.scoresItem}>
-              <p>+{0}</p>
+              <p>+{formatAbbreviation(0)}</p>
               <img src={SubscriberCoin} />
               <p>/инт.</p>
             </div>
             <div className={styles.scoresItem}>
-              <p>+{0}</p>
+              <p>+{formatAbbreviation(0)}</p>
               <img src={CoinIcon} />
               <p>/сек.</p>
             </div>

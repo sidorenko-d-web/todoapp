@@ -5,7 +5,8 @@ import arrow from '../../../../assets/icons/arrow.svg';
 import BottomModal from '../../../shared/BottomModal/BottomModal.tsx';
 import s from './InviteFriend.module.scss';
 import classNames from 'classnames';
-import { useGetCurrentUserProfileInfoQuery } from '../../../../redux/index.ts';
+import { useGetUserQuery } from '../../../../redux';
+import { formatAbbreviation } from '../../../../helpers';
 
 interface InviteFriendProps {
   modalId: string;
@@ -18,7 +19,7 @@ export const InviteFriend: FC<InviteFriendProps> = ({
                                                     }: InviteFriendProps) => {
 
 
-  const { data } = useGetCurrentUserProfileInfoQuery();
+  const { data } = useGetUserQuery();
 
   const inviteTG = () => {
     const shareData = {
@@ -40,14 +41,14 @@ export const InviteFriend: FC<InviteFriendProps> = ({
       <ul className={s.subscribers}>
         <li className={s.listBadge}>
             <span className={s.badge}>
-              +120 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+              +{formatAbbreviation(120)} <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
             </span>
           <span className={s.level}>1ур.</span>
         </li>
         <li className={s.listBadge}>
 
             <span className={s.badge}>
-              +40 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+              +{formatAbbreviation(40)} <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
             </span>
           <span className={s.level}>2ур.</span>
         </li>

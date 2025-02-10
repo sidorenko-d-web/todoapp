@@ -8,6 +8,7 @@ import back from '../../assets/icons/arrow-back.svg';
 import StatisticsCard from '../../components/statistics/statisticsCard/StatisticsCard';
 import coin from '../../assets/icons/coin.png';
 import { useGetAllIntegrationsQuery, useGetCurrentUserProfileInfoQuery } from '../../redux';
+import { formatAbbreviation } from '../../helpers';
 
 const StatisticsPage: FC = () => {
   const navigate = useNavigate();
@@ -23,15 +24,15 @@ const StatisticsPage: FC = () => {
           <h1 className={styles.title}>Статистика</h1>
           <div className={styles.scores}>
             <div className={styles.scoresItem}>
-              <p>{userProfileData?.total_views}</p>
+              <p>{formatAbbreviation(userProfileData?.total_views || 0)}</p>
               <img src={views} alt="views" />
             </div>
             <div className={styles.scoresItem}>
-              <p>{userProfileData?.subscribers}</p>
+              <p>{formatAbbreviation(userProfileData?.subscribers || 0)}</p>
               <img src={subscribers} alt="subscribers" />
             </div>
             <div className={styles.scoresItem}>
-              <p>+ {userProfileData?.points}</p>
+              <p>+ {formatAbbreviation(userProfileData?.points || 0)}</p>
               <img src={coin} height={14} width={14} alt="" />
             </div>
           </div>

@@ -5,6 +5,7 @@ import { DevelopmentPlan, IncreaseIncome, TopInfluencers } from '../../component
 
 import s from './PromotionPage.module.scss';
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUsersCountQuery } from '../../redux';
+import { formatAbbreviation } from '../../helpers';
 
 export const PromotionPage: React.FC = () => {
   
@@ -33,7 +34,7 @@ export const PromotionPage: React.FC = () => {
             <h1 className={s.pageTitle}>Продвижение</h1>
             <div className={s.badges}>
               <span className={s.badge}>{`#${position}`} <img src={clanRed} height={14} width={14} alt={'income'} /></span>
-              <span className={s.badge}>+440 <img src={subscribersIcon} height={14} width={14}
+              <span className={s.badge}>+{formatAbbreviation(440)} <img src={subscribersIcon} height={14} width={14}
                 alt={'subscribers'} /></span>
             </div>
             <IncreaseIncome />

@@ -6,6 +6,7 @@ import subscribersIcon from '../../../../assets/icons/subscribers.png';
 
 import { ReferralCard } from '../../ReferralCard/ReferralCard';
 import { useGetCurrentUsersReferralsQuery } from '../../../../redux';
+import { formatAbbreviation } from '../../../../helpers';
 
 interface UserReferralsProps {
     modalId: string;
@@ -25,12 +26,12 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
 
             <div className={s.badgesWrp} style={{ justifyContent: 'center'}}>
                 <span className={s.badge}>
-                    <span>+120</span>
+                    <span>+{formatAbbreviation(120)}</span>
                     <img src={subscribersIcon} className={s.icon} height={14} width={14} alt="Подписчики" ></img>
                     <span className={s.level}>1ур.</span>
                 </span>
                 <span className={s.badge}>
-                    <span className={s.value}>+40</span>
+                    <span className={s.value}>+{formatAbbreviation(40)}</span>
                     <img src={subscribersIcon} className={s.icon} height={14} width={14} alt="Подписчики" ></img>
                     <span className={s.level}>2ур.</span>
                 </span>
