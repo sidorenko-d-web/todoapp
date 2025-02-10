@@ -7,6 +7,7 @@ import fireIcon from '../../assets/icons/fire.svg';
 import infoIcon from '../../assets/icons/info.svg';
 import { useParams } from 'react-router-dom';
 import { useGetUserProfileInfoByIdQuery } from '../../redux';
+import { formatAbbreviation } from '../../helpers';
 
 import s from './StrangerProfilePage.module.scss';
 
@@ -34,7 +35,7 @@ export const StrangerProfilePage = () => {
               <li className={s.number}>6</li>
               <li className={s.fireIcon}>
                 <img src={fireIcon} alt="fire" width={12} height={12} />
-                <span>{profile.points}</span>
+                <span>{formatAbbreviation(profile.points)}</span>
               </li>
               {/*{profile.vip &&*/}
               {/*  <li className={s.vip}>*/}
