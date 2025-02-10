@@ -17,9 +17,10 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { MODALS, localStorageConsts, svgHeadersString } from '../../../constants';
+import { localStorageConsts, MODALS, svgHeadersString } from '../../../constants';
 import { useModal } from '../../../hooks';
 import { useTranslation } from 'react-i18next';
+import { formatAbbreviation } from '../../../helpers';
 
 interface Props {
   disabled?: boolean;
@@ -163,15 +164,15 @@ export const InventoryCard: FC<Props> = ({
             )}
           >
             <div className={styles.statsItem}>
-              <p>+{item.boost.views}</p>
+              <p>+{formatAbbreviation(item.boost.views)}</p>
               <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{item.boost.subscribers}</p>
+              <p>+{formatAbbreviation(item.boost.subscribers)}</p>
               <img src={SubscriberCoin} alt="" />
             </div>
             <div className={styles.statsItem}>
-              <p>+{item.boost.income_per_second}</p>
+              <p>+{formatAbbreviation(item.boost.income_per_second)}</p>
               <img src={CoinIcon} alt="" />
               <p>/{t('s13')}</p>
             </div>
@@ -274,7 +275,7 @@ export const InventoryCard: FC<Props> = ({
         </button>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
-          <button>{data?.items[0].price_usdt} $USDT</button>
+          <button>{formatAbbreviation(data?.items[0].price_usdt || 0, 'currency')}</button>
           <button
             className={clsx(
               item.item_rarity === 'yellow'
@@ -288,7 +289,7 @@ export const InventoryCard: FC<Props> = ({
               <p>loading</p>
             ) : (
               <>
-                {data?.items[0].price_internal} <img src={CoinIcon} alt="" />
+                {formatAbbreviation(data?.items[0].price_internal || 0)} <img src={CoinIcon} alt="" />
               </>
             )}
           </button>

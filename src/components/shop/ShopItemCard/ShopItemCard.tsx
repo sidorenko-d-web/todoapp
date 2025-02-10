@@ -8,11 +8,12 @@ import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
 import { useModal, useSendTransaction, useUsdtTransactions } from '../../../hooks';
-import { MODALS, svgHeadersString } from '../../../constants';
 import { useTransactionNotification } from '../../../hooks/useTransactionNotification';
 import { useTransactionNotificationContext } from '../../../providers/TransactionNotificationProvider';
 
 import { useTranslation } from 'react-i18next';
+import { MODALS, svgHeadersString } from '../../../constants';
+import { formatAbbreviation } from '../../../helpers';
 
 interface Props {
   disabled?: boolean;
@@ -29,8 +30,6 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const usdtTransactions = useUsdtTransactions();
   const [currentTrxId, setCurrentTrxId] = useState("")
 
-
-
   const handleBuyItem = async () => {
     try {
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
@@ -40,7 +39,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       } else {
         setError(JSON.stringify(res.error));
       }
-    } catch (error) {}
+    } catch (error) {
+    }
   };
 
   // useEffect(() => {
@@ -112,8 +112,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                ? styles.colorPurple
-                : styles.level
+                  ? styles.colorPurple
+                  : styles.level
             }
           >
             {t('s17')}
@@ -124,8 +124,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 item.item_rarity === 'green'
                   ? styles.colorRed
                   : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                    ? styles.colorPurple
+                    : styles.level
               }
             >
               {error}
@@ -133,15 +133,15 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
           )}
           <div className={styles.stats}>
             <div className={styles.statsItem}>
-              <p>+{item.boost.views}</p>
+              <p>+{formatAbbreviation(item.boost.views)}</p>
               <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{item.boost.subscribers}</p>
+              <p>+{formatAbbreviation(item.boost.subscribers)}</p>
               <img src={SubscriberCoin} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{item.boost.income_per_second}</p>
+              <p>+{formatAbbreviation(item.boost.income_per_second)}</p>
               <img src={CoinIcon} alt="" />
               <p>/{t('s13')}</p>
             </div>
@@ -155,14 +155,14 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
             // onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
             onClick={handleUsdtPayment}
           >
-            {item.price_usdt} $USDT
+            {formatAbbreviation(item.price_usdt, 'currency')}
           </button>
           <button onClick={handleBuyItem}>
             {isLoading ? (
               <p>loading</p>
             ) : (
               <>
-                {item.price_internal} <img src={CoinIcon} alt="" />
+                {formatAbbreviation(item.price_internal)} <img src={CoinIcon} alt="" />
               </>
 
 

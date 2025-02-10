@@ -9,6 +9,7 @@ import { itemsInTab } from '../../helpers';
 import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import { useTranslation } from 'react-i18next';
+
 type TypeTab<T> = { title: string; value: T };
 
 const StorePage: FC = () => {
