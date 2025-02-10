@@ -58,7 +58,7 @@ export const ProfilePage: React.FC = () => {
           <div>
             <p className={styles.statsTitle}>{t('p4')}</p>
             <ProfileStats earned={userProfileData.total_earned} views={userProfileData.total_views}
-                          favoriteCompany={'Favourite company'} comments={userProfileData.comments_answered}
+                          favoriteCompany={'Favourite company'} comments={userProfileData.comments_answered_correctly}
                           rewards={12} coffee={5} />
           </div>
 

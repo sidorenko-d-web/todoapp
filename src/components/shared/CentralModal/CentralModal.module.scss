@@ -11,12 +11,12 @@
 }
 
 .modal {
+  max-height: 90svh;
   padding: 5px 12px 12px;
   background-color: var.$color-bg;
   border: 1px solid var.$color-dark-gray;
   border-radius: 12px;
   width: 100%;
-  max-height: 80%;
   overflow-y: auto;
   @include var.hide-scroll;
 }
@@ -28,6 +28,7 @@
 }
 
 .header {
+  background-color: var.$color-bg;
   position: sticky;
   top: 0;
   left: 0;

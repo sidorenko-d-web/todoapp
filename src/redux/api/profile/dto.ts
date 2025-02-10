@@ -7,7 +7,7 @@ export type UserProfileInfoResponseDTO = {
     subscription_integrations_left: number;
     subscribers: number;
     total_views: number;
-    comments_answered: number;
+    comments_answered_correctly: number;
 }
 
 export type TopProfilesResponseDTO = {
