@@ -24,15 +24,15 @@ const StatisticsPage: FC = () => {
           <h1 className={styles.title}>Статистика</h1>
           <div className={styles.scores}>
             <div className={styles.scoresItem}>
-              <p>{formatAbbreviation(userProfileData?.total_views)}</p>
+              <p>{formatAbbreviation(userProfileData?.total_views || 0)}</p>
               <img src={views} alt="views" />
             </div>
             <div className={styles.scoresItem}>
-              <p>{formatAbbreviation(userProfileData?.subscribers)}</p>
+              <p>{formatAbbreviation(userProfileData?.subscribers || 0)}</p>
               <img src={subscribers} alt="subscribers" />
             </div>
             <div className={styles.scoresItem}>
-              <p>+ {formatAbbreviation(userProfileData?.points)}</p>
+              <p>+ {formatAbbreviation(userProfileData?.points || 0)}</p>
               <img src={coin} height={14} width={14} alt="" />
             </div>
           </div>
