@@ -5,6 +5,7 @@ import LockIconSvg from '../../../assets/icons/lock-closed';
 import ChestBlueIcon from '../../../assets/icons/chest-blue.svg';
 import ChestPurpleIcon from '../../../assets/icons/chest-purple.svg';
 import ChestRedIcon from '../../../assets/icons/chest-red.svg';
+import ListIcon from '../../../assets/icons/list.svg';
 import {
   IShopItem,
   TypeItemQuality,
@@ -36,7 +37,7 @@ const getPremiumLevelOrder = (level: TypeItemQuality) =>
   }[level]);
 
 function sortByPremiumLevel(items: IShopItem[]) {
-  return [...items].sort(
+  return [ ...items ].sort(
     (a, b) =>
       getPremiumLevelOrder(a.item_premium_level) -
       getPremiumLevelOrder(b.item_premium_level),
@@ -44,13 +45,13 @@ function sortByPremiumLevel(items: IShopItem[]) {
 }
 
 export const InventoryCard: FC<Props> = ({
-  disabled,
-  isBlocked,
-  isUpgradeEnabled = true,
-  item,
-  isB,
-}) => {
-  const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
+                                           disabled,
+                                           isBlocked,
+                                           isUpgradeEnabled = true,
+                                           item,
+                                           isB,
+                                         }) => {
+  const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
   const { data, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
@@ -85,7 +86,8 @@ export const InventoryCard: FC<Props> = ({
           }
         }
       }
-    } catch (error) {}
+    } catch (error) {
+    }
   };
 
   return (
@@ -114,27 +116,28 @@ export const InventoryCard: FC<Props> = ({
         <div className={styles.title}>
           <div className={styles.headline}>
             <h3>{item.name}</h3>
-            {item.item_rarity === 'red' ? (
-              <div className={styles.variant}>
-                <p>Эконом</p>
-              </div>
-            ) : item.item_rarity === 'yellow' ? (
-              <div className={styles.variantPurple}>
-                <p>Премиум</p>
-              </div>
-            ) : (
-              <div className={styles.variantRed}>
-                <p>Люкс</p>
-              </div>
-            )}
+            {/* https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284353&m=dev#1121983015 */}
+            {/*{item.item_rarity === 'red' ? (*/}
+            {/*  <div className={styles.variant}>*/}
+            {/*    <p>Эконом</p>*/}
+            {/*  </div>*/}
+            {/*) : item.item_rarity === 'yellow' ? (*/}
+            {/*  <div className={styles.variantPurple}>*/}
+            {/*    <p>Премиум</p>*/}
+            {/*  </div>*/}
+            {/*) : (*/}
+            {/*  <div className={styles.variantRed}>*/}
+            {/*    <p>Люкс</p>*/}
+            {/*  </div>*/}
+            {/*)}*/}
           </div>
           <p
             className={
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                ? styles.colorPurple
-                : styles.level
+                  ? styles.colorPurple
+                  : styles.level
             }
           >
             Уровень {item.level} {isB && 'Предмет куплен'}
@@ -188,8 +191,8 @@ export const InventoryCard: FC<Props> = ({
                     item.item_rarity === 'red'
                       ? ChestBlueIcon
                       : item.item_rarity === 'yellow'
-                      ? ChestPurpleIcon
-                      : ChestRedIcon
+                        ? ChestPurpleIcon
+                        : ChestRedIcon
                   }
                   alt=""
                 />
@@ -202,8 +205,8 @@ export const InventoryCard: FC<Props> = ({
                   item.item_rarity === 'red'
                     ? styles.done
                     : item.item_rarity === 'yellow'
-                    ? styles.donePurple
-                    : styles.doneRed
+                      ? styles.donePurple
+                      : styles.doneRed
                 }
                 style={{ width: item.level * 2 + '%' }}
               />
@@ -217,13 +220,13 @@ export const InventoryCard: FC<Props> = ({
                       item.item_rarity === 'red'
                         ? styles.item
                         : item.item_rarity === 'yellow'
-                        ? styles.itemPurple
-                        : styles.itemRed,
+                          ? styles.itemPurple
+                          : styles.itemRed,
                       item.item_premium_level === 'advanced'
                         ? index > 1 && styles.itemLocked
                         : item.item_premium_level === 'base' &&
-                            index > 0 &&
-                            styles.itemLocked,
+                        index > 0 &&
+                        styles.itemLocked,
                     )}
                     key={_item.id}
                   >
@@ -257,6 +260,7 @@ export const InventoryCard: FC<Props> = ({
         </button>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
+          <button>{data?.items[0].price_usdt} $USDT</button>
           <button
             className={clsx(
               item.item_rarity === 'yellow'
@@ -283,9 +287,8 @@ export const InventoryCard: FC<Props> = ({
               })
             }
           >
-            Задание
+            <img src={ListIcon} alt="Tasks" />
           </button>
-          <button>{data?.items[0].price_usdt} $USDT</button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>

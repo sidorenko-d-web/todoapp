@@ -4,6 +4,9 @@
   display: flex;
   justify-content: center;
   align-items: end;
+  background-color: rgba(0, 0, 0, 0.85);
+  height: 100svh;
+  overflow-y: auto;
 }
 
 .modal {

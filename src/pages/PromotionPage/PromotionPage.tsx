@@ -1,7 +1,6 @@
 import React from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
 import clanRed from '../../assets/icons/clanRed.svg';
-import coin from '../../assets/icons/coin.png';
 import { DevelopmentPlan, IncreaseIncome, TopInfluencers } from '../../components';
 
 import s from './PromotionPage.module.scss';
@@ -36,8 +35,6 @@ export const PromotionPage: React.FC = () => {
               <span className={s.badge}>{`#${position}`} <img src={clanRed} height={14} width={14} alt={'income'} /></span>
               <span className={s.badge}>+440 <img src={subscribersIcon} height={14} width={14}
                 alt={'subscribers'} /></span>
-              <span className={s.badge}>+1 <img src={coin} height={14} width={14}
-                alt={'coin'} />/сек.</span>
             </div>
             <IncreaseIncome />
             <TopInfluencers />
