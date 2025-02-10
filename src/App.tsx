@@ -3,7 +3,7 @@ import { store } from './redux';
 import HistoryRouter from './routes/HistoryRoute.tsx';
 import browserHistory from './routes/browserHistory.ts';
 import AppRouter from './routes/AppRouter.tsx';
-import { AuthInit} from './hooks';
+import { AuthInit } from './hooks';
 import { ModalsProvider } from './providers';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { TonClientProvider } from './providers/TonClientProvider';

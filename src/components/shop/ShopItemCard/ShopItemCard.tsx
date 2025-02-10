@@ -111,19 +111,6 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     }
   }, [usdtTransactions]);
 
-  const handleUsdtPayment = async () => {
-    try {
-      setError('');
-      const trxId = await sendUSDT(Number(item.price_usdt));
-      if (trxId) {
-        setCurrentTrxId(trxId);
-      } else {
-        setError('Failed to initiate USDT payment');
-      }
-    } catch (error) {
-      setError('Failed to initiate USDT payment');
-    }
-  };
 
   return (
     <div className={styles.storeCard}>
