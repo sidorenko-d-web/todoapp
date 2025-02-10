@@ -16,7 +16,6 @@ const scales: ScaleConfig[] = [
   { threshold: 1e12, suffixRu: 'трлн.', suffixEn: 'T' },
   { threshold: 1e9, suffixRu: 'млрд.', suffixEn: 'B' },
   { threshold: 1e6, suffixRu: 'млн.', suffixEn: 'M' },
-  { threshold: 1e3, suffixRu: 'тыс.', suffixEn: 'K' },
 ];
 
 export const formatAbbreviation = (
