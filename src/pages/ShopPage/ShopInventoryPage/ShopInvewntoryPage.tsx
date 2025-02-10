@@ -14,10 +14,12 @@ import {
   useGetShopItemsQuery,
 } from '../../../redux';
 import { compareItems } from '../../../helpers';
+import { useTranslation } from 'react-i18next';
 
 type TypeTab<T> = { title: string; value: T };
 
 export const ShopInvewntoryPage = () => {
+  const { t } = useTranslation('shop');
   const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
   const [itemsQuality, setItemsQuality] = useState<TypeTab<TypeItemRarity>>();
 
@@ -93,11 +95,11 @@ export const ShopInvewntoryPage = () => {
       onItemCategoryChange={setShopCategory}
       onItemQualityChange={setItemsQuality}
     >
-      {!isFetching && !isSuccess && shopCategory?.title !== 'Вы' ? (
+      {!isFetching && !isSuccess && shopCategory?.title !== `${t('s6')}` ? (
         <p style={{ color: '#fff' }}>No items in inventory</p>
       ) : !shopCategory || !itemsQuality ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
-      ) : shopCategory?.title !== 'Вы' ? (
+      ) : shopCategory?.title !== `${t('s6')}` ? (
         isSuccess && (
           <>
             {itemsForBuy?.[0] && (

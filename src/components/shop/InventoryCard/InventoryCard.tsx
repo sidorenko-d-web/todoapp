@@ -18,6 +18,7 @@ import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
 import { MODALS, svgHeadersString } from '../../../constants';
 import { useModal } from '../../../hooks';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   disabled?: boolean;
@@ -50,6 +51,7 @@ export const InventoryCard: FC<Props> = ({
   item,
   isB,
 }) => {
+  const { t } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const { data, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
@@ -115,15 +117,15 @@ export const InventoryCard: FC<Props> = ({
             <h3>{item.name}</h3>
             {item.item_rarity === 'red' ? (
               <div className={styles.variant}>
-                <p>Эконом</p>
+                <p>{t('s14')}</p>
               </div>
             ) : item.item_rarity === 'yellow' ? (
               <div className={styles.variantPurple}>
-                <p>Премиум</p>
+                <p>{t('s15')}</p>
               </div>
             ) : (
               <div className={styles.variantRed}>
-                <p>Люкс</p>
+                <p>{t('s16')}</p>
               </div>
             )}
           </div>
@@ -136,7 +138,7 @@ export const InventoryCard: FC<Props> = ({
                 : styles.level
             }
           >
-            Уровень {item.level} {isB && 'Предмет куплен'}
+            {t('s20')} {item.level} {isB && t("s21")}
           </p>
           <div
             className={clsx(
@@ -155,7 +157,7 @@ export const InventoryCard: FC<Props> = ({
             <div className={styles.statsItem}>
               <p>+{item.boost.income_per_second}</p>
               <img src={CoinIcon} alt="" />
-              <p>/сек</p>
+              <p>/{t('s13')}</p>
             </div>
           </div>
         </div>
@@ -164,7 +166,7 @@ export const InventoryCard: FC<Props> = ({
       {!isBlocked &&
         (disabled ? (
           <p className={styles.disabledText}>
-            Сейчас активен “
+            {t('s22')} “
             <span
               className={
                 item.item_rarity === 'yellow'
@@ -174,14 +176,14 @@ export const InventoryCard: FC<Props> = ({
             >
               Компьютерный стул - Base
             </span>
-            ”. Вы можете заменить его на текущий предмет, сделав его активным.
+            ”. {t('s23')}
           </p>
         ) : (
           <div className={styles.progress}>
             <div className={styles.text}>
-              <p>{item.level}/50 уровней </p>
+              <p>{item.level}/50 {t('s24')} </p>
               <div className={styles.goal}>
-                <p>Каменный сундук</p>
+                <p>{t('s25')}</p>
                 <img
                   src={
                     item.item_rarity === 'red'
@@ -241,18 +243,18 @@ export const InventoryCard: FC<Props> = ({
       {isBlocked ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
-          <p>Прокачайте основной предмет</p>
+          <p>{t('s26')}</p>
           <img src={LockIcon} alt="" />
         </div>
       ) : item.level === 50 ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
-          <p>Максимальный уровень</p>
+          <p>{t('s27')}</p>
           <img src={LockIcon} alt="" />
         </div>
       ) : disabled ? (
         <button className={styles.disabledActions}>
-          <p>Активировать</p>
+          <p>{t('s28')}</p>
         </button>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
@@ -273,13 +275,13 @@ export const InventoryCard: FC<Props> = ({
               </>
             )}
           </button>
-          <button>Задание</button>
+          <button>{t('s29')}</button>
           <button>{data?.items[0].price_usdt} $USDT</button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
-          <p>Нужен уровень Древа 7</p>
+          <p>{t('s18')} 7</p>
           <img src={LockIcon} alt="" />
         </div>
       )}
