@@ -12,37 +12,41 @@ import { setGuideShown } from '../../../utils/index.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 
 
-export const PublishIntegrationButton: React.FC = ( ) => {
+export const PublishIntegrationButton: React.FC = () => {
   const dispatch = useDispatch();
 
-  const {openModal} = useModal();
+  const { openModal } = useModal();
 
-   const [publishIntegration] = usePublishIntegrationMutation();
-   const { data, refetch } = useGetAllIntegrationsQuery();
-  
-   const handlePublish = async () => {
+  const [publishIntegration] = usePublishIntegrationMutation();
+  const { data, refetch } = useGetAllIntegrationsQuery();
+
+  const handlePublish = async () => {
     setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-    try {
-        refetch();
-        const createdIntegration = data?.integrations.find(integration => integration.status === 'created');
+    refetch().then(() => {
+      try {
+      console.log('REFERCHED')
+
+        const createdIntegration = data!.integrations[0];
+        console.log('fetched integrations: ' + JSON.stringify(data?.count));
         dispatch(setIntegrationReadyForPublishing(false));
         dispatch(setCreateIntegrationButtonGlowing(false));
-        if(createdIntegration) {
-            await publishIntegration(createdIntegration.id).unwrap();
-            dispatch(setCreatedIntegrationId(createdIntegration.id));
+        if (createdIntegration) {
+          publishIntegration(createdIntegration.id);
+          dispatch(setCreatedIntegrationId(createdIntegration.id));
         }
         openModal(MODALS.INTEGRATION_REWARD);
-    } catch (error) {
-      console.error('Failed to publish integration:', error);
-    }
+      } catch (error) {
+        console.error('Failed to publish integration:', error);
+      }
+    })
   };
   return (
     <section className={s.integrationsControls} onClick={handlePublish}>
       <button className={`${s.button} `} disabled={false}>
         Опубликовать
         <span className={s.buttonBadge}>
-            Интеграция готова
-            <img src={integrationIcon} height={12} width={12}
+          Интеграция готова
+          <img src={integrationIcon} height={12} width={12}
             alt="integration" />
         </span>
       </button>

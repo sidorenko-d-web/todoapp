@@ -80,7 +80,6 @@ export const integrationsApi = createApi({
         url: `/integrations/${integrationId}/publish`,
         method: 'PATCH'
       }),
-      invalidatesTags: ['Integrations'],
     })
   }),
 });
