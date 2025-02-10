@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../utils';
 import { BackToMainPageGuide, WelcomeToShopGuide } from '../../components';
 import { setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
+import { UpgradeItemsGuide } from '../../components/guide/ShopPageSecondVisitGuides/UpgradeItemsGuide/UpgradeItemsGuide';
+import { TreeLevelGuide } from '../../components/guide/ShopPageSecondVisitGuides/TreeLevelGuide/TreeLevelGuide';
 
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
@@ -102,6 +104,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const initialGuideState = {
     welcomeGuideShown: isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN),
     backToMainGuideShown: isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE),
+    upgradeItemsGuideShown: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN),
+    treeLevelGuideShown: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN)
   };
 
   function guideReducer(state: any, action: { type: any; payload: string; }) {
@@ -208,6 +212,20 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             navigate(AppRoute.Main);
           }} />
         )}
+
+      {(!guideVisibility.upgradeItemsGuideShown
+        && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN))
+        && <UpgradeItemsGuide onClose={() => {
+          handleGuideClose(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
+        }} />}
+
+      {(guideVisibility.upgradeItemsGuideShown
+        && !guideVisibility.treeLevelGuideShown)
+        && <TreeLevelGuide onClose={() => {
+          handleGuideClose(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
+          navigate(AppRoute.ProgressTree);
+        }} />}
+
 
     </>
   );

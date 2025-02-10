@@ -17,7 +17,7 @@ interface props {
 
 export const ItemsTab: FC<props> = ({ inventoryItems, shopItems }) => {
 
-  const foundItem = shopItems?.find((item) => item.name.toLowerCase().trim() === 'лампа настольная');
+  const foundItem = shopItems?.find((item) => item.name.toLowerCase().trim() === 'постер');
 
 
   return (
