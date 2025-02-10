@@ -86,9 +86,9 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   };
 
   if (isExpired) {
+    dispatch(setIntegrationReadyForPublishing(true));
     if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-      dispatch(setIntegrationReadyForPublishing(true));
     }
     return null;
   };
