@@ -45,8 +45,3 @@ export const integrationCreatingModalButtonGlowing = () => {
         && !isGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED)
     );
 }
-
-export const isItemBought = () => {
-    return isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
-}
-
