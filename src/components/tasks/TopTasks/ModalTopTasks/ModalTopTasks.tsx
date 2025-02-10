@@ -10,7 +10,6 @@ import bookIcon from '../../../../assets/icons/book.svg';
 import coinBlueIcon from '../../../../assets/icons/coin-blue-human.svg';
 import { ProgressBarTasks } from '../../ProgressBarTasks';
 import chestIcon from '../../../../assets/icons/chest-purple.svg';
-import { useGetTasksQuery } from '../../../../redux/api/tasks';
 
 interface ModalTopTasksProps {
   modalId: string;
@@ -59,16 +58,10 @@ const TASK_STEPS: TaskStep[] = [
 ];
 
 export const ModalTopTasks: FC<ModalTopTasksProps> = ({
-                                                        modalId,
-                                                        onClose,
-                                                        onStateChange,
-                                                      }) => {
-  const { data: tasksData, isLoading, isError } = useGetTasksQuery();
-
-  console.log('Все задания:', tasksData);
-  console.log('Загрузка:', isLoading);
-  console.log('Ошибка:', isError);
-  
+  modalId,
+  onClose,
+  onStateChange,
+}) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<boolean[]>(
     Array(TASK_STEPS.length).fill(false),
@@ -76,7 +69,6 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
   const [channelLink, setChannelLink] = useState('');
   const currentStepInfo = TASK_STEPS[currentStepIndex];
   const progress = (completedSteps.filter(step => step).length / TASK_STEPS.length) * 100;
-
 
   useEffect(() => {
     onStateChange?.({
@@ -133,7 +125,6 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
           </span>
         </div>
 
-
         <div className={s.containerPG}>
           <ProgressBarTasks
             currentStep={currentStepIndex}
@@ -143,7 +134,6 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
             progressRewardIcon={chestIcon}
           />
         </div>
-
 
         <div className={s.question}>
           <span className={s.linkLabel}>Ссылка на канал</span>
@@ -167,7 +157,6 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
           </div>
           <h3 className={s.questionText}>{currentStepInfo.description}</h3>
         </div>
-
 
         <div className={s.buttons}>
           <button className={s.answerButton}>

@@ -1,12 +1,16 @@
-import React from 'react';
+import { FC } from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
 import coinIcon from '../../assets/icons/coin.png';
 
 import s from './TasksPage.module.scss';
 import { DailyTasks, SocialTasks, TopTasks } from '../../components';
 import { formatAbbreviation } from '../../helpers';
+import { useGetTasksQuery } from '../../redux/api/tasks';
 
-export const TasksPage: React.FC = () => {
+export const TasksPage: FC = () => {
+  const result = useGetTasksQuery();
+  console.log('Весь результат запроса:', result);
+
   return (
     <main className={s.page}>
       <section className={s.topSection}>
