@@ -29,5 +29,13 @@ export const GUIDE_ITEMS = {
 
     integration: {
         INTEGRATION_INITIAL_GUIDE_SHOWN: 'integrationInitialGuideShown'
+    },
+
+    integrationPage: {
+        INTEGRATION_PAGE_GUIDE_SHOWN: 'integrationPageGuideShown',
+    },
+
+    mainPageSecondVisit: {
+        FINISH_TUTORIAL_GUIDE_SHOWN: 'finishTutorialGuideShown'
     }
 }

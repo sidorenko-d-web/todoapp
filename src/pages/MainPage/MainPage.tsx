@@ -15,6 +15,7 @@ import { IntegrationCreatedGuide } from '../../components/guide/IntegrationCreat
 import { useNavigate } from 'react-router-dom';
 import { PublishIntegrationButton } from '../../components/main/PublishIntegrationButton/PublishIntegrationButton.tsx';
 import { AccelerateIntegtrationGuide } from '../../components/guide/IntegrationCreatingGuides/AccelerateIntegrationGuide/AccelerateIntegration.tsx';
+import { FinishTutorialGuide } from '../../components/guide/MainPageSecondVIsitGuides/FinishTutorialGuide.tsx/FinishTutorialGuide.tsx';
 
 
 export const MainPage: FC = () => {
@@ -175,6 +176,12 @@ export const MainPage: FC = () => {
           }
           } />
         ))
+      }
+
+      {
+        (isGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN) 
+          && !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && 
+          <FinishTutorialGuide onClose={() => setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)}/>) 
       }
 
       {readyForPublishing && <PublishIntegrationButton/>}

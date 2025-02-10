@@ -104,7 +104,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
           </button>
           }
           <button onClick={handleBuyItem} className={(buyButtonGlowing
-            && item.name.toLowerCase().trim().includes('столик')) ? styles.glowingBtn : ''}>
+            && item.name.toLowerCase().trim().includes('лампа')) ? styles.glowingBtn : ''}>
             {isLoading ? (
               <p>Загрузка...</p>
             ) : (

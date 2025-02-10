@@ -1,7 +1,9 @@
+import { useSelector } from 'react-redux';
 import coinIcon from '../../../assets/icons/coin.png';
 import { formatAbbreviation } from '../../../helpers';
 import ProgressLine from '../../shared/ProgressLine/ProgressLine';
 import styles from './IntegrationComment.module.scss';
+import { RootState } from '../../../redux';
 
 interface IntegrationCommentProps {
   author_username: string;
@@ -20,8 +22,13 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
                                                                         onVote,
                                                                         finished,
                                                                       }) => {
+
+
+                                                                        
+  const elevateComment = useSelector((state: RootState) => state.guide.elevateIntegrationStats);
+
   return (
-    <div className={styles.wrp}>
+    <div className={`${styles.wrp} ${elevateComment ? styles.elevated : ''}`}>
       {!finished ? (
         <div className={styles.usernameAndComment}>
           <p className={styles.username}>{author_username}:</p>

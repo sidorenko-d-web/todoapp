@@ -46,13 +46,6 @@ export const integrationCreatingModalButtonGlowing = () => {
     );
 }
 
-
-//shop
-
-export const setItemBought = () => {
-    setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
-}
-
 export const isItemBought = () => {
     return isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
 }

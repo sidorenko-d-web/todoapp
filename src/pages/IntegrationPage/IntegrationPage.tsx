@@ -9,6 +9,11 @@ import {
 import { Integration, IntegrationComment, IntegrationStats, IntegrationStatsMini } from '../../components';
 import integrationIcon from '../../assets/icons/integration-icon.svg';
 import { useParams } from 'react-router-dom';
+import { IntegrationPageGuide } from '../../components/guide/IntegrationPageGuides/IntegrationPageGuide/IntegrationPageGuide';
+import { isGuideShown, setGuideShown } from '../../utils';
+import { GUIDE_ITEMS } from '../../constants';
+import { useDispatch } from 'react-redux';
+import { setElevateIntegrationStats } from '../../redux/slices/guideSlice';
 
 export const IntegrationPage: React.FC = () => {
   const { integrationId: queryIntegrationId } = useParams<{ integrationId: string | undefined }>();
@@ -18,19 +23,22 @@ export const IntegrationPage: React.FC = () => {
 
   const { data, error, isLoading } = useGetIntegrationQuery(`${integrationId}`);
   const { data: commentData, refetch } = useGetUnansweredIntegrationCommentQuery(`${integrationId}`);
-  const [ postComment ] = usePostCommentIntegrationsMutation();
+  const [postComment] = usePostCommentIntegrationsMutation();
 
-  const [ currentCommentIndex, setCurrentCommentIndex ] = useState<number>(0);
-  const [ progress, setProgress ] = useState(0);
-  const [ finished, setFinished ] = useState(false);
+  const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
+  const [progress, setProgress] = useState(0);
+  const [finished, setFinished] = useState(false);
 
-  const comments = commentData ? (Array.isArray(commentData) ? commentData : [ commentData ]) : [];
+  const comments = commentData ? (Array.isArray(commentData) ? commentData : [commentData]) : [];
+
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     if (comments.length === 0) {
       setFinished(true);
     }
-  }, [ comments ]);
+  }, [comments]);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     await postComment({ commentId, isHate: isThumbsUp });
@@ -46,7 +54,6 @@ export const IntegrationPage: React.FC = () => {
       setFinished(false);
     }
   };
-
 
   return (
     <div className={styles.wrp}>
@@ -79,7 +86,13 @@ export const IntegrationPage: React.FC = () => {
             finished={finished}
           />
         </>
+
       )}
+      {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+        <IntegrationPageGuide onClose={() => {
+          setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+          dispatch(setElevateIntegrationStats(false));
+        }} />}
     </div>
   );
 };

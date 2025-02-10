@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 
 import s from './PublishIntegrationButton.module.scss';
 
-import { setCreatedIntegrationId, setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice.ts';
+import { setCreatedIntegrationId, setCreateIntegrationButtonGlowing, setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice.ts';
 import { setGuideShown } from '../../../utils/index.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 
@@ -27,6 +27,7 @@ export const PublishIntegrationButton: React.FC = ( ) => {
         refetch();
         const createdIntegration = data?.integrations.find(integration => integration.status === 'created');
         dispatch(setIntegrationReadyForPublishing(false));
+        dispatch(setCreateIntegrationButtonGlowing(false));
         if(createdIntegration) {
             await publishIntegration(createdIntegration.id).unwrap();
             dispatch(setCreatedIntegrationId(createdIntegration.id));

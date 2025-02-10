@@ -101,7 +101,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const initialGuideState = {
     welcomeGuideShown: isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN),
-    itemBought: isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT),
     backToMainGuideShown: isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE),
   };
 
@@ -124,7 +123,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const statsGlowing = useSelector((state: RootState) => state.guide.getShopStatsGlowing);
 
-
+  console.log('ITE BOUGHTl: ', useSelector((state: RootState) => state.guide.itemBought))
   return (
     <>
       <div className={styles.wrapper}>
@@ -200,7 +199,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         }} />
       )}
 
-      {guideVisibility.itemBought &&
+      {useSelector((state: RootState) => state.guide.itemBought) &&
         guideVisibility.welcomeGuideShown &&
         !guideVisibility.backToMainGuideShown &&
         mode === 'inventory' && (

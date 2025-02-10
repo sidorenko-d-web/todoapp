@@ -67,7 +67,11 @@ export default function RewardForIntegrationModal() {
       <div className={styles.desc}>
         <p>Поздравляем! Интеграция готова, следите за статистикой и продолжайте в том же духе!</p>
       </div>
-      <Button variant={'blue'}>Забрать</Button>
+      <Button variant={'blue'} onClick={() => {
+        console.log('onnn clossseee')
+        dispatch(setIsPublishedModalClosed(true));
+        closeModal(MODALS.INTEGRATION_REWARD);
+      }}>Забрать</Button>
     </CentralModal>
   );
 }

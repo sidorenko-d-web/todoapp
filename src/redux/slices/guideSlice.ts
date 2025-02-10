@@ -13,6 +13,10 @@ interface GuideState {
   integrationReadyForPublishing: boolean;
 
   createdIntegrationId: string;
+
+  itemBought: boolean;
+
+  elevateIntegrationStats: boolean;
 }
 
 const initialState: GuideState = {
@@ -22,13 +26,15 @@ const initialState: GuideState = {
     && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE),
   createIntegrationButtonGlowing: isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
     !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED),
+  itemBought: false,
   integrationCreated: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED) 
     && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN),
   integrationReadyForPublishing: false,
   accelerateIntegrationGuideClosed: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN)
     && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED),
   isPublishedModalClosed: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED),
-  createdIntegrationId: ""
+  createdIntegrationId: "",
+  elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN)
 };
 
 const guideSlice = createSlice({
@@ -62,6 +68,13 @@ const guideSlice = createSlice({
     setCreatedIntegrationId: (state, action: PayloadAction<string>) => {
       state.createdIntegrationId = action.payload;
     },
+    setElevateIntegrationStats: (state, action: PayloadAction<boolean>) => {
+      state.elevateIntegrationStats = action.payload;
+    },
+    setItemBought: (state, action: PayloadAction<boolean>) => {
+      console.log('set item bought');
+      state.itemBought = action.payload;
+    },
   },
 });
 
@@ -70,5 +83,5 @@ export const { setGetCoinsGuideShown,
     setBuyItemButtonGlowing,
     setCreateIntegrationButtonGlowing, 
     setIntegrationCreated, setAccelerateIntegrationGuideClosed,
-    setIsPublishedModalClosed, setIntegrationReadyForPublishing, setCreatedIntegrationId } = guideSlice.actions;
+    setIsPublishedModalClosed, setIntegrationReadyForPublishing, setCreatedIntegrationId, setElevateIntegrationStats, setItemBought } = guideSlice.actions;
 export default guideSlice.reducer;

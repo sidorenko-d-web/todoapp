@@ -11,7 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import Lottie from 'lottie-react';
 import { blueLight, purpleLight, redLight } from '../../../../assets/animations';
-import { isItemBought, setItemBought } from '../../../../utils';
+import { useDispatch } from 'react-redux';
+import { setItemBought } from '../../../../redux/slices/guideSlice';
 
 export const NewItemModal: React.FC = () => {
   const { closeModal, getModalState } = useModal();
@@ -20,9 +21,12 @@ export const NewItemModal: React.FC = () => {
     MODALS.NEW_ITEM,
   );
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClose = () => {
     closeModal(MODALS.NEW_ITEM);
+    dispatch(setItemBought(true));
+    navigate(AppRoute.ShopInventory);
   };
 
   const isPrem = state.args?.item.item_rarity === 'yellow';
@@ -32,10 +36,6 @@ export const NewItemModal: React.FC = () => {
     <CentralModal
       title="Новый предмет!"
       onClose={() => {
-        if(!isItemBought()) {
-          setItemBought();
-          navigate(AppRoute.ShopInventory);
-        }
         closeModal(MODALS.NEW_ITEM);
       }}
       modalId={MODALS.NEW_ITEM}

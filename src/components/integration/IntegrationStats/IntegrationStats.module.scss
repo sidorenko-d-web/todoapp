@@ -45,3 +45,8 @@
         }
     }
 }
+
+.elevated {
+    z-index: 10000;
+    border: 2px solid var.$color-primary;
+}
