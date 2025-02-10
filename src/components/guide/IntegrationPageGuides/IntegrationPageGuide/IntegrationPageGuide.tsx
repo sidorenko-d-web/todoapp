@@ -29,7 +29,7 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({onClo
                 <span style={{color: '#219653'}}> отвечая на их комментарии!</span>
                 </>
             }
-            onClose={onClose}>
+            onClose={handleClose}>
             <button className={styles.nextBtn} onClick={handleClose}>Супер!</button>
             <img src={img1} className={styles.gifImage} height={146} width={140}/>
         </Guide>
