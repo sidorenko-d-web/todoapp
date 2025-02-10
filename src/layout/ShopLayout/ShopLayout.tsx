@@ -45,7 +45,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const shopItemRarity = [
     { title: `${t('s14')}`, value: 'red' },
     { title: `${t('s15')}`, value: 'yellow' },
-    { title: `${t('s16')}юкс`, value: 'green' },
+    { title: `${t('s16')}`, value: 'green' },
   ];
   const [shopCategory, setShopCategory] = useState(shopItemCategories[0]);
   const [itemsQuality, setItemsQuality] = useState(shopItemRarity[0]);
@@ -66,26 +66,26 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const itemsInTabs = itemsInTab(shop?.items, inventory?.items);
   const tabs = [];
   itemsInTabs?.red?.length &&
-    itemsInTabs?.red?.length > 0 &&
-    tabs.push(shopItemRarity[0]);
+  itemsInTabs?.red?.length > 0 &&
+  tabs.push(shopItemRarity[0]);
   itemsInTabs?.yellow?.length &&
-    itemsInTabs?.yellow?.length > 0 &&
-    tabs.push(shopItemRarity[1]);
+  itemsInTabs?.yellow?.length > 0 &&
+  tabs.push(shopItemRarity[1]);
   itemsInTabs?.green?.length &&
-    itemsInTabs?.green?.length > 0 &&
-    tabs.push(shopItemRarity[2]);
+  itemsInTabs?.green?.length > 0 &&
+  tabs.push(shopItemRarity[2]);
 
   const inventoryTabs = [shopItemRarity[0]];
   isSuccess &&
-    inventory?.items.find(
-      item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value,
-    ) &&
-    inventoryTabs.push(shopItemRarity[1]);
+  inventory?.items.find(
+    item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value,
+  ) &&
+  inventoryTabs.push(shopItemRarity[1]);
   isSuccess &&
-    inventory?.items.find(
-      item => item.item_rarity === 'green' && item.item_category === shopCategory.value,
-    ) &&
-    inventoryTabs.push(shopItemRarity[2]);
+  inventory?.items.find(
+    item => item.item_rarity === 'green' && item.item_category === shopCategory.value,
+  ) &&
+  inventoryTabs.push(shopItemRarity[2]);
 
   const handleShop = () => {
     setItemsQuality(shopItemRarity[0]);

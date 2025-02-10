@@ -5,9 +5,11 @@ import { useGetShopItemsQuery } from '../../redux/api/shop/api';
 import { IShopItem, TypeItemCategory, TypeItemRarity } from '../../redux';
 import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
 import { itemsInTab } from '../../helpers';
+import { useTranslation } from 'react-i18next';
 type TypeTab<T> = { title: string; value: T };
 
 const StorePage: FC = () => {
+  const { t } = useTranslation('shop');
   const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
   const [itemsRarity, setItemsQuality] = useState<TypeTab<TypeItemRarity>>();
 
@@ -42,7 +44,7 @@ const StorePage: FC = () => {
         <p style={{ color: '#fff' }}>Loading...</p>
       ) : !shopCategory || !itemsRarity ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
-      ) : shopCategory?.title !== 'Вы' ? (
+      ) : shopCategory?.title !== t('s6') ? (
         <ItemsTab shopCategory={shopCategory} shopItems={items} />
       ) : (
         <SkinTab mode="shop" />

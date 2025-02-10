@@ -14,6 +14,7 @@ import VIPIcon from '../../../assets/icons/star_check_icon.svg';
 import ListIcon from '../../../assets/icons/list.svg';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   item: IShopSkin;
@@ -21,6 +22,7 @@ interface Props {
 }
 
 export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
+  const { t } = useTranslation('shop');
   const [buySkin, { isLoading }] = useBuySkinMutation();
   const { refetch: refetchShop } = useGetShopSkinsQuery();
   const { refetch: refetchInventory } = useGetInventorySkinsQuery();
@@ -39,8 +41,6 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
       console.error(error);
     }
   };
-
-  console.log(mode);
 
   return (
     <div className={styles.storeCard}>
@@ -72,14 +72,14 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
               )}
             </div>
           </div>
-          <p className={styles.description}>Небольшое описание скина.</p>
+          <p className={styles.description}>{t('s36')}</p>
         </div>
       </div>
 
       <div className={styles.actions}>
         {item.limited ? (
           <button className={styles.vipButton}>
-            {item.price_usdt} $USDT (осталось {item.quantity} шт.)
+            {item.price_usdt} $USDT ({t('s10')} {item.quantity} {t('s11')}.)
           </button>
         ) : mode === 'shop' ? (
           <>
