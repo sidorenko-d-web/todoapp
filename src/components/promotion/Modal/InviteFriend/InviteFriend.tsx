@@ -5,7 +5,7 @@ import arrow from '../../../../assets/icons/arrow.svg';
 import BottomModal from '../../../shared/BottomModal/BottomModal.tsx';
 import s from './InviteFriend.module.scss';
 import classNames from 'classnames';
-import { useGetCurrentUserProfileInfoQuery } from '../../../../redux/index.ts';
+import { useGetUserQuery } from '../../../../redux';
 import { formatAbbreviation } from '../../../../helpers';
 
 interface InviteFriendProps {
@@ -19,7 +19,7 @@ export const InviteFriend: FC<InviteFriendProps> = ({
                                                     }: InviteFriendProps) => {
 
 
-  const { data } = useGetCurrentUserProfileInfoQuery();
+  const { data } = useGetUserQuery();
 
   const inviteTG = () => {
     const shareData = {
