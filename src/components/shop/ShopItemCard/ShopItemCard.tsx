@@ -12,6 +12,7 @@ import { MODALS, svgHeadersString } from '../../../constants';
 import { useTransactionNotification } from '../../../hooks/useTransactionNotification';
 import { useTransactionNotificationContext } from '../../../providers/TransactionNotificationProvider';
 
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   disabled?: boolean;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
+  const { t } = useTranslation('shop');
   const [buyItem, { isLoading }] = useBuyItemMutation();
   const { openModal } = useModal();
   const [error, setError] = useState('');
@@ -114,7 +116,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 : styles.level
             }
           >
-            Не куплено
+            {t('s17')}
           </p>
           {error && (
             <p
@@ -141,7 +143,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
             <div className={styles.statsItem}>
               <p>+{item.boost.income_per_second}</p>
               <img src={CoinIcon} alt="" />
-              <p>/сек</p>
+              <p>/{t('s13')}</p>
             </div>
           </div>
         </div>
@@ -171,7 +173,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <img src={LockIcon} alt="" />
-          <p>Нужен уровень Древа 7</p>
+          <p>{t('s18')} 7</p>
           <img src={LockIcon} alt="" />
           <img src={LockIcon} alt="" />
         </div>
