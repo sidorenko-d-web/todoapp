@@ -10,15 +10,15 @@ export const useAccelerateIntegration = ({
                                            integrationId,
                                            onSuccess,
                                          }: UseAccelerateIntegrationProps) => {
-  const [isAccelerating, setIsAccelerating] = useState(false);
-  const [updateTimeLeft] = useUpdateTimeLeftMutation();
+  const [ isAccelerating, setIsAccelerating ] = useState(false);
+  const [ updateTimeLeft ] = useUpdateTimeLeftMutation();
 
-  const accelerateIntegration = useCallback(async () => {
+  const accelerateIntegration = useCallback(async (timeLeftDelta: number) => {
     setIsAccelerating(true);
     try {
       const response = await updateTimeLeft({
         integrationId,
-        timeLeftDelta: 1,
+        timeLeftDelta,
       }).unwrap();
       onSuccess(response.time_left);
     } catch (error) {
@@ -26,7 +26,7 @@ export const useAccelerateIntegration = ({
     } finally {
       setIsAccelerating(false);
     }
-  }, [integrationId, onSuccess, updateTimeLeft]);
+  }, [ integrationId, onSuccess, updateTimeLeft ]);
 
   return { accelerateIntegration, isAccelerating };
 };

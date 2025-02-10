@@ -1,9 +1,26 @@
-@use '../../../assets/styles' as var;
+@use '../../../assets/styles/abstracts' as var;
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
 
 .inputGroup {
   position: relative;
   width: 100%;
-
 
   label {
     display: block;
@@ -25,18 +42,33 @@
 
   .invalid {
     border-color: var.$color-red !important;
+    animation: shake 0.3s ease-in-out;
   }
 
+  .inputWrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
 
   .statusIcon {
     position: absolute;
     right: 6px;
-    top: 28px;
+    top: 50%;
+    transform: translateY(-50%);
     width: 24px;
     height: 24px;
     background-color: var.$color-dark-gray;
     padding: 5px;
     border-radius: 6px;
+  }
+
+  .shakeWrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    animation: shake 0.3s ease-in-out;
   }
 }
 
@@ -64,4 +96,3 @@
     pointer-events: all;
   }
 }
-

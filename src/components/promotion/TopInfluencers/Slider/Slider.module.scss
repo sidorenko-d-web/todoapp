@@ -12,11 +12,8 @@
 
 .cardWrapper {
   position: relative;
-  padding: 0 5px;
-
-  &:first-child {
-    padding-left: 0;
-  }
+  width: 80px;
+  margin-right: 10px;
 }
 
 .cardBlock, .vipCard {
@@ -61,7 +58,7 @@
   display: block;
   background-color: var.$color-gray;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   padding: 2px;
   z-index: 2;

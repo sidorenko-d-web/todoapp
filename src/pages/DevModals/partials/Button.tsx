@@ -4,14 +4,20 @@ import clsx from 'clsx';
 
 interface Props {
   variant: 'blue' | 'red' | 'gray';
+  onClick?: () => any;
 }
 
-export default function Button({ variant, children }: PropsWithChildren<Props>) {
+export default function Button({ variant, children, onClick }: PropsWithChildren<Props>) {
   return (
     <button
+      onClick={() => onClick?.()}
       className={clsx(
         styles.button,
-        variant === 'blue' ? styles.buttonBlue : variant === 'red' ? styles.buttonRed : styles.buttonGray,
+        variant === 'blue'
+          ? styles.buttonBlue
+          : variant === 'red'
+          ? styles.buttonRed
+          : styles.buttonGray,
       )}
     >
       {children}

@@ -7,6 +7,7 @@ import viewsIcon from '../../../assets/icons/views.png';
 import subscribersIcon from '../../../assets/icons/subscribers.png';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../../constants';
+import { formatAbbreviation } from '../../../helpers';
 
 
 interface IntegrationStatsMiniProps {
@@ -23,19 +24,15 @@ export const IntegrationStatsMini: React.FC<IntegrationStatsMiniProps> = ({ view
       <div className={styles.toCenterStats} />
       <div className={styles.statsUnderTitle}>
         <div className={styles.statWrp}>
-          <p className={styles.stat}>{views}</p>
+          <p className={styles.stat}>{formatAbbreviation(views)}</p>
           <img src={viewsIcon} height={14} width={14} alt="" />
         </div>
         <div className={styles.statWrp}>
-          <p className={styles.stat}>{subscribers}</p>
+          <p className={styles.stat}>{formatAbbreviation(subscribers)}</p>
           <img src={subscribersIcon} height={14} width={14} alt="" />
         </div>
         <div className={styles.statWrp}>
-          <p className={styles.stat}>+ {income}</p>
-          <img src={coin} height={14} width={14} alt="" />
-        </div>
-        <div className={styles.statWrp}>
-          <p className={styles.stat}>+ {income}</p>
+          <p className={styles.stat}>+ {formatAbbreviation(income)}</p>
           <img src={coin} height={14} width={14} alt="" />
         </div>
       </div>

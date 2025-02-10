@@ -1,6 +1,6 @@
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
-import { MODALS } from '../../../constants/modals.ts';
+import { MODALS } from '../../../constants';
 import { profileApi, useGetCurrentUserProfileInfoQuery, useGetIntegrationsQuery } from '../../../redux';
 import { IntegrationCreationCard, IntegrationCreationModal } from '../';
 import { SubscribeModal, SuccessfullySubscribedModal } from '../../';
@@ -47,7 +47,7 @@ export const IntegrationCreation = () => {
         </span>
       </button>
       {
-        // @ts-expect-error ts(2769)
+        // @ts-expect-error ts(2339)
         integrationsError?.status === 404 ? null :
           integrations?.integrations && <IntegrationCreationCard integration={integrations?.integrations[0]} />
       }
@@ -55,7 +55,8 @@ export const IntegrationCreation = () => {
       <IntegrationCreationModal
         modalId={MODALS.CREATING_INTEGRATION}
         onClose={() => closeModal(MODALS.CREATING_INTEGRATION)}
-        hasCreatingIntegration={integrations?.integrations && integrations?.integrations.length > 0}
+        // @ts-expect-error ts(2339)
+        hasCreatingIntegration={integrationsError?.status !== 404 && integrations?.integrations && integrations?.integrations.length > 0}
       />
       <SubscribeModal
         modalId={MODALS.SUBSCRIBE}
