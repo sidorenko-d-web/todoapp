@@ -3,11 +3,12 @@ import { store } from './redux';
 import HistoryRouter from './routes/HistoryRoute.tsx';
 import browserHistory from './routes/browserHistory.ts';
 import AppRouter from './routes/AppRouter.tsx';
-import { AuthInit} from './hooks';
+import { AuthInit } from './hooks';
 import { ModalsProvider } from './providers';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { TonClientProvider } from './providers/TonClientProvider';
 import { useMemo } from 'react';
+import { TransactionNotificationProvider } from './providers/TransactionNotificationProvider/';
 
 
 declare global {
@@ -26,9 +27,11 @@ function App() {
         <ModalsProvider>
           <AuthInit>
             <HistoryRouter history={browserHistory}>
-              <TonConnectUIProvider manifestUrl={"https://raw.githubusercontent.com/TimurZheksimbaev/First-TON-Project/refs/heads/main/apusher-tonconnect-manifest.json"}>  
+              <TonConnectUIProvider manifestUrl={"https://raw.githubusercontent.com/TimurZheksimbaev/First-TON-Project/refs/heads/main/apusher-tonconnect-manifest.json"}>
                 <TonClientProvider>
-                  <AppRouter />
+                  <TransactionNotificationProvider>
+                    <AppRouter />
+                  </TransactionNotificationProvider>
                 </TonClientProvider>
               </TonConnectUIProvider>
             </HistoryRouter>

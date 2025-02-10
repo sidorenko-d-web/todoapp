@@ -28,7 +28,7 @@ export const NewItemModal = () => {
   const isPrem = state.args?.item.item_rarity === 'yellow';
   const isPro = state.args?.item.item_rarity === 'green';
 
-  return (
+  return ( 
     <CentralModal
       title="Новый предмет!"
       onClose={() => closeModal(MODALS.NEW_ITEM)}

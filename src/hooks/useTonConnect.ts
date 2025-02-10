@@ -52,7 +52,7 @@ export const useTonConnect = (): {
               payload: args.body?.toBoc()?.toString("base64"),
             },
           ],
-          validUntil: Date.now() + 60 * 1000, // 60 seconds for user to approve
+          validUntil: Date.now() + 60 * 1000, // 60 seconds for user to approve 
         });
       },
       address: walletAddress,
