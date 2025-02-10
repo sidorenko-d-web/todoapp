@@ -42,5 +42,9 @@ export const GUIDE_ITEMS = {
     shopPageSecondVisit: {
         UPGRADE_ITEMS_GUIDE_SHOWN: 'upgradeItemsGuideShown',
         TREE_LEVEL_GUIDE_SHOWN: 'treeLevelGuideShown'
+    },
+
+    treePage: {
+        TREE_GUIDE_SHONW: 'treeGuideShown',
     }
 }
