@@ -19,7 +19,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
  
   const dispatch = useDispatch();
   const initialTime = 3600;
-  const [timeLeft, setTimeLeft] = useState(3600);
+  const [timeLeft, setTimeLeft] = useState(integration.time_left);
   const [isExpired, setIsExpired] = useState(false);
 
   const calculateProgress = () => ((initialTime - timeLeft) / initialTime) * 100;
@@ -59,7 +59,9 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
 
   const handleAccelerateClick = () => {
     if (!isExpired) {
-      void accelerateIntegration(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) ? 1 : timeLeft-1);
+      console.log('expired? ' + isExpired);
+      console.log('published btn clc ' + sessionStorage.getItem(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED));
+      void accelerateIntegration(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) ? 1 : timeLeft-1);
       createParticles();
     }
   };

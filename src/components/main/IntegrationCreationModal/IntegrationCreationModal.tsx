@@ -66,7 +66,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       .then(() => {
         dispatch(setIntegrationCreated(true));
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
-        sessionStorage.setItem(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED, '0');
         onClose();
         dispatch(integrationsApi.util.invalidateTags(['Integrations']));
         dispatch(profileApi.util.invalidateTags(['Me']));
