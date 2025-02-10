@@ -103,7 +103,7 @@
   }
 
   &.selected {
-    border: 2px solid var.$color-blue-primary;
+    outline: 2px solid var.$color-blue-primary;
 
     .selectedText {
       color: var.$color-blue-primary;

@@ -5,6 +5,7 @@ import s from './DevelopmentPlan.module.scss';
 import classNames from 'classnames';
 import { INFO_TEXT } from './constantsPlan.ts';
 import React from 'react';
+import { formatAbbreviation } from '../../../helpers';
 
 type DevelopmentPlanProps = {
   usersCount: number;
@@ -24,26 +25,28 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
         <ul className={s.list}>
           {INFO_TEXT.map((item, index) => {
             const isUnlocked = usersCount >= item.userCount && !item.isPlatform;
+            const isDescriptionUnlocked = index <= 4;
 
             return (
               <li key={index} className={s.wrapperList}>
                 <div className={s.infoUser}>
-                <div
-                  className={classNames(s.namePlan, {
-                    [s.locked]: !isUnlocked,
-                  })}
-                >
+                  <div
+                    className={classNames(s.namePlan, {
+                      [s.locked]: !isUnlocked,
+                    })}
+                  >
                     <span>{item.namePlan}</span>
                     {isUnlocked && <img src={tickCircle} height={17} width={17} />}
                     {!isUnlocked && <img src={circle} height={17} width={17} />}
                   </div>
-                  <span className={s.text}>{`#${index+1}`}</span>
+                  <span className={s.text}>{`#${index + 1}`}</span>
                 </div>
                 <div className={s.users}>
                   <img src={lockOpen} height={14} width={14} alt="lockOpen" />
-                  <span className={classNames(s.countUsers, s.text)}>{item.userCount} пользователей {item.isPlatform && ' на платформе'}</span>
+                  <span
+                    className={classNames(s.countUsers, s.text)}>{formatAbbreviation(item.userCount)} пользователей {item.isPlatform && ' на платформе'}</span>
                 </div>
-                <p className={s.textInfoPlan}>{isUnlocked ? item.description : '*****'}</p>
+                <p className={s.textInfoPlan}>{isDescriptionUnlocked ? item.description : '*****'}</p>
               </li>
             );
           })}

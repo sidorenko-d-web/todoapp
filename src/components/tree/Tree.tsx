@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import s from './Tree.module.scss';
 import classNames from 'classnames';
 import tickCircle from '../../assets/icons/tickCircle.svg';
@@ -7,6 +7,7 @@ import gift from '../../assets/icons/gift.svg';
 import spinner from '../../assets/icons/spinner-blue.svg';
 import { useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery } from '../../redux';
 import { useTreeProgress } from '../../hooks';
+import { formatAbbreviation } from '../../helpers';
 
 export const Tree = () => {
   const { data: treeData } = useGetTreeInfoQuery();
@@ -74,7 +75,7 @@ export const Tree = () => {
                       </div>
                     )}
                     <p className={classNames(s.text, { [s.textActive]: isActive})}>
-                      {stage.subscribers} <br />
+                      {formatAbbreviation(stage.subscribers)} <br />
                       подписчиков
                     </p>
                   </div>

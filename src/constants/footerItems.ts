@@ -1,8 +1,8 @@
-import { EyeIcon } from '../assets/icons/eye';
-import { HomeIcon } from '../assets/icons/home';
-import { FlagIcon } from '../assets/icons/flag';
-import { ListIcon } from '../assets/icons/list';
-import { ShopIcon } from '../assets/icons/shop';
+import ColoredShop from '../assets/icons/colored-shop.svg';
+import ColoredIntegrations from '../assets/icons/colored-integrations.svg';
+import ColoredHome from '../assets/icons/colored-home.svg';
+import ColoredPromotion from '../assets/icons/colored-promotion.svg';
+import ColoredTasks from '../assets/icons/colored-tasks.svg';
 
 import { AppRoute } from './appRoute';
 
@@ -10,31 +10,31 @@ export const footerItems = [
     {
         id: 0,
         title: "Магазин",
-        icon: ShopIcon,
+        icon: ColoredShop,
         redirectTo: AppRoute.Shop
     },
     {
         id: 1, 
         title: "Интеграции",
-        icon: EyeIcon,
+        icon: ColoredIntegrations,
         redirectTo: '/integrations/undefined'
     },
     {
         id: 2,
         title: "Дом",
-        icon: HomeIcon,
+        icon: ColoredHome,
         redirectTo: AppRoute.Main
     },
     {
         id: 3, 
         title: "Продвижение",
-        icon: FlagIcon,
+        icon: ColoredPromotion,
         redirectTo: AppRoute.Promotion
     },
     {
         id: 4, 
         title: "Задания",
-        icon: ListIcon,
+        icon: ColoredTasks,
         redirectTo: AppRoute.Tasks
     }
 ]

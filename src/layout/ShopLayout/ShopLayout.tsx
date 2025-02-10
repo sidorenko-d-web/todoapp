@@ -1,12 +1,4 @@
-import {
-  type Dispatch,
-  type FC,
-  PropsWithChildren,
-  type SetStateAction,
-  useEffect,
-  useReducer,
-  useState,
-} from 'react';
+import { type Dispatch, type FC, PropsWithChildren, type SetStateAction, useEffect, useReducer, useState } from 'react';
 import styles from './ShopLayout.module.scss';
 import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
 import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
@@ -18,11 +10,12 @@ import { useNavigate } from 'react-router-dom';
 import CoinIcon from '../../assets/icons/coin.png';
 import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
 import ViewsCoin from '../../assets/icons/views.png';
-import { itemsInTab } from '../../helpers';
-import { isGuideShown, setGuideShown } from '../../utils';
+import { formatAbbreviation, itemsInTab } from '../../helpers';
 import { useDispatch, useSelector } from 'react-redux';
-import { setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
+import { isGuideShown, setGuideShown } from '../../utils';
 import { BackToMainPageGuide, WelcomeToShopGuide } from '../../components';
+import { setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
+
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
   { title: 'Фото', value: 'image' },
@@ -104,7 +97,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     setItemsQuality(shopItemRarity[0]);
   }, [shopCategory]);
 
-
   const reduxDispatch = useDispatch();
 
   const initialGuideState = {
@@ -112,7 +104,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     itemBought: isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT),
     backToMainGuideShown: isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE),
   };
-
 
   function guideReducer(state: any, action: { type: any; payload: string; }) {
     switch (action.type) {
@@ -133,6 +124,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const statsGlowing = useSelector((state: RootState) => state.guide.getShopStatsGlowing);
 
+
   return (
     <>
       <div className={styles.wrapper}>
@@ -149,17 +141,17 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
             <div className={`${styles.scores} ${statsGlowing ? styles.elevated : ''}`}>
               <div className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
-                <p>+{0}</p>
+                <p>+{formatAbbreviation(0)}</p>
                 <img src={ViewsCoin} />
                 <p>/инт.</p>
               </div>
               <div className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
-                <p>+{0}</p>
+                <p>+{formatAbbreviation(0)}</p>
                 <img src={SubscriberCoin} />
                 <p>/инт.</p>
               </div>
               <div className={styles.scoresItem}>
-                <p>+{0}</p>
+                <p>+{formatAbbreviation(0)}</p>
                 <img src={CoinIcon} />
                 <p>/сек.</p>
               </div>
@@ -180,20 +172,21 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             currentTab={shopCategory.title}
             onChange={setShopCategory}
           />
-          {shopCategory.title !== 'Вы' && (
-            <TabsNavigation
-              colorClass={
-                itemsQuality.title === 'Эконом'
-                  ? 'tabItemSelectedBlue'
-                  : itemsQuality.title === 'Премиум'
-                    ? 'tabItemSelectedPurple'
-                    : 'tabItemSelectedRed'
-              }
-              tabs={mode === 'shop' ? tabs : inventoryTabs}
-              currentTab={itemsQuality.title}
-              onChange={setItemsQuality}
-            />
-          )}
+          {/* https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284346&m=dev#1121980464 */}
+          {/*{shopCategory.title !== 'Вы' && (*/}
+          {/*  <TabsNavigation*/}
+          {/*    colorClass={*/}
+          {/*      itemsQuality.title === 'Эконом'*/}
+          {/*        ? 'tabItemSelectedBlue'*/}
+          {/*        : itemsQuality.title === 'Премиум'*/}
+          {/*        ? 'tabItemSelectedPurple'*/}
+          {/*        : 'tabItemSelectedRed'*/}
+          {/*    }*/}
+          {/*    tabs={mode === 'shop' ? tabs : inventoryTabs}*/}
+          {/*    currentTab={itemsQuality.title}*/}
+          {/*    onChange={setItemsQuality}*/}
+          {/*  />*/}
+          {/*)}*/}
         </div>
 
         {children}

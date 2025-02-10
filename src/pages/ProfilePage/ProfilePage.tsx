@@ -42,7 +42,7 @@ export const ProfilePage: React.FC = () => {
           <div>
             <h1 className={styles.pageTitle}>Профиль</h1>
 
-            <ProfileStatsMini subscribers={userProfileData.subscribers} position={position} daysInARow={10} />
+            <ProfileStatsMini subscribers={userProfileData.subscribers} position={position} daysInARow={10} totalViews={userProfileData.total_views} />
           </div>
 
           <ChangeNicknameModal modalId={MODALS.CHANGING_NICKNAME}
@@ -58,7 +58,7 @@ export const ProfilePage: React.FC = () => {
           <div>
             <p className={styles.statsTitle}>Статистика за всё время</p>
             <ProfileStats earned={userProfileData.total_earned} views={userProfileData.total_views}
-                          favoriteCompany={'Favourite company'} comments={userProfileData.comments_answered}
+                          favoriteCompany={'Favourite company'} comments={userProfileData.comments_answered_correctly}
                           rewards={12} coffee={5} />
           </div>
 

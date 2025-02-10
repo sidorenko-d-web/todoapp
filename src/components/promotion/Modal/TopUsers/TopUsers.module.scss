@@ -16,6 +16,14 @@
   justify-content: space-between;
   gap: 10px;
   background: var.$color-card-bg;
+
+  &:last-child {
+    margin-bottom: 10px;
+  }
+
+  &.active {
+    border: 2px solid var.$color-primary;
+  }
 }
 
 .subscribers {
@@ -37,6 +45,7 @@
   flex-direction: column;
   gap: 10px;
   @include var.custom-scroll();
+  margin-bottom: -40px;
 }
 
 .listBadge {
@@ -139,6 +148,7 @@
 }
 
 .number {
+  font-size: 12px;
   padding: 2px 4px;
   border-radius: 4px;
   background: var.$color-primary;

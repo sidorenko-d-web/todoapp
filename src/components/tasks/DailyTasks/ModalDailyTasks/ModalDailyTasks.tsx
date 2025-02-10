@@ -10,6 +10,7 @@ import circleWhiteIcon from '../../../../assets/icons/circle.svg';
 import checkIcon from '../../../../assets/icons/checkmark-in-the-circle.svg';
 import bookIcon from '../../../../assets/icons/book.svg';
 import CrossRedIcon from '../../../../assets/icons/cross-red-in-circle.svg';
+import { formatAbbreviation } from '../../../../helpers';
 
 interface ModalDailyTasksProps {
   modalId: string;
@@ -18,6 +19,7 @@ interface ModalDailyTasksProps {
 }
 
 type QuestionState = 'solved' | 'current' | 'closed';
+
 interface Question {
   id: number;
   text: string;
@@ -64,13 +66,13 @@ const QUESTIONS: Question[] = [
 export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
                                                             modalId,
                                                             onClose,
-                                                            onStateChange
+                                                            onStateChange,
                                                           }) => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [showResult, setShowResult] = useState(false);
-  const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>(
-    Array(QUESTIONS.length).fill(false)
+  const [ currentQuestionIndex, setCurrentQuestionIndex ] = useState(0);
+  const [ selectedOption, setSelectedOption ] = useState<string | null>(null);
+  const [ showResult, setShowResult ] = useState(false);
+  const [ answeredQuestions, setAnsweredQuestions ] = useState<boolean[]>(
+    Array(QUESTIONS.length).fill(false),
   );
 
   const getQuestionStates = (): QuestionState[] => {
@@ -86,7 +88,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
 
   useEffect(() => {
     onStateChange?.(getQuestionStates());
-  }, [currentQuestionIndex, answeredQuestions]);
+  }, [ currentQuestionIndex, answeredQuestions ]);
 
   const currentQuestion = QUESTIONS[currentQuestionIndex];
   const isCorrectAnswer = selectedOption === currentQuestion.correctAnswer;
@@ -98,7 +100,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
 
   const handleNext = () => {
     if (isCorrectAnswer) {
-      const newAnsweredQuestions = [...answeredQuestions];
+      const newAnsweredQuestions = [ ...answeredQuestions ];
       newAnsweredQuestions[currentQuestionIndex] = true;
       setAnsweredQuestions(newAnsweredQuestions);
 
@@ -132,7 +134,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
         {/* Награды */}
         <div className={s.rewards}>
           <span className={s.reward}>
-            10 - 1000
+            {formatAbbreviation(10)} - {formatAbbreviation(1000)}
             <img src={coinIcon} alt="coin" width={14} height={14} />
           </span>
           <span className={s.reward}>
