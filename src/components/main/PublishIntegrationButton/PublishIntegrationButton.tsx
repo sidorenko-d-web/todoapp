@@ -21,7 +21,6 @@ export const PublishIntegrationButton: React.FC = ( ) => {
    const { data, refetch } = useGetAllIntegrationsQuery();
   
    const handlePublish = async () => {
-    console.log('handle publish');
     setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
     try {
         refetch();

@@ -127,7 +127,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const statsGlowing = useSelector((state: RootState) => state.guide.getShopStatsGlowing);
 
-  console.log('ITE BOUGHTl: ', useSelector((state: RootState) => state.guide.itemBought))
   return (
     <>
       <div className={styles.wrapper}>

@@ -59,8 +59,6 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
 
   const handleAccelerateClick = () => {
     if (!isExpired) {
-      console.log('expired? ' + isExpired);
-      console.log('published btn clc ' + sessionStorage.getItem(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED));
       void accelerateIntegration(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) ? 1 : timeLeft-1);
       createParticles();
     }
@@ -88,7 +86,6 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   };
 
   if (isExpired) {
-    console.log('EXPIRED');
     if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
       dispatch(setIntegrationReadyForPublishing(true));

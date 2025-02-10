@@ -72,7 +72,6 @@ const guideSlice = createSlice({
       state.elevateIntegrationStats = action.payload;
     },
     setItemBought: (state, action: PayloadAction<boolean>) => {
-      console.log('set item bought');
       state.itemBought = action.payload;
     },
   },
