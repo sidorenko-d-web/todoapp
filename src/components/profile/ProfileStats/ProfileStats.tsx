@@ -1,5 +1,6 @@
-import React from "react";
-import styles from "./ProfileStats.module.scss";
+import React from 'react';
+import styles from './ProfileStats.module.scss';
+import { formatAbbreviation } from '../../../helpers';
 
 interface ProfileStatsProps {
   earned: string;
@@ -15,11 +16,11 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ earned, views, favor
     <div className={styles.profileStats}>
       <div className={styles.stat}>
         <span className={styles.label}>Всего заработано</span>
-        <span className={styles.value}>{earned}</span>
+        <span className={styles.value}>{formatAbbreviation(earned)}</span>
       </div>
       <div className={styles.stat}>
         <span className={styles.label}>Всего просмотров</span>
-        <span className={styles.value}>{views}</span>
+        <span className={styles.value}>{formatAbbreviation(views)}</span>
       </div>
       <div className={styles.stat}>
         <span className={styles.label}>Любимая компания</span>
@@ -27,15 +28,15 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ earned, views, favor
       </div>
       <div className={styles.stat}>
         <span className={styles.label}>Отвечено комментариев</span>
-        <span className={styles.value}>{comments}</span>
+        <span className={styles.value}>{formatAbbreviation(comments || 0)}</span>
       </div>
       <div className={styles.stat}>
         <span className={styles.label}>Собрано наград</span>
-        <span className={styles.value}>{awards}</span>
+        <span className={styles.value}>{formatAbbreviation(awards)}</span>
       </div>
       <div className={styles.stat}>
         <span className={styles.label}>Выпито чашек кофе</span>
-        <span className={styles.value}>{coffee}</span>
+        <span className={styles.value}>{formatAbbreviation(coffee)}</span>
       </div>
     </div>
   );

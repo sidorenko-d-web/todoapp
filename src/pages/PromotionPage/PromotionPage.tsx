@@ -1,11 +1,11 @@
 import React from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
 import clanRed from '../../assets/icons/clanRed.svg';
-import coin from '../../assets/icons/coin.png';
 import { DevelopmentPlan, IncreaseIncome, TopInfluencers } from '../../components';
 
 import s from './PromotionPage.module.scss';
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUsersCountQuery } from '../../redux';
+import { formatAbbreviation } from '../../helpers';
 
 export const PromotionPage: React.FC = () => {
   
@@ -34,10 +34,8 @@ export const PromotionPage: React.FC = () => {
             <h1 className={s.pageTitle}>Продвижение</h1>
             <div className={s.badges}>
               <span className={s.badge}>{`#${position}`} <img src={clanRed} height={14} width={14} alt={'income'} /></span>
-              <span className={s.badge}>+440 <img src={subscribersIcon} height={14} width={14}
+              <span className={s.badge}>+{formatAbbreviation(440)} <img src={subscribersIcon} height={14} width={14}
                 alt={'subscribers'} /></span>
-              <span className={s.badge}>+1 <img src={coin} height={14} width={14}
-                alt={'coin'} />/сек.</span>
             </div>
             <IncreaseIncome />
             <TopInfluencers />

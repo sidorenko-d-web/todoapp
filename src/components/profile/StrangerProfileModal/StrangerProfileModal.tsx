@@ -46,7 +46,7 @@ export const StrangerProfileModal: FC<StrangerProfileModalProps> = ({
   return (
     <BottomModal modalId={modalId} title={`Инфо о ${profile.username}`} onClose={onClose}>
       <div className={s.content}>
-        <ProfileStatsMini onlyBadges position={position} subscribers={subscribers} daysInARow={daysInARow} />
+        <ProfileStatsMini onlyBadges position={position} subscribers={subscribers} daysInARow={daysInARow} totalViews={profile.total_views} />
         <ProfileInfo
           nickname={profile.username}
           blogName={profile.blog_name}

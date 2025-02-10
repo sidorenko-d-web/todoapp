@@ -1,11 +1,4 @@
-import {
-  type Dispatch,
-  type FC,
-  PropsWithChildren,
-  type SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
+import { type Dispatch, type FC, PropsWithChildren, type SetStateAction, useEffect, useState } from 'react';
 import styles from './ShopLayout.module.scss';
 import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
 import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
@@ -17,7 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import CoinIcon from '../../assets/icons/coin.png';
 import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
 import ViewsCoin from '../../assets/icons/views.png';
-import { itemsInTab } from '../../helpers';
+import { formatAbbreviation, itemsInTab } from '../../helpers';
+
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
   { title: 'Фото', value: 'image' },
@@ -114,17 +108,17 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
           <div className={styles.scores}>
             <div className={styles.scoresItem}>
-              <p>+{0}</p>
+              <p>+{formatAbbreviation(0)}</p>
               <img src={ViewsCoin} />
               <p>/инт.</p>
             </div>
             <div className={styles.scoresItem}>
-              <p>+{0}</p>
+              <p>+{formatAbbreviation(0)}</p>
               <img src={SubscriberCoin} />
               <p>/инт.</p>
             </div>
             <div className={styles.scoresItem}>
-              <p>+{0}</p>
+              <p>+{formatAbbreviation(0)}</p>
               <img src={CoinIcon} />
               <p>/сек.</p>
             </div>
@@ -145,20 +139,21 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
           currentTab={shopCategory.title}
           onChange={setShopCategory}
         />
-        {shopCategory.title !== 'Вы' && (
-          <TabsNavigation
-            colorClass={
-              itemsQuality.title === 'Эконом'
-                ? 'tabItemSelectedBlue'
-                : itemsQuality.title === 'Премиум'
-                ? 'tabItemSelectedPurple'
-                : 'tabItemSelectedRed'
-            }
-            tabs={mode === 'shop' ? tabs : inventoryTabs}
-            currentTab={itemsQuality.title}
-            onChange={setItemsQuality}
-          />
-        )}
+        {/* https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284346&m=dev#1121980464 */}
+        {/*{shopCategory.title !== 'Вы' && (*/}
+        {/*  <TabsNavigation*/}
+        {/*    colorClass={*/}
+        {/*      itemsQuality.title === 'Эконом'*/}
+        {/*        ? 'tabItemSelectedBlue'*/}
+        {/*        : itemsQuality.title === 'Премиум'*/}
+        {/*        ? 'tabItemSelectedPurple'*/}
+        {/*        : 'tabItemSelectedRed'*/}
+        {/*    }*/}
+        {/*    tabs={mode === 'shop' ? tabs : inventoryTabs}*/}
+        {/*    currentTab={itemsQuality.title}*/}
+        {/*    onChange={setItemsQuality}*/}
+        {/*  />*/}
+        {/*)}*/}
       </div>
 
       {children}

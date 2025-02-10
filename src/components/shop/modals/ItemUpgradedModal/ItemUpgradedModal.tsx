@@ -1,5 +1,5 @@
 import styles from './ItemUpgradedModal.module.scss';
-import { MODALS, svgHeadersString } from '../../../../constants';
+import { MODALS, localStorageConsts, svgHeadersString } from '../../../../constants';
 import { useModal } from '../../../../hooks';
 import CentralModal from '../../../shared/CentralModal/CentralModal';
 import { IShopItem, useGetShopItemsQuery } from '../../../../redux';
@@ -14,16 +14,11 @@ import Lottie from 'lottie-react';
 import { blueLight, purpleLight, redLight } from '../../../../assets/animations';
 
 export const ItemUpgradedModal = () => {
-  const { closeModal, getModalState } = useModal();
+  const { closeModal, getModalState, openModal } = useModal();
 
   const state = getModalState<{ item: IShopItem; mode: 'skin' | 'item'; reward: string }>(
     MODALS.UPGRADED_ITEM,
   );
-  // const navigate = useNavigate();
-
-  const handleClose = () => {
-    closeModal(MODALS.UPGRADED_ITEM);
-  };
 
   const isPrem = state.args?.item.item_rarity === 'yellow';
   const isPro = state.args?.item.item_rarity === 'green';
@@ -32,15 +27,21 @@ export const ItemUpgradedModal = () => {
     name: state.args?.item.name,
     level: 1,
     item_premium_level:
-      state.args?.item.item_premium_level === 'base' ? 'advanced' : 'pro' ,
+      state.args?.item.item_premium_level === 'base' ? 'advanced' : 'pro',
   });
 
   if (!newItem) return <></>;
 
+  const handleOpenChest = () => {
+    localStorage.removeItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
+    closeModal(MODALS.UPGRADED_ITEM);
+    openModal(MODALS.TASK_CHEST);
+  };
+
   return (
     <CentralModal
       title="Новый предмет!"
-      onClose={() => closeModal(MODALS.UPGRADED_ITEM)}
+      onClose={handleOpenChest}
       modalId={MODALS.UPGRADED_ITEM}
     >
       <div className={styles.images}>
@@ -106,7 +107,7 @@ export const ItemUpgradedModal = () => {
           !
         </p>
       </div>
-      <Button onClick={handleClose} variant="blue">
+      <Button onClick={handleOpenChest} variant="blue">
         Открыть сундук!
       </Button>
     </CentralModal>

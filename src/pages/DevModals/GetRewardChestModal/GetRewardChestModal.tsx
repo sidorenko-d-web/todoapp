@@ -10,12 +10,20 @@ import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import chestAnimation from '../../../assets/animations/kamen_fixed.json';
 import reward from '../../../assets/animations/reward.json';
+import { localStorageConsts } from '../../../constants';
 
 export default function GetRewardChestModal() {
   const { closeModal } = useModal();
-
+  const handleClose = () => {
+    closeModal(MODALS.TASK_CHEST);
+    localStorage.removeItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST)
+  };
   return (
-    <CentralModal onClose={() => closeModal(MODALS.TASK_CHEST)} modalId={MODALS.TASK_CHEST} title={'Сундук открыт!'}>
+    <CentralModal
+      onClose={handleClose}
+      modalId={MODALS.TASK_CHEST}
+      title={'Сундук открыт!'}
+    >
       <div className={styles.background}>
         <Lottie animationData={reward} loop={false} className={styles.reward} />
       </div>
@@ -40,10 +48,17 @@ export default function GetRewardChestModal() {
           <div className={styles.itemIcon}>Adv.</div>
         </div>
         <div className={styles.desc}>
-          <p>Поздравляем! Вы получили дополнительные интеграции, заморозку и учлучшение предмета!</p>
+          <p>
+            Поздравляем! Вы получили дополнительные интеграции, заморозку и учлучшение
+            предмета!
+          </p>
         </div>
       </div>
-      <Button variant={'blue'}>Забрать</Button>
+      <div className={styles.button}>
+        <Button variant={'blue'} onClick={handleClose}>
+          Забрать
+        </Button>
+      </div>
     </CentralModal>
   );
 }

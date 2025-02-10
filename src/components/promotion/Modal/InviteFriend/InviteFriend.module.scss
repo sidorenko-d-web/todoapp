@@ -8,18 +8,20 @@
   color: #ffffff;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  gap: 5px;
   margin: 5px 16px 20px 0
 }
 
 .listBadge {
-  position: relative;
+  padding: 4px 4px 4px 7px;
+  display: flex;
+  border-radius: 10px;
+  background-color: var.$color-badge-bg;
 }
 
 .badge {
   display: flex;
   gap: 5px;
-  border-radius: 10px;
   font-size: 14px;
   line-height: 100%;
 }
@@ -31,12 +33,13 @@
   color: var.$color-white;
 }
 
+
 .level {
+  vertical-align: top;
   font-size: 10px;
-  position: absolute;
-  top: -3px;
-  right: -20px;
-  color: var.$color-text-semi-transparent
+  color: var.$color-text-semi-transparent;
+  font-weight: 500;
+  line-height: 10px;
 }
 
 .description {
