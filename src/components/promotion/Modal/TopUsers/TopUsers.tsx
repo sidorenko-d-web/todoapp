@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import BottomModal from '../../../shared/BottomModal/BottomModal.tsx';
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../../../redux/index.ts';
 import { Link } from 'react-router-dom';
+import { formatAbbreviation } from '../../../../helpers';
 
 interface InviteFriendProps {
   modalId: string;
@@ -50,7 +51,8 @@ export const TopUsers: FC<InviteFriendProps> = ({
       </ul>
       <ul className={classNames(s.ulBlock, s.blogUsers)}>
         {topProfiles.map((profile, index) => (
-          <Link to={`/profile/${profile.id}`} key={profile.id} className={classNames(s.listUser, me && me.id === profile.id && s.active)}>
+          <Link to={`/profile/${profile.id}`} key={profile.id}
+                className={classNames(s.listUser, me && me.id === profile.id && s.active)}>
             <div
               className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
               <div className={s.card}>
@@ -61,10 +63,10 @@ export const TopUsers: FC<InviteFriendProps> = ({
               <div className={s.userInfo}>
                 <h3 className={s.text}>{profile.username}</h3>
                 <ul className={classNames(s.ulBlock, s.infoRang)}>
-                  <li className={s.number}>6</li>
+                  <li className={s.number}>{formatAbbreviation(6)}</li>
                   <li className={s.fireIcon}>
                     <img src={fire} alt="fire" width={12} height={12} />
-                    <span>{Math.round((+profile.points)).toLocaleString('RU-ru')}</span>
+                    <span>{formatAbbreviation(profile.points)}</span>
                   </li>
                   {/*{profile.vip &&*/}
                   {/*  <li className={s.vip}>*/}
