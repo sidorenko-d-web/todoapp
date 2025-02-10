@@ -1,11 +1,11 @@
-import { FC, useState } from "react";
-import CentralModal from "../../shared/CentralModal/CentralModal.tsx";
+import { FC, useState } from 'react';
+import CentralModal from '../../shared/CentralModal/CentralModal.tsx';
 
-import styles from "./ChangingNicknameModal.module.scss";
+import styles from './ChangingNicknameModal.module.scss';
 
 import cross from '../../../assets/icons/input-cross.svg';
 import tick from '../../../assets/icons/input-tick.svg';
-import { useGetCurrentUserProfileInfoQuery, useUpdateCurrentUserProfileMutation } from "../../../redux/index.ts";
+import { useGetCurrentUserProfileInfoQuery, useUpdateCurrentUserProfileMutation } from '../../../redux/index.ts';
 
 interface ChangeNicknameModalProps {
   modalId: string;
@@ -62,31 +62,36 @@ const ChangeNicknameModal: FC<ChangeNicknameModalProps> = ({ modalId, onClose, c
     <CentralModal modalId={modalId} title={"Редактировать профиль"} onClose={handleClose}>
       <div className={styles.inputGroup}>
         <label>Никнейм</label>
-        <input
-          type="text"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-          className={`${styles.input} ${!isValid(trimmedNickname) ? styles.invalid : ""}`}
-          placeholder="Введите никнейм"
-        />
-        <img className={styles.statusIcon} src={!isValid(trimmedNickname) ? cross : tick} />
+        <div className={`${!isValid(trimmedNickname) ? styles.shakeWrapper : styles.inputWrapper}`}>
+          <input
+            type="text"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+            className={`${styles.input} ${!isValid(trimmedNickname) ? styles.invalid : ''}`}
+            placeholder="Введите никнейм"
+          />
+          <img className={styles.statusIcon} src={!isValid(trimmedNickname) ? cross : tick} />
+        </div>
       </div>
 
       <p className={styles.maxLength}>{!isValid(trimmedNickname) ? 'Максимальная длина поля - 26 символов' : ''}</p>
 
       <div className={styles.inputGroup}>
         <label>Название блога</label>
-        <input
-          type="text"
-          value={blogName}
-          onChange={(e) => setBlogName(e.target.value)}
-          className={`${styles.input} ${!isValid(trimmedBlogName) ? styles.invalid : ""}`}
-          placeholder="Введите название блога"
-        />
-        <img className={styles.statusIcon} src={!isValid(trimmedBlogName) ? cross : tick} />
+        <div className={`${!isValid(trimmedBlogName) ? styles.shakeWrapper : styles.inputWrapper}`}>
+          <input
+            type="text"
+            value={blogName}
+            onChange={(e) => setBlogName(e.target.value)}
+            className={`${styles.input} ${!isValid(trimmedBlogName) ? styles.invalid : ''}`}
+            placeholder="Введите название блога"
+          />
+          <img className={styles.statusIcon} src={!isValid(trimmedBlogName) ? cross : tick} />
+        </div>
       </div>
 
       <p className={styles.maxLength}>{!isValid(trimmedBlogName) ? 'Максимальная длина поля - 26 символов' : ''}</p>
+
 
       <p className={styles.maxLength}>{suchUserExists ? 'Пользователь с таким никнеймом уже существует' : ''}</p>
 

@@ -4,6 +4,7 @@ import styles from './ProfileStatsMini.module.scss';
 
 import clanIcon from '../../../assets/icons/clan-red.svg';
 import subscriberIcon from '../../../assets/icons/subscribers.png';
+import viewsIcon from '../../../assets/icons/views.png';
 import fireIcon from '../../../assets/icons/fire-red.svg';
 import { Link } from 'react-router-dom';
 
@@ -12,6 +13,7 @@ interface ProfileStatsMiniProps {
   daysInARow: number;
   position: number;
   onlyBadges?: boolean;
+  totalViews: number
 }
 
 export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
@@ -19,6 +21,7 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
                                                                     daysInARow,
                                                                     position,
                                                                     onlyBadges,
+                                                                    totalViews,
                                                                   }) => {
   console.log(styles.wrp + ' ' + (onlyBadges ? styles.justifyCenter : styles.justifyBetween));
   return (
@@ -34,6 +37,11 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
         <div className={styles.statWrp}>
           <span className={styles.stat}>{subscribers}</span>
           <img src={subscriberIcon} width={14} height={14} />
+        </div>
+
+        <div className={styles.statWrp}>
+          <span className={styles.stat}>{totalViews}</span>
+          <img src={viewsIcon} width={14} height={14} />
         </div>
 
         <div className={styles.statWrp}>

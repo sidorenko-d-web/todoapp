@@ -6,9 +6,11 @@
   align-self: stretch;
   padding: 10px;
   border-radius: 12px;
+
   .header {
     display: flex;
     gap: 10px;
+
     .image {
       border: 2px solid var.$color-primary;
       border-radius: 8px;
@@ -30,6 +32,7 @@
         min-width: 66px;
         height: 66px;
       }
+
       p {
         text-transform: capitalize;
         background: var.$color-primary;
@@ -45,6 +48,7 @@
           line-height: 13.2px;
         }
       }
+
       .disabledImageIcon {
         position: absolute;
         width: 40px;
@@ -54,6 +58,7 @@
           color: var.$light-gray-bg;
         }
       }
+
       .disabledImage {
         opacity: 0.3;
       }
@@ -62,13 +67,16 @@
     .purpleImage {
       @extend .image;
       border-color: var.$color-purple;
+
       p {
         background-color: var.$color-purple;
       }
     }
+
     .redImage {
       @extend .image;
       border-color: var.$color-red;
+
       p {
         background-color: var.$color-red;
       }
@@ -78,10 +86,12 @@
       display: flex;
       flex-direction: column;
       flex: 1;
+
       .headline {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+
         h3 {
           color: var.$color-white;
           font-weight: 500;
@@ -95,6 +105,7 @@
           align-self: flex-start;
           padding: 2px 5px;
           border-radius: 4px;
+
           p {
             color: var.$color-dark-gray-stroke;
             font-size: 12px;
@@ -107,11 +118,13 @@
           @extend .variant;
           background-color: var.$color-purple;
         }
+
         .variantRed {
           @extend .variant;
           background-color: var.$color-red;
         }
       }
+
       .level {
         font-weight: 500;
         font-size: 12px;
@@ -144,6 +157,7 @@
           display: flex;
           align-items: center;
           gap: 2px;
+
           img {
             width: 14px;
             height: 14px;
@@ -152,6 +166,7 @@
               height: 18px;
             }
           }
+
           p {
             color: var.$color-white;
             font-size: 14px;
@@ -162,6 +177,7 @@
           }
         }
       }
+
       .disabledStats {
         opacity: 0.3;
       }
@@ -170,6 +186,7 @@
 
   .progress {
     margin-top: 20px;
+
     .text {
       display: flex;
       justify-content: space-between;
@@ -185,10 +202,12 @@
           line-height: 16px;
         }
       }
+
       .goal {
         display: flex;
         align-items: center;
         gap: 5px;
+
         img {
           width: 12px;
           aspect-ratio: 1;
@@ -206,6 +225,7 @@
       border-radius: 6px;
       overflow: hidden;
       background: var.$color-gray;
+
       .done {
         height: 16px;
         background: var.$color-primary;
@@ -215,6 +235,7 @@
         @extend .done;
         background-color: var.$color-purple;
       }
+
       .doneRed {
         @extend .done;
         background-color: var.$color-red;
@@ -225,6 +246,7 @@
       display: flex;
       margin-top: 5px;
       gap: 5px;
+
       .item {
         border: 1px solid var.$color-primary;
         border-radius: 4px;
@@ -243,6 +265,7 @@
             border-radius: 7px;
           }
         }
+
         .itemImage {
           width: 24px;
           height: 24px;
@@ -273,6 +296,7 @@
         @extend .item;
         border-color: var.$color-purple;
       }
+
       .itemRed {
         @extend .item;
         border-color: var.$color-red;
@@ -282,9 +306,10 @@
 
   .actions {
     margin-top: 20px;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
     gap: 10px;
-    flex-wrap: wrap;
+
     button {
       border-radius: 8px;
       padding: 10px 12px;
@@ -298,24 +323,22 @@
       gap: 5px;
       box-sizing: border-box;
 
+      & > img {
+        width: 14px;
+        aspect-ratio: 1;
+
+        @media (min-width: var.$breakpoint-md) {
+          width: 18px;
+        }
+      }
+
       &:first-child {
         background: var.$color-primary;
         border: 1px solid var.$color-border-primary;
         flex: 1;
-
-        img {
-          width: 14px;
-          aspect-ratio: 1;
-
-          @media (min-width: var.$breakpoint-md) {
-            width: 18px;
-          }
-        }
       }
 
       &:last-child {
-        background: var.$color-gray;
-        opacity: 0.3;
         flex: 1;
         border: none;
       }
@@ -330,6 +353,7 @@
       background: var.$color-purple !important;
       border: 1px solid var.$color-border-secondary !important;
     }
+
     .upgradeItemRed {
       background: var.$color-red !important;
       border: 1px solid var.$color-border-red !important;
@@ -345,10 +369,12 @@
     gap: 2px;
     align-items: center;
     margin-top: 20px;
+
     img {
       width: 14px;
       height: 14px;
     }
+
     p {
       line-height: 14px;
       color: var.$grayed-white;
@@ -387,6 +413,7 @@
     .itemNamePurple {
       color: var.$color-purple;
     }
+
     .itemNameBlue {
       color: var.$color-primary;
     }

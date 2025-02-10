@@ -12,9 +12,9 @@ import { ReferralCard } from '../ReferralCard/ReferralCard';
 import { useGetCurrentUsersReferralsQuery } from '../../../redux';
 
 export const IncreaseIncome = () => {
-  const [showAll, setShowAll] = useState(false);
+  const [ showAll, setShowAll ] = useState(false);
   const { openModal, closeModal } = useModal();
-  
+
   const { data, isLoading, error } = useGetCurrentUsersReferralsQuery();
 
 
@@ -26,9 +26,9 @@ export const IncreaseIncome = () => {
     <>
       <h2 className={s.headerIncrease}>
         <span className={s.textName}>Увеличьте доход</span>
-        <span className={s.badge}>
+        {data && data.referrals.length > 0 && <span className={s.badge}>
           +440 <img src={peeps} height={14} width={14} alt="Количество peeps" />
-        </span>
+        </span>}
       </h2>
       <section className={s.wrapperIncrease}>
         <div className={s.content}>
@@ -55,12 +55,13 @@ export const IncreaseIncome = () => {
         {isLoading && <p>Загрузка данных о рефералах...</p>}
 
         {error && <p>Не удалось загрузить данные о рефералах</p>}
-        
+
         {data && <>
           {data.referrals.length > 0 ?
             <div className={s.referralsList}>
               {visibleReferrals.map((referral, index) => (
-                <ReferralCard key={index} position={index + 1} name={referral.name} total_invited={referral.total_invited} />
+                <ReferralCard key={index} position={index + 1} name={referral.name}
+                              total_invited={referral.total_invited} />
               ))}
               {hiddenReferralsCount > 0 && !showAll && (
                 <p
@@ -70,13 +71,14 @@ export const IncreaseIncome = () => {
                   Ещё {hiddenReferralsCount} рефералов...
                 </p>
               )}
-            </div> : <p>У вас пока нет рефералов</p>}
+            </div> : <p className={s.noReferrals}>Пригласите друга в MiniApp и получайте постояные бонусы к подписчикам!</p>}
         </>}
         <div className={s.buttonsContainer}>
           <button className={classNames(s.buttonContainer, s.text)} onClick={() => openModal(MODALS.INVITE_FRIEND)}>
             Пригласить
           </button>
-          <button className={classNames(s.buttonContainerGray, s.text)} onClick={() => openModal(MODALS.USERS_REFERRALS)}>
+          <button className={classNames(s.buttonContainerGray, s.text)}
+                  onClick={() => openModal(MODALS.USERS_REFERRALS)}>
             Смотреть всех
           </button>
         </div>
