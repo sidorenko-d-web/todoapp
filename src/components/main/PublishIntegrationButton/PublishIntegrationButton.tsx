@@ -14,7 +14,6 @@ import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 
 export const PublishIntegrationButton: React.FC = () => {
   const dispatch = useDispatch();
-
   const { openModal } = useModal();
 
   const [publishIntegration] = usePublishIntegrationMutation();
@@ -22,32 +21,43 @@ export const PublishIntegrationButton: React.FC = () => {
 
   const handlePublish = async () => {
     setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-    refetch().then(() => {
-      try {
-      console.log('REFERCHED')
 
-        const createdIntegration = data!.integrations[0];
-        console.log('fetched integrations: ' + JSON.stringify(data?.count));
+    refetch().then(() => {
+      console.log('REFETCHED');
+
+      if (data?.integrations && data.integrations.length > 0) {
+        const createdIntegration = data.integrations[0];
+        console.log('Fetched integrations:', JSON.stringify(data.integrations));
+
         dispatch(setIntegrationReadyForPublishing(false));
         dispatch(setCreateIntegrationButtonGlowing(false));
+
         if (createdIntegration) {
-          publishIntegration(createdIntegration.id);
-          dispatch(setCreatedIntegrationId(createdIntegration.id));
+          publishIntegration(createdIntegration.id)
+            .unwrap()
+            .then(() => {
+              dispatch(setCreatedIntegrationId(createdIntegration.id));
+              openModal(MODALS.INTEGRATION_REWARD);
+            })
+            .catch((error) => {
+              console.error('Failed to publish integration:', error);
+            });
         }
-        openModal(MODALS.INTEGRATION_REWARD);
-      } catch (error) {
-        console.error('Failed to publish integration:', error);
+      } else {
+        console.error('No integrations found after refetch.');
       }
-    })
+    }).catch((error) => {
+      console.error('Failed to refetch integrations:', error);
+    });
   };
+
   return (
     <section className={s.integrationsControls} onClick={handlePublish}>
-      <button className={`${s.button} `} disabled={false}>
+      <button className={`${s.button}`} disabled={false}>
         Опубликовать
         <span className={s.buttonBadge}>
           Интеграция готова
-          <img src={integrationIcon} height={12} width={12}
-            alt="integration" />
+          <img src={integrationIcon} height={12} width={12} alt="integration" />
         </span>
       </button>
     </section>
