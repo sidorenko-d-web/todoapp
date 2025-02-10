@@ -17,6 +17,8 @@ interface GuideState {
   itemBought: boolean;
 
   elevateIntegrationStats: boolean;
+
+  lastIntegrationId: string;
 }
 
 const initialState: GuideState = {
@@ -34,7 +36,8 @@ const initialState: GuideState = {
     && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED),
   isPublishedModalClosed: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED),
   createdIntegrationId: "",
-  elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)
+  elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
+  lastIntegrationId: ""
 };
 
 const guideSlice = createSlice({
@@ -74,6 +77,9 @@ const guideSlice = createSlice({
     setItemBought: (state, action: PayloadAction<boolean>) => {
       state.itemBought = action.payload;
     },
+    setLastIntegrationId: (state, action: PayloadAction<string>) => {
+      state.lastIntegrationId = action.payload;
+    },
   },
 });
 
@@ -82,5 +88,6 @@ export const { setGetCoinsGuideShown,
     setBuyItemButtonGlowing,
     setCreateIntegrationButtonGlowing, 
     setIntegrationCreated, setAccelerateIntegrationGuideClosed,
-    setIsPublishedModalClosed, setIntegrationReadyForPublishing, setCreatedIntegrationId, setElevateIntegrationStats, setItemBought } = guideSlice.actions;
+    setIsPublishedModalClosed, setIntegrationReadyForPublishing, 
+    setCreatedIntegrationId, setElevateIntegrationStats, setItemBought, setLastIntegrationId } = guideSlice.actions;
 export default guideSlice.reducer;

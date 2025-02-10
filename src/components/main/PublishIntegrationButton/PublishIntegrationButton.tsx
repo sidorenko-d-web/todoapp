@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants/modals.ts';
-import { useGetAllIntegrationsQuery, usePublishIntegrationMutation } from '../../../redux';
-import { useDispatch } from 'react-redux';
+import { RootState, useGetAllIntegrationsQuery, usePublishIntegrationMutation } from '../../../redux';
+import { useDispatch, useSelector } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
 import { setCreatedIntegrationId, setCreateIntegrationButtonGlowing, setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice.ts';
 import { setGuideShown } from '../../../utils/index.ts';
@@ -15,46 +15,43 @@ export const PublishIntegrationButton: React.FC = () => {
 
   const [publishIntegration] = usePublishIntegrationMutation();
   const { data, refetch } = useGetAllIntegrationsQuery();
-  const [isRefetching, setIsRefetching] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+
+  const lastIntId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
   const handlePublish = async () => {
+
+    if (isPublishing) return;
+    setIsPublishing(true);
+
     setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-    setIsRefetching(true); 
-    refetch(); 
-  };
 
-  useEffect(() => {
-    if (isRefetching && data?.integrations) {
+    try {
+      await refetch().unwrap();
 
-      if (data.integrations.length > 0) {
-        console.log('data int count: ', data.count, ' ,length: ' + data.integrations.length);
+      if (data?.integrations && data.integrations.length > 0) {
         const createdIntegration = data.integrations[0];
 
         dispatch(setIntegrationReadyForPublishing(false));
         dispatch(setCreateIntegrationButtonGlowing(false));
 
-        if (createdIntegration) {
-          publishIntegration(createdIntegration.id)
-            .unwrap()
-            .then(() => {
-              dispatch(setCreatedIntegrationId(createdIntegration.id));
-              openModal(MODALS.INTEGRATION_REWARD);
-            })
-            .catch((error) => {
-              console.error('Failed to publish integration:', error);
-            });
-        }
+        await publishIntegration((lastIntId !== "" ? lastIntId : createdIntegration.id)).unwrap();
+
+        dispatch(setCreatedIntegrationId(createdIntegration.id));
+        openModal(MODALS.INTEGRATION_REWARD);
       } else {
         console.error('No integrations found after refetch.');
       }
-
-      setIsRefetching(false);
+    } catch (error) {
+      console.error('Failed to publish integration:', error);
+    } finally {
+      setIsPublishing(false);
     }
-  }, [data, isRefetching, dispatch, publishIntegration, openModal]);
+  };
 
   return (
     <section className={s.integrationsControls} onClick={handlePublish}>
-      <button className={`${s.button}`} disabled={false}>
+      <button className={`${s.button}`} disabled={isPublishing}>
         Опубликовать
         <span className={s.buttonBadge}>
           Интеграция готова

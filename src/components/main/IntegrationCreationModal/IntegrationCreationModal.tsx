@@ -17,7 +17,7 @@ import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { integrationCreatingModalButtonGlowing, integrationCreatingModalLightningsGlowing, integrationCreatingModalTabsGlowing, setGuideShown } from '../../../utils/guide-functions.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
-import { setIntegrationCreated } from '../../../redux/slices/guideSlice.ts';
+import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
 
 interface CreatingIntegrationModalProps {
   modalId: string;
@@ -63,8 +63,10 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       campaign_id: selectedCompany,
     })
       .unwrap()
-      .then(() => {
+      .then((data) => {
         dispatch(setIntegrationCreated(true));
+        dispatch(setLastIntegrationId(data.id));
+        console.log('INTEG ID', data.id)
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         onClose();
         dispatch(integrationsApi.util.invalidateTags(['Integrations']));
