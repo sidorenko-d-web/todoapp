@@ -8,9 +8,11 @@ import styles from './ShopPage.module.scss';
 import { itemsInTab } from '../../helpers';
 import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
+import { useTranslation } from 'react-i18next';
 type TypeTab<T> = { title: string; value: T };
 
 const StorePage: FC = () => {
+  const { t } = useTranslation('shop');
   const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
   const [itemsRarity, setItemsQuality] = useState<TypeTab<TypeItemRarity>>();
 
@@ -47,15 +49,8 @@ const StorePage: FC = () => {
         <p style={{ color: '#fff' }}>Loading...</p>
       ) : !shopCategory || !itemsRarity ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
-      ) : shopCategory?.title !== 'Вы' ? (
-        items?.length === 0 ? (
-          <p className={styles.emptyText}>
-            Пока здесь нет новых предметов. Откройте новые предметы с новым уровнем
-            Дерева!
-          </p>
-        ) : (
-          <ItemsTab shopCategory={shopCategory} shopItems={items} />
-        )
+      ) : shopCategory?.title !== t('s6') ? (
+        <ItemsTab shopCategory={shopCategory} shopItems={items} />
       ) : (
         <SkinTab mode="shop" />
       )}
