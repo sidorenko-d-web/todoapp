@@ -6,11 +6,12 @@ import { IShopItem, TypeItemCategory, TypeItemRarity } from '../../redux';
 import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
 import styles from './ShopPage.module.scss';
 import { itemsInTab } from '../../helpers';
+
 type TypeTab<T> = { title: string; value: T };
 
 const StorePage: FC = () => {
-  const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
-  const [itemsRarity, setItemsQuality] = useState<TypeTab<TypeItemRarity>>();
+  const [ shopCategory, setShopCategory ] = useState<TypeTab<TypeItemCategory>>();
+  const [ itemsRarity, setItemsQuality ] = useState<TypeTab<TypeItemRarity>>();
 
   const { data: shop, isFetching: isShopFetching } = useGetShopItemsQuery({
     item_category: shopCategory?.value as TypeItemCategory,
@@ -23,7 +24,7 @@ const StorePage: FC = () => {
     item_category: shopCategory?.value as TypeItemCategory,
   });
 
-  const [items, setItems] = useState<IShopItem[]>();
+  const [ items, setItems ] = useState<IShopItem[]>();
 
   useEffect(() => {
     const itemsInTab1 = itemsInTab(shop?.items, inventory?.items);
@@ -31,7 +32,7 @@ const StorePage: FC = () => {
     setItems(
       itemsInTab(shop?.items, inventory?.items)[itemsRarity?.value as TypeItemRarity],
     );
-  }, [inventory, shop]);
+  }, [ inventory, shop ]);
 
   return (
     <ShopLayout
