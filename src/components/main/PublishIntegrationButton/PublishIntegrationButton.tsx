@@ -20,28 +20,31 @@ export const PublishIntegrationButton: React.FC = () => {
   const lastIntId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
   const handlePublish = async () => {
-
     if (isPublishing) return;
     setIsPublishing(true);
 
     setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
     try {
-      await refetch().unwrap();
+      let integrationIdToPublish = lastIntId;
 
-      if (data?.integrations && data.integrations.length > 0) {
-        const createdIntegration = data.integrations[0];
-
-        dispatch(setIntegrationReadyForPublishing(false));
-        dispatch(setCreateIntegrationButtonGlowing(false));
-
-        await publishIntegration((lastIntId !== "" ? lastIntId : createdIntegration.id)).unwrap();
-
-        dispatch(setCreatedIntegrationId(createdIntegration.id));
-        openModal(MODALS.INTEGRATION_REWARD);
-      } else {
-        console.error('No integrations found after refetch.');
+      if (!lastIntId) {
+        await refetch().unwrap();
+        if (data?.integrations && data.integrations.length > 0) {
+          integrationIdToPublish = data.integrations[0].id;
+        } else {
+          console.error('No integrations found after refetch.');
+          return;
+        }
       }
+
+      dispatch(setIntegrationReadyForPublishing(false));
+      dispatch(setCreateIntegrationButtonGlowing(false));
+
+      await publishIntegration(integrationIdToPublish).unwrap();
+
+      dispatch(setCreatedIntegrationId(integrationIdToPublish));
+      openModal(MODALS.INTEGRATION_REWARD);
     } catch (error) {
       console.error('Failed to publish integration:', error);
     } finally {
