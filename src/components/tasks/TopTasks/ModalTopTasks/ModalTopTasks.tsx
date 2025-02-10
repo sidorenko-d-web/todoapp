@@ -10,6 +10,7 @@ import bookIcon from '../../../../assets/icons/book.svg';
 import coinBlueIcon from '../../../../assets/icons/coin-blue-human.svg';
 import { ProgressBarTasks } from '../../ProgressBarTasks';
 import chestIcon from '../../../../assets/icons/chest-purple.svg';
+import { useGetTasksQuery } from '../../../../redux/api/tasks';
 
 interface ModalTopTasksProps {
   modalId: string;
@@ -62,14 +63,18 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
                                                         onClose,
                                                         onStateChange,
                                                       }) => {
+  const { data: tasksData, isLoading, isError } = useGetTasksQuery();
+
+  console.log('Все задания:', tasksData);
+  console.log('Загрузка:', isLoading);
+  console.log('Ошибка:', isError);
+  
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<boolean[]>(
     Array(TASK_STEPS.length).fill(false),
   );
   const [channelLink, setChannelLink] = useState('');
-  console.log(currentStepIndex);
   const currentStepInfo = TASK_STEPS[currentStepIndex];
-  console.log(currentStepInfo);
   const progress = (completedSteps.filter(step => step).length / TASK_STEPS.length) * 100;
 
 

@@ -7,7 +7,6 @@ import { useModal } from '../../../hooks';
 import s from '../styles.module.scss';
 import { ModalTopTasks } from './ModalTopTasks';
 
-
 interface TaskState {
   currentStep: number;
   totalSteps: number;
@@ -17,6 +16,7 @@ interface TaskState {
 
 export const TopTasks: FC = () => {
   const { openModal, closeModal } = useModal();
+  
   const [taskState, setTaskState] = useState<TaskState>({
     currentStep: 0,
     totalSteps: 4,
