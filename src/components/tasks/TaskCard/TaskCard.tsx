@@ -7,6 +7,7 @@ import checkIcon from '../../../assets/icons/checkmark-in-the-circle.svg';
 import giftIcon from '../../../assets/icons/gift.svg';
 
 import s from './TaskCard.module.scss';
+import { formatAbbreviation } from '../../../helpers';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -64,7 +65,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      isLoading,
                                                      disabled,
                                                      onClick,
-                                                     questionStates = ['closed', 'closed', 'closed'],
+                                                     questionStates = [ 'closed', 'closed', 'closed' ],
                                                    }) => {
   // Функция для получения иконки на основе состояния
   const getIconByState = (state: QuestionState) => {
@@ -90,10 +91,13 @@ export const TaskCard: React.FC<TasksCardProps> = ({
 
       {type === 'default' && (
         <section className={s.rewards}>
-          <span className={s.reward}>+{income}<img src={coinIcon} height={14} width={14} alt="income" /></span>
-          <span className={s.reward}>+{subscribers}<img src={subscribersIcon} height={14} width={14}
-                                                        alt="subscribers" /></span>
-          <span className={s.reward}>+{passiveIncome}<img src={coinIcon} height={14} width={14} alt="passive income" />/сек.</span>
+          <span className={s.reward}>+{formatAbbreviation(income || 0)}<img src={coinIcon} height={14} width={14}
+                                                                            alt="income" /></span>
+          <span className={s.reward}>+{formatAbbreviation(subscribers || 0)}<img src={subscribersIcon} height={14}
+                                                                                 width={14}
+                                                                                 alt="subscribers" /></span>
+          <span className={s.reward}>+{formatAbbreviation(passiveIncome || 0)}<img src={coinIcon} height={14} width={14}
+                                                                                   alt="passive income" />/сек.</span>
         </section>
       )}
 
@@ -111,7 +115,9 @@ export const TaskCard: React.FC<TasksCardProps> = ({
             ))}
           </div>
           <div className={s.progressTypeReward}>
-            <span className={s.reward}>10 - 1000 <img src={coinIcon} height={14} width={14} alt="income" /></span>
+            <span className={s.reward}>{formatAbbreviation(10)} - {formatAbbreviation(1000)} <img src={coinIcon}
+                                                                                                  height={14} width={14}
+                                                                                                  alt="income" /></span>
             <span className={s.reward}>??? <img src={giftIcon} height={14} width={14} alt="gift" /></span>
           </div>
         </section>
