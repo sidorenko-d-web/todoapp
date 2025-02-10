@@ -10,6 +10,7 @@ import { InviteFriend, UserReferrals } from '../Modal';
 
 import { ReferralCard } from '../ReferralCard/ReferralCard';
 import { useGetCurrentUsersReferralsQuery } from '../../../redux';
+import { formatAbbreviation } from '../../../helpers';
 
 export const IncreaseIncome = () => {
   const [ showAll, setShowAll ] = useState(false);
@@ -38,13 +39,13 @@ export const IncreaseIncome = () => {
             <ul className={s.subscribers}>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +120 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+                  +{formatAbbreviation(120)} <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
                 </span>
                 <span className={classNames(s.level, s.text)}>1ур.</span>
               </li>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +40 <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+                  +{formatAbbreviation(40)} <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
                 </span>
                 <span className={classNames(s.level, s.text)}>2ур.</span>
               </li>

@@ -7,13 +7,14 @@ import { IShopSkin } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import HeadIcon from '../../../assets/icons/head_icon.svg';
 import FaceIcon from '../../../assets/icons/face_icon.svg';
-import PersonIcon from '../../../assets/icons/person_icon.svg';
 import LegsIcon from '../../../assets/icons/face_icon.svg';
 import FeetIcon from '../../../assets/icons/face_icon.svg';
+import PersonIcon from '../../../assets/icons/person_icon.svg';
 import VIPIcon from '../../../assets/icons/star_check_icon.svg';
 import ListIcon from '../../../assets/icons/list.svg';
 import { useModal } from '../../../hooks';
 import { MODALS, svgHeadersString } from '../../../constants';
+import { formatAbbreviation } from '../../../helpers';
 
 interface Props {
   item: IShopSkin;
@@ -79,7 +80,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
       <div className={styles.actions}>
         {item.limited ? (
           <button className={styles.vipButton}>
-            {item.price_usdt} $USDT (осталось {item.quantity} шт.)
+            {formatAbbreviation(item.price_usdt, 'currency')} (осталось {item.quantity} шт.)
           </button>
         ) : mode === 'shop' ? (
           <>
@@ -87,14 +88,14 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
               className={styles.button}
               onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' })}
             >
-              {item.price_usdt} $USDT
+              {formatAbbreviation(item.price_usdt, 'currency')}
             </button>
             <button className={styles.priceButton} onClick={handleBuySkin}>
               {isLoading ? (
                 <p>Загрузка</p>
               ) : (
                 <>
-                  {item.price_internal} <img src={CoinIcon} />
+                  {formatAbbreviation(item.price_internal)} <img src={CoinIcon} />
                 </>
               )}
             </button>
