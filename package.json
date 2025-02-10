@@ -28,6 +28,7 @@
     "sass-embedded": "^1.80.5",
     "slick-carousel": "^1.8.1",
     "url": "^0.11.4",
+    "use-sound": "^4.0.3",
     "vite-plugin-svg-icons": "^2.0.1",
     "vite-plugin-svgr": "^4.3.0"
   },

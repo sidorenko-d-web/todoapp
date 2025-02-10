@@ -1,6 +1,6 @@
 import styles from './ItemUpgradedModal.module.scss';
 import { MODALS, localStorageConsts, svgHeadersString } from '../../../../constants';
-import { useModal } from '../../../../hooks';
+import { useAutoPlaySound, useModal } from '../../../../hooks';
 import CentralModal from '../../../shared/CentralModal/CentralModal';
 import { IShopItem, useGetShopItemsQuery } from '../../../../redux';
 import Button from '../partials/Button';
@@ -8,10 +8,10 @@ import ViewsIcon from '../../../../assets/icons/views.png';
 import SubsIcon from '../../../../assets/icons/subscriber_coin.svg';
 import CoinIcon from '../../../../assets/icons/coin.png';
 import BlueChest from '../../../../assets/icons/chest-blue.svg';
-// import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import Lottie from 'lottie-react';
 import { blueLight, purpleLight, redLight } from '../../../../assets/animations';
+import { SOUNDS } from '../../../../constants/sounds';
 
 export const ItemUpgradedModal = () => {
   const { closeModal, getModalState, openModal } = useModal();
@@ -30,7 +30,7 @@ export const ItemUpgradedModal = () => {
       state.args?.item.item_premium_level === 'base' ? 'advanced' : 'pro',
   });
 
-  if (!newItem) return <></>;
+  useAutoPlaySound(MODALS.UPGRADED_ITEM, SOUNDS.upgradeOrBuyItem);
 
   const handleOpenChest = () => {
     localStorage.removeItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
@@ -38,6 +38,7 @@ export const ItemUpgradedModal = () => {
     openModal(MODALS.TASK_CHEST);
   };
 
+  if (!newItem) return <></>;
   return (
     <CentralModal
       title="Новый предмет!"

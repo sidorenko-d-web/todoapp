@@ -1,13 +1,18 @@
 import CentralModal from '../../../components/shared/CentralModal/CentralModal';
 import { MODALS } from '../../../constants/modals';
-import { useModal } from '../../../hooks';
+import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './LossOfProgress.module.scss';
 import Button from '../partials/Button';
 import grayFire from '../../../assets/icons/grayFire.svg';
 import blueChest from '../../../assets/icons/chest-blue.svg';
+import { SOUNDS } from '../../../constants';
 
 export default function LossOfProgress() {
   const { closeModal } = useModal();
+
+  
+  useAutoPlaySound(MODALS.LOSS_PROGRESS, SOUNDS.lostDaysStreak);
+  
   return (
     <CentralModal
       onClose={() => closeModal(MODALS.LOSS_PROGRESS)}

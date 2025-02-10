@@ -122,6 +122,7 @@ button {
 	height: 16px;
 	position: relative;
 	cursor: pointer;
+	display: none;
 }
 .spine-player-slider-value {
 	position: absolute;
@@ -275,7 +276,6 @@ button {
 
 /** Player controls **/
 .spine-player-controls {
-	display: flex;
 	flex-direction: column;
 	position: absolute;
 	bottom: 0;
@@ -283,6 +283,7 @@ button {
 	width: 100%;
 	opacity: 1;
 	transition: opacity 0.4s;
+	display: none;
 }
 .spine-player-controls-hidden {
 	pointer-events: none;

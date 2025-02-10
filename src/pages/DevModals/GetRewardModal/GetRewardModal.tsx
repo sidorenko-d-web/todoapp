@@ -1,6 +1,6 @@
 import CentralModal from '../../../components/shared/CentralModal/CentralModal';
-import { MODALS } from '../../../constants/modals';
-import { useModal } from '../../../hooks';
+import { MODALS, SOUNDS } from '../../../constants';
+import { useModal, useAutoPlaySound } from '../../../hooks';
 import styles from './GetRewardModal.module.scss';
 import coin from '../../../assets/icons/coin.png';
 import Button from '../partials/Button';
@@ -9,8 +9,15 @@ import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import reward from '../../../assets/animations/reward.json';
 export default function GetRewardModal() {
   const { closeModal } = useModal();
+
+  useAutoPlaySound(MODALS.GET_REWARD, SOUNDS.rewardSmall);
+
   return (
-    <CentralModal onClose={() => closeModal(MODALS.GET_REWARD)} modalId={MODALS.GET_REWARD} title={'Награда получена!'}>
+    <CentralModal
+      onClose={() => closeModal(MODALS.GET_REWARD)}
+      modalId={MODALS.GET_REWARD}
+      title={'Награда получена!'}
+    >
       <div className={styles.background}>
         <Lottie animationData={reward} loop={false} className={styles.reward} />
       </div>
@@ -24,7 +31,8 @@ export default function GetRewardModal() {
         </div>
         <div className={styles.bottom}>
           <p>
-            Поздравляем! За ответы на 20 комментариев <br></br> к интеграции вы получаете баллы!
+            Поздравляем! За ответы на 20 комментариев <br></br> к интеграции вы получаете
+            баллы!
           </p>
         </div>
       </div>

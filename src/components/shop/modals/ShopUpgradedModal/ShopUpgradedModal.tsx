@@ -1,6 +1,6 @@
 import styles from './ShopUpgradedModal.module.scss';
-import { AppRoute, MODALS } from '../../../../constants';
-import { useModal } from '../../../../hooks';
+import { AppRoute, MODALS, SOUNDS } from '../../../../constants';
+import { useAutoPlaySound, useModal } from '../../../../hooks';
 import CentralModal from '../../../shared/CentralModal/CentralModal';
 import { IShopItem } from '../../../../redux';
 import Button from '../partials/Button';
@@ -22,6 +22,9 @@ export const ShopUpgradedModal = () => {
   };
 
   const isYellow = state.args?.isYellow;
+
+  
+  useAutoPlaySound(MODALS.UPGRADED_SHOP, SOUNDS.upgradeOrBuyItem);
 
   return (
     <CentralModal

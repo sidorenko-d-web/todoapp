@@ -1,17 +1,18 @@
 import CentralModal from '../../../components/shared/CentralModal/CentralModal';
-import { MODALS } from '../../../constants/modals';
-import { useModal } from '../../../hooks';
+import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './TaskCompletedModal.module.scss';
-
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
 import subscribers from '../../../assets/icons/subscribers.png';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import reward from '../../../assets/animations/reward.json';
+import { MODALS, SOUNDS } from '../../../constants';
 
 export default function TaskCompletedModal() {
   const { closeModal } = useModal();
+
+  useAutoPlaySound(MODALS.TASK_COMPLETED, SOUNDS.rewardHuge);
   return (
     <CentralModal
       onClose={() => closeModal(MODALS.TASK_COMPLETED)}
@@ -25,7 +26,11 @@ export default function TaskCompletedModal() {
         <div className={styles.top}>
           <div className={styles.item}>
             <div className={styles.bg}>
-              <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
+              <Lottie
+                animationData={blueLightAnimation}
+                loop={true}
+                className={styles.light}
+              />
             </div>
             <div className={styles.content}>
               <p>+100</p>
@@ -34,7 +39,11 @@ export default function TaskCompletedModal() {
           </div>
           <div className={styles.item}>
             <div className={styles.bg}>
-              <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
+              <Lottie
+                animationData={blueLightAnimation}
+                loop={true}
+                className={styles.light}
+              />
             </div>
             <div className={styles.content}>
               <p>+150</p>
@@ -43,7 +52,11 @@ export default function TaskCompletedModal() {
           </div>
           <div className={styles.item}>
             <div className={styles.bg}>
-              <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
+              <Lottie
+                animationData={blueLightAnimation}
+                loop={true}
+                className={styles.light}
+              />
             </div>
             <div className={styles.content}>
               <p>+5</p>
@@ -54,7 +67,8 @@ export default function TaskCompletedModal() {
         </div>
         <div className={styles.bottom}>
           <p>
-            Поздравляем! За выполнение задания вы <br></br>получаете дополнительные бонусы!
+            Поздравляем! За выполнение задания вы <br></br>получаете дополнительные
+            бонусы!
           </p>
         </div>
       </div>

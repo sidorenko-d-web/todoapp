@@ -1,6 +1,6 @@
 import CentralModal from '../../../components/shared/CentralModal/CentralModal';
-import { MODALS } from '../../../constants/modals';
-import { useModal } from '../../../hooks';
+import { MODALS, SOUNDS } from '../../../constants';
+import { useModal, useAutoPlaySound } from '../../../hooks';
 import styles from './RewardForIntegrationModal.module.scss';
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
@@ -15,6 +15,9 @@ import reward from '../../../assets/animations/reward.json';
 
 export default function RewardForIntegrationModal() {
   const { closeModal } = useModal();
+
+  useAutoPlaySound(MODALS.INTEGRATION_REWARD, SOUNDS.rewardHuge);
+
   return (
     <CentralModal
       onClose={() => closeModal(MODALS.INTEGRATION_REWARD)}
@@ -57,7 +60,10 @@ export default function RewardForIntegrationModal() {
         </div>
       </div>
       <div className={styles.desc}>
-        <p>Поздравляем! Интеграция готова, следите за статистикой и продолжайте в том же духе!</p>
+        <p>
+          Поздравляем! Интеграция готова, следите за статистикой и продолжайте в том же
+          духе!
+        </p>
       </div>
       <Button variant={'blue'}>Забрать</Button>
     </CentralModal>

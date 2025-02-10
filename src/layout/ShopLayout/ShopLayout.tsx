@@ -1,4 +1,11 @@
-import { type Dispatch, type FC, PropsWithChildren, type SetStateAction, useEffect, useState } from 'react';
+import {
+  type Dispatch,
+  type FC,
+  PropsWithChildren,
+  type SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import styles from './ShopLayout.module.scss';
 import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
 import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
@@ -67,7 +74,12 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     itemsInTabs?.green?.length > 0 &&
     tabs.push(shopItemRarity[2]);
 
-  const inventoryTabs = [shopItemRarity[0]];
+  const inventoryTabs = [];
+  isSuccess &&
+    inventory?.items.find(
+      item => item.item_rarity === 'red' && item.item_category === shopCategory.value,
+    ) &&
+    inventoryTabs.push(shopItemRarity[0]);
   isSuccess &&
     inventory?.items.find(
       item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value,
@@ -92,6 +104,9 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   useEffect(() => {
     setItemsQuality(shopItemRarity[0]);
   }, [shopCategory]);
+
+  const isTabsNotEmpty =
+    [...(itemsInTabs.green ?? []), ...(itemsInTabs.yellow ?? [])].length > 0;
 
   return (
     <div className={styles.wrapper}>
@@ -139,21 +154,21 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
           currentTab={shopCategory.title}
           onChange={setShopCategory}
         />
-        {/* https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284346&m=dev#1121980464 */}
-        {/*{shopCategory.title !== 'Вы' && (*/}
-        {/*  <TabsNavigation*/}
-        {/*    colorClass={*/}
-        {/*      itemsQuality.title === 'Эконом'*/}
-        {/*        ? 'tabItemSelectedBlue'*/}
-        {/*        : itemsQuality.title === 'Премиум'*/}
-        {/*        ? 'tabItemSelectedPurple'*/}
-        {/*        : 'tabItemSelectedRed'*/}
-        {/*    }*/}
-        {/*    tabs={mode === 'shop' ? tabs : inventoryTabs}*/}
-        {/*    currentTab={itemsQuality.title}*/}
-        {/*    onChange={setItemsQuality}*/}
-        {/*  />*/}
-        {/*)}*/}
+        {/* https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284346&m=dev#1121980464  */}
+        {shopCategory.title !== 'Вы' && isTabsNotEmpty && (
+          <TabsNavigation
+            colorClass={
+              itemsQuality.title === 'Эконом'
+                ? 'tabItemSelectedBlue'
+                : itemsQuality.title === 'Премиум'
+                ? 'tabItemSelectedPurple'
+                : 'tabItemSelectedRed'
+            }
+            tabs={mode === 'shop' ? tabs : inventoryTabs}
+            currentTab={itemsQuality.title}
+            onChange={setItemsQuality}
+          />
+        )}
       </div>
 
       {children}

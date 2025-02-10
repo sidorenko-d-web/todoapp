@@ -3,6 +3,7 @@ import { createContext, useState } from 'react';
 type ModalState<T extends Record<string, unknown> = Record<string, unknown>> = {
   isOpen: boolean;
   args: T | null;
+  currentModal: string | null
 };
 
 type ModalsContextType = {
@@ -22,6 +23,7 @@ export const ModalsProvider: React.FC<React.PropsWithChildren> = ({ children }) 
       [key]: {
         isOpen: true,
         args,
+        currentModal: key
       },
     }));
 
@@ -31,6 +33,7 @@ export const ModalsProvider: React.FC<React.PropsWithChildren> = ({ children }) 
       [key]: {
         isOpen: false,
         args: prevModalsRegistry[key]?.args || null,
+        currentModal: null
       },
     }));
 
@@ -38,6 +41,7 @@ export const ModalsProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     (modalsRegistry[key] as ModalState<T>) || {
       isOpen: false,
       args: null,
+      currentModal: key
     };
 
   const contextValue: ModalsContextType = {
