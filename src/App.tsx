@@ -21,13 +21,14 @@ function App() {
   const manifestUrl = useMemo(() => {
     return new URL('tonconnect-manifest.json', window.location.href).toString();
   }, []);
+
   return (
     <>
       <Provider store={store}>
         <ModalsProvider>
           <AuthInit>
             <HistoryRouter history={browserHistory}>
-              <TonConnectUIProvider manifestUrl={"https://raw.githubusercontent.com/TimurZheksimbaev/First-TON-Project/refs/heads/main/apusher-tonconnect-manifest.json"}>
+              <TonConnectUIProvider language='ru' manifestUrl={"https://raw.githubusercontent.com/TimurZheksimbaev/First-TON-Project/refs/heads/main/apusher-tonconnect-manifest.json"}>
                 <TonClientProvider>
                   <TransactionNotificationProvider>
                     <AppRouter />

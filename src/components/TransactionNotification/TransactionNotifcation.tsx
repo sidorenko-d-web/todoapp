@@ -17,7 +17,7 @@ export const TransactionNotification: React.FC<TransactionNotificationProps> = (
       <div className={`${styles.transactionIndicator__content} ${type === 'error' ? styles.error : ''}`}>
         {type === 'error' ? (
           <>
-            <span>Ошибка транзакции!</span>
+            <span>{message}</span>
             <button onClick={onRetry} className={styles.retryButton}>
               <img src={refresh} alt="Retry transaction" />
             </button>
@@ -30,7 +30,7 @@ export const TransactionNotification: React.FC<TransactionNotificationProps> = (
               autoplay={true}
               className={styles.lottie}
             />
-            <span>Обработка транзакции...</span>
+            <span>{message}</span>
           </>
         )}
       </div>

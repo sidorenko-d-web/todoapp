@@ -2,8 +2,10 @@ import { createContext, useContext, useState } from 'react';
 import { NewItemModal, TransactionNotification } from '../../components';
 import { useTonConnect } from '../../hooks';
 
+type NotificationType = 'progress' | 'error';
+
 const TransactionNotificationContext = createContext({
-    showNotification: (type: 'progress' | 'error', message: string) => {},
+    showNotification: (type: NotificationType, message: string) => {},
     hideNotification: () => {},
 });
 
@@ -56,4 +58,3 @@ export const TransactionNotificationProvider = ({ children }: { children: React.
 
 export const useTransactionNotificationContext = () =>
     useContext(TransactionNotificationContext);
-

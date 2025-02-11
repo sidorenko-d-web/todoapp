@@ -5,6 +5,7 @@ import { Header } from '../components/Header/';
 import { useEffect } from 'react';
 import { MODALS, localStorageConsts } from '../constants';
 import { useModal } from '../hooks';
+import { LanguageSelectionModal, SettingsModal, WalletConnectionModal } from '../components';
 
 const Layout = () => {
   const location = useLocation();
@@ -19,12 +20,17 @@ const Layout = () => {
     );
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
   }, []);
-
+  
   return (
     <div className={styles.wrp}>
       {showHeader && <Header />}
       <main className={styles.content + ' ' + (showHeader ? styles.withHeader : '')}>
         <Outlet />
+
+        {/* Modals */}
+        <SettingsModal />
+        <WalletConnectionModal />
+        <LanguageSelectionModal />
       </main>
       <Footer />
     </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
 import clanRed from '../../assets/icons/clanRed.svg';
-import { DevelopmentPlan, IncreaseIncome, TopInfluencers } from '../../components';
+import { DevelopmentPlan, IncreaseIncome, NewItemModal, TopInfluencers } from '../../components';
 
 import s from './PromotionPage.module.scss';
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUsersCountQuery } from '../../redux';

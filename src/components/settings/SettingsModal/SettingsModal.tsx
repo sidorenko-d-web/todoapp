@@ -5,9 +5,10 @@ import russiaIcon from "../../../assets/icons/ru-flag.svg"
 import cryptoWalletIcon from "../../../assets/Icons/Wallet.png"
 import ArrowRight from "../../../assets/icons/arrow-right.svg"
 import CentralModal from "../../shared/CentralModal/CentralModal"
-
+import {useTranslation} from 'react-i18next'
 
 export const SettingsModal = () => {
+    const { t } = useTranslation('settings');
     const { closeModal, openModal, } = useModal()
 
     const handleCloseModal = () => {
@@ -27,7 +28,7 @@ export const SettingsModal = () => {
     return (
         <CentralModal
             modalId={MODALS.SETTINGS} 
-            title="Настройки" 
+            title={t('s1')}
             onClose={handleCloseModal} 
             headerStyles={styles.titleStyles}
             >
@@ -35,7 +36,7 @@ export const SettingsModal = () => {
                 <div className={styles.childModalWrapper} onClick={handleOpenLanguageSelectionModal}>
                     <div className={styles.titleAndIcon}>
                         <img className={styles.icon} src={russiaIcon} alt="" />
-                        Язык
+                        {t('s2')}
                     </div>
                     <img className={styles.arrow} src={ArrowRight} alt="" />
                 </div>
@@ -43,14 +44,14 @@ export const SettingsModal = () => {
                 <div className={styles.childModalWrapper} onClick={handleOpenWalletConnectionModal}>
                     <div className={styles.titleAndIcon}>
                         <img className={styles.icon} src={cryptoWalletIcon} alt="" />
-                        Кошелек
+                        {t('s3')}
                     </div>
                     <img className={styles.arrow} src={ArrowRight} alt="" />
                 </div>
 
 
                 <button className={styles.OK} onClick={handleCloseModal}>
-                    Ок
+                    {t('s7')}
                 </button>
             </div>
         </CentralModal>

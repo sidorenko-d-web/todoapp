@@ -14,6 +14,7 @@ export async function retry<T>(
   options: { retries: number; delay: number },
 ): Promise<T> {
   let lastError: Error | undefined;
+  let delay = options.delay;
   for (let i = 0; i < options.retries; i++) {
     try {
       return await fn();
@@ -21,7 +22,10 @@ export async function retry<T>(
       if (e instanceof Error) {
         lastError = e;
       }
-      await wait(options.delay);
+      // await wait(options.delay);
+      
+      await wait(Math.min(delay, 30000));
+      delay *= 2; 
     }
   }
   throw lastError;

@@ -9,8 +9,12 @@ import tickIcon from "../../../assets/icons/input-tick.svg"
 import { useState } from "react"
 
 import { useTonConnect } from "../../../hooks"
+import { useTranslation } from "react-i18next"
+import { Locales } from "@tonconnect/ui-react"
 
 export const WalletConnectionModal = () => {
+  const { t } = useTranslation('settings');
+  
   const {closeModal} = useModal()
 
   const {
@@ -18,9 +22,15 @@ export const WalletConnectionModal = () => {
     userAddress,
     connectWallet,
     disconnectWallet,
+    tonConnectUI
   } = useTonConnect()
 
   const [activeButton, setActiveButton] = useState("")
+  const {i18n} = useTranslation()
+
+  tonConnectUI.uiOptions = {
+    language: i18n.languages[0] as Locales
+  }
 
   const handleDisconnectWallet = () => {
     if (userAddress) {
@@ -48,7 +58,7 @@ export const WalletConnectionModal = () => {
   return (
     <CentralModal
       modalId={MODALS.WALLET_CONNECTION}
-      title="Кошелек"
+      title={t('s3')}
       onClose={handleCloseModal}
       headerStyles={styles.titleStyles}
     >
@@ -61,7 +71,7 @@ export const WalletConnectionModal = () => {
           onClick={handleWalletConnect}
           >
             <p className={styles.text}>
-              {walletType || 'Подключить кошелек'}
+              {walletType || t('s4')}
             </p>
             <img src={tickIcon} alt="tickIcon" className={styles.icon} />
           </div>
@@ -71,7 +81,7 @@ export const WalletConnectionModal = () => {
           onClick={handleCopyAddress}
           >
             <p className={styles.text}>
-              {userAddress || "Ваш адрес"}
+              {userAddress || t('s5')}
             </p>
             <img src={copyIcon} alt="copyIcon" className={styles.icon} />
           </div>
@@ -79,11 +89,11 @@ export const WalletConnectionModal = () => {
 
         <div className={styles.walletButtons}>
           <button className={styles.okButton} onClick={handleDisconnectWallet}>
-            Отвязать
+            {t('s6')}
           </button>
 
           <button className={styles.disconnectButton} onClick={handleCloseModal}>
-            Ок
+            {t('s7')}
           </button>
         </div>
       </div>

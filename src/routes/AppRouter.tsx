@@ -21,7 +21,6 @@ import StatisticsPage from '../pages/StatisticsPage/StatisticsPage';
 import DevModals from '../pages/DevModals/DevModals.tsx';
 import { ShopInvewntoryPage } from '../pages/ShopPage';
 import { useWebApp } from '../hooks/useWebApp.ts';
-import { LanguageSelectionModal, SettingsModal, WalletConnectionModal } from '../components/settings/';
 
 function AppRouter(): JSX.Element | null {
   useWebApp(); // WebApp SDK initialization
@@ -50,9 +49,6 @@ function AppRouter(): JSX.Element | null {
         <Route path={AppRoute.ProgressTree} element={<ProgressTreePage/>} />
       </Route>
     </Routes>
-      <SettingsModal />
-      <WalletConnectionModal />
-      <LanguageSelectionModal />
     </>
   );
 }

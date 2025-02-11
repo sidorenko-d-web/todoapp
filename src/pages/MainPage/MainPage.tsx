@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { IntegrationCreation } from '../../components';
+import { IntegrationCreation, NewItemModal } from '../../components';
 
 import s from './MainPage.module.scss';
 

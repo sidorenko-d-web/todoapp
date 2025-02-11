@@ -8,6 +8,7 @@ import tick from "../../../assets/icons/input-tick.svg"
 import circle from "../../../assets/icons/circle-blue.svg"
 import russiaIcon from "../../../assets/icons/ru-flag.svg"
 import usaIcon from "../../../assets/Icons/us-flag.svg"
+import { useTranslation } from 'react-i18next';
 
 
 const LANGUAGES = [
@@ -53,6 +54,7 @@ const LanguageOption = ({ language, isSelected, onSelect }: LanguageOptionProps)
 );
 
 export const LanguageSelectionModal = () => {
+    const { i18n } = useTranslation();
     const { closeModal } = useModal();
     const [selectedLanguage, setSelectedLanguage] = useState<LanguageCode | null>(null);
 
@@ -62,8 +64,10 @@ export const LanguageSelectionModal = () => {
         closeModal(MODALS.LANGUAGE_SELECTION);
     };
 
-    const handleSelectLanguage = (code: LanguageCode) => {
+    const handleSelectLanguage = async (code: LanguageCode) => {
         setSelectedLanguage(code);
+        localStorage.setItem('selectedLanguage', code);
+        await i18n.changeLanguage(code);
     };
 
     return (

@@ -46,5 +46,11 @@ export const ModalsProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     getModalState,
   };
 
-  return <ModalsContext.Provider value={contextValue}>{children}</ModalsContext.Provider>;
+  return (
+    <>
+      <ModalsContext.Provider value={contextValue}>
+        {children}
+      </ModalsContext.Provider>;
+    </>
+  )
 };
