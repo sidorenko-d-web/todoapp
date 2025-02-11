@@ -15,6 +15,8 @@ import { isGuideShown } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
+import { useDispatch } from 'react-redux';
+import { setPoints } from '../../../redux/slices/point.ts';
 
 interface Props {
   disabled?: boolean;
@@ -24,15 +26,18 @@ interface Props {
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [buyItem, { isLoading }] = useBuyItemMutation();
   const { data } = useGetCurrentUserProfileInfoQuery();
+  const dispatch = useDispatch();
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
   const userPoints = data?.points || 0;
   const [error, setError] = useState('');
+
   const buyButtonGlowing = useSelector((state: RootState) => state.guide.buyItemButtonGlowing);
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const handleBuyItem = async () => {
     try {
+      dispatch(setPoints((prevPoints: number) => prevPoints + 1));
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
       if (!res.error) {
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });

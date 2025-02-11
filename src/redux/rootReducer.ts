@@ -5,13 +5,14 @@ import { shopApi } from './api';
 import { refferalsApi } from './api';
 import { treeReducer } from './slices/tree.ts';
 import guideReducer from './slices/guideSlice.ts';
-
+import { pointsReducer } from './slices/point.ts';
 
 const appReducer = combineReducers({
   auth: authReducer,
   treeSlice: treeReducer,
   guide: guideReducer,
   audioSlice: audioReducer,
+  pointSlice: pointsReducer,
   [authApi.reducerPath]: authApi.reducer,
   [shopApi.reducerPath]: shopApi.reducer,
   [integrationsApi.reducerPath]: integrationsApi.reducer,

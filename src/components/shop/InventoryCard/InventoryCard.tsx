@@ -26,6 +26,8 @@ import { useTranslation } from 'react-i18next';
 import useSound from 'use-sound';
 import { useSelector } from 'react-redux';
 import { Button } from '../../shared';
+import { useDispatch } from 'react-redux';
+import { setPoints } from '../../../redux/slices/point.ts';
 
 interface Props {
   disabled?: boolean;
@@ -58,9 +60,10 @@ export const InventoryCard: FC<Props> = ({
                                            item,
                                            isB,
                                          }) => {
-                                          
+
   const { t,i18n } = useTranslation('shop');
   const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
+  const dispatch = useDispatch();
   const { data, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
@@ -83,6 +86,7 @@ export const InventoryCard: FC<Props> = ({
       if (!res.error) {
         playLvlSound();
         refetch();
+        dispatch(setPoints((prevPoints: number) => prevPoints + 1));
         if (item.level === 49) {
           if (item.item_premium_level === 'pro') {
             openModal(MODALS.UPGRADED_SHOP, {
@@ -322,7 +326,6 @@ export const InventoryCard: FC<Props> = ({
           <img src={LockIcon} alt="" />
         </div>
       )}
-
     </div>
   );
 };

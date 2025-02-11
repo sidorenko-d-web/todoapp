@@ -6,7 +6,7 @@ import { selectVolume } from '../../../redux';
 
 interface Props
   extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
-  onClick: () => any;
+  onClick?: () => any;
 }
 
 export const Button = ({ children, onClick, ...props }: Props) => {
