@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import CentralModal from '../../shared/CentralModal/CentralModal.tsx';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
+import { CentralModal } from '../../shared';
 
 interface CreatingIntegrationModalProps {
   modalId: string;

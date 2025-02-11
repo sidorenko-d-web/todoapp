@@ -1,7 +1,6 @@
 import styles from './ShopUpgradedModal.module.scss';
-import { AppRoute, MODALS } from '../../../../constants';
-import { useModal } from '../../../../hooks';
-import CentralModal from '../../../shared/CentralModal/CentralModal';
+import { AppRoute, MODALS, SOUNDS } from '../../../../constants';
+import { useAutoPlaySound, useModal } from '../../../../hooks';
 import { IShopItem } from '../../../../redux';
 import Button from '../partials/Button';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +8,7 @@ import clsx from 'clsx';
 import { ShopIcon } from '../../../../assets/icons/shop';
 import Lottie from 'lottie-react';
 import { purpleLight, redLight } from '../../../../assets/animations';
+import { CentralModal } from '../../../shared';
 
 export const ShopUpgradedModal = () => {
   const { closeModal, getModalState } = useModal();
@@ -22,6 +22,9 @@ export const ShopUpgradedModal = () => {
   };
 
   const isYellow = state.args?.isYellow;
+
+  
+  useAutoPlaySound(MODALS.UPGRADED_SHOP, SOUNDS.upgradeOrBuyItem);
 
   return (
     <CentralModal

@@ -1,0 +1,52 @@
+@use '../../../assets/styles/index.scss' as var;
+
+.nextBtn {
+    width: 100%;
+    background-color: var.$color-gray;
+    color: white;
+    height: 44px;
+    padding: 10px 0;
+    border: 1px solid var.$color-dark-gray;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.gifImage {
+    position: absolute;
+    top: 50%;
+    left: -45px;
+    transform: scaleX(-1);
+}
+
+.square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: 2px solid var.$color-primary;
+    background-color: var.$color-dark-gray;
+    border-radius: 6px;
+}
+
+.subscribers {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    width: 90px;
+    height: fit-content;
+    border: 2px solid var.$color-primary;
+    background-color: black;
+    border-radius: 6px;
+
+    p {
+        color: gray;
+        font-size: 10px;
+        text-align: center;
+        width: 100%;
+        align-self: center;
+    }
+}

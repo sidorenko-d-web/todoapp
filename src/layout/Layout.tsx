@@ -4,7 +4,7 @@ import styles from './Layout.module.scss';
 import { Header } from '../components/Header/';
 import { useEffect } from 'react';
 import { MODALS, localStorageConsts } from '../constants';
-import { useModal } from '../hooks';
+import { AudioBg, useModal } from '../hooks';
 
 const Layout = () => {
   const location = useLocation();
@@ -25,6 +25,8 @@ const Layout = () => {
       {showHeader && <Header />}
       <main className={styles.content + ' ' + (showHeader ? styles.withHeader : '')}>
         <Outlet />
+
+        <AudioBg />
       </main>
       <Footer />
     </div>

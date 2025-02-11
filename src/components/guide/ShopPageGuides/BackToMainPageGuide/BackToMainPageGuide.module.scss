@@ -1,0 +1,22 @@
+@use '../../../../assets/styles/index.scss' as var;
+
+.nextBtn {
+    width: 100%;
+    background-color: var.$color-gray;
+    color: white;
+    height: 44px;
+    padding: 10px 0;
+    border: 1px solid var.$color-dark-gray;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.gifImage {
+    position: absolute;
+    top: 75%;
+    left: -50px;
+    width: 146px;
+    height: 140px;
+    transform: scaleX(-1);
+}

@@ -1,5 +1,4 @@
-import CentralModal from '../../../components/shared/CentralModal/CentralModal';
-import { MODALS } from '../../../constants/modals';
+import { MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import styles from './GetGift.module.scss';
 import Button from '../partials/Button';
@@ -11,6 +10,7 @@ import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import reward from '../../../assets/animations/reward.json';
 import gift from '../../../assets/icons/gift.svg';
 import Lottie from 'lottie-react';
+import { CentralModal } from '../../../components/shared';
 
 export default function GetGift() {
   const { closeModal } = useModal();

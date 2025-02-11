@@ -12,6 +12,7 @@ import { setLastActiveStage } from '../../redux/slices/tree.ts';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 
+
 export const Header = () => {
   const { data, isLoading, refetch } = useGetCurrentUserProfileInfoQuery();
   const { data: treeData } = useGetTreeInfoQuery();
@@ -44,6 +45,8 @@ export const Header = () => {
     navigate(AppRoute.Profile);
   };
 
+  const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
+
   return (
     <header className={styles.header}>
       <div className={styles.lowerHeader}>
@@ -67,9 +70,9 @@ export const Header = () => {
             </div>
           </div>
         </div>
-
+        
         <div className={styles.coinsWrapper}>
-          <p className={styles.coins}>{formatAbbreviation(data?.points || 0,'number', { locale: locale })}</p>
+          <p className={styles.coins}>{formatAbbreviation(showCoins ? (data?.points || 0) : '0', 'number', { locale: locale })}</p>
           <img className={styles.coinIcon} src={CoinIcon} alt="CoinIcon" />
         </div>
       </div>

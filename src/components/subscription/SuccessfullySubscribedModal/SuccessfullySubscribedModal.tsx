@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import CentralModal from '../../shared/CentralModal/CentralModal';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import spinnerBlueIcon from '../../../assets/icons/spinner-blue.svg';
 
 import s from './SuccessfullySubscribedModal.module.scss';
+import { Button, CentralModal } from '../../shared';
 
 interface SuccessfullySubscribedModalProps {
   modalId: string;
@@ -41,7 +41,7 @@ export const SuccessfullySubscribedModal: FC<SuccessfullySubscribedModalProps> =
           </span>
         </div>
 
-        <button className={s.button} onClick={onClose}>Отлично!</button>
+        <Button className={s.button} onClick={onClose}>Отлично!</Button>
       </div>
     </CentralModal>
   );
