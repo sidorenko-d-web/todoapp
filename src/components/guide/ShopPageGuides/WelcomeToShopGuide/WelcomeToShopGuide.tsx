@@ -28,7 +28,7 @@ export const WelcomeToShopGuide: React.FC<WelcomeToShopGuideProps> = ({ onClose 
                     Давай купим технику, чтобы начать делать интеграции и зарабатывать!
                 </>
             }
-            top={'55%'}
+            top={'50%'}
             onClose={handleClose}
         >
             <button className={styles.nextBtn} onClick={handleClose}>Вперёд!</button>

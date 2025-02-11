@@ -219,8 +219,9 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         }} />}
 
       {(guideVisibility.upgradeItemsGuideShown
-        && !guideVisibility.treeLevelGuideShown)
+        && !guideVisibility.treeLevelGuideShown && !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW))
         && <TreeLevelGuide onClose={() => {
+          setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
           handleGuideClose(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
           navigate(AppRoute.ProgressTree);
         }} />}

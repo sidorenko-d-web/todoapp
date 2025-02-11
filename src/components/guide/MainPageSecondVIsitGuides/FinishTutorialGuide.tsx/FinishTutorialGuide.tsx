@@ -21,7 +21,7 @@ export const FinishTutorialGuide: React.FC<FinishTutorialGuideProps> = ({onClose
         
         <Guide align="right"
             zIndex={110}
-            top={'55%'}
+            top={'53%'}
             description={
                 <>Вот ты и настоящий блогер! Продолжай делать интеграции с брендами, привекать подписчиков и зарабатывать! 
                 <br />

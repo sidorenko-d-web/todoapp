@@ -25,6 +25,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const { data } = useGetCurrentUserProfileInfoQuery();
   const { openModal } = useModal();
   const userPoints = data?.points || 0;
+  console.log('userPoints: ' + userPoints);
   const [error, setError] = useState('');
   const handleBuyItem = async () => {
     try {
@@ -104,8 +105,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
             </button>
           }
           <button onClick={handleBuyItem} className={`
-              ${userPoints < item.price_internal ? styles.disabledButton : ''}
-              ${buyButtonGlowing && item.name.toLowerCase().trim().includes('печатная машинка') ? styles.glowingBtn : ''}
+              ${Number(userPoints) < Number(item.price_internal) ? styles.disabledButton : ''}
+              ${buyButtonGlowing && item.name.toLowerCase().trim().includes('пуф') ? styles.glowingBtn : ''}
               `}>
             {isLoading ? (
               <p>Загрузка...</p>
