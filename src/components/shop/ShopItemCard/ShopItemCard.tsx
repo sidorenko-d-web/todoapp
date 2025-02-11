@@ -1,7 +1,8 @@
 import { FC, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
-import { useBuyItemMutation } from '../../../redux/api/shop/api';
+import { useBuyItemMutation } from '../../../redux';
+import { useGetCurrentUserProfileInfoQuery } from '../../../redux';
 import { IShopItem } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
@@ -18,12 +19,13 @@ interface Props {
 }
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
+  const [buyItem, { isLoading }] = useBuyItemMutation();
+  const { data } = useGetCurrentUserProfileInfoQuery();
   const { t } = useTranslation('shop');
-  const [ buyItem, { isLoading } ] = useBuyItemMutation();
 
   const { openModal } = useModal();
-
-  const [ error, setError ] = useState('');
+  const userPoints = data?.points || 0;
+  const [error, setError] = useState('');
   const handleBuyItem = async () => {
     try {
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
@@ -33,8 +35,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       } else {
         setError(JSON.stringify(res.error));
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return (
@@ -54,8 +55,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                ? styles.colorPurple
+                : styles.level
             }
           >
             {t('s17')}
@@ -66,8 +67,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 item.item_rarity === 'green'
                   ? styles.colorRed
                   : item.item_rarity === 'yellow'
-                    ? styles.colorPurple
-                    : styles.level
+                  ? styles.colorPurple
+                  : styles.level
               }
             >
               {error}
@@ -98,7 +99,10 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
           >
             {formatAbbreviation(item.price_usdt, 'currency')}
           </button>
-          <button onClick={handleBuyItem}>
+          <button
+            className={userPoints < item.price_internal ? styles.disabledButton : ''}
+            onClick={handleBuyItem}
+          >
             {isLoading ? (
               <p>loading</p>
             ) : (
