@@ -1,14 +1,15 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
-import { IShopItem, RootState } from '../../../redux';
 import { useGetCurrentUserProfileInfoQuery } from '../../../redux';
+import { IShopItem, RootState } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { useModal } from '../../../hooks';
+import { useModal, useSendTransaction, useUsdtTransactions } from '../../../hooks';
+import { useTransactionNotification } from '../../../hooks/useTransactionNotification';
 import { GUIDE_ITEMS, MODALS, svgHeadersString } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { isGuideShown } from '../../../utils';
@@ -29,12 +30,16 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
-  const userPoints = data?.points || 0;
   const [error, setError] = useState('');
 
   const buyButtonGlowing = useSelector((state: RootState) => state.guide.buyItemButtonGlowing);
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  // for transactions
+  const { sendUSDT } = useSendTransaction();
+  const usdtTransactions = useUsdtTransactions();
+  const [currentTrxId, setCurrentTrxId] = useState("")
 
+
+  const userPoints = data?.points || 0;
   const handleBuyItem = async () => {
     try {
       dispatch(setPoints((prevPoints: number) => prevPoints + 1));
@@ -48,6 +53,35 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       console.error(error);
     }
   };
+
+  // for transactions
+  const { startTransaction, failTransaction, completeTransaction } = useTransactionNotification();
+  const handleUsdtPayment = async () => {
+    try {
+      setError('');
+      startTransaction();
+      const trxId = await sendUSDT(Number(item.price_usdt));
+      setCurrentTrxId(trxId || '');
+    } catch (error) {
+      failTransaction(handleUsdtPayment);
+    }
+  };
+
+  useEffect(() => {
+    const latestTransaction = usdtTransactions[0];
+    console.log("Transactions", latestTransaction)
+
+    if (!latestTransaction || latestTransaction.orderId !== currentTrxId) return;
+
+    if (latestTransaction.status === 'succeeded') {
+      completeTransaction();
+    } else {
+      failTransaction(handleUsdtPayment);
+    }
+  }, [usdtTransactions, currentTrxId]);
+
+
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.storeCard}>
@@ -106,7 +140,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       {!disabled ? (
         <div className={styles.actions}>
           {isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) && (
-            <Button onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}>
+            <Button onClick={handleUsdtPayment}>
               {formatAbbreviation(item.price_usdt, 'currency', { locale: locale })}
             </Button>
           )}
@@ -122,6 +156,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
             ) : (
               <>
                 {formatAbbreviation(item.price_internal, 'number', { locale: locale })} <img src={CoinIcon} alt="" />
+
               </>
             )}
           </Button>
