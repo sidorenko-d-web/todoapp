@@ -1,5 +1,5 @@
 import { FC, useReducer } from 'react';
-import { CreatingIntegrationGuide, GetCoinsGuide, InitialGuide, IntegrationCreation, SubscrieGuide } from '../../components';
+import { AccelerateIntegtrationGuide, CreatingIntegrationGuide, FinishTutorialGuide, GetCoinsGuide, InitialGuide, IntegrationCreatedGuide, IntegrationCreation, PublishIntegrationButton, SubscrieGuide } from '../../components';
 import s from './MainPage.module.scss';
 import { AppRoute, MODALS } from '../../constants';
 import { useModal } from '../../hooks';
@@ -11,12 +11,7 @@ import { setAccelerateIntegrationGuideClosed, setGetCoinsGuideShown } from "../.
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux';
 import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/RewardForIntegrationModal.tsx';
-import { IntegrationCreatedGuide } from '../../components/guide/IntegrationCreatingGuides/IntegrationCreatedGuide/IntegrationCreatedGuide.tsx';
 import { useNavigate } from 'react-router-dom';
-import { PublishIntegrationButton } from '../../components/main/PublishIntegrationButton/PublishIntegrationButton.tsx';
-import { AccelerateIntegtrationGuide } from '../../components/guide/IntegrationCreatingGuides/AccelerateIntegrationGuide/AccelerateIntegration.tsx';
-import { FinishTutorialGuide } from '../../components/guide/MainPageSecondVIsitGuides/FinishTutorialGuide.tsx/FinishTutorialGuide.tsx';
-
 
 export const MainPage: FC = () => {
   const { getModalState, openModal, closeModal } = useModal();

@@ -6,10 +6,9 @@ import {
   useGetUnansweredIntegrationCommentQuery,
   usePostCommentIntegrationsMutation,
 } from '../../redux';
-import { Integration, IntegrationComment, IntegrationStats, IntegrationStatsMini } from '../../components';
+import { Integration, IntegrationComment, IntegrationPageGuide, IntegrationStats, IntegrationStatsMini } from '../../components';
 import integrationIcon from '../../assets/icons/integration-icon.svg';
 import { useParams } from 'react-router-dom';
-import { IntegrationPageGuide } from '../../components/guide/IntegrationPageGuides/IntegrationPageGuide/IntegrationPageGuide';
 import { isGuideShown, setGuideShown } from '../../utils';
 import { GUIDE_ITEMS } from '../../constants';
 import { useDispatch } from 'react-redux';

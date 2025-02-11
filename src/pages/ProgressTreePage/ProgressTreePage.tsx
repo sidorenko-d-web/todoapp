@@ -1,5 +1,4 @@
-import { Tree } from '../../components';
-import { TreeGuide } from '../../components/guide/TreeGuide/TreeGuide';
+import { Tree, TreeGuide } from '../../components';
 import { GUIDE_ITEMS } from '../../constants';
 import { isGuideShown, setGuideShown } from '../../utils';
 

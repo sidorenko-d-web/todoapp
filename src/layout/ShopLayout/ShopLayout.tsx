@@ -14,9 +14,7 @@ import { formatAbbreviation, itemsInTab } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../utils';
-import { BackToMainPageGuide, WelcomeToShopGuide } from '../../components';
-import { UpgradeItemsGuide } from '../../components/guide/ShopPageSecondVisitGuides/UpgradeItemsGuide/UpgradeItemsGuide';
-import { TreeLevelGuide } from '../../components/guide/ShopPageSecondVisitGuides/TreeLevelGuide/TreeLevelGuide';
+import { BackToMainPageGuide, TreeLevelGuide, UpgradeItemsGuide, WelcomeToShopGuide } from '../../components';
 import { setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
 
 type TypeTab<T> = { title: string; value: T };
