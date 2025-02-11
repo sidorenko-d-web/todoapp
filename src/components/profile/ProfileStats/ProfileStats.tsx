@@ -13,17 +13,18 @@ interface ProfileStatsProps {
 }
 
 export const ProfileStats: React.FC<ProfileStatsProps> = ({ earned, views, favoriteCompany, comments, rewards: awards, coffee }) => {
-  const { t } = useTranslation('profile');
+  const { t,i18n } = useTranslation('profile');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.profileStats}>
       <div className={styles.stat}>
         <span className={styles.label}>{t('p6')}</span>
-        <span className={styles.value}>{formatAbbreviation(earned)}</span>
+        <span className={styles.value}>{formatAbbreviation(earned,'number', { locale: locale })}</span>
       </div>
       <div className={styles.stat}>
         <span className={styles.label}>{t('p7')}</span>
-        <span className={styles.value}>{formatAbbreviation(views)}</span>
+        <span className={styles.value}>{formatAbbreviation(views,'number', { locale: locale })}</span>
       </div>
       <div className={styles.stat}>
         <span className={styles.label}>{t('p8')}</span>
@@ -31,15 +32,15 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ earned, views, favor
       </div>
       <div className={styles.stat}>
         <span className={styles.label}>{t('p9')}</span>
-        <span className={styles.value}>{formatAbbreviation(comments || 0)}</span>
+        <span className={styles.value}>{formatAbbreviation(comments || 0,'number', { locale: locale })}</span>
       </div>
       <div className={styles.stat}>
         <span className={styles.label}>{t('p10')}</span>
-        <span className={styles.value}>{formatAbbreviation(awards)}</span>
+        <span className={styles.value}>{formatAbbreviation(awards,'number', { locale: locale })}</span>
       </div>
       <div className={styles.stat}>
         <span className={styles.label}>{t('p11')}</span>
-        <span className={styles.value}>{formatAbbreviation(coffee)}</span>
+        <span className={styles.value}>{formatAbbreviation(coffee,'number', { locale: locale })}</span>
       </div>
     </div>
   );

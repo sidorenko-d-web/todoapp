@@ -76,6 +76,7 @@ export const IntegrationPage: React.FC = () => {
             progres={progress}
             {...comments[currentCommentIndex]}
             onVote={handleVote}
+            hateText={commentData.is_hate}
             finished={finished}
           />
         </>
