@@ -24,3 +24,10 @@ export type GetTasksResponse = {
   count: number;
   assignments: Task[];
 }
+
+export type UpdateTaskRequest = {
+  completed_stages: number;
+  link: string;
+}
+
+export type UpdateTaskResponse = Task;

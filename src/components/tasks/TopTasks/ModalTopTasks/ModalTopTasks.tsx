@@ -10,6 +10,7 @@ import bookIcon from '../../../../assets/icons/book.svg';
 import coinBlueIcon from '../../../../assets/icons/coin-blue-human.svg';
 import { ProgressBarTasks } from '../../ProgressBarTasks';
 import chestIcon from '../../../../assets/icons/chest-purple.svg';
+import { useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
 
 interface ModalTopTasksProps {
   modalId: string;
@@ -69,6 +70,7 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
   const [channelLink, setChannelLink] = useState('');
   const currentStepInfo = TASK_STEPS[currentStepIndex];
   const progress = (completedSteps.filter(step => step).length / TASK_STEPS.length) * 100;
+  const [updateTask] = useUpdateTaskMutation();
 
   useEffect(() => {
     onStateChange?.({
@@ -78,22 +80,34 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
     });
   }, [currentStepIndex, completedSteps]);
 
-  const handleCompleteStep = () => {
-    const newCompletedSteps = [...completedSteps];
-    newCompletedSteps[currentStepIndex] = true;
-    setCompletedSteps(newCompletedSteps);
+  const handleCompleteStep = async () => {
+    try {
+      const newCompletedSteps = [...completedSteps];
+      newCompletedSteps[currentStepIndex] = true;
+      setCompletedSteps(newCompletedSteps);
 
-    if (currentStepIndex === TASK_STEPS.length - 1) {
-      onStateChange?.({
-        currentStep: TASK_STEPS.length,
-        totalSteps: TASK_STEPS.length,
-        completed: true,
+      await updateTask({
+        id: modalId,
+        data: {
+          completed_stages: currentStepIndex + 1,
+          link: channelLink,
+        },
       });
-      setTimeout(() => onClose(), 1000);
-      return;
-    }
 
-    setCurrentStepIndex(prev => prev + 1);
+      if (currentStepIndex === TASK_STEPS.length - 1) {
+        onStateChange?.({
+          currentStep: TASK_STEPS.length,
+          totalSteps: TASK_STEPS.length,
+          completed: true,
+        });
+        setTimeout(() => onClose(), 1000);
+        return;
+      }
+
+      setCurrentStepIndex(prev => prev + 1);
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
   };
 
   return (
