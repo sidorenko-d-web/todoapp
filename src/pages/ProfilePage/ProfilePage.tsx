@@ -14,11 +14,11 @@ import { getWeekData } from '../../utils';
 import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
-
+import { useGetPushLineQuery } from '../../redux/api/pushLine/api';
 export const ProfilePage: React.FC = () => {
   const { t } = useTranslation('profile');
   const { closeModal, openModal } = useModal();
-
+  const { data } = useGetPushLineQuery();
   const {
     data: userProfileData,
     error: userError,
@@ -74,7 +74,7 @@ export const ProfilePage: React.FC = () => {
             <ProfileStatsMini
               subscribers={userProfileData.subscribers}
               position={position}
-              daysInARow={10}
+              daysInARow={data?.in_streak_days}
               totalViews={userProfileData.total_views}
             />
           </div>
@@ -94,7 +94,12 @@ export const ProfilePage: React.FC = () => {
             isVip={false}
           />
 
-          <StreakCard streakCount={12} freezeCount={0} days={weekData} progress={12} />
+          <StreakCard
+            streakCount={data?.in_streak_days}
+            freezeCount={0}
+            days={weekData}
+            progress={data?.in_streak_days}
+          />
 
           <div>
             <p className={styles.statsTitle}>{t('p4')}</p>
