@@ -5,18 +5,19 @@ import { Link } from 'react-router-dom';
 import skinPlaceholder from '../../../assets/icons/skin-placeholder.svg';
 import statusInactive from '../../../assets/icons/status-inactive.svg';
 import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 
 export const WardrobeInfo: React.FC = () => {
-
+    const { t } = useTranslation('wardrobe');
     const { data, isLoading, error } = useGetInventorySkinsQuery();
 
 
     return (
         <>
-            {isLoading && <p>Загрузка...</p>}
+            {isLoading && <p>Loading...</p>}
 
-            {error && <p>Ошибка при загрузке данных профиля</p>}
+            {error && <p>Error loading profile data</p>}
 
             {data && <div className={styles.wrp}>
                 <Link to='/profile'>
@@ -24,7 +25,7 @@ export const WardrobeInfo: React.FC = () => {
                 </Link>
 
                 <div className={styles.infoWrp}>
-                    <h1 className={styles.title}>Гардероб</h1>
+                    <h1 className={styles.title}>{t('w1')}</h1>
                     <div className={styles.statsWrp}>
                         <div className={styles.statWrp}>
                             <span className={styles.stat}>{data.count}</span>
@@ -32,7 +33,7 @@ export const WardrobeInfo: React.FC = () => {
                         </div>
 
                         <div className={styles.statusWrp}>
-                            <span className={styles.status}>без статуса</span>
+                            <span className={styles.status}>{t('w2')}</span>
                             <img src={statusInactive} height={14} width={14} />
                         </div>
                     </div>

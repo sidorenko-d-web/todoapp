@@ -15,6 +15,7 @@ import { AppRoute, MODALS } from '../../../constants';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux';
+import { useTranslation } from 'react-i18next';
 
 interface ProfileInfoProps {
   nickname: string;
@@ -33,6 +34,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
   isVip,
   nonEditable,
 }) => {
+  const { t } = useTranslation('profile');
   const { openModal } = useModal();
   const lastActiveStage = useSelector(
     (state: RootState) => state.treeSlice.lastActiveStage,
@@ -87,7 +89,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
 
         <div className={styles.subscription}>
           <div className={styles.subscriptionTextWrp}>
-            <span className={styles.subscriptionText}>Подписка</span>
+            <span className={styles.subscriptionText}>{t('p2')}</span>
 
             <div className={styles.subscriptionLevelWrp}>
               <span className={styles.subscriptionLevel}>

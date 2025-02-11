@@ -14,6 +14,9 @@ import { useInventoryItemsFilter } from '../../../hooks';
 
 import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
+import { integrationCreatingModalButtonGlowing, integrationCreatingModalLightningsGlowing, integrationCreatingModalTabsGlowing, setGuideShown } from '../../../utils/guide-functions.ts';
+import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
+import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
 import { Button, CentralModal } from '../../shared';
 
 interface CreatingIntegrationModalProps {
@@ -45,7 +48,9 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const { data } = useGetCompaniesQuery();
   const companies = data?.campaigns;
 
+
   const goToShop = () => {
+    setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
     onClose();
     navigate('/shop');
   };
@@ -58,7 +63,11 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       campaign_id: selectedCompany,
     })
       .unwrap()
-      .then(() => {
+      .then((data) => {
+        dispatch(setIntegrationCreated(true));
+        dispatch(setLastIntegrationId(data.id));
+        console.log('INTEG ID', data.id)
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         onClose();
         dispatch(integrationsApi.util.invalidateTags(['Integrations']));
         dispatch(profileApi.util.invalidateTags(['Me']));
@@ -75,18 +84,24 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     return null;
   })();
 
+  const lightningsGlowing = integrationCreatingModalLightningsGlowing();
+
+  const tabsGlowing = integrationCreatingModalTabsGlowing();
+
+  const buttonGlowing = integrationCreatingModalButtonGlowing();
+
   return (
     <CentralModal modalId={modalId} title="Создание интеграции" onClose={onClose} titleIcon={integrationWhiteIcon}>
       <div className={s.content}>
         <div className={s.skinsWrapper}>
           {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
-            <div key={index} className={s.skin}>
+            <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`} >
               <img src={lightningIcon} alt="Lightning" width={20} height={20} />
             </div>
           ))}
         </div>
 
-        <div className={s.tabs}>
+        <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
           {contentOptions.map((option, index) => (
             <span
               key={index}
@@ -123,7 +138,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         }
 
         <Button
-          className={s.button}
+          className={`${s.button} 
+            ${buttonGlowing ? s.glowingBtn : ''} `}
           disabled={submitDisabled && !noItemsMessage}
           onClick={noItemsMessage ? goToShop : submitCreation}
         >

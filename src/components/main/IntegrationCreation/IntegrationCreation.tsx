@@ -2,13 +2,20 @@ import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants';
 import {
+  RootState,
   profileApi,
   useGetCurrentUserProfileInfoQuery,
   useGetIntegrationsQuery,
 } from '../../../redux';
 import { IntegrationCreationCard, IntegrationCreationModal } from '../';
 import { SubscribeModal, SuccessfullySubscribedModal } from '../../';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+import {
+  getSubscriptionPurchased,
+  isIntegrationCreationButtonGlowing,
+  setSubscriptionPurchased,
+} from '../../../utils/guide-functions.ts';
 
 import s from './IntegrationCreation.module.scss';
 import { Button } from '../../shared';
@@ -39,13 +46,22 @@ export const IntegrationCreation = () => {
   const handleSuccessfullySubscribed = () => {
     closeModal(MODALS.SUBSCRIBE);
     dispatch(profileApi.util.invalidateTags(['Me']));
+    dispatch(profileApi.util.invalidateTags(['Me']));
     openModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
   };
+
+  const isButtonGlowing = isIntegrationCreationButtonGlowing();
+
+  const createIntegrationButtonGlowing = useSelector(
+    (state: RootState) => state.guide.createIntegrationButtonGlowing,
+  );
 
   return (
     <section className={s.integrationsControls}>
       <Button
-        className={s.button}
+        className={`${s.button} ${
+          isButtonGlowing || createIntegrationButtonGlowing ? s.glowing : ''
+        }`}
         disabled={!profile}
         onClick={handleIntegrationCreation}
       >
@@ -81,7 +97,13 @@ export const IntegrationCreation = () => {
       />
       <SuccessfullySubscribedModal
         modalId={MODALS.SUCCESSFULLY_SUBSCRIBED}
-        onClose={() => closeModal(MODALS.SUCCESSFULLY_SUBSCRIBED)}
+        onClose={() => {
+          closeModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
+          if (!getSubscriptionPurchased()) {
+            setSubscriptionPurchased();
+            openModal(MODALS.CREATING_INTEGRATION);
+          }
+        }}
       />
     </section>
   );

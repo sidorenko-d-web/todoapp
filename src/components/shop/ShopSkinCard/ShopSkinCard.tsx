@@ -1,8 +1,7 @@
 import { FC } from 'react';
 import styles from './ShopSkinCard.module.scss';
 import clsx from 'clsx';
-import { shopApi, useBuySkinMutation, useGetShopSkinsQuery } from '../../../redux/api/shop/api';
-import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
+import { shopApi, useBuySkinMutation } from '../../../redux';
 import { IShopSkin } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import HeadIcon from '../../../assets/icons/head_icon.svg';
@@ -15,6 +14,7 @@ import ListIcon from '../../../assets/icons/list.svg';
 import { useModal } from '../../../hooks';
 import { MODALS, svgHeadersString } from '../../../constants';
 import { formatAbbreviation } from '../../../helpers';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 
 interface Props {
@@ -23,9 +23,8 @@ interface Props {
 }
 
 export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
+  const { t,i18n } = useTranslation('shop');
   const [buySkin, { isLoading }] = useBuySkinMutation();
-  const { refetch: refetchShop } = useGetShopSkinsQuery();
-  const { refetch: refetchInventory } = useGetInventorySkinsQuery();
   const { openModal } = useModal();
 
   const handleBuySkin = async () => {
@@ -41,7 +40,8 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
     }
   };
 
-  console.log(mode);
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+
 
   return (
     <div className={styles.storeCard}>
@@ -73,14 +73,14 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
               )}
             </div>
           </div>
-          <p className={styles.description}>Небольшое описание скина.</p>
+          <p className={styles.description}>{t('s36')}</p>
         </div>
       </div>
 
       <div className={styles.actions}>
         {item.limited ? (
           <Button className={styles.vipButton}>
-            {formatAbbreviation(item.price_usdt, 'currency')} (осталось {item.quantity} шт.)
+            {formatAbbreviation(item.price_usdt, 'currency',{ locale: locale })} ({t('s10')} {item.quantity} {t('s11')}.)
           </Button>
         ) : mode === 'shop' ? (
           <>
@@ -88,14 +88,14 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
               className={styles.button}
               onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' })}
             >
-              {formatAbbreviation(item.price_usdt, 'currency')}
+              {formatAbbreviation(item.price_usdt, 'currency', { locale: locale })}
             </Button>
             <Button className={styles.priceButton} onClick={handleBuySkin}>
               {isLoading ? (
-                <p>Загрузка</p>
+                <p>Loading</p>
               ) : (
                 <>
-                  {formatAbbreviation(item.price_internal)} <img src={CoinIcon} />
+                  {formatAbbreviation(item.price_internal, 'number', { locale: locale })} <img src={CoinIcon} />
                 </>
               )}
             </Button>
@@ -107,10 +107,10 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
           <>
             <Button className={styles.buttonInventory}>
               {isLoading ? (
-                <p>Загрузка</p>
+                <p>Loading</p>
               ) : (
                 <>
-                  <p>Надеть</p>
+                  <p>{t('s39')}</p>
                 </>
               )}
             </Button>

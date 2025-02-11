@@ -21,7 +21,7 @@ const scales: ScaleConfig[] = [
 export const formatAbbreviation = (
   value: number | string | Date,
   abbreviationType: AbbreviationType = 'number',
-  { locale = 'ru', decimals = 3, currencySymbol = '$USDT' }: FormatAbbreviationOptions = {},
+  { locale = 'ru', decimals = 3, currencySymbol = ' $USDT' }: FormatAbbreviationOptions = {},
 ): string => {
   if (abbreviationType === 'date') {
     const asDate =

@@ -105,3 +105,10 @@
     }
   }
 }
+
+.elevated {
+  z-index: 5000;
+}
+.bordered {
+  border: 2px solid var.$color-primary;
+}

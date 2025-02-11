@@ -8,12 +8,17 @@ import {
 } from '../../redux';
 import {
   Integration,
-  IntegrationComment,
+  IntegrationComment, IntegrationPageGuide,
   IntegrationStats,
   IntegrationStatsMini,
 } from '../../components';
 import integrationIcon from '../../assets/icons/integration-icon.svg';
 import { useParams } from 'react-router-dom';
+import { isGuideShown, setGuideShown } from '../../utils';
+import { GUIDE_ITEMS } from '../../constants';
+import { useDispatch } from 'react-redux';
+import { setElevateIntegrationStats } from '../../redux/slices/guideSlice';
+
 export const IntegrationPage: React.FC = () => {
   const { integrationId: queryIntegrationId } = useParams<{
     integrationId: string | undefined;
@@ -28,20 +33,17 @@ export const IntegrationPage: React.FC = () => {
       : integrations?.integrations[0].id;
 
   const { data, error, isLoading } = useGetIntegrationQuery(`${integrationId}`);
-  const { data: commentData, refetch } = useGetUnansweredIntegrationCommentQuery(
-    `${integrationId}`,
-  );
+  const { data: commentData, refetch } = useGetUnansweredIntegrationCommentQuery(`${integrationId}`);
   const [postComment] = usePostCommentIntegrationsMutation();
 
   const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
   const [progress, setProgress] = useState(0);
   const [finished, setFinished] = useState(false);
 
-  const comments = commentData
-    ? Array.isArray(commentData)
-      ? commentData
-      : [commentData]
-    : [];
+  const comments = commentData ? (Array.isArray(commentData) ? commentData : [commentData]) : [];
+
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     if (comments.length === 0) {
@@ -101,10 +103,17 @@ export const IntegrationPage: React.FC = () => {
             progres={progress}
             {...comments[currentCommentIndex]}
             onVote={handleVote}
+            hateText={commentData?.is_hate}
             finished={finished}
           />
         </>
+
       )}
+      {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+        <IntegrationPageGuide onClose={() => {
+          setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+          dispatch(setElevateIntegrationStats(false));
+        }} />}
     </div>
   );
 };

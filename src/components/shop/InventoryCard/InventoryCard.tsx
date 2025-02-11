@@ -22,6 +22,7 @@ import ViewsIcon from '../../../assets/icons/views.png';
 import { localStorageConsts, MODALS, SOUNDS, svgHeadersString } from '../../../constants';
 import { useModal } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
+import { useTranslation } from 'react-i18next';
 import useSound from 'use-sound';
 import { useSelector } from 'react-redux';
 import { Button } from '../../shared';
@@ -51,13 +52,15 @@ function sortByPremiumLevel(items: IShopItem[]) {
 }
 
 export const InventoryCard: FC<Props> = ({
-  disabled,
-  isBlocked,
-  isUpgradeEnabled = true,
-  item,
-  isB,
-}) => {
-  const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
+                                           disabled,
+                                           isBlocked,
+                                           isUpgradeEnabled = true,
+                                           item,
+                                           isB,
+                                         }) => {
+                                          
+  const { t,i18n } = useTranslation('shop');
+  const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
   const { data, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
@@ -99,6 +102,8 @@ export const InventoryCard: FC<Props> = ({
     } catch (error) {}
   };
 
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+
   return (
     <div className={styles.storeCard}>
       <div className={styles.header}>
@@ -136,15 +141,15 @@ export const InventoryCard: FC<Props> = ({
             https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284353&m=dev#1121983015
             {item.item_rarity === 'red' ? (
               <div className={styles.variant}>
-                <p>Эконом</p>
+                <p>{t('s14')}</p>
               </div>
             ) : item.item_rarity === 'yellow' ? (
               <div className={styles.variantPurple}>
-                <p>Премиум</p>
+                <p>{t('s15')}</p>
               </div>
             ) : (
               <div className={styles.variantRed}>
-                <p>Люкс</p>
+                <p>{t('s16')}</p>
               </div>
             )}
           </div> */}
@@ -157,7 +162,7 @@ export const InventoryCard: FC<Props> = ({
                 : styles.level
             }
           >
-            Уровень {item.level} {isB && 'Предмет куплен'}
+            {t('s20')} {item.level} {isB && t("s21")}
           </p>
           <div
             className={clsx(
@@ -166,17 +171,17 @@ export const InventoryCard: FC<Props> = ({
             )}
           >
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.views)}</p>
+              <p>+{formatAbbreviation(item.boost.views,'number', { locale: locale })}</p>
               <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.subscribers)}</p>
+              <p>+{formatAbbreviation(item.boost.subscribers,'number', { locale: locale })}</p>
               <img src={SubscriberCoin} alt="" />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.income_per_second)}</p>
+              <p>+{formatAbbreviation(item.boost.income_per_second, 'number', { locale: locale })}</p>
               <img src={CoinIcon} alt="" />
-              <p>/сек</p>
+              <p>/{t('s13')}</p>
             </div>
           </div>
         </div>
@@ -185,7 +190,7 @@ export const InventoryCard: FC<Props> = ({
       {!isBlocked &&
         (disabled ? (
           <p className={styles.disabledText}>
-            Сейчас активен “
+            {t('s22')} “
             <span
               className={
                 item.item_rarity === 'yellow'
@@ -195,14 +200,14 @@ export const InventoryCard: FC<Props> = ({
             >
               Компьютерный стул - Base
             </span>
-            ”. Вы можете заменить его на текущий предмет, сделав его активным.
+            ”. {t('s23')}
           </p>
         ) : (
           <div className={styles.progress}>
             <div className={styles.text}>
-              <p>{item.level}/50 уровней </p>
+              <p>{item.level}/50 {t('s24')} </p>
               <div className={styles.goal}>
-                <p>Каменный сундук</p>
+                <p>{t('s25')}</p>
                 <img
                   src={
                     item.item_rarity === 'red'
@@ -262,23 +267,23 @@ export const InventoryCard: FC<Props> = ({
       {isBlocked ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
-          <p>Прокачайте основной предмет</p>
+          <p>{t('s26')}</p>
           <img src={LockIcon} alt="" />
         </div>
       ) : item.level === 50 ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
-          <p>Максимальный уровень</p>
+          <p>{t('s27')}</p>
           <img src={LockIcon} alt="" />
         </div>
       ) : disabled ? (
         <Button className={styles.disabledActions}>
-          <p>Активировать</p>
+          <p>{t('s28')}</p>
         </Button>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
           <Button>
-            {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency')}
+            {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', { locale: locale })}
           </Button>
           <Button
             className={clsx(
@@ -293,7 +298,7 @@ export const InventoryCard: FC<Props> = ({
               <p>loading</p>
             ) : (
               <>
-                {formatAbbreviation(data?.items[0].price_internal || 0)}{' '}
+                {formatAbbreviation(data?.items[0].price_internal || 0,'number', { locale: locale })}{' '}
                 <img src={CoinIcon} alt="" />
               </>
             )}
@@ -313,10 +318,11 @@ export const InventoryCard: FC<Props> = ({
       ) : (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
-          <p>Нужен уровень Древа 7</p>
+          <p>{t('s18')} 7</p>
           <img src={LockIcon} alt="" />
         </div>
       )}
+
     </div>
   );
 };

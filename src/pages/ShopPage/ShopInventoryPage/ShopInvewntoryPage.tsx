@@ -16,10 +16,12 @@ import {
 import { compareItems } from '../../../helpers';
 import styles from '../ShopPage.module.scss'
 import GetRewardChestModal from '../../DevModals/GetRewardChestModal/GetRewardChestModal';
+import { useTranslation } from 'react-i18next';
 
 type TypeTab<T> = { title: string; value: T };
 
 export const ShopInvewntoryPage = () => {
+  const { t } = useTranslation('shop');
   const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
   const [itemsQuality, setItemsQuality] = useState<TypeTab<TypeItemRarity>>();
 
@@ -96,10 +98,10 @@ export const ShopInvewntoryPage = () => {
       onItemQualityChange={setItemsQuality}
     >
       {!isFetching && !isSuccess && shopCategory?.title !== 'Вы' ? (
-        <p className={styles.emptyText}>Пока здесь нет приобретенных предметов. Купите новый предмет в магазине.</p>
+        <p className={styles.emptyText}>{t("s38")}</p>
       ) : !shopCategory || !itemsQuality ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
-      ) : shopCategory?.title !== 'Вы' ? (
+      ) : shopCategory?.title !== `${t('s6')}` ? (
         isSuccess && (
           <>
             {itemsForBuy?.[0] && (

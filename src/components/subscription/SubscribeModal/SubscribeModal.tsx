@@ -4,6 +4,7 @@ import coinIcon from '../../../assets/icons/coin.png';
 import { useBuySubscriptionMutation } from '../../../redux';
 
 import s from './SubscribeModal.module.scss';
+import { getSubscriptionPurchased } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { Button, CentralModal } from '../../shared';
 
@@ -19,6 +20,8 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
                                                           onSuccess,
                                                         }: SubscribeModalProps) => {
   const [ buySubscription ] = useBuySubscriptionMutation();
+
+  const buyBtnGlowing = getSubscriptionPurchased();
 
   const handleBuySubscription = () => {
     buySubscription().unwrap().then(() => onSuccess());
@@ -45,11 +48,10 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
           </span>
         </div>
         <div className={s.buttons}>
-          <Button className={s.button} onClick={handleBuySubscription}>{formatAbbreviation(450)} <img src={coinIcon}
-                                                                                                      height={14}
-                                                                                                      width={14}
-                                                                                                      alt={'Coin'} />
-          </Button>
+          <Button className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`} onClick={handleBuySubscription}>
+              {formatAbbreviation(450)} <img src={coinIcon} height={14} width={14}
+                                                                                  alt={'Coin'} /></Button>
+       
           <Button className={s.button + ' ' + s.gray}>Задание</Button>
           <Button className={s.button} disabled>{formatAbbreviation(1.99, 'currency')}</Button>
         </div>

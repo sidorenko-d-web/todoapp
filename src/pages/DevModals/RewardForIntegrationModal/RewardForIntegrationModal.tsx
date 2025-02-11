@@ -11,16 +11,24 @@ import lightning from '../../../assets/icons/lightning.svg';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import reward from '../../../assets/animations/reward.json';
+import { useDispatch } from 'react-redux';
+import { setIsPublishedModalClosed } from '../../../redux/slices/guideSlice';
 import { CentralModal } from '../../../components/shared';
 
 export default function RewardForIntegrationModal() {
   const { closeModal } = useModal();
 
+  const dispatch = useDispatch();
+
+
   useAutoPlaySound(MODALS.INTEGRATION_REWARD, SOUNDS.rewardHuge);
 
   return (
     <CentralModal
-      onClose={() => closeModal(MODALS.INTEGRATION_REWARD)}
+      onClose={() => {
+        dispatch(setIsPublishedModalClosed(true));
+        closeModal(MODALS.INTEGRATION_REWARD);
+      }}
       modalId={MODALS.INTEGRATION_REWARD}
       title={'Интеграция опубликована!'}
     >
@@ -65,7 +73,10 @@ export default function RewardForIntegrationModal() {
           духе!
         </p>
       </div>
-      <Button variant={'blue'}>Забрать</Button>
+      <Button variant={'blue'} onClick={() => {
+        dispatch(setIsPublishedModalClosed(true));
+        closeModal(MODALS.INTEGRATION_REWARD);
+      }}>Забрать</Button>
     </CentralModal>
   );
 }

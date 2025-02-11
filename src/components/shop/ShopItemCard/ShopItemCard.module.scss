@@ -156,10 +156,14 @@
       }
 
       &:last-child {
-        background: var.$color-gray;
         flex: 1;
         border: none;
       }
+    }
+    .disabledButton {
+      pointer-events: none !important;
+      border: none !important;
+      opacity: 0.3 !important;
     }
   }
 
@@ -206,4 +210,9 @@
       color: var.$color-primary;
     }
   }
+}
+
+.glowingBtn {
+  box-shadow: 0 0 50px var.$color-primary;
+  background: var.$color-primary;
 }

@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
 import { SOUNDS } from '../../../constants';
 import { Button, ProgressLine } from '../../shared';
+import { RootState } from '../../../redux';
+import clsx from 'clsx';
 
 interface IntegrationCommentProps {
   author_username: string;
@@ -14,6 +16,7 @@ interface IntegrationCommentProps {
   progres: number;
   onVote: (isThumbsUp: boolean, id: string) => void;
   finished: boolean;
+  hateText: boolean;
 }
 
 export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
@@ -23,7 +26,11 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
   progres,
   onVote,
   finished,
+  hateText,
 }) => {
+
+  const elevateComment = useSelector((state: RootState) => state.guide.elevateIntegrationStats);
+
   const [voteRightSound] = useSound(SOUNDS.rightAnswer, {
     volume: useSelector(selectVolume),
   });
@@ -39,11 +46,11 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
     voteWrondSound();
   };
   return (
-    <div className={styles.wrp}>
+    <div className={`${styles.wrp} ${elevateComment ? styles.elevated : ''}`}>
       {!finished ? (
         <div className={styles.usernameAndComment}>
           <p className={styles.username}>{author_username}:</p>
-          <p className={styles.commentText}>{comment_text}</p>
+          <p className={clsx(styles.negativeCommentText, {[styles.positiveCommentText]: hateText})}>{comment_text}</p>
         </div>
       ) : (
         <p className={styles.noComment}>Нет новых комментариев</p>
