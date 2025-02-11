@@ -7,12 +7,11 @@
     "dev": "vite --host",
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "preview": "vite preview",
-    "tunnel": "ssh -R 80:localhost:5173 nokey@localhost.run"
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@esotericsoftware/spine-player": "^4.2.72",
     "@orbs-network/ton-access": "^2.3.3",
+    "@esotericsoftware/spine-player": "^4.2.72",
     "@react-input/mask": "^2.0.4",
     "@reduxjs/toolkit": "^2.5.0",
     "@ton/ton": "^15.2.0",
@@ -40,10 +39,10 @@
     "slick-carousel": "^1.8.1",
     "url": "^0.11.4",
     "use-sound": "^4.0.3",
-    "uuid": "^11.0.5",
-    "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-svg-icons": "^2.0.1",
     "vite-plugin-svgr": "^4.3.0"
+    "uuid": "^11.0.5",
+    "vite-plugin-node-polyfills": "^0.23.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
