@@ -112,7 +112,6 @@ export const MainPage: FC = () => {
               handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
               openModal(MODALS.SUBSCRIBE);
             }}
-            isReferral={true}
           />
         )}
 

@@ -38,9 +38,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   }, [timeLeft, accelerateIntegration]);
 
   useEffect(() => {
-    console.log('using effect')
     if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
-      console.log('using effect 12345')
       accelerateIntegration(timeLeft-20);
     }
   }, [])
