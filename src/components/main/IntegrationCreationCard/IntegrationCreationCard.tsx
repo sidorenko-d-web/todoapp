@@ -40,6 +40,14 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   }, [ timeLeft, accelerateIntegration ]);
 
   useEffect(() => {
+    console.log('using effect')
+    if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
+      console.log('using effect 12345')
+      accelerateIntegration(timeLeft-20);
+    }
+  }, [])
+
+  useEffect(() => {
     const timerId = setInterval(() => {
       setTimeLeft(prevTime => Math.max(prevTime - 1, 0));
     }, 1000);
@@ -51,7 +59,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     return () => {
       clearInterval(timerId);
     };
-  }, [ isExpired ]);
+  }, [isExpired]);
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -94,7 +102,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
     }
     return null;
-  }
+  };
 
   return (
     <div className={`${s.integration} ${s.elevated}`}>
