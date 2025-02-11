@@ -1,5 +1,4 @@
-import CentralModal from '../../shared/CentralModal/CentralModal';
-
+import { CentralModal } from '../../shared';
 import s from './BindingCompleteModal.module.scss';
 
 type BindingCompleteModalProps = {
