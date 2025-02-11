@@ -59,7 +59,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
 
   const handleAccelerateClick = () => {
     if (!isExpired) {
-      void accelerateIntegration(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) ? timeLeft-5: timeLeft-1);
+      void accelerateIntegration(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) ? 1: timeLeft-1);
       createParticles();
     }
   };
