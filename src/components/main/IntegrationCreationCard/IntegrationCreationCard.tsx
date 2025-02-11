@@ -38,6 +38,14 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   }, [timeLeft, accelerateIntegration]);
 
   useEffect(() => {
+    console.log('using effect')
+    if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
+      console.log('using effect 12345')
+      accelerateIntegration(timeLeft-20);
+    }
+  }, [])
+
+  useEffect(() => {
     const timerId = setInterval(() => {
       setTimeLeft(prevTime => Math.max(prevTime - 1, 0));
     }, 1000);
@@ -59,7 +67,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
 
   const handleAccelerateClick = () => {
     if (!isExpired) {
-      void accelerateIntegration(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) ? 1: timeLeft-1);
+      void accelerateIntegration(1);
       createParticles();
     }
   };
