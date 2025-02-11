@@ -24,7 +24,7 @@ export type IntegrationsResponseDTO = {
 
 export type IntegrationsQueryRequestDTO = {
   company_name?: string;
-  status?: 'creating' | 'created';
+  status?: 'creating' | 'created' | 'published';
   asc?: boolean;
   offset?: number;
   limit?: number;
@@ -34,6 +34,7 @@ export type UnansweredIntegrationCommentDTO = {
   id: string,
   author_username: string,
   comment_text: string,
+  is_hate: boolean
 }
 
 

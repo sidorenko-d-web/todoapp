@@ -22,6 +22,7 @@ export const store = configureStore({
       usersApi.middleware,
       treeApi.middleware,
       tasksApi.middleware,
+
     ),
 });
 

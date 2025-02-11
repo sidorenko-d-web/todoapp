@@ -19,6 +19,12 @@ export const MODALS = {
   NEW_ITEM: 'newItem',
   UPGRADED_ITEM: 'upgradedItem',
   UPGRADED_SHOP: 'upgradedShop',
+  SETTINGS: 'settings',
+  LANGUAGE_SELECTION: 'languageSelection',
+  WALLET_CONNECTION: 'walletConnection',
+  BINDING: 'binding',
+  BINDING_CONFIRMATION: 'binding-confirmation',
+  BINDING_SUCCESS: 'binding-success',
 };
 
 

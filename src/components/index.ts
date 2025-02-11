@@ -6,3 +6,7 @@ export * from './subscription';
 export * from './promotion';
 export * from './wardrobe';
 export * from './tree';
+export * from './TransactionNotification'
+export * from './settings'
+export * from './guide';
+export * from './influencers';

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import styles from './ProfilePage.module.scss';
 import { ProfileInfo, ProfileStats, ProfileStatsMini, StreakCard } from '../../components/profile';
@@ -9,8 +10,8 @@ import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 
-
 export const ProfilePage: React.FC = () => {
+  const { t } = useTranslation('profile');
 
   const { closeModal } = useModal();
 
@@ -30,17 +31,16 @@ export const ProfilePage: React.FC = () => {
 
   const weekData = getWeekData(streakDays, freezeDays);
 
-
   return (
     <>
-      {(isUserLoading || isTopProfilesLoading) && <p>Загрузка...</p>}
+      {(isUserLoading || isTopProfilesLoading) && <p>{t('p3')}</p>}
 
-      {(userError || topProfilesError) && <p>Ошибка при загрузке данных профиля</p>}
+      {(userError || topProfilesError) && <p>{t('p17')}</p>}
 
       {(userProfileData && topProfilesData) &&
         <div className={styles.wrp}>
           <div>
-            <h1 className={styles.pageTitle}>Профиль</h1>
+            <h1 className={styles.pageTitle}>{t("p1")}</h1>
 
             <ProfileStatsMini subscribers={userProfileData.subscribers} position={position} daysInARow={10} totalViews={userProfileData.total_views} />
           </div>
@@ -56,14 +56,14 @@ export const ProfilePage: React.FC = () => {
           <StreakCard streakCount={12} freezeCount={0} days={weekData} progress={12} />
 
           <div>
-            <p className={styles.statsTitle}>Статистика за всё время</p>
+            <p className={styles.statsTitle}>{t('p4')}</p>
             <ProfileStats earned={userProfileData.total_earned} views={userProfileData.total_views}
                           favoriteCompany={'Favourite company'} comments={userProfileData.comments_answered_correctly}
                           rewards={12} coffee={5} />
           </div>
 
           <div>
-            <p className={styles.statsTitle}>Награды</p>
+            <p className={styles.statsTitle}>{t('p5')}</p>
             <RewardsList />
           </div>
 

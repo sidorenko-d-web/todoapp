@@ -1,6 +1,5 @@
-import CentralModal from '../../../components/shared/CentralModal/CentralModal';
-import { MODALS } from '../../../constants/modals';
-import { useModal } from '../../../hooks';
+import { MODALS, SOUNDS } from '../../../constants';
+import { useModal, useAutoPlaySound } from '../../../hooks';
 import styles from './RewardForIntegrationModal.module.scss';
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
@@ -12,12 +11,24 @@ import lightning from '../../../assets/icons/lightning.svg';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import reward from '../../../assets/animations/reward.json';
+import { useDispatch } from 'react-redux';
+import { setIsPublishedModalClosed } from '../../../redux/slices/guideSlice';
+import { CentralModal } from '../../../components/shared';
 
 export default function RewardForIntegrationModal() {
   const { closeModal } = useModal();
+
+  const dispatch = useDispatch();
+
+
+  useAutoPlaySound(MODALS.INTEGRATION_REWARD, SOUNDS.rewardHuge);
+
   return (
     <CentralModal
-      onClose={() => closeModal(MODALS.INTEGRATION_REWARD)}
+      onClose={() => {
+        dispatch(setIsPublishedModalClosed(true));
+        closeModal(MODALS.INTEGRATION_REWARD);
+      }}
       modalId={MODALS.INTEGRATION_REWARD}
       title={'Интеграция опубликована!'}
     >
@@ -57,9 +68,15 @@ export default function RewardForIntegrationModal() {
         </div>
       </div>
       <div className={styles.desc}>
-        <p>Поздравляем! Интеграция готова, следите за статистикой и продолжайте в том же духе!</p>
+        <p>
+          Поздравляем! Интеграция готова, следите за статистикой и продолжайте в том же
+          духе!
+        </p>
       </div>
-      <Button variant={'blue'}>Забрать</Button>
+      <Button variant={'blue'} onClick={() => {
+        dispatch(setIsPublishedModalClosed(true));
+        closeModal(MODALS.INTEGRATION_REWARD);
+      }}>Забрать</Button>
     </CentralModal>
   );
 }

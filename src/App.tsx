@@ -5,6 +5,11 @@ import browserHistory from './routes/browserHistory.ts';
 import AppRouter from './routes/AppRouter.tsx';
 import { AuthInit } from './hooks';
 import { ModalsProvider } from './providers';
+import { TonConnectUIProvider } from '@tonconnect/ui-react';
+import { TonClientProvider } from './providers/TonClientProvider';
+import { useMemo } from 'react';
+import { TransactionNotificationProvider } from './providers/TransactionNotificationProvider/';
+
 
 declare global {
   interface Window {
@@ -13,6 +18,9 @@ declare global {
 }
 
 function App() {
+  const manifestUrl = useMemo(() => {
+    return new URL('tonconnect-manifest.json', window.location.href).toString();
+  }, []);
 
   return (
     <>
@@ -20,7 +28,13 @@ function App() {
         <ModalsProvider>
           <AuthInit>
             <HistoryRouter history={browserHistory}>
-              <AppRouter />
+              <TonConnectUIProvider language='ru' manifestUrl={"https://raw.githubusercontent.com/TimurZheksimbaev/First-TON-Project/refs/heads/main/apusher-tonconnect-manifest.json"}>
+                <TonClientProvider>
+                  <TransactionNotificationProvider>
+                    <AppRouter />
+                  </TransactionNotificationProvider>
+                </TonClientProvider>
+              </TonConnectUIProvider>
             </HistoryRouter>
           </AuthInit>
         </ModalsProvider>

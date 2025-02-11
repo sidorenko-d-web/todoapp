@@ -21,18 +21,18 @@
       color: var.$color-blue-primary;
     }
 
-    .positiveCommentText {
-      font-size: 14px;
-      font-weight: 500;
-      margin: 0;
-      color: var.$color-green;
-    }
-
     .negativeCommentText {
       font-size: 14px;
       font-weight: 500;
       margin: 0;
       color: var.$color-red;
+    }
+
+    .positiveCommentText {
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0;
+      color: var.$color-green;
     }
   }
 
@@ -102,4 +102,10 @@
     text-align: center;
     font-size: 14px;
   }
+}
+
+.elevated {
+  z-index: 10000;
+  border: 2px solid var.$color-primary;
+  box-shadow: 0px 0px 50px var.$color-blue-primary;
 }

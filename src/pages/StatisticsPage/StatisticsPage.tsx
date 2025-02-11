@@ -9,6 +9,7 @@ import StatisticsCard from '../../components/statistics/statisticsCard/Statistic
 import coin from '../../assets/icons/coin.png';
 import { useGetAllIntegrationsQuery, useGetCurrentUserProfileInfoQuery } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
+import { Button } from '../../components/shared';
 
 const StatisticsPage: FC = () => {
   const navigate = useNavigate();
@@ -18,21 +19,21 @@ const StatisticsPage: FC = () => {
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
-        <button className={styles.backButton} onClick={() => navigate(-1)}><img src={back} alt="Back" width={22}
-                                                                                height={22} /></button>
+        <Button className={styles.backButton} onClick={() => navigate(-1)}><img src={back} alt="Back" width={22}
+                                                                                height={22} /></Button>
         <div className={styles.titleWrapper}>
           <h1 className={styles.title}>Статистика</h1>
           <div className={styles.scores}>
             <div className={styles.scoresItem}>
-              <p>{formatAbbreviation(userProfileData?.total_views)}</p>
+              <p>{formatAbbreviation(userProfileData?.total_views || 0)}</p>
               <img src={views} alt="views" />
             </div>
             <div className={styles.scoresItem}>
-              <p>{formatAbbreviation(userProfileData?.subscribers)}</p>
+              <p>{formatAbbreviation(userProfileData?.subscribers || 0)}</p>
               <img src={subscribers} alt="subscribers" />
             </div>
             <div className={styles.scoresItem}>
-              <p>+ {formatAbbreviation(userProfileData?.points)}</p>
+              <p>+ {formatAbbreviation(userProfileData?.points || 0)}</p>
               <img src={coin} height={14} width={14} alt="" />
             </div>
           </div>

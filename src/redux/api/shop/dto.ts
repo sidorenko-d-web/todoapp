@@ -55,7 +55,7 @@ export interface IBoosts {
   subscribers: number;
 }
 export interface IBuyItemRequest {
-  payment_method: 'internal_wallet';
+  payment_method: 'internal_wallet' | 'usdt';
   id: string;
 }
 

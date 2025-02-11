@@ -42,6 +42,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
+  position: relative;
   transition: background 0.3s, border 0.3s;
   background: var.$color-card-bg;
   border: 2px solid var.$color-dark-gray-stroke;
@@ -76,8 +77,9 @@
 
 .spiner {
   position: absolute;
-  top: -47px;
-  right: 80px;
+  top: -166%;
+  left: -66%;
+  transform: translate(-50%, -50%) rotate(0deg);
   z-index: -2;
   animation: spin 6s linear infinite;
 }

@@ -10,6 +10,7 @@ import { useGetUserProfileInfoByIdQuery } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
 
 import s from './StrangerProfilePage.module.scss';
+import { Button } from '../../components/shared';
 
 export const StrangerProfilePage = () => {
   const { openModal, closeModal } = useModal();
@@ -23,7 +24,10 @@ export const StrangerProfilePage = () => {
     <main className={s.page}>
       <div className={s.listUser}>
         <div
-          className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
+          className={classNames(s.cardBlock, {
+            /*{ [s.vipCard]: profile.vip }*/
+          })}
+        >
           <div className={s.card}>
             <img src={userIcon} alt="user" width={27} height={36} />
           </div>
@@ -45,18 +49,23 @@ export const StrangerProfilePage = () => {
             </ul>
           </div>
         </div>
-        <button className={classNames(s.cardBox, {/*{ [s.vipCardBox]: profile.vip }*/ })}
-                onClick={() => openModal(MODALS.STRANGER_PROFILE)}>
+        <Button
+          className={classNames(s.cardBox, {
+            /*{ [s.vipCardBox]: profile.vip }*/
+          })}
+          onClick={() => openModal(MODALS.STRANGER_PROFILE)}
+        >
           {/*{profile.vip ? <img src={chest} height={20} width={20} alt="chest" /> :*/}
           <img src={infoIcon} alt="close" width={20} height={20} />
           {/*}*/}
-        </button>
+        </Button>
       </div>
 
       <StrangerProfileModal
         profileId={profileId}
         modalId={MODALS.STRANGER_PROFILE}
-        onClose={() => closeModal(MODALS.STRANGER_PROFILE)} />
+        onClose={() => closeModal(MODALS.STRANGER_PROFILE)}
+      />
     </main>
   );
 };

@@ -52,11 +52,14 @@ export const Tree = () => {
               <div key={stage.id} className={s.levelMarker} style={{ bottom: `${bottomPosition}px` }}>
                 <div className={classNames(s.levelCircle, { [s.active]: isActive })}>
                   {isActive ? (
-                    <img src={tickCircle} height={16} width={16} alt="tickCircle" />
+                    <img src={tickCircle} height={16} width={16} alt="tickCircle" style={{zIndex: '0'}}/>
                   ) : (
-                    <img src={circle} height={16} width={16} alt="circle" />
+                    <img src={circle} height={16} width={16} alt="circle" style={{zIndex: '0'}}/>
                   )}
                   {stage.stage_number}
+                {stage.stage_number % 10 === 0 && (
+                  <img className={s.spiner} src={spinner} height={120} width={120} alt="spinner" />
+                )}
                 </div>
                 {stage.id > 1 && (
                   <div
@@ -65,9 +68,6 @@ export const Tree = () => {
                       [s.prizeActive]: isActive || stage.stage_number % 10 === 0,
                     })}
                   >
-                    {stage.stage_number % 10 === 0 && (
-                      <img className={s.spiner} src={spinner} height={120} width={120} alt="spinner" />
-                    )}
                     {stage.achievement && (
                       <div className={classNames(s.imgPrize, { [s.imgPrizeActive]: isActive })}>
                         <div className={classNames({ [s.blur]: !isActive })} />

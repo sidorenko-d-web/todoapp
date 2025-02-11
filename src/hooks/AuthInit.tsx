@@ -3,6 +3,7 @@ import { useSignInMutation } from '../redux';
 import { LoadingScreen } from '../components/shared/LoadingScreen';
 import { LanguageSelect } from '../pages/LanguageSelect';
 import { SkinSetupPage } from '../pages/SkinSetupPage';
+import { useTranslation } from 'react-i18next';
 
 type AuthInitProps = {
   children: React.ReactNode;
@@ -11,6 +12,7 @@ type AuthInitProps = {
 type AuthStep = 'loading' | 'language' | 'skin' | 'completed';
 
 export function AuthInit({ children }: AuthInitProps) {
+  const { i18n } = useTranslation();
   const [signIn, { isLoading, isError, error }] = useSignInMutation();
   const [currentStep, setCurrentStep] = useState<AuthStep>('loading');
   const [selectedLanguage, setSelectedLanguage] = useState(() => {
@@ -71,9 +73,10 @@ export function AuthInit({ children }: AuthInitProps) {
     initAuth();
   }, [signIn]);
 
-  const handleLanguageSelect = (language: string) => {
+  const handleLanguageSelect = async (language: string) => {
     setSelectedLanguage(language);
     localStorage.setItem('selectedLanguage', language);
+    await i18n.changeLanguage(language);
   };
 
   const handleLanguageContinue = () => {

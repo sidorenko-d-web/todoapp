@@ -7,6 +7,8 @@ import checkIcon from '../../../assets/icons/checkmark-in-the-circle.svg';
 import giftIcon from '../../../assets/icons/gift.svg';
 
 import s from './TaskCard.module.scss';
+import { formatAbbreviation } from '../../../helpers';
+import { Button } from '../../shared';
 import { ProgressBarTasks } from '../ProgressBarTasks';
 import classNames from 'classnames';
 
@@ -58,9 +60,9 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      income,
                                                      subscribers,
                                                      passiveIncome,
-                                                     currentStep = 0,
-                                                     totalSteps = 0,
-                                                     progress = 0,
+                                                     currentStep,
+                                                     totalSteps,
+                                                     progress,
                                                      progressReward,
                                                      progressRewardIcon,
                                                      buttonText = 'Выполнить',
@@ -68,10 +70,10 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      isLoading,
                                                      disabled,
                                                      onClick,
-                                                     questionStates = ['closed', 'closed', 'closed'],
-                                                     errorText,
+                                                     questionStates = [ 'closed', 'closed', 'closed' ],
                                                      isCompleted,
                                                      isTopTask,
+                                                     errorText,
                                                    }) => {
   // Функция для получения иконки на основе состояния
   const getIconByState = (state: QuestionState) => {
@@ -86,7 +88,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
   };
 
   return (
-    <div className={classNames(s.card, { 
+    <div className={classNames(s.card, {
       [s.completed]: isCompleted,
       [s.topTask]: isTopTask
     })}>
@@ -100,10 +102,18 @@ export const TaskCard: React.FC<TasksCardProps> = ({
 
       {type === 'default' && (
         <section className={s.rewards}>
-          <span className={s.reward}>+{income}<img src={coinIcon} height={14} width={14} alt="income" /></span>
-          <span className={s.reward}>+{subscribers}<img src={subscribersIcon} height={14} width={14}
-                                                        alt="subscribers" /></span>
-          <span className={s.reward}>+{passiveIncome}<img src={coinIcon} height={14} width={14} alt="passive income" />/сек.</span>
+          <span className={s.reward}>
+            +{formatAbbreviation(income ?? 0)}
+            <img src={coinIcon} height={14} width={14} alt="income" />
+          </span>
+          <span className={s.reward}>
+            +{formatAbbreviation(subscribers ?? 0)}
+            <img src={subscribersIcon} height={14} width={14} alt="subscribers" />
+          </span>
+          <span className={s.reward}>
+            +{formatAbbreviation(passiveIncome ?? 0)}
+            <img src={coinIcon} height={14} width={14} alt="passive income" />/сек.
+          </span>
         </section>
       )}
 
@@ -129,9 +139,9 @@ export const TaskCard: React.FC<TasksCardProps> = ({
 
       {showProgressBar && (
         <ProgressBarTasks
-          currentStep={currentStep}
-          totalSteps={totalSteps}
-          progress={progress}
+          currentStep={currentStep ?? 0}
+          totalSteps={totalSteps ?? 0}
+          progress={progress ?? 0}
           progressReward={progressReward}
           progressRewardIcon={progressRewardIcon}
         />
@@ -144,13 +154,13 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       )}
 
       <section className={s.buttons}>
-        <button
+        <Button
           className={`${s.button} ${s[buttonType]} ${isLoading ? s.loading : ''}`}
           disabled={disabled || isLoading}
-          onClick={onClick}
+          onClick={() => onClick?.()}
         >
           {buttonText}
-        </button>
+        </Button>
       </section>
     </div>
   );

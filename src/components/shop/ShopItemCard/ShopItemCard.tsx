@@ -1,15 +1,23 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
-import { IShopItem } from '../../../redux';
+import { useGetCurrentUserProfileInfoQuery } from '../../../redux';
+import { IShopItem, RootState } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { MODALS, svgHeadersString } from '../../../constants';
+import { useModal, useSendTransaction, useUsdtTransactions } from '../../../hooks';
+import { useTransactionNotification } from '../../../hooks/useTransactionNotification';
+import { GUIDE_ITEMS, MODALS, svgHeadersString } from '../../../constants';
+import { useSelector } from 'react-redux';
+import { isGuideShown } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
-import { useModal } from '../../../hooks';
+import { useTranslation } from 'react-i18next';
+import { Button } from '../../shared';
+import { useDispatch } from 'react-redux';
+import { setPoints } from '../../../redux/slices/point.ts';
 
 interface Props {
   disabled?: boolean;
@@ -17,23 +25,63 @@ interface Props {
 }
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
-  const [ buyItem, { isLoading } ] = useBuyItemMutation();
-
+  const [buyItem, { isLoading }] = useBuyItemMutation();
+  const { data } = useGetCurrentUserProfileInfoQuery();
+  const dispatch = useDispatch();
+  const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
+  const [error, setError] = useState('');
 
-  const [ error, setError ] = useState('');
+  const buyButtonGlowing = useSelector((state: RootState) => state.guide.buyItemButtonGlowing);
+  // for transactions
+  const { sendUSDT } = useSendTransaction();
+  const usdtTransactions = useUsdtTransactions();
+  const [currentTrxId, setCurrentTrxId] = useState("")
+
+
+  const userPoints = data?.points || 0;
   const handleBuyItem = async () => {
     try {
+      dispatch(setPoints((prevPoints: number) => prevPoints + 1));
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
-      console.log(res);
       if (!res.error) {
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
       } else {
         setError(JSON.stringify(res.error));
       }
     } catch (error) {
+      console.error(error);
     }
   };
+
+  // for transactions
+  const { startTransaction, failTransaction, completeTransaction } = useTransactionNotification();
+  const handleUsdtPayment = async () => {
+    try {
+      setError('');
+      startTransaction();
+      const trxId = await sendUSDT(Number(item.price_usdt));
+      setCurrentTrxId(trxId || '');
+    } catch (error) {
+      failTransaction(handleUsdtPayment);
+    }
+  };
+
+  useEffect(() => {
+    const latestTransaction = usdtTransactions[0];
+    console.log("Transactions", latestTransaction)
+
+    if (!latestTransaction || latestTransaction.orderId !== currentTrxId) return;
+
+    if (latestTransaction.status === 'succeeded') {
+      completeTransaction();
+    } else {
+      failTransaction(handleUsdtPayment);
+    }
+  }, [usdtTransactions, currentTrxId]);
+
+
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.storeCard}>
@@ -52,11 +100,11 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                ? styles.colorPurple
+                : styles.level
             }
           >
-            Не куплено
+            {t('s17')}
           </p>
           {error && (
             <p
@@ -64,8 +112,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 item.item_rarity === 'green'
                   ? styles.colorRed
                   : item.item_rarity === 'yellow'
-                    ? styles.colorPurple
-                    : styles.level
+                  ? styles.colorPurple
+                  : styles.level
               }
             >
               {error}
@@ -73,17 +121,17 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
           )}
           <div className={styles.stats}>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.views)}</p>
+              <p>+{formatAbbreviation(item.boost.views, 'number', { locale: locale })}</p>
               <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.subscribers)}</p>
+              <p>+{formatAbbreviation(item.boost.subscribers, 'number', { locale: locale })}</p>
               <img src={SubscriberCoin} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.income_per_second)}</p>
+              <p>+{formatAbbreviation(item.boost.income_per_second, 'number', { locale: locale })}</p>
               <img src={CoinIcon} alt="" />
-              <p>/сек</p>
+              <p>/{t('s13')}</p>
             </div>
           </div>
         </div>
@@ -91,26 +139,33 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
       {!disabled ? (
         <div className={styles.actions}>
-          <button
-            onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
+          {isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) && (
+            <Button onClick={handleUsdtPayment}>
+              {formatAbbreviation(item.price_usdt, 'currency', { locale: locale })}
+            </Button>
+          )}
+          <Button
+            onClick={handleBuyItem}
+            className={clsx(
+              Number(userPoints) < Number(item.price_internal) ? styles.disabledButton : '',
+              buyButtonGlowing && item.name.toLowerCase().trim().includes('печатная машинка') ? styles.glowingBtn : ''
+            )}
           >
-            {formatAbbreviation(item.price_usdt, 'currency')}
-          </button>
-          <button onClick={handleBuyItem}>
             {isLoading ? (
-              <p>loading</p>
+              <p>Загрузка...</p>
             ) : (
               <>
-                {formatAbbreviation(item.price_internal)} <img src={CoinIcon} alt="" />
+                {formatAbbreviation(item.price_internal, 'number', { locale: locale })} <img src={CoinIcon} alt="" />
+
               </>
             )}
-          </button>
+          </Button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <img src={LockIcon} alt="" />
-          <p>Нужен уровень Древа 7</p>
+          <p>{t('s18')} 7</p>
           <img src={LockIcon} alt="" />
           <img src={LockIcon} alt="" />
         </div>

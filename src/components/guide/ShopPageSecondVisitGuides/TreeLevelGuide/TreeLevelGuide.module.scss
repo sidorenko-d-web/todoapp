@@ -1,0 +1,61 @@
+@use '../../../../assets/styles/index.scss' as var;
+@use 'sass:color';
+
+.nextBtn {
+    width: 100%;
+    background-color: var.$color-gray;
+    color: white;
+    height: 44px;
+    padding: 10px 0;
+    border: 1px solid var.$color-dark-gray;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.gifImage {
+    position: absolute;
+    top: 50%;
+    right: -20px;
+}
+
+.disabledUpgradeActions {
+    position: absolute;
+    top: -80px;
+    background: color.scale(var.$color-gray, $alpha: 100%);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    padding: 10px 20px;
+    gap: 2px;
+    align-items: center;
+
+    img {
+      width: 14px;
+      height: 14px;
+    }
+
+    p {
+      line-height: 14px;
+      color: var.$grayed-white;
+      font-weight: 500;
+    }
+
+    @media (min-width: var.$breakpoint-md) {
+      padding: 12px;
+      p {
+        font-size: 16px;
+        line-height: 16px;
+      }
+      img {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
+
+.elevated {
+    box-shadow: 0 0 50px var.$color-primary;
+  }
+  
