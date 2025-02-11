@@ -6,39 +6,58 @@ import {
   useGetUnansweredIntegrationCommentQuery,
   usePostCommentIntegrationsMutation,
 } from '../../redux';
-import { Integration, IntegrationComment, IntegrationStats, IntegrationStatsMini } from '../../components';
+import {
+  Integration,
+  IntegrationComment, IntegrationPageGuide,
+  IntegrationStats,
+  IntegrationStatsMini,
+} from '../../components';
 import integrationIcon from '../../assets/icons/integration-icon.svg';
 import { useParams } from 'react-router-dom';
+import { isGuideShown, setGuideShown } from '../../utils';
+import { GUIDE_ITEMS } from '../../constants';
+import { useDispatch } from 'react-redux';
+import { setElevateIntegrationStats } from '../../redux/slices/guideSlice';
 
 export const IntegrationPage: React.FC = () => {
-  const { integrationId: queryIntegrationId } = useParams<{ integrationId: string | undefined }>();
-  const { data: integrations } = useGetIntegrationsQuery(undefined, { skip: !!queryIntegrationId && queryIntegrationId !== 'undefined' });
+  const { integrationId: queryIntegrationId } = useParams<{
+    integrationId: string | undefined;
+  }>();
+  const { data: integrations } = useGetIntegrationsQuery(undefined, {
+    skip: !!queryIntegrationId && queryIntegrationId !== 'undefined',
+  });
 
-  const integrationId = queryIntegrationId !== 'undefined' ? queryIntegrationId : integrations?.integrations[0].id;
+  const integrationId =
+    queryIntegrationId !== 'undefined'
+      ? queryIntegrationId
+      : integrations?.integrations[0].id;
 
   const { data, error, isLoading } = useGetIntegrationQuery(`${integrationId}`);
   const { data: commentData, refetch } = useGetUnansweredIntegrationCommentQuery(`${integrationId}`);
-  const [ postComment ] = usePostCommentIntegrationsMutation();
+  const [postComment] = usePostCommentIntegrationsMutation();
 
-  const [ currentCommentIndex, setCurrentCommentIndex ] = useState<number>(0);
-  const [ progress, setProgress ] = useState(0);
-  const [ finished, setFinished ] = useState(false);
+  const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
+  const [progress, setProgress] = useState(0);
+  const [finished, setFinished] = useState(false);
 
-  const comments = commentData ? (Array.isArray(commentData) ? commentData : [ commentData ]) : [];
+  const comments = commentData ? (Array.isArray(commentData) ? commentData : [commentData]) : [];
+
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     if (comments.length === 0) {
       setFinished(true);
     }
-  }, [ comments ]);
+  }, [comments]);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     await postComment({ commentId, isHate: isThumbsUp });
 
-    setProgress((prevProgress) => (prevProgress + 1) % 5);
+    setProgress(prevProgress => (prevProgress + 1) % 5);
 
     if (currentCommentIndex + 1 < comments.length) {
-      setCurrentCommentIndex((prevIndex) => prevIndex + 1);
+      setCurrentCommentIndex(prevIndex => prevIndex + 1);
     } else {
       setFinished(true);
       await refetch();
@@ -46,7 +65,6 @@ export const IntegrationPage: React.FC = () => {
       setFinished(false);
     }
   };
-
 
   return (
     <div className={styles.wrp}>
@@ -57,7 +75,11 @@ export const IntegrationPage: React.FC = () => {
 
       {data && (
         <>
-          <IntegrationStatsMini views={data.views} subscribers={data.subscribers} income={data.income} />
+          <IntegrationStatsMini
+            views={data.views}
+            subscribers={data.subscribers}
+            income={data.income}
+          />
           <div className={styles.integrationNameWrp}>
             <p className={styles.integrationTitle}>Интеграция 1</p>
             <div className={styles.integrationLevelWrp}>
@@ -66,11 +88,16 @@ export const IntegrationPage: React.FC = () => {
             </div>
           </div>
           <Integration />
-          <IntegrationStats views={data.views} income={data.income} subscribers={data.subscribers} />
+          <IntegrationStats
+            views={data.views}
+            income={data.income}
+            subscribers={data.subscribers}
+          />
           <div className={styles.commentsSectionTitleWrp}>
             <p className={styles.commentsSectionTitle}>Комментарии</p>
-            <p
-              className={styles.commentsAmount}>{comments.length === 0 ? 0 : currentCommentIndex + 1}/{comments.length}</p>
+            <p className={styles.commentsAmount}>
+              {comments.length === 0 ? 0 : currentCommentIndex + 1}/{comments.length}
+            </p>
           </div>
           <IntegrationComment
             progres={progress}
@@ -80,7 +107,13 @@ export const IntegrationPage: React.FC = () => {
             finished={finished}
           />
         </>
+
       )}
+      {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+        <IntegrationPageGuide onClose={() => {
+          setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+          dispatch(setElevateIntegrationStats(false));
+        }} />}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import giftIcon from '../../../assets/icons/gift.svg';
 
 import s from './TaskCard.module.scss';
 import { formatAbbreviation } from '../../../helpers';
+import { Button } from '../../shared';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -139,13 +140,13 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       )}
 
       <section className={s.buttons}>
-        <button
+        <Button
           className={`${s.button} ${s[buttonType]} ${isLoading ? s.loading : ''}`}
           disabled={disabled || isLoading}
-          onClick={onClick}
+          onClick={() => onClick?.()}
         >
           {buttonText}
-        </button>
+        </Button>
       </section>
     </div>
   );

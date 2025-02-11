@@ -6,6 +6,9 @@ import starDarkGrayIcon from '../../../assets/icons/star-dark-gray.svg';
 import integrationBlueIcon from '../../../assets/icons/integration-blue.svg';
 
 import s from './CompanyCard.module.scss';
+import { isGuideShown } from '../../../utils';
+import { GUIDE_ITEMS } from '../../../constants';
+import { Button } from '../../shared';
 
 interface CompanyCardProps {
   company: CompanyResponseDTO;
@@ -13,9 +16,11 @@ interface CompanyCardProps {
   onClick?: (id: string) => void;
 }
 
+const glowing = !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+
 export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick }) => {
   return (
-    <div className={s.card + ' ' + (selected ? ` ${s.selected}` : '')} onClick={() => onClick && onClick(company.id)}>
+    <Button className={s.card + ' ' + (selected ? ` ${s.selected}` : '') + ' ' + (glowing ? `${s.glowing}` : '')} onClick={() => onClick && onClick(company.id)}>
       <header className={s.header}>
         <div className={s.icon}>
           <img src={lightningIcon} alt="Lightning" width={12} height={12} />
@@ -36,6 +41,6 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick }
           />
         </div>
       </div>
-    </div>
+    </Button>
   );
 };

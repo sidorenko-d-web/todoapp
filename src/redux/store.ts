@@ -22,6 +22,7 @@ export const store = configureStore({
       pushLineApi.middleware,
       usersApi.middleware,
       treeApi.middleware,
+      
     ),
 });
 

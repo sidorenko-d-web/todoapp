@@ -6,6 +6,7 @@ import skinPlaceholder from '../../../assets/icons/skin-placeholder.svg';
 import statusInactive from '../../../assets/icons/status-inactive.svg';
 import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../../shared';
 
 export const WardrobeInfo: React.FC = () => {
     const { t } = useTranslation('wardrobe');
@@ -20,7 +21,7 @@ export const WardrobeInfo: React.FC = () => {
 
             {data && <div className={styles.wrp}>
                 <Link to='/profile'>
-                    <button className={styles.backBtn} />
+                    <Button className={styles.backBtn} />
                 </Link>
 
                 <div className={styles.infoWrp}>

@@ -1,6 +1,7 @@
 import styles from './LanguageSelect.module.scss';
 import checkIcon from '../../../src/assets/icons/checkmark-in-the-circle.svg';
 import circleIcon from '../../../src/assets/icons/circle-blue.svg';
+import { Button } from '../../components/shared';
 
 interface LanguageSelectProps {
   selectedLanguage: string;
@@ -33,9 +34,9 @@ export const LanguageSelect = ({ selectedLanguage, onLanguageSelect, onContinue 
           </div>
         ))}
       </div>
-      <button className={styles.continueButton} onClick={onContinue}>
+      <Button className={styles.continueButton} onClick={onContinue}>
         Продолжить/Continue
-      </button>
+      </Button>
       <div className={styles.selectText}>Выберите язык&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Select language</div>
     </div>
   );

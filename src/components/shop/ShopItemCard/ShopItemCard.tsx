@@ -1,17 +1,20 @@
 import { FC, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
-import { useBuyItemMutation } from '../../../redux';
+import { useBuyItemMutation } from '../../../redux/api/shop/api';
+import { IShopItem, RootState } from '../../../redux';
 import { useGetCurrentUserProfileInfoQuery } from '../../../redux';
-import { IShopItem } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { MODALS, svgHeadersString } from '../../../constants';
-import { formatAbbreviation } from '../../../helpers';
 import { useModal } from '../../../hooks';
+import { GUIDE_ITEMS, MODALS, svgHeadersString } from '../../../constants';
+import { useSelector } from 'react-redux';
+import { isGuideShown } from '../../../utils';
+import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../../shared';
 
 interface Props {
   disabled?: boolean;
@@ -22,23 +25,24 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [buyItem, { isLoading }] = useBuyItemMutation();
   const { data } = useGetCurrentUserProfileInfoQuery();
   const { t, i18n } = useTranslation('shop');
-
   const { openModal } = useModal();
   const userPoints = data?.points || 0;
   const [error, setError] = useState('');
+  const buyButtonGlowing = useSelector((state: RootState) => state.guide.buyItemButtonGlowing);
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+
   const handleBuyItem = async () => {
     try {
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
-      console.log(res);
       if (!res.error) {
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
       } else {
         setError(JSON.stringify(res.error));
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
-
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.storeCard}>
@@ -78,15 +82,15 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
           )}
           <div className={styles.stats}>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.views,'number', { locale: locale })}</p>
+              <p>+{formatAbbreviation(item.boost.views, 'number', { locale: locale })}</p>
               <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.subscribers,'number', { locale: locale })}</p>
+              <p>+{formatAbbreviation(item.boost.subscribers, 'number', { locale: locale })}</p>
               <img src={SubscriberCoin} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.income_per_second,'number', { locale: locale })}</p>
+              <p>+{formatAbbreviation(item.boost.income_per_second, 'number', { locale: locale })}</p>
               <img src={CoinIcon} alt="" />
               <p>/{t('s13')}</p>
             </div>
@@ -96,23 +100,26 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
       {!disabled ? (
         <div className={styles.actions}>
-          <button
-            onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
-          >
-            {formatAbbreviation(item.price_usdt, 'currency',{ locale: locale })}
-          </button>
-          <button
-            className={userPoints < item.price_internal ? styles.disabledButton : ''}
+          {isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) && (
+            <Button onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}>
+              {formatAbbreviation(item.price_usdt, 'currency', { locale: locale })}
+            </Button>
+          )}
+          <Button
             onClick={handleBuyItem}
+            className={clsx(
+              Number(userPoints) < Number(item.price_internal) ? styles.disabledButton : '',
+              buyButtonGlowing && item.name.toLowerCase().trim().includes('печатная машинка') ? styles.glowingBtn : ''
+            )}
           >
             {isLoading ? (
-              <p>loading</p>
+              <p>Загрузка...</p>
             ) : (
               <>
-                {formatAbbreviation(item.price_internal,'number', { locale: locale })} <img src={CoinIcon} alt="" />
+                {formatAbbreviation(item.price_internal, 'number', { locale: locale })} <img src={CoinIcon} alt="" />
               </>
             )}
-          </button>
+          </Button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>

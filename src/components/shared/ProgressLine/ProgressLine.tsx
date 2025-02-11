@@ -6,21 +6,20 @@ interface ProgressLineProps {
   color: 'red' | 'blue';
 }
 
-const ProgressLine: React.FC<ProgressLineProps> = ({ level, color }) => {
+export const ProgressLine: React.FC<ProgressLineProps> = ({ level, color }) => {
   const progressWidth = `${Math.max((level / 5) * 100, 10)}%`;
 
   return (
     <div className={styles.progressContainer}>
-      {
-        color === 'red' ?
-          <>
-            <div className={styles.progressBarRed} style={{ width: progressWidth }} /></> :
-          <>
-            <div className={styles.progressBarBlue} style={{ width: progressWidth }} />
-          </>
-      }
+      {color === 'red' ? (
+        <>
+          <div className={styles.progressBarRed} style={{ width: progressWidth }} />
+        </>
+      ) : (
+        <>
+          <div className={styles.progressBarBlue} style={{ width: progressWidth }} />
+        </>
+      )}
     </div>
   );
 };
-
-export default ProgressLine;

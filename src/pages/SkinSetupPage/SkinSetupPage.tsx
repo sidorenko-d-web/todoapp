@@ -3,6 +3,7 @@ import styles from './SkinSetupPage.module.scss';
 import humanIcon from '../../../src/assets/icons/human.svg';
 import sckinIcon from '../../../src/assets/icons/skin.svg';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../../components/shared';
 
 interface SkinSetupPageProps {
   onContinue: () => void;
@@ -35,19 +36,19 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
         </div>
         <div className={styles.bodyPartsContainer}>
           {BODY_PARTS.map(part => (
-            <button
+            <Button
               key={part.id}
               onClick={() => setSelectedPart(part.id)}
               className={`${styles.bodyPartButton} ${selectedPart === part.id ? styles.active : ''}`}
             >
               {part.label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
       <div className={styles.skinOptionsGrid}>
         {SKIN_OPTIONS.map(option => (
-          <button
+          <Button
             key={option.id}
             type="button"
             onClick={() => setSelectedSkin(option.id)}
@@ -56,12 +57,12 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
             data-selected={selectedSkin === option.id}
           >
             <img src={sckinIcon} alt={`Skin option ${option.value}`} />
-          </button>
+          </Button>
         ))}
       </div>
-      <button className={styles.continueButton} onClick={onContinue}>
+      <Button className={styles.continueButton} onClick={onContinue}>
         {t('s34')}
-      </button>
+      </Button>
       <div className={styles.selectText}>{t('s35')}</div>
     </div>
   );

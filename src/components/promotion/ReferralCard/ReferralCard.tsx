@@ -7,6 +7,7 @@ import subscribersIcon from '../../../assets/icons/subscribers.png';
 
 import profileIconPlaceholder from '../../../assets/icons/referral-icon-placeholder.svg';
 import { formatAbbreviation } from '../../../helpers';
+import { Button } from '../../shared';
 
 interface ReferralCardProps {
   position: number;
@@ -40,9 +41,9 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, tota
                         </span>
             <span className={classNames(s.level, s.text)}>2ур.</span>
           </div>
-          <button className={classNames(s.userCardRefs, s.text)}>
+          <Button className={classNames(s.userCardRefs, s.text)}>
             {`(ещё ${total_invited} реф.)`}
-          </button>
+          </Button>
         </div>
       </div>
     </>
