@@ -5,12 +5,17 @@ import classNames from 'classnames';
 
 import s from './Slider.module.scss';
 
+import lock from '../../../../assets/icons/lock-gray.svg';
 import face from '../../../../assets/icons/face.svg';
 import fire from '../../../../assets/icons/fire-icon.svg';
 import { useGetTopProfilesQuery } from '../../../../redux';
 import { Link } from 'react-router-dom';
 
-export const SliderSelect = () => {
+type SliderProps = {
+  isInfluencersLocked?: boolean
+}
+
+export const SliderSelect = ({ isInfluencersLocked }: SliderProps) => {
   const settings: Settings = {
     variableWidth: true,
     dots: false,
@@ -35,16 +40,48 @@ export const SliderSelect = () => {
     ],
   };
 
-  const { data } = useGetTopProfilesQuery();
+  const { data } = useGetTopProfilesQuery(undefined, { skip: isInfluencersLocked });
   const topProfiles = data?.profiles;
 
-  if (!topProfiles) return null;
+  if (!topProfiles && !isInfluencersLocked) return null;
 
   // TODO: Раскомментировать когда на бэке будет vip данные
   return (
     <div className={s.sliderContainer}>
       <Slider {...settings}>
-        {topProfiles.map((profile, index) => (
+        {
+          isInfluencersLocked && Array.from({ length: 10 }).map((_, index) => (
+            <div
+              key={index}
+              className={s.cardWrapper}
+            >
+              <div className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
+                <div className={s.card}>
+                  <div className={s.infoRang}>
+                    <span className={s.seat}>{'#???'}</span>
+                    { /*profile.fire true !== undefined &&*/ (
+                      <div className={s.fireIcon}>
+                        <img src={fire} alt="fire" width={12} height={12} />
+                        <span>???</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className={s.middleRow}>
+                    <img src={lock} alt="Lock" width={44} height={44} />
+                  </div>
+                  {/*{profile.vip && (*/}
+                  {/*  <div className={s.vip}>*/}
+                  {/*    <img src={star} alt="star" />*/}
+                  {/*    <span>VIP</span>*/}
+                  {/*  </div>*/}
+                  {/*)}*/}
+                </div>
+              </div>
+            </div>
+          ))
+        }
+
+        {!isInfluencersLocked && topProfiles && topProfiles.map((profile, index) => (
           <Link
             draggable={false}
             to={`/profile/${profile.id}`}
