@@ -27,6 +27,7 @@ interface ModalTopTasksProps {
       views: number;
     };
     completed_stages: number;
+    external_link: string;
   };
 }
 
@@ -187,10 +188,15 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
         </div>
 
         <div className={s.buttons}>
-          <button className={s.answerButton}>
+          <a 
+            href={task.external_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={s.answerButton}
+          >
             Инструкция
             <img src={bookIcon} alt="" className={s.buttonIcon} />
-          </button>
+          </a>
           <button
             className={classNames(s.nextButton, {
               [s.active]: true,
