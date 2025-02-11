@@ -14,8 +14,20 @@ import { useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
 
 interface ModalTopTasksProps {
   modalId: string;
+  taskId: string;
   onClose: () => void;
   onStateChange?: (state: TaskState) => void;
+  task: {
+    title: string;
+    description: string;
+    stages: number;
+    boost: {
+      income_per_second: string;
+      subscribers: number;
+      views: number;
+    };
+    completed_stages: number;
+  };
 }
 
 interface TaskStep {
@@ -60,22 +72,24 @@ const TASK_STEPS: TaskStep[] = [
 
 export const ModalTopTasks: FC<ModalTopTasksProps> = ({
   modalId,
+  taskId,
   onClose,
   onStateChange,
+  task,
 }) => {
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [currentStepIndex, setCurrentStepIndex] = useState(task.completed_stages);
   const [completedSteps, setCompletedSteps] = useState<boolean[]>(
-    Array(TASK_STEPS.length).fill(false),
+    Array(task.stages).fill(false).map((_, index) => index < task.completed_stages)
   );
   const [channelLink, setChannelLink] = useState('');
   const currentStepInfo = TASK_STEPS[currentStepIndex];
-  const progress = (completedSteps.filter(step => step).length / TASK_STEPS.length) * 100;
+  const progress = (completedSteps.filter(step => step).length / task.stages) * 100;
   const [updateTask] = useUpdateTaskMutation();
 
   useEffect(() => {
     onStateChange?.({
       currentStep: completedSteps.filter(step => step).length,
-      totalSteps: TASK_STEPS.length,
+      totalSteps: task.stages,
       completed: completedSteps.every(step => step),
     });
   }, [currentStepIndex, completedSteps]);
@@ -87,17 +101,17 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
       setCompletedSteps(newCompletedSteps);
 
       await updateTask({
-        id: modalId,
+        id: taskId,
         data: {
           completed_stages: currentStepIndex + 1,
           link: channelLink,
         },
       });
 
-      if (currentStepIndex === TASK_STEPS.length - 1) {
+      if (currentStepIndex === task.stages - 1) {
         onStateChange?.({
-          currentStep: TASK_STEPS.length,
-          totalSteps: TASK_STEPS.length,
+          currentStep: task.stages,
+          totalSteps: task.stages,
           completed: true,
         });
         setTimeout(() => onClose(), 1000);
@@ -113,22 +127,22 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
   return (
     <BottomModal
       modalId={modalId}
-      title="Создание личного канала"
+      title={task.title}
       onClose={onClose}
     >
       <div className={s.container}>
         <div className={s.rewards}>
           <span className={s.reward}>
-            200
+            {task.boost.views}
             <img src={coinIcon} alt="coin" width={14} height={14} />
           </span>
           <span className={s.reward}>
-            +10
+            +{task.boost.income_per_second}
             <img src={coinIcon} alt="coin" width={14} height={14} />
             /сек.
           </span>
           <span className={s.reward}>
-            100
+            {task.boost.subscribers}
             <img src={coinBlueIcon} alt="referral" width={14} height={14} />
           </span>
         </div>
@@ -142,7 +156,7 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
         <div className={s.containerPG}>
           <ProgressBarTasks
             currentStep={currentStepIndex}
-            totalSteps={TASK_STEPS.length}
+            totalSteps={task.stages}
             progress={progress}
             progressReward="Драгоценный сундук"
             progressRewardIcon={chestIcon}
@@ -183,7 +197,7 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
             })}
             onClick={handleCompleteStep}
           >
-            {currentStepIndex === TASK_STEPS.length - 1 ? 'Завершить' : 'Далее'}
+            {currentStepIndex === task.stages - 1 ? 'Завершить' : 'Далее'}
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { TaskCard } from '../TaskCard';
 import magicBallIcon from '../../../assets/icons/magic-ball.png';
 import chestIcon from '../../../assets/icons/chest-purple.svg';
@@ -6,6 +6,7 @@ import { MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import s from '../styles.module.scss';
 import { ModalTopTasks } from './ModalTopTasks';
+import { useGetTasksQuery } from '../../../redux/api/tasks/api';
 
 interface TaskState {
   currentStep: number;
@@ -16,6 +17,11 @@ interface TaskState {
 
 export const TopTasks: FC = () => {
   const { openModal, closeModal } = useModal();
+  const { data: tasksData } = useGetTasksQuery();
+  
+  const channelTask = tasksData?.assignments.find(
+    task => task.category === 'create_channel'
+  );
   
   const [taskState, setTaskState] = useState<TaskState>({
     currentStep: 0,
@@ -23,6 +29,18 @@ export const TopTasks: FC = () => {
     completed: false,
     hasError: false
   });
+
+  // Обновляем состояние когда получаем данные с сервера
+  useEffect(() => {
+    if (channelTask) {
+      setTaskState(prev => ({
+        ...prev,
+        currentStep: channelTask.completed_stages,
+        totalSteps: channelTask.stages,
+        completed: channelTask.is_completed,
+      }));
+    }
+  }, [channelTask]);
 
   const handleOpenTopTasks = () => {
     openModal(MODALS.TOP_TASK);
@@ -44,21 +62,27 @@ export const TopTasks: FC = () => {
     return 'Выполнить';
   };
 
+  if (!channelTask) {
+    return null;
+  }
+
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
         <h2 className={s.sectionTitle}>Топ-задания</h2>
-        <span className={s.count}>{taskState.completed ? '1' : '0'}/1</span>
+        <span className={s.count}>
+          {taskState.currentStep}/{taskState.totalSteps}
+        </span>
       </div>
       <div className={s.tasksList}>
         <TaskCard
-          title="Создайте личный канал"
-          description="Продвигайтесь и получайте награды."
+          title={channelTask.title}
+          description={channelTask.description}
           icon={magicBallIcon}
           buttonType="secondary"
-          income={150}
-          subscribers={10}
-          passiveIncome={5}
+          income={Number(channelTask.boost.income_per_second)}
+          subscribers={channelTask.boost.subscribers}
+          passiveIncome={Number(channelTask.boost.income_per_second)}
           showProgressBar
           progress={progress}
           totalSteps={taskState.totalSteps}
@@ -75,8 +99,10 @@ export const TopTasks: FC = () => {
       </div>
       <ModalTopTasks
         modalId={MODALS.TOP_TASK}
+        taskId={channelTask.id}
         onClose={handleCloseModal}
         onStateChange={handleStateChange}
+        task={channelTask}
       />
     </section>
   );
