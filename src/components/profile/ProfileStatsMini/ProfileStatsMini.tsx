@@ -9,6 +9,7 @@ import fireIcon from '../../../assets/icons/fire-red.svg';
 import { Link } from 'react-router-dom';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../../shared';
 
 interface ProfileStatsMiniProps {
   subscribers: number;
@@ -56,7 +57,7 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
 
       {!onlyBadges && (
         <Link to={'../wardrobe'}>
-          <div className={styles.wardrobeButton}/>
+          <Button onClick={() => {}} className={styles.wardrobeButton}/>
         </Link>
       )}
     </div>

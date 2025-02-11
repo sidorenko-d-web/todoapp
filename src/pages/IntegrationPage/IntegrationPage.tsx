@@ -6,7 +6,12 @@ import {
   useGetUnansweredIntegrationCommentQuery,
   usePostCommentIntegrationsMutation,
 } from '../../redux';
-import { Integration, IntegrationComment, IntegrationPageGuide, IntegrationStats, IntegrationStatsMini } from '../../components';
+import {
+  Integration,
+  IntegrationComment, IntegrationPageGuide,
+  IntegrationStats,
+  IntegrationStatsMini,
+} from '../../components';
 import integrationIcon from '../../assets/icons/integration-icon.svg';
 import { useParams } from 'react-router-dom';
 import { isGuideShown, setGuideShown } from '../../utils';
@@ -15,10 +20,17 @@ import { useDispatch } from 'react-redux';
 import { setElevateIntegrationStats } from '../../redux/slices/guideSlice';
 
 export const IntegrationPage: React.FC = () => {
-  const { integrationId: queryIntegrationId } = useParams<{ integrationId: string | undefined }>();
-  const { data: integrations } = useGetIntegrationsQuery(undefined, { skip: !!queryIntegrationId && queryIntegrationId !== 'undefined' });
+  const { integrationId: queryIntegrationId } = useParams<{
+    integrationId: string | undefined;
+  }>();
+  const { data: integrations } = useGetIntegrationsQuery(undefined, {
+    skip: !!queryIntegrationId && queryIntegrationId !== 'undefined',
+  });
 
-  const integrationId = queryIntegrationId !== 'undefined' ? queryIntegrationId : integrations?.integrations[0].id;
+  const integrationId =
+    queryIntegrationId !== 'undefined'
+      ? queryIntegrationId
+      : integrations?.integrations[0].id;
 
   const { data, error, isLoading } = useGetIntegrationQuery(`${integrationId}`);
   const { data: commentData, refetch } = useGetUnansweredIntegrationCommentQuery(`${integrationId}`);
@@ -42,10 +54,10 @@ export const IntegrationPage: React.FC = () => {
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     await postComment({ commentId, isHate: isThumbsUp });
 
-    setProgress((prevProgress) => (prevProgress + 1) % 5);
+    setProgress(prevProgress => (prevProgress + 1) % 5);
 
     if (currentCommentIndex + 1 < comments.length) {
-      setCurrentCommentIndex((prevIndex) => prevIndex + 1);
+      setCurrentCommentIndex(prevIndex => prevIndex + 1);
     } else {
       setFinished(true);
       await refetch();
@@ -61,9 +73,13 @@ export const IntegrationPage: React.FC = () => {
       {isLoading && <p>Загрузка...</p>}
       {(error || !integrationId) && <p>Интеграция не найдена</p>}
 
-      {data && (
+      {data?.status === 'created' && (
         <>
-          <IntegrationStatsMini views={data.views} subscribers={data.subscribers} income={data.income} />
+          <IntegrationStatsMini
+            views={data.views}
+            subscribers={data.subscribers}
+            income={data.income}
+          />
           <div className={styles.integrationNameWrp}>
             <p className={styles.integrationTitle}>Интеграция 1</p>
             <div className={styles.integrationLevelWrp}>
@@ -72,11 +88,16 @@ export const IntegrationPage: React.FC = () => {
             </div>
           </div>
           <Integration />
-          <IntegrationStats views={data.views} income={data.income} subscribers={data.subscribers} />
+          <IntegrationStats
+            views={data.views}
+            income={data.income}
+            subscribers={data.subscribers}
+          />
           <div className={styles.commentsSectionTitleWrp}>
             <p className={styles.commentsSectionTitle}>Комментарии</p>
-            <p
-              className={styles.commentsAmount}>{comments.length === 0 ? 0 : currentCommentIndex + 1}/{comments.length}</p>
+            <p className={styles.commentsAmount}>
+              {comments.length === 0 ? 0 : currentCommentIndex + 1}/{comments.length}
+            </p>
           </div>
           <IntegrationComment
             progres={progress}

@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react';
 import styles from './Button.module.scss';
 import clsx from 'clsx';
+import { Button as ButtonBase } from '../../../components/shared';
 
 interface Props {
   variant: 'blue' | 'red' | 'gray';
@@ -9,7 +10,7 @@ interface Props {
 
 export default function Button({ variant, children, onClick }: PropsWithChildren<Props>) {
   return (
-    <button
+    <ButtonBase
       onClick={() => onClick?.()}
       className={clsx(
         styles.button,
@@ -21,6 +22,6 @@ export default function Button({ variant, children, onClick }: PropsWithChildren
       )}
     >
       {children}
-    </button>
+    </ButtonBase>
   );
 }

@@ -1,4 +1,11 @@
-import { type Dispatch, type FC, PropsWithChildren, type SetStateAction, useEffect, useReducer, useState } from 'react';
+import {
+  type Dispatch,
+  type FC,
+  PropsWithChildren,
+  type SetStateAction,
+  useEffect, useReducer,
+  useState,
+} from 'react';
 import styles from './ShopLayout.module.scss';
 import { RootState, useGetInventoryItemsQuery } from '../../redux';
 import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
@@ -11,6 +18,7 @@ import CoinIcon from '../../assets/icons/coin.png';
 import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
 import ViewsCoin from '../../assets/icons/views.png';
 import { formatAbbreviation, itemsInTab } from '../../helpers';
+import { Button } from '../../components/shared';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../utils';
@@ -72,7 +80,12 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     itemsInTabs?.green?.length > 0 &&
     tabs.push(shopItemRarity[2]);
 
-  const inventoryTabs = [shopItemRarity[0]];
+  const inventoryTabs = [];
+  isSuccess &&
+    inventory?.items.find(
+      item => item.item_rarity === 'red' && item.item_category === shopCategory.value,
+    ) &&
+    inventoryTabs.push(shopItemRarity[0]);
   isSuccess &&
     inventory?.items.find(
       item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value,
@@ -126,17 +139,20 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const statsGlowing = useSelector((state: RootState) => state.guide.getShopStatsGlowing);
 
+  const isTabsNotEmpty =
+    [...(itemsInTabs.green ?? []), ...(itemsInTabs.yellow ?? [])].length > 0;
+
   return (
     <>
       <div className={styles.wrapper}>
         <div className={styles.titleWrapper}>
-          <button
+          <Button
             className={styles.linkBack}
             onClick={handleShop}
             style={{ opacity: mode === 'inventory' ? 1 : 0 }}
           >
             <img src={ArrowLeftIcon} />
-          </button>
+          </Button>
           <div className={styles.mainHeader}>
             <h1 className={`${styles.title} ${statsGlowing ? styles.elevated : ''}`}>{mode === 'shop' ? `${t('s1')}` : `${t('s19')}`}</h1>
 
@@ -158,13 +174,13 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
               </div>
             </div>
           </div>
-          <button
+          <Button
             className={styles.linkInventory}
             onClick={handleInventory}
             style={{ opacity: mode === 'shop' ? 1 : 0 }}
           >
             <img src={InventoryBox} />
-          </button>
+          </Button>
         </div>
 
         <div className={styles.navs}>
@@ -173,21 +189,21 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             currentTab={shopCategory.title}
             onChange={setShopCategory}
           />
-          {/* https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284346&m=dev#1121980464 */}
-          {/*{shopCategory.title !== t('s6') && (*/}
-          {/*  <TabsNavigation*/}
-          {/*    colorClass={*/}
-          {/*      itemsQuality.title === t('s14')*/}
-          {/*        ? 'tabItemSelectedBlue'*/}
-          {/*        : itemsQuality.title === t('s15')*/}
-          {/*        ? 'tabItemSelectedPurple'*/}
-          {/*        : 'tabItemSelectedRed'*/}
-          {/*    }*/}
-          {/*    tabs={mode === 'shop' ? tabs : inventoryTabs}*/}
-          {/*    currentTab={itemsQuality.title}*/}
-          {/*    onChange={setItemsQuality}*/}
-          {/*  />*/}
-          {/*)}*/}
+          {/* https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284346&m=dev#1121980464  */}
+          {shopCategory.title !== t('s6') && isTabsNotEmpty && (
+            <TabsNavigation
+              colorClass={
+                itemsQuality.title === t('s14')
+                  ? 'tabItemSelectedBlue'
+                  : itemsQuality.title === t('s15')
+                  ? 'tabItemSelectedPurple'
+                  : 'tabItemSelectedRed'
+              }
+              tabs={mode === 'shop' ? tabs : inventoryTabs}
+              currentTab={itemsQuality.title}
+              onChange={setItemsQuality}
+            />
+          )}
         </div>
 
         {children}

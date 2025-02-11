@@ -11,6 +11,7 @@ import checkIcon from '../../../../assets/icons/checkmark-in-the-circle.svg';
 import bookIcon from '../../../../assets/icons/book.svg';
 import CrossRedIcon from '../../../../assets/icons/cross-red-in-circle.svg';
 import { formatAbbreviation } from '../../../../helpers';
+import { Button } from '../../../shared';
 
 interface ModalDailyTasksProps {
   modalId: string;
@@ -212,11 +213,11 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
 
         {/* Кнопки */}
         <div className={s.buttons}>
-          <button className={s.answerButton}>
+          <Button className={s.answerButton}>
             Ответы
             <img src={bookIcon} alt="" className={s.buttonIcon} />
-          </button>
-          <button
+          </Button>
+          <Button
             className={classNames(s.nextButton, {
               [s.active]: selectedOption !== null,
             })}
@@ -224,7 +225,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
             onClick={handleNext}
           >
             {currentQuestionIndex === QUESTIONS.length - 1 ? 'Завершить' : 'Далее'}
-          </button>
+          </Button>
         </div>
       </div>
     </BottomModal>

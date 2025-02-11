@@ -1,6 +1,7 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import styles from './TabsNavigation.module.scss';
 import clsx from 'clsx';
+import { Button } from '../shared';
 
 interface Props {
   tabs: { title: string; value: string }[];
@@ -17,13 +18,13 @@ const TabsNavigation: FC<Props> = ({ tabs, currentTab, onChange, colorClass }) =
           onChange(item);
         };
         return (
-          <button
+          <Button
             onClick={handleClick}
             className={item.title === currentTab ? styles[colorClass ?? 'tabItemSelectedWhite'] : styles.tabItem}
             key={item + '' + index}
           >
             {item.title}
-          </button>
+          </Button>
         );
       })}
     </div>

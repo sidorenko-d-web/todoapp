@@ -1,6 +1,5 @@
-import CentralModal from '../../../components/shared/CentralModal/CentralModal';
-import { MODALS } from '../../../constants/modals';
-import { useModal } from '../../../hooks';
+import { MODALS, SOUNDS } from '../../../constants';
+import { useModal, useAutoPlaySound } from '../../../hooks';
 import styles from './RewardForIntegrationModal.module.scss';
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
@@ -14,11 +13,15 @@ import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import reward from '../../../assets/animations/reward.json';
 import { useDispatch } from 'react-redux';
 import { setIsPublishedModalClosed } from '../../../redux/slices/guideSlice';
+import { CentralModal } from '../../../components/shared';
 
 export default function RewardForIntegrationModal() {
   const { closeModal } = useModal();
 
   const dispatch = useDispatch();
+
+
+  useAutoPlaySound(MODALS.INTEGRATION_REWARD, SOUNDS.rewardHuge);
 
   return (
     <CentralModal
@@ -65,7 +68,10 @@ export default function RewardForIntegrationModal() {
         </div>
       </div>
       <div className={styles.desc}>
-        <p>Поздравляем! Интеграция готова, следите за статистикой и продолжайте в том же духе!</p>
+        <p>
+          Поздравляем! Интеграция готова, следите за статистикой и продолжайте в том же
+          духе!
+        </p>
       </div>
       <Button variant={'blue'} onClick={() => {
         dispatch(setIsPublishedModalClosed(true));

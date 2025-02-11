@@ -20,6 +20,7 @@ export const store = configureStore({
       refferalsApi.middleware,
       usersApi.middleware,
       treeApi.middleware,
+      
     ),
 });
 
