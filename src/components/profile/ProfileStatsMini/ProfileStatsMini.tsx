@@ -8,6 +8,7 @@ import viewsIcon from '../../../assets/icons/views.png';
 import fireIcon from '../../../assets/icons/fire-red.svg';
 import { Link } from 'react-router-dom';
 import { formatAbbreviation } from '../../../helpers';
+import { useTranslation } from 'react-i18next';
 
 interface ProfileStatsMiniProps {
   subscribers: number;
@@ -24,7 +25,9 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
                                                                     onlyBadges,
                                                                     totalViews,
                                                                   }) => {
-  console.log(styles.wrp + ' ' + (onlyBadges ? styles.justifyCenter : styles.justifyBetween));
+  const {  i18n } = useTranslation('shop');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+
   return (
     <div className={styles.wrp + ' ' + (onlyBadges ? styles.justifyCenter : '')}>
       {!onlyBadges && <div className={styles.toCenterStats} />}
@@ -36,12 +39,12 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
         </div>
 
         <div className={styles.statWrp}>
-          <span className={styles.stat}>{formatAbbreviation(subscribers)}</span>
+          <span className={styles.stat}>{formatAbbreviation(subscribers,'number', { locale: locale })}</span>
           <img src={subscriberIcon} width={14} height={14} />
         </div>
 
         <div className={styles.statWrp}>
-          <span className={styles.stat}>{formatAbbreviation(totalViews)}</span>
+          <span className={styles.stat}>{formatAbbreviation(totalViews,'number', { locale: locale })}</span>
           <img src={viewsIcon} width={14} height={14} />
         </div>
 

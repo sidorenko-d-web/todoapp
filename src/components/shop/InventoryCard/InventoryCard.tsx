@@ -47,13 +47,13 @@ function sortByPremiumLevel(items: IShopItem[]) {
 }
 
 export const InventoryCard: FC<Props> = ({
-  disabled,
-  isBlocked,
-  isUpgradeEnabled = true,
-  item,
-  isB,
-}) => {
-  const { t } = useTranslation('shop');
+                                           disabled,
+                                           isBlocked,
+                                           isUpgradeEnabled = true,
+                                           item,
+                                           isB,
+                                         }) => {
+  const { t,i18n } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const { data, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
@@ -91,6 +91,8 @@ export const InventoryCard: FC<Props> = ({
       }
     } catch (error) {}
   };
+
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.storeCard}>
@@ -164,15 +166,15 @@ export const InventoryCard: FC<Props> = ({
             )}
           >
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.views)}</p>
+              <p>+{formatAbbreviation(item.boost.views,'number', { locale: locale })}</p>
               <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.subscribers)}</p>
+              <p>+{formatAbbreviation(item.boost.subscribers,'number', { locale: locale })}</p>
               <img src={SubscriberCoin} alt="" />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.income_per_second)}</p>
+              <p>+{formatAbbreviation(item.boost.income_per_second, 'number', { locale: locale })}</p>
               <img src={CoinIcon} alt="" />
               <p>/{t('s13')}</p>
             </div>
@@ -275,7 +277,7 @@ export const InventoryCard: FC<Props> = ({
         </button>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
-          <button>{formatAbbreviation(data?.items[0].price_usdt || 0, 'currency')}</button>
+          <button>{formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', { locale: locale })}</button>
           <button
             className={clsx(
               item.item_rarity === 'yellow'
@@ -289,7 +291,7 @@ export const InventoryCard: FC<Props> = ({
               <p>loading</p>
             ) : (
               <>
-                {formatAbbreviation(data?.items[0].price_internal || 0)} <img src={CoinIcon} alt="" />
+                {formatAbbreviation(data?.items[0].price_internal || 0,'number', { locale: locale })} <img src={CoinIcon} alt="" />
               </>
             )}
           </button>

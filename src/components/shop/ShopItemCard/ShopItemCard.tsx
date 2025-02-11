@@ -22,8 +22,10 @@ interface Props {
 }
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
-  const { t } = useTranslation('shop');
   const [buyItem, { isLoading }] = useBuyItemMutation();
+  const { data } = useGetCurrentUserProfileInfoQuery();
+  const { t, i18n } = useTranslation('shop');
+
   const { openModal } = useModal();
   const [error, setError] = useState('');
 
@@ -96,6 +98,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     }
   }, [usdtTransactions, currentTrxId]);
 
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.storeCard}>
@@ -135,15 +138,15 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
           )}
           <div className={styles.stats}>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.views)}</p>
+              <p>+{formatAbbreviation(item.boost.views,'number', { locale: locale })}</p>
               <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.subscribers)}</p>
+              <p>+{formatAbbreviation(item.boost.subscribers,'number', { locale: locale })}</p>
               <img src={SubscriberCoin} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.income_per_second)}</p>
+              <p>+{formatAbbreviation(item.boost.income_per_second,'number', { locale: locale })}</p>
               <img src={CoinIcon} alt="" />
               <p>/{t('s13')}</p>
             </div>
@@ -157,7 +160,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
             // onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
             onClick={handleUsdtPayment}
           >
-            {formatAbbreviation(item.price_usdt, 'currency')}
+            {formatAbbreviation(item.price_usdt, 'currency',{ locale: locale })}
           </button>
           <button
             className={userPoints < item.price_internal ? styles.disabledButton : ''}
@@ -167,7 +170,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
               <p>loading</p>
             ) : (
               <>
-                {formatAbbreviation(item.price_internal)} <img src={CoinIcon} alt="" />
+                {formatAbbreviation(item.price_internal,'number', { locale: locale })} <img src={CoinIcon} alt="" />
               </>
 
 
