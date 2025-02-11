@@ -4,12 +4,19 @@ import styles from './TreeLevelGuide.module.scss';
 import img1 from '../../../../assets/gif/guide1.gif';
 import { Guide } from "../../Guide/Guide";
 
+import LockIcon from '../../../../assets/icons/lock_icon.svg';
+import { useTranslation } from "react-i18next";
+
+
 interface TreeLevelGuideProps {
     onClose: () => void;
 }
 export const TreeLevelGuide: React.FC<TreeLevelGuideProps> = ({onClose}) => {
     const [isOpen, setIsOpen] = useState(true);
 
+
+    const { t,i18n } = useTranslation('shop');
+    
     const handleClose = () => {
         onClose();
         setIsOpen(false);
@@ -31,6 +38,11 @@ export const TreeLevelGuide: React.FC<TreeLevelGuideProps> = ({onClose}) => {
                 </>
             }
             onClose={onClose}>
+             <div className={`${styles.disabledUpgradeActions} ${styles.elevated}`}>
+                <img src={LockIcon} alt="" />
+                <p>{t('s18')} 7</p>
+                <img src={LockIcon} alt="" />
+            </div>
             <button className={styles.nextBtn} onClick={handleClose}>Дерево!</button>
             <img src={img1} className={styles.gifImage} height={146} width={140}/>
         </Guide>

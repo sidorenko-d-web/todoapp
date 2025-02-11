@@ -18,3 +18,35 @@
     left: -45px;
     transform: scaleX(-1);
 }
+
+.square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: 2px solid var.$color-primary;
+    background-color: var.$color-dark-gray;
+    border-radius: 6px;
+}
+
+.subscribers {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    width: 90px;
+    height: fit-content;
+    border: 2px solid var.$color-primary;
+    background-color: black;
+    border-radius: 6px;
+
+    p {
+        color: gray;
+        font-size: 10px;
+        text-align: center;
+        width: 100%;
+        align-self: center;
+    }
+}

@@ -4,6 +4,11 @@ import styles from './TreeGuide.module.scss';
 import img1 from '../../../assets/gif/guide1.gif';
 import { Guide } from "../Guide/Guide";
 
+import gift from '../../../assets/icons/gift.svg';
+import cup from '../../../assets/icons/medal-gold.svg';
+import home from '../../../assets/icons/colored-home.svg';
+
+
 interface TreeGuideProps {
     onClose: () => void;
 }
@@ -31,6 +36,17 @@ export const TreeGuide: React.FC<TreeGuideProps> = ({onClose}) => {
                 </>
             }
             onClose={handleClose}>
+            <div style={{position: 'absolute', top: '-165px', display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center'}}>
+                <div style={{display: 'flex', gap: '10px'}}>
+                    <div className={styles.square}><img src={gift} width={20} height={20}></img></div>
+                    <div className={styles.square}><img src={cup} width={20} height={20}></img></div>
+                    <div className={styles.square}><img src={home} width={20} height={20}></img></div>
+                </div>
+                <div className={styles.subscribers}>
+                    <p style={{height: '10px', marginBottom:'5px'}}>100 000</p>
+                    <p>подписчиков</p>
+                </div>
+            </div>
             <button className={styles.nextBtn} onClick={handleClose}>Отлично!</button>
             <img src={img1} className={styles.gifImage} height={146} width={140}/>
         </Guide>
