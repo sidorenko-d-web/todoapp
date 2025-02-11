@@ -1,0 +1,60 @@
+@use '../../../assets/styles' as var;
+
+.rewards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  .card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 80px;
+    height: 80px;
+
+    border-radius: 8px;
+    border: 2px solid var.$color-purple;
+    background-color: var.$footer-bg;
+    color: var.$color-white;
+
+    &[aria-disabled='true'] {
+      opacity: 0.4;
+      mix-blend-mode: luminosity;
+    }
+
+    .infoBadges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      z-index: 2;
+
+      .position, .streak {
+        border-radius: 4px;
+
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 100%;
+
+        padding: 2px;
+        z-index: 2;
+      }
+
+      .position {
+        background-color: var.$color-purple;
+      }
+
+      .streak {
+        background-color: var.$color-red;
+        display: flex;
+        align-items: center;
+        padding-right: 4px;
+      }
+    }
+  }
+}

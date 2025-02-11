@@ -24,6 +24,7 @@ export const PromotionPage: React.FC = () => {
 
   return (
     <>
+      <TopInfluencers />
       {(isTopProfilesLoading || isUserLoading) && <p>Загрузка...</p>}
 
       {(userError || topProfilesError) && <p>Ошибка при загрузке страницы</p>}
