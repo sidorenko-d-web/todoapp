@@ -14,8 +14,6 @@ import { MODALS, svgHeadersString } from '../../../constants';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 
-type PaymentMethod = 'internal_wallet' | 'usdt';
-
 interface Props {
   disabled?: boolean;
   item: IShopItem;
@@ -29,14 +27,16 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const { openModal } = useModal();
   const [error, setError] = useState('');
 
+  // for transactions
   const { sendUSDT } = useSendTransaction();
   const usdtTransactions = useUsdtTransactions();
   const [currentTrxId, setCurrentTrxId] = useState("")
 
+
   const userPoints = data?.points || 0;
-  const handleBuyItem = async (paymentMethod: PaymentMethod) => {
+  const handleBuyItem = async () => {
     try {
-      const res = await buyItem({ payment_method: paymentMethod, id: item.id });
+      const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
       console.log(res);
       if (!res.error) {
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
@@ -45,9 +45,10 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       }
     } catch (error) {}
   };
-
-  const { startTransaction, failTransaction, completeTransaction } = useTransactionNotification();
   
+
+  // for transactions
+  const { startTransaction, failTransaction, completeTransaction } = useTransactionNotification();
   const handleUsdtPayment = async () => {
     try {
       setError('');
@@ -55,10 +56,10 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       const trxId = await sendUSDT(Number(item.price_usdt));
       setCurrentTrxId(trxId || '');
     } catch (error) {
-      failTransaction();
+      failTransaction(handleUsdtPayment);
     }
   };
-  
+
   useEffect(() => {
     const latestTransaction = usdtTransactions[0];
     console.log("Transactions", latestTransaction)
@@ -66,10 +67,9 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     if (!latestTransaction || latestTransaction.orderId !== currentTrxId) return;
     
     if (latestTransaction.status === 'succeeded') {
-      handleBuyItem('usdt')
-      completeTransaction(item);
+      completeTransaction();
     } else {
-      failTransaction();
+      failTransaction(handleUsdtPayment);
     }
   }, [usdtTransactions, currentTrxId]);
 
@@ -133,14 +133,13 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       {!disabled ? (
         <div className={styles.actions}>
           <button
-            // onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
             onClick={handleUsdtPayment}
           >
             {formatAbbreviation(item.price_usdt, 'currency',{ locale: locale })}
           </button>
           <button
             className={userPoints < item.price_internal ? styles.disabledButton : ''}
-            onClick={() => handleBuyItem('internal_wallet')}
+            onClick={() => handleBuyItem}
           >
             {isLoading ? (
               <p>loading</p>

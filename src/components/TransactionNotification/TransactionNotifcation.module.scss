@@ -1,4 +1,4 @@
-@use "../../assets/styles/abstracts/" as var;
+@use "../../assets/styles/abstracts" as var;
 
 .transactionIndicator {
     position: fixed;
@@ -43,6 +43,26 @@
             color: #E84949;
         }
 
+        &.success {
+            display: flex;
+            width: 370px;
+            height: 60px;
+            padding: 15px 9px 15px 15px;
+
+            align-items: center;
+            border-radius: 12px;
+            border: 2px solid #219653;
+            background: #1C1D22;
+            box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.15);
+            color: #219653;
+
+            .checkIcon {
+                width: 24px;
+                height: 24px;
+                fill: #219653;
+            }
+        }
+        
         span {
             font-size: 16px;
         }

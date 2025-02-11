@@ -1,60 +1,81 @@
 import { createContext, useContext, useState } from 'react';
-import { NewItemModal, TransactionNotification } from '../../components';
 import { useTonConnect } from '../../hooks';
+import { TransactionNotification } from '../../components';
 
-type NotificationType = 'progress' | 'error';
+type NotificationType = 'progress' | 'error' | 'new_item';
 
-const TransactionNotificationContext = createContext({
-    showNotification: (type: NotificationType, message: string) => {},
-    hideNotification: () => {},
+interface TransactionNotificationContextType {
+  showNotification: (type: NotificationType, message: string, retryHandler?: () => void) => void;
+  hideNotification: () => void;
+}
+
+export const TransactionNotificationContext = createContext<TransactionNotificationContextType>({
+  showNotification: () => {},
+  hideNotification: () => {}
 });
 
 export const TransactionNotificationProvider = ({ children }: { children: React.ReactNode }) => {
-  const [notification, setNotification] = useState({
+  const [notification, setNotification] = useState<{
+    visible: boolean;
+    type: NotificationType;
+    message: string;
+    retryHandler?: () => void;
+  }>({
     visible: false,
     type: 'progress',
-    message: '',
+    message: ''
   });
+  
   const [timeoutId, setTimeoutId] = useState<number | null>(null);
-  const {userAddress} = useTonConnect();
+  const { userAddress } = useTonConnect();
 
-  const showNotification = (type: 'progress' | 'error', message: string) => {
-    if (!userAddress) return
+  const showNotification = (
+    type: NotificationType,
+    message: string,
+    retryHandler?: () => void
+  ) => {
+    if (!userAddress) return;
 
-    if (timeoutId) clearTimeout(timeoutId);
-    
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
     setNotification({
       visible: true,
       type,
       message,
+      retryHandler
     });
 
-    const id = setTimeout(() => {
-      hideNotification();
-    }, 60000);
-    setTimeoutId(id);
+    if (type !== 'error') {
+      const timeout = type === 'new_item' ? 3000 : 60000;
+      const id = window.setTimeout(() => {
+        hideNotification();
+      }, timeout);
+      setTimeoutId(id);
+    }
   };
 
   const hideNotification = () => {
     setNotification(prev => ({ ...prev, visible: false }));
-    if (timeoutId) clearTimeout(timeoutId);
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
   };
 
   return (
     <TransactionNotificationContext.Provider value={{ showNotification, hideNotification }}>
       {children}
       {notification.visible && (
-        <TransactionNotification 
-          type={notification.type} 
-          message={notification.message} 
+        <TransactionNotification
+          type={notification.type}
+          message={notification.message}
+          onRetry={notification.retryHandler}
           onClose={hideNotification}
         />
       )}
-      <NewItemModal />
     </TransactionNotificationContext.Provider>
   );
 };
 
-
-export const useTransactionNotificationContext = () =>
-    useContext(TransactionNotificationContext);
+export const useTransactionNotificationContext = () => useContext(TransactionNotificationContext);
