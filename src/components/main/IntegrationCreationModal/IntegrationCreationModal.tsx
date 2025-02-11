@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import CentralModal from '../../shared/CentralModal/CentralModal.tsx';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import lightningIcon from '../../../assets/icons/lightning.svg';
 import {
@@ -15,6 +14,7 @@ import { useInventoryItemsFilter } from '../../../hooks';
 
 import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
+import { Button, CentralModal } from '../../shared';
 
 interface CreatingIntegrationModalProps {
   modalId: string;
@@ -122,13 +122,13 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           isError && <span className={s.errorMessage}>{error?.data?.detail}</span>
         }
 
-        <button
+        <Button
           className={s.button}
           disabled={submitDisabled && !noItemsMessage}
           onClick={noItemsMessage ? goToShop : submitCreation}
         >
           {noItemsMessage ? 'В магазин' : 'Создать интеграцию'}
-        </button>
+        </Button>
       </div>
     </CentralModal>
   );

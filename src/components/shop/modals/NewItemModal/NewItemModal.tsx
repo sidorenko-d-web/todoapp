@@ -1,7 +1,6 @@
 import styles from './NewItemModal.module.scss';
 import { AppRoute, MODALS, SOUNDS, svgHeadersString } from '../../../../constants';
 import { useAutoPlaySound, useModal } from '../../../../hooks';
-import CentralModal from '../../../shared/CentralModal/CentralModal';
 import { IShopItem } from '../../../../redux';
 import Button from '../partials/Button';
 import ViewsIcon from '../../../../assets/icons/views.png';
@@ -11,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import Lottie from 'lottie-react';
 import { blueLight, purpleLight, redLight } from '../../../../assets/animations';
+import { CentralModal } from '../../../shared';
 
 export const NewItemModal = () => {
   const { closeModal, getModalState } = useModal();

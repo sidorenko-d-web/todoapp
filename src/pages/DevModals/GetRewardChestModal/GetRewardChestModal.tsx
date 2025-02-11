@@ -1,5 +1,3 @@
-import CentralModal from '../../../components/shared/CentralModal/CentralModal';
-import { MODALS } from '../../../constants/modals';
 import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './GetRewardChestModal.module.scss';
 import Button from '../partials/Button';
@@ -10,7 +8,8 @@ import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import chestAnimation from '../../../assets/animations/kamen_fixed.json';
 import reward from '../../../assets/animations/reward.json';
-import { SOUNDS, localStorageConsts } from '../../../constants';
+import { SOUNDS, localStorageConsts, MODALS } from '../../../constants';
+import { CentralModal } from '../../../components/shared';
 
 export default function GetRewardChestModal() {
   const { closeModal } = useModal();

@@ -10,6 +10,7 @@ import ViewsIcon from '../../../assets/icons/views.png';
 import { MODALS, svgHeadersString } from '../../../constants';
 import { formatAbbreviation } from '../../../helpers';
 import { useModal } from '../../../hooks';
+import { Button } from '../../shared';
 
 interface Props {
   disabled?: boolean;
@@ -91,12 +92,12 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
       {!disabled ? (
         <div className={styles.actions}>
-          <button
+          <Button
             onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
           >
             {formatAbbreviation(item.price_usdt, 'currency')}
-          </button>
-          <button onClick={handleBuyItem}>
+          </Button>
+          <Button onClick={handleBuyItem}>
             {isLoading ? (
               <p>loading</p>
             ) : (
@@ -104,7 +105,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 {formatAbbreviation(item.price_internal)} <img src={CoinIcon} alt="" />
               </>
             )}
-          </button>
+          </Button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>

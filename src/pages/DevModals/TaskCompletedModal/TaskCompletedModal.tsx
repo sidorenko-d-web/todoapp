@@ -1,4 +1,3 @@
-import CentralModal from '../../../components/shared/CentralModal/CentralModal';
 import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './TaskCompletedModal.module.scss';
 import Button from '../partials/Button';
@@ -8,6 +7,7 @@ import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import reward from '../../../assets/animations/reward.json';
 import { MODALS, SOUNDS } from '../../../constants';
+import { CentralModal } from '../../../components/shared';
 
 export default function TaskCompletedModal() {
   const { closeModal } = useModal();

@@ -4,6 +4,7 @@ import styles from "./WardrobeTabs.module.scss";
 import { useGetInventorySkinsQuery } from "../../../redux/api/inventory/api";
 import skinPlaceholder from '../../../assets/icons/skin-placeholder.svg';
 import { IShopSkin } from "../../../redux";
+import { Button } from "../../shared";
 
 const categories = [
     { name: "Голова", key: "head" },
@@ -54,19 +55,19 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ setSelectedSkinUrl }
         <div className={styles.container}>
             <div className={styles.tabs}>
                 {categories.map(({ name, key }) => (
-                    <button
+                    <Button
                         key={key}
                         className={`${styles.tab} ${activeTab === key ? styles.activeTab : ""} ${(key === "entire_body" && activeTab !== key) ? styles.vipTab : ""}`}
                         onClick={() => setActiveTab(key)}
                     >
                         {name}
-                    </button>
+                    </Button>
                 ))}
             </div>
 
             <div className={styles.grid}>
                 {categorizedSkins[activeTab as keyof CategorizedSkins]?.map((skin) => (
-                    <button
+                    <Button
                         key={skin.id}
                         className={`${styles.option} ${selected === skin.id ? styles.selected : ""}`}
                         onClick={() => {
@@ -75,7 +76,7 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ setSelectedSkinUrl }
                         }}
                     >
                         <img src={skin.image_url || skinPlaceholder} />
-                    </button>
+                    </Button>
                 ))}
             </div>
         </div>

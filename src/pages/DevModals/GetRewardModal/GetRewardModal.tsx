@@ -1,4 +1,3 @@
-import CentralModal from '../../../components/shared/CentralModal/CentralModal';
 import { MODALS, SOUNDS } from '../../../constants';
 import { useModal, useAutoPlaySound } from '../../../hooks';
 import styles from './GetRewardModal.module.scss';
@@ -7,6 +6,7 @@ import Button from '../partials/Button';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import reward from '../../../assets/animations/reward.json';
+import { CentralModal } from '../../../components/shared';
 export default function GetRewardModal() {
   const { closeModal } = useModal();
 

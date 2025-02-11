@@ -1,4 +1,3 @@
-import CentralModal from '../../../components/shared/CentralModal/CentralModal';
 import { MODALS, SOUNDS } from '../../../constants';
 import { useModal, useAutoPlaySound } from '../../../hooks';
 import styles from './RewardForIntegrationModal.module.scss';
@@ -12,6 +11,7 @@ import lightning from '../../../assets/icons/lightning.svg';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import reward from '../../../assets/animations/reward.json';
+import { CentralModal } from '../../../components/shared';
 
 export default function RewardForIntegrationModal() {
   const { closeModal } = useModal();

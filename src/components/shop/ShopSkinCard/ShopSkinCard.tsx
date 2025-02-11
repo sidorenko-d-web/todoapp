@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import styles from './ShopSkinCard.module.scss';
 import clsx from 'clsx';
-import { useBuySkinMutation, useGetShopSkinsQuery } from '../../../redux/api/shop/api';
+import { shopApi, useBuySkinMutation, useGetShopSkinsQuery } from '../../../redux/api/shop/api';
 import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
 import { IShopSkin } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
@@ -15,6 +15,7 @@ import ListIcon from '../../../assets/icons/list.svg';
 import { useModal } from '../../../hooks';
 import { MODALS, svgHeadersString } from '../../../constants';
 import { formatAbbreviation } from '../../../helpers';
+import { Button } from '../../shared';
 
 interface Props {
   item: IShopSkin;
@@ -32,8 +33,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
       const res = await buySkin({ payment_method: 'internal_wallet', id: item.id });
       console.log(res);
       if (!res.error) {
-        refetchInventory();
-        refetchShop();
+        shopApi.util.resetApiState()
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' });
       }
     } catch (error) {
@@ -79,18 +79,18 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
 
       <div className={styles.actions}>
         {item.limited ? (
-          <button className={styles.vipButton}>
+          <Button className={styles.vipButton}>
             {formatAbbreviation(item.price_usdt, 'currency')} (осталось {item.quantity} шт.)
-          </button>
+          </Button>
         ) : mode === 'shop' ? (
           <>
-            <button
+            <Button
               className={styles.button}
               onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' })}
             >
               {formatAbbreviation(item.price_usdt, 'currency')}
-            </button>
-            <button className={styles.priceButton} onClick={handleBuySkin}>
+            </Button>
+            <Button className={styles.priceButton} onClick={handleBuySkin}>
               {isLoading ? (
                 <p>Загрузка</p>
               ) : (
@@ -98,14 +98,14 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
                   {formatAbbreviation(item.price_internal)} <img src={CoinIcon} />
                 </>
               )}
-            </button>
-            <button className={styles.listButton}>
-              <img src={ListIcon} alt="" />
-            </button>
+            </Button>
+            <Button className={styles.listButton}>
+              <img src={ListIcon} alt="list icon" />
+            </Button>
           </>
         ) : (
           <>
-            <button className={styles.buttonInventory}>
+            <Button className={styles.buttonInventory}>
               {isLoading ? (
                 <p>Загрузка</p>
               ) : (
@@ -113,7 +113,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
                   <p>Надеть</p>
                 </>
               )}
-            </button>
+            </Button>
           </>
         )}
       </div>

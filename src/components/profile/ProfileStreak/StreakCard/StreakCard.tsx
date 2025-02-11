@@ -1,14 +1,12 @@
 import React from 'react';
 import styles from './StreakCard.module.scss';
 
-
 import chestIcon from '../../../../assets/icons/elite-chest-glowing.svg';
 import snowflake from '../../../../assets/icons/snowflake.svg';
-import ProgressLine from '../../../shared/ProgressLine/ProgressLine';
+import { ProgressLine } from '../../../shared';
 
 import { DayType } from '../../../../types';
 import { StreakDay } from './StreakDay';
-
 
 interface StreakCardProps {
   streakCount: number;
@@ -18,7 +16,13 @@ interface StreakCardProps {
   onlyStreak?: boolean;
 }
 
-export const StreakCard: React.FC<StreakCardProps> = ({ streakCount, freezeCount, days, progress, onlyStreak }) => {
+export const StreakCard: React.FC<StreakCardProps> = ({
+  streakCount,
+  freezeCount,
+  days,
+  progress,
+  onlyStreak,
+}) => {
   return (
     <div className={styles.wrp}>
       <div className={styles.header}>
@@ -27,34 +31,36 @@ export const StreakCard: React.FC<StreakCardProps> = ({ streakCount, freezeCount
 
           <div className={styles.title}>
             <h2 className={styles.daysInARow}>{streakCount} дней в блоге!</h2>
-            {!onlyStreak && <div className={styles.freezeCount}>
-              <span>{freezeCount}</span>
-              <img src={snowflake} />
-            </div>}
+            {!onlyStreak && (
+              <div className={styles.freezeCount}>
+                <span>{freezeCount}</span>
+                <img src={snowflake} />
+              </div>
+            )}
           </div>
         </div>
         <div className={styles.fire} />
-
       </div>
 
       {!onlyStreak && (
         <>
-          {days && <div className={styles.streakDays}>
-            {days.map(({ day, type }, index) => (
-              <StreakDay key={day} dayNumber={day} type={type} weekIndex={index} />
-            ))}
-          </div>}
-
+          {days && (
+            <div className={styles.streakDays}>
+              {days.map(({ day, type }, index) => (
+                <StreakDay key={day} dayNumber={day} type={type} weekIndex={index} />
+              ))}
+            </div>
+          )}
 
           <div className={styles.progressContainer}>
             <div className={`${styles['progressBarTextWrp']} ${styles['progressText']}`}>
               <span>{progress}/30 дней</span>
               <span className={styles.reward}>
-            Легендарный сундук
-            <div className={styles.chestImgContainer}>
-              <img src={chestIcon} className={styles.chestImg} />
-            </div>
-          </span>
+                Легендарный сундук
+                <div className={styles.chestImgContainer}>
+                  <img src={chestIcon} className={styles.chestImg} />
+                </div>
+              </span>
             </div>
             <ProgressLine level={3} color="red" />
           </div>

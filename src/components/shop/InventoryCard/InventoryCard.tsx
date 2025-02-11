@@ -10,6 +10,7 @@ import ListIcon from '@icons/list.svg';
 import {
   IShopItem,
   TypeItemQuality,
+  selectVolume,
   useGetCurrentUserProfileInfoQuery,
   useGetShopItemsQuery,
   useUpgradeItemMutation,
@@ -18,9 +19,12 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { localStorageConsts, MODALS, svgHeadersString } from '../../../constants';
+import { localStorageConsts, MODALS, SOUNDS, svgHeadersString } from '../../../constants';
 import { useModal } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
+import useSound from 'use-sound';
+import { useSelector } from 'react-redux';
+import { Button } from '../../shared';
 
 interface Props {
   disabled?: boolean;
@@ -67,10 +71,14 @@ export const InventoryCard: FC<Props> = ({
 
   const { openModal } = useModal();
 
+  const [playLvlSound] = useSound(SOUNDS.levelUp, {volume: useSelector(selectVolume)});
+
   const handleBuyItem = async () => {
     try {
       const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
+
       if (!res.error) {
+        playLvlSound();
         refetch();
         if (item.level === 49) {
           if (item.item_premium_level === 'pro') {
@@ -264,13 +272,15 @@ export const InventoryCard: FC<Props> = ({
           <img src={LockIcon} alt="" />
         </div>
       ) : disabled ? (
-        <button className={styles.disabledActions}>
+        <Button className={styles.disabledActions}>
           <p>Активировать</p>
-        </button>
+        </Button>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
-          <button>{formatAbbreviation(data?.items[0].price_usdt || 0, 'currency')}</button>
-          <button
+          <Button>
+            {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency')}
+          </Button>
+          <Button
             className={clsx(
               item.item_rarity === 'yellow'
                 ? styles.upgradeItemPurple
@@ -283,11 +293,12 @@ export const InventoryCard: FC<Props> = ({
               <p>loading</p>
             ) : (
               <>
-                {formatAbbreviation(data?.items[0].price_internal || 0)} <img src={CoinIcon} alt="" />
+                {formatAbbreviation(data?.items[0].price_internal || 0)}{' '}
+                <img src={CoinIcon} alt="" />
               </>
             )}
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() =>
               openModal(MODALS.UPGRADED_ITEM, {
                 item,
@@ -297,7 +308,7 @@ export const InventoryCard: FC<Props> = ({
             }
           >
             <img src={ListIcon} alt="Tasks" />
-          </button>
+          </Button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>

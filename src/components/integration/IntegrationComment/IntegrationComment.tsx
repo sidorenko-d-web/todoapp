@@ -1,7 +1,11 @@
+import useSound from 'use-sound';
 import coinIcon from '../../../assets/icons/coin.png';
 import { formatAbbreviation } from '../../../helpers';
-import ProgressLine from '../../shared/ProgressLine/ProgressLine';
 import styles from './IntegrationComment.module.scss';
+import { useSelector } from 'react-redux';
+import { selectVolume } from '../../../redux';
+import { SOUNDS } from '../../../constants';
+import { Button, ProgressLine } from '../../shared';
 
 interface IntegrationCommentProps {
   author_username: string;
@@ -13,13 +17,27 @@ interface IntegrationCommentProps {
 }
 
 export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
-                                                                        author_username,
-                                                                        comment_text,
-                                                                        id,
-                                                                        progres,
-                                                                        onVote,
-                                                                        finished,
-                                                                      }) => {
+  author_username,
+  comment_text,
+  id,
+  progres,
+  onVote,
+  finished,
+}) => {
+  const [voteRightSound] = useSound(SOUNDS.rightAnswer, {
+    volume: useSelector(selectVolume),
+  });
+  const [voteWrondSound] = useSound(SOUNDS.wrongAnswer, {
+    volume: useSelector(selectVolume) * 5 < 1 ? useSelector(selectVolume) * 5 : 1, // too much quiet sound
+  });
+  const handleVoteRight = () => {
+    onVote(true, id);
+    voteRightSound();
+  };
+  const handleVoteWrong = () => {
+    onVote(false, id);
+    voteWrondSound();
+  };
   return (
     <div className={styles.wrp}>
       {!finished ? (
@@ -27,7 +45,9 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
           <p className={styles.username}>{author_username}:</p>
           <p className={styles.commentText}>{comment_text}</p>
         </div>
-      ) : <p className={styles.noComment}>Нет новых комментариев</p>}
+      ) : (
+        <p className={styles.noComment}>Нет новых комментариев</p>
+      )}
       <div className={styles.progressWrp}>
         <div className={styles.amountAndRewardWrp}>
           <p className={styles.amount}>{progres}/5</p>
@@ -41,8 +61,8 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
 
       {!finished && (
         <div className={styles.thumbs}>
-          <button className={styles.thumbsUp} onClick={() => onVote(true, id)} />
-          <button className={styles.thumbsDown} onClick={() => onVote(false, id)} />
+          <Button className={styles.thumbsUp} onClick={handleVoteRight} />
+          <Button className={styles.thumbsDown} onClick={handleVoteWrong} />
         </div>
       )}
     </div>

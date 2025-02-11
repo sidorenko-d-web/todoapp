@@ -18,6 +18,7 @@ import CoinIcon from '../../assets/icons/coin.png';
 import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
 import ViewsCoin from '../../assets/icons/views.png';
 import { formatAbbreviation, itemsInTab } from '../../helpers';
+import { Button } from '../../components/shared';
 
 const shopItemCategories = [
   { title: 'Текст', value: 'text' },
@@ -111,13 +112,13 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   return (
     <div className={styles.wrapper}>
       <div className={styles.titleWrapper}>
-        <button
+        <Button
           className={styles.linkBack}
           onClick={handleShop}
           style={{ opacity: mode === 'inventory' ? 1 : 0 }}
         >
           <img src={ArrowLeftIcon} />
-        </button>
+        </Button>
         <div className={styles.mainHeader}>
           <h1 className={styles.title}>{mode === 'shop' ? 'Магазин' : 'Инвентарь '}</h1>
 
@@ -139,13 +140,13 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             </div>
           </div>
         </div>
-        <button
+        <Button
           className={styles.linkInventory}
           onClick={handleInventory}
           style={{ opacity: mode === 'shop' ? 1 : 0 }}
         >
           <img src={InventoryBox} />
-        </button>
+        </Button>
       </div>
 
       <div className={styles.navs}>

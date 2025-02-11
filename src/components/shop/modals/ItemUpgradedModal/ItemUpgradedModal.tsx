@@ -1,7 +1,6 @@
 import styles from './ItemUpgradedModal.module.scss';
 import { MODALS, localStorageConsts, svgHeadersString } from '../../../../constants';
 import { useAutoPlaySound, useModal } from '../../../../hooks';
-import CentralModal from '../../../shared/CentralModal/CentralModal';
 import { IShopItem, useGetShopItemsQuery } from '../../../../redux';
 import Button from '../partials/Button';
 import ViewsIcon from '../../../../assets/icons/views.png';
@@ -12,6 +11,7 @@ import clsx from 'clsx';
 import Lottie from 'lottie-react';
 import { blueLight, purpleLight, redLight } from '../../../../assets/animations';
 import { SOUNDS } from '../../../../constants/sounds';
+import { CentralModal } from '../../../shared';
 
 export const ItemUpgradedModal = () => {
   const { closeModal, getModalState, openModal } = useModal();
