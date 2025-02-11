@@ -15,6 +15,7 @@ import ListIcon from '../../../assets/icons/list.svg';
 import { useModal } from '../../../hooks';
 import { MODALS, svgHeadersString } from '../../../constants';
 import { formatAbbreviation } from '../../../helpers';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   item: IShopSkin;
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
+  const { t,i18n } = useTranslation('shop');
   const [buySkin, { isLoading }] = useBuySkinMutation();
   const { refetch: refetchShop } = useGetShopSkinsQuery();
   const { refetch: refetchInventory } = useGetInventorySkinsQuery();
@@ -41,7 +43,8 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
     }
   };
 
-  console.log(mode);
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+
 
   return (
     <div className={styles.storeCard}>
@@ -73,14 +76,14 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
               )}
             </div>
           </div>
-          <p className={styles.description}>Небольшое описание скина.</p>
+          <p className={styles.description}>{t('s36')}</p>
         </div>
       </div>
 
       <div className={styles.actions}>
         {item.limited ? (
           <button className={styles.vipButton}>
-            {formatAbbreviation(item.price_usdt, 'currency')} (осталось {item.quantity} шт.)
+            {formatAbbreviation(item.price_usdt, 'currency',{ locale: locale })} ({t('s10')} {item.quantity} {t('s11')}.)
           </button>
         ) : mode === 'shop' ? (
           <>
@@ -88,14 +91,14 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
               className={styles.button}
               onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' })}
             >
-              {formatAbbreviation(item.price_usdt, 'currency')}
+              {formatAbbreviation(item.price_usdt, 'currency', { locale: locale })}
             </button>
             <button className={styles.priceButton} onClick={handleBuySkin}>
               {isLoading ? (
-                <p>Загрузка</p>
+                <p>Loading</p>
               ) : (
                 <>
-                  {formatAbbreviation(item.price_internal)} <img src={CoinIcon} />
+                  {formatAbbreviation(item.price_internal, 'number', { locale: locale })} <img src={CoinIcon} />
                 </>
               )}
             </button>
@@ -107,10 +110,10 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
           <>
             <button className={styles.buttonInventory}>
               {isLoading ? (
-                <p>Загрузка</p>
+                <p>Loading</p>
               ) : (
                 <>
-                  <p>Надеть</p>
+                  <p>{t('s39')}</p>
                 </>
               )}
             </button>

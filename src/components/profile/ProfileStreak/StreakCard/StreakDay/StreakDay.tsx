@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './StreakDay.module.scss';
 
 import fireIcon from '../../../../../assets/icons/streak-fire.svg';
@@ -12,6 +12,12 @@ interface StreakDayProps {
 }
 
 export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type, weekIndex }) => {
+  const [lang, setLang] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLang(localStorage.getItem('selectedLanguage'));
+  }, []);
+
   const getIcon = () => {
     switch (type) {
       case 'streak':
@@ -23,7 +29,8 @@ export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type, weekIndex
     }
   };
 
-  const weekdays = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
+  const weekdaysRu = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
+  const weekdaysEn = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
   return (
     <div>
@@ -37,7 +44,7 @@ export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type, weekIndex
       </div>
 
       {/* Dynamic weekday based on weekIndex */}
-      <p className={styles.dayOfTheWeek}>{weekdays[weekIndex]}</p>
+      <p className={styles.dayOfTheWeek}>{lang === 'en' ? weekdaysEn[weekIndex] : weekdaysRu[weekIndex]}</p>
     </div>
   );
 };

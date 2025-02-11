@@ -15,7 +15,6 @@ interface props {
 
 export const ItemsTab: FC<props> = ({ inventoryItems, shopItems }) => {
 
-
   return (
     <div className={styles.cardsWrapper}>
       {shopItems?.map(item => (

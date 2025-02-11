@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
-import { useBuyItemMutation } from '../../../redux/api/shop/api';
+import { useBuyItemMutation } from '../../../redux';
 import { useGetCurrentUserProfileInfoQuery } from '../../../redux';
 import { IShopItem } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
@@ -11,6 +11,7 @@ import ViewsIcon from '../../../assets/icons/views.png';
 import { MODALS, svgHeadersString } from '../../../constants';
 import { formatAbbreviation } from '../../../helpers';
 import { useModal } from '../../../hooks';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   disabled?: boolean;
@@ -20,6 +21,8 @@ interface Props {
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [buyItem, { isLoading }] = useBuyItemMutation();
   const { data } = useGetCurrentUserProfileInfoQuery();
+  const { t, i18n } = useTranslation('shop');
+
   const { openModal } = useModal();
   const userPoints = data?.points || 0;
   const [error, setError] = useState('');
@@ -34,6 +37,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       }
     } catch (error) {}
   };
+
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.storeCard}>
@@ -56,7 +61,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 : styles.level
             }
           >
-            Не куплено
+            {t('s17')}
           </p>
           {error && (
             <p
@@ -73,17 +78,17 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
           )}
           <div className={styles.stats}>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.views)}</p>
+              <p>+{formatAbbreviation(item.boost.views,'number', { locale: locale })}</p>
               <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.subscribers)}</p>
+              <p>+{formatAbbreviation(item.boost.subscribers,'number', { locale: locale })}</p>
               <img src={SubscriberCoin} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.income_per_second)}</p>
+              <p>+{formatAbbreviation(item.boost.income_per_second,'number', { locale: locale })}</p>
               <img src={CoinIcon} alt="" />
-              <p>/сек</p>
+              <p>/{t('s13')}</p>
             </div>
           </div>
         </div>
@@ -94,7 +99,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
           <button
             onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
           >
-            {formatAbbreviation(item.price_usdt, 'currency')}
+            {formatAbbreviation(item.price_usdt, 'currency',{ locale: locale })}
           </button>
           <button
             className={userPoints < item.price_internal ? styles.disabledButton : ''}
@@ -104,7 +109,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
               <p>loading</p>
             ) : (
               <>
-                {formatAbbreviation(item.price_internal)} <img src={CoinIcon} alt="" />
+                {formatAbbreviation(item.price_internal,'number', { locale: locale })} <img src={CoinIcon} alt="" />
               </>
             )}
           </button>
@@ -113,7 +118,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <img src={LockIcon} alt="" />
-          <p>Нужен уровень Древа 7</p>
+          <p>{t('s18')} 7</p>
           <img src={LockIcon} alt="" />
           <img src={LockIcon} alt="" />
         </div>
