@@ -47,7 +47,6 @@ export const IntegrationPage: React.FC = () => {
     }
   };
 
-
   return (
     <div className={styles.wrp}>
       <h1 className={styles.pageTitle}>Интеграции</h1>
@@ -55,7 +54,7 @@ export const IntegrationPage: React.FC = () => {
       {isLoading && <p>Загрузка...</p>}
       {(error || !integrationId) && <p>Интеграция не найдена</p>}
 
-      {data && (
+      {data?.status === 'created' && (
         <>
           <IntegrationStatsMini views={data.views} subscribers={data.subscribers} income={data.income} />
           <div className={styles.integrationNameWrp}>

@@ -12,6 +12,8 @@ import { MODALS, svgHeadersString } from '../../../constants';
 import { formatAbbreviation } from '../../../helpers';
 import { useModal } from '../../../hooks';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { setPoints } from '../../../redux/slices/point.ts';
 
 interface Props {
   disabled?: boolean;
@@ -21,15 +23,17 @@ interface Props {
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [buyItem, { isLoading }] = useBuyItemMutation();
   const { data } = useGetCurrentUserProfileInfoQuery();
+  const dispatch = useDispatch();
   const { t, i18n } = useTranslation('shop');
 
   const { openModal } = useModal();
   const userPoints = data?.points || 0;
   const [error, setError] = useState('');
+
   const handleBuyItem = async () => {
     try {
+      dispatch(setPoints((prevPoints: number) => prevPoints + 1));
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
-      console.log(res);
       if (!res.error) {
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
       } else {

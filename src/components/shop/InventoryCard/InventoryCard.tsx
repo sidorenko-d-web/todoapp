@@ -21,6 +21,8 @@ import { localStorageConsts, MODALS, svgHeadersString } from '../../../constants
 import { useModal } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { setPoints } from '../../../redux/slices/point.ts';
 
 interface Props {
   disabled?: boolean;
@@ -55,6 +57,7 @@ export const InventoryCard: FC<Props> = ({
                                          }) => {
   const { t,i18n } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
+  const dispatch = useDispatch();
   const { data, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
@@ -73,6 +76,7 @@ export const InventoryCard: FC<Props> = ({
       const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
       if (!res.error) {
         refetch();
+        dispatch(setPoints((prevPoints: number) => prevPoints + 1));
         if (item.level === 49) {
           if (item.item_premium_level === 'pro') {
             openModal(MODALS.UPGRADED_SHOP, {

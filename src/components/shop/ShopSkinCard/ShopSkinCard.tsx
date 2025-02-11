@@ -16,6 +16,8 @@ import { useModal } from '../../../hooks';
 import { MODALS, svgHeadersString } from '../../../constants';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { setPoints } from '../../../redux/slices/point.ts';
 
 interface Props {
   item: IShopSkin;
@@ -25,12 +27,14 @@ interface Props {
 export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
   const { t,i18n } = useTranslation('shop');
   const [buySkin, { isLoading }] = useBuySkinMutation();
+  const dispatch = useDispatch();
   const { refetch: refetchShop } = useGetShopSkinsQuery();
   const { refetch: refetchInventory } = useGetInventorySkinsQuery();
   const { openModal } = useModal();
 
   const handleBuySkin = async () => {
     try {
+      dispatch(setPoints((prevPoints: number) => prevPoints + 1));
       const res = await buySkin({ payment_method: 'internal_wallet', id: item.id });
       console.log(res);
       if (!res.error) {

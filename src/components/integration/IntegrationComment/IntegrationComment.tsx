@@ -23,7 +23,6 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
                                                                         finished,
                                                                         hateText
                                                                       }) => {
-  console.log(hateText);
   return (
     <div className={styles.wrp}>
       {!finished ? (
