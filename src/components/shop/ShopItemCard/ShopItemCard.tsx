@@ -3,6 +3,7 @@ import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
 import { IShopItem, RootState } from '../../../redux';
+import { useGetCurrentUserProfileInfoQuery } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
@@ -20,11 +21,11 @@ interface Props {
 }
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
-  const [ buyItem, { isLoading } ] = useBuyItemMutation();
-
+  const [buyItem, { isLoading }] = useBuyItemMutation();
+  const { data } = useGetCurrentUserProfileInfoQuery();
   const { openModal } = useModal();
-
-  const [ error, setError ] = useState('');
+  const userPoints = data?.points || 0;
+  const [error, setError] = useState('');
   const handleBuyItem = async () => {
     try {
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
@@ -34,8 +35,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       } else {
         setError(JSON.stringify(res.error));
       }
-    } catch (error) {
-    }
+    } catch (error) { }
   };
 
   const buyButtonGlowing = useSelector((state: RootState) => state.guide.buyItemButtonGlowing);
@@ -96,15 +96,17 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
       {!disabled ? (
         <div className={styles.actions}>
-          {isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) && 
+          {isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
             <button
-            onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
-          >
-            {formatAbbreviation(item.price_usdt, 'currency')}
-          </button>
+              onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}
+            >
+              {formatAbbreviation(item.price_usdt, 'currency')}
+            </button>
           }
-          <button onClick={handleBuyItem} className={(buyButtonGlowing
-            && item.name.toLowerCase().trim().includes('печатная машинка')) ? styles.glowingBtn : ''}>
+          <button onClick={handleBuyItem} className={`
+              ${userPoints < item.price_internal ? styles.disabledButton : ''}
+              ${buyButtonGlowing && item.name.toLowerCase().trim().includes('печатная машинка') ? styles.glowingBtn : ''}
+              `}>
             {isLoading ? (
               <p>Загрузка...</p>
             ) : (

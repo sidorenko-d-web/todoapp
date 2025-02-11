@@ -160,6 +160,11 @@
         border: none;
       }
     }
+    .disabledButton {
+      pointer-events: none !important;
+      border: none !important;
+      opacity: 0.3 !important;
+    }
   }
 
   .disabledUpgradeActions {
