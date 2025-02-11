@@ -108,7 +108,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
             onClick={handleBuyItem}
             className={clsx(
               Number(userPoints) < Number(item.price_internal) ? styles.disabledButton : '',
-              buyButtonGlowing && item.name.toLowerCase().trim().includes('пуф') ? styles.glowingBtn : ''
+              buyButtonGlowing && item.name.toLowerCase().trim().includes('штатив') ? styles.glowingBtn : ''
             )}
           >
             {isLoading ? (

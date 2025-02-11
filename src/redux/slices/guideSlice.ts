@@ -20,6 +20,8 @@ interface GuideState {
 
   lastIntegrationId: string;
 
+  hightlightNeededTreeLevel: boolean;
+
   hightlightTreeLevelStats: boolean;
 }
 
@@ -40,7 +42,8 @@ const initialState: GuideState = {
   createdIntegrationId: "",
   elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
   lastIntegrationId: "",
-  hightlightTreeLevelStats: !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW)
+  hightlightTreeLevelStats: !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW),
+  hightlightNeededTreeLevel: !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN)
 };
 
 const guideSlice = createSlice({
@@ -86,6 +89,9 @@ const guideSlice = createSlice({
     setHightlightTreeLevelStats: (state, action: PayloadAction<boolean>) => {
       state.hightlightTreeLevelStats = action.payload;
     },
+    setHightlightNeededTreeLevel: (state, action: PayloadAction<boolean>) => {
+      state.hightlightNeededTreeLevel = action.payload;
+    },
   },
 });
 
@@ -95,5 +101,6 @@ export const { setGetCoinsGuideShown,
     setCreateIntegrationButtonGlowing, 
     setIntegrationCreated, setAccelerateIntegrationGuideClosed,
     setIsPublishedModalClosed, setIntegrationReadyForPublishing, 
-    setCreatedIntegrationId, setElevateIntegrationStats, setItemBought, setLastIntegrationId, setHightlightTreeLevelStats } = guideSlice.actions;
+    setCreatedIntegrationId, setElevateIntegrationStats, 
+    setItemBought, setLastIntegrationId, setHightlightTreeLevelStats, setHightlightNeededTreeLevel } = guideSlice.actions;
 export default guideSlice.reducer;

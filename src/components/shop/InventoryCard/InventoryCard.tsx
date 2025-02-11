@@ -8,6 +8,7 @@ import ChestRedIcon from '../../../assets/icons/chest-red.svg';
 import ListIcon from '../../../assets/icons/list.svg';
 import {
   IShopItem,
+  RootState,
   TypeItemQuality,
   useGetCurrentUserProfileInfoQuery,
   useGetShopItemsQuery,
@@ -21,6 +22,7 @@ import { localStorageConsts, MODALS, svgHeadersString } from '../../../constants
 import { useModal } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 interface Props {
   disabled?: boolean;
@@ -53,6 +55,10 @@ export const InventoryCard: FC<Props> = ({
                                            item,
                                            isB,
                                          }) => {
+                                        
+   
+  const treeLevelElevated = useSelector((state: RootState) => state.guide.hightlightNeededTreeLevel);
+                                        
   const { t,i18n } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const { data, isFetching } = useGetShopItemsQuery({
@@ -302,6 +308,12 @@ export const InventoryCard: FC<Props> = ({
           <img src={LockIcon} alt="" />
         </div>
       )}
+
+      <div className={`${styles.disabledUpgradeActions} ${treeLevelElevated ? styles.elevated: ''}`}>
+          <img src={LockIcon} alt="" />
+          <p>{t('s18')} 7</p>
+          <img src={LockIcon} alt="" />
+        </div>
     </div>
   );
 };

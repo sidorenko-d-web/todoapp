@@ -419,3 +419,9 @@
     }
   }
 }
+
+.elevated {
+  z-index: 10000;
+  box-shadow: 0 0 50px var.$color-primary;
+  scale: 1.1;
+}
