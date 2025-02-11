@@ -1,15 +1,19 @@
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
-import { MODALS } from '../../../constants';
-import { profileApi, useGetCurrentUserProfileInfoQuery, useGetIntegrationsQuery } from '../../../redux';
+import { MODALS } from '../../../constants/modals.ts';
+import { profileApi, RootState, useGetCurrentUserProfileInfoQuery, useGetIntegrationsQuery } from '../../../redux';
+
 import { IntegrationCreationCard, IntegrationCreationModal } from '../';
 import { SubscribeModal, SuccessfullySubscribedModal } from '../../';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import s from './IntegrationCreation.module.scss';
 
-export const IntegrationCreation = () => {
+import { getSubscriptionPurchased, isIntegrationCreationButtonGlowing, setSubscriptionPurchased } from '../../../utils/guide-functions.ts';
+
+export const IntegrationCreation: React.FC = () => {
   const dispatch = useDispatch();
+
 
   const { data: profile } = useGetCurrentUserProfileInfoQuery();
   const {
@@ -33,17 +37,22 @@ export const IntegrationCreation = () => {
 
   const handleSuccessfullySubscribed = () => {
     closeModal(MODALS.SUBSCRIBE);
-    dispatch(profileApi.util.invalidateTags([ 'Me' ]));
+    dispatch(profileApi.util.invalidateTags(['Me']));
     openModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
   };
 
+  const isButtonGlowing = isIntegrationCreationButtonGlowing();
+  
+  const createIntegrationButtonGlowing = useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing);
+  
+  
   return (
     <section className={s.integrationsControls}>
-      <button className={s.button} disabled={!profile} onClick={handleIntegrationCreation}>
+      <button className={`${s.button} ${(isButtonGlowing || createIntegrationButtonGlowing) ? s.glowing : ''}`} disabled={!profile} onClick={handleIntegrationCreation}>
         Создать интеграцию
         <span className={s.buttonBadge}>
           {profile?.subscription_integrations_left || 0}/5 <img src={integrationIcon} height={12} width={12}
-                                                                alt="integration" />
+            alt="integration" />
         </span>
       </button>
       {
@@ -65,7 +74,13 @@ export const IntegrationCreation = () => {
       />
       <SuccessfullySubscribedModal
         modalId={MODALS.SUCCESSFULLY_SUBSCRIBED}
-        onClose={() => closeModal(MODALS.SUCCESSFULLY_SUBSCRIBED)}
+        onClose={() => {
+          closeModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
+          if(!getSubscriptionPurchased()) {
+            setSubscriptionPurchased();
+            openModal(MODALS.CREATING_INTEGRATION);
+          }
+        }}
       />
     </section>
   );

@@ -11,17 +11,21 @@ import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import Lottie from 'lottie-react';
 import { blueLight, purpleLight, redLight } from '../../../../assets/animations';
+import { useDispatch } from 'react-redux';
+import { setItemBought } from '../../../../redux/slices/guideSlice';
 
-export const NewItemModal = () => {
+export const NewItemModal: React.FC = () => {
   const { closeModal, getModalState } = useModal();
 
   const state = getModalState<{ item: IShopItem; mode: 'skin' | 'item' }>(
     MODALS.NEW_ITEM,
   );
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClose = () => {
     closeModal(MODALS.NEW_ITEM);
+    dispatch(setItemBought(true));
     navigate(AppRoute.ShopInventory);
   };
 
@@ -31,7 +35,9 @@ export const NewItemModal = () => {
   return (
     <CentralModal
       title="Новый предмет!"
-      onClose={() => closeModal(MODALS.NEW_ITEM)}
+      onClose={() => {
+        closeModal(MODALS.NEW_ITEM);
+      }}
       modalId={MODALS.NEW_ITEM}
     >
       <div className={styles.images}>

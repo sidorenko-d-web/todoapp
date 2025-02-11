@@ -53,6 +53,8 @@ export const InventoryCard: FC<Props> = ({
                                            item,
                                            isB,
                                          }) => {
+                                        
+                                          
   const { t,i18n } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const { data, isFetching } = useGetShopItemsQuery({
@@ -302,6 +304,7 @@ export const InventoryCard: FC<Props> = ({
           <img src={LockIcon} alt="" />
         </div>
       )}
+
     </div>
   );
 };

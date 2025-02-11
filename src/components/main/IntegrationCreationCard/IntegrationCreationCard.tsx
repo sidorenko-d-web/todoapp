@@ -5,6 +5,9 @@ import rocketIcon from '../../../assets/icons/rocket.svg';
 import { IntegrationResponseDTO, integrationsApi } from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration } from '../../../hooks';
+import { GUIDE_ITEMS } from '../../../constants';
+import { isGuideShown, setGuideShown } from '../../../utils';
+import { setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice';
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
@@ -13,6 +16,7 @@ interface CreatingIntegrationCardProps {
 export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   integration,
 }) => {
+ 
   const dispatch = useDispatch();
   const initialTime = 3600;
   const [timeLeft, setTimeLeft] = useState(integration.time_left);
@@ -55,7 +59,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
 
   const handleAccelerateClick = () => {
     if (!isExpired) {
-      void accelerateIntegration(1);
+      void accelerateIntegration(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) ? 1: timeLeft-1);
       createParticles();
     }
   };
@@ -81,10 +85,16 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     }
   };
 
-  if (isExpired) return null;
+  if (isExpired) {
+    dispatch(setIntegrationReadyForPublishing(true));
+    if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
+      setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+    }
+    return null;
+  };
 
   return (
-    <div className={s.integration}>
+    <div className={`${s.integration} ${s.elevated}`}>
       <div className={s.integrationHeader}>
         <h2 className={s.title}>Интеграция</h2>
         <span className={s.author}>
