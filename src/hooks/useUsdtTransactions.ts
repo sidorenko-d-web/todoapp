@@ -61,7 +61,7 @@ function parseUsdtPayload(tx: Transaction): UsdtTransaction | undefined {
 export const useUsdtTransactions = (): UsdtTransaction[] => {
   const { walletAddress, tonClient, network } = useTonConnect();
   const [transactions, setTransactions] = useState<UsdtTransaction[]>([]);
-  const intervalId = useRef<number | null>(null);
+  const intervalId = useRef<NodeJS.Timeout | null>(null);
   const accountSubscriptionService = useRef<AccountSubscriptionService | null>(null);
   const effectRan = useRef(false); // double render in dev mode
   const jettonMasterAddress = network === CHAIN.TESTNET ? TESTNET_USDT_MASTER_ADDRESS : MAINNET_USDT_MASTER_ADDRESS;

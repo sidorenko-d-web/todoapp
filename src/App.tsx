@@ -7,7 +7,6 @@ import { AuthInit } from './hooks';
 import { ModalsProvider } from './providers';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { TonClientProvider } from './providers/TonClientProvider';
-import { useMemo } from 'react';
 import { TransactionNotificationProvider } from './providers/TransactionNotificationProvider/';
 
 
@@ -18,10 +17,6 @@ declare global {
 }
 
 function App() {
-  const manifestUrl = useMemo(() => {
-    return new URL('tonconnect-manifest.json', window.location.href).toString();
-  }, []);
-
   return (
     <>
       <Provider store={store}>

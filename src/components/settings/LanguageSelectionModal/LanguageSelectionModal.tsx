@@ -2,7 +2,7 @@ import { MODALS } from "../../../constants/modals"
 import { useModal } from "../../../hooks/useModal"
 import styles from "./LanguageSelectionModal.module.scss"
 import { useState } from "react"
-import CentralModal from "../../shared/CentralModal/CentralModal"
+import {CentralModal} from "../../shared/CentralModal"
 
 import tick from "../../../assets/icons/input-tick.svg"
 import circle from "../../../assets/icons/circle-blue.svg"

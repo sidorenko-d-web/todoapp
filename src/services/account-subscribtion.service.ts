@@ -1,6 +1,7 @@
 import { Address, TonClient, Transaction } from '@ton/ton';
 import { retry } from '../helpers';
 
+
 export class AccountSubscriptionService {
   constructor(
     readonly client: TonClient,
@@ -39,7 +40,7 @@ export class AccountSubscriptionService {
   // }
 
   private isErrorState = false;
-  private errorTimeout: number | null = null;
+  private errorTimeout: NodeJS.Timeout | null = null;
 
   async getTransactionsBatch(toLt?: string, lt?: string, hash?: string) {
     if (this.isErrorState) {
@@ -68,6 +69,7 @@ export class AccountSubscriptionService {
       if (this.errorTimeout) {
         clearTimeout(this.errorTimeout);
       }
+
       this.errorTimeout = setTimeout(() => {
         this.isErrorState = false;
       }, 60000);
@@ -106,7 +108,7 @@ export class AccountSubscriptionService {
     }
   }
 
-  start(): number {
+  start(): NodeJS.Timeout {
     let isProcessing = false;
     const tick = async () => {
       // prevent multiple running `subscribeToTransactionUpdate` functions
