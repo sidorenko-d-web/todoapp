@@ -1,6 +1,4 @@
-import CentralModal from '../../../components/shared/CentralModal/CentralModal';
-import { MODALS } from '../../../constants/modals';
-import { useModal } from '../../../hooks';
+import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './GetRewardChestModal.module.scss';
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
@@ -10,14 +8,18 @@ import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import chestAnimation from '../../../assets/animations/kamen_fixed.json';
 import reward from '../../../assets/animations/reward.json';
-import { localStorageConsts } from '../../../constants';
+import { SOUNDS, localStorageConsts, MODALS } from '../../../constants';
+import { CentralModal } from '../../../components/shared';
 
 export default function GetRewardChestModal() {
   const { closeModal } = useModal();
   const handleClose = () => {
     closeModal(MODALS.TASK_CHEST);
-    localStorage.removeItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST)
+    localStorage.removeItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
   };
+
+  useAutoPlaySound(MODALS.TASK_CHEST, SOUNDS.chestOpen);
+
   return (
     <CentralModal
       onClose={handleClose}

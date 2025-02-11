@@ -1,13 +1,17 @@
 import { Action, combineReducers } from 'redux';
-import { authReducer } from './slices';
+import { audioReducer, authReducer } from './slices';
 import { authApi, companiesApi, integrationsApi, profileApi, treeApi, usersApi } from './api';
 import { shopApi } from './api';
 import { refferalsApi } from './api';
 import { treeReducer } from './slices/tree.ts';
+import guideReducer from './slices/guideSlice.ts';
+
 
 const appReducer = combineReducers({
   auth: authReducer,
   treeSlice: treeReducer,
+  guide: guideReducer,
+  audioSlice: audioReducer,
   [authApi.reducerPath]: authApi.reducer,
   [shopApi.reducerPath]: shopApi.reducer,
   [integrationsApi.reducerPath]: integrationsApi.reducer,

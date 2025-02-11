@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./RewardsList.module.scss";
 import Reward from "./Reward/Reward";
 import { useGetInventoryAchievementsQuery } from "../../../redux/api/inventory/api";
+import { useTranslation } from 'react-i18next';
 
 interface RewardItem {
   name: string;
@@ -11,6 +12,7 @@ interface RewardItem {
 }
 
 const RewardsList: React.FC = () => {
+  const { t } = useTranslation('profile');
   const { data: awardsData, error: awardsError, isLoading: awardsLoading } = useGetInventoryAchievementsQuery();
 
   const mappedRewards: RewardItem[] = React.useMemo(() => {
@@ -36,8 +38,8 @@ const RewardsList: React.FC = () => {
 
   return (
     <>
-      {awardsLoading && <p>Загрузка...</p>}
-      {awardsError && <p>Ошибка при загрузке наград</p>}
+      {awardsLoading && <p>{t('p3')}</p>}
+      {awardsError && <p>{t('p16')}</p>}
       {!awardsLoading && !awardsError && (
         <div className={styles.rewardsList}>
           <div className={styles.list}>

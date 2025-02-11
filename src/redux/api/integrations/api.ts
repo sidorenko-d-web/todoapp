@@ -75,6 +75,13 @@ export const integrationsApi = createApi({
       }),
       invalidatesTags: ['Integrations'],
     }),
+    publishIntegration: builder.mutation<IntegrationResponseDTO, string> ({
+      query: (integrationId) => ({
+        url: `/integrations/${integrationId}/publish`,
+        method: 'PATCH'
+      }),
+      invalidatesTags: ['Integrations'],
+    })
   }),
 });
 
@@ -85,5 +92,6 @@ export const {
   useGetAllIntegrationsQuery,
   usePostCommentIntegrationsMutation,
   useGetUnansweredIntegrationCommentQuery,
-  useUpdateTimeLeftMutation
+  useUpdateTimeLeftMutation,
+  usePublishIntegrationMutation
 } = integrationsApi;

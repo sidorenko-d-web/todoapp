@@ -9,12 +9,13 @@ import vipIcon from '../../../assets/icons/vip.svg';
 
 import subscriptionLeveIcon from '../../../assets/icons/subscription-level.svg';
 
-import ProgressLine from '../../shared/ProgressLine/ProgressLine';
+import { ProgressLine } from '../../shared';
 import { useModal } from '../../../hooks';
 import { AppRoute, MODALS } from '../../../constants';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux';
+import { useTranslation } from 'react-i18next';
 
 interface ProfileInfoProps {
   nickname: string;
@@ -26,17 +27,18 @@ interface ProfileInfoProps {
 }
 
 export const ProfileInfo: React.FC<ProfileInfoProps> = ({
-                                                          nickname,
-                                                          blogName,
-                                                          subscriptionIntegrationsLeft,
-                                                          position,
-                                                          isVip,
-                                                          nonEditable,
-                                                        }) => {
-
-
+  nickname,
+  blogName,
+  subscriptionIntegrationsLeft,
+  position,
+  isVip,
+  nonEditable,
+}) => {
+  const { t } = useTranslation('profile');
   const { openModal } = useModal();
-  const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
+  const lastActiveStage = useSelector(
+    (state: RootState) => state.treeSlice.lastActiveStage,
+  );
 
   return (
     <div className={styles.wrp}>
@@ -57,10 +59,11 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
                 <span className={styles.vipText}>VIP</span>
               </div>
             </>
-          ) : <>
-            <div style={{ height: '16px' }}></div>
-          </>}
-
+          ) : (
+            <>
+              <div style={{ height: '16px' }}></div>
+            </>
+          )}
         </div>
       </div>
 
@@ -68,31 +71,36 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         <div className={styles.info}>
           <div className={styles.nicknameWrp}>
             <span className={styles.nickname}>{nickname}</span>
-            <Link to={AppRoute.ProgressTree} className={styles.subscribers}>{lastActiveStage}</Link>
-            {
-              !nonEditable &&
-              <img className={styles.edit} src={editIcon} onClick={() => openModal(MODALS.CHANGING_NICKNAME)} alt="" />
-            }
+            <Link to={AppRoute.ProgressTree} className={styles.subscribers}>
+              {lastActiveStage}
+            </Link>
+            {!nonEditable && (
+              <img
+                className={styles.edit}
+                src={editIcon}
+                onClick={() => openModal(MODALS.CHANGING_NICKNAME)}
+                alt=""
+              />
+            )}
           </div>
 
-          <p className={styles.blogName}>
-            {blogName}
-          </p>
+          <p className={styles.blogName}>{blogName}</p>
         </div>
 
         <div className={styles.subscription}>
           <div className={styles.subscriptionTextWrp}>
-            <span className={styles.subscriptionText}>Подписка</span>
+            <span className={styles.subscriptionText}>{t('p2')}</span>
 
             <div className={styles.subscriptionLevelWrp}>
-              <span className={styles.subscriptionLevel}>{subscriptionIntegrationsLeft}/5</span>
+              <span className={styles.subscriptionLevel}>
+                {subscriptionIntegrationsLeft}/5
+              </span>
               <img src={subscriptionLeveIcon} alt="" />
             </div>
           </div>
           <ProgressLine level={subscriptionIntegrationsLeft} color="blue" />
         </div>
       </div>
-
     </div>
   );
 };

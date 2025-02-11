@@ -105,3 +105,16 @@
     }
   }
 }
+
+.glowing {
+  box-shadow: 0 0 60px $color-primary;
+}
+
+.elevatedBordered {
+  z-index: 2000;
+  border: 2px solid $color-primary;
+}
+
+.elevated {
+  z-index: 2000;
+}

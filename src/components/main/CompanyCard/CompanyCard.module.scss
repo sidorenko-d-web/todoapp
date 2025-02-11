@@ -6,6 +6,7 @@
   flex-direction: column;
   gap: 5px;
   overflow: hidden;
+  border: none;
 
   border-radius: 8px;
   background-color: var.$color-dark-gray;
@@ -70,4 +71,9 @@
       }
     }
   }
+}
+
+.glowing {
+  box-shadow: 2px 3px 40px var.$color-primary;
+  border: 2px solid var.$color-primary;
 }

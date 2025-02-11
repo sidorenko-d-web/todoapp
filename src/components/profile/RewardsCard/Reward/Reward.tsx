@@ -5,6 +5,7 @@ import silverMedal from "../../../../assets/icons/medal-silver.svg";
 import bronzeMedal from "../../../../assets/icons/medal-bronze.svg";
 import trophyActive from "../../../../assets/icons/cup-active.svg";
 import trophyInactive from "../../../../assets/icons/cup-inactive.svg";
+import { useTranslation } from 'react-i18next';
 
 interface RewardProps {
     name: string;
@@ -14,6 +15,8 @@ interface RewardProps {
 }
 
 const Reward: React.FC<RewardProps> = ({ name, stars, medal, isActive }) => {
+    const { t } = useTranslation('profile');
+
     const medalIcons = {
         gold: goldMedal,
         silver: silverMedal,
@@ -39,7 +42,7 @@ const Reward: React.FC<RewardProps> = ({ name, stars, medal, isActive }) => {
             <div className={styles.status}>
                 <img src={isActive ? trophyActive : trophyInactive} className={styles.trophy} />
                 <span className={isActive ? styles.activeText : styles.inactiveText}>
-                    {isActive ? "Активно!" : "Не активно"}
+                    {isActive ? `${t('p18')}` : `${t('p19')}`}
                 </span>
             </div>
         </div>
