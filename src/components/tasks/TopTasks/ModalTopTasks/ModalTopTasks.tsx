@@ -99,6 +99,10 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
     }
   };
 
+  const handleOpenGuide = () => {
+    window.open(task.external_link, '_blank');
+  };
+
   const getStepTitle = (step: number) => {
     return task.title;
   };
@@ -170,7 +174,10 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
         </div>
 
         <div className={s.buttons}>
-          <button className={s.answerButton}>
+          <button 
+            className={s.answerButton}
+            onClick={handleOpenGuide}
+          >
             Инструкция
             <img src={bookIcon} alt="" className={s.buttonIcon} />
           </button>
