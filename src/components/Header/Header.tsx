@@ -12,11 +12,13 @@ import { setLastActiveStage } from '../../redux/slices/tree.ts';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 
+
 export const Header = () => {
-  const { data, isLoading } = useGetCurrentUserProfileInfoQuery();
+  const { data, isLoading, refetch } = useGetCurrentUserProfileInfoQuery();
   const { data: treeData } = useGetTreeInfoQuery();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const points = useSelector((state: RootState) => state.pointSlice.points);
   const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
   const { i18n } = useTranslation('profile');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
@@ -35,9 +37,15 @@ export const Header = () => {
     }
   }, [ lastActiveStageNumber, dispatch ]);
 
+  useEffect(() => {
+    refetch();
+  }, [points]);
+
   const handleNavigateToProfile = () => {
     navigate(AppRoute.Profile);
   };
+
+  const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
 
   return (
     <header className={styles.header}>
@@ -62,9 +70,9 @@ export const Header = () => {
             </div>
           </div>
         </div>
-
+        
         <div className={styles.coinsWrapper}>
-          <p className={styles.coins}>{formatAbbreviation(data?.points || 0,'number', { locale: locale })}</p>
+          <p className={styles.coins}>{formatAbbreviation(showCoins ? (data?.points || 0) : '0', 'number', { locale: locale })}</p>
           <img className={styles.coinIcon} src={CoinIcon} alt="CoinIcon" />
         </div>
       </div>

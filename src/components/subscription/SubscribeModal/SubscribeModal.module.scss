@@ -70,6 +70,8 @@
       border-radius: 8px;
       color: var.$color-text;
 
+      
+      
       font-size: 14px;
       font-weight: 500;
 
@@ -92,4 +94,8 @@
       }
     }
   }
+}
+
+.glowing {
+  box-shadow: 2px 3px 30px var.$color-primary;
 }

@@ -1,7 +1,6 @@
 import styles from './NewItemModal.module.scss';
-import { AppRoute, MODALS, svgHeadersString } from '../../../../constants';
-import { useModal } from '../../../../hooks';
-import CentralModal from '../../../shared/CentralModal/CentralModal';
+import { AppRoute, MODALS, SOUNDS, svgHeadersString } from '../../../../constants';
+import { useAutoPlaySound, useModal } from '../../../../hooks';
 import { IShopItem } from '../../../../redux';
 import Button from '../partials/Button';
 import ViewsIcon from '../../../../assets/icons/views.png';
@@ -11,27 +10,37 @@ import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import Lottie from 'lottie-react';
 import { blueLight, purpleLight, redLight } from '../../../../assets/animations';
+import { useDispatch } from 'react-redux';
+import { setItemBought } from '../../../../redux/slices/guideSlice';
+import { CentralModal } from '../../../shared';
 
-export const NewItemModal = () => {
+export const NewItemModal: React.FC = () => {
   const { closeModal, getModalState } = useModal();
 
   const state = getModalState<{ item: IShopItem; mode: 'skin' | 'item' }>(
     MODALS.NEW_ITEM,
   );
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClose = () => {
     closeModal(MODALS.NEW_ITEM);
+    dispatch(setItemBought(true));
     navigate(AppRoute.ShopInventory);
   };
 
   const isPrem = state.args?.item.item_rarity === 'yellow';
   const isPro = state.args?.item.item_rarity === 'green';
 
-  return ( 
+  
+  useAutoPlaySound(MODALS.NEW_ITEM, SOUNDS.upgradeOrBuyItem);
+
+  return (
     <CentralModal
       title="Новый предмет!"
-      onClose={() => closeModal(MODALS.NEW_ITEM)}
+      onClose={() => {
+        closeModal(MODALS.NEW_ITEM);
+      }}
       modalId={MODALS.NEW_ITEM}
     >
       <div className={styles.images}>

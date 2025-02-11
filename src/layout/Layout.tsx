@@ -4,8 +4,8 @@ import styles from './Layout.module.scss';
 import { Header } from '../components/Header/';
 import { useEffect } from 'react';
 import { MODALS, localStorageConsts } from '../constants';
-import { useModal } from '../hooks';
 import { LanguageSelectionModal, SettingsModal, WalletConnectionModal } from '../components';
+import { AudioBg, useModal } from '../hooks';
 
 const Layout = () => {
   const location = useLocation();
@@ -20,7 +20,7 @@ const Layout = () => {
     );
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
   }, []);
-  
+
   return (
     <div className={styles.wrp}>
       {showHeader && <Header />}
@@ -31,6 +31,8 @@ const Layout = () => {
         <SettingsModal />
         <WalletConnectionModal />
         <LanguageSelectionModal />
+
+        <AudioBg />
       </main>
       <Footer />
     </div>

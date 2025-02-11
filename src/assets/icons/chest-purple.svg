@@ -1,53 +1,45 @@
-<svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Group 1536">
-<g id="Group 54">
-<path id="Rectangle 19" d="M1.87975 0.16298C1.03128 0.16298 0.343461 0.850801 0.343461 1.69927V3.74766V10.5756C0.343461 10.8584 0.572736 11.0877 0.855558 11.0877H13.1459C13.4287 11.0877 13.658 10.8584 13.658 10.5756V3.74766V1.69927C13.658 0.850801 12.9702 0.16298 12.1217 0.16298H1.87975Z" fill="#8D3FCA" stroke="#3F035B" stroke-width="0.341398" stroke-linejoin="round"/>
-<rect id="Rectangle 81" x="0.51416" y="4.43018" width="12.9731" height="0.682796" fill="#5E1E91"/>
-<g id="Group 1534">
-<circle id="Ellipse 755" cx="12.0368" cy="10.4903" r="0.256048" fill="#7C29AE"/>
-<circle id="Ellipse 760" cx="12.8045" cy="8.69772" r="0.341398" fill="#7C29AE"/>
-<circle id="Ellipse 756" cx="12.6338" cy="9.55144" r="0.170699" fill="#7C29AE"/>
-<circle id="Ellipse 761" cx="11.8657" cy="8.61237" r="0.256048" fill="#7C29AE"/>
-<circle id="Ellipse 762" cx="10.6711" cy="8.61237" r="0.256048" fill="#7C29AE"/>
-<circle id="Ellipse 763" cx="12.1221" cy="7.50291" r="0.170699" fill="#7C29AE"/>
-<circle id="Ellipse 764" cx="12.805" cy="7.84441" r="0.170699" fill="#7C29AE"/>
-<circle id="Ellipse 771" cx="13.1463" cy="6.6494" r="0.170699" fill="#7C29AE"/>
-<circle id="Ellipse 765" cx="12.9756" cy="10.2341" r="0.170699" fill="#7C29AE"/>
-<circle id="Ellipse 767" cx="10.7561" cy="7.67351" r="0.170699" fill="#7C29AE"/>
-<circle id="Ellipse 757" cx="10.6711" cy="10.3194" r="0.256048" fill="#7C29AE"/>
-<circle id="Ellipse 758" cx="10.2444" cy="9.72197" r="0.170699" fill="#7C29AE"/>
-<circle id="Ellipse 766" cx="9.56157" cy="10.2341" r="0.170699" fill="#7C29AE"/>
-<circle id="Ellipse 768" cx="10.2444" cy="9.38054" r="0.170699" fill="#7C29AE"/>
-<circle id="Ellipse 769" cx="9.56157" cy="9.03905" r="0.170699" fill="#7C29AE"/>
-<circle id="Ellipse 770" cx="8.70805" cy="10.5755" r="0.170699" fill="#7C29AE"/>
-<circle id="Ellipse 759" cx="12.1221" cy="9.20994" r="0.170699" fill="#7C29AE"/>
-</g>
-<g id="Group 1531">
-<path id="Vector 1699" d="M1.64062 1.69922H12.3584" stroke="#631791" stroke-width="0.341398" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector 1700" d="M1.06641 2.89423H12.9326" stroke="#631791" stroke-width="0.341398" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector 1701" d="M0.684326 5.62531H13.316" stroke="#631791" stroke-width="0.341398" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector 1702" d="M0.684326 6.99091H13.316" stroke="#631791" stroke-width="0.341398" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector 1703" d="M0.684326 8.35645H13.316" stroke="#631791" stroke-width="0.341398" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector 1704" d="M0.684326 9.72198H13.316" stroke="#631791" stroke-width="0.341398" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
-<path id="Rectangle 27" d="M0.684814 9.55132V4.6864" stroke="#D96CFF" stroke-width="0.341398" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Rectangle 26" d="M11.7802 0.504089H1.96506C1.11156 0.504089 0.684814 0.930837 0.684814 1.78433V3.91807H13.1458" stroke="#D96CFF" stroke-width="0.341398" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Rectangle 28" d="M1.96506 0.504089C1.11156 0.504089 0.684814 0.930837 0.684814 1.78433" stroke="#F4ADFF" stroke-width="0.341398" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
-<path id="Vector 1706" d="M0.343506 4.25977H13.658" stroke="#3F035B" stroke-width="0.341398" stroke-linecap="round" stroke-linejoin="round"/>
-<g id="Group 1532">
-<path id="Rectangle 21" d="M8.46886 5.59116C8.51184 5.55893 8.53714 5.50833 8.53714 5.4546V3.23552C8.53714 3.04697 8.38429 2.89412 8.19574 2.89412H5.80595C5.6174 2.89412 5.46455 3.04697 5.46455 3.23552V5.4546C5.46455 5.50833 5.48985 5.55893 5.53283 5.59116L6.89843 6.61536C6.95912 6.66088 7.04257 6.66088 7.10326 6.61536L8.46886 5.59116Z" fill="#DF8D12" stroke="#652A11" stroke-width="0.341398" stroke-linejoin="round"/>
-<circle id="Ellipse 8" cx="7.00087" cy="4.43043" r="0.682796" fill="#FFB341" stroke="#944320" stroke-width="0.341398"/>
-<path id="Vector 1690" d="M5.80591 5.1131V3.23541H7.8543" stroke="#FFB341" stroke-width="0.341398" stroke-linecap="round" stroke-linejoin="round"/>
-<circle id="Ellipse 754" cx="6.83012" cy="4.25963" r="0.170699" fill="#FFEACA"/>
-</g>
-<g id="Group 1533">
-<path id="Rectangle 23" d="M10.7563 4.43018H11.7805V10.9167H10.7563V4.43018Z" fill="#10A4C5"/>
-<path id="Rectangle 25" d="M11.7805 3.74747H11.2684H10.7563V0.333496H11.7805V3.74747Z" fill="#45CDEB"/>
-<path id="Rectangle 24" d="M2.22119 3.74766H2.73329H3.24538V0.333679H2.22119V3.74766Z" fill="#45CDEB"/>
-<path id="Vector 1726" d="M2.39185 0.504089V2.29643" stroke="#8EEBFF" stroke-width="0.341398" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector 1727" d="M10.927 0.504089V2.29643" stroke="#8EEBFF" stroke-width="0.341398" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Rectangle 22" d="M2.22119 4.43018H2.73329H3.24538V10.9167H2.22119V4.43018Z" fill="#10A4C5"/>
-</g>
+<svg width="57" height="47" viewBox="0 0 57 47" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="&#208;&#180;&#208;&#187;&#209;&#143; &#208;&#176;&#208;&#189;&#208;&#184;&#208;&#188;&#208;&#176;&#209;&#134;&#208;&#184;&#208;&#185;">
+<path id="Rectangle 19" d="M1.45215 7.30398C1.45215 4.20343 3.96564 1.68994 7.06618 1.68994H49.1714C52.272 1.68994 54.7855 4.20343 54.7855 7.30398V15.725V43.7952C54.7855 44.5703 54.1571 45.1987 53.382 45.1987H2.85566C2.08052 45.1987 1.45215 44.5703 1.45215 43.7952V15.725V7.30398Z" fill="#8D3FCA"/>
+<path id="Rectangle 19 (Stroke)" fill-rule="evenodd" clip-rule="evenodd" d="M7.06735 0.286133H49.1726C53.0483 0.286133 56.1902 3.42799 56.1902 7.30368V43.7949C56.1902 45.3452 54.9334 46.6019 53.3831 46.6019H2.85682C1.30654 46.6019 0.0498047 45.3452 0.0498047 43.7949V7.30368C0.0498047 3.428 3.19167 0.286133 7.06735 0.286133ZM7.06735 1.68964C3.9668 1.68964 1.45331 4.20313 1.45331 7.30368V43.7949C1.45331 44.57 2.08168 45.1984 2.85682 45.1984H53.3831C54.1583 45.1984 54.7867 44.57 54.7867 43.7949V7.30368C54.7867 4.20313 52.2732 1.68964 49.1726 1.68964H7.06735Z" fill="#3F035B"/>
+<rect id="Rectangle 81" x="1.45215" y="18.5332" width="53.3333" height="2.80702" fill="#5E1E90"/>
+<circle id="Ellipse 755" cx="48.8183" cy="43.4433" r="1.05263" fill="#7C29AE"/>
+<circle id="Ellipse 760" cx="51.9758" cy="36.0754" r="1.40351" fill="#7C29AE"/>
+<circle id="Ellipse 756" cx="51.274" cy="39.5841" r="0.701754" fill="#7C29AE"/>
+<circle id="Ellipse 761" cx="48.1171" cy="35.7245" r="1.05263" fill="#7C29AE"/>
+<circle id="Ellipse 762" cx="43.204" cy="35.7245" r="1.05263" fill="#7C29AE"/>
+<circle id="Ellipse 763" cx="49.1695" cy="31.1632" r="0.701754" fill="#7C29AE"/>
+<circle id="Ellipse 764" cx="51.9732" cy="32.5655" r="0.701754" fill="#7C29AE"/>
+<circle id="Ellipse 771" cx="53.3814" cy="27.6544" r="0.701754" fill="#7C29AE"/>
+<circle id="Ellipse 765" cx="52.6764" cy="42.3922" r="0.701754" fill="#7C29AE"/>
+<circle id="Ellipse 767" cx="43.5533" cy="31.8648" r="0.701754" fill="#7C29AE"/>
+<circle id="Ellipse 757" cx="43.204" cy="42.7431" r="1.05263" fill="#7C29AE"/>
+<circle id="Ellipse 758" cx="41.4518" cy="40.2853" r="0.701754" fill="#7C29AE"/>
+<circle id="Ellipse 766" cx="38.6393" cy="42.3922" r="0.701754" fill="#7C29AE"/>
+<circle id="Ellipse 768" cx="41.4518" cy="38.8839" r="0.701754" fill="#7C29AE"/>
+<circle id="Ellipse 769" cx="38.6393" cy="37.4811" r="0.701754" fill="#7C29AE"/>
+<circle id="Ellipse 770" cx="35.1353" cy="43.795" r="0.701754" fill="#7C29AE"/>
+<circle id="Ellipse 759" cx="49.1695" cy="38.1822" r="0.701754" fill="#7C29AE"/>
+<path id="Vector 1699" d="M6.08984 7.30518H50.1515" stroke="#631790" stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector 1700" d="M3.72949 12.2168H52.5121" stroke="#631790" stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector 1701" d="M2.1543 23.4448H54.0841" stroke="#631790" stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector 1702" d="M2.1543 29.0596H54.0841" stroke="#631790" stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector 1703" d="M2.1543 34.6748H54.0841" stroke="#631790" stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector 1704" d="M2.1543 40.2876H54.0841" stroke="#631790" stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Rectangle 27" d="M2.1543 39.5855V19.5854" stroke="#AD88E1" stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector 1706" d="M0.75293 17.8296H55.4898" stroke="#3F035B" stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round"/>
+<circle id="Ellipse 754" cx="27.4215" cy="17.8287" r="0.701754" fill="#FFEACA"/>
+<path id="Rectangle 23" d="M43.5615 18.5332H47.772V45.1999H43.5615V18.5332Z" fill="#3B1E63"/>
+<path id="Rectangle 25" d="M47.7691 16.0034H43.5586V1.96826H47.7691V16.0034Z" fill="#57338A"/>
+<path id="Rectangle 24" d="M8.47266 15.725H10.5779H12.6832V1.68994H8.47266V15.725Z" fill="#57338A"/>
+<path id="Vector 1726" d="M9.17383 2.39062V9.75905" stroke="#922AC2" stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector 1727" d="M44.2617 2.39062V9.75905" stroke="#922AC2" stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Rectangle 22" d="M8.47266 18.5332H10.5779H12.6832V45.1999H8.47266V18.5332Z" fill="#3B1E63"/>
+<path id="Rectangle 26" d="M47.7683 2.39062H7.41746C3.90868 2.39062 2.1543 4.14501 2.1543 7.65378V16.4257H53.3824" stroke="#AD88E1" stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Rectangle 28" d="M7.41745 2.39062C3.90868 2.39062 2.1543 4.14501 2.1543 7.65378" stroke="#E2C4F9" stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Rectangle 21" d="M34.1579 23.3039C34.3346 23.1714 34.4386 22.9634 34.4386 22.7425V13.6197C34.4386 12.8446 33.8102 12.2162 33.0351 12.2162H23.2105C22.4354 12.2162 21.807 12.8446 21.807 13.6197V22.7425C21.807 22.9634 21.911 23.1714 22.0877 23.3039L27.7018 27.5145C27.9513 27.7016 28.2944 27.7016 28.5439 27.5145L34.1579 23.3039Z" fill="#DF8D12" stroke="#652A11" stroke-width="1.40351" stroke-linejoin="round"/>
+<circle id="Ellipse 8" cx="28.1209" cy="18.532" r="2.80702" fill="#FFB341" stroke="#944320" stroke-width="1.40351"/>
+<circle id="Ellipse 772" cx="27.4215" cy="17.8287" r="0.701754" fill="#FFEACA"/>
+<path id="Vector 1690" d="M23.21 21.3384V13.6191H31.631" stroke="#FFB341" stroke-width="1.40351" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 </svg>

@@ -1,7 +1,7 @@
 import React from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
 import clanRed from '../../assets/icons/clanRed.svg';
-import { DevelopmentPlan, IncreaseIncome, NewItemModal, TopInfluencers } from '../../components';
+import { DevelopmentPlan, IncreaseIncome, TopInfluencers } from '../../components';
 
 import s from './PromotionPage.module.scss';
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUsersCountQuery } from '../../redux';
@@ -14,7 +14,6 @@ export const PromotionPage: React.FC = () => {
   const { data: topProfilesData, error: topProfilesError, isLoading: isTopProfilesLoading } = useGetTopProfilesQuery();
 
   const {data: usersCountData} = useGetUsersCountQuery();
-
   const userPosition = userProfileData && topProfilesData?.profiles
     ? topProfilesData.profiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
     : -1;

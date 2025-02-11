@@ -3,6 +3,8 @@ export * from './AuthInit'
 export * from './useInventoryItemsFilter'
 export * from './useTreeProgress'
 export * from './useAccelerateIntegration'
+export * from './AudioBg'
+export * from './useAutoPlaySound'
 export * from './useWebApp'
 export * from "./useTonConnect"
 export * from './useSendTransaction'

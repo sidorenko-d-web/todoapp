@@ -4,6 +4,7 @@ import { useModal } from '../../../hooks';
 import { Fade, Overlay } from '../common';
 import classNames from 'classnames';
 import closeIcon from '../../../assets/icons/close.svg';
+import { Button } from '..';
 
 interface CentralModalProps {
   modalId: string;
@@ -17,7 +18,7 @@ interface CentralModalProps {
   titleIcon?: string;
 }
 
-const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
+export const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
                                                                   modalId,
                                                                   title,
                                                                   onClose,
@@ -51,9 +52,9 @@ const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
             <header className={classNames(s.header, headerStyles)}>
               <h2 className={s.title}>{title}{titleIcon &&
                 <img src={titleIcon} alt={'title'} width={14} height={14} />}</h2>
-              <button className={s.closeBtn} onClick={onClose}>
+              <Button className={s.closeBtn} onClick={onClose}>
                 <img src={closeIcon} alt={'Close'} width={14} height={14} />
-              </button>
+              </Button>
             </header>
             <div>{children}</div>
           </div>
@@ -62,5 +63,3 @@ const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
     </Overlay>
   );
 };
-
-export default CentralModal;

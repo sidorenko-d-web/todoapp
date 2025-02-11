@@ -1,14 +1,16 @@
 import { FC } from 'react';
 import styles from './InventoryCard.module.scss';
 import clsx from 'clsx';
-import LockIconSvg from '../../../assets/icons/lock-closed';
-import ChestBlueIcon from '../../../assets/icons/chest-blue.svg';
-import ChestPurpleIcon from '../../../assets/icons/chest-purple.svg';
-import ChestRedIcon from '../../../assets/icons/chest-red.svg';
-import ListIcon from '../../../assets/icons/list.svg';
+//@ts-ignore
+import LockIconSvg from '@icons/lock-closed.tsx';
+import ChestBlueIcon from '@icons/chest-blue.svg';
+import ChestPurpleIcon from '@icons/chest-purple.svg';
+import ChestRedIcon from '@icons/chest-red.svg';
+import ListIcon from '@icons/list.svg';
 import {
   IShopItem,
   TypeItemQuality,
+  selectVolume,
   useGetCurrentUserProfileInfoQuery,
   useGetShopItemsQuery,
   useUpgradeItemMutation,
@@ -17,10 +19,15 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { localStorageConsts, MODALS, svgHeadersString } from '../../../constants';
+import { localStorageConsts, MODALS, SOUNDS, svgHeadersString } from '../../../constants';
 import { useModal } from '../../../hooks';
-import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../helpers';
+import { useTranslation } from 'react-i18next';
+import useSound from 'use-sound';
+import { useSelector } from 'react-redux';
+import { Button } from '../../shared';
+import { useDispatch } from 'react-redux';
+import { setPoints } from '../../../redux/slices/point.ts';
 
 interface Props {
   disabled?: boolean;
@@ -53,8 +60,10 @@ export const InventoryCard: FC<Props> = ({
                                            item,
                                            isB,
                                          }) => {
+
   const { t,i18n } = useTranslation('shop');
-  const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
+  const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
+  const dispatch = useDispatch();
   const { data, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
@@ -68,11 +77,16 @@ export const InventoryCard: FC<Props> = ({
 
   const { openModal } = useModal();
 
+  const [playLvlSound] = useSound(SOUNDS.levelUp, {volume: useSelector(selectVolume)});
+
   const handleBuyItem = async () => {
     try {
       const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
+
       if (!res.error) {
+        playLvlSound();
         refetch();
+        dispatch(setPoints((prevPoints: number) => prevPoints + 1));
         if (item.level === 49) {
           if (item.item_premium_level === 'pro') {
             openModal(MODALS.UPGRADED_SHOP, {
@@ -110,6 +124,14 @@ export const InventoryCard: FC<Props> = ({
             className={clsx(isBlocked && styles.disabledImage)}
             alt=""
           />
+          {/* <div style={{width: 60, height: 60}}>
+            <SpineAnimation
+              name={item.name}
+              skin={item.item_premium_level}
+              jsonUrl="https://storage.yandexcloud.net/miniapp-v2-dev/Камера любительская-1.json"
+              atlasUrl="https://storage.yandexcloud.net/miniapp-v2-dev/Камера любительская-1atlas.txt"
+            />
+          </div> */}
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
           {!isBlocked && (
             <p>
@@ -118,22 +140,9 @@ export const InventoryCard: FC<Props> = ({
           )}
         </div>
         <div className={styles.title}>
-          <div className={styles.headline}>
+          {/* <div className={styles.headline}>
             <h3>{item.name}</h3>
-            {/* https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284353&m=dev#1121983015 */}
-            {/*{item.item_rarity === 'red' ? (*/}
-            {/*  <div className={styles.variant}>*/}
-            {/*    <p>Эконом</p>*/}
-            {/*  </div>*/}
-            {/*) : item.item_rarity === 'yellow' ? (*/}
-            {/*  <div className={styles.variantPurple}>*/}
-            {/*    <p>Премиум</p>*/}
-            {/*  </div>*/}
-            {/*) : (*/}
-            {/*  <div className={styles.variantRed}>*/}
-            {/*    <p>Люкс</p>*/}
-            {/*  </div>*/}
-            {/*)}*/}
+            https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284353&m=dev#1121983015
             {item.item_rarity === 'red' ? (
               <div className={styles.variant}>
                 <p>{t('s14')}</p>
@@ -147,7 +156,7 @@ export const InventoryCard: FC<Props> = ({
                 <p>{t('s16')}</p>
               </div>
             )}
-          </div>
+          </div> */}
           <p
             className={
               item.item_rarity === 'green'
@@ -272,13 +281,15 @@ export const InventoryCard: FC<Props> = ({
           <img src={LockIcon} alt="" />
         </div>
       ) : disabled ? (
-        <button className={styles.disabledActions}>
+        <Button className={styles.disabledActions}>
           <p>{t('s28')}</p>
-        </button>
+        </Button>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
-          <button>{formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', { locale: locale })}</button>
-          <button
+          <Button>
+            {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', { locale: locale })}
+          </Button>
+          <Button
             className={clsx(
               item.item_rarity === 'yellow'
                 ? styles.upgradeItemPurple
@@ -291,12 +302,22 @@ export const InventoryCard: FC<Props> = ({
               <p>loading</p>
             ) : (
               <>
-                {formatAbbreviation(data?.items[0].price_internal || 0,'number', { locale: locale })} <img src={CoinIcon} alt="" />
+                {formatAbbreviation(data?.items[0].price_internal || 0,'number', { locale: locale })}{' '}
+                <img src={CoinIcon} alt="" />
               </>
             )}
-          </button>
-          <button>{t('s29')}</button>
-          <button>{data?.items[0].price_usdt} $USDT</button>
+          </Button>
+          <Button
+            onClick={() =>
+              openModal(MODALS.UPGRADED_ITEM, {
+                item,
+                mode: 'item',
+                reward: 'reward of item',
+              })
+            }
+          >
+            <img src={ListIcon} alt="Tasks" />
+          </Button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>

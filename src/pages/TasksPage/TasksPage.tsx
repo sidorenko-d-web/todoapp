@@ -3,7 +3,7 @@ import subscribersIcon from '../../assets/icons/subscribers.png';
 import coinIcon from '../../assets/icons/coin.png';
 
 import s from './TasksPage.module.scss';
-import { DailyTasks, NewItemModal, SocialTasks, TopTasks } from '../../components';
+import { DailyTasks, SocialTasks, TopTasks } from '../../components';
 import { formatAbbreviation } from '../../helpers';
 
 export const TasksPage: React.FC = () => {
@@ -21,7 +21,7 @@ export const TasksPage: React.FC = () => {
 
       <DailyTasks />
       <TopTasks />
-      <SocialTasks />      
+      <SocialTasks />
     </main>
   );
 };

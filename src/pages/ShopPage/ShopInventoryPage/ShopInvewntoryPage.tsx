@@ -97,8 +97,8 @@ export const ShopInvewntoryPage = () => {
       onItemCategoryChange={setShopCategory}
       onItemQualityChange={setItemsQuality}
     >
-      {!isFetching && !isSuccess && shopCategory?.title !== `${t('s6')}` ? (
-        <p style={{ color: '#fff' }}>No items in inventory</p>
+      {!isFetching && !isSuccess && shopCategory?.title !== 'Вы' ? (
+        <p className={styles.emptyText}>{t("s38")}</p>
       ) : !shopCategory || !itemsQuality ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
       ) : shopCategory?.title !== `${t('s6')}` ? (

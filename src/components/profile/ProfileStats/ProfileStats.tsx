@@ -1,6 +1,6 @@
+import React from "react";
+import styles from "./ProfileStats.module.scss";
 import { useTranslation } from 'react-i18next';
-import React from 'react';
-import styles from './ProfileStats.module.scss';
 import { formatAbbreviation } from '../../../helpers';
 
 interface ProfileStatsProps {
