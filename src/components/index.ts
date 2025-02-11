@@ -1,4 +1,4 @@
-export * from './shop'
+export * from './shop';
 export * from './tasks';
 export * from './main';
 export * from './integration';
@@ -7,3 +7,4 @@ export * from './promotion';
 export * from './wardrobe';
 export * from './tree';
 export * from './guide';
+export * from './influencers';
