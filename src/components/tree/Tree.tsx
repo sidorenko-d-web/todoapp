@@ -5,19 +5,15 @@ import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
 import gift from '../../assets/icons/gift.svg';
 import spinner from '../../assets/icons/spinner-blue.svg';
-import { RootState, useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery } from '../../redux';
+import { useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery } from '../../redux';
 import { useTreeProgress } from '../../hooks';
 import { formatAbbreviation } from '../../helpers';
-import { useSelector } from 'react-redux';
 
 export const Tree = () => {
   const { data: treeData } = useGetTreeInfoQuery();
   const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
   const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
   const lastActiveLevelRef = useRef<HTMLDivElement | null>(null);
-
-  const hightlightTreeLevelStats = useSelector((state: RootState) => state.guide.hightlightTreeLevelStats);
-
 
   const userSubscribers = userProfileData?.subscribers || 0;
 
@@ -68,14 +64,13 @@ export const Tree = () => {
                     className={classNames(s.prize, {
                       [s.priseSubscribers]: !stage.achievement,
                       [s.prizeActive]: isActive || stage.stage_number % 10 === 0,
-                      [s.highlight] : hightlightTreeLevelStats,
                     })}
                   >
                     {stage.stage_number % 10 === 0 && (
                       <img className={s.spiner} src={spinner} height={120} width={120} alt="spinner"/>
                     )}
                     {stage.achievement && (
-                      <div className={classNames(s.imgPrize, { [s.imgPrizeActive]: isActive, [s.highlight] : hightlightTreeLevelStats })}>
+                      <div className={classNames(s.imgPrize, { [s.imgPrizeActive]: isActive })}>
                         <div className={classNames({ [s.blur]: !isActive })} />
                         <img src={gift} height={20} width={20} alt="gift" />
                       </div>

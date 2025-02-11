@@ -20,7 +20,6 @@ interface GuideState {
 
   lastIntegrationId: string;
 
-  hightlightTreeLevelStats: boolean;
 }
 
 const initialState: GuideState = {
@@ -40,7 +39,6 @@ const initialState: GuideState = {
   createdIntegrationId: "",
   elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
   lastIntegrationId: "",
-  hightlightTreeLevelStats: !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW),
 };
 
 const guideSlice = createSlice({
@@ -83,9 +81,6 @@ const guideSlice = createSlice({
     setLastIntegrationId: (state, action: PayloadAction<string>) => {
       state.lastIntegrationId = action.payload;
     },
-    setHightlightTreeLevelStats: (state, action: PayloadAction<boolean>) => {
-      state.hightlightTreeLevelStats = action.payload;
-    },
   },
 });
 
@@ -96,5 +91,5 @@ export const { setGetCoinsGuideShown,
     setIntegrationCreated, setAccelerateIntegrationGuideClosed,
     setIsPublishedModalClosed, setIntegrationReadyForPublishing, 
     setCreatedIntegrationId, setElevateIntegrationStats, 
-    setItemBought, setLastIntegrationId, setHightlightTreeLevelStats } = guideSlice.actions;
+    setItemBought, setLastIntegrationId } = guideSlice.actions;
 export default guideSlice.reducer;
