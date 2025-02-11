@@ -13,9 +13,13 @@ interface StreakDayProps {
 
 export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type, weekIndex }) => {
   const [lang, setLang] = useState<string | null>(null);
+  const [currentDay, setCurrentDay] = useState<number | null>(null);
 
   useEffect(() => {
     setLang(localStorage.getItem('selectedLanguage'));
+
+    const today = new Date().getDate();
+    setCurrentDay(today);
   }, []);
 
   const getIcon = () => {
@@ -34,17 +38,21 @@ export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type, weekIndex
 
   return (
     <div>
-      <div className={`${styles['calendar-day']} ${styles[type]}`}>
+      <div
+        className={`${styles['calendar-day']} ${styles[type]} ${
+          currentDay === dayNumber ? styles.currentDay : ''
+        }`}
+      >
         {(type === 'streak' || type === 'freeze') && (
-          <div className={`${styles['status-icon']} ${styles[type]}`}>
-            {getIcon()}
-          </div>
+          <div className={`${styles['status-icon']} ${styles[type]}`}>{getIcon()}</div>
         )}
         {dayNumber}
       </div>
 
       {/* Dynamic weekday based on weekIndex */}
-      <p className={styles.dayOfTheWeek}>{lang === 'en' ? weekdaysEn[weekIndex] : weekdaysRu[weekIndex]}</p>
+      <p className={styles.dayOfTheWeek}>
+        {lang === 'en' ? weekdaysEn[weekIndex] : weekdaysRu[weekIndex]}
+      </p>
     </div>
   );
 };
