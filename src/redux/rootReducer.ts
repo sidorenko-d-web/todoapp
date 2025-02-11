@@ -1,6 +1,14 @@
 import { Action, combineReducers } from 'redux';
 import { authReducer } from './slices';
-import { authApi, companiesApi, integrationsApi, profileApi, treeApi, usersApi } from './api';
+import {
+  authApi,
+  companiesApi,
+  integrationsApi,
+  profileApi,
+  treeApi,
+  usersApi,
+} from './api';
+import { pushLineApi } from './api/pushLine/api';
 import { shopApi } from './api';
 import { refferalsApi } from './api';
 import { treeReducer } from './slices/tree.ts';
@@ -10,6 +18,7 @@ const appReducer = combineReducers({
   treeSlice: treeReducer,
   [authApi.reducerPath]: authApi.reducer,
   [shopApi.reducerPath]: shopApi.reducer,
+  [pushLineApi.reducerPath]: pushLineApi.reducer,
   [integrationsApi.reducerPath]: integrationsApi.reducer,
   [profileApi.reducerPath]: profileApi.reducer,
   [companiesApi.reducerPath]: companiesApi.reducer,

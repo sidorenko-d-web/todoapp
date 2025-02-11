@@ -6,6 +6,7 @@ import { inventoryApi } from './api/inventory/api';
 import { integrationsApi } from './api';
 import { profileApi } from './api';
 import { refferalsApi } from './api';
+import { pushLineApi } from './api/pushLine/api';
 
 export const store = configureStore({
   reducer: rootReducer,
@@ -18,6 +19,7 @@ export const store = configureStore({
       profileApi.middleware,
       companiesApi.middleware,
       refferalsApi.middleware,
+      pushLineApi.middleware,
       usersApi.middleware,
       treeApi.middleware,
     ),
