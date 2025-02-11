@@ -103,11 +103,11 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
     window.open(task.external_link, '_blank');
   };
 
-  const getStepTitle = (step: number) => {
+  const getStepTitle = () => {
     return task.title;
   };
 
-  const getStepDescription = (step: number) => {
+  const getStepDescription = () => {
     return task.description;
   };
 
@@ -136,7 +136,7 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
 
         <div className={s.progress}>
           <span className={s.step}>
-            Этап {currentStepIndex + 1}: {getStepTitle(currentStepIndex)}
+            Этап {currentStepIndex + 1}: {getStepTitle()}
           </span>
         </div>
 
@@ -170,7 +170,7 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
               </div>
             </div>
           </div>
-          <h3 className={s.questionText}>{getStepDescription(currentStepIndex)}</h3>
+          <h3 className={s.questionText}>{getStepDescription()}</h3>
         </div>
 
         <div className={s.buttons}>
