@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { setLastActiveStage } from '../../redux/slices/tree.ts';
 import { formatAbbreviation } from '../../helpers';
+import { useTranslation } from 'react-i18next';
 
 
 export const Header = () => {
@@ -18,6 +19,8 @@ export const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
+  const { i18n } = useTranslation('profile');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const userSubscribers = data?.subscribers || 0;
   let lastActiveStageNumber = 0;
@@ -52,7 +55,7 @@ export const Header = () => {
 
           <div className={styles.info}>
             <div className={styles.subscribers}>
-              <p className={styles.subscribersNumber}>{formatAbbreviation(data?.subscribers || 0)}</p>
+              <p className={styles.subscribersNumber}>{formatAbbreviation(data?.subscribers || 0,'number', { locale: locale })}</p>
               <img className={styles.subscribersIcon} src={SubscribersIcon} alt="SubscribersIcon" />
             </div>
 
@@ -62,9 +65,9 @@ export const Header = () => {
             </div>
           </div>
         </div>
-
+        
         <div className={styles.coinsWrapper}>
-          <p className={styles.coins}>{formatAbbreviation(showCoins ? (data?.points || 0) : '0')}</p>
+          <p className={styles.coins}>{formatAbbreviation(showCoins ? (data?.points || 0) : '0', 'number', { locale: locale })}</p>
           <img className={styles.coinIcon} src={CoinIcon} alt="CoinIcon" />
         </div>
       </div>

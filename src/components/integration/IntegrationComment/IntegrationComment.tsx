@@ -4,6 +4,7 @@ import { formatAbbreviation } from '../../../helpers';
 import ProgressLine from '../../shared/ProgressLine/ProgressLine';
 import styles from './IntegrationComment.module.scss';
 import { RootState } from '../../../redux';
+import classNames from 'classnames';
 
 interface IntegrationCommentProps {
   author_username: string;
@@ -12,6 +13,7 @@ interface IntegrationCommentProps {
   progres: number;
   onVote: (isThumbsUp: boolean, id: string) => void;
   finished: boolean;
+  hateText: boolean;
 }
 
 export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
@@ -21,18 +23,20 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
                                                                         progres,
                                                                         onVote,
                                                                         finished,
+                                                                        hateText
                                                                       }) => {
 
 
                                                                         
   const elevateComment = useSelector((state: RootState) => state.guide.elevateIntegrationStats);
 
+  console.log(hateText);
   return (
     <div className={`${styles.wrp} ${elevateComment ? styles.elevated : ''}`}>
       {!finished ? (
         <div className={styles.usernameAndComment}>
           <p className={styles.username}>{author_username}:</p>
-          <p className={styles.commentText}>{comment_text}</p>
+          <p className={classNames(styles.negativeCommentText, {[styles.positiveCommentText]: hateText})}>{comment_text}</p>
         </div>
       ) : <p className={styles.noComment}>Нет новых комментариев</p>}
       <div className={styles.progressWrp}>

@@ -2,17 +2,11 @@ import { useState } from 'react';
 import styles from './SkinSetupPage.module.scss';
 import humanIcon from '../../../src/assets/icons/human.svg';
 import sckinIcon from '../../../src/assets/icons/skin.svg';
+import { useTranslation } from 'react-i18next';
 
 interface SkinSetupPageProps {
   onContinue: () => void;
 }
-
-const BODY_PARTS = [
-  { id: 'head', label: 'Голова' },
-  { id: 'face', label: 'Лицо' },
-  { id: 'top', label: 'Верх' },
-  { id: 'bottom', label: 'Низ' },
-];
 
 const SKIN_OPTIONS = Array(9)
   .fill(null)
@@ -22,8 +16,16 @@ const SKIN_OPTIONS = Array(9)
   }));
 
 export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
+  const { t } = useTranslation('shop');
   const [selectedPart, setSelectedPart] = useState('head');
   const [selectedSkin, setSelectedSkin] = useState('skin1');
+
+  const BODY_PARTS = [
+    { id: 'head', label: t('s30') },
+    { id: 'face', label: t('s31') },
+    { id: 'top', label: t('s7') },
+    { id: 'bottom', label: t('s8') },
+  ];
 
   return (
     <div className={styles.root}>
@@ -58,9 +60,9 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
         ))}
       </div>
       <button className={styles.continueButton} onClick={onContinue}>
-        Продолжить
+        {t('s34')}
       </button>
-      <div className={styles.selectText}>Настройте внешность</div>
+      <div className={styles.selectText}>{t('s35')}</div>
     </div>
   );
 };

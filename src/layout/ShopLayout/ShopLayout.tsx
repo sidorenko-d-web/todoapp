@@ -1,35 +1,23 @@
 import { type Dispatch, type FC, PropsWithChildren, type SetStateAction, useEffect, useReducer, useState } from 'react';
 import styles from './ShopLayout.module.scss';
-import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
+import { RootState, useGetInventoryItemsQuery } from '../../redux';
 import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
 import { AppRoute, GUIDE_ITEMS } from '../../constants';
 import ArrowLeftIcon from '../../assets/icons/arrow-left.svg';
 import InventoryBox from '../../assets/icons/inventory-box.svg';
-import { RootState, TypeItemCategory, TypeItemRarity, useGetShopItemsQuery } from '../../redux';
+import { TypeItemCategory, TypeItemRarity, useGetShopItemsQuery } from '../../redux';
 import { useNavigate } from 'react-router-dom';
 import CoinIcon from '../../assets/icons/coin.png';
 import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
 import ViewsCoin from '../../assets/icons/views.png';
 import { formatAbbreviation, itemsInTab } from '../../helpers';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../utils';
 import { BackToMainPageGuide, WelcomeToShopGuide } from '../../components';
-import { setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
 import { UpgradeItemsGuide } from '../../components/guide/ShopPageSecondVisitGuides/UpgradeItemsGuide/UpgradeItemsGuide';
 import { TreeLevelGuide } from '../../components/guide/ShopPageSecondVisitGuides/TreeLevelGuide/TreeLevelGuide';
-
-const shopItemCategories = [
-  { title: 'Текст', value: 'text' },
-  { title: 'Фото', value: 'image' },
-  { title: 'Видео', value: 'video' },
-  { title: 'Декор', value: 'decor' },
-  { title: 'Вы', value: 'decor' },
-];
-const shopItemRarity = [
-  { title: 'Эконом', value: 'red' },
-  { title: 'Премиум', value: 'yellow' },
-  { title: 'Люкс', value: 'green' },
-];
+import { setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
 
 type TypeTab<T> = { title: string; value: T };
 
@@ -45,6 +33,19 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   onItemQualityChange,
   mode,
 }) => {
+  const { t } = useTranslation('shop');
+  const shopItemCategories = [
+    { title: `${t('s2')}`, value: 'text' },
+    { title: `${t('s3')}`, value: 'image' },
+    { title: `${t('s4')}`, value: 'video' },
+    { title: `${t('s5')}`, value: 'decor' },
+    { title: `${t('s6')}`, value: 'decor' },
+  ];
+  const shopItemRarity = [
+    { title: `${t('s14')}`, value: 'red' },
+    { title: `${t('s15')}`, value: 'yellow' },
+    { title: `${t('s16')}`, value: 'green' },
+  ];
   const [shopCategory, setShopCategory] = useState(shopItemCategories[0]);
   const [itemsQuality, setItemsQuality] = useState(shopItemRarity[0]);
 
@@ -139,23 +140,23 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             <img src={ArrowLeftIcon} />
           </button>
           <div className={styles.mainHeader}>
-            <h1 className={`${styles.title} ${statsGlowing ? styles.elevated : ''}`}>{mode === 'shop' ? 'Магазин' : 'Инвентарь '}</h1>
+            <h1 className={`${styles.title} ${statsGlowing ? styles.elevated : ''}`}>{mode === 'shop' ? `${t('s1')}` : `${t('s19')}`}</h1>
 
             <div className={`${styles.scores} ${statsGlowing ? styles.elevated : ''}`}>
               <div className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
                 <p>+{formatAbbreviation(0)}</p>
                 <img src={ViewsCoin} />
-                <p>/инт.</p>
+                <p>/{t('s12')}.</p>
               </div>
               <div className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
                 <p>+{formatAbbreviation(0)}</p>
                 <img src={SubscriberCoin} />
-                <p>/инт.</p>
+                <p>/{t('s12')}.</p>
               </div>
               <div className={styles.scoresItem}>
                 <p>+{formatAbbreviation(0)}</p>
                 <img src={CoinIcon} />
-                <p>/сек.</p>
+                <p>/{t('s13')}.</p>
               </div>
             </div>
           </div>
@@ -175,12 +176,12 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             onChange={setShopCategory}
           />
           {/* https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284346&m=dev#1121980464 */}
-          {/*{shopCategory.title !== 'Вы' && (*/}
+          {/*{shopCategory.title !== t('s6') && (*/}
           {/*  <TabsNavigation*/}
           {/*    colorClass={*/}
-          {/*      itemsQuality.title === 'Эконом'*/}
+          {/*      itemsQuality.title === t('s14')*/}
           {/*        ? 'tabItemSelectedBlue'*/}
-          {/*        : itemsQuality.title === 'Премиум'*/}
+          {/*        : itemsQuality.title === t('s15')*/}
           {/*        ? 'tabItemSelectedPurple'*/}
           {/*        : 'tabItemSelectedRed'*/}
           {/*    }*/}
@@ -225,7 +226,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
           handleGuideClose(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
           navigate(AppRoute.ProgressTree);
         }} />}
-
 
     </>
   );

@@ -34,6 +34,7 @@ export type UnansweredIntegrationCommentDTO = {
   id: string,
   author_username: string,
   comment_text: string,
+  is_hate: boolean
 }
 
 
