@@ -51,7 +51,12 @@ export const TopTasks: FC = () => {
   };
 
   const handleStateChange = (newState: TaskState) => {
-    setTaskState(newState);
+    setTaskState(prev => ({
+      ...prev,
+      currentStep: newState.currentStep,
+      totalSteps: newState.totalSteps,
+      completed: newState.completed,
+    }));
   };
 
   const progress = (taskState.currentStep / taskState.totalSteps) * 100;

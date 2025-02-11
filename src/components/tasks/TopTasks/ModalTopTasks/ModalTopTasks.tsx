@@ -3,7 +3,6 @@ import coinIcon from '../../../../assets/icons/coin.png';
 import classNames from 'classnames';
 import s from './ModalTopTasks.module.scss';
 import BottomModal from '../../../shared/BottomModal/BottomModal';
-
 import dotsIcon from '../../../../assets/icons/dots.svg';
 import checkIcon from '../../../../assets/icons/checkmark-in-the-circle.svg';
 import bookIcon from '../../../../assets/icons/book.svg';
@@ -31,45 +30,11 @@ interface ModalTopTasksProps {
   };
 }
 
-interface TaskStep {
-  id: number;
-  title: string;
-  description: string;
-  reward: number;
-}
-
 interface TaskState {
   currentStep: number;
   totalSteps: number;
   completed: boolean;
 }
-
-const TASK_STEPS: TaskStep[] = [
-  {
-    id: 1,
-    title: 'Создание канала',
-    description: 'Вам нужно создать свой личный канал в телеграмме. Прочитайте наш подробный гайд, и прикрепите ссылку ниже. Последующие этапы будут завязаны на вашем канале.',
-    reward: 25,
-  },
-  {
-    id: 2,
-    title: 'Настройка профиля',
-    description: 'Добавьте аватар и описание канала',
-    reward: 35,
-  },
-  {
-    id: 3,
-    title: 'Первый пост',
-    description: 'Опубликуйте ваш первый пост в канале',
-    reward: 40,
-  },
-  {
-    id: 4,
-    title: 'Привлечение подписчиков',
-    description: 'Получите первых 10 подписчиков',
-    reward: 50,
-  },
-];
 
 export const ModalTopTasks: FC<ModalTopTasksProps> = ({
   modalId,
@@ -83,17 +48,25 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
     Array(task.stages).fill(false).map((_, index) => index < task.completed_stages)
   );
   const [channelLink, setChannelLink] = useState('');
-  const currentStepInfo = TASK_STEPS[currentStepIndex];
   const progress = (completedSteps.filter(step => step).length / task.stages) * 100;
   const [updateTask] = useUpdateTaskMutation();
 
   useEffect(() => {
+    setCurrentStepIndex(task.completed_stages);
+    setCompletedSteps(
+      Array(task.stages)
+        .fill(false)
+        .map((_, index) => index < task.completed_stages)
+    );
+  }, [task.completed_stages, task.stages]);
+
+  useEffect(() => {
     onStateChange?.({
-      currentStep: completedSteps.filter(step => step).length,
+      currentStep: task.completed_stages,
       totalSteps: task.stages,
-      completed: completedSteps.every(step => step),
+      completed: task.completed_stages === task.stages,
     });
-  }, [currentStepIndex, completedSteps]);
+  }, [task.completed_stages, task.stages]);
 
   const handleCompleteStep = async () => {
     try {
@@ -101,20 +74,21 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
       newCompletedSteps[currentStepIndex] = true;
       setCompletedSteps(newCompletedSteps);
 
+      onStateChange?.({
+        currentStep: currentStepIndex + 1,
+        totalSteps: task.stages,
+        completed: currentStepIndex + 1 === task.stages,
+      });
+
       await updateTask({
         id: taskId,
         data: {
           completed_stages: currentStepIndex + 1,
-          link: channelLink,
+          link: task.external_link,
         },
       });
 
       if (currentStepIndex === task.stages - 1) {
-        onStateChange?.({
-          currentStep: task.stages,
-          totalSteps: task.stages,
-          completed: true,
-        });
         setTimeout(() => onClose(), 1000);
         return;
       }
@@ -123,6 +97,14 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
     } catch (error) {
       console.error('Error updating task:', error);
     }
+  };
+
+  const getStepTitle = (step: number) => {
+    return task.title;
+  };
+
+  const getStepDescription = (step: number) => {
+    return task.description;
   };
 
   return (
@@ -150,7 +132,7 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
 
         <div className={s.progress}>
           <span className={s.step}>
-            Этап {currentStepIndex + 1}: {currentStepInfo.title}
+            Этап {currentStepIndex + 1}: {getStepTitle(currentStepIndex)}
           </span>
         </div>
 
@@ -184,19 +166,14 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
               </div>
             </div>
           </div>
-          <h3 className={s.questionText}>{currentStepInfo.description}</h3>
+          <h3 className={s.questionText}>{getStepDescription(currentStepIndex)}</h3>
         </div>
 
         <div className={s.buttons}>
-          <a 
-            href={task.external_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={s.answerButton}
-          >
+          <button className={s.answerButton}>
             Инструкция
             <img src={bookIcon} alt="" className={s.buttonIcon} />
-          </a>
+          </button>
           <button
             className={classNames(s.nextButton, {
               [s.active]: true,

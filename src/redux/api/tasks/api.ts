@@ -5,12 +5,14 @@ import { GetTasksResponse, UpdateTaskRequest, UpdateTaskResponse } from './dto';
 export const tasksApi = createApi({
   reducerPath: 'tasksApi',
   baseQuery: baseQueryReauth,
+  tagTypes: ['Tasks'],
   endpoints: builder => ({
     getTasks: builder.query<GetTasksResponse, void>({
       query: () => ({
         url: '/assignments',
         method: 'GET',
       }),
+      providesTags: ['Tasks']
     }),
     updateTask: builder.mutation<UpdateTaskResponse, { id: string; data: UpdateTaskRequest }>({
       query: ({ id, data }) => ({
@@ -18,6 +20,7 @@ export const tasksApi = createApi({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['Tasks']
     }),
   }),
 });
