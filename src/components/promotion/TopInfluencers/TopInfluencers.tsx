@@ -8,6 +8,7 @@ import { useModal } from '../../../hooks';
 import s from './TopInfluencers.module.scss';
 import classNames from 'classnames';
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../../redux';
+import { Button } from '../../shared';
 
 export const TopInfluencers = () => {
   const { openModal, closeModal } = useModal();
@@ -53,9 +54,9 @@ export const TopInfluencers = () => {
           Драгоценный<br /> сундук!
           <span className={s.textDay}> До выдачи призов осталось 3д.</span>
         </p>
-        <button className={classNames(s.buttonContainer, s.text)} onClick={() => openModal(MODALS.TOP_USERS)}>
+        <Button className={classNames(s.buttonContainer, s.text)} onClick={() => openModal(MODALS.TOP_USERS)}>
           Смотреть список
-        </button>
+        </Button>
         <TopUsers modalId={MODALS.TOP_USERS} onClose={() => closeModal(MODALS.TOP_USERS)} />
       </section>
     </>

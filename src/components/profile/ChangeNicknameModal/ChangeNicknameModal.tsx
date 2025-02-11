@@ -1,11 +1,11 @@
 import { FC, useState } from 'react';
-import CentralModal from '../../shared/CentralModal/CentralModal.tsx';
 
 import styles from './ChangingNicknameModal.module.scss';
 
 import cross from '../../../assets/icons/input-cross.svg';
 import tick from '../../../assets/icons/input-tick.svg';
 import { useGetCurrentUserProfileInfoQuery, useUpdateCurrentUserProfileMutation } from '../../../redux/index.ts';
+import { Button, CentralModal } from '../../shared';
 
 interface ChangeNicknameModalProps {
   modalId: string;
@@ -95,13 +95,13 @@ const ChangeNicknameModal: FC<ChangeNicknameModalProps> = ({ modalId, onClose, c
 
       <p className={styles.maxLength}>{suchUserExists ? 'Пользователь с таким никнеймом уже существует' : ''}</p>
 
-      <button
+      <Button
         className={`${styles.saveBtn} ${isFormValid ? styles.validInput : ''}`}
         onClick={handleUpdate}
         disabled={!isFormValid || isLoading}
       >
         Сохранить
-      </button>
+      </Button>
     </CentralModal>
   );
 };

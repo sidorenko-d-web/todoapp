@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import CentralModal from '../../shared/CentralModal/CentralModal.tsx';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import lightningIcon from '../../../assets/icons/lightning.svg';
 import {
@@ -18,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { integrationCreatingModalButtonGlowing, integrationCreatingModalLightningsGlowing, integrationCreatingModalTabsGlowing, setGuideShown } from '../../../utils/guide-functions.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
+import { Button, CentralModal } from '../../shared';
 
 interface CreatingIntegrationModalProps {
   modalId: string;
@@ -137,14 +137,14 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           isError && <span className={s.errorMessage}>{error?.data?.detail}</span>
         }
 
-        <button
+        <Button
           className={`${s.button} 
             ${buttonGlowing ? s.glowingBtn : ''} `}
           disabled={submitDisabled && !noItemsMessage}
           onClick={noItemsMessage ? goToShop : submitCreation}
         >
           {noItemsMessage ? 'В магазин' : 'Создать интеграцию'}
-        </button>
+        </Button>
       </div>
     </CentralModal>
   );

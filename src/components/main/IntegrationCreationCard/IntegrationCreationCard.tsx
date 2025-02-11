@@ -1,13 +1,15 @@
 import { FC, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
-import { IntegrationResponseDTO, integrationsApi } from '../../../redux';
+import { IntegrationResponseDTO, integrationsApi, selectVolume } from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration } from '../../../hooks';
 import { GUIDE_ITEMS } from '../../../constants';
 import { isGuideShown, setGuideShown } from '../../../utils';
 import { setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice';
+import useSound from 'use-sound';
+import { SOUNDS } from '../../../constants';
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
@@ -21,7 +23,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   const initialTime = 3600;
   const [timeLeft, setTimeLeft] = useState(integration.time_left);
   const [isExpired, setIsExpired] = useState(false);
-
+  const [playAccelerateIntegrationSound] = useSound(SOUNDS.speedUp, {volume: useSelector(selectVolume)}) 
   const calculateProgress = () => ((initialTime - timeLeft) / initialTime) * 100;
 
   const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
@@ -59,6 +61,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
 
   const handleAccelerateClick = () => {
     if (!isExpired) {
+      playAccelerateIntegrationSound()
       void accelerateIntegration(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) ? 1: timeLeft-1);
       createParticles();
     }

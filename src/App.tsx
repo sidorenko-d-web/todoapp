@@ -13,7 +13,6 @@ declare global {
 }
 
 function App() {
-
   return (
     <>
       <Provider store={store}>
@@ -26,7 +25,7 @@ function App() {
         </ModalsProvider>
       </Provider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

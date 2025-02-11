@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { isGuideShown } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../../shared';
 
 interface Props {
   disabled?: boolean;
@@ -100,11 +101,11 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       {!disabled ? (
         <div className={styles.actions}>
           {isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) && (
-            <button onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}>
+            <Button onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}>
               {formatAbbreviation(item.price_usdt, 'currency', { locale: locale })}
-            </button>
+            </Button>
           )}
-          <button
+          <Button
             onClick={handleBuyItem}
             className={clsx(
               Number(userPoints) < Number(item.price_internal) ? styles.disabledButton : '',
@@ -118,7 +119,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 {formatAbbreviation(item.price_internal, 'number', { locale: locale })} <img src={CoinIcon} alt="" />
               </>
             )}
-          </button>
+          </Button>
         </div>
       ) : (
         <div className={styles.disabledUpgradeActions}>

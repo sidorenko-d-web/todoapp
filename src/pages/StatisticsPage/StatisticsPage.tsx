@@ -9,6 +9,7 @@ import StatisticsCard from '../../components/statistics/statisticsCard/Statistic
 import coin from '../../assets/icons/coin.png';
 import { useGetAllIntegrationsQuery, useGetCurrentUserProfileInfoQuery } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
+import { Button } from '../../components/shared';
 
 const StatisticsPage: FC = () => {
   const navigate = useNavigate();
@@ -18,8 +19,8 @@ const StatisticsPage: FC = () => {
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
-        <button className={styles.backButton} onClick={() => navigate(-1)}><img src={back} alt="Back" width={22}
-                                                                                height={22} /></button>
+        <Button className={styles.backButton} onClick={() => navigate(-1)}><img src={back} alt="Back" width={22}
+                                                                                height={22} /></Button>
         <div className={styles.titleWrapper}>
           <h1 className={styles.title}>Статистика</h1>
           <div className={styles.scores}>

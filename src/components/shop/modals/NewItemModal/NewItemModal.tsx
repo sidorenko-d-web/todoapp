@@ -1,7 +1,6 @@
 import styles from './NewItemModal.module.scss';
-import { AppRoute, MODALS, svgHeadersString } from '../../../../constants';
-import { useModal } from '../../../../hooks';
-import CentralModal from '../../../shared/CentralModal/CentralModal';
+import { AppRoute, MODALS, SOUNDS, svgHeadersString } from '../../../../constants';
+import { useAutoPlaySound, useModal } from '../../../../hooks';
 import { IShopItem } from '../../../../redux';
 import Button from '../partials/Button';
 import ViewsIcon from '../../../../assets/icons/views.png';
@@ -13,6 +12,7 @@ import Lottie from 'lottie-react';
 import { blueLight, purpleLight, redLight } from '../../../../assets/animations';
 import { useDispatch } from 'react-redux';
 import { setItemBought } from '../../../../redux/slices/guideSlice';
+import { CentralModal } from '../../../shared';
 
 export const NewItemModal: React.FC = () => {
   const { closeModal, getModalState } = useModal();
@@ -31,6 +31,9 @@ export const NewItemModal: React.FC = () => {
 
   const isPrem = state.args?.item.item_rarity === 'yellow';
   const isPro = state.args?.item.item_rarity === 'green';
+
+  
+  useAutoPlaySound(MODALS.NEW_ITEM, SOUNDS.upgradeOrBuyItem);
 
   return (
     <CentralModal
