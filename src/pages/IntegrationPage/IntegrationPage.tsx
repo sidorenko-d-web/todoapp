@@ -73,7 +73,7 @@ export const IntegrationPage: React.FC = () => {
       {isLoading && <p>Загрузка...</p>}
       {(error || !integrationId) && <p>Интеграция не найдена</p>}
 
-      {data && (
+      {data?.status === 'created' && (
         <>
           <IntegrationStatsMini
             views={data.views}

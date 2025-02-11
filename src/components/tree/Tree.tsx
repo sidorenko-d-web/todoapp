@@ -35,7 +35,6 @@ export const Tree = () => {
     return null;
   }
 
-
   return (
     <div className={s.container}>
       <div className={s.progressBarContainer}>
@@ -58,6 +57,9 @@ export const Tree = () => {
                     <img src={circle} height={16} width={16} alt="circle" style={{zIndex: '0'}}/>
                   )}
                   {stage.stage_number}
+                {stage.stage_number % 10 === 0 && (
+                  <img className={s.spiner} src={spinner} height={120} width={120} alt="spinner" />
+                )}
                 </div>
                 {stage.id > 1 && (
                   <div
@@ -66,9 +68,6 @@ export const Tree = () => {
                       [s.prizeActive]: isActive || stage.stage_number % 10 === 0,
                     })}
                   >
-                    {stage.stage_number % 10 === 0 && (
-                      <img className={s.spiner} src={spinner} height={120} width={120} alt="spinner"/>
-                    )}
                     {stage.achievement && (
                       <div className={classNames(s.imgPrize, { [s.imgPrizeActive]: isActive })}>
                         <div className={classNames({ [s.blur]: !isActive })} />

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import styles from './TreeLevelGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
-import { Guide } from "../../Guide/Guide";
+import { Guide } from '../../Guide/Guide';
 
 import LockIcon from '../../../../assets/icons/lock_icon.svg';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 
 interface TreeLevelGuideProps {
@@ -15,7 +15,7 @@ export const TreeLevelGuide: React.FC<TreeLevelGuideProps> = ({onClose}) => {
     const [isOpen, setIsOpen] = useState(true);
 
 
-    const { t,i18n } = useTranslation('shop');
+    const { t } = useTranslation('shop');
     
     const handleClose = () => {
         onClose();
