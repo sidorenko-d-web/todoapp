@@ -1,5 +1,5 @@
 import { MODALS } from "../../../constants/modals"
-import CentralModal from "../../shared/CentralModal/CentralModal"
+
 
 import styles from "./WalletConnectionModal.module.scss"
 import { useModal } from "../../../hooks/useModal"
@@ -11,6 +11,7 @@ import { useState } from "react"
 import { useTonConnect } from "../../../hooks"
 import { useTranslation } from "react-i18next"
 import { Locales } from "@tonconnect/ui-react"
+import { CentralModal } from "../../shared"
 
 export const WalletConnectionModal = () => {
   const { t } = useTranslation('settings');

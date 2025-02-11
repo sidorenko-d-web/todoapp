@@ -2,13 +2,14 @@ import { MODALS } from "../../../constants/modals"
 import { useModal } from "../../../hooks/useModal"
 import styles from "./LanguageSelectionModal.module.scss"
 import { useState } from "react"
-import CentralModal from "../../shared/CentralModal/CentralModal"
+
 
 import tick from "../../../assets/icons/input-tick.svg"
 import circle from "../../../assets/icons/circle-blue.svg"
 import russiaIcon from "../../../assets/icons/ru-flag.svg"
-import usaIcon from "../../../assets/Icons/us-flag.svg"
+import usaIcon from "../../../assets/icons/us-flag.svg"
 import { useTranslation } from 'react-i18next';
+import { CentralModal } from "../../shared"
 
 
 const LANGUAGES = [
