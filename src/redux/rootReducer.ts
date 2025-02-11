@@ -4,6 +4,7 @@ import { authApi, companiesApi, integrationsApi, profileApi, treeApi, usersApi }
 import { shopApi } from './api';
 import { refferalsApi } from './api';
 import { treeReducer } from './slices/tree.ts';
+import { tasksApi } from './api/tasks';
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -16,6 +17,7 @@ const appReducer = combineReducers({
   [refferalsApi.reducerPath]: refferalsApi.reducer,
   [usersApi.reducerPath]: usersApi.reducer,
   [treeApi.reducerPath]: treeApi.reducer,
+  [tasksApi.reducerPath]: tasksApi.reducer,
 });
 
 export const rootReducer = (state: any, action: Action) => {

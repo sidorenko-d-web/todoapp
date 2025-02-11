@@ -8,8 +8,21 @@ import { formatAbbreviation } from '../../helpers';
 import { useGetTasksQuery } from '../../redux/api/tasks';
 
 export const TasksPage: FC = () => {
-  const result = useGetTasksQuery();
-  console.log('Весь результат запроса:', result);
+  const { data, error, isLoading } = useGetTasksQuery();
+  
+  console.log('Состояние запроса:', {
+    data,
+    error,
+    isLoading
+  });
+
+  if (isLoading) {
+    return <div>Загрузка...</div>;
+  }
+
+  if (error) {
+    return <div>Произошла ошибка при загрузке заданий</div>;
+  }
 
   return (
     <main className={s.page}>
