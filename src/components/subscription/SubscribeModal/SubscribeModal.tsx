@@ -49,7 +49,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
         </div>
         <div className={s.buttons}>
           <button className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`} onClick={handleBuySubscription}>
-              {formatAbbreviation(450)} <img src={coinIcon} height={14} width={14}
+              {formatAbbreviation(100)} <img src={coinIcon} height={14} width={14}
                                                                                   alt={'Coin'} /></button>
        
           <button className={s.button + ' ' + s.gray}>Задание</button>
