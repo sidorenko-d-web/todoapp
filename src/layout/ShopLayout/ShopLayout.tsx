@@ -13,19 +13,6 @@ import ViewsCoin from '../../assets/icons/views.png';
 import { useTranslation } from 'react-i18next';
 import { formatAbbreviation, itemsInTab } from '../../helpers';
 
-const shopItemCategories = [
-  { title: 'Текст', value: 'text' },
-  { title: 'Фото', value: 'image' },
-  { title: 'Видео', value: 'video' },
-  { title: 'Декор', value: 'decor' },
-  { title: 'Вы', value: 'decor' },
-];
-const shopItemRarity = [
-  { title: 'Эконом', value: 'red' },
-  { title: 'Премиум', value: 'yellow' },
-  { title: 'Люкс', value: 'green' },
-];
-
 type TypeTab<T> = { title: string; value: T };
 
 interface Props {
