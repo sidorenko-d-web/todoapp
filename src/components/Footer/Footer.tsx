@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux';
 import { TrackedButton } from '..';
 
-
 export const Footer = () => {
   const [ activeButton, setActiveButton ] = useState<number | null>(null);
   const navigate = useNavigate();
@@ -26,6 +25,8 @@ export const Footer = () => {
 
     setActiveButton((currentFooterItemId >= 0 && currentFooterItemId <= 4) ? currentFooterItemId : id)
   };
+
+  
   return (
     <div className={styles.footerItems}>
       {footerItems.map((item) => (
