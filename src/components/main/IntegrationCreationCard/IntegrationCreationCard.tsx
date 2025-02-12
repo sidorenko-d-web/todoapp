@@ -40,8 +40,9 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   }, [ timeLeft, accelerateIntegration ]);
 
   useEffect(() => {
-    if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
+    if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET)) {
       accelerateIntegration(timeLeft-20);
+      setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
     }
   }, [])
 

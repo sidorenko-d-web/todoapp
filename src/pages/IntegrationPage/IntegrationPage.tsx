@@ -75,7 +75,7 @@ export const IntegrationPage: React.FC = () => {
       {isLoading && <p>{t('i3')}</p>}
       {(error || !integrationId) && <p>{t('i2')}</p>}
 
-      {data?.status === 'created' && (
+      {data?.status === 'published' && (
         <>
           <IntegrationStatsMini
             views={data.views}
@@ -101,13 +101,13 @@ export const IntegrationPage: React.FC = () => {
               {comments.length === 0 ? 0 : currentCommentIndex + 1}/{comments.length}
             </p>
           </div>
-          <IntegrationComment
+          {commentData &&  <IntegrationComment
             progres={progress}
             {...comments[currentCommentIndex]}
             onVote={handleVote}
             hateText={commentData?.is_hate}
             finished={finished}
-          />
+          />}
         </>
 
       )}
