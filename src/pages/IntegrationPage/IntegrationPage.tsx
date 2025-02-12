@@ -17,6 +17,8 @@ import { useParams } from 'react-router-dom';
 import { isGuideShown, setGuideShown } from '../../utils';
 import { GUIDE_ITEMS } from '../../constants';
 import { useDispatch } from 'react-redux';
+import { setElevateIntegrationStats } from '../../redux/slices/guideSlice';
+import { useTranslation } from 'react-i18next';
 import { useTranslation } from 'react-i18next';
 import { setActiveFooterItemId, setElevateIntegrationStats, setFooterActive } from '../../redux/slices/guideSlice';
 
