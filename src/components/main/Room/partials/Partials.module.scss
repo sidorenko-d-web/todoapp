@@ -1,23 +1,73 @@
 $translateY: -15vh;
+
+.room {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
 .wallsWrapper {
   display: flex;
-  scale: 1.085;
+  aspect-ratio: 402/885;
+  width: 100%;
 
   .wallLeft {
     background: #bac2d3;
     flex: 7;
-    height: 91vh;
   }
   .wallRight {
-    flex: 3;
+    width: 129.47px;
     background: #96a1bc;
-    height: 91vh;
   }
 }
+
 .floor {
-  scale: 1.086;
+  background: #6e717a;
+  transform: skew(-30deg);
+  rotate: 32deg;
+  height: 800px;
+  aspect-ratio: 1/1;
+  position: absolute;
+  z-index: 2;
+  top: 279px;
+  right: -203px;
+}
+
+.treshinaLeft {
+  position: absolute;
+  top: 30px;
+  right: 240px;
+}
+.treshinaRight {
   position: absolute;
   top: 0;
+  right: 20px;
+}
+
+.sofa {
+  position: absolute;
+  top: 220px;
   z-index: 100;
-  width: 100%;
+  right: 10px;
+}
+
+.chair {
+  position: absolute;
+  top: 400px;
+  right: 200px;
+  z-index: 4;
+}
+
+.table {
+  position: absolute;
+  top: 395px;
+  right: 90px;
+  z-index: 5;
+}
+
+.window {
+  position: absolute;
+  top: 100px;
+  right: 300px;
+  z-index: 5;
 }

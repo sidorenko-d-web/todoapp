@@ -92,7 +92,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
         <div className={styles.title}>
           <div className={styles.headline}>
             <h3>
-              {item.name} {item.item_rarity} {item.item_premium_level}
+              {item.name}
             </h3>
           </div>
           <p

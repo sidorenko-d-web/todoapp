@@ -4,8 +4,13 @@ import styles from './Layout.module.scss';
 import { Header } from '../components/Header/';
 import { useEffect } from 'react';
 import { MODALS, localStorageConsts } from '../constants';
-import { LanguageSelectionModal, SettingsModal, WalletConnectionModal } from '../components';
+import {
+  LanguageSelectionModal,
+  SettingsModal,
+  WalletConnectionModal,
+} from '../components';
 import { AudioBg, useModal } from '../hooks';
+import clsx from 'clsx';
 
 const Layout = () => {
   const location = useLocation();
@@ -24,7 +29,13 @@ const Layout = () => {
   return (
     <div className={styles.wrp}>
       {showHeader && <Header />}
-      <main className={styles.content + ' ' + (showHeader ? styles.withHeader : '')}>
+      <main
+        className={clsx(
+          styles.content,
+          showHeader && styles.withHeader,
+          location.pathname === '/' && styles.isMain,
+        )}
+      >
         <Outlet />
 
         {/* Modals */}

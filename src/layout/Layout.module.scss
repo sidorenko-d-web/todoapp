@@ -21,4 +21,10 @@
   &.withHeader {
     margin-top: 60px;
   }
+
+  &.isMain{
+    padding: 0;
+    height: 100vh;
+    margin-top: 0;
+  }
 }

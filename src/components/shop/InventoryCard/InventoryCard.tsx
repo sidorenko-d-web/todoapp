@@ -141,9 +141,9 @@ export const InventoryCard: FC<Props> = ({
           )}
         </div>
         <div className={styles.title}>
-          {/* <div className={styles.headline}>
+          <div className={styles.headline}>
             <h3>{item.name}</h3>
-            https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284353&m=dev#1121983015
+            {/* https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284353&m=dev#1121983015
             {item.item_rarity === 'red' ? (
               <div className={styles.variant}>
                 <p>{t('s14')}</p>
@@ -156,8 +156,8 @@ export const InventoryCard: FC<Props> = ({
               <div className={styles.variantRed}>
                 <p>{t('s16')}</p>
               </div>
-            )}
-          </div> */}
+            )} */}
+          </div>
           <p
             className={
               item.item_rarity === 'green'
