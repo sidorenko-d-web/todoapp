@@ -1,0 +1,25 @@
+$translateY: -15vh;
+dd
+
+.wallsWrapper {
+  display: flex;
+  scale: 1.085;
+
+  .wallLeft {
+    background: #bac2d3;
+    flex: 7;
+    height: 91vh;
+  }
+  .wallRight {
+    flex: 3;
+    background: #96a1bc;
+    height: 91vh;
+  }
+}
+.floor {
+  scale: 1.086;
+  position: absolute;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+}
