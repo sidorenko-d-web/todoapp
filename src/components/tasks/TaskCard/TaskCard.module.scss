@@ -1,10 +1,20 @@
 @use '../../../assets/styles' as var;
 
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .card {
   padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  position: relative;
 
   border-radius: 12px;
 
@@ -24,7 +34,7 @@
 
     .info {
       display: flex;
-      width: 255px;
+      width: 100%;
       flex-direction: column;
       align-items: flex-start;
       gap: 10px;
@@ -42,7 +52,10 @@
         color: var.$color-text-semi-transparent;
         font-size: 14px;
         font-weight: 500;
-        line-height: 100%;
+        line-height: 120%;
+        width: 100%;
+        white-space: pre-wrap;
+        word-break: break-word;
       }
     }
   }
@@ -83,42 +96,11 @@
     }
   }
 
-  .progressBarSection {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-
-    .progressBarSectionHeader {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var.$color-text-semi-transparent;
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 100%;
-
-      .progressReward {
-        display: flex;
-        gap: 5px;
-      }
-    }
-
-    .progressBar {
-      height: 16px;
-      border-radius: 3px;
-      background-color: var.$color-gray;
-      overflow: hidden;
-
-      .progressBarInner {
-        height: 100%;
-        background-color: var.$color-purple;
-      }
-    }
-  }
-
   .buttons {
     display: flex;
     gap: 10px;
+    position: relative;
+    z-index: 1;
 
     .button {
       display: flex;
@@ -147,4 +129,36 @@
       opacity: 0.8;
     }
   }
+
+  &.completed {
+    border-radius: 12px;
+    border: 2px solid #9747FF;
+    background: var(--, #1C1D22);
+    box-shadow: 0px 0px 16px 0px rgba(151, 71, 255, 0.50);
+  }
+
+  &.completed.topTask {
+    &::before {
+      content: '';
+      position: absolute;
+      left: -1px;
+      bottom: -46px;
+      width: 147px;
+      height: 147px;
+      background-image: url('../../../assets/icons/light-purple.svg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      z-index: 0;
+      opacity: 0.8;
+      pointer-events: none;
+      animation: rotate 4s linear 1;
+    }
+  }
+}
+
+.errorText {
+  color: #FF5454;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-align: center;
 }
