@@ -90,7 +90,9 @@ export const IntegrationCreation = () => {
       />
       <SubscribeModal
         modalId={MODALS.SUBSCRIBE}
-        onClose={() => closeModal(MODALS.SUBSCRIBE)}
+        onClose={() => {
+          closeModal(MODALS.SUBSCRIBE);
+        }}
         onSuccess={handleSuccessfullySubscribed}
       />
       <SuccessfullySubscribedModal
