@@ -153,7 +153,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
             onClick={handleBuyItem}
             className={clsx(
               Number(userPoints) < Number(item.price_internal) ? styles.disabledButton : '',
-              buyButtonGlowing && item.name.toLowerCase().trim().includes('печатная машинка') ? styles.glowingBtn : ''
+              buyButtonGlowing && item.name.toLowerCase().trim().includes('свет портативный') ? styles.glowingBtn : ''
             )}
           >
             {isLoading ? (
