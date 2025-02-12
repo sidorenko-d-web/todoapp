@@ -70,7 +70,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     if (!isExpired) {
       playAccelerateIntegrationSound();
       dispatch(setLastIntegrationId(integration.id));
-      void accelerateIntegration(timeLeft-3);
+      void accelerateIntegration(1);
       createParticles();
     }
   };
