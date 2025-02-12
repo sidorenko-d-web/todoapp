@@ -4,7 +4,7 @@ import { useModal } from "../../../hooks/useModal"
 import russiaIcon from "../../../assets/icons/ru-flag.svg"
 import cryptoWalletIcon from "../../../assets/Icons/Wallet.png"
 import ArrowRight from "../../../assets/icons/arrow-right.svg"
-import { CentralModal } from "../../shared/CentralModal/CentralModal"
+import {CentralModal} from "../../shared/CentralModal/"
 import {useTranslation} from 'react-i18next'
 
 export const SettingsModal = () => {
