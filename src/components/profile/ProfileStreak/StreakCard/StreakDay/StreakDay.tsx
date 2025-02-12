@@ -9,29 +9,44 @@ interface StreakDayProps {
   dayNumber: number;
   type: DayType;
   weekIndex: number;
+  failedDay: number;
+  streakCount: number;
 }
 
-export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type, weekIndex }) => {
+export const StreakDay: React.FC<StreakDayProps> = ({
+  dayNumber,
+  type,
+  weekIndex,
+  failedDay,
+  streakCount,
+}) => {
   const [lang, setLang] = useState<string | null>(null);
   const [currentDay, setCurrentDay] = useState<number | null>(null);
+  const [currentWeekdayIndex, setCurrentWeekdayIndex] = useState<number | null>(null);
 
   useEffect(() => {
     setLang(localStorage.getItem('selectedLanguage'));
 
-    const today = new Date().getDate();
-    setCurrentDay(today);
+    const today = new Date();
+    setCurrentDay(today.getDate());
+    setCurrentWeekdayIndex(today.getDay() === 0 ? 6 : today.getDay() - 1); // Преобразуем getDay(), где 0 - это воскресенье
   }, []);
 
   const getIcon = () => {
-    switch (type) {
-      case 'streak':
-        return <img src={fireIcon} />;
-      case 'freeze':
-        return <img src={freezeIcon} />;
-      default:
-        return null;
+    if (failedDay === dayNumber) return <img src={freezeIcon} />;
+    if (
+      streakCount > 0 &&
+      dayNumber > currentDay - streakCount &&
+      dayNumber <= currentDay
+    ) {
+      return <img src={fireIcon} />;
     }
+    return null;
   };
+
+  const isStreakDay =
+    streakCount > 0 && dayNumber > currentDay - streakCount && dayNumber <= currentDay;
+  const isFailedDay = failedDay === dayNumber;
 
   const weekdaysRu = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
   const weekdaysEn = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
@@ -39,18 +54,28 @@ export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type, weekIndex
   return (
     <div>
       <div
-        className={`${styles['calendar-day']} ${styles[type]} ${
-          currentDay === dayNumber ? styles.currentDay : ''
-        }`}
+        className={`${styles['calendar-day']} 
+          ${isFailedDay ? styles.freeze : isStreakDay ? styles.streak : styles[type]} 
+          ${currentDay === dayNumber ? styles.currentDay : ''}`}
       >
-        {(type === 'streak' || type === 'freeze') && (
-          <div className={`${styles['status-icon']} ${styles[type]}`}>{getIcon()}</div>
+        {(isStreakDay || isFailedDay) && (
+          <div
+            className={`${styles['status-icon']} ${
+              isFailedDay ? styles.freeze : styles.streak
+            }`}
+          >
+            {getIcon()}
+          </div>
         )}
         {dayNumber}
       </div>
 
       {/* Dynamic weekday based on weekIndex */}
-      <p className={styles.dayOfTheWeek}>
+      <p
+        className={`${styles.dayOfTheWeek} ${
+          currentWeekdayIndex === weekIndex ? styles.dayOfTheWeekActive : ''
+        }`}
+      >
         {lang === 'en' ? weekdaysEn[weekIndex] : weekdaysRu[weekIndex]}
       </p>
     </div>
