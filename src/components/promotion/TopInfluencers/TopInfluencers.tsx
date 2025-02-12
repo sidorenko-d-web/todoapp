@@ -7,11 +7,10 @@ import { TopUsers } from '../Modal';
 import { useModal } from '../../../hooks';
 import classNames from 'classnames';
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../../redux';
-import { BindingConfirmationModal, BindingModal, BindingSuccessModal } from '../../';
+import { BindingConfirmationModal, BindingModal, BindingSuccessModal, TrackedButton } from '../../';
 
 import s from './TopInfluencers.module.scss';
 import { useState } from 'react';
-import { Button } from '../../shared';
 
 export const TopInfluencers = () => {
   const { openModal, closeModal } = useModal();
@@ -59,10 +58,16 @@ export const TopInfluencers = () => {
             : 'Войдите в топ #100 инфлюенсеров по количеству подписчиков на этой неделе, чтобы получить Драгоценный сундук!'}
           <span className={s.textDay}> До выдачи призов осталось 3д.</span>
         </p>
-        <Button className={classNames(s.buttonContainer, s.text)}
-                onClick={() => openModal(isInfluencersLocked ? MODALS.BINDING : MODALS.TOP_USERS)}>
+        <TrackedButton
+          trackingData={{
+            eventType: 'button',
+            eventPlace: `${isInfluencersLocked ? 'Открыть доступ к рейтингу инфлюенсеров!' : 'Смотреть список'} - Продвижение - Лучшие инфлюенсеры`,
+          }}
+          className={classNames(s.buttonContainer, s.text)}
+          onClick={() => openModal(isInfluencersLocked ? MODALS.BINDING : MODALS.TOP_USERS)}
+        >
           {isInfluencersLocked ? 'Открыть доступ к рейтингу инфлюенсеров!' : 'Смотреть список'}
-        </Button>
+        </TrackedButton>
 
         <TopUsers modalId={MODALS.TOP_USERS} onClose={() => closeModal(MODALS.TOP_USERS)} />
 

@@ -9,14 +9,14 @@ import fireIcon from '../../../assets/icons/fire-red.svg';
 import { Link } from 'react-router-dom';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../../shared';
+import { TrackedButton } from '../..';
 
 interface ProfileStatsMiniProps {
   subscribers: number;
   daysInARow: number;
   position: number;
   onlyBadges?: boolean;
-  totalViews: number
+  totalViews: number;
 }
 
 export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
@@ -26,8 +26,8 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
                                                                     onlyBadges,
                                                                     totalViews,
                                                                   }) => {
-  const {  i18n } = useTranslation('shop');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const { i18n } = useTranslation('shop');
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.wrp + ' ' + (onlyBadges ? styles.justifyCenter : '')}>
@@ -40,12 +40,12 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
         </div>
 
         <div className={styles.statWrp}>
-          <span className={styles.stat}>{formatAbbreviation(subscribers,'number', { locale: locale })}</span>
+          <span className={styles.stat}>{formatAbbreviation(subscribers, 'number', { locale: locale })}</span>
           <img src={subscriberIcon} width={14} height={14} />
         </div>
 
         <div className={styles.statWrp}>
-          <span className={styles.stat}>{formatAbbreviation(totalViews,'number', { locale: locale })}</span>
+          <span className={styles.stat}>{formatAbbreviation(totalViews, 'number', { locale: locale })}</span>
           <img src={viewsIcon} width={14} height={14} />
         </div>
 
@@ -57,7 +57,12 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
 
       {!onlyBadges && (
         <Link to={'../wardrobe'}>
-          <Button onClick={() => {}} className={styles.wardrobeButton}/>
+          <TrackedButton
+            trackingData={{
+              eventType: 'button',
+              eventPlace: 'В гардероб - Профиль',
+            }}
+            className={styles.wardrobeButton} />
         </Link>
       )}
     </div>

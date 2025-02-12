@@ -8,9 +8,9 @@ import giftIcon from '../../../assets/icons/gift.svg';
 
 import s from './TaskCard.module.scss';
 import { formatAbbreviation } from '../../../helpers';
-import { Button } from '../../shared';
 import { ProgressBarTasks } from '../ProgressBarTasks';
 import classNames from 'classnames';
+import { TrackedButton } from '../..';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -90,7 +90,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
   return (
     <div className={classNames(s.card, {
       [s.completed]: isCompleted,
-      [s.topTask]: isTopTask
+      [s.topTask]: isTopTask,
     })}>
       <section className={s.header}>
         {icon && <img className={s.icon} src={icon} height={40} width={40} alt="icon" />}
@@ -154,13 +154,17 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       )}
 
       <section className={s.buttons}>
-        <Button
+        <TrackedButton
+          trackingData={{
+            eventType: 'button',
+            eventPlace: `${buttonText} - Задания - ${title}`,
+          }}
           className={`${s.button} ${s[buttonType]} ${isLoading ? s.loading : ''}`}
           disabled={disabled || isLoading}
           onClick={() => onClick?.()}
         >
           {buttonText}
-        </Button>
+        </TrackedButton>
       </section>
     </div>
   );

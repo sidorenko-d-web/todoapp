@@ -10,3 +10,4 @@ export * from './TransactionNotification'
 export * from './settings'
 export * from './guide';
 export * from './influencers';
+export * from './withTracking';
