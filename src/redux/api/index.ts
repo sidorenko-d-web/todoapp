@@ -7,3 +7,4 @@ export * from './inventory';
 export * from './referrals';
 export * from './users';
 export * from './tree'
+export * from './room'
