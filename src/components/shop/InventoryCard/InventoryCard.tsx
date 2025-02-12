@@ -54,15 +54,14 @@ function sortByPremiumLevel(items: IShopItem[]) {
 }
 
 export const InventoryCard: FC<Props> = ({
-                                           disabled,
-                                           isBlocked,
-                                           isUpgradeEnabled = true,
-                                           item,
-                                           isB,
-                                         }) => {
-
-  const { t,i18n } = useTranslation('shop');
-  const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
+  disabled,
+  isBlocked,
+  isUpgradeEnabled = true,
+  item,
+  isB,
+}) => {
+  const { t, i18n } = useTranslation('shop');
+  const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const dispatch = useDispatch();
   const { data, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
@@ -77,7 +76,7 @@ export const InventoryCard: FC<Props> = ({
 
   const { openModal } = useModal();
 
-  const [playLvlSound] = useSound(SOUNDS.levelUp, {volume: useSelector(selectVolume)});
+  const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
 
   const handleBuyItem = async () => {
     try {
@@ -106,7 +105,9 @@ export const InventoryCard: FC<Props> = ({
     } catch (error) {}
   };
 
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language)
+    ? (i18n.language as 'ru' | 'en')
+    : 'ru';
 
   return (
     <div className={styles.storeCard}>
@@ -166,7 +167,7 @@ export const InventoryCard: FC<Props> = ({
                 : styles.level
             }
           >
-            {t('s20')} {item.level} {isB && t("s21")}
+            {t('s20')} {item.level} {isB && t('s21')}
           </p>
           <div
             className={clsx(
@@ -175,15 +176,23 @@ export const InventoryCard: FC<Props> = ({
             )}
           >
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.views,'number', { locale: locale })}</p>
+              <p>+{formatAbbreviation(item.boost.views, 'number', { locale: locale })}</p>
               <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.subscribers,'number', { locale: locale })}</p>
+              <p>
+                +
+                {formatAbbreviation(item.boost.subscribers, 'number', { locale: locale })}
+              </p>
               <img src={SubscriberCoin} alt="" />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.income_per_second, 'number', { locale: locale })}</p>
+              <p>
+                +
+                {formatAbbreviation(item.boost.income_per_second, 'number', {
+                  locale: locale,
+                })}
+              </p>
               <img src={CoinIcon} alt="" />
               <p>/{t('s13')}</p>
             </div>
@@ -209,7 +218,9 @@ export const InventoryCard: FC<Props> = ({
         ) : (
           <div className={styles.progress}>
             <div className={styles.text}>
-              <p>{item.level}/50 {t('s24')} </p>
+              <p>
+                {item.level}/50 {t('s24')}{' '}
+              </p>
               <div className={styles.goal}>
                 <p>{t('s25')}</p>
                 <img
@@ -287,7 +298,9 @@ export const InventoryCard: FC<Props> = ({
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
           <Button>
-            {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', { locale: locale })}
+            {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', {
+              locale: locale,
+            })}
           </Button>
           <Button
             className={clsx(
@@ -302,7 +315,9 @@ export const InventoryCard: FC<Props> = ({
               <p>loading</p>
             ) : (
               <>
-                {formatAbbreviation(data?.items[0].price_internal || 0,'number', { locale: locale })}{' '}
+                {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {
+                  locale: locale,
+                })}{' '}
                 <img src={CoinIcon} alt="" />
               </>
             )}
