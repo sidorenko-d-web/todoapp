@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DaysInARowModal from '../DevModals/DaysInARowModal/DaysInARowModal';
+import GetRewardChestModal from '../DevModals/GetRewardChestModal/GetRewardChestModal';
 import styles from './ProfilePage.module.scss';
 import {
   ProfileInfo,
@@ -32,7 +33,6 @@ export const ProfilePage: React.FC = () => {
   } = useGetTopProfilesQuery();
 
   const [isModalShown, setIsModalShown] = useState(false);
-
   useEffect(() => {
     const lastShownTimestamp = localStorage.getItem('daysInARowModalTimestamp');
     const now = Date.now();
@@ -43,6 +43,12 @@ export const ProfilePage: React.FC = () => {
       setIsModalShown(true);
     }
   }, [openModal]);
+
+  useEffect(() => {
+    if (data?.in_streak_days === 30) {
+      openModal(MODALS.TASK_CHEST);
+    }
+  }, [data?.in_streak_days, openModal]);
 
   const userPosition =
     userProfileData && topProfilesData?.profiles
@@ -62,6 +68,8 @@ export const ProfilePage: React.FC = () => {
   return (
     <>
       <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
+      <GetRewardChestModal onClose={() => closeModal(MODALS.TASK_CHEST)} />
+
       {(isUserLoading || isTopProfilesLoading) && <p>{t('p3')}</p>}
 
       {(userError || topProfilesError) && <p>{t('p17')}</p>}
@@ -96,9 +104,10 @@ export const ProfilePage: React.FC = () => {
 
           <StreakCard
             streakCount={data?.in_streak_days}
-            freezeCount={0}
+            freezeCount={data?.failed_days_ago}
             days={weekData}
             progress={data?.in_streak_days}
+            failed={data?.failed_at}
           />
 
           <div>
