@@ -1,5 +1,5 @@
 import { MODALS } from "../../../constants/modals"
-import CentralModal from "../../shared/CentralModal/CentralModal"
+import { CentralModal } from "../../shared/CentralModal"
 
 import styles from "./WalletConnectionModal.module.scss"
 import { useModal } from "../../../hooks/useModal"
