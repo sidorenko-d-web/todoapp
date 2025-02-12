@@ -6,6 +6,7 @@ import { inventoryApi } from './api/inventory/api';
 import { integrationsApi } from './api';
 import { profileApi } from './api';
 import { refferalsApi } from './api';
+import { tasksApi } from './api/tasks';
 
 export const store = configureStore({
   reducer: rootReducer,
@@ -20,7 +21,8 @@ export const store = configureStore({
       refferalsApi.middleware,
       usersApi.middleware,
       treeApi.middleware,
-      
+      tasksApi.middleware,
+
     ),
 });
 

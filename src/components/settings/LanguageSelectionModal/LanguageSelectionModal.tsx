@@ -3,7 +3,6 @@ import { useModal } from "../../../hooks/useModal"
 import styles from "./LanguageSelectionModal.module.scss"
 import { useState } from "react"
 
-
 import tick from "../../../assets/icons/input-tick.svg"
 import circle from "../../../assets/icons/circle-blue.svg"
 import russiaIcon from "../../../assets/icons/ru-flag.svg"

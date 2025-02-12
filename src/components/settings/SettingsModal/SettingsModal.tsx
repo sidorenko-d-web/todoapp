@@ -4,7 +4,6 @@ import { useModal } from "../../../hooks/useModal"
 import russiaIcon from "../../../assets/icons/ru-flag.svg"
 import cryptoWalletIcon from "../../../assets/icons/Wallet.png"
 import ArrowRight from "../../../assets/icons/arrow-right.svg"
-
 import {useTranslation} from 'react-i18next'
 import { CentralModal } from "../../shared"
 

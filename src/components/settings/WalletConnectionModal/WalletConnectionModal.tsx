@@ -1,6 +1,5 @@
 import { MODALS } from "../../../constants/modals"
 
-
 import styles from "./WalletConnectionModal.module.scss"
 import { useModal } from "../../../hooks/useModal"
 
