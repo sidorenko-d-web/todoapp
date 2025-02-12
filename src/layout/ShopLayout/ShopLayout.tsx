@@ -12,6 +12,7 @@ import {
   RootState,
   TypeItemCategory,
   TypeItemRarity,
+  useGetCurrentUserBoostQuery,
   useGetInventoryItemsQuery,
   useGetShopItemsQuery,
 } from '../../redux';
@@ -71,6 +72,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     level: 1,
     item_category: shopCategory.value as TypeItemCategory,
   });
+  const { data: boost } = useGetCurrentUserBoostQuery()
 
   useEffect(() => {
     onItemCategoryChange(shopCategory as TypeTab<TypeItemCategory>);
@@ -171,31 +173,33 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
           <div className={styles.mainHeader}>
             <h1
               className={`${styles.title} ${statsGlowing ? styles.elevated : ''}`}>{mode === 'shop' ? `${t('s1')}` : `${t('s19')}`}</h1>
+            {boost && (
+              <div className={`${styles.scores} ${statsGlowing ? styles.elevated : ''}`}>
+                <div
+                  className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
+                  <p>+{formatAbbreviation(boost.views)}</p>
+                  <img src={ViewsCoin} />
+                  <p>/{t('s12')}.</p>
+                </div>
+                <div
+                  className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
+                  <p>+{formatAbbreviation(boost.subscribers)}</p>
+                  <img src={SubscriberCoin} />
+                  <p>/{t('s12')}.</p>
+                </div>
+                <div className={styles.scoresItem}>
+                  <p>+{formatAbbreviation(boost.income_per_second)}</p>
+                  <img src={CoinIcon} />
+                  <p>/{t('s13')}.</p>
+                </div>
+              </div>
+            )}
 
-            <div className={`${styles.scores} ${statsGlowing ? styles.elevated : ''}`}>
-              <div
-                className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
-                <p>+{formatAbbreviation(0)}</p>
-                <img src={ViewsCoin} />
-                <p>/{t('s12')}.</p>
-              </div>
-              <div
-                className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
-                <p>+{formatAbbreviation(0)}</p>
-                <img src={SubscriberCoin} />
-                <p>/{t('s12')}.</p>
-              </div>
-              <div className={styles.scoresItem}>
-                <p>+{formatAbbreviation(0)}</p>
-                <img src={CoinIcon} />
-                <p>/{t('s13')}.</p>
-              </div>
-            </div>
           </div>
           <TrackedButton
             trackingData={{
               eventType: 'button',
-              eventPlace: 'В инвентарь - Магазин'
+              eventPlace: 'В инвентарь - Магазин',
             }}
             className={styles.linkInventory}
             onClick={handleInventory}

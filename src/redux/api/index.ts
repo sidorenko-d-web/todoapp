@@ -8,3 +8,4 @@ export * from './referrals';
 export * from './users';
 export * from './tree'
 export * from './tracking'
+export * from './room'

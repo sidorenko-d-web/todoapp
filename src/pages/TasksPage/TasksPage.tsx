@@ -1,12 +1,29 @@
-import React from 'react';
+import { FC } from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
 import coinIcon from '../../assets/icons/coin.png';
 
 import s from './TasksPage.module.scss';
 import { DailyTasks, SocialTasks, TopTasks } from '../../components';
 import { formatAbbreviation } from '../../helpers';
+import { useGetTasksQuery } from '../../redux/api/tasks';
 
-export const TasksPage: React.FC = () => {
+export const TasksPage: FC = () => {
+  const { data, error, isLoading } = useGetTasksQuery();
+  
+  console.log('Состояние запроса:', {
+    data,
+    error,
+    isLoading
+  });
+
+  if (isLoading) {
+    return <div>Загрузка...</div>;
+  }
+
+  if (error) {
+    return <div>Произошла ошибка при загрузке заданий</div>;
+  }
+
   return (
     <main className={s.page}>
       <section className={s.topSection}>

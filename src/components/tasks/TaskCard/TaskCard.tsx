@@ -8,6 +8,8 @@ import giftIcon from '../../../assets/icons/gift.svg';
 
 import s from './TaskCard.module.scss';
 import { formatAbbreviation } from '../../../helpers';
+import { ProgressBarTasks } from '../ProgressBarTasks';
+import classNames from 'classnames';
 import { TrackedButton } from '../..';
 
 type QuestionState = 'solved' | 'current' | 'closed';
@@ -27,7 +29,9 @@ type BaseTaskProps = {
   isLoading?: boolean;
   disabled?: boolean;
   onClick?: () => void;
-  // Заменяем customProgressIcons на states
+  errorText?: string;
+  isCompleted?: boolean;
+  isTopTask?: boolean;
   questionStates?: QuestionState[];
 };
 
@@ -67,6 +71,9 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      disabled,
                                                      onClick,
                                                      questionStates = [ 'closed', 'closed', 'closed' ],
+                                                     isCompleted,
+                                                     isTopTask,
+                                                     errorText,
                                                    }) => {
   // Функция для получения иконки на основе состояния
   const getIconByState = (state: QuestionState) => {
@@ -81,7 +88,10 @@ export const TaskCard: React.FC<TasksCardProps> = ({
   };
 
   return (
-    <div className={s.card}>
+    <div className={classNames(s.card, {
+      [s.completed]: isCompleted,
+      [s.topTask]: isTopTask,
+    })}>
       <section className={s.header}>
         {icon && <img className={s.icon} src={icon} height={40} width={40} alt="icon" />}
         <div className={s.info}>
@@ -92,13 +102,18 @@ export const TaskCard: React.FC<TasksCardProps> = ({
 
       {type === 'default' && (
         <section className={s.rewards}>
-          <span className={s.reward}>+{formatAbbreviation(income || 0)}<img src={coinIcon} height={14} width={14}
-                                                                            alt="income" /></span>
-          <span className={s.reward}>+{formatAbbreviation(subscribers || 0)}<img src={subscribersIcon} height={14}
-                                                                                 width={14}
-                                                                                 alt="subscribers" /></span>
-          <span className={s.reward}>+{formatAbbreviation(passiveIncome || 0)}<img src={coinIcon} height={14} width={14}
-                                                                                   alt="passive income" />/сек.</span>
+          <span className={s.reward}>
+            +{formatAbbreviation(income ?? 0)}
+            <img src={coinIcon} height={14} width={14} alt="income" />
+          </span>
+          <span className={s.reward}>
+            +{formatAbbreviation(subscribers ?? 0)}
+            <img src={subscribersIcon} height={14} width={14} alt="subscribers" />
+          </span>
+          <span className={s.reward}>
+            +{formatAbbreviation(passiveIncome ?? 0)}
+            <img src={coinIcon} height={14} width={14} alt="passive income" />/сек.
+          </span>
         </section>
       )}
 
@@ -116,27 +131,26 @@ export const TaskCard: React.FC<TasksCardProps> = ({
             ))}
           </div>
           <div className={s.progressTypeReward}>
-            <span className={s.reward}>{formatAbbreviation(10)} - {formatAbbreviation(1000)} <img src={coinIcon}
-                                                                                                  height={14} width={14}
-                                                                                                  alt="income" /></span>
+            <span className={s.reward}>10 - 1000 <img src={coinIcon} height={14} width={14} alt="income" /></span>
             <span className={s.reward}>??? <img src={giftIcon} height={14} width={14} alt="gift" /></span>
           </div>
         </section>
       )}
 
       {showProgressBar && (
-        <section className={s.progressBarSection}>
-          <div className={s.progressBarSectionHeader}>
-            <span>{currentStep}/{totalSteps}</span>
-            <span className={s.progressReward}>
-              {progressReward}
-              {progressRewardIcon && <img src={progressRewardIcon} height={12} width={12} alt="reward" />}
-            </span>
-          </div>
-          <div className={s.progressBar}>
-            <div className={s.progressBarInner} style={{ width: `${progress}%` }} />
-          </div>
-        </section>
+        <ProgressBarTasks
+          currentStep={currentStep ?? 0}
+          totalSteps={totalSteps ?? 0}
+          progress={progress ?? 0}
+          progressReward={progressReward}
+          progressRewardIcon={progressRewardIcon}
+        />
+      )}
+
+      {errorText && (
+        <div className={s.errorText}>
+          {errorText}
+        </div>
       )}
 
       <section className={s.buttons}>
