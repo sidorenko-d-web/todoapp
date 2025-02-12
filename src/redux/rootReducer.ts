@@ -1,8 +1,17 @@
 import { Action, combineReducers } from 'redux';
 import { audioReducer, authReducer } from './slices';
-import { authApi, companiesApi, integrationsApi, profileApi, treeApi, usersApi, roomApi } from './api';
-import { shopApi } from './api';
-import { refferalsApi } from './api';
+import {
+  authApi,
+  companiesApi,
+  integrationsApi,
+  profileApi,
+  refferalsApi,
+  roomApi,
+  shopApi,
+  trackingApi,
+  treeApi,
+  usersApi,
+} from './api';
 import { treeReducer } from './slices/tree.ts';
 import { tasksApi } from './api/tasks';
 import guideReducer from './slices/guideSlice.ts';
@@ -24,6 +33,7 @@ const appReducer = combineReducers({
   [treeApi.reducerPath]: treeApi.reducer,
   [tasksApi.reducerPath]: tasksApi.reducer,
   [roomApi.reducerPath]: roomApi.reducer,
+  [trackingApi.reducerPath]: trackingApi.reducer,
 });
 
 export const rootReducer = (state: any, action: Action) => {
