@@ -18,17 +18,22 @@ export const MainPage: FC = () => {
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
 
-  const { data } = useGetAllIntegrationsQuery();
+  const { data, refetch } = useGetAllIntegrationsQuery();
 
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
+  useEffect(() => {
+    refetch();
+  }, []);
 
   useEffect(() => {
     if (data) {
       if (data.integrations[0].status === 'created') {
+        console.log('=== created: ' + data.integrations[0].id);
         reduxDispatch(setIntegrationReadyForPublishing(true));
         reduxDispatch(setLastIntegrationId(data.integrations[0].id));
       } else {
+        console.log('1== created: ');
         reduxDispatch(setIntegrationReadyForPublishing(false));
         reduxDispatch(setLastIntegrationId(""));
       }
