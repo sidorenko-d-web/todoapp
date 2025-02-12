@@ -11,6 +11,9 @@
   border-radius: 8px;
   background-color: var.$color-dark-gray;
   cursor: pointer;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 
   &.selected {
     outline: 2px solid var.$color-primary;
@@ -24,6 +27,7 @@
     position: relative;
     height: 60px;
     background-color: var.$color-gray;
+    width: 100%;
 
     .icon {
       position: absolute;
@@ -41,6 +45,7 @@
     padding: 0 6px 6px 6px;
     flex-direction: column;
     gap: 5px;
+    width: 100%;
 
     .title {
       color: var.$color-text;
