@@ -12,9 +12,7 @@ import { SubscribeModal, SuccessfullySubscribedModal } from '../../';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  getSubscriptionPurchased,
   isIntegrationCreationButtonGlowing,
-  setSubscriptionPurchased,
 } from '../../../utils/guide-functions.ts';
 
 import s from './IntegrationCreation.module.scss';
@@ -99,10 +97,7 @@ export const IntegrationCreation = () => {
         modalId={MODALS.SUCCESSFULLY_SUBSCRIBED}
         onClose={() => {
           closeModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
-          if (!getSubscriptionPurchased()) {
-            setSubscriptionPurchased();
-            openModal(MODALS.CREATING_INTEGRATION);
-          }
+          openModal(MODALS.CREATING_INTEGRATION);
         }}
       />
     </section>

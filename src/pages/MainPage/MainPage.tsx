@@ -1,11 +1,11 @@
-import { FC, useReducer } from 'react';
+import { FC, useEffect, useReducer } from 'react';
 import { AccelerateIntegtrationGuide, CreatingIntegrationGuide, FinishTutorialGuide, GetCoinsGuide, InitialGuide, IntegrationCreatedGuide, IntegrationCreation, PublishIntegrationButton, SubscrieGuide } from '../../components';
 import s from './MainPage.module.scss';
 import { AppRoute, MODALS } from '../../constants';
 import { useModal } from '../../hooks';
 
 import { GUIDE_ITEMS } from '../../constants/guidesConstants';
-import { isGuideShown, setGuideShown } from '../../utils';
+import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../utils';
 
 import { setAccelerateIntegrationGuideClosed, setGetCoinsGuideShown } from "../../redux/slices/guideSlice.ts";
 import { useDispatch, useSelector } from 'react-redux';
@@ -52,6 +52,46 @@ export const MainPage: FC = () => {
   };
 
   const integrationId = useSelector((state: RootState) => state.guide.createdIntegrationId);
+
+
+  useEffect(() => {
+    if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED) && !purchasingSubscriptionModalState.isOpen) {
+      openModal(MODALS.SUBSCRIBE);
+    }
+
+    if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+      navigate(AppRoute.Shop);
+    }
+
+    if(isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) 
+      && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)
+      && !getSubscriptionPurchased()) {
+      openModal(MODALS.SUBSCRIBE);
+    }
+    
+    if(isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) 
+      && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) && !creatingIntegrationModalState.isOpen) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
+
+    if(isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) 
+      && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) && !creatingIntegrationModalState.isOpen) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
+
+    if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
+      navigate(AppRoute.Shop);
+    }
+
+
+    if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+      navigate(AppRoute.ShopInventory);
+    }
+  }, []);
+
   return (
     <main className={s.page}>
       {!readyForPublishing && <IntegrationCreation />}
@@ -173,12 +213,14 @@ export const MainPage: FC = () => {
       }
 
       {
-        (isGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN) 
-          && !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && 
-          <FinishTutorialGuide onClose={() => setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)}/>) 
+        (isGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN)
+          && !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) &&
+          <FinishTutorialGuide onClose={() => setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)} />)
       }
 
-      {readyForPublishing && <PublishIntegrationButton/>}
+
+
+      {readyForPublishing && <PublishIntegrationButton />}
       <RewardForIntegrationModal />
 
     </main>
