@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { setItemBought } from '../../../../redux/slices/guideSlice';
 import { CentralModal } from '../../../shared';
 
+
 export const NewItemModal: React.FC = () => {
   const { closeModal, getModalState } = useModal();
 

@@ -88,7 +88,17 @@ export const MainPage: FC = () => {
 
 
     if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+      console.log('navigating to inventory')
       navigate(AppRoute.ShopInventory);
+    } else {
+      console.log('NOT navigating to inventory')
+      console.log(isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT));
+      console.log(isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE));
+    }
+
+    if(isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) 
+      && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) {
+        openModal(MODALS.CREATING_INTEGRATION);
     }
   }, []);
 

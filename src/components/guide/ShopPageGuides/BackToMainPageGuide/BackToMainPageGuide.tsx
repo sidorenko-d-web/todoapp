@@ -34,7 +34,7 @@ export const BackToMainPageGuide: React.FC<BackToMainPageGuideProps> = ({ onClos
             align="right"
             description={
                 <>
-                    Супер! Теперь у тебя есть <span style={{ color: '#2F80ED' }}>подписка</span> и <span style={{ color: '#2F80ED' }}>печатная машинка</span>.
+                    Супер! Теперь у тебя есть <span style={{ color: '#2F80ED' }}>подписка</span> и <span style={{ color: '#2F80ED' }}>свет портативный</span>.
                     <br />
                     <br />
                     Ты можешь сделать свою первую интеграцию! Давай вернёмся в комнату и сделаем это!
