@@ -15,7 +15,6 @@ export const Footer = () => {
 
 
   useEffect(() => {
-    console.log('SET FOOTER BTN');
     setActiveButton((currentFooterItemId >= 0 && currentFooterItemId <= 4) ? currentFooterItemId : 0);
   }, [currentFooterItemId]);
 

@@ -77,10 +77,10 @@ export const MainPage: FC = () => {
       openModal(MODALS.SUBSCRIBE);
     }
 
-    if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
-      && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
-      navigate(AppRoute.Shop);
-    }
+    // if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
+    //   && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+    //   navigate(AppRoute.Shop);
+    // }
 
     if (isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN)
       && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)
@@ -98,14 +98,14 @@ export const MainPage: FC = () => {
       openModal(MODALS.CREATING_INTEGRATION);
     }
 
-    if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
-      && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
-      navigate(AppRoute.Shop);
-    }
+    // if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+    //   && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
+    //   navigate(AppRoute.Shop);
+    // }
 
-    if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
-      navigate(AppRoute.ShopInventory);
-    }
+    // if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+    //   navigate(AppRoute.ShopInventory);
+    // }
   }, []);
 
   return (
@@ -219,7 +219,7 @@ export const MainPage: FC = () => {
 
       {
         ((!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN)
-          && useSelector((state: RootState) => state.guide.isPublishedModalClosed)) && (
+            && useSelector((state: RootState) => state.guide.isPublishedModalClosed) ) && (
             <IntegrationCreatedGuide onClose={() => {
               setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
               handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);

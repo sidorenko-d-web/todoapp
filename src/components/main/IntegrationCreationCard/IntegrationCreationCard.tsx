@@ -98,6 +98,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
 
   if (isExpired) {
     dispatch(setIntegrationReadyForPublishing(true));
+    dispatch(setLastIntegrationId(integration.id));
     if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
     }
