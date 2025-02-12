@@ -18,8 +18,10 @@ import { isGuideShown, setGuideShown } from '../../utils';
 import { GUIDE_ITEMS } from '../../constants';
 import { useDispatch } from 'react-redux';
 import { setElevateIntegrationStats } from '../../redux/slices/guideSlice';
+import { useTranslation } from 'react-i18next';
 
 export const IntegrationPage: React.FC = () => {
+  const { t } = useTranslation('integrations');
   const { integrationId: queryIntegrationId } = useParams<{
     integrationId: string | undefined;
   }>();
@@ -68,10 +70,10 @@ export const IntegrationPage: React.FC = () => {
 
   return (
     <div className={styles.wrp}>
-      <h1 className={styles.pageTitle}>Интеграции</h1>
+      <h1 className={styles.pageTitle}>{t('i1')}</h1>
 
-      {isLoading && <p>Загрузка...</p>}
-      {(error || !integrationId) && <p>Интеграция не найдена</p>}
+      {isLoading && <p>{t('i3')}</p>}
+      {(error || !integrationId) && <p>{t('i2')}</p>}
 
       {data?.status === 'created' && (
         <>
@@ -81,7 +83,7 @@ export const IntegrationPage: React.FC = () => {
             income={data.income}
           />
           <div className={styles.integrationNameWrp}>
-            <p className={styles.integrationTitle}>Интеграция 1</p>
+            <p className={styles.integrationTitle}>{t('i1')} 1</p>
             <div className={styles.integrationLevelWrp}>
               <p className={styles.integrationLevel}>{data.campaign.company_name}</p>
               <img src={integrationIcon} height={12} width={12} />
@@ -94,7 +96,7 @@ export const IntegrationPage: React.FC = () => {
             subscribers={data.subscribers}
           />
           <div className={styles.commentsSectionTitleWrp}>
-            <p className={styles.commentsSectionTitle}>Комментарии</p>
+            <p className={styles.commentsSectionTitle}>{t('i4')}</p>
             <p className={styles.commentsAmount}>
               {comments.length === 0 ? 0 : currentCommentIndex + 1}/{comments.length}
             </p>

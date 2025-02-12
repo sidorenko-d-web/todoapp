@@ -6,13 +6,14 @@ import { DevelopmentPlan, IncreaseIncome, TopInfluencers } from '../../component
 import s from './PromotionPage.module.scss';
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUsersCountQuery } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
+import { useTranslation } from 'react-i18next';
 
 export const PromotionPage: React.FC = () => {
-  
+  const { t, i18n } = useTranslation('promotion');
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: userProfileData, error: userError, isLoading: isUserLoading } = useGetCurrentUserProfileInfoQuery();
 
   const { data: topProfilesData, error: topProfilesError, isLoading: isTopProfilesLoading } = useGetTopProfilesQuery();
-
   const {data: usersCountData} = useGetUsersCountQuery();
   const userPosition = userProfileData && topProfilesData?.profiles
     ? topProfilesData.profiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
@@ -30,10 +31,10 @@ export const PromotionPage: React.FC = () => {
       {(userProfileData && topProfilesData) &&
         <main className={s.page}>
           <section className={s.topSection}>
-            <h1 className={s.pageTitle}>Продвижение</h1>
+            <h1 className={s.pageTitle}>{t("p1")}</h1>
             <div className={s.badges}>
               <span className={s.badge}>{`#${position}`} <img src={clanRed} height={14} width={14} alt={'income'} /></span>
-              <span className={s.badge}>+{formatAbbreviation(440)} <img src={subscribersIcon} height={14} width={14}
+              <span className={s.badge}>+{formatAbbreviation(440, 'number', { locale: locale })} <img src={subscribersIcon} height={14} width={14}
                 alt={'subscribers'} /></span>
             </div>
             <IncreaseIncome />

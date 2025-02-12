@@ -8,6 +8,8 @@ import classNames from 'classnames';
 import { useGetUserQuery } from '../../../../redux';
 import { formatAbbreviation } from '../../../../helpers';
 import { Button } from '../../../shared';
+import { useTranslation } from 'react-i18next';
+
 
 interface InviteFriendProps {
   modalId: string;
@@ -18,17 +20,20 @@ export const InviteFriend: FC<InviteFriendProps> = ({
   modalId,
   onClose,
 }: InviteFriendProps) => {
+  const { t, i18n } = useTranslation('promotion');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data } = useGetUserQuery();
 
   const inviteTG = () => {
+
     const shareData = {
-      title: 'Приглашение в MiniApp',
-      text: 'Присоединяйся ко мне в MiniApp и получи бонусы!',
+      title: `${t('p25')}`,
+      text: `${t('p26')}`,
       url: `https://t.me/wished_sentry_robot?start=${data?.id}`,
     };
 
     if (navigator.share) {
-      navigator.share(shareData).catch(error => console.log('Ошибка при шаринге', error));
+      navigator.share(shareData).catch(error => console.log(t('p27'), error));
     } else {
       window.open(
         `https://t.me/share/url?url=${encodeURIComponent(
@@ -40,29 +45,25 @@ export const InviteFriend: FC<InviteFriendProps> = ({
   };
 
   return (
-    <BottomModal modalId={modalId} title={'Пригласить друга'} onClose={onClose}>
+    <BottomModal modalId={modalId} title={`${t('p28')}`} onClose={onClose}>
       <ul className={s.subscribers}>
         <li className={s.listBadge}>
           <span className={s.badge}>
-            +{formatAbbreviation(120)}{' '}
+            +{formatAbbreviation(120, 'number', {locale: locale})}{' '}
             <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
           </span>
-          <span className={s.level}>1ур.</span>
+          <span className={s.level}>1{t('p4')}.</span>
         </li>
         <li className={s.listBadge}>
           <span className={s.badge}>
-            +{formatAbbreviation(40)}{' '}
+            +{formatAbbreviation(40, 'number', {locale: locale})}{' '}
             <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
           </span>
-          <span className={s.level}>2ур.</span>
+          <span className={s.level}>2{t('p4')}.</span>
         </li>
       </ul>
       <div>
-        <p className={s.description}>
-          Пригласите друга в MiniApp и получите бонус к <br /> подписчикам! Когда ваш друг
-          будет приглашать ещё
-          <br /> кого-то, вы также будете получать бонус.
-        </p>
+        <p className={s.description}>{t('p30')}</p>
         <div className={s.blockInput}>
           <input
             type="text"
@@ -82,7 +83,7 @@ export const InviteFriend: FC<InviteFriendProps> = ({
           </Button>
         </div>
         <Button className={classNames(s.buttonContainer, s.text)} onClick={inviteTG}>
-          Поделиться ссылкой <img src={arrow} height={14} width={14} alt="arrow" />
+          {t('p31')} <img src={arrow} height={14} width={14} alt="arrow" />
         </Button>
       </div>
     </BottomModal>

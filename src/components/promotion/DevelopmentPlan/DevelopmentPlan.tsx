@@ -6,19 +6,22 @@ import classNames from 'classnames';
 import { INFO_TEXT } from './constantsPlan.ts';
 import React from 'react';
 import { formatAbbreviation } from '../../../helpers';
+import { useTranslation } from 'react-i18next';
 
 type DevelopmentPlanProps = {
   usersCount: number;
 };
 
 export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) => {
+  const { t, i18n } = useTranslation('promotion');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const unlockedCount = INFO_TEXT.filter((item) => usersCount >= item.userCount).length;
   const totalCount = INFO_TEXT.length;
 
   return (
     <>
       <div className={s.headerDevelopment}>
-        <span className={s.textName}>План развития Apusher</span>
+        <span className={s.textName}>{t("p14")}</span>
         <span className={s.badge}>{unlockedCount}/{totalCount}</span>
       </div>
       <section className={s.component}>
@@ -44,7 +47,7 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
                 <div className={s.users}>
                   <img src={lockOpen} height={14} width={14} alt="lockOpen" />
                   <span
-                    className={classNames(s.countUsers, s.text)}>{formatAbbreviation(item.userCount)} пользователей {item.isPlatform && ' на платформе'}</span>
+                    className={classNames(s.countUsers, s.text)}>{formatAbbreviation(item.userCount, 'number', {locale: locale})} {t('p23')} {item.isPlatform && ` ${t('p24')}`}</span>
                 </div>
                 <p className={s.textInfoPlan}>{isDescriptionUnlocked ? item.description : '*****'}</p>
               </li>
