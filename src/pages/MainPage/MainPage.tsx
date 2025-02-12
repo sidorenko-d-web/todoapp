@@ -7,9 +7,9 @@ import { useModal } from '../../hooks';
 import { GUIDE_ITEMS } from '../../constants/guidesConstants';
 import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../utils';
 
-import { setAccelerateIntegrationGuideClosed, setGetCoinsGuideShown } from "../../redux/slices/guideSlice.ts";
+import { setAccelerateIntegrationGuideClosed, setActiveFooterItemId, setGetCoinsGuideShown, setIntegrationReadyForPublishing, setLastIntegrationId } from "../../redux/slices/guideSlice.ts";
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux';
+import { RootState, useGetAllIntegrationsQuery } from '../../redux';
 import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/RewardForIntegrationModal.tsx';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,6 +17,26 @@ export const MainPage: FC = () => {
   const { getModalState, openModal, closeModal } = useModal();
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
+
+  const { data } = useGetAllIntegrationsQuery();
+
+  const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
+
+  useEffect(() => {
+    if(data) {
+      // data.integrations.forEach(integration => {
+      //   if(integration.status === 'created') {
+      //     reduxDispatch(setIntegrationReadyForPublishing(true));
+      //     reduxDispatch(setLastIntegrationId(integration.id));
+      //   }
+      // })
+
+      if(data.integrations[0].status === 'created') {
+          reduxDispatch(setIntegrationReadyForPublishing(true));
+          reduxDispatch(setLastIntegrationId(data.integrations[0].id));
+      }
+    }
+  }, [data]);
 
   const readyForPublishing = useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
 
@@ -46,15 +66,19 @@ export const MainPage: FC = () => {
 
   const purchasingSubscriptionModalState = getModalState(MODALS.SUBSCRIBE);
   const creatingIntegrationModalState = getModalState(MODALS.CREATING_INTEGRATION);
+  const integrationPublishedModalState = getModalState(MODALS.INTEGRATION_REWARD);
 
   const handleGuideClose = (guideId: string) => {
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
 
-  const integrationId = useSelector((state: RootState) => state.guide.createdIntegrationId);
 
 
   useEffect(() => {
+
+    reduxDispatch(setActiveFooterItemId(2));
+
+
     if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
       && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED) && !purchasingSubscriptionModalState.isOpen) {
       openModal(MODALS.SUBSCRIBE);
@@ -86,25 +110,14 @@ export const MainPage: FC = () => {
       navigate(AppRoute.Shop);
     }
 
-
     if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
-      console.log('navigating to inventory')
       navigate(AppRoute.ShopInventory);
-    } else {
-      console.log('NOT navigating to inventory')
-      console.log(isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT));
-      console.log(isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE));
-    }
-
-    if(isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) 
-      && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) {
-        openModal(MODALS.CREATING_INTEGRATION);
     }
   }, []);
 
   return (
     <main className={s.page}>
-      {!readyForPublishing && <IntegrationCreation />}
+      {(!readyForPublishing) ? <IntegrationCreation /> : <PublishIntegrationButton/>}
 
       {!guideVisibility.firstGuideShown && (
         <InitialGuide
@@ -212,9 +225,10 @@ export const MainPage: FC = () => {
       }
 
       {
-        (publishedModalClosed && !isGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN) && (
+        ((!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN)
+          && readyForPublishing && publishedModalClosed) && (
           <IntegrationCreatedGuide onClose={() => {
-            setGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
             handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
             navigate(AppRoute.Integration.replace(':integrationId', integrationId))
           }
@@ -228,9 +242,6 @@ export const MainPage: FC = () => {
           <FinishTutorialGuide onClose={() => setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)} />)
       }
 
-
-
-      {readyForPublishing && <PublishIntegrationButton />}
       <RewardForIntegrationModal />
 
     </main>

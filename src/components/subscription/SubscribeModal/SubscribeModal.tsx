@@ -5,9 +5,11 @@ import coinIcon from '../../../assets/icons/coin.png';
 import { useBuySubscriptionMutation } from '../../../redux';
 
 import s from './SubscribeModal.module.scss';
-import { getSubscriptionPurchased, setSubscriptionPurchased } from '../../../utils';
+import { getSubscriptionPurchased, isGuideShown, setSubscriptionPurchased } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { Button, CentralModal } from '../../shared';
+import { GUIDE_ITEMS, MODALS } from '../../../constants';
+import { useModal } from '../../../hooks';
 
 interface SubscribeModalProps {
   modalId: string;
@@ -24,9 +26,14 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
 
   const buyBtnGlowing = getSubscriptionPurchased();
 
+  const { openModal } = useModal();
+
   const handleBuySubscription = () => {
     setSubscriptionPurchased();
     buySubscription().unwrap().then(() => onSuccess());
+    if(!isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) {
+      openModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
+    }
   };
 
   return (

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { isGuideShown } from "../../utils";
+import { getCurrentFooterItem, isGuideShown } from "../../utils";
 import { GUIDE_ITEMS } from "../../constants";
 
 interface GuideState {
@@ -22,6 +22,7 @@ interface GuideState {
 
   footerActive: boolean;
 
+  activeFooterItemId: number;
 }
 
 const initialState: GuideState = {
@@ -41,7 +42,8 @@ const initialState: GuideState = {
   createdIntegrationId: "",
   elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
   lastIntegrationId: "",
-  footerActive: isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)
+  footerActive: isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
+  activeFooterItemId: getCurrentFooterItem()
 };
 
 const guideSlice = createSlice({
@@ -87,6 +89,11 @@ const guideSlice = createSlice({
     setFooterActive: (state, action: PayloadAction<boolean>) => {
       state.footerActive = action.payload;
     },
+    setActiveFooterItemId: (state, action: PayloadAction<number>) => {
+      if(state.activeFooterItemId !== -1) {
+        state.activeFooterItemId = action.payload;
+      }
+    },
   },
 });
 
@@ -97,5 +104,6 @@ export const { setGetCoinsGuideShown,
     setIntegrationCreated, setAccelerateIntegrationGuideClosed,
     setIsPublishedModalClosed, setIntegrationReadyForPublishing, 
     setCreatedIntegrationId, setElevateIntegrationStats, 
-    setItemBought, setLastIntegrationId, setFooterActive } = guideSlice.actions;
+    setItemBought, setLastIntegrationId,
+    setFooterActive, setActiveFooterItemId} = guideSlice.actions;
 export default guideSlice.reducer;

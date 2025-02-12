@@ -1,23 +1,32 @@
 import styles from './Footer.module.scss';
 import { footerItems } from '../../constants';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux';
 import { TrackedButton } from '..';
+
 
 export const Footer = () => {
   const [ activeButton, setActiveButton ] = useState<number | null>(null);
   const navigate = useNavigate();
 
+  const footerActive = useSelector((state: RootState) => state.guide.footerActive);
+  const currentFooterItemId = useSelector((state: RootState) => state.guide.activeFooterItemId);
+
+
+  useEffect(() => {
+    console.log('SET FOOTER BTN');
+    setActiveButton((currentFooterItemId >= 0 && currentFooterItemId <= 4) ? currentFooterItemId : 0);
+  }, [currentFooterItemId]);
+
   const handleFooterItemClick = (id: number, redirectTo: string) => {
     if(footerActive) {
-      setActiveButton(id);
       navigate(redirectTo);
     }
-  };
 
-  const footerActive = useSelector((state: RootState) => state.guide.footerActive);
+    setActiveButton((currentFooterItemId >= 0 && currentFooterItemId <= 4) ? currentFooterItemId : id)
+  };
 
 
   return (
