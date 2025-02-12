@@ -1,11 +1,11 @@
 import { GUIDE_ITEMS } from "../constants";
 
 export const isGuideShown = (guideId: string) => {
-    return sessionStorage.getItem(guideId) === '1';
+    return localStorage.getItem(guideId) === '1';
 }
 
 export const setGuideShown = (guideId: string) => {
-    sessionStorage.setItem(guideId, '1');
+    localStorage.setItem(guideId, '1');
 }
 
 export const isIntegrationCreationButtonGlowing = () => {
@@ -15,11 +15,11 @@ export const isIntegrationCreationButtonGlowing = () => {
 }
 
 export const setSubscriptionPurchased = () => {
-    sessionStorage.setItem(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT, '1');
+    localStorage.setItem(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT, '1');
 }
 
 export const getSubscriptionPurchased = () => {
-    return sessionStorage.getItem(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) === '1';
+    return localStorage.getItem(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) === '1';
 }
 
 
