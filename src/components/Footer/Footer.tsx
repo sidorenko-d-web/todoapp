@@ -2,6 +2,8 @@ import styles from './Footer.module.scss';
 import { footerItems } from '../../constants';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux';
 import { TrackedButton } from '..';
 
 export const Footer = () => {
@@ -9,9 +11,14 @@ export const Footer = () => {
   const navigate = useNavigate();
 
   const handleFooterItemClick = (id: number, redirectTo: string) => {
-    setActiveButton(id);
-    navigate(redirectTo);
+    if(footerActive) {
+      setActiveButton(id);
+      navigate(redirectTo);
+    }
   };
+
+  const footerActive = useSelector((state: RootState) => state.guide.footerActive);
+
 
   return (
     <div className={styles.footerItems}>

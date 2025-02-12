@@ -20,6 +20,8 @@ interface GuideState {
 
   lastIntegrationId: string;
 
+  footerActive: boolean;
+
 }
 
 const initialState: GuideState = {
@@ -39,6 +41,7 @@ const initialState: GuideState = {
   createdIntegrationId: "",
   elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
   lastIntegrationId: "",
+  footerActive: isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)
 };
 
 const guideSlice = createSlice({
@@ -81,6 +84,9 @@ const guideSlice = createSlice({
     setLastIntegrationId: (state, action: PayloadAction<string>) => {
       state.lastIntegrationId = action.payload;
     },
+    setFooterActive: (state, action: PayloadAction<boolean>) => {
+      state.footerActive = action.payload;
+    },
   },
 });
 
@@ -91,5 +97,5 @@ export const { setGetCoinsGuideShown,
     setIntegrationCreated, setAccelerateIntegrationGuideClosed,
     setIsPublishedModalClosed, setIntegrationReadyForPublishing, 
     setCreatedIntegrationId, setElevateIntegrationStats, 
-    setItemBought, setLastIntegrationId } = guideSlice.actions;
+    setItemBought, setLastIntegrationId, setFooterActive } = guideSlice.actions;
 export default guideSlice.reducer;
