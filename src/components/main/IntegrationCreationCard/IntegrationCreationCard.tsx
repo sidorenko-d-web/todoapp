@@ -7,7 +7,7 @@ import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration } from '../../../hooks';
 import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
 import { isGuideShown, setGuideShown } from '../../../utils';
-import { setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice';
+import { setIntegrationReadyForPublishing, setLastIntegrationId } from '../../../redux/slices/guideSlice';
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
 
@@ -69,7 +69,8 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   const handleAccelerateClick = () => {
     if (!isExpired) {
       playAccelerateIntegrationSound();
-      void accelerateIntegration(1);
+      dispatch(setLastIntegrationId(integration.id));
+      void accelerateIntegration(timeLeft-3);
       createParticles();
     }
   };

@@ -45,7 +45,7 @@ export const IntegrationPage: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setActiveFooterItemId(-1));
+    dispatch(setActiveFooterItemId(1));
     dispatch(setFooterActive(true));
   }, []);
 
