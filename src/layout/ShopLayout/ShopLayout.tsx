@@ -3,26 +3,37 @@ import {
   type FC,
   PropsWithChildren,
   type SetStateAction,
-  useEffect, useReducer,
+  useEffect,
+  useReducer,
   useState,
 } from 'react';
 import styles from './ShopLayout.module.scss';
-import { RootState, useGetInventoryItemsQuery } from '../../redux';
+import {
+  RootState,
+  TypeItemCategory,
+  TypeItemRarity,
+  useGetInventoryItemsQuery,
+  useGetShopItemsQuery,
+} from '../../redux';
 import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
 import { AppRoute, GUIDE_ITEMS } from '../../constants';
 import ArrowLeftIcon from '../../assets/icons/arrow-left.svg';
 import InventoryBox from '../../assets/icons/inventory-box.svg';
-import { TypeItemCategory, TypeItemRarity, useGetShopItemsQuery } from '../../redux';
 import { useNavigate } from 'react-router-dom';
 import CoinIcon from '../../assets/icons/coin.png';
 import SubscriberCoin from '../../assets/icons/subscriber_coin.svg';
 import ViewsCoin from '../../assets/icons/views.png';
 import { formatAbbreviation, itemsInTab } from '../../helpers';
-import { Button } from '../../components/shared';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../utils';
-import { BackToMainPageGuide, TreeLevelGuide, UpgradeItemsGuide, WelcomeToShopGuide } from '../../components';
+import {
+  BackToMainPageGuide,
+  TrackedButton,
+  TreeLevelGuide,
+  UpgradeItemsGuide,
+  WelcomeToShopGuide,
+} from '../../components';
 import { setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
 
 type TypeTab<T> = { title: string; value: T };
@@ -34,11 +45,11 @@ interface Props {
 }
 
 export const ShopLayout: FC<PropsWithChildren<Props>> = ({
-  children,
-  onItemCategoryChange,
-  onItemQualityChange,
-  mode,
-}) => {
+                                                           children,
+                                                           onItemCategoryChange,
+                                                           onItemQualityChange,
+                                                           mode,
+                                                         }) => {
   const { t } = useTranslation('shop');
   const shopItemCategories = [
     { title: `${t('s2')}`, value: 'text' },
@@ -52,8 +63,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     { title: `${t('s15')}`, value: 'yellow' },
     { title: `${t('s16')}`, value: 'green' },
   ];
-  const [shopCategory, setShopCategory] = useState(shopItemCategories[0]);
-  const [itemsQuality, setItemsQuality] = useState(shopItemRarity[0]);
+  const [ shopCategory, setShopCategory ] = useState(shopItemCategories[0]);
+  const [ itemsQuality, setItemsQuality ] = useState(shopItemRarity[0]);
 
   const { data: inventory, isSuccess } = useGetInventoryItemsQuery({});
   const { data: shop } = useGetShopItemsQuery({
@@ -64,38 +75,38 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   useEffect(() => {
     onItemCategoryChange(shopCategory as TypeTab<TypeItemCategory>);
     onItemQualityChange(itemsQuality as TypeTab<TypeItemRarity>);
-  }, [shopCategory, itemsQuality]);
+  }, [ shopCategory, itemsQuality ]);
 
   const navigate = useNavigate();
 
   const itemsInTabs = itemsInTab(shop?.items, inventory?.items);
   const tabs = [];
   itemsInTabs?.red?.length &&
-    itemsInTabs?.red?.length > 0 &&
-    tabs.push(shopItemRarity[0]);
+  itemsInTabs?.red?.length > 0 &&
+  tabs.push(shopItemRarity[0]);
   itemsInTabs?.yellow?.length &&
-    itemsInTabs?.yellow?.length > 0 &&
-    tabs.push(shopItemRarity[1]);
+  itemsInTabs?.yellow?.length > 0 &&
+  tabs.push(shopItemRarity[1]);
   itemsInTabs?.green?.length &&
-    itemsInTabs?.green?.length > 0 &&
-    tabs.push(shopItemRarity[2]);
+  itemsInTabs?.green?.length > 0 &&
+  tabs.push(shopItemRarity[2]);
 
   const inventoryTabs = [];
   isSuccess &&
-    inventory?.items.find(
-      item => item.item_rarity === 'red' && item.item_category === shopCategory.value,
-    ) &&
-    inventoryTabs.push(shopItemRarity[0]);
+  inventory?.items.find(
+    item => item.item_rarity === 'red' && item.item_category === shopCategory.value,
+  ) &&
+  inventoryTabs.push(shopItemRarity[0]);
   isSuccess &&
-    inventory?.items.find(
-      item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value,
-    ) &&
-    inventoryTabs.push(shopItemRarity[1]);
+  inventory?.items.find(
+    item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value,
+  ) &&
+  inventoryTabs.push(shopItemRarity[1]);
   isSuccess &&
-    inventory?.items.find(
-      item => item.item_rarity === 'green' && item.item_category === shopCategory.value,
-    ) &&
-    inventoryTabs.push(shopItemRarity[2]);
+  inventory?.items.find(
+    item => item.item_rarity === 'green' && item.item_category === shopCategory.value,
+  ) &&
+  inventoryTabs.push(shopItemRarity[2]);
 
   const handleShop = () => {
     setItemsQuality(shopItemRarity[0]);
@@ -109,7 +120,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     setItemsQuality(shopItemRarity[0]);
-  }, [shopCategory]);
+  }, [ shopCategory ]);
 
   const reduxDispatch = useDispatch();
 
@@ -117,7 +128,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     welcomeGuideShown: isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN),
     backToMainGuideShown: isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE),
     upgradeItemsGuideShown: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN),
-    treeLevelGuideShown: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN)
+    treeLevelGuideShown: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN),
   };
 
   function guideReducer(state: any, action: { type: any; payload: string; }) {
@@ -130,7 +141,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     }
   }
 
-  const [guideVisibility, dispatch] = useReducer(guideReducer, initialGuideState);
+  const [ guideVisibility, dispatch ] = useReducer(guideReducer, initialGuideState);
 
   const handleGuideClose = (guideId: string) => {
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
@@ -140,29 +151,36 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const statsGlowing = useSelector((state: RootState) => state.guide.getShopStatsGlowing);
 
   const isTabsNotEmpty =
-    [...(itemsInTabs.green ?? []), ...(itemsInTabs.yellow ?? [])].length > 0;
+    [ ...(itemsInTabs.green ?? []), ...(itemsInTabs.yellow ?? []) ].length > 0;
 
   return (
     <>
       <div className={styles.wrapper}>
         <div className={styles.titleWrapper}>
-          <Button
+          <TrackedButton
+            trackingData={{
+              eventType: 'button',
+              eventPlace: 'В магазин - Инвентарь'
+            }}
             className={styles.linkBack}
             onClick={handleShop}
             style={{ opacity: mode === 'inventory' ? 1 : 0 }}
           >
             <img src={ArrowLeftIcon} />
-          </Button>
+          </TrackedButton>
           <div className={styles.mainHeader}>
-            <h1 className={`${styles.title} ${statsGlowing ? styles.elevated : ''}`}>{mode === 'shop' ? `${t('s1')}` : `${t('s19')}`}</h1>
+            <h1
+              className={`${styles.title} ${statsGlowing ? styles.elevated : ''}`}>{mode === 'shop' ? `${t('s1')}` : `${t('s19')}`}</h1>
 
             <div className={`${styles.scores} ${statsGlowing ? styles.elevated : ''}`}>
-              <div className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
+              <div
+                className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
                 <p>+{formatAbbreviation(0)}</p>
                 <img src={ViewsCoin} />
                 <p>/{t('s12')}.</p>
               </div>
-              <div className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
+              <div
+                className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${statsGlowing ? styles.glowing : ''}`}>
                 <p>+{formatAbbreviation(0)}</p>
                 <img src={SubscriberCoin} />
                 <p>/{t('s12')}.</p>
@@ -174,13 +192,17 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
               </div>
             </div>
           </div>
-          <Button
+          <TrackedButton
+            trackingData={{
+              eventType: 'button',
+              eventPlace: 'В инвентарь - Магазин'
+            }}
             className={styles.linkInventory}
             onClick={handleInventory}
             style={{ opacity: mode === 'shop' ? 1 : 0 }}
           >
             <img src={InventoryBox} />
-          </Button>
+          </TrackedButton>
         </div>
 
         <div className={styles.navs}>
@@ -196,8 +218,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
                 itemsQuality.title === t('s14')
                   ? 'tabItemSelectedBlue'
                   : itemsQuality.title === t('s15')
-                  ? 'tabItemSelectedPurple'
-                  : 'tabItemSelectedRed'
+                    ? 'tabItemSelectedPurple'
+                    : 'tabItemSelectedRed'
               }
               tabs={mode === 'shop' ? tabs : inventoryTabs}
               currentTab={itemsQuality.title}
@@ -213,7 +235,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         <WelcomeToShopGuide onClose={() => {
           reduxDispatch(setShopStatsGlowing(false));
           reduxDispatch(setBuyItemButtonGlowing(true));
-          handleGuideClose(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+          handleGuideClose(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
         }} />
       )}
 
@@ -228,13 +250,13 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         )}
 
       {(!guideVisibility.upgradeItemsGuideShown
-        && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && mode==='inventory')
+          && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && mode === 'inventory')
         && <UpgradeItemsGuide onClose={() => {
           handleGuideClose(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
         }} />}
 
       {(guideVisibility.upgradeItemsGuideShown
-        && !guideVisibility.treeLevelGuideShown && !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) && mode==='inventory')
+          && !guideVisibility.treeLevelGuideShown && !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) && mode === 'inventory')
         && <TreeLevelGuide onClose={() => {
           setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
           handleGuideClose(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);

@@ -14,10 +14,16 @@ import { useInventoryItemsFilter } from '../../../hooks';
 
 import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { integrationCreatingModalButtonGlowing, integrationCreatingModalLightningsGlowing, integrationCreatingModalTabsGlowing, setGuideShown } from '../../../utils/guide-functions.ts';
+import {
+  integrationCreatingModalButtonGlowing,
+  integrationCreatingModalLightningsGlowing,
+  integrationCreatingModalTabsGlowing,
+  setGuideShown,
+} from '../../../utils/guide-functions.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
-import { Button, CentralModal } from '../../shared';
+import { CentralModal } from '../../shared';
+import { TrackedButton } from '../../';
 
 interface CreatingIntegrationModalProps {
   modalId: string;
@@ -26,10 +32,10 @@ interface CreatingIntegrationModalProps {
 }
 
 export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
-  modalId,
-  onClose,
-  hasCreatingIntegration,
-}) => {
+                                                                              modalId,
+                                                                              onClose,
+                                                                              hasCreatingIntegration,
+                                                                            }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -39,11 +45,11 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     { label: 'Видео', value: 'video' },
   ] as const;
 
-  const [selectedOption, setSelectedOption] = useState<(typeof contentOptions)[number]['value']>('text');
-  const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
+  const [ selectedOption, setSelectedOption ] = useState<(typeof contentOptions)[number]['value']>('text');
+  const [ selectedCompany, setSelectedCompany ] = useState<string | null>(null);
 
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
-  const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
+  const [ createIntegration, { isError, error } ] = useCreateIntegrationMutation();
   const { data: profile } = useGetCurrentUserProfileInfoQuery();
   const { data } = useGetCompaniesQuery();
   const companies = data?.campaigns;
@@ -66,11 +72,11 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       .then((data) => {
         dispatch(setIntegrationCreated(true));
         dispatch(setLastIntegrationId(data.id));
-        console.log('INTEG ID', data.id)
+        console.log('INTEG ID', data.id);
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         onClose();
-        dispatch(integrationsApi.util.invalidateTags(['Integrations']));
-        dispatch(profileApi.util.invalidateTags(['Me']));
+        dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
+        dispatch(profileApi.util.invalidateTags([ 'Me' ]));
       });
   };
 
@@ -95,7 +101,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       <div className={s.content}>
         <div className={s.skinsWrapper}>
           {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
-            <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`} >
+            <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`}>
               <img src={lightningIcon} alt="Lightning" width={20} height={20} />
             </div>
           ))}
@@ -137,14 +143,18 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           isError && <span className={s.errorMessage}>{error?.data?.detail}</span>
         }
 
-        <Button
+        <TrackedButton
+          trackingData={{
+            eventType: 'button',
+            eventPlace: `${noItemsMessage ? 'В магазин' : 'Создать интеграцию'} - Главный экран - Окно создание интеграции`,
+          }}
           className={`${s.button} 
             ${buttonGlowing ? s.glowingBtn : ''} `}
           disabled={submitDisabled && !noItemsMessage}
           onClick={noItemsMessage ? goToShop : submitCreation}
         >
           {noItemsMessage ? 'В магазин' : 'Создать интеграцию'}
-        </Button>
+        </TrackedButton>
       </div>
     </CentralModal>
   );

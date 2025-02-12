@@ -1,32 +1,30 @@
-import { ComponentType } from 'react';
 import { usePostEventMutation } from '../../redux';
+import { ComponentType, MouseEvent as ReactMouseEvent } from 'react';
 
 type TrackingData = {
-  eventType: 'button' | 'login' | 'other'
-  eventPlace: string
+  eventType: 'button' | 'login' | 'other';
+  eventPlace: string;
 };
 
 type WithTrackingProps = {
   trackingData: TrackingData;
 };
 
-export const withTracking = <P extends { onClick?: (event: MouseEvent) => void }>(
-  Component: ComponentType<P>,
-) => {
-  return ({ trackingData, ...props }: P & WithTrackingProps) => {
-    const [ trackClickMutation ] = usePostEventMutation();
+export function withTracking<P extends { onClick?: (e: ReactMouseEvent<HTMLAnchorElement>) => void }>(
+  Wrapped: ComponentType<P>
+) {
+  return (props: P & WithTrackingProps) => {
+    const [trackClickMutation] = usePostEventMutation();
+    const { trackingData, ...rest } = props;
 
-    const handleClick = (event: MouseEvent) => {
-      if (trackingData) {
-        trackClickMutation({
-          event: trackingData.eventType,
-          description: trackingData.eventPlace,
-        });
-      }
-
-      props.onClick?.(event);
+    const handleClick = (e: ReactMouseEvent<HTMLAnchorElement>) => {
+      trackClickMutation({
+        event: trackingData.eventType,
+        description: trackingData.eventPlace
+      });
+      props.onClick?.(e);
     };
 
-    return <Component {...(props as unknown as P)} onClick={handleClick} />;
+    return <Wrapped {...(rest as unknown as P)} onClick={handleClick} />;
   };
-};
+}

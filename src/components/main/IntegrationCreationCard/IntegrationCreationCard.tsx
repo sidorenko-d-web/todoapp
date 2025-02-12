@@ -5,25 +5,25 @@ import rocketIcon from '../../../assets/icons/rocket.svg';
 import { IntegrationResponseDTO, integrationsApi, selectVolume } from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration } from '../../../hooks';
-import { GUIDE_ITEMS } from '../../../constants';
+import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
 import { isGuideShown, setGuideShown } from '../../../utils';
 import { setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice';
 import useSound from 'use-sound';
-import { SOUNDS } from '../../../constants';
+import { TrackedButton } from '../..';
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
 }
 
 export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
-  integration,
-}) => {
- 
+                                                                            integration,
+                                                                          }) => {
+
   const dispatch = useDispatch();
   const initialTime = 3600;
-  const [timeLeft, setTimeLeft] = useState(integration.time_left);
-  const [isExpired, setIsExpired] = useState(false);
-  const [playAccelerateIntegrationSound] = useSound(SOUNDS.speedUp, {volume: useSelector(selectVolume)}) 
+  const [ timeLeft, setTimeLeft ] = useState(integration.time_left);
+  const [ isExpired, setIsExpired ] = useState(false);
+  const [ playAccelerateIntegrationSound ] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
   const calculateProgress = () => ((initialTime - timeLeft) / initialTime) * 100;
 
   const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
@@ -35,9 +35,9 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     if (timeLeft <= 0) {
       if (!isExpired) void accelerateIntegration(3600);
       setIsExpired(true);
-      dispatch(integrationsApi.util.invalidateTags(['Integrations']));
+      dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
     }
-  }, [timeLeft, accelerateIntegration]);
+  }, [ timeLeft, accelerateIntegration ]);
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -51,7 +51,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     return () => {
       clearInterval(timerId);
     };
-  }, [isExpired]);
+  }, [ isExpired ]);
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -61,8 +61,8 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
 
   const handleAccelerateClick = () => {
     if (!isExpired) {
-      playAccelerateIntegrationSound()
-      void accelerateIntegration(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) ? 1: timeLeft-1);
+      playAccelerateIntegrationSound();
+      void accelerateIntegration(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) ? 1 : timeLeft - 1);
       createParticles();
     }
   };
@@ -90,11 +90,11 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
 
   if (isExpired) {
     dispatch(setIntegrationReadyForPublishing(true));
-    if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
+    if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
     }
     return null;
-  };
+  }
 
   return (
     <div className={`${s.integration} ${s.elevated}`}>
@@ -118,14 +118,18 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
             />
           </div>
         </div>
-        <button
+        <TrackedButton
+          trackingData={{
+            eventType: 'button',
+            eventPlace: `Ускорить создание интеграции - Главный экран`,
+          }}
           className={s.iconButton}
           onClick={handleAccelerateClick}
           disabled={isExpired || isAccelerating}
           aria-label="Ускорить интеграцию"
         >
           <img src={rocketIcon} alt="rocket" />
-        </button>
+        </TrackedButton>
       </div>
     </div>
   );
