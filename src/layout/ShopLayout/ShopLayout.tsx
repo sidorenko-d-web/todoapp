@@ -243,7 +243,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         }} />
       )}
 
-      {useSelector((state: RootState) => state.guide.itemBought) &&
+      {(useSelector((state: RootState) => state.guide.itemBought) || isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) &&
         guideVisibility.welcomeGuideShown &&
         !guideVisibility.backToMainGuideShown &&
         mode === 'inventory' && (
