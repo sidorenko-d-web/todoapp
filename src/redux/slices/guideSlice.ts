@@ -12,8 +12,6 @@ interface GuideState {
   isPublishedModalClosed: boolean;
   integrationReadyForPublishing: boolean;
 
-  createdIntegrationId: string;
-
   itemBought: boolean;
 
   elevateIntegrationStats: boolean;
@@ -39,7 +37,6 @@ const initialState: GuideState = {
   accelerateIntegrationGuideClosed: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN)
     && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED),
   isPublishedModalClosed: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED),
-  createdIntegrationId: "",
   elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
   lastIntegrationId: "",
   footerActive: isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
@@ -74,9 +71,6 @@ const guideSlice = createSlice({
     setIntegrationReadyForPublishing: (state, action: PayloadAction<boolean>) => {
       state.integrationReadyForPublishing = action.payload;
     },
-    setCreatedIntegrationId: (state, action: PayloadAction<string>) => {
-      state.createdIntegrationId = action.payload;
-    },
     setElevateIntegrationStats: (state, action: PayloadAction<boolean>) => {
       state.elevateIntegrationStats = action.payload;
     },
@@ -103,7 +97,7 @@ export const { setGetCoinsGuideShown,
     setCreateIntegrationButtonGlowing, 
     setIntegrationCreated, setAccelerateIntegrationGuideClosed,
     setIsPublishedModalClosed, setIntegrationReadyForPublishing, 
-    setCreatedIntegrationId, setElevateIntegrationStats, 
+    setElevateIntegrationStats, 
     setItemBought, setLastIntegrationId,
     setFooterActive, setActiveFooterItemId} = guideSlice.actions;
 export default guideSlice.reducer;

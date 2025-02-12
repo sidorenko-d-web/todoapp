@@ -22,26 +22,20 @@ export const MainPage: FC = () => {
 
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
-  useEffect(() => {
-    if(data) {
-      // data.integrations.forEach(integration => {
-      //   if(integration.status === 'created') {
-      //     reduxDispatch(setIntegrationReadyForPublishing(true));
-      //     reduxDispatch(setLastIntegrationId(integration.id));
-      //   }
-      // })
 
-      if(data.integrations[0].status === 'created') {
-          reduxDispatch(setIntegrationReadyForPublishing(true));
-          reduxDispatch(setLastIntegrationId(data.integrations[0].id));
+  useEffect(() => {
+    if (data) {
+      if (data.integrations[0].status === 'created') {
+        reduxDispatch(setIntegrationReadyForPublishing(true));
+        reduxDispatch(setLastIntegrationId(data.integrations[0].id));
+      } else {
+        reduxDispatch(setIntegrationReadyForPublishing(false));
+        reduxDispatch(setLastIntegrationId(""));
       }
     }
   }, [data]);
 
-  const readyForPublishing = useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
-
   const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
-  const publishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
   const initialState = {
     firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
@@ -66,7 +60,6 @@ export const MainPage: FC = () => {
 
   const purchasingSubscriptionModalState = getModalState(MODALS.SUBSCRIBE);
   const creatingIntegrationModalState = getModalState(MODALS.CREATING_INTEGRATION);
-  const integrationPublishedModalState = getModalState(MODALS.INTEGRATION_REWARD);
 
   const handleGuideClose = (guideId: string) => {
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
@@ -89,18 +82,18 @@ export const MainPage: FC = () => {
       navigate(AppRoute.Shop);
     }
 
-    if(isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) 
+    if (isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN)
       && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)
       && !getSubscriptionPurchased()) {
       openModal(MODALS.SUBSCRIBE);
     }
-    
-    if(isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) 
+
+    if (isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT)
       && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) && !creatingIntegrationModalState.isOpen) {
       openModal(MODALS.CREATING_INTEGRATION);
     }
 
-    if(isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) 
+    if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)
       && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) && !creatingIntegrationModalState.isOpen) {
       openModal(MODALS.CREATING_INTEGRATION);
     }
@@ -117,7 +110,7 @@ export const MainPage: FC = () => {
 
   return (
     <main className={s.page}>
-      {(!readyForPublishing) ? <IntegrationCreation /> : <PublishIntegrationButton/>}
+      {!useSelector((state: RootState) => state.guide.integrationReadyForPublishing) ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
       {!guideVisibility.firstGuideShown && (
         <InitialGuide
@@ -226,14 +219,14 @@ export const MainPage: FC = () => {
 
       {
         ((!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN)
-          && readyForPublishing && publishedModalClosed) && (
-          <IntegrationCreatedGuide onClose={() => {
-            setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-            handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-            navigate(AppRoute.Integration.replace(':integrationId', integrationId))
-          }
-          } />
-        ))
+          && useSelector((state: RootState) => state.guide.isPublishedModalClosed)) && (
+            <IntegrationCreatedGuide onClose={() => {
+              setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              navigate(AppRoute.Integration.replace(':integrationId', integrationId))
+            }
+            } />
+          ))
       }
 
       {
