@@ -8,7 +8,7 @@ import subscribersIcon from '../../../assets/icons/subscribers.png';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../../constants';
 import { formatAbbreviation } from '../../../helpers';
-import { Button } from '../../shared';
+import { TrackedButton } from '../..';
 
 
 interface IntegrationStatsMiniProps {
@@ -37,7 +37,7 @@ export const IntegrationStatsMini: React.FC<IntegrationStatsMiniProps> = ({ view
           <img src={coin} height={14} width={14} alt="" />
         </div>
       </div>
-      <Button onClick={() => navigate(AppRoute.Statistics)} className={styles.seeStatsButton}></Button>
+      <TrackedButton trackingData={{eventType: 'button', eventPlace: 'К статистике - Интеграции'}} onClick={() => navigate(AppRoute.Statistics)} className={styles.seeStatsButton}></TrackedButton>
     </div>
   );
 };

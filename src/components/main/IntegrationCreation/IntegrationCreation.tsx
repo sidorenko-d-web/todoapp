@@ -1,14 +1,9 @@
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants';
-import {
-  RootState,
-  profileApi,
-  useGetCurrentUserProfileInfoQuery,
-  useGetIntegrationsQuery,
-} from '../../../redux';
+import { profileApi, RootState, useGetCurrentUserProfileInfoQuery, useGetIntegrationsQuery } from '../../../redux';
 import { IntegrationCreationCard, IntegrationCreationModal } from '../';
-import { SubscribeModal, SuccessfullySubscribedModal } from '../../';
+import { SubscribeModal, SuccessfullySubscribedModal, TrackedButton } from '../../';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -16,7 +11,6 @@ import {
 } from '../../../utils/guide-functions.ts';
 
 import s from './IntegrationCreation.module.scss';
-import { Button } from '../../shared';
 
 export const IntegrationCreation = () => {
   const dispatch = useDispatch();
@@ -56,7 +50,11 @@ export const IntegrationCreation = () => {
 
   return (
     <section className={s.integrationsControls}>
-      <Button
+      <TrackedButton
+        trackingData={{
+          eventType: 'button',
+          eventPlace: 'Создать интеграцию - Главный экран'
+        }}
         className={`${s.button} ${
           isButtonGlowing || createIntegrationButtonGlowing ? s.glowing : ''
         }`}
@@ -68,7 +66,7 @@ export const IntegrationCreation = () => {
           {profile?.subscription_integrations_left || 0}/5{' '}
           <img src={integrationIcon} height={12} width={12} alt="integration" />
         </span>
-      </Button>
+      </TrackedButton>
       {
         // @ts-expect-error ts(2339)
         integrationsError?.status === 404

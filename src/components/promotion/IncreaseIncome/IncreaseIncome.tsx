@@ -11,7 +11,7 @@ import { InviteFriend, UserReferrals } from '../Modal';
 import { ReferralCard } from '../ReferralCard/ReferralCard';
 import { useGetCurrentUsersReferralsQuery } from '../../../redux';
 import { formatAbbreviation } from '../../../helpers';
-import { Button } from '../../shared';
+import { TrackedButton } from '../..';
 
 export const IncreaseIncome = () => {
   const [ showAll, setShowAll ] = useState(false);
@@ -73,16 +73,30 @@ export const IncreaseIncome = () => {
                   Ещё {hiddenReferralsCount} рефералов...
                 </p>
               )}
-            </div> : <p className={s.noReferrals}>Пригласите друга в MiniApp и получайте постояные бонусы к подписчикам!</p>}
+            </div> :
+            <p className={s.noReferrals}>Пригласите друга в MiniApp и получайте постояные бонусы к подписчикам!</p>}
         </>}
         <div className={s.buttonsContainer}>
-          <Button className={classNames(s.buttonContainer, s.text)} onClick={() => openModal(MODALS.INVITE_FRIEND)}>
+          <TrackedButton
+            trackingData={{
+              eventType: 'button',
+              eventPlace: 'Пригласить - Продвижение - Увеличьте доход',
+            }}
+            className={classNames(s.buttonContainer, s.text)}
+            onClick={() => openModal(MODALS.INVITE_FRIEND)}
+          >
             Пригласить
-          </Button>
-          <Button className={classNames(s.buttonContainerGray, s.text)}
-                  onClick={() => openModal(MODALS.USERS_REFERRALS)}>
+          </TrackedButton>
+          <TrackedButton
+            trackingData={{
+              eventType: 'button',
+              eventPlace: 'Смотреть всех - Продвижение - Увеличьте доход',
+            }}
+            className={classNames(s.buttonContainerGray, s.text)}
+            onClick={() => openModal(MODALS.USERS_REFERRALS)}
+          >
             Смотреть всех
-          </Button>
+          </TrackedButton>
         </div>
         <InviteFriend modalId={MODALS.INVITE_FRIEND} onClose={() => closeModal(MODALS.INVITE_FRIEND)} />
         <UserReferrals modalId={MODALS.USERS_REFERRALS} onClose={() => closeModal(MODALS.USERS_REFERRALS)} />
