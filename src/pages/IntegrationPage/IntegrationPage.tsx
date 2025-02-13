@@ -17,7 +17,7 @@ import { useParams } from 'react-router-dom';
 import { isGuideShown, setGuideShown } from '../../utils';
 import { GUIDE_ITEMS } from '../../constants';
 import { useDispatch } from 'react-redux';
-import { setElevateIntegrationStats } from '../../redux/slices/guideSlice';
+import { setActiveFooterItemId, setElevateIntegrationStats, setFooterActive } from '../../redux/slices/guideSlice';
 
 export const IntegrationPage: React.FC = () => {
   const { integrationId: queryIntegrationId } = useParams<{
@@ -44,6 +44,10 @@ export const IntegrationPage: React.FC = () => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(setActiveFooterItemId(1));
+    dispatch(setFooterActive(true));
+  }, []);
 
   useEffect(() => {
     if (comments.length === 0) {
@@ -73,7 +77,7 @@ export const IntegrationPage: React.FC = () => {
       {isLoading && <p>Загрузка...</p>}
       {(error || !integrationId) && <p>Интеграция не найдена</p>}
 
-      {data?.status === 'created' && (
+      {data?.status === 'published' && (
         <>
           <IntegrationStatsMini
             views={data.views}
@@ -99,13 +103,13 @@ export const IntegrationPage: React.FC = () => {
               {comments.length === 0 ? 0 : currentCommentIndex + 1}/{comments.length}
             </p>
           </div>
-          <IntegrationComment
+          {commentData &&  <IntegrationComment
             progres={progress}
             {...comments[currentCommentIndex]}
             onVote={handleVote}
             hateText={commentData?.is_hate}
             finished={finished}
-          />
+          />}
         </>
 
       )}

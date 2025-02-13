@@ -4,9 +4,11 @@ import coinIcon from '../../../assets/icons/coin.png';
 import { useBuySubscriptionMutation } from '../../../redux';
 
 import s from './SubscribeModal.module.scss';
-import { getSubscriptionPurchased } from '../../../utils';
+import { getSubscriptionPurchased, isGuideShown, setSubscriptionPurchased } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { Button, CentralModal } from '../../shared';
+import { GUIDE_ITEMS, MODALS } from '../../../constants';
+import { useModal } from '../../../hooks';
 
 interface SubscribeModalProps {
   modalId: string;
@@ -23,8 +25,14 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
 
   const buyBtnGlowing = getSubscriptionPurchased();
 
+  const { openModal } = useModal();
+
   const handleBuySubscription = () => {
+    setSubscriptionPurchased();
     buySubscription().unwrap().then(() => onSuccess());
+    if(!isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) {
+      openModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
+    }
   };
 
   return (
@@ -49,7 +57,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
         </div>
         <div className={s.buttons}>
           <Button className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`} onClick={handleBuySubscription}>
-              {formatAbbreviation(450)} <img src={coinIcon} height={14} width={14}
+              {formatAbbreviation(150)} <img src={coinIcon} height={14} width={14}
                                                                                   alt={'Coin'} /></Button>
        
           <Button className={s.button + ' ' + s.gray}>Задание</Button>
