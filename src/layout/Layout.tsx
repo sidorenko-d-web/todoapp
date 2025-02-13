@@ -4,7 +4,7 @@ import styles from './Layout.module.scss';
 import { Header } from '../components/Header/';
 import { useEffect } from 'react';
 import { MODALS, localStorageConsts } from '../constants';
-import { LanguageSelectionModal, SettingsModal, WalletConnectionModal } from '../components';
+import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
 import { AudioBg, useModal } from '../hooks';
 
 const Layout = () => {
@@ -23,6 +23,9 @@ const Layout = () => {
 
   return (
     <div className={styles.wrp}>
+      <div className={styles.settingsIcon}>
+        <Settings />
+      </div>
       {showHeader && <Header />}
       <main className={styles.content + ' ' + (showHeader ? styles.withHeader : '')}>
         <Outlet />

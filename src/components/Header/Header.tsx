@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import { setLastActiveStage } from '../../redux/slices/tree.ts';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
-import { Settings, TrackedLink } from '../';
+import { TrackedLink } from '../';
 
 
 export const Header = () => {
@@ -50,12 +50,8 @@ export const Header = () => {
 
   return (
     <header className={styles.header}>
-      <div className={styles.settingsIcon}>
-        <Settings />
-      </div>
+      {isLoading ? <p>Loading...</p> :
       <div className={styles.lowerHeader}>
-        {isLoading && <p>Loading...</p>}
-
         <div className={styles.levelWrapper}>
           <div className={styles.avatarWrapper} onClick={handleNavigateToProfile}>
             <img className={styles.avatarIcon} src={AvatarIcon} alt="AvatarIcon" />
@@ -89,6 +85,7 @@ export const Header = () => {
           <img className={styles.coinIcon} src={CoinIcon} alt="CoinIcon" />
         </div>
       </div>
+    }
     </header>
   );
 };

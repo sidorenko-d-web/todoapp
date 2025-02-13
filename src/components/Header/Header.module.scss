@@ -26,12 +26,6 @@ $header-border: 1px solid $color-header-border-dark;
   margin: 0;
 }
 
-.settingsIcon {
-  position: sticky;
-  top: var(--tg-safe-area-inset-top);
-  right: calc(var(--tg-safe-area-inset-right) + 90px);
-}
-
 .lowerHeader {
   padding: 5px;
 
