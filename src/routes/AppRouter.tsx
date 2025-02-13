@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { AppRoute } from '../constants';
 
+
+
 import ShopPage from '../pages/ShopPage/ShopPage.tsx';
 import {
   IntegrationPage,
@@ -18,8 +20,11 @@ import StatisticsPage from '../pages/StatisticsPage/StatisticsPage';
 
 import DevModals from '../pages/DevModals/DevModals.tsx';
 import { ShopInvewntoryPage } from '../pages/ShopPage';
+import { useWebApp } from '../hooks/useWebApp.ts';
 
 function AppRouter(): JSX.Element | null {
+  useWebApp(); // WebApp SDK initialization
+
   const location = useLocation();
 
   useEffect(() => {
@@ -27,6 +32,7 @@ function AppRouter(): JSX.Element | null {
   }, [ location.pathname ]);
 
   return (
+    <>
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path={AppRoute.Main} element={<MainPage />} />
@@ -43,6 +49,7 @@ function AppRouter(): JSX.Element | null {
         <Route path={AppRoute.ProgressTree} element={<ProgressTreePage/>} />
       </Route>
     </Routes>
+    </>
   );
 }
 

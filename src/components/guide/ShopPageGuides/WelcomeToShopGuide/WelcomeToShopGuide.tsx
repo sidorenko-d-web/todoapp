@@ -4,12 +4,14 @@ import { Guide } from "../../Guide";
 import styles from './WelcomeToShopGuide.module.scss';
 
 import gif from '../../../../assets/gif/guide1.gif';
+import { useTranslation } from 'react-i18next';
 
 
 interface WelcomeToShopGuideProps {
     onClose: () => void;
 }
 export const WelcomeToShopGuide: React.FC<WelcomeToShopGuideProps> = ({ onClose }) => {
+    const { t } = useTranslation('guide');
     const [isOpen, setIsOpen] = useState(true);
 
     const handleClose = () => {
@@ -23,15 +25,15 @@ export const WelcomeToShopGuide: React.FC<WelcomeToShopGuideProps> = ({ onClose 
         <Guide
             description={
                 <>
-                    Каждая интеграция дает <span style={{ color: '#2F80ED' }}>подписчиков</span> и <span style={{ color: '#EC7913' }}>баллы</span>. Ты можешь увелиить доход, купив в магазине аппаратуру и предметы в комнату!
+                    {t('g43')} <span style={{ color: '#2F80ED' }}>{t('g44')}</span> {t('g39')} <span style={{ color: '#EC7913' }}>{t('g45')}</span>. {t('g46')}
                     <br />
-                    Давай купим технику, чтобы начать делать интеграции и зарабатывать!
+                    {t('g47')}
                 </>
             }
             top={'50%'}
             onClose={handleClose}
         >
-            <button className={styles.nextBtn} onClick={handleClose}>Вперёд!</button>
+            <button className={styles.nextBtn} onClick={handleClose}>{t('g4')}</button>
             <img src={gif} className={styles.gifImage} />
         </Guide>
     )

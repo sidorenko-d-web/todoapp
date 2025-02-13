@@ -14,10 +14,17 @@ import { useInventoryItemsFilter } from '../../../hooks';
 
 import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { integrationCreatingModalButtonGlowing, integrationCreatingModalLightningsGlowing, integrationCreatingModalTabsGlowing, setGuideShown } from '../../../utils/guide-functions.ts';
+import {
+  integrationCreatingModalButtonGlowing,
+  integrationCreatingModalLightningsGlowing,
+  integrationCreatingModalTabsGlowing,
+  setGuideShown,
+} from '../../../utils/guide-functions.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
-import { Button, CentralModal } from '../../shared';
+import { CentralModal } from '../../shared';
+import { TrackedButton } from '../../';
+import { useTranslation } from 'react-i18next';
 
 interface CreatingIntegrationModalProps {
   modalId: string;
@@ -26,24 +33,25 @@ interface CreatingIntegrationModalProps {
 }
 
 export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
-  modalId,
-  onClose,
-  hasCreatingIntegration,
-}) => {
+                                                                              modalId,
+                                                                              onClose,
+                                                                              hasCreatingIntegration,
+                                                                            }) => {
+  const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const contentOptions = [
-    { label: 'Текст', value: 'text' },
-    { label: 'Фото', value: 'image' },
-    { label: 'Видео', value: 'video' },
+    { label: t("i13"), value: 'text' },
+    { label: t("i14"), value: 'image' },
+    { label: t("i15"), value: 'video' },
   ] as const;
 
-  const [selectedOption, setSelectedOption] = useState<(typeof contentOptions)[number]['value']>('text');
-  const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
+  const [ selectedOption, setSelectedOption ] = useState<(typeof contentOptions)[number]['value']>('text');
+  const [ selectedCompany, setSelectedCompany ] = useState<string | null>(null);
 
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
-  const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
+  const [ createIntegration, { isError, error } ] = useCreateIntegrationMutation();
   const { data: profile } = useGetCurrentUserProfileInfoQuery();
   const { data } = useGetCompaniesQuery();
   const companies = data?.campaigns;
@@ -66,21 +74,20 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       .then((data) => {
         dispatch(setIntegrationCreated(true));
         dispatch(setLastIntegrationId(data.id));
-        console.log('INTEG ID', data.id)
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         onClose();
-        dispatch(integrationsApi.util.invalidateTags(['Integrations']));
-        dispatch(profileApi.util.invalidateTags(['Me']));
+        dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
+        dispatch(profileApi.util.invalidateTags([ 'Me' ]));
       });
   };
 
   const submitDisabled = !selectedOption || !selectedCompany || hasCreatingIntegration;
 
   const noItemsMessage = (() => {
-    const baseText = 'Купите предмет нужного типа, чтобы начать делать ';
-    if (selectedOption === 'text' && !hasText) return baseText + 'текстовые интеграции.';
-    if (selectedOption === 'image' && !hasImage) return baseText + 'фото-интеграции.';
-    if (selectedOption === 'video' && !hasVideo) return baseText + 'видео-интеграции.';
+    const baseText = t("i16");
+    if (selectedOption === 'text' && !hasText) return baseText + t("i17");
+    if (selectedOption === 'image' && !hasImage) return baseText + t("i18");
+    if (selectedOption === 'video' && !hasVideo) return baseText + t("i19");
     return null;
   })();
 
@@ -91,11 +98,11 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const buttonGlowing = integrationCreatingModalButtonGlowing();
 
   return (
-    <CentralModal modalId={modalId} title="Создание интеграции" onClose={onClose} titleIcon={integrationWhiteIcon}>
+    <CentralModal modalId={modalId} title={t('i11')} onClose={onClose} titleIcon={integrationWhiteIcon}>
       <div className={s.content}>
         <div className={s.skinsWrapper}>
           {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
-            <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`} >
+            <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`}>
               <img src={lightningIcon} alt="Lightning" width={20} height={20} />
             </div>
           ))}
@@ -129,7 +136,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         )}
 
         {!noItemsMessage && hasCreatingIntegration && (
-          <span className={s.message}>Нельзя создавать новую интеграцию, пока создание предыдущей не закончится.</span>
+          <span className={s.message}>{t('i20')}</span>
         )}
 
         {
@@ -137,14 +144,18 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           isError && <span className={s.errorMessage}>{error?.data?.detail}</span>
         }
 
-        <Button
+        <TrackedButton
+          trackingData={{
+            eventType: 'button',
+            eventPlace: `${noItemsMessage ? 'В магазин' : 'Создать интеграцию'} - Главный экран - Окно создание интеграции`,
+          }}
           className={`${s.button} 
             ${buttonGlowing ? s.glowingBtn : ''} `}
           disabled={submitDisabled && !noItemsMessage}
           onClick={noItemsMessage ? goToShop : submitCreation}
         >
-          {noItemsMessage ? 'В магазин' : 'Создать интеграцию'}
-        </Button>
+          {noItemsMessage ? t("i21") : t("i9")}
+        </TrackedButton>
       </div>
     </CentralModal>
   );

@@ -1,27 +1,48 @@
-import { FC, useReducer } from 'react';
+import { FC, useEffect, useReducer } from 'react';
 import { AccelerateIntegtrationGuide, CreatingIntegrationGuide, FinishTutorialGuide, GetCoinsGuide, InitialGuide, IntegrationCreatedGuide, IntegrationCreation, PublishIntegrationButton, SubscrieGuide } from '../../components';
 import s from './MainPage.module.scss';
 import { AppRoute, MODALS } from '../../constants';
 import { useModal } from '../../hooks';
 
 import { GUIDE_ITEMS } from '../../constants/guidesConstants';
-import { isGuideShown, setGuideShown } from '../../utils';
+import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../utils';
 
-import { setAccelerateIntegrationGuideClosed, setGetCoinsGuideShown } from "../../redux/slices/guideSlice.ts";
+import { setAccelerateIntegrationGuideClosed, setActiveFooterItemId, setGetCoinsGuideShown, setIntegrationReadyForPublishing, setLastIntegrationId } from "../../redux/slices/guideSlice.ts";
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux';
+import { RootState, useGetAllIntegrationsQuery } from '../../redux';
 import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/RewardForIntegrationModal.tsx';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export const MainPage: FC = () => {
+  const { t } = useTranslation('guide');
   const { getModalState, openModal, closeModal } = useModal();
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
 
-  const readyForPublishing = useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
+  const { data, refetch } = useGetAllIntegrationsQuery();
+
+  const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      if (data.integrations[0].status === 'created') {
+        console.log('=== created: ' + data.integrations[0].id);
+        reduxDispatch(setIntegrationReadyForPublishing(true));
+        reduxDispatch(setLastIntegrationId(data.integrations[0].id));
+      } else {
+        console.log('1== created: ');
+        reduxDispatch(setIntegrationReadyForPublishing(false));
+        reduxDispatch(setLastIntegrationId(""));
+      }
+    }
+  }, [data]);
 
   const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
-  const publishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
   const initialState = {
     firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
@@ -51,10 +72,56 @@ export const MainPage: FC = () => {
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
 
-  const integrationId = useSelector((state: RootState) => state.guide.createdIntegrationId);
+  useEffect(() => {
+    if(creatingIntegrationModalState.isOpen) {
+      closeModal(MODALS.SUBSCRIBE);
+    }
+  }, [creatingIntegrationModalState.isOpen]);
+
+  useEffect(() => {
+
+    reduxDispatch(setActiveFooterItemId(2));
+
+
+    if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED) && !purchasingSubscriptionModalState.isOpen) {
+      openModal(MODALS.SUBSCRIBE);
+    }
+
+    // if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
+    //   && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+    //   navigate(AppRoute.Shop);
+    // }
+
+    if (isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)
+      && !getSubscriptionPurchased()) {
+      openModal(MODALS.SUBSCRIBE);
+    }
+
+    if (isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT)
+      && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) && !creatingIntegrationModalState.isOpen) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
+
+    if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) && !creatingIntegrationModalState.isOpen) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
+
+    // if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+    //   && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
+    //   navigate(AppRoute.Shop);
+    // }
+
+    // if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+    //   navigate(AppRoute.ShopInventory);
+    // }
+  }, []);
+
   return (
     <main className={s.page}>
-      {!readyForPublishing && <IntegrationCreation />}
+      {!useSelector((state: RootState) => state.guide.integrationReadyForPublishing) ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
       {!guideVisibility.firstGuideShown && (
         <InitialGuide
@@ -72,10 +139,10 @@ export const MainPage: FC = () => {
           zIndex={1500}
           description={
             <>
-              В MiniApp ты сможешь почувствовать себя настоящим блогером и зарабатывать, создавая контент!
+            {t('g11')}
               <br />
               <br />
-              Давай <span style={{ color: '#2F80ED' }}>создадим твою первую интеграцию</span>!
+              {t('g12')} <span style={{ color: '#2F80ED' }}>{t('g13')}</span>!
             </>
           }
         />
@@ -93,11 +160,11 @@ export const MainPage: FC = () => {
             zIndex={1500}
             description={
               <>
-                Чтобы получить доступ к интеграциям от разных брендов,{' '}
-                <span style={{ color: '#2F80ED' }}>надо оформить подписку!</span>
+                {t('h14')}{' '}
+                <span style={{ color: '#2F80ED' }}>{t('h15')}</span>
                 <br />
                 <br />
-                Пока подписка активна, ты можешь делать любые интеграции на выбор: фото, видео или текст!
+                {t('h16')}
               </>
             }
           />
@@ -112,7 +179,6 @@ export const MainPage: FC = () => {
               handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
               openModal(MODALS.SUBSCRIBE);
             }}
-            isReferral={true}
           />
         )}
 
@@ -120,13 +186,13 @@ export const MainPage: FC = () => {
         !guideVisibility.createIntegrationFirstGuideShown) && (
           <CreatingIntegrationGuide
             onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)}
-            buttonText="Отлично!"
+            buttonText={t('g17')}
             description={
               <>
-                Вверху можно увидеть <span style={{ color: '#2F80ED' }}>актуальные тренды.</span>
+                {t('g18')} <span style={{ color: '#2F80ED' }}>{t('g19')}</span>
                 <br />
                 <br />
-                Если будешь делать интеграции о том, что сейчас актуально - твой заработок будет больше!
+                {t('g20')}
               </>
             }
             align="left"
@@ -139,13 +205,13 @@ export const MainPage: FC = () => {
         !guideVisibility.createIntegrationSecondGuideShown) && (
           <CreatingIntegrationGuide
             onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)}
-            buttonText="Хорошо!"
+            buttonText={t('g21')}
             description={
               <>
-                Интеграции бывают трех видов: <span style={{ color: '#2F80ED' }}>Текстовые, Фото и Видео. </span>
+                {t('g22')} <span style={{ color: '#2F80ED' }}>{t('g23')} </span>
                 <br />
                 <br />
-                Ты можешь делать любые интеграции, но для начала нужно купить необходимую аппаратуру.
+                {t('g24')}
               </>
             }
             align="right"
@@ -163,23 +229,23 @@ export const MainPage: FC = () => {
       }
 
       {
-        (publishedModalClosed && !isGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN) && (
-          <IntegrationCreatedGuide onClose={() => {
-            setGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN);
-            handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-            navigate(AppRoute.Integration.replace(':integrationId', integrationId))
-          }
-          } />
-        ))
+        ((!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN)
+            && useSelector((state: RootState) => state.guide.isPublishedModalClosed) ) && (
+            <IntegrationCreatedGuide onClose={() => {
+              setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              navigate(AppRoute.Integration.replace(':integrationId', integrationId))
+            }
+            } />
+          ))
       }
 
       {
-        (isGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN) 
-          && !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && 
-          <FinishTutorialGuide onClose={() => setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)}/>) 
+        (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)
+          && !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) &&
+          <FinishTutorialGuide onClose={() => setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)} />)
       }
 
-      {readyForPublishing && <PublishIntegrationButton/>}
       <RewardForIntegrationModal />
 
     </main>

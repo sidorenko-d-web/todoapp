@@ -49,6 +49,8 @@
   letter-spacing: -0.05em;
   color: var.$color-white;
   margin-bottom: 10px;
+  word-wrap: break-word;
+  white-space: pre-line;
 }
 
 .blockInput {

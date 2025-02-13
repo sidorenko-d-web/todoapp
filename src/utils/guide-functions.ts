@@ -45,3 +45,22 @@ export const integrationCreatingModalButtonGlowing = () => {
         && !isGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED)
     );
 }
+
+
+export const getCurrentFooterItem = () => {
+  if(!isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)) {
+    return 2;
+  }
+
+  if(isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) 
+    && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+    return 0;
+  }
+
+  if(isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) 
+    && !isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN)) {
+    return 1;
+  }
+
+  return -1;
+}
