@@ -28,6 +28,7 @@ import { formatAbbreviation, itemsInTab } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../utils';
+import { setActiveFooterItemId} from '../../redux/slices/guideSlice';
 import {
   TrackedButton,
 } from '../../components';

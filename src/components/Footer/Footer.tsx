@@ -26,8 +26,6 @@ export const Footer = () => {
 
     setActiveButton((currentFooterItemId >= 0 && currentFooterItemId <= 4) ? currentFooterItemId : id)
   };
-
-
   return (
     <div className={styles.footerItems}>
       {footerItems.map((item) => (

@@ -71,7 +71,8 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   const handleAccelerateClick = () => {
     if (!isExpired) {
       playAccelerateIntegrationSound();
-      void accelerateIntegration(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) ? 1 : timeLeft - 1);
+      dispatch(setLastIntegrationId(integration.id));
+      void accelerateIntegration(1);
       createParticles();
     }
   };
