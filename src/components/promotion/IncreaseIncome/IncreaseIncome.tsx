@@ -17,8 +17,31 @@ export const IncreaseIncome = () => {
   const [ showAll, setShowAll ] = useState(false);
   const { openModal, closeModal } = useModal();
 
-  const { data, isLoading, error } = useGetCurrentUsersReferralsQuery();
-
+  const { /*data,*/ isLoading, error } = useGetCurrentUsersReferralsQuery();
+  const data = {
+    referrals: [
+      {
+        name: "Иван Иванов",
+        total_invited: 10
+      },
+      {
+        name: "Алексей Смирнов",
+        total_invited: 5
+      },
+      {
+        name: "Мария Петрова",
+        total_invited: 8
+      },
+      {
+        name: "Мария Петрова",
+        total_invited: 8
+      },
+      {
+        name: "Мария Петрова",
+        total_invited: 8
+      }
+    ]
+  };
 
   const referrals = data?.referrals || [];
   const visibleReferrals = showAll ? referrals : referrals.slice(0, 3);
