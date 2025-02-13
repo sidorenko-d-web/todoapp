@@ -43,7 +43,7 @@ export const ProfilePage: React.FC = () => {
       setIsModalShown(true);
     }
   }, [openModal]);
-
+  console.log(data);
   useEffect(() => {
     if (data?.in_streak_days === 30) {
       openModal(MODALS.TASK_CHEST);
