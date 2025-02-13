@@ -11,8 +11,10 @@ import {
 } from '../../../utils/guide-functions.ts';
 
 import s from './IntegrationCreation.module.scss';
+import { useTranslation } from 'react-i18next';
 
 export const IntegrationCreation = () => {
+  const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
 
   const { data: profile } = useGetCurrentUserProfileInfoQuery();
@@ -61,7 +63,7 @@ export const IntegrationCreation = () => {
         disabled={!profile}
         onClick={handleIntegrationCreation}
       >
-        Создать интеграцию
+        {t('i9')}
         <span className={s.buttonBadge}>
           {profile?.subscription_integrations_left || 0}/5{' '}
           <img src={integrationIcon} height={12} width={12} alt="integration" />

@@ -3,12 +3,14 @@ import styles from './AccelerateIntegration.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
 import { Guide } from "../../Guide/Guide";
+import { useTranslation } from 'react-i18next';
 
 interface AccelerateIntegtrationGuideProps {
     onClose: () => void;
 }
 export const AccelerateIntegtrationGuide: React.FC<AccelerateIntegtrationGuideProps> = ({onClose}) => {
-    const [isOpen, setIsOpen] = useState(true);
+  const { t } = useTranslation('guide');
+  const [isOpen, setIsOpen] = useState(true);
 
     const handleClose = () => {
         onClose();
@@ -24,14 +26,14 @@ export const AccelerateIntegtrationGuide: React.FC<AccelerateIntegtrationGuidePr
             top={'45%'}
             description= {
                 <>
-                Отлично! Теперь нужно немного подождать пока интеграция будет создана. Но ты можешь повлиять на это!
+                  {t('g1')}
                 <br />
                 <br />
-                Тапни по экрану чтобы <span style={{color: '#2F80ED'}}>ускорить создание интеграции!</span>
+                  {t('g2')} <span style={{color: '#2F80ED'}}>{t('g3')}</span>
                 </>
             }
             onClose={onClose}>
-            <button className={styles.nextBtn} onClick={handleClose}>Вперёд!</button>
+            <button className={styles.nextBtn} onClick={handleClose}>{t('g4')}</button>
             <img src={img1} className={styles.gifImage} height={146} width={140}/>
         </Guide>
     );

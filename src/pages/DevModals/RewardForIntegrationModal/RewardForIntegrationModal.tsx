@@ -14,8 +14,12 @@ import reward from '../../../assets/animations/reward.json';
 import { useDispatch } from 'react-redux';
 import { setIsPublishedModalClosed } from '../../../redux/slices/guideSlice';
 import { CentralModal } from '../../../components/shared';
+import { useTranslation } from 'react-i18next';
+import { formatAbbreviation } from '../../../helpers';
 
 export default function RewardForIntegrationModal() {
+  const {t, i18n } = useTranslation('integration');
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal } = useModal();
 
   const dispatch = useDispatch();
@@ -30,7 +34,7 @@ export default function RewardForIntegrationModal() {
         closeModal(MODALS.INTEGRATION_REWARD);
       }}
       modalId={MODALS.INTEGRATION_REWARD}
-      title={'Интеграция опубликована!'}
+      title={t('i27')}
     >
       <div className={styles.background}>
         <Lottie animationData={reward} loop={false} className={styles.reward} />
@@ -46,7 +50,7 @@ export default function RewardForIntegrationModal() {
           <img className={styles.integration} src={integration} />
         </div>
         <div className={styles.bottom}>
-          <h2 className={styles.title}>Компания</h2>
+          <h2 className={styles.title}>{t('i28')}</h2>
           <div className={styles.rate}>
             <img src={starBlue} />
             <img src={starGray} />
@@ -59,24 +63,21 @@ export default function RewardForIntegrationModal() {
       </div>
       <div className={styles.icons}>
         <div className={styles.item}>
-          <p>+1 500</p>
+          <p>+{formatAbbreviation(1500, 'number', {locale: locale})}</p>
           <img src={coin} className={styles.coin} />
         </div>
         <div className={styles.item}>
-          <p>+500</p>
+          <p>+{formatAbbreviation(500, 'number', {locale: locale})}</p>
           <img src={subscribers} />
         </div>
       </div>
       <div className={styles.desc}>
-        <p>
-          Поздравляем! Интеграция готова, следите за статистикой и продолжайте в том же
-          духе!
-        </p>
+        <p>{t('i29')}</p>
       </div>
       <Button variant={'blue'} onClick={() => {
         dispatch(setIsPublishedModalClosed(true));
         closeModal(MODALS.INTEGRATION_REWARD);
-      }}>Забрать</Button>
+      }}>{t('i30')}</Button>
     </CentralModal>
   );
 }

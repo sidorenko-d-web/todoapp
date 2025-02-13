@@ -11,6 +11,7 @@ import { formatAbbreviation } from '../../../helpers';
 import { ProgressBarTasks } from '../ProgressBarTasks';
 import classNames from 'classnames';
 import { TrackedButton } from '../..';
+import { useTranslation } from 'react-i18next';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -75,6 +76,9 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      isTopTask,
                                                      errorText,
                                                    }) => {
+  const { t, i18n } = useTranslation('quests');
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+
   // Функция для получения иконки на основе состояния
   const getIconByState = (state: QuestionState) => {
     switch (state) {
@@ -103,16 +107,16 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       {type === 'default' && (
         <section className={s.rewards}>
           <span className={s.reward}>
-            +{formatAbbreviation(income ?? 0)}
+            +{formatAbbreviation(income ?? 0, 'number', {locale: locale})}
             <img src={coinIcon} height={14} width={14} alt="income" />
           </span>
           <span className={s.reward}>
-            +{formatAbbreviation(subscribers ?? 0)}
+            +{formatAbbreviation(subscribers ?? 0, 'number', {locale: locale})}
             <img src={subscribersIcon} height={14} width={14} alt="subscribers" />
           </span>
           <span className={s.reward}>
-            +{formatAbbreviation(passiveIncome ?? 0)}
-            <img src={coinIcon} height={14} width={14} alt="passive income" />/сек.
+            +{formatAbbreviation(passiveIncome ?? 0, 'number', {locale: locale})}
+            <img src={coinIcon} height={14} width={14} alt="passive income" />/{t('q9')}
           </span>
         </section>
       )}
@@ -157,7 +161,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
         <TrackedButton
           trackingData={{
             eventType: 'button',
-            eventPlace: `${buttonText} - Задания - ${title}`,
+            eventPlace: `${buttonText} - ${t('q1')} - ${title}`,
           }}
           className={`${s.button} ${s[buttonType]} ${isLoading ? s.loading : ''}`}
           disabled={disabled || isLoading}
