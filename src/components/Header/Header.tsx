@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import { setLastActiveStage } from '../../redux/slices/tree.ts';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
-import { TrackedLink } from '../';
+import { Settings, TrackedLink } from '../';
 
 
 export const Header = () => {
@@ -50,6 +50,9 @@ export const Header = () => {
 
   return (
     <header className={styles.header}>
+      <div className={styles.settingsIcon}>
+        <Settings />
+      </div>
       <div className={styles.lowerHeader}>
         {isLoading && <p>Loading...</p>}
 

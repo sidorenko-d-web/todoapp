@@ -4,7 +4,7 @@ import styles from './Layout.module.scss';
 import { Header } from '../components/Header/';
 import { useEffect } from 'react';
 import { MODALS, localStorageConsts } from '../constants';
-import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
+import { LanguageSelectionModal, SettingsModal, WalletConnectionModal } from '../components';
 import { AudioBg, useModal } from '../hooks';
 
 const Layout = () => {
@@ -22,25 +22,20 @@ const Layout = () => {
   }, []);
 
   return (
-    <>
-      <div className={styles.settingsWrapper}>
-        <Settings />
-      </div>
-      <div className={styles.wrp}>
-        {showHeader && <Header />}
-        <main className={styles.content + ' ' + (showHeader ? styles.withHeader : '')}>
-          <Outlet />
+    <div className={styles.wrp}>
+      {showHeader && <Header />}
+      <main className={styles.content + ' ' + (showHeader ? styles.withHeader : '')}>
+        <Outlet />
 
-          {/* Modals */}
-          <SettingsModal />
-          <WalletConnectionModal />
-          <LanguageSelectionModal />
+        {/* Modals */}
+        <SettingsModal />
+        <WalletConnectionModal />
+        <LanguageSelectionModal />
 
-          <AudioBg />
-        </main>
-        <Footer />
-      </div>
-    </>
+        <AudioBg />
+      </main>
+      <Footer />
+    </div>
   );
 };
 
