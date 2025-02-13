@@ -5,7 +5,7 @@ import { MODALS } from '../../../constants/modals.ts';
 import { RootState, useGetAllIntegrationsQuery, usePublishIntegrationMutation } from '../../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
-import { setCreatedIntegrationId, setCreateIntegrationButtonGlowing, setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice.ts';
+import { setCreateIntegrationButtonGlowing, setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice.ts';
 import { setGuideShown } from '../../../utils/index.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 
@@ -43,7 +43,6 @@ export const PublishIntegrationButton: React.FC = () => {
 
       await publishIntegration(integrationIdToPublish).unwrap();
 
-      dispatch(setCreatedIntegrationId(integrationIdToPublish));
       openModal(MODALS.INTEGRATION_REWARD);
     } catch (error) {
       console.error('Failed to publish integration:', error);

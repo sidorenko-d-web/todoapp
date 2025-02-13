@@ -17,8 +17,8 @@ import { useParams } from 'react-router-dom';
 import { isGuideShown, setGuideShown } from '../../utils';
 import { GUIDE_ITEMS } from '../../constants';
 import { useDispatch } from 'react-redux';
-import { setElevateIntegrationStats } from '../../redux/slices/guideSlice';
 import { useTranslation } from 'react-i18next';
+import { setActiveFooterItemId, setElevateIntegrationStats, setFooterActive } from '../../redux/slices/guideSlice';
 
 export const IntegrationPage: React.FC = () => {
   const { t } = useTranslation('integrations');
@@ -46,6 +46,10 @@ export const IntegrationPage: React.FC = () => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(setActiveFooterItemId(1));
+    dispatch(setFooterActive(true));
+  }, []);
 
   useEffect(() => {
     if (comments.length === 0) {
@@ -75,7 +79,7 @@ export const IntegrationPage: React.FC = () => {
       {isLoading && <p>{t('i3')}</p>}
       {(error || !integrationId) && <p>{t('i2')}</p>}
 
-      {data?.status === 'created' && (
+      {data?.status === 'published' && (
         <>
           <IntegrationStatsMini
             views={data.views}
@@ -101,13 +105,13 @@ export const IntegrationPage: React.FC = () => {
               {comments.length === 0 ? 0 : currentCommentIndex + 1}/{comments.length}
             </p>
           </div>
-          <IntegrationComment
+          {commentData &&  <IntegrationComment
             progres={progress}
             {...comments[currentCommentIndex]}
             onVote={handleVote}
             hateText={commentData?.is_hate}
             finished={finished}
-          />
+          />}
         </>
 
       )}

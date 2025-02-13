@@ -28,6 +28,7 @@ import { formatAbbreviation, itemsInTab } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../utils';
+import { setActiveFooterItemId} from '../../redux/slices/guideSlice';
 import {
   BackToMainPageGuide,
   TrackedButton,
@@ -149,6 +150,9 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
 
+  useEffect(() => {
+    reduxDispatch(setActiveFooterItemId(0));
+  }, []);
 
   const statsGlowing = useSelector((state: RootState) => state.guide.getShopStatsGlowing);
 
@@ -243,7 +247,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         }} />
       )}
 
-      {useSelector((state: RootState) => state.guide.itemBought) &&
+      {(useSelector((state: RootState) => state.guide.itemBought) || isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) &&
         guideVisibility.welcomeGuideShown &&
         !guideVisibility.backToMainGuideShown &&
         mode === 'inventory' && (
