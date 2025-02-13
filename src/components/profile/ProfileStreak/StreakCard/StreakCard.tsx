@@ -79,7 +79,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
           <div className={styles.progressContainer}>
             <div className={`${styles['progressBarTextWrp']} ${styles['progressText']}`}>
               <span>
-                {progress}/{t('p14')}
+                {streakCount}/{t('p14')}
               </span>
               <span className={styles.reward}>
                 {t('p15')}

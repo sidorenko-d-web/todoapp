@@ -64,11 +64,7 @@ export const TopUsers: FC<InviteFriendProps> = ({
             key={profile.id}
             className={classNames(s.listUser, me && me.id === profile.id && s.active)}
           >
-            <div
-              className={classNames(s.cardBlock, {
-                /*{ [s.vipCard]: profile.vip }*/
-              })}
-            >
+            <div className={classNames(s.cardBlock)}>
               <div className={s.card}>
                 <img src={user} alt="user" width={27} height={36} />
               </div>
@@ -78,27 +74,14 @@ export const TopUsers: FC<InviteFriendProps> = ({
                 <h3 className={s.text}>{profile.username}</h3>
                 <ul className={classNames(s.ulBlock, s.infoRang)}>
                   <li className={s.number}>
-                    {me && me.id === profile.id && pushLine?.failed_days_ago !== undefined
-                      ? formatAbbreviation(pushLine.failed_days_ago)
-                      : formatAbbreviation(6)}
+                    {formatAbbreviation(pushLine?.failed_days_ago ?? 6)}
                   </li>
-
                   <li className={s.fireIcon}>
                     <img src={fire} alt="fire" width={12} height={12} />
                     <span>
-                      {me &&
-                      me.id === profile.id &&
-                      pushLine?.in_streak_days !== undefined
-                        ? formatAbbreviation(pushLine.in_streak_days)
-                        : formatAbbreviation(profile.points)}
+                      {formatAbbreviation(pushLine?.in_streak_days ?? profile.points)}
                     </span>
                   </li>
-
-                  {/*{profile.vip &&*/}
-                  {/*  <li className={s.vip}>*/}
-                  {/*    <img src={star} alt="star" width={12} height={12} />*/}
-                  {/*    <span>VIP</span>*/}
-                  {/*  </li>}*/}
                 </ul>
               </div>
               <div className={s.numUser}>
@@ -106,11 +89,7 @@ export const TopUsers: FC<InviteFriendProps> = ({
                 <img src={clanRed} height={14} width={14} alt={'clanRed'} />
               </div>
             </div>
-            <div
-              className={classNames(s.cardBox, {
-                /*{ [s.vipCardBox]: profile.vip }*/
-              })}
-            >
+            <div className={classNames(s.cardBox)}>
               {index <= 100 ? (
                 <img src={chest} height={20} width={20} alt="chest" />
               ) : (

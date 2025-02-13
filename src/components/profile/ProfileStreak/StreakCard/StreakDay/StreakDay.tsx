@@ -32,6 +32,12 @@ export const StreakDay: React.FC<StreakDayProps> = ({
     setCurrentWeekdayIndex(today.getDay() === 0 ? 6 : today.getDay() - 1); // Преобразуем getDay(), где 0 - это воскресенье
   }, []);
 
+  const isStreakDay =
+    streakCount > 0 && dayNumber > currentDay - streakCount && dayNumber <= currentDay;
+  const isFailedDay = failedDay === dayNumber;
+
+  const weekdaysRu = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
+  const weekdaysEn = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
   const getIcon = () => {
     if (failedDay === dayNumber) return <img src={freezeIcon} />;
     if (
@@ -43,14 +49,6 @@ export const StreakDay: React.FC<StreakDayProps> = ({
     }
     return null;
   };
-
-  const isStreakDay =
-    streakCount > 0 && dayNumber > currentDay - streakCount && dayNumber <= currentDay;
-  const isFailedDay = failedDay === dayNumber;
-
-  const weekdaysRu = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
-  const weekdaysEn = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-
   return (
     <div>
       <div
