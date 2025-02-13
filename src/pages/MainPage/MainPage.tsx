@@ -1,29 +1,15 @@
-import { FC, useReducer } from 'react';
-import {
-  AccelerateIntegtrationGuide,
-  CreatingIntegrationGuide,
-  FinishTutorialGuide,
-  GetCoinsGuide,
-  InitialGuide,
-  IntegrationCreatedGuide,
-  IntegrationCreation,
-  PublishIntegrationButton,
-  Room,
-  SubscrieGuide,
-} from '../../components';
+import { FC, useEffect, useReducer } from 'react';
+import { AccelerateIntegtrationGuide, CreatingIntegrationGuide, FinishTutorialGuide, GetCoinsGuide, InitialGuide, IntegrationCreatedGuide, IntegrationCreation, PublishIntegrationButton, SubscrieGuide } from '../../components';
 import s from './MainPage.module.scss';
 import { AppRoute, MODALS } from '../../constants';
 import { useModal } from '../../hooks';
 
 import { GUIDE_ITEMS } from '../../constants/guidesConstants';
-import { isGuideShown, setGuideShown } from '../../utils';
+import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../utils';
 
-import {
-  setAccelerateIntegrationGuideClosed,
-  setGetCoinsGuideShown,
-} from '../../redux/slices/guideSlice.ts';
+import { setAccelerateIntegrationGuideClosed, setActiveFooterItemId, setGetCoinsGuideShown, setIntegrationReadyForPublishing, setLastIntegrationId } from "../../redux/slices/guideSlice.ts";
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux';
+import { RootState, useGetAllIntegrationsQuery } from '../../redux';
 import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/RewardForIntegrationModal.tsx';
 import { useNavigate } from 'react-router-dom';
 
@@ -32,16 +18,29 @@ export const MainPage: FC = () => {
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
 
-  const readyForPublishing = useSelector(
-    (state: RootState) => state.guide.integrationReadyForPublishing,
-  );
+  const { data, refetch } = useGetAllIntegrationsQuery();
 
-  const showAccelerateGuide = useSelector(
-    (state: RootState) => state.guide.integrationCreated,
-  );
-  const publishedModalClosed = useSelector(
-    (state: RootState) => state.guide.isPublishedModalClosed,
-  );
+  const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      if (data.integrations[0].status === 'created') {
+        console.log('=== created: ' + data.integrations[0].id);
+        reduxDispatch(setIntegrationReadyForPublishing(true));
+        reduxDispatch(setLastIntegrationId(data.integrations[0].id));
+      } else {
+        console.log('1== created: ');
+        reduxDispatch(setIntegrationReadyForPublishing(false));
+        reduxDispatch(setLastIntegrationId(""));
+      }
+    }
+  }, [data]);
+
+  const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
 
   const initialState = {
     firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
@@ -75,13 +74,56 @@ export const MainPage: FC = () => {
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
 
-  const integrationId = useSelector(
-    (state: RootState) => state.guide.createdIntegrationId,
-  );
+  useEffect(() => {
+    if(creatingIntegrationModalState.isOpen) {
+      closeModal(MODALS.SUBSCRIBE);
+    }
+  }, [creatingIntegrationModalState.isOpen]);
+
+  useEffect(() => {
+
+    reduxDispatch(setActiveFooterItemId(2));
+
+
+    if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED) && !purchasingSubscriptionModalState.isOpen) {
+      openModal(MODALS.SUBSCRIBE);
+    }
+
+    // if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
+    //   && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+    //   navigate(AppRoute.Shop);
+    // }
+
+    if (isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)
+      && !getSubscriptionPurchased()) {
+      openModal(MODALS.SUBSCRIBE);
+    }
+
+    if (isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT)
+      && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) && !creatingIntegrationModalState.isOpen) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
+
+    if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) && !creatingIntegrationModalState.isOpen) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
+
+    // if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+    //   && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
+    //   navigate(AppRoute.Shop);
+    // }
+
+    // if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+    //   navigate(AppRoute.ShopInventory);
+    // }
+  }, []);
+
   return (
     <main className={s.page}>
-      <Room />
-      {!readyForPublishing && <IntegrationCreation />}
+      {!useSelector((state: RootState) => state.guide.integrationReadyForPublishing) ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
       {!guideVisibility.firstGuideShown && (
         <InitialGuide
@@ -142,7 +184,6 @@ export const MainPage: FC = () => {
               handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
               openModal(MODALS.SUBSCRIBE);
             }}
-            isReferral={true}
           />
         )}
 
@@ -206,29 +247,24 @@ export const MainPage: FC = () => {
           />
         )}
 
-      {publishedModalClosed &&
-        !isGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN) && (
-          <IntegrationCreatedGuide
-            onClose={() => {
-              setGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN);
-              handleGuideClose(
-                GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN,
-              );
-              navigate(AppRoute.Integration.replace(':integrationId', integrationId));
-            }}
-          />
-        )}
-
-      {isGuideShown(GUIDE_ITEMS.integration.INTEGRATION_INITIAL_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (
-          <FinishTutorialGuide
-            onClose={() =>
-              setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)
+      {
+        ((!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN)
+            && useSelector((state: RootState) => state.guide.isPublishedModalClosed) ) && (
+            <IntegrationCreatedGuide onClose={() => {
+              setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              navigate(AppRoute.Integration.replace(':integrationId', integrationId))
             }
-          />
-        )}
+            } />
+          ))
+      }
 
-      {readyForPublishing && <PublishIntegrationButton />}
+      {
+        (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)
+          && !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) &&
+          <FinishTutorialGuide onClose={() => setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)} />)
+      }
+
       <RewardForIntegrationModal />
     </main>
   );

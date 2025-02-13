@@ -23,7 +23,7 @@ export const WelcomeToShopGuide: React.FC<WelcomeToShopGuideProps> = ({ onClose 
         <Guide
             description={
                 <>
-                    Каждая интеграция дает <span style={{ color: '#2F80ED' }}>подписчиков</span> и <span style={{ color: '#EC7913' }}>баллы</span>. Ты можешь увелиить доход, купив в магазине аппаратуру и предметы в комнату!
+                    Каждая интеграция дает <span style={{ color: '#2F80ED' }}>подписчиков</span> и <span style={{ color: '#EC7913' }}>баллы</span>. Ты можешь увеличить доход, купив в магазине аппаратуру и предметы в комнату!
                     <br />
                     Давай купим технику, чтобы начать делать интеграции и зарабатывать!
                 </>

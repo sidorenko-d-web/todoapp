@@ -20,6 +20,7 @@ export const GUIDE_ITEMS = {
     creatingIntegration: {
         INTEGRATION_CREATED: 'integrationCreated',
         INTEGRATION_ACCELERATION_GUIDE_SHOWN: 'integrationAccelerationGuideShown',
+        INITIAL_INTEGRATION_DURATION_SET: 'initialIntegrationDurationSet',
         INTEGRATION_ACCELERATED: 'integrationAccelerated',
         INTEGRATION_ACCELERATED_GUIDE_CLOSED: 'integrationAcceleratedGuideClosed',
         INTEGRATION_PUBLISHED_MODAL_CLOSED: 'integrationPublishedModalClosed',

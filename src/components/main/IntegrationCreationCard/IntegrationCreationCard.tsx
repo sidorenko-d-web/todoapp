@@ -7,7 +7,7 @@ import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration } from '../../../hooks';
 import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
 import { isGuideShown, setGuideShown } from '../../../utils';
-import { setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice';
+import { setIntegrationReadyForPublishing, setLastIntegrationId } from '../../../redux/slices/guideSlice';
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
 
@@ -40,6 +40,13 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   }, [ timeLeft, accelerateIntegration ]);
 
   useEffect(() => {
+    if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET)) {
+      accelerateIntegration(timeLeft-20);
+      setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
+    }
+  }, [])
+
+  useEffect(() => {
     const timerId = setInterval(() => {
       setTimeLeft(prevTime => Math.max(prevTime - 1, 0));
     }, 1000);
@@ -62,7 +69,8 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   const handleAccelerateClick = () => {
     if (!isExpired) {
       playAccelerateIntegrationSound();
-      void accelerateIntegration(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) ? 1 : timeLeft - 1);
+      dispatch(setLastIntegrationId(integration.id));
+      void accelerateIntegration(1);
       createParticles();
     }
   };
@@ -90,6 +98,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
 
   if (isExpired) {
     dispatch(setIntegrationReadyForPublishing(true));
+    dispatch(setLastIntegrationId(integration.id));
     if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
     }

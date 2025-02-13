@@ -12,7 +12,7 @@ import { useModal, useSendTransaction, useUsdtTransactions } from '../../../hook
 import { useTransactionNotification } from '../../../hooks/useTransactionNotification';
 import { GUIDE_ITEMS, MODALS, svgHeadersString } from '../../../constants';
 import { useSelector } from 'react-redux';
-import { isGuideShown } from '../../../utils';
+import { isGuideShown, setGuideShown } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
@@ -41,6 +41,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
   const userPoints = data?.points || 0;
   const handleBuyItem = async () => {
+    setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
     try {
       dispatch(setPoints((prevPoints: number) => prevPoints + 1));
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });

@@ -21,9 +21,9 @@ const SpineAnimation: FC<Props> = ({ skin, jsonUrl, atlasUrl, name }) => {
         preserveDrawingBuffer: true,
         jsonUrl: proxyImageUrl(jsonUrl),
         atlasUrl: proxyImageUrl(atlasUrl),
-        skin: `Камера любительская-${skin === 'base' ? 1 : skin === 'advanced' ? 2 : 3}`,
+        skin: `тетрадь-${skin === 'base' ? 1 : skin === 'advanced' ? 2 : 3}`,
         showLoading: false,
-        animations: ['Камера любительская'],
+        animations: ['тетрадь'],
         alpha: true,
       });
     } else {

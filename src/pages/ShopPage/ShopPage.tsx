@@ -7,6 +7,8 @@ import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
 import styles from './ShopPage.module.scss';
 import { itemsInTab } from '../../helpers';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { setActiveFooterItemId } from '../../redux/slices/guideSlice';
 
 type TypeTab<T> = { title: string; value: T };
 
@@ -14,6 +16,8 @@ const StorePage: FC = () => {
   const { t } = useTranslation('shop');
   const [ shopCategory, setShopCategory ] = useState<TypeTab<TypeItemCategory>>();
   const [ itemsRarity, setItemsQuality ] = useState<TypeTab<TypeItemRarity>>();
+
+  const dispatch = useDispatch();
 
   const { data: shop, isFetching: isShopFetching } = useGetShopItemsQuery({
     item_category: shopCategory?.value as TypeItemCategory,
@@ -27,6 +31,10 @@ const StorePage: FC = () => {
   });
 
   const [ items, setItems ] = useState<IShopItem[]>();
+
+  useEffect(() => {
+    dispatch(setActiveFooterItemId(0));
+  }, []);
 
   useEffect(() => {
     const itemsInTab1 = itemsInTab(shop?.items, inventory?.items);
