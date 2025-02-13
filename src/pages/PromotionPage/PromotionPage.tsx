@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
 import clanRed from '../../assets/icons/clanRed.svg';
 import { DevelopmentPlan, IncreaseIncome, TopInfluencers } from '../../components';
@@ -7,8 +7,12 @@ import s from './PromotionPage.module.scss';
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUsersCountQuery } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { setActiveFooterItemId } from '../../redux/slices/guideSlice';
 
 export const PromotionPage: React.FC = () => {
+  const dispatch = useDispatch();
+
   const { t, i18n } = useTranslation('promotion');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: userProfileData, error: userError, isLoading: isUserLoading } = useGetCurrentUserProfileInfoQuery();
@@ -19,6 +23,9 @@ export const PromotionPage: React.FC = () => {
     ? topProfilesData.profiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
     : -1;
 
+  useEffect(() => {
+    dispatch(setActiveFooterItemId(3));
+  }, []);
 
   const position = userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length!;
 
