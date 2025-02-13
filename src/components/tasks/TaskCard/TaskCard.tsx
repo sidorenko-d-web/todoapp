@@ -5,6 +5,7 @@ import circleIcon from '../../../assets/icons/circle-blue.svg';
 import circleWhiteIcon from '../../../assets/icons/circle.svg';
 import checkIcon from '../../../assets/icons/checkmark-in-the-circle.svg';
 import giftIcon from '../../../assets/icons/gift.svg';
+import { TaskBoost } from '../../../redux/api/tasks/dto';
 
 import s from './TaskCard.module.scss';
 import { formatAbbreviation } from '../../../helpers';
@@ -33,6 +34,8 @@ type BaseTaskProps = {
   isCompleted?: boolean;
   isTopTask?: boolean;
   questionStates?: QuestionState[];
+  boost?: TaskBoost;
+  completedSteps?: number;
 };
 
 type DefaultTaskProps = {
@@ -74,6 +77,8 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      isCompleted,
                                                      isTopTask,
                                                      errorText,
+                                                     boost,
+                                                     completedSteps,
                                                    }) => {
   // Функция для получения иконки на основе состояния
   const getIconByState = (state: QuestionState) => {
@@ -131,8 +136,15 @@ export const TaskCard: React.FC<TasksCardProps> = ({
             ))}
           </div>
           <div className={s.progressTypeReward}>
-            <span className={s.reward}>10 - 1000 <img src={coinIcon} height={14} width={14} alt="income" /></span>
-            <span className={s.reward}>??? <img src={giftIcon} height={14} width={14} alt="gift" /></span>
+            <span className={s.reward}>
+              {boost?.income_per_second || '0'} <img src={coinIcon} height={14} width={14} alt="income" />
+            </span>
+            <span className={s.reward}>
+              {boost?.subscribers || 0} <img src={subscribersIcon} height={14} width={14} alt="subscribers" />
+            </span>
+            <span className={s.reward}>
+              ??? <img src={giftIcon} height={14} width={14} alt="gift" />
+            </span>
           </div>
         </section>
       )}

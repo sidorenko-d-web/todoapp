@@ -74,3 +74,17 @@ export enum DailyQuestionsError {
 }
 
 export type GetTaskQuestionsErrorResponse = ErrorResponse;
+
+export type DailyQuestionAnswerOption = {
+  id: string;
+  answer_text: string;
+  is_correct: boolean;
+}
+
+export type DailyQuestion = {
+  id: string;
+  question_text: string;
+  answer_options: DailyQuestionAnswerOption[];
+}
+
+export type GetTaskQuestionsResponse = DailyQuestion[];
