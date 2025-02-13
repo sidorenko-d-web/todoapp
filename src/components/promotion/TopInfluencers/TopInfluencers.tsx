@@ -2,7 +2,7 @@ import cup from '../../../assets/icons/cup.svg';
 import chest from '../../../assets/icons/chest-purple.svg';
 import lock from '../../../assets/icons/lock_icon.svg';
 import { SliderSelect } from './Slider';
-import { INFLUENCER_RATING_STEPS, InfluencerRatingSteps, MODALS } from '../../../constants';
+import { InfluencerRatingSteps, MODALS, useInfluencerRatingSteps } from '../../../constants';
 import { TopUsers } from '../Modal';
 import { useModal } from '../../../hooks';
 import classNames from 'classnames';
@@ -18,7 +18,7 @@ export const TopInfluencers = () => {
   const { t, i18n } = useTranslation('promotion');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
-
+  const INFLUENCER_RATING_STEPS = useInfluencerRatingSteps();
   const [ isInfluencersLocked, setIsInfluencersLocked ] = useState(true);
   const [ influencersUnlockingStep, setInfluencersUnlockingStep ] = useState<keyof InfluencerRatingSteps>('email');
 

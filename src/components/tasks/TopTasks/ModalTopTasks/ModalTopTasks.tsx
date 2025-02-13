@@ -10,6 +10,8 @@ import coinBlueIcon from '../../../../assets/icons/coin-blue-human.svg';
 import { ProgressBarTasks } from '../../ProgressBarTasks';
 import chestIcon from '../../../../assets/icons/chest-purple.svg';
 import { useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
+import { useTranslation } from 'react-i18next';
+import { formatAbbreviation } from '../../../../helpers';
 
 interface ModalTopTasksProps {
   modalId: string;
@@ -43,6 +45,8 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
   onStateChange,
   task,
 }) => {
+  const { t, i18n } = useTranslation('quests');
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const [currentStepIndex, setCurrentStepIndex] = useState(task.completed_stages);
   const [completedSteps, setCompletedSteps] = useState<boolean[]>(
     Array(task.stages).fill(false).map((_, index) => index < task.completed_stages)
@@ -120,23 +124,23 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
       <div className={s.container}>
         <div className={s.rewards}>
           <span className={s.reward}>
-            {task.boost.views}
+            {formatAbbreviation(task.boost.views, 'number', {locale: locale})}
             <img src={coinIcon} alt="coin" width={14} height={14} />
           </span>
           <span className={s.reward}>
-            +{task.boost.income_per_second}
+            +{formatAbbreviation(task.boost.income_per_second, 'number', {locale: locale})}
             <img src={coinIcon} alt="coin" width={14} height={14} />
-            /сек.
+            /{t('q9')}.
           </span>
           <span className={s.reward}>
-            {task.boost.subscribers}
+            {formatAbbreviation(task.boost.subscribers, 'number', {locale: locale})}
             <img src={coinBlueIcon} alt="referral" width={14} height={14} />
           </span>
         </div>
 
         <div className={s.progress}>
           <span className={s.step}>
-            Этап {currentStepIndex + 1}: {getStepTitle()}
+            {t('q31')} {currentStepIndex + 1}: {getStepTitle()}
           </span>
         </div>
 
@@ -145,13 +149,13 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
             currentStep={currentStepIndex}
             totalSteps={task.stages}
             progress={progress}
-            progressReward="Драгоценный сундук"
+            progressReward={t('q10')}
             progressRewardIcon={chestIcon}
           />
         </div>
 
         <div className={s.question}>
-          <span className={s.linkLabel}>Ссылка на канал</span>
+          <span className={s.linkLabel}>{t('q28')}</span>
           <div className={s.options}>
             <div className={s.option}>
               <input
@@ -159,7 +163,7 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
                 className={s.channelInput}
                 value={channelLink}
                 onChange={(e) => setChannelLink(e.target.value)}
-                placeholder="Введите ссылку на канал"
+                placeholder={t('q29')}
               />
               <div className={s.selectWrapper}>
                 <img
@@ -178,7 +182,7 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
             className={s.answerButton}
             onClick={handleOpenGuide}
           >
-            Инструкция
+            {t('q30')}
             <img src={bookIcon} alt="" className={s.buttonIcon} />
           </button>
           <button
@@ -187,7 +191,7 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
             })}
             onClick={handleCompleteStep}
           >
-            {currentStepIndex === task.stages - 1 ? 'Завершить' : 'Далее'}
+            {currentStepIndex === task.stages - 1 ? t('q25') : t('q26')}
           </button>
         </div>
       </div>

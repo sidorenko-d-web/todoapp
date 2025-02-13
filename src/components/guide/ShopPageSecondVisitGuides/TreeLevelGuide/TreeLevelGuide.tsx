@@ -12,11 +12,10 @@ interface TreeLevelGuideProps {
     onClose: () => void;
 }
 export const TreeLevelGuide: React.FC<TreeLevelGuideProps> = ({onClose}) => {
+    const { t } = useTranslation('guide');
     const [isOpen, setIsOpen] = useState(true);
 
 
-    const { t } = useTranslation('shop');
-    
     const handleClose = () => {
         onClose();
         setIsOpen(false);
@@ -31,19 +30,19 @@ export const TreeLevelGuide: React.FC<TreeLevelGuideProps> = ({onClose}) => {
             top={'50%'}
             description={
                 <>
-               <span style={{color: '#2F80ED'}}>Новый уровень</span> открывается с каждым уровнем <span style={{color: '#E0B01D'}}> Дерева</span>  А уровень дерева зависит от подписчиков. 
+               <span style={{color: '#2F80ED'}}>{t('g48')}</span> {t('g49')} <span style={{color: '#E0B01D'}}> {t('g50')}</span>  {t('g51')}
                <br />
                <br />
-               Чем больше у тебя подписчиков тем выше уровень <span style={{color: '#E0B01D'}}> дерева</span>. Давай, я тебе его покажу!
+                  {t('g52')} <span style={{color: '#E0B01D'}}> {t('g53')}</span>. {t('g54')}
                 </>
             }
             onClose={onClose}>
              <div className={`${styles.disabledUpgradeActions} ${styles.elevated}`}>
                 <img src={LockIcon} alt="" />
-                <p>{t('s18')} 7</p>
+                <p>{t('g55')} 7</p>
                 <img src={LockIcon} alt="" />
             </div>
-            <button className={styles.nextBtn} onClick={handleClose}>Дерево!</button>
+            <button className={styles.nextBtn} onClick={handleClose}>{t('g56')}</button>
             <img src={img1} className={styles.gifImage} height={146} width={140}/>
         </Guide>
     );
