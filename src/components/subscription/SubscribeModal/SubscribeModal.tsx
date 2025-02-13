@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import CentralModal from '../../shared/CentralModal/CentralModal';
+import { CentralModal } from '../../shared/CentralModal/CentralModal';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import coinIcon from '../../../assets/icons/coin.png';
 import { useBuySubscriptionMutation } from '../../../redux';
