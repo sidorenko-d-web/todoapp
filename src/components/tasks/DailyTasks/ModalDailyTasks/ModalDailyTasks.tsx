@@ -12,6 +12,8 @@ import bookIcon from '../../../../assets/icons/book.svg';
 import CrossRedIcon from '../../../../assets/icons/cross-red-in-circle.svg';
 import { formatAbbreviation } from '../../../../helpers';
 import { Button } from '../../../shared';
+import { useQuestions } from './constant/Questions.ts';
+import { useTranslation } from 'react-i18next';
 
 interface ModalDailyTasksProps {
   modalId: string;
@@ -21,54 +23,13 @@ interface ModalDailyTasksProps {
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
-interface Question {
-  id: number;
-  text: string;
-  options: Array<{
-    id: string;
-    label: string;
-  }>;
-  correctAnswer: string;
-}
-
-const QUESTIONS: Question[] = [
-  {
-    id: 1,
-    text: 'В какой валюте вы будете зарабатывать на нашей иновационной платформе Apusher?',
-    options: [
-      { id: 'APUSH', label: '$APUSH' },
-      { id: 'BLUSH', label: '$BLUSH' },
-      { id: 'APCHHI', label: '$APCHHI' },
-    ],
-    correctAnswer: 'APUSH',
-  },
-  {
-    id: 2,
-    text: 'Какой минимальный депозит для старта?',
-    options: [
-      { id: '10', label: '10 USDT' },
-      { id: '50', label: '50 USDT' },
-      { id: '100', label: '100 USDT' },
-    ],
-    correctAnswer: '50',
-  },
-  {
-    id: 3,
-    text: 'Сколько уровней в реферальной программе?',
-    options: [
-      { id: '3', label: '3 уровня' },
-      { id: '5', label: '5 уровней' },
-      { id: '7', label: '7 уровней' },
-    ],
-    correctAnswer: '5',
-  },
-];
-
 export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
                                                             modalId,
                                                             onClose,
                                                             onStateChange,
                                                           }) => {
+  const {t } = useTranslation('quests');
+  const QUESTIONS = useQuestions();
   const [ currentQuestionIndex, setCurrentQuestionIndex ] = useState(0);
   const [ selectedOption, setSelectedOption ] = useState<string | null>(null);
   const [ showResult, setShowResult ] = useState(false);
@@ -128,7 +89,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   return (
     <BottomModal
       modalId={modalId}
-      title="Ежедневный подарок"
+      title={t('q24')}
       onClose={onClose}
     >
       <div className={s.container}>
@@ -214,7 +175,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
         {/* Кнопки */}
         <div className={s.buttons}>
           <Button className={s.answerButton}>
-            Ответы
+            {t('q27')}
             <img src={bookIcon} alt="" className={s.buttonIcon} />
           </Button>
           <Button
@@ -224,7 +185,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
             disabled={!selectedOption}
             onClick={handleNext}
           >
-            {currentQuestionIndex === QUESTIONS.length - 1 ? 'Завершить' : 'Далее'}
+            {currentQuestionIndex === QUESTIONS.length - 1 ? t('q25') : t('q26')}
           </Button>
         </div>
       </div>

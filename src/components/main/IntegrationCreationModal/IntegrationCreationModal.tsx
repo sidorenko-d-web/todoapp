@@ -24,6 +24,7 @@ import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
 import { CentralModal } from '../../shared';
 import { TrackedButton } from '../../';
+import { useTranslation } from 'react-i18next';
 
 interface CreatingIntegrationModalProps {
   modalId: string;
@@ -36,13 +37,14 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                                                                               onClose,
                                                                               hasCreatingIntegration,
                                                                             }) => {
+  const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const contentOptions = [
-    { label: 'Текст', value: 'text' },
-    { label: 'Фото', value: 'image' },
-    { label: 'Видео', value: 'video' },
+    { label: t("i13"), value: 'text' },
+    { label: t("i14"), value: 'image' },
+    { label: t("i15"), value: 'video' },
   ] as const;
 
   const [ selectedOption, setSelectedOption ] = useState<(typeof contentOptions)[number]['value']>('text');
@@ -82,10 +84,10 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const submitDisabled = !selectedOption || !selectedCompany || hasCreatingIntegration;
 
   const noItemsMessage = (() => {
-    const baseText = 'Купите предмет нужного типа, чтобы начать делать ';
-    if (selectedOption === 'text' && !hasText) return baseText + 'текстовые интеграции.';
-    if (selectedOption === 'image' && !hasImage) return baseText + 'фото-интеграции.';
-    if (selectedOption === 'video' && !hasVideo) return baseText + 'видео-интеграции.';
+    const baseText = t("i16");
+    if (selectedOption === 'text' && !hasText) return baseText + t("i17");
+    if (selectedOption === 'image' && !hasImage) return baseText + t("i18");
+    if (selectedOption === 'video' && !hasVideo) return baseText + t("i19");
     return null;
   })();
 
@@ -96,7 +98,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const buttonGlowing = integrationCreatingModalButtonGlowing();
 
   return (
-    <CentralModal modalId={modalId} title="Создание интеграции" onClose={onClose} titleIcon={integrationWhiteIcon}>
+    <CentralModal modalId={modalId} title={t('i11')} onClose={onClose} titleIcon={integrationWhiteIcon}>
       <div className={s.content}>
         <div className={s.skinsWrapper}>
           {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
@@ -134,7 +136,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         )}
 
         {!noItemsMessage && hasCreatingIntegration && (
-          <span className={s.message}>Нельзя создавать новую интеграцию, пока создание предыдущей не закончится.</span>
+          <span className={s.message}>{t('i20')}</span>
         )}
 
         {
@@ -152,7 +154,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           disabled={submitDisabled && !noItemsMessage}
           onClick={noItemsMessage ? goToShop : submitCreation}
         >
-          {noItemsMessage ? 'В магазин' : 'Создать интеграцию'}
+          {noItemsMessage ? t("i21") : t("i9")}
         </TrackedButton>
       </div>
     </CentralModal>

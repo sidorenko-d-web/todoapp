@@ -3,11 +3,13 @@ import styles from './InitialGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
 import { Guide } from "../../Guide/Guide";
+import { useTranslation } from 'react-i18next';
 
 interface InitialGuideProps {
     onClose: () => void;
 }
 export const InitialGuide: React.FC<InitialGuideProps> = ({onClose}) => {
+    const { t } = useTranslation('guide');
     const [isOpen, setIsOpen] = useState(true);
 
     const handleClose = () => {
@@ -22,9 +24,9 @@ export const InitialGuide: React.FC<InitialGuideProps> = ({onClose}) => {
         <Guide align="left"
             zIndex={110}
             top={'35%'}
-            description="Меня зовут Push! Давай покажу, как тут все устроено и как ты сможешь заработать реальные деньги с Apusher! "
+            description={t('g31')}
             onClose={onClose}>
-            <button className={styles.nextBtn} onClick={handleClose}>Вперёд!</button>
+            <button className={styles.nextBtn} onClick={handleClose}>{t('g4')}</button>
             <img src={img1} className={styles.gifImage} height={146} width={140}/>
         </Guide>
     );

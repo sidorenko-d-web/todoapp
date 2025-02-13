@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './LoadingScreen.module.scss';
 import coinIcon from '../../../../src/assets/icons/coin.png';
 import { ProgressBar } from './ProgressBar';
+import { useTranslation } from 'react-i18next';
+
 export const LoadingScreen = () => {
+  const { t } = useTranslation('statistics');
   const [dots, setDots] = useState('.');
   const [progress, setProgress] = useState(0);
 
@@ -34,7 +37,7 @@ export const LoadingScreen = () => {
       <img className={styles.coin} src={coinIcon} alt="Coin" />
       <div className={styles.loadingWrp}>
         <ProgressBar progress={progress} />
-        <div className={styles.text}>Загрузка{dots}</div>
+        <div className={styles.text}>{t('s3')}{dots}</div>
       </div>
     </div>
   );

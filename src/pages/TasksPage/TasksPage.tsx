@@ -21,11 +21,11 @@ export const TasksPage: FC = () => {
   });
 
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return <div>{t('q16')}...</div>;
   }
 
   if (error) {
-    return <div>Произошла ошибка при загрузке заданий</div>;
+    return <div>{t('q17')}</div>;
   }
 
   return (

@@ -1,67 +1,70 @@
-export const INFLUENCER_RATING_STEPS = {
+import { useTranslation } from 'react-i18next';
+
+const getTranslatedSteps = (t: any) => ({
   email: {
     binding: {
       stepIndex: 1,
       stepsTotal: 2,
-      title: 'Рейтинг инфлюенсеров',
-      inputLabel: 'Почта',
+      title: t("p38"),
+      inputLabel: t("p39"),
       placeholder: 'example@mail.com',
-      description:
-        'Вы сможете видеть список лучших игроков и просматривать их профили, а также сами станете участником рейтинга! Привяжите вашу почту, чтобы открыть доступ.',
-      buttonNext: 'Далее',
+      description: t("p40"),
+      buttonNext: t("p41"),
       inputRegex: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
     },
     confirmation: {
       stepIndex: null,
       stepsTotal: null,
-      title: 'Рейтинг инфлюенсеров',
-      description: 'Введите код подтверждения, полученный на ваш почтовый адрес: ',
-      buttonResend: 'Отправить повторно',
-      buttonConfirm: 'Подтвердить',
+      title: t("p38"),
+      description: t("p42"),
+      buttonResend: t("p43"),
+      buttonConfirm: t("p44"),
     },
     success: {
       stepIndex: 2,
       stepsTotal: 2,
-      title: 'Рейтинг инфлюенсеров',
+      title: t("p38"),
       userPosition: '#2',
       ratingPoints: 12,
-      description:
-        'Поздравляем! Теперь вам доступен рейтинг инфлюенсеров! Ваша позиция в рейтинге: #2',
-      buttonNext: 'Продолжить',
+      description:t("p45"),
+      buttonNext: t("p46"),
     },
   },
   phone: {
     binding: {
       stepIndex: 2,
       stepsTotal: 2,
-      title: 'Рейтинг инфлюенсеров',
-      inputLabel: 'Номер телефона WhatsApp',
+      title: t("p38"),
+      inputLabel: t("p47"),
       placeholder: '+7 (000) 000-00-00',
-      description:
-        'Вы сможете получать еженедельный сундучок за продвижение по шкале рейтинга!',
+      description:t("p48"),
       buttonNext: 'Далее',
       inputRegex: /^\+?7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/,
     },
     confirmation: {
       stepIndex: null,
       stepsTotal: null,
-      title: 'Рейтинг инфлюенсеров',
-      description: 'Введите код подтверждения, полученный в приложении WhatsApp',
-      buttonResend: 'Отправить повторно',
-      buttonConfirm: 'Подтвердить',
+      title: t("p38"),
+      description: t("p49"),
+      buttonResend: t("p43"),
+      buttonConfirm: t("p44"),
     },
     success: {
       stepIndex: -1,
       stepsTotal: 2,
-      title: 'Рейтинг инфлюенсеров',
+      title: t("p38"),
       userPosition: '#2',
       ratingPoints: 12,
       userShield: '#100',
-      description:
-        'Поздравляем! Теперь вы участвуете в еженедельном розыгрыше Драгоценных сундучков!',
-      buttonNext: 'Отлично!',
+      description:t("p50"),
+      buttonNext: t("p51"),
     },
   },
+});
+
+export const useInfluencerRatingSteps = () => {
+  const { t } = useTranslation('promotion');
+  return getTranslatedSteps(t);
 };
 
-export type InfluencerRatingSteps = typeof INFLUENCER_RATING_STEPS;
+export type InfluencerRatingSteps = ReturnType<typeof useInfluencerRatingSteps>;
