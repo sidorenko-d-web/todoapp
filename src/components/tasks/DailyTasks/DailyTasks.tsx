@@ -1,8 +1,9 @@
-import { FC, useState, useMemo } from 'react';
+import { FC, useState, useMemo, useEffect } from 'react';
 import { TaskCard } from '../';
 import giftIcon from '../../../assets/icons/gift.svg';
 import { MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
+import { useGetTasksQuery } from '../../../redux/api/tasks/api';
 import s from '../styles.module.scss';
 import { ModalDailyTasks } from './ModalDailyTasks';
 
@@ -10,7 +11,13 @@ type QuestionState = 'solved' | 'current' | 'closed';
 
 export const DailyTasks: FC = () => {
   const { openModal, closeModal } = useModal();
+  const { data: tasksData } = useGetTasksQuery();
   const [questionStates, setQuestionStates] = useState<QuestionState[]>(['current', 'closed', 'closed']);
+
+  useEffect(() => {
+    const dailyTasks = tasksData?.assignments.filter(task => task.category === 'daily');
+    console.log('Daily Tasks:', dailyTasks);
+  }, [tasksData]);
 
   const completedCount = useMemo(() => {
     return questionStates.filter(state => state === 'solved').length;

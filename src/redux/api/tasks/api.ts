@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import { GetTasksResponse, UpdateTaskRequest, UpdateTaskResponse } from './dto';
+import { GetTasksResponse, UpdateTaskRequest, UpdateTaskResponse, GetTaskQuestionsResponse, GetDailyRewardResponse, GetTaskQuestionsErrorResponse } from './dto';
 
 export const tasksApi = createApi({
   reducerPath: 'tasksApi',
@@ -14,6 +14,12 @@ export const tasksApi = createApi({
       }),
       providesTags: ['Tasks']
     }),
+    getTaskQuestions: builder.query<GetTaskQuestionsResponse | GetTaskQuestionsErrorResponse, string>({
+      query: (assignmentId) => ({
+        url: `/assignments/daily/questions/${assignmentId}`,
+        method: 'GET',
+      })
+    }),
     updateTask: builder.mutation<UpdateTaskResponse, { id: string; data: UpdateTaskRequest }>({
       query: ({ id, data }) => ({
         url: `/assignments/${id}`,
@@ -22,12 +28,21 @@ export const tasksApi = createApi({
       }),
       invalidatesTags: ['Tasks']
     }),
+    getDailyReward: builder.mutation<GetDailyRewardResponse, string>({
+      query: (assignmentId) => ({
+        url: `/assignments/daily/reward/${assignmentId}`,
+        method: 'POST'
+      }),
+      invalidatesTags: ['Tasks']
+    }),
   }),
 });
 
 export const {
   useGetTasksQuery,
+  useGetTaskQuestionsQuery,
   useUpdateTaskMutation,
+  useGetDailyRewardMutation,
 } = tasksApi;
 
 

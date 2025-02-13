@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
 import coinIcon from '../../assets/icons/coin.png';
 
@@ -10,6 +10,12 @@ import { useGetTasksQuery } from '../../redux/api/tasks';
 export const TasksPage: FC = () => {
   const { data, error, isLoading } = useGetTasksQuery();
   
+  useEffect(() => {
+    const dailyTasks = data?.assignments.filter(task => task.category === 'daily');
+    console.log('Все задания:', data?.assignments);
+    console.log('Ежедневные задания:', dailyTasks);
+  }, [data]);
+
   console.log('Состояние запроса:', {
     data,
     error,
