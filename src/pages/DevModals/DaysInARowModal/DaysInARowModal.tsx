@@ -17,6 +17,7 @@ import { TypeItemQuality } from '../../../redux';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import redLightAnimation from '../../../assets/animations/redLight.json';
 import purpleLightAnimation from '../../../assets/animations/purpleLight.json';
+import { useGetPushLineQuery } from '../../../redux/api/pushLine/api';
 interface Props {
   days?: number;
   quality?: TypeItemQuality;
@@ -24,67 +25,193 @@ interface Props {
 
 export default function DaysInARowModal({ days = 90 }: Props) {
   const { closeModal } = useModal();
-
+  const { data } = useGetPushLineQuery();
   return (
     <BottomModal
       modalId={MODALS.DAYS_IN_A_ROW}
-      title={`${days} дней в ударе!`}
+      title={`${data?.in_streak_days} дней в ударе!`}
       onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)}
     >
       <div className={styles.images}>
-        {days < 30 ? (
-          <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
-        ) : days < 60 ? (
-          <Lottie animationData={purpleLightAnimation} loop={true} className={styles.light} />
+        {data?.in_streak_days < 30 ? (
+          <Lottie
+            animationData={blueLightAnimation}
+            loop={true}
+            className={styles.light}
+          />
+        ) : data?.in_streak_days < 60 ? (
+          <Lottie
+            animationData={purpleLightAnimation}
+            loop={true}
+            className={styles.light}
+          />
         ) : (
-          <Lottie animationData={redLightAnimation} loop={true} className={styles.light} />
+          <Lottie
+            animationData={redLightAnimation}
+            loop={true}
+            className={styles.light}
+          />
         )}
-        <img className={styles.fire} src={days < 30 ? FireBlue : days < 60 ? FirePurple : FireRed} />
+        <img
+          className={styles.fire}
+          src={
+            data?.in_streak_days < 30
+              ? FireBlue
+              : data?.in_streak_days < 60
+              ? FirePurple
+              : FireRed
+          }
+        />
         <div className={styles.days}>
-          <p>{days}</p>
+          <p>{data?.in_streak_days}</p>
         </div>
       </div>
       <div className={styles.days}>
-        <DayItem day={11} isActive={true} quality={days < 30 ? 'blue' : days < 60 ? 'purple' : 'red'} />
-        <DayItem day={12} isActive={true} quality={days < 30 ? 'blue' : days < 60 ? 'purple' : 'red'} />
-        <DayItem day={13} isActive={false} quality={days < 30 ? 'blue' : days < 60 ? 'purple' : 'red'} />
-        <DayItem day={14} isActive={true} quality={days < 30 ? 'blue' : days < 60 ? 'purple' : 'red'} />
-        <DayItem day={15} isActive={false} quality={days < 30 ? 'blue' : days < 60 ? 'purple' : 'red'} />
-        <DayItem day={16} isActive={false} quality={days < 30 ? 'blue' : days < 60 ? 'purple' : 'red'} />
-        <DayItem day={17} isActive={false} quality={days < 30 ? 'blue' : days < 60 ? 'purple' : 'red'} />
+        <DayItem
+          day={11}
+          isActive={true}
+          quality={
+            data?.in_streak_days < 30
+              ? 'blue'
+              : data?.in_streak_days < 60
+              ? 'purple'
+              : 'red'
+          }
+        />
+        <DayItem
+          day={12}
+          isActive={true}
+          quality={
+            data?.in_streak_days < 30
+              ? 'blue'
+              : data?.in_streak_days < 60
+              ? 'purple'
+              : 'red'
+          }
+        />
+        <DayItem
+          day={13}
+          isActive={false}
+          quality={
+            data?.in_streak_days < 30
+              ? 'blue'
+              : data?.in_streak_days < 60
+              ? 'purple'
+              : 'red'
+          }
+        />
+        <DayItem
+          day={14}
+          isActive={true}
+          quality={
+            data?.in_streak_days < 30
+              ? 'blue'
+              : data?.in_streak_days < 60
+              ? 'purple'
+              : 'red'
+          }
+        />
+        <DayItem
+          day={15}
+          isActive={false}
+          quality={
+            data?.in_streak_days < 30
+              ? 'blue'
+              : data?.in_streak_days < 60
+              ? 'purple'
+              : 'red'
+          }
+        />
+        <DayItem
+          day={16}
+          isActive={false}
+          quality={
+            data?.in_streak_days < 30
+              ? 'blue'
+              : data?.in_streak_days < 60
+              ? 'purple'
+              : 'red'
+          }
+        />
+        <DayItem
+          day={17}
+          isActive={false}
+          quality={
+            data?.in_streak_days < 30
+              ? 'blue'
+              : data?.in_streak_days < 60
+              ? 'purple'
+              : 'red'
+          }
+        />
       </div>
 
       <div className={styles.progressTitle}>
         <p>
-          {days}/{days < 30 ? '30' : days < 60 ? '60' : '120'} дней
+          {data?.in_streak_days}/
+          {data?.in_streak_days < 30 ? '30' : data?.in_streak_days < 60 ? '60' : '120'}{' '}
+          дней
         </p>
         <div className={styles.chest}>
           <p>Каменный сундук</p>
-          <img src={days < 30 ? ChestBlue : days < 60 ? ChestPurple : ChestRed} alt="" />
+          <img
+            src={
+              data?.in_streak_days < 30
+                ? ChestBlue
+                : data?.in_streak_days < 60
+                ? ChestPurple
+                : ChestRed
+            }
+            alt=""
+          />
         </div>
       </div>
       <div className={styles.progress}>
         <div
-          style={{ width: `${(days / (days < 30 ? 30 : days < 60 ? 60 : 120)) * 100}%` }}
+          style={{
+            width: `${
+              (data?.in_streak_days /
+                (data?.in_streak_days < 30 ? 30 : data?.in_streak_days < 60 ? 60 : 120)) *
+              100
+            }%`,
+          }}
           className={clsx(
             styles.progressBar,
-            days >= 60 ? styles.progressBarRed : days >= 30 && styles.progressBarPurple,
+            data?.in_streak_days >= 60
+              ? styles.progressBarRed
+              : data?.in_streak_days >= 30 && styles.progressBarPurple,
           )}
         />
       </div>
 
-      <Button variant={days < 30 ? 'blue' : days < 60 ? 'red' : 'red'}>Отлично!</Button>
+      <Button
+        variant={
+          data?.in_streak_days < 30 ? 'blue' : data?.in_streak_days < 60 ? 'red' : 'red'
+        }
+      >
+        Отлично!
+      </Button>
     </BottomModal>
   );
 }
 
-const DayItem = ({ day, isActive, quality }: { day: number; isActive: boolean; quality: string }) => {
+const DayItem = ({
+  day,
+  isActive,
+  quality,
+}: {
+  day: number;
+  isActive: boolean;
+  quality: string;
+}) => {
   return (
     <div className={styles.dayWrapper}>
       <div
         className={clsx(
           styles.icon,
-          quality === 'red' && isActive ? styles.iconRed : quality === 'purple' && isActive && styles.iconPurple,
+          quality === 'red' && isActive
+            ? styles.iconRed
+            : quality === 'purple' && isActive && styles.iconPurple,
         )}
       >
         <img src={isActive ? FireIcon : SnowflakeIcon} />
@@ -92,7 +219,9 @@ const DayItem = ({ day, isActive, quality }: { day: number; isActive: boolean; q
       <div
         className={clsx(
           styles.day,
-          quality === 'red' && isActive ? styles.dayRed : quality === 'purple' && isActive && styles.dayPurple,
+          quality === 'red' && isActive
+            ? styles.dayRed
+            : quality === 'purple' && isActive && styles.dayPurple,
         )}
       >
         <p>{day}</p>

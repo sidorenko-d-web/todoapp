@@ -8,7 +8,7 @@ import infoIcon from '../../assets/icons/info.svg';
 import { useParams } from 'react-router-dom';
 import { useGetUserProfileInfoByIdQuery } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
-
+import { useGetPushLineQuery } from '../../redux/api/pushLine/api';
 import s from './StrangerProfilePage.module.scss';
 import { Button } from '../../components/shared';
 
@@ -16,7 +16,7 @@ export const StrangerProfilePage = () => {
   const { openModal, closeModal } = useModal();
   const { profileId } = useParams();
   const { data: profile } = useGetUserProfileInfoByIdQuery(profileId || '');
-
+  const { data } = useGetPushLineQuery();
   if (!profile || !profileId) return null;
 
   // TODO: Раскомментировать когда на бэке будет vip данные
@@ -39,7 +39,7 @@ export const StrangerProfilePage = () => {
               <li className={s.number}>6</li>
               <li className={s.fireIcon}>
                 <img src={fireIcon} alt="fire" width={12} height={12} />
-                <span>{formatAbbreviation(profile.points)}</span>
+                <span>{formatAbbreviation(data?.in_streak_days)}</span>
               </li>
               {/*{profile.vip &&*/}
               {/*  <li className={s.vip}>*/}

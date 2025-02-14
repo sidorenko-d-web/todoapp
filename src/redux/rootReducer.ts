@@ -12,8 +12,9 @@ import {
   treeApi,
   usersApi,
 } from './api';
-import { treeReducer } from './slices/tree.ts';
+import { pushLineApi } from './api/pushLine/api';
 import { tasksApi } from './api/tasks';
+import { treeReducer } from './slices/tree.ts';
 import guideReducer from './slices/guideSlice.ts';
 import { pointsReducer } from './slices/point.ts';
 
@@ -25,6 +26,7 @@ const appReducer = combineReducers({
   pointSlice: pointsReducer,
   [authApi.reducerPath]: authApi.reducer,
   [shopApi.reducerPath]: shopApi.reducer,
+  [pushLineApi.reducerPath]: pushLineApi.reducer,
   [integrationsApi.reducerPath]: integrationsApi.reducer,
   [profileApi.reducerPath]: profileApi.reducer,
   [companiesApi.reducerPath]: companiesApi.reducer,
