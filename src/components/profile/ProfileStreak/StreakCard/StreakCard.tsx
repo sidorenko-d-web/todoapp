@@ -29,10 +29,8 @@ export const StreakCard: React.FC<StreakCardProps> = ({
   const calculateLevel = () => {
     const maxStreak = 30;
     const maxLevel = 5;
-    return Math.min(
-      maxLevel,
-      Math.max(0, Math.ceil((streakDays / maxStreak) * maxLevel)),
-    );
+
+    return Math.min(maxLevel, Math.floor((streakDays / maxStreak) * maxLevel));
   };
 
   return (
@@ -66,8 +64,6 @@ export const StreakCard: React.FC<StreakCardProps> = ({
                   dayNumber={day}
                   type={type}
                   weekIndex={index}
-                  streakDays={streakDays}
-                  frozenDays={frozenDays}
                   weekData={weekData}
                 />
               ))}
