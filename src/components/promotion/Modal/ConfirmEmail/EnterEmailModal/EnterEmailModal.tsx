@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { CentralModal, Button } from "../../../shared";
-import { MODALS } from "../../../../constants";
-import { ProgressBar } from "../../../shared/LoadingScreen/ProgressBar";
+import { CentralModal, Button } from "../../../../shared";
+import { MODALS } from "../../../../../constants";
+import { ProgressBar } from "../../../../shared/LoadingScreen/ProgressBar";
 
 import styles from "./EnterEmailModal.module.scss";
 
-import notEnteredIcon from '../../../../assets/icons/email-not-entered.svg';
-import clanIcon from '../../../../assets/icons/clan-red.svg';
+import notEnteredIcon from '../../../../../assets/icons/email-not-entered.svg';
+import clanIcon from '../../../../../assets/icons/clan-red.svg';
 
 interface EnterEmailModalProps {
     onClose: () => void;
