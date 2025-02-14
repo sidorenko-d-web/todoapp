@@ -1,0 +1,70 @@
+@use "../../../assets/styles/abstracts" as var;
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+
+.titleStyles {
+    display: flex;
+    padding: 5px 12px 10px 12px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    align-self: stretch;
+}
+
+.OK {
+    display: flex;
+    margin-top: 20px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    align-self: stretch;
+    border-radius: 8px;
+    border: 1px solid #2064C0;
+    background: #2F80ED;
+
+    color: #FFF;
+    text-align: center;
+    font-family: var.$font-default;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.childModalWrapper {
+    display: flex;
+    padding: 6px 6px 6px 8px;
+    gap: 15px;
+    align-self: stretch;
+    justify-content: space-between;
+    border-radius: 8px;
+    border: 1px solid #282830;
+}
+
+.titleAndIcon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+
+    color: var.$color-white;
+    font-family: var.$font-default;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+}
+
+.icon {
+    width: 14px;
+    height: 14px;
+}
+
+.arrow {
+    padding: 5px;
+}

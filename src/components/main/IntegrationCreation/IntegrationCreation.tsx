@@ -1,26 +1,20 @@
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants';
-import {
-  RootState,
-  profileApi,
-  useGetCurrentUserProfileInfoQuery,
-  useGetIntegrationsQuery,
-} from '../../../redux';
+import { profileApi, RootState, useGetCurrentUserProfileInfoQuery, useGetIntegrationsQuery } from '../../../redux';
 import { IntegrationCreationCard, IntegrationCreationModal } from '../';
-import { SubscribeModal, SuccessfullySubscribedModal } from '../../';
+import { SubscribeModal, SuccessfullySubscribedModal, TrackedButton } from '../../';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  getSubscriptionPurchased,
   isIntegrationCreationButtonGlowing,
-  setSubscriptionPurchased,
 } from '../../../utils/guide-functions.ts';
 
 import s from './IntegrationCreation.module.scss';
-import { Button } from '../../shared';
+import { useTranslation } from 'react-i18next';
 
 export const IntegrationCreation = () => {
+  const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
 
   const { data: profile } = useGetCurrentUserProfileInfoQuery();
@@ -58,19 +52,23 @@ export const IntegrationCreation = () => {
 
   return (
     <section className={s.integrationsControls}>
-      <Button
+      <TrackedButton
+        trackingData={{
+          eventType: 'button',
+          eventPlace: 'Создать интеграцию - Главный экран'
+        }}
         className={`${s.button} ${
           isButtonGlowing || createIntegrationButtonGlowing ? s.glowing : ''
         }`}
         disabled={!profile}
         onClick={handleIntegrationCreation}
       >
-        Создать интеграцию
+        {t('i9')}
         <span className={s.buttonBadge}>
           {profile?.subscription_integrations_left || 0}/5{' '}
           <img src={integrationIcon} height={12} width={12} alt="integration" />
         </span>
-      </Button>
+      </TrackedButton>
       {
         // @ts-expect-error ts(2339)
         integrationsError?.status === 404
@@ -92,17 +90,16 @@ export const IntegrationCreation = () => {
       />
       <SubscribeModal
         modalId={MODALS.SUBSCRIBE}
-        onClose={() => closeModal(MODALS.SUBSCRIBE)}
+        onClose={() => {
+          closeModal(MODALS.SUBSCRIBE);
+        }}
         onSuccess={handleSuccessfullySubscribed}
       />
       <SuccessfullySubscribedModal
         modalId={MODALS.SUCCESSFULLY_SUBSCRIBED}
         onClose={() => {
           closeModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
-          if (!getSubscriptionPurchased()) {
-            setSubscriptionPurchased();
-            openModal(MODALS.CREATING_INTEGRATION);
-          }
+          openModal(MODALS.CREATING_INTEGRATION);
         }}
       />
     </section>

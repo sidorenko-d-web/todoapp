@@ -3,11 +3,12 @@ import coinIcon from '../../../assets/icons/coin.png';
 import { formatAbbreviation } from '../../../helpers';
 import styles from './IntegrationComment.module.scss';
 import { useSelector } from 'react-redux';
-import { selectVolume } from '../../../redux';
+import { RootState, selectVolume } from '../../../redux';
 import { SOUNDS } from '../../../constants';
-import { Button, ProgressLine } from '../../shared';
-import { RootState } from '../../../redux';
+import { ProgressLine } from '../../shared';
 import clsx from 'clsx';
+import { TrackedButton } from '../..';
+import { useTranslation } from 'react-i18next';
 
 interface IntegrationCommentProps {
   author_username: string;
@@ -20,21 +21,22 @@ interface IntegrationCommentProps {
 }
 
 export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
-  author_username,
-  comment_text,
-  id,
-  progres,
-  onVote,
-  finished,
-  hateText,
-}) => {
-
+                                                                        author_username,
+                                                                        comment_text,
+                                                                        id,
+                                                                        progres,
+                                                                        onVote,
+                                                                        finished,
+                                                                        hateText,
+                                                                      }) => {
+  const { t, i18n } = useTranslation('integrations');
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const elevateComment = useSelector((state: RootState) => state.guide.elevateIntegrationStats);
 
-  const [voteRightSound] = useSound(SOUNDS.rightAnswer, {
+  const [ voteRightSound ] = useSound(SOUNDS.rightAnswer, {
     volume: useSelector(selectVolume),
   });
-  const [voteWrondSound] = useSound(SOUNDS.wrongAnswer, {
+  const [ voteWrondSound ] = useSound(SOUNDS.wrongAnswer, {
     volume: useSelector(selectVolume) * 5 < 1 ? useSelector(selectVolume) * 5 : 1, // too much quiet sound
   });
   const handleVoteRight = () => {
@@ -50,16 +52,16 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
       {!finished ? (
         <div className={styles.usernameAndComment}>
           <p className={styles.username}>{author_username}:</p>
-          <p className={clsx(styles.negativeCommentText, {[styles.positiveCommentText]: hateText})}>{comment_text}</p>
+          <p className={clsx(styles.negativeCommentText, { [styles.positiveCommentText]: hateText })}>{comment_text}</p>
         </div>
       ) : (
-        <p className={styles.noComment}>Нет новых комментариев</p>
+        <p className={styles.noComment}>{t('i8')}</p>
       )}
       <div className={styles.progressWrp}>
         <div className={styles.amountAndRewardWrp}>
           <p className={styles.amount}>{progres}/5</p>
           <div className={styles.rewardWrp}>
-            <p className={styles.reward}>+{formatAbbreviation(100)}</p>
+            <p className={styles.reward}>+{formatAbbreviation(100, 'number', {locale: locale})}</p>
             <img src={coinIcon} width={12} height={12} />
           </div>
         </div>
@@ -68,8 +70,14 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
 
       {!finished && (
         <div className={styles.thumbs}>
-          <Button className={styles.thumbsUp} onClick={handleVoteRight} />
-          <Button className={styles.thumbsDown} onClick={handleVoteWrong} />
+          <TrackedButton trackingData={{
+            eventType: 'button',
+            eventPlace: 'Лайк - Интеграции - Комментарий'
+          }} className={styles.thumbsUp} onClick={handleVoteRight} />
+          <TrackedButton trackingData={{
+            eventType: 'button',
+            eventPlace: 'Дизлайк - Интеграции - Комментарий'
+          }} className={styles.thumbsDown} onClick={handleVoteWrong} />
         </div>
       )}
     </div>

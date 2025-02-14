@@ -8,12 +8,14 @@ import { setGuideShown } from "../../../../utils";
 import { GUIDE_ITEMS } from "../../../../constants";
 import { useDispatch } from "react-redux";
 import { setCreateIntegrationButtonGlowing } from "../../../../redux/slices/guideSlice";
+import { useTranslation } from 'react-i18next';
 
 
 interface BackToMainPageGuideProps {
     onClose: () => void;
 }
 export const BackToMainPageGuide: React.FC<BackToMainPageGuideProps> = ({ onClose }) => {
+    const { t } = useTranslation('guide');
     const [isOpen, setIsOpen] = useState(true);
 
 
@@ -34,16 +36,16 @@ export const BackToMainPageGuide: React.FC<BackToMainPageGuideProps> = ({ onClos
             align="right"
             description={
                 <>
-                    Супер! Теперь у тебя есть <span style={{ color: '#2F80ED' }}>подписка</span> и <span style={{ color: '#2F80ED' }}>печатная машинка</span>.
+                {t('g37')}<span style={{ color: '#2F80ED' }}>{t('g38')}</span> {t('g39')} <span style={{ color: '#2F80ED' }}>{t('g40')}</span>.
                     <br />
                     <br />
-                    Ты можешь сделать свою первую интеграцию! Давай вернёмся в комнату и сделаем это!
+                    {t('g41')}
                 </>
             }
             top={'50%'}
             onClose={handleClose}
         >
-            <button className={styles.nextBtn} onClick={handleClose}>В комнату!</button>
+            <button className={styles.nextBtn} onClick={handleClose}>{t('g42')}</button>
             <img src={gif} className={styles.gifImage} />
         </Guide>
     )

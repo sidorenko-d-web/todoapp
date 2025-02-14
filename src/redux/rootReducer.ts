@@ -5,16 +5,18 @@ import {
   companiesApi,
   integrationsApi,
   profileApi,
+  refferalsApi,
+  roomApi,
+  shopApi,
+  trackingApi,
   treeApi,
   usersApi,
 } from './api';
 import { pushLineApi } from './api/pushLine/api';
-import { shopApi } from './api';
-import { refferalsApi } from './api';
+import { tasksApi } from './api/tasks';
 import { treeReducer } from './slices/tree.ts';
 import guideReducer from './slices/guideSlice.ts';
 import { pointsReducer } from './slices/point.ts';
-
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -31,6 +33,9 @@ const appReducer = combineReducers({
   [refferalsApi.reducerPath]: refferalsApi.reducer,
   [usersApi.reducerPath]: usersApi.reducer,
   [treeApi.reducerPath]: treeApi.reducer,
+  [tasksApi.reducerPath]: tasksApi.reducer,
+  [roomApi.reducerPath]: roomApi.reducer,
+  [trackingApi.reducerPath]: trackingApi.reducer,
 });
 
 export const rootReducer = (state: any, action: Action) => {

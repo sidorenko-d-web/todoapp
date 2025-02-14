@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { isGuideShown } from "../../utils";
+import { getCurrentFooterItem, isGuideShown } from "../../utils";
 import { GUIDE_ITEMS } from "../../constants";
 
 interface GuideState {
@@ -12,14 +12,15 @@ interface GuideState {
   isPublishedModalClosed: boolean;
   integrationReadyForPublishing: boolean;
 
-  createdIntegrationId: string;
-
   itemBought: boolean;
 
   elevateIntegrationStats: boolean;
 
   lastIntegrationId: string;
 
+  footerActive: boolean;
+
+  activeFooterItemId: number;
 }
 
 const initialState: GuideState = {
@@ -36,9 +37,10 @@ const initialState: GuideState = {
   accelerateIntegrationGuideClosed: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN)
     && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED),
   isPublishedModalClosed: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED),
-  createdIntegrationId: "",
   elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
   lastIntegrationId: "",
+  footerActive: isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
+  activeFooterItemId: getCurrentFooterItem()
 };
 
 const guideSlice = createSlice({
@@ -69,9 +71,6 @@ const guideSlice = createSlice({
     setIntegrationReadyForPublishing: (state, action: PayloadAction<boolean>) => {
       state.integrationReadyForPublishing = action.payload;
     },
-    setCreatedIntegrationId: (state, action: PayloadAction<string>) => {
-      state.createdIntegrationId = action.payload;
-    },
     setElevateIntegrationStats: (state, action: PayloadAction<boolean>) => {
       state.elevateIntegrationStats = action.payload;
     },
@@ -80,6 +79,14 @@ const guideSlice = createSlice({
     },
     setLastIntegrationId: (state, action: PayloadAction<string>) => {
       state.lastIntegrationId = action.payload;
+    },
+    setFooterActive: (state, action: PayloadAction<boolean>) => {
+      state.footerActive = action.payload;
+    },
+    setActiveFooterItemId: (state, action: PayloadAction<number>) => {
+      if(state.activeFooterItemId !== -1) {
+        state.activeFooterItemId = action.payload;
+      }
     },
   },
 });
@@ -90,6 +97,7 @@ export const { setGetCoinsGuideShown,
     setCreateIntegrationButtonGlowing, 
     setIntegrationCreated, setAccelerateIntegrationGuideClosed,
     setIsPublishedModalClosed, setIntegrationReadyForPublishing, 
-    setCreatedIntegrationId, setElevateIntegrationStats, 
-    setItemBought, setLastIntegrationId } = guideSlice.actions;
+    setElevateIntegrationStats, 
+    setItemBought, setLastIntegrationId,
+    setFooterActive, setActiveFooterItemId} = guideSlice.actions;
 export default guideSlice.reducer;

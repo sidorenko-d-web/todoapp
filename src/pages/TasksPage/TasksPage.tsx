@@ -1,21 +1,52 @@
-import React from 'react';
+import { FC, useEffect } from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
 import coinIcon from '../../assets/icons/coin.png';
 
 import s from './TasksPage.module.scss';
 import { DailyTasks, SocialTasks, TopTasks } from '../../components';
 import { formatAbbreviation } from '../../helpers';
+import { useGetTasksQuery } from '../../redux/api/tasks';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { setActiveFooterItemId } from '../../redux/slices/guideSlice';
 
-export const TasksPage: React.FC = () => {
+export const TasksPage: FC = () => {
+  const dispatch = useDispatch();
+
+
+  const { t, i18n } = useTranslation('quests');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+
+  const { data, error, isLoading } = useGetTasksQuery();
+
+  useEffect(() => {
+    dispatch(setActiveFooterItemId(4));
+  }, []);
+
+
+  console.log('Состояние запроса:', {
+    data,
+    error,
+    isLoading
+  });
+
+  if (isLoading) {
+    return <div>{t('q16')}...</div>;
+  }
+
+  if (error) {
+    return <div>{t('q17')}</div>;
+  }
+
   return (
     <main className={s.page}>
       <section className={s.topSection}>
-        <h1 className={s.pageTitle}>Задания</h1>
+        <h1 className={s.pageTitle}>{t('q1')}</h1>
         <div className={s.badges}>
-          <span className={s.badge}>+{formatAbbreviation(100)} <img src={subscribersIcon} height={14} width={14}
-                                              alt={'subscribers'} /></span>
-          <span className={s.badge}>+{formatAbbreviation(150)} <img src={coinIcon} height={14} width={14} alt={'income'} /></span>
-          <span className={s.badge}>+{formatAbbreviation(1)} <img src={coinIcon} height={14} width={14} alt={'income'} />/сек.</span>
+          <span className={s.badge}>+{formatAbbreviation(100, 'number', { locale: locale })} <img src={subscribersIcon} height={14} width={14}
+            alt={'subscribers'} /></span>
+          <span className={s.badge}>+{formatAbbreviation(150, 'number', { locale: locale })} <img src={coinIcon} height={14} width={14} alt={'income'} /></span>
+          <span className={s.badge}>+{formatAbbreviation(1, 'number', { locale: locale })} <img src={coinIcon} height={14} width={14} alt={'income'} />/{t('q9')}</span>
         </div>
       </section>
 

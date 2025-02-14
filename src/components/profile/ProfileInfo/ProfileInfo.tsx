@@ -12,10 +12,10 @@ import subscriptionLeveIcon from '../../../assets/icons/subscription-level.svg';
 import { ProgressLine } from '../../shared';
 import { useModal } from '../../../hooks';
 import { AppRoute, MODALS } from '../../../constants';
-import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux';
 import { useTranslation } from 'react-i18next';
+import { TrackedLink } from '../..';
 
 interface ProfileInfoProps {
   nickname: string;
@@ -27,13 +27,13 @@ interface ProfileInfoProps {
 }
 
 export const ProfileInfo: React.FC<ProfileInfoProps> = ({
-  nickname,
-  blogName,
-  subscriptionIntegrationsLeft,
-  position,
-  isVip,
-  nonEditable,
-}) => {
+                                                          nickname,
+                                                          blogName,
+                                                          subscriptionIntegrationsLeft,
+                                                          position,
+                                                          isVip,
+                                                          nonEditable,
+                                                        }) => {
   const { t } = useTranslation('profile');
   const { openModal } = useModal();
   const lastActiveStage = useSelector(
@@ -71,9 +71,13 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         <div className={styles.info}>
           <div className={styles.nicknameWrp}>
             <span className={styles.nickname}>{nickname}</span>
-            <Link to={AppRoute.ProgressTree} className={styles.subscribers}>
+            <TrackedLink
+              trackingData={{
+                eventType: 'button',
+                eventPlace: 'В дерево роста - Профиль',
+              }} to={AppRoute.ProgressTree} className={styles.subscribers}>
               {lastActiveStage}
-            </Link>
+            </TrackedLink>
             {!nonEditable && (
               <img
                 className={styles.edit}
