@@ -1,0 +1,60 @@
+@use "../../../../../assets/styles/index.scss" as var;
+
+.emailText {
+  font-size: 14px;
+  color: var.$color-text-semi-transparent;
+  text-align: center;
+  white-space: normal;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+.codeInputGroup {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 15px;
+
+  .codeInput {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: transparent;
+    border: 1px solid var.$color-dark-gray-stroke;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus {
+      border-color: var.$color-primary;
+    }
+  }
+}
+
+.resendText {
+  font-size: 12px;
+  color: var.$color-text-semi-transparent;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.submitBtn {
+  width: 100%;
+  border: none;
+  color: var.$color-gray;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: var.$color-button-inactive;
+  pointer-events: none;
+
+  &:not(:disabled) {
+    background-color: var.$color-primary;
+    color: white;
+    border: 1px solid var.$color-border-primary;
+    pointer-events: all;
+  }
+}

@@ -25,6 +25,8 @@ export const MODALS = {
   BINDING: 'binding',
   BINDING_CONFIRMATION: 'binding-confirmation',
   BINDING_SUCCESS: 'binding-success',
+  ENTER_EMAIL: 'enterEmail',
+  EMAIL_CONFIRMATION_CODE: 'emailConfirmationCode'
 };
 
 
