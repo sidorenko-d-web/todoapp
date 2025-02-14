@@ -4,7 +4,7 @@ import lightningIcon from '../../../assets/icons/lightning.svg';
 import starBlueIcon from '../../../assets/icons/star-blue.svg';
 import starDarkGrayIcon from '../../../assets/icons/star-dark-gray.svg';
 import integrationBlueIcon from '../../../assets/icons/integration-blue.svg';
-
+import { getCompanyLogo } from '../../../utils/getCompanyLogo';
 import s from './CompanyCard.module.scss';
 import { isGuideShown } from '../../../utils';
 import { GUIDE_ITEMS } from '../../../constants';
@@ -20,12 +20,31 @@ const glowing = !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLIS
 
 export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick }) => {
   return (
-    <Button className={s.card + ' ' + (selected ? ` ${s.selected}` : '') + ' ' + (glowing ? `${s.glowing}` : '')} onClick={() => onClick && onClick(company.id)}>
+    <Button
+      className={
+        s.card +
+        ' ' +
+        (selected ? ` ${s.selected}` : '') +
+        ' ' +
+        (glowing ? `${s.glowing}` : '')
+      }
+      onClick={() => onClick && onClick(company.id)}
+    >
       <header className={s.header}>
         <div className={s.icon}>
           <img src={lightningIcon} alt="Lightning" width={12} height={12} />
         </div>
-        <img src={company.image_url || integrationBlueIcon} alt="Photo" width={24} height={24} />
+        <img
+          src={
+            company.image_url ||
+            getCompanyLogo(company.company_name) ||
+            integrationBlueIcon
+          }
+          alt="Company Logo"
+          width={24}
+          height={24}
+          className={s.companyIcon}
+        />
       </header>
       <div className={s.content}>
         <h3 className={s.title}>{company.company_name}</h3>
@@ -35,10 +54,7 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick }
           <img src={starDarkGrayIcon} alt="" width={14} height={14} />
         </div>
         <div className={s.progressBar}>
-          <div
-            className={s.progressBarInner}
-            style={{ width: `15%` }}
-          />
+          <div className={s.progressBarInner} style={{ width: `15%` }} />
         </div>
       </div>
     </Button>
