@@ -43,7 +43,6 @@ export const ProfilePage: React.FC = () => {
       setIsModalShown(true);
     }
   }, [openModal]);
-  console.log(data);
   useEffect(() => {
     if (data?.in_streak_days === 30) {
       openModal(MODALS.TASK_CHEST);
@@ -59,7 +58,28 @@ export const ProfilePage: React.FC = () => {
 
   const position =
     userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length!;
+  const frozen = data?.week_information.filter(
+    day =>
+      day.status === 'passed' &&
+      !day.is_notified_at_morning &&
+      !day.is_notified_at_afternoon &&
+      !day.is_notified_at_evening &&
+      !day.is_notified_at_late_evening &&
+      !day.is_notified_at_late_night &&
+      !day.is_notified_at_night,
+  ).length;
 
+  const streaks = data?.week_information.filter(
+    day =>
+      day &&
+      (day.status === 'unspecified' || day.status === 'passed') &&
+      (day.is_notified_at_morning ||
+        day.is_notified_at_afternoon ||
+        day.is_notified_at_evening ||
+        day.is_notified_at_late_evening ||
+        day.is_notified_at_late_night ||
+        day.is_notified_at_night),
+  ).length;
   const streakDays = [27, 28, 30]; // TODO: replace with real data from API
   const freezeDays = [29]; // TODO: replace with real data
 
@@ -82,7 +102,7 @@ export const ProfilePage: React.FC = () => {
             <ProfileStatsMini
               subscribers={userProfileData.subscribers}
               position={position}
-              daysInARow={data?.in_streak_days}
+              daysInARow={streaks}
               totalViews={userProfileData.total_views}
             />
           </div>
@@ -103,11 +123,10 @@ export const ProfilePage: React.FC = () => {
           />
 
           <StreakCard
-            streakCount={data?.in_streak_days}
-            freezeCount={data?.failed_days_ago}
+            streakDays={streaks}
+            frozenDays={frozen}
             days={weekData}
-            progress={data?.in_streak_days}
-            failed={data?.failed_at}
+            weekData={data?.week_information}
           />
 
           <div>
