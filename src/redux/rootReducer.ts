@@ -17,6 +17,7 @@ import { tasksApi } from './api/tasks';
 import { treeReducer } from './slices/tree.ts';
 import guideReducer from './slices/guideSlice.ts';
 import { pointsReducer } from './slices/point.ts';
+import { confirmationsApi } from './api/confirmations/api.ts';
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -36,6 +37,7 @@ const appReducer = combineReducers({
   [tasksApi.reducerPath]: tasksApi.reducer,
   [roomApi.reducerPath]: roomApi.reducer,
   [trackingApi.reducerPath]: trackingApi.reducer,
+  [confirmationsApi.reducerPath]: confirmationsApi.reducer,
 });
 
 export const rootReducer = (state: any, action: Action) => {

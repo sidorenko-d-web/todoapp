@@ -15,6 +15,7 @@ import {
 } from './api';
 import { tasksApi } from './api/tasks';
 import { pushLineApi } from './api/pushLine/api';
+import { confirmationsApi } from './api/confirmations/api';
 
 export const store = configureStore({
   reducer: rootReducer,
@@ -33,6 +34,7 @@ export const store = configureStore({
       trackingApi.middleware,
       tasksApi.middleware,
       roomApi.middleware,
+      confirmationsApi.middleware
     ),
 });
 
