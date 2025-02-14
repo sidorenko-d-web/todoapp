@@ -47,7 +47,7 @@ export const StreakDay: React.FC<StreakDayProps> = ({
 
   const isStreakDay =
     currentDayInfo &&
-    currentDayInfo.status === 'unspecified' &&
+    (currentDayInfo.status === 'unspecified' || currentDayInfo.status === 'passed') &&
     (currentDayInfo.is_notified_at_morning ||
       currentDayInfo.is_notified_at_afternoon ||
       currentDayInfo.is_notified_at_evening ||
@@ -56,14 +56,7 @@ export const StreakDay: React.FC<StreakDayProps> = ({
       currentDayInfo.is_notified_at_night);
 
   const isFailedDay =
-    currentDayInfo &&
-    currentDayInfo.status === 'passed' &&
-    !currentDayInfo.is_notified_at_morning &&
-    !currentDayInfo.is_notified_at_afternoon &&
-    !currentDayInfo.is_notified_at_evening &&
-    !currentDayInfo.is_notified_at_late_evening &&
-    !currentDayInfo.is_notified_at_late_night &&
-    !currentDayInfo.is_notified_at_night;
+    currentDayInfo && currentDayInfo.status === 'passed' && !isStreakDay;
 
   const weekdaysRu = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
   const weekdaysEn = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];

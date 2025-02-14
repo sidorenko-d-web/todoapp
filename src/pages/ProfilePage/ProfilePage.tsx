@@ -71,7 +71,8 @@ export const ProfilePage: React.FC = () => {
 
   const streaks = data?.week_information.filter(
     day =>
-      day.status === 'unspecified' &&
+      day &&
+      (day.status === 'unspecified' || day.status === 'passed') &&
       (day.is_notified_at_morning ||
         day.is_notified_at_afternoon ||
         day.is_notified_at_evening ||
