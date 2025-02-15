@@ -11,6 +11,7 @@ import {
   trackingApi,
   treeApi,
   usersApi,
+  pushLineApi
 } from './api';
 import { treeReducer } from './slices/tree.ts';
 import { tasksApi } from './api/tasks';
@@ -34,6 +35,7 @@ const appReducer = combineReducers({
   [tasksApi.reducerPath]: tasksApi.reducer,
   [roomApi.reducerPath]: roomApi.reducer,
   [trackingApi.reducerPath]: trackingApi.reducer,
+  [pushLineApi.reducerPath]: pushLineApi.reducer
 });
 
 export const rootReducer = (state: any, action: Action) => {

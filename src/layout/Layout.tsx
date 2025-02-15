@@ -37,6 +37,7 @@ const Layout = () => {
 
         <AudioBg />
       </main>
+
       <Footer />
     </div>
   );

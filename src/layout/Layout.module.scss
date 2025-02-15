@@ -8,8 +8,8 @@
 }
 
 .settingsIcon {
-  position: fixed;
-  top: var(--tg-safe-area-inset-top);
+  position: sticky;
+  top: calc(var(--tg-safe-area-inset-top) + var(--tg-safe-area-inset-top) / 2);
   right: calc(var(--tg-safe-area-inset-right) + 90px);
 }
 
@@ -19,7 +19,8 @@
   width: 100%;
   max-width: 1728px;
   height: calc(100vh - 140px);
-  padding: 20px 15px;
+  //padding: 20px 15px;
+  padding: calc(var(--tg-content-safe-area-inset-top) + 20px) 15px 20px;
   overflow-y: auto;
   overflow-x: hidden;
 
