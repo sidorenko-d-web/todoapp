@@ -91,17 +91,20 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
       setAnsweredQuestions(newAnsweredQuestions);
 
       try {
+        const newCompletedStages = currentQuestionIndex + 1;
         await updateTask({
           id: taskId,
           data: {
-            completed_stages: currentQuestionIndex + 1,
+            completed_stages: newCompletedStages,
             link: task.external_link,
             question_id: currentQuestion.id,
             answer_option_id: selectedOption as string
           }
         });
 
-        if (currentQuestionIndex === questions.length - 1) {
+        onStateChange?.(getQuestionStates());
+
+        if (newCompletedStages === questions.length) {
           setShowResult(true);
           setTimeout(() => onClose(), 1000);
           return;
@@ -118,7 +121,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   };
 
   const handleDotClick = (index: number) => {
-    if (index < task.completed_stages) {
+    if (index <= task.completed_stages) {
       setCurrentQuestionIndex(index);
       setSelectedOption(correctAnswer?.id || null);
       setShowResult(true);
