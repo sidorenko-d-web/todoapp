@@ -9,12 +9,23 @@ import { DayType } from '../../../../types';
 import { StreakDay } from './StreakDay';
 import { useTranslation } from 'react-i18next';
 
+interface WeekData {
+  date: string;
+  status: string;
+  is_notified_at_morning: boolean;
+  is_notified_at_afternoon: boolean;
+  is_notified_at_evening: boolean;
+  is_notified_at_late_evening: boolean;
+  is_notified_at_night: boolean;
+  is_notified_at_late_night: boolean;
+}
+
 interface StreakCardProps {
   days?: { day: number; type: DayType }[];
   onlyStreak?: boolean;
   streakDays: number;
-  frozenDays: number;
-  weekData: [];
+  frozenDays?: number;
+  weekData?: WeekData[];
 }
 
 export const StreakCard: React.FC<StreakCardProps> = ({
@@ -64,7 +75,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
                   dayNumber={day}
                   type={type}
                   weekIndex={index}
-                  weekData={weekData}
+                  weekData={weekData ?? []}
                 />
               ))}
             </div>

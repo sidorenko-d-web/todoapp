@@ -32,7 +32,7 @@ export const ProfilePage: React.FC = () => {
     isLoading: isTopProfilesLoading,
   } = useGetTopProfilesQuery();
 
-  const [isModalShown, setIsModalShown] = useState(false);
+  const [, setIsModalShown] = useState(false);
   useEffect(() => {
     const lastShownTimestamp = localStorage.getItem('daysInARowModalTimestamp');
     const now = Date.now();
@@ -84,7 +84,7 @@ export const ProfilePage: React.FC = () => {
   const freezeDays = [29]; // TODO: replace with real data
 
   const weekData = getWeekData(streakDays, freezeDays);
-
+  console.log(data?.week_information);
   return (
     <>
       <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
@@ -102,7 +102,7 @@ export const ProfilePage: React.FC = () => {
             <ProfileStatsMini
               subscribers={userProfileData.subscribers}
               position={position}
-              daysInARow={streaks}
+              daysInARow={streaks !== undefined ? streaks : 0}
               totalViews={userProfileData.total_views}
             />
           </div>
@@ -123,8 +123,8 @@ export const ProfilePage: React.FC = () => {
           />
 
           <StreakCard
-            streakDays={streaks}
-            frozenDays={frozen}
+            streakDays={streaks !== undefined ? streaks : 0}
+            frozenDays={frozen !== undefined ? frozen : 0}
             days={weekData}
             weekData={data?.week_information}
           />

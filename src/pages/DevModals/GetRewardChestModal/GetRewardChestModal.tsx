@@ -10,8 +10,10 @@ import chestAnimation from '../../../assets/animations/kamen_fixed.json';
 import reward from '../../../assets/animations/reward.json';
 import { SOUNDS, localStorageConsts, MODALS } from '../../../constants';
 import { CentralModal } from '../../../components/shared';
-
-export default function GetRewardChestModal() {
+interface GetRewardChestModalProps {
+  onClose?: () => void;
+}
+export default function GetRewardChestModal({}: GetRewardChestModalProps) {
   const { closeModal } = useModal();
   const handleClose = () => {
     closeModal(MODALS.TASK_CHEST);
