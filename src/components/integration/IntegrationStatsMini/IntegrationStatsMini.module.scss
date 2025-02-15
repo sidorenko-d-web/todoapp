@@ -17,18 +17,21 @@
   }
 
   .statsUnderTitle {
-    width: 225px;
+    width: 100%;
+    max-width: 225px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
     align-self: center;
     gap: 5px;
     margin-top: 5px;
+    flex-grow: 1;
 
     .statWrp {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 3px;
 
       height: fit-content;
@@ -43,20 +46,24 @@
         white-space: nowrap;
       }
     }
+
+    @media (min-width: var.$breakpoint-md) {
+      flex-direction: row;
+    }
+
   }
 
   .seeStatsButton {
     height: 40px;
-    width: 40px;
+    min-width: 40px;
     border-radius: 10px;
     background-color: var.$color-blue-primary;
     border: none;
     background-image: url('../../../assets/icons/stats-button.svg');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: contain;
+    background-size: 22px;
     margin-right: 15px;
-    background-size: 45%;
+    flex-grow: 0;
   }
-
 }

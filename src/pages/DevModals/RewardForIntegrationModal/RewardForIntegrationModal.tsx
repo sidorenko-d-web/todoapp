@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../helpers';
 
 export default function RewardForIntegrationModal() {
-  const {t, i18n } = useTranslation('integration');
+  const {t, i18n } = useTranslation('integrations');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal } = useModal();
 
