@@ -22,10 +22,11 @@ const Layout = () => {
   }, []);
 
   return (
-    <div className={styles.wrp}>
+    <>
       <div className={styles.settingsIcon}>
         <Settings />
       </div>
+    <div className={styles.wrp}>
       {showHeader && <Header />}
       <main className={styles.content + ' ' + (showHeader ? styles.withHeader : '')}>
         <Outlet />
@@ -40,6 +41,7 @@ const Layout = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

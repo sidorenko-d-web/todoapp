@@ -8,10 +8,11 @@
 }
 
 .settingsIcon {
-  position: sticky;
+  position: fixed;
   //top: calc(var(--tg-safe-area-inset-top));
-  top: calc(var(--tg-safe-area-inset-top) + var(--tg-content-safe-area-inset-top) / 2);
-  right: calc(var(--tg-safe-area-inset-right) + 90px);
+  top: calc(var(--tg-content-safe-area-inset-top) / 1.5 + var(--tg-content-safe-area-inset-top) / 1.5);
+  right: calc(var(--tg-content-safe-area-inset-right) + 100px);
+  z-index: 100;
 }
 
 .content {
