@@ -28,12 +28,12 @@ export const tasksApi = createApi({
       }),
       invalidatesTags: ['Tasks']
     }),
-    getDailyReward: builder.mutation<GetDailyRewardResponse, string>({
+    getDailyReward: builder.query<GetDailyRewardResponse, string>({
       query: (assignmentId) => ({
         url: `/assignments/daily/reward/${assignmentId}`,
-        method: 'POST'
+        method: 'GET'
       }),
-      invalidatesTags: ['Tasks']
+      providesTags: ['Tasks']
     }),
   }),
 });
@@ -42,7 +42,7 @@ export const {
   useGetTasksQuery,
   useGetTaskQuestionsQuery,
   useUpdateTaskMutation,
-  useGetDailyRewardMutation,
+  useGetDailyRewardQuery,
 } = tasksApi;
 
 

@@ -82,6 +82,7 @@ export const DailyTasks: FC = () => {
         taskId={dailyTask.id}
         totalSteps={dailyTask.stages}
         boost={dailyTask.boost}
+        task={dailyTask}
       />
     </section>
   );

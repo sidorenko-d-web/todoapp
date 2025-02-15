@@ -28,6 +28,8 @@ export type GetTasksResponse = {
 export type UpdateTaskRequest = {
   completed_stages: number;
   link: string;
+  question_id?: string;
+  answer_option_id?: string;
 }
 
 export type UpdateTaskResponse = Task;
@@ -44,7 +46,6 @@ export type Question = {
   answer_options: AnswerOption[];
 }
 
-export type GetTaskQuestionsResponse = Question[];
 
 export type ErrorDetail = {
   loc: [string, number];

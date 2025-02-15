@@ -12,8 +12,8 @@ import bookIcon from '../../../../assets/icons/book.svg';
 import CrossRedIcon from '../../../../assets/icons/cross-red-in-circle.svg';
 import { formatAbbreviation } from '../../../../helpers';
 import { Button } from '../../../shared';
-import { TaskBoost, DailyQuestion } from '../../../../redux/api/tasks/dto';
-import { useGetTaskQuestionsQuery } from '../../../../redux/api/tasks/api';
+import { TaskBoost, DailyQuestion, Task } from '../../../../redux/api/tasks/dto';
+import { useGetTaskQuestionsQuery, useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
 
 type ModalDailyTasksProps = {
   modalId: string;
@@ -22,6 +22,7 @@ type ModalDailyTasksProps = {
   taskId: string;
   totalSteps: number;
   boost: TaskBoost;
+  task: Task;
 };
 
 type QuestionState = 'solved' | 'current' | 'closed';
@@ -33,24 +34,31 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
                                                             taskId,
                                                             totalSteps,
                                                             boost,
+                                                            task,
                                                           }) => {
   const { data: questions } = useGetTaskQuestionsQuery(taskId);
+  const [updateTask] = useUpdateTaskMutation();
   const isQuestionsArray = Array.isArray(questions);
-  const [ currentQuestionIndex, setCurrentQuestionIndex ] = useState(0);
-  const [ selectedOption, setSelectedOption ] = useState<string | null>(null);
-  const [ showResult, setShowResult ] = useState(false);
-  const [ answeredQuestions, setAnsweredQuestions ] = useState<boolean[]>([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(task.completed_stages);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [showResult, setShowResult] = useState(false);
+  const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
+  const [channelLink, setChannelLink] = useState(task.external_link);
 
   useEffect(() => {
     if (isQuestionsArray && questions) {
-      setAnsweredQuestions(Array(questions.length).fill(false));
+      setAnsweredQuestions(
+        Array(questions.length)
+          .fill(false)
+          .map((_, index) => index < task.completed_stages)
+      );
     }
-  }, [questions, isQuestionsArray]);
+  }, [questions, isQuestionsArray, task.completed_stages]);
 
   const getQuestionStates = (): QuestionState[] => {
     if (!isQuestionsArray || !questions) return [];
     return questions.map((_, index) => {
-      if (answeredQuestions[index]) {
+      if (index < task.completed_stages) {
         return 'solved';
       } else if (index === currentQuestionIndex) {
         return 'current';
@@ -61,7 +69,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
 
   useEffect(() => {
     onStateChange?.(getQuestionStates());
-  }, [ currentQuestionIndex, answeredQuestions ]);
+  }, [currentQuestionIndex, answeredQuestions, task.completed_stages]);
 
   if (!isQuestionsArray || !questions || questions.length === 0) {
     return null;
@@ -76,32 +84,51 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
     setShowResult(false);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (isCorrectAnswer) {
-      const newAnsweredQuestions = [ ...answeredQuestions ];
+      const newAnsweredQuestions = [...answeredQuestions];
       newAnsweredQuestions[currentQuestionIndex] = true;
       setAnsweredQuestions(newAnsweredQuestions);
 
-      if (currentQuestionIndex === questions.length - 1) {
-        setShowResult(true);
-        setTimeout(() => onClose(), 1000);
-        return;
-      }
+      try {
+        await updateTask({
+          id: taskId,
+          data: {
+            completed_stages: currentQuestionIndex + 1,
+            link: task.external_link,
+            question_id: currentQuestion.id,
+            answer_option_id: selectedOption as string
+          }
+        });
 
-      setCurrentQuestionIndex(prev => prev + 1);
-      setSelectedOption(null);
+        if (currentQuestionIndex === questions.length - 1) {
+          setShowResult(true);
+          setTimeout(() => onClose(), 1000);
+          return;
+        }
+
+        setCurrentQuestionIndex(prev => prev + 1);
+        setSelectedOption(null);
+      } catch (error) {
+        console.error('Error updating task:', error);
+      }
     } else {
       setShowResult(true);
     }
   };
 
   const handleDotClick = (index: number) => {
-    if (answeredQuestions[index] && correctAnswer?.id) {
+    if (index < task.completed_stages) {
       setCurrentQuestionIndex(index);
-      setSelectedOption(correctAnswer.id);
+      setSelectedOption(correctAnswer?.id || null);
       setShowResult(true);
     }
   };
+
+  const handleOpenGuide = () => {
+    window.open(channelLink, '_blank');
+  };
+
   return (
     <BottomModal
       modalId={modalId}
@@ -116,7 +143,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
             <img src={coinIcon} alt="coin" width={14} height={14} />
           </span>
           <span className={s.reward}>
-            ???
+            0
             <img src={giftIcon} alt="gift" width={14} height={14} />
           </span>
         </div>
@@ -190,7 +217,10 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
 
         {/* Кнопки */}
         <div className={s.buttons}>
-          <Button className={s.answerButton}>
+          <Button 
+            className={s.answerButton}
+            onClick={handleOpenGuide}
+          >
             Ответы
             <img src={bookIcon} alt="" className={s.buttonIcon} />
           </Button>

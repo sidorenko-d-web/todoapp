@@ -139,11 +139,11 @@ export const TaskCard: React.FC<TasksCardProps> = ({
             <span className={s.reward}>
               {boost?.income_per_second || '0'} <img src={coinIcon} height={14} width={14} alt="income" />
             </span>
-            <span className={s.reward}>
+            {/* <span className={s.reward}>
               {boost?.subscribers || 0} <img src={subscribersIcon} height={14} width={14} alt="subscribers" />
-            </span>
+            </span> */}
             <span className={s.reward}>
-              ??? <img src={giftIcon} height={14} width={14} alt="gift" />
+              0 <img src={giftIcon} height={14} width={14} alt="gift" />
             </span>
           </div>
         </section>
