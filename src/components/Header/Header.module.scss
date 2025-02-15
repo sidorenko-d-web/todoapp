@@ -11,9 +11,7 @@
 $color-header-dark: #1c1d22;
 $color-header-border-dark: #282830;
 $color-header-content-dark: #212129;
-
 $progress-bar-color: #2f80ed;
-
 $mobile-device-safe-are-inset-top: env(safe-area-inset-top);
 $header-border: 1px solid $color-header-border-dark;
 
@@ -22,7 +20,7 @@ $header-border: 1px solid $color-header-border-dark;
   inset: 0 0 auto 0;
   z-index: 20;
   //padding: 10px 10px 0;
-  padding: calc(var(--tg-content-safe-area-inset-top) + 10px) 10px 0px;
+  padding: calc(var(--tg-content-safe-area-inset-top) + 20px) 10px 0px;
   margin: 0;
 }
 
