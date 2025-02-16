@@ -160,11 +160,11 @@ export const MainPage: FC = () => {
             zIndex={1500}
             description={
               <>
-                {t('h14')}{' '}
-                <span style={{ color: '#2F80ED' }}>{t('h15')}</span>
+                {t('g14')}{' '}
+                <span style={{ color: '#2F80ED' }}>{t('g15')}</span>
                 <br />
                 <br />
-                {t('h16')}
+                {t('g16')}
               </>
             }
           />
