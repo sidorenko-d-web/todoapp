@@ -39,6 +39,7 @@ export const TasksPage: FC = () => {
   }
 
   return (
+    <>
     <main className={s.page}>
       <section className={s.topSection}>
         <h1 className={s.pageTitle}>{t('q1')}</h1>
@@ -49,10 +50,11 @@ export const TasksPage: FC = () => {
           <span className={s.badge}>+{formatAbbreviation(1, 'number', { locale: locale })} <img src={coinIcon} height={14} width={14} alt={'income'} />/{t('q9')}</span>
         </div>
       </section>
-
       <DailyTasks />
       <TopTasks />
       <SocialTasks />
     </main>
+ 
+    </>
   );
 };

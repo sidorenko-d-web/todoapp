@@ -24,9 +24,7 @@ export const MODALS = {
   WALLET_CONNECTION: 'walletConnection',
   BINDING: 'binding',
   BINDING_CONFIRMATION: 'binding-confirmation',
-  BINDING_SUCCESS: 'binding-success',
-  ENTER_EMAIL: 'enterEmail',
-  EMAIL_CONFIRMATION_CODE: 'emailConfirmationCode'
+  BINDING_SUCCESS: 'binding-success'
 };
 
 

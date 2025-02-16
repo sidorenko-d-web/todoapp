@@ -27,7 +27,7 @@ export const
                                onNext,
                              }: BindingModalProps) => {
   const { t } = useTranslation('promotion');
-  const [ value, setValue ] = useState<string>('masterbox06@gmail.com');
+  const [ value, setValue ] = useState<string>('');
 
   const isValid = value && binding.inputRegex.test(value);
 
