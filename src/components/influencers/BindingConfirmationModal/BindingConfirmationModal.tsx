@@ -5,9 +5,9 @@ import OtpInput from 'react-otp-input';
 import s from './BindingConfirmationModal.module.scss';
 import ss from '../shared.module.scss';
 import { Button, CentralModal } from '../../shared';
-import { useConfirmEmailMutation } from '../../../redux/api/confirmations/api';
+
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../redux';
+import { RootState, useConfirmEmailMutation } from '../../../redux';
 import { setInputType } from '../../../redux/slices/confirmation';
 
 type BindingConfirmationModalProps = {
@@ -25,6 +25,7 @@ export const BindingConfirmationModal = ({
                                          }: BindingConfirmationModalProps) => {
   const [ value, setValue ] = useState<string>('');
   const [ timer, setTimer ] = useState<number>(20);
+  const [ error, setError ] = useState('');
   const isValid = value && value.length === 6;
 
   const dispatch = useDispatch();
@@ -57,7 +58,12 @@ export const BindingConfirmationModal = ({
       setValue('');
       onNext();
     } catch (err) {
-      console.error("Invalid confirmation code:", err);
+      const error = err as { status: number };
+        if (error.status === 400) {
+          setError('Введён неверный код подтверждения');
+        } else {
+          setError('Произошла ошибка при отправке кода подтверждения.');
+        }
     }
   };
 
@@ -97,6 +103,8 @@ export const BindingConfirmationModal = ({
               />
             )}
           />
+
+          {error && <p className={s.errorMessage}>{error}</p>}
 
           <Button
             className={ss.textButton}
