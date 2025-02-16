@@ -47,6 +47,9 @@ export const
         if (inputType === 'email') {
           await sendCode({ email: value.trim() }).unwrap();
           dispatch(setInputValue(value.trim()));
+
+          setValue('');
+          onNext();
         }
       } catch (err) {
         const error = err as { status: number };
@@ -56,8 +59,7 @@ export const
           setError('Произошла ошибка при отправке кода подтверждения.');
         }
       }
-      setValue('');
-      onNext();
+      
     };
     
     const phoneMask = '+7 (___) ___-__-__';
