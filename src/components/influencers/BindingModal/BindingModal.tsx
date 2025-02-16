@@ -11,6 +11,11 @@ import ss from '../shared.module.scss';
 import { Button, CentralModal } from '../../shared';
 import { InputMask } from '@react-input/mask';
 import { useTranslation } from 'react-i18next';
+import { useSendEmailConfirmationCodeMutation } from '../../../redux/api/confirmations/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../redux';
+import { setInputValue } from '../../../redux/slices/confirmation';
+
 
 type BindingModalProps = {
   modalId: string;
@@ -29,9 +34,18 @@ export const
   const { t } = useTranslation('promotion');
   const [ value, setValue ] = useState<string>('');
 
+  const dispatch = useDispatch();
+  const { inputType } = useSelector((state: RootState) => state.confirmation);
+
+  const [sendCode] = useSendEmailConfirmationCodeMutation();
+
   const isValid = value && binding.inputRegex.test(value);
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    if(inputType === 'email') {
+      await sendCode({email: value.trim()}).unwrap();
+      dispatch(setInputValue(value.trim()));
+    }
     setValue('');
     onNext();
   };

@@ -15,6 +15,8 @@ import {
 import { pushLineApi } from './api/pushLine/api';
 import { tasksApi } from './api/tasks';
 import { treeReducer } from './slices/tree.ts';
+import confirmationReducer from './slices/confirmation.ts';
+
 import guideReducer from './slices/guideSlice.ts';
 import { pointsReducer } from './slices/point.ts';
 import { confirmationsApi } from './api/confirmations/api.ts';
@@ -25,6 +27,7 @@ const appReducer = combineReducers({
   guide: guideReducer,
   audioSlice: audioReducer,
   pointSlice: pointsReducer,
+  confirmation: confirmationReducer,
   [authApi.reducerPath]: authApi.reducer,
   [shopApi.reducerPath]: shopApi.reducer,
   [pushLineApi.reducerPath]: pushLineApi.reducer,

@@ -5,6 +5,10 @@ import OtpInput from 'react-otp-input';
 import s from './BindingConfirmationModal.module.scss';
 import ss from '../shared.module.scss';
 import { Button, CentralModal } from '../../shared';
+import { useConfirmEmailMutation } from '../../../redux/api/confirmations/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../redux';
+import { setInputType } from '../../../redux/slices/confirmation';
 
 type BindingConfirmationModalProps = {
   modalId: string;
@@ -23,6 +27,12 @@ export const BindingConfirmationModal = ({
   const [ timer, setTimer ] = useState<number>(20);
   const isValid = value && value.length === 6;
 
+  const dispatch = useDispatch();
+  const { inputValue, inputType } = useSelector((state: RootState) => state.confirmation);
+
+
+  const [confirmEmail] = useConfirmEmailMutation();
+
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => {
@@ -36,9 +46,19 @@ export const BindingConfirmationModal = ({
     setTimer(20);
   };
 
-  const handleNext = () => {
-    setValue('');
-    onNext();
+  const handleNext = async () => {
+    if (!isValid) return;
+  
+    try {
+      if (inputType === 'email') {
+        await confirmEmail({ email: inputValue, confirmation_code: value }).unwrap();
+        dispatch(setInputType('phone'));
+      }
+      setValue('');
+      onNext();
+    } catch (err) {
+      console.error("Invalid confirmation code:", err);
+    }
   };
 
   return (
