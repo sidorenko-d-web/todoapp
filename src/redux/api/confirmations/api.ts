@@ -1,27 +1,28 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
 
-
 export const confirmationsApi = createApi({
   reducerPath: 'confirmationsApi',
   baseQuery: baseQueryReauth,
   endpoints: builder => ({
-    sendEmailConfirmationCode: builder.query<string, void>({
-      query: () => ({
-        url: `/profiles/me`,
+    sendEmailConfirmationCode: builder.mutation<string, { email: string }>({
+      query: (body) => ({
+        url: `/confirmations/send_confirmation_code/email`,
         method: 'POST',
+        body,
       }),
     }),
-    confirmEmail: builder.query<string, void>({
-        query: () => ({
-          url: `/confirmations/confirm`,
-          method: 'PATCH',
-        }),
+    confirmEmail: builder.mutation<string, { email: string; confirmation_code: string }>({
+      query: (body) => ({
+        url: `/confirmations/confirm`,
+        method: 'PATCH',
+        body,
       }),
+    }),
   }),
 });
 
 export const {
-    useSendEmailConfirmationCodeQuery,
-    useConfirmEmailQuery
+  useSendEmailConfirmationCodeMutation,
+  useConfirmEmailMutation,
 } = confirmationsApi;
