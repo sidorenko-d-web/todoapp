@@ -39,7 +39,6 @@ export const TasksPage: FC = () => {
   }
 
   return (
-    <>
     <main className={s.page}>
       <section className={s.topSection}>
         <h1 className={s.pageTitle}>{t('q1')}</h1>
@@ -54,7 +53,5 @@ export const TasksPage: FC = () => {
       <TopTasks />
       <SocialTasks />
     </main>
- 
-    </>
   );
 };
