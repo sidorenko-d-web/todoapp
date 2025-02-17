@@ -15,7 +15,7 @@ import { getWeekData } from '../../utils';
 import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
-import { useGetPushLineQuery } from '../../redux/api/pushLine/api';
+import { useGetPushLineQuery } from '../../redux/api/pushLine';
 export const ProfilePage: React.FC = () => {
   const { t } = useTranslation('profile');
   const { closeModal, openModal } = useModal();

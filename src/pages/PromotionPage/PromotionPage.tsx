@@ -8,7 +8,7 @@ import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUsersC
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { setActiveFooterItemId } from '../../redux/slices/guideSlice';
+import { setActiveFooterItemId } from '../../redux';
 
 export const PromotionPage: React.FC = () => {
   const dispatch = useDispatch();

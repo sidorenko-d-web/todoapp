@@ -18,7 +18,7 @@ import { isGuideShown, setGuideShown } from '../../utils';
 import { GUIDE_ITEMS } from '../../constants';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { setActiveFooterItemId, setElevateIntegrationStats, setFooterActive } from '../../redux/slices/guideSlice';
+import { setActiveFooterItemId, setElevateIntegrationStats, setFooterActive } from '../../redux';
 
 export const IntegrationPage: React.FC = () => {
   const { t } = useTranslation('integrations');
@@ -90,7 +90,7 @@ export const IntegrationPage: React.FC = () => {
             <p className={styles.integrationTitle}>{t('i1')} 1</p>
             <div className={styles.integrationLevelWrp}>
               <p className={styles.integrationLevel}>{data.campaign.company_name}</p>
-              <img src={integrationIcon} height={12} width={12} />
+              <img src={integrationIcon} height={12} width={12}  alt={'icon'}/>
             </div>
           </div>
           <Integration />
