@@ -97,7 +97,11 @@
   }
   .chest {
     display: flex;
+    align-items: center;
     gap: 5px;
+  }
+  .chest img {
+    width: 30px;
   }
 }
 
@@ -120,4 +124,20 @@
     height: 16px;
     background: var.$color-red;
   }
+}
+
+.currentDay {
+  position: relative;
+}
+
+.currentDay::after {
+  content: '';
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  background-color: var.$color-white;
+  border-radius: 50%;
+  transform: translateX(-50%);
 }

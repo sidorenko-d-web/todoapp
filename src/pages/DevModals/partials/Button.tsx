@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { Button as ButtonBase } from '../../../components/shared';
 
 interface Props {
-  variant: 'blue' | 'red' | 'gray';
+  variant: 'blue' | 'red' | 'gray' | 'purple';
   onClick?: () => any;
 }
 
@@ -18,6 +18,8 @@ export default function Button({ variant, children, onClick }: PropsWithChildren
           ? styles.buttonBlue
           : variant === 'red'
           ? styles.buttonRed
+          : variant === 'purple'
+          ? styles.buttonPurple
           : styles.buttonGray,
       )}
     >

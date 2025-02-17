@@ -9,33 +9,39 @@ import { DayType } from '../../../../types';
 import { StreakDay } from './StreakDay';
 import { useTranslation } from 'react-i18next';
 
+interface WeekData {
+  date: string;
+  status: string;
+  is_notified_at_morning: boolean;
+  is_notified_at_afternoon: boolean;
+  is_notified_at_evening: boolean;
+  is_notified_at_late_evening: boolean;
+  is_notified_at_night: boolean;
+  is_notified_at_late_night: boolean;
+}
+
 interface StreakCardProps {
-  streakCount: number;
-  freezeCount?: number;
   days?: { day: number; type: DayType }[];
-  failed?: Date;
-  progress?: number;
   onlyStreak?: boolean;
+  streakDays: number;
+  frozenDays?: number;
+  weekData?: WeekData[];
 }
 
 export const StreakCard: React.FC<StreakCardProps> = ({
-  streakCount,
-  freezeCount,
   days,
-  progress,
   onlyStreak,
-  failed,
+  streakDays,
+  frozenDays,
+  weekData,
 }) => {
   const { t } = useTranslation('profile');
-  const failedDay = new Date(failed).getUTCDate();
 
   const calculateLevel = () => {
     const maxStreak = 30;
     const maxLevel = 5;
-    return Math.min(
-      maxLevel,
-      Math.max(0, Math.ceil((streakCount / maxStreak) * maxLevel)),
-    );
+
+    return Math.min(maxLevel, Math.floor((streakDays / maxStreak) * maxLevel));
   };
 
   return (
@@ -46,12 +52,12 @@ export const StreakCard: React.FC<StreakCardProps> = ({
 
           <div className={styles.title}>
             <h2 className={styles.daysInARow}>
-              {streakCount} {t('p13')}
+              {streakDays} {t('p13')}
             </h2>
             {!onlyStreak && (
               <div className={styles.freezeCount}>
-                <span>{freezeCount}</span>
-                <img src={snowflake} />
+                <span>{frozenDays}</span>
+                <img src={snowflake} alt="Freeze Icon" />
               </div>
             )}
           </div>
@@ -66,11 +72,10 @@ export const StreakCard: React.FC<StreakCardProps> = ({
               {days.map(({ day, type }, index) => (
                 <StreakDay
                   key={day}
-                  failedDay={failedDay}
                   dayNumber={day}
                   type={type}
                   weekIndex={index}
-                  streakCount={streakCount}
+                  weekData={weekData ?? []}
                 />
               ))}
             </div>
@@ -79,12 +84,12 @@ export const StreakCard: React.FC<StreakCardProps> = ({
           <div className={styles.progressContainer}>
             <div className={`${styles['progressBarTextWrp']} ${styles['progressText']}`}>
               <span>
-                {streakCount}/{t('p14')}
+                {streakDays}/{t('p14')}
               </span>
               <span className={styles.reward}>
                 {t('p15')}
                 <div className={styles.chestImgContainer}>
-                  <img src={chestIcon} className={styles.chestImg} />
+                  <img src={chestIcon} className={styles.chestImg} alt="Chest Icon" />
                 </div>
               </span>
             </div>

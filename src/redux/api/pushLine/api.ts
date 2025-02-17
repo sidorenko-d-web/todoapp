@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import { PushLineDTO, PushLineDateDTO } from './dto';
+import { PushLineDTO } from './dto';
 
 export const pushLineApi = createApi({
   reducerPath: 'pushLineApi',

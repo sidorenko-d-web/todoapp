@@ -20,14 +20,16 @@ interface ProfileStatsMiniProps {
 }
 
 export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
-                                                                    subscribers,
-                                                                    daysInARow,
-                                                                    position,
-                                                                    onlyBadges,
-                                                                    totalViews,
-                                                                  }) => {
+  subscribers,
+  daysInARow,
+  position,
+  onlyBadges,
+  totalViews,
+}) => {
   const { i18n } = useTranslation('shop');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language)
+    ? (i18n.language as 'ru' | 'en')
+    : 'ru';
 
   return (
     <div className={styles.wrp + ' ' + (onlyBadges ? styles.justifyCenter : '')}>
@@ -40,12 +42,16 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
         </div>
 
         <div className={styles.statWrp}>
-          <span className={styles.stat}>{formatAbbreviation(subscribers, 'number', { locale: locale })}</span>
+          <span className={styles.stat}>
+            {formatAbbreviation(subscribers, 'number', { locale: locale })}
+          </span>
           <img src={subscriberIcon} width={14} height={14} />
         </div>
 
         <div className={styles.statWrp}>
-          <span className={styles.stat}>{formatAbbreviation(totalViews, 'number', { locale: locale })}</span>
+          <span className={styles.stat}>
+            {formatAbbreviation(totalViews, 'number', { locale: locale })}
+          </span>
           <img src={viewsIcon} width={14} height={14} />
         </div>
 
@@ -62,7 +68,8 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
               eventType: 'button',
               eventPlace: 'В гардероб - Профиль',
             }}
-            className={styles.wardrobeButton} />
+            className={styles.wardrobeButton}
+          />
         </Link>
       )}
     </div>
