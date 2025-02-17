@@ -24,7 +24,7 @@
 
 
   &.withHeader {
-    margin-top: 70px;
+    margin-top: calc(var(--tg-content-safe-area-inset-top) + 80px);
     //padding-top: var(--tg-content-safe-area-inset-top) + 60px;
     //margin-top: var(--tg-content-safe-area-inset-top) + 60px;
   }
@@ -37,6 +37,7 @@
   //top: calc(var(--tg-safe-area-inset-top));
   //top: calc(var(--tg-content-safe-area-inset-top) / 1.5 + var(--tg-content-safe-area-inset-top) / 1.5);
   top: calc(var(--tg-safe-area-inset-top) + 6px);
+  //top: calc(var(--tg-content-safe-area-inset-top) / 2);
   right: calc(var(--tg-safe-area-inset-right) + 95px);
   z-index: 50;
 }
