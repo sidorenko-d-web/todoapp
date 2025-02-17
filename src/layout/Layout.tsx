@@ -7,7 +7,7 @@ import { MODALS, localStorageConsts } from '../constants';
 import { LanguageSelectionModal, SettingsModal, WalletConnectionModal } from '../components';
 import { AudioBg, useModal } from '../hooks';
 
-import roadmapBg from '../assets/icons/roadmap-bg.png';
+import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
 
 const Layout = () => {
   const location = useLocation();
