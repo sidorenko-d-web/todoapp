@@ -4,10 +4,12 @@ import telegramIcon from '../../../assets/icons/telegram.png';
 import instagramIcon from '../../../assets/icons/instagram.png';
 import s from '../styles.module.scss';
 import { useGetTasksQuery } from '../../../redux/api/tasks/api';
+import { useTranslation } from 'react-i18next';
 
 const TELEGRAM_CHANNEL_URL = 'https://t.me/pushtoyours';
 
 export const SocialTasks: FC = () => {
+  const { t } = useTranslation('quests');
   const { data: tasksData } = useGetTasksQuery();
   
   const socialTasks = tasksData?.assignments.filter(
@@ -27,7 +29,7 @@ export const SocialTasks: FC = () => {
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
-        <h2 className={s.sectionTitle}>Подписки на социальные сети</h2>
+        <h2 className={s.sectionTitle}>{t('q12')}</h2>
         <span className={s.count}>{completedTasks}/{socialTasks.length}</span>
       </div>
       <div className={s.tasksList}>
@@ -40,7 +42,7 @@ export const SocialTasks: FC = () => {
             income={Number(task.boost.views)}
             subscribers={task.boost.subscribers}
             passiveIncome={Number(task.boost.income_per_second)}
-            buttonText={task.is_completed ? 'Выполнено' : 'Выполнить'}
+            buttonText={task.is_completed ? t('q15') : t('q13')}
             isCompleted={task.is_completed}
             showProgressBar={false}
             onClick={() => handleTaskClick(task)}

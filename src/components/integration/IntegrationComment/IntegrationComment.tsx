@@ -8,6 +8,7 @@ import { SOUNDS } from '../../../constants';
 import { ProgressLine } from '../../shared';
 import clsx from 'clsx';
 import { TrackedButton } from '../..';
+import { useTranslation } from 'react-i18next';
 
 interface IntegrationCommentProps {
   author_username: string;
@@ -28,7 +29,8 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
                                                                         finished,
                                                                         hateText,
                                                                       }) => {
-
+  const { t, i18n } = useTranslation('integrations');
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const elevateComment = useSelector((state: RootState) => state.guide.elevateIntegrationStats);
 
   const [ voteRightSound ] = useSound(SOUNDS.rightAnswer, {
@@ -53,13 +55,13 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
           <p className={clsx(styles.negativeCommentText, { [styles.positiveCommentText]: hateText })}>{comment_text}</p>
         </div>
       ) : (
-        <p className={styles.noComment}>Нет новых комментариев</p>
+        <p className={styles.noComment}>{t('i8')}</p>
       )}
       <div className={styles.progressWrp}>
         <div className={styles.amountAndRewardWrp}>
           <p className={styles.amount}>{progres}/5</p>
           <div className={styles.rewardWrp}>
-            <p className={styles.reward}>+{formatAbbreviation(100)}</p>
+            <p className={styles.reward}>+{formatAbbreviation(100, 'number', {locale: locale})}</p>
             <img src={coinIcon} width={12} height={12} />
           </div>
         </div>

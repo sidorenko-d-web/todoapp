@@ -10,6 +10,7 @@ import { isGuideShown, setGuideShown } from '../../../utils';
 import { setIntegrationReadyForPublishing, setLastIntegrationId } from '../../../redux/slices/guideSlice';
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
+import { useTranslation } from 'react-i18next';
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
@@ -18,6 +19,7 @@ interface CreatingIntegrationCardProps {
 export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
                                                                             integration,
                                                                           }) => {
+  const { t } = useTranslation('integrations');
 
   const dispatch = useDispatch();
   const initialTime = 3600;
@@ -108,7 +110,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   return (
     <div className={`${s.integration} ${s.elevated}`}>
       <div className={s.integrationHeader}>
-        <h2 className={s.title}>Интеграция</h2>
+        <h2 className={s.title}>{t('i10')}</h2>
         <span className={s.author}>
           {integration.campaign.company_name}{' '}
           <img src={dotIcon} height={14} width={14} alt="dot" />
@@ -117,8 +119,8 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
       <div className={s.body}>
         <div className={s.info}>
           <div className={s.infoHeader}>
-            <span>Создание интеграции...</span>
-            <span>Осталось {formatTime(timeLeft)}</span>
+            <span>{t('i11')}...</span>
+            <span>{t('i12')} {formatTime(timeLeft)}</span>
           </div>
           <div className={s.progressBar}>
             <div
@@ -135,7 +137,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
           className={s.iconButton}
           onClick={handleAccelerateClick}
           disabled={isExpired || isAccelerating}
-          aria-label="Ускорить интеграцию"
+          aria-label={t('i24')}
         >
           <img src={rocketIcon} alt="rocket" />
         </TrackedButton>

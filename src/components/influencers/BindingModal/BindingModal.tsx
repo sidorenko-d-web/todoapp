@@ -10,6 +10,12 @@ import s from './BindingModal.module.scss';
 import ss from '../shared.module.scss';
 import { Button, CentralModal } from '../../shared';
 import { InputMask } from '@react-input/mask';
+import { useTranslation } from 'react-i18next';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, useSendEmailConfirmationCodeMutation } from '../../../redux';
+import { setInputValue } from '../../../redux/slices/confirmation';
+
 
 type BindingModalProps = {
   modalId: string;
@@ -18,71 +24,100 @@ type BindingModalProps = {
   onNext: () => void;
 };
 
-export const BindingModal = ({
-                               modalId,
-                               onClose,
-                               binding,
-                               onNext,
-                             }: BindingModalProps) => {
-  const [ value, setValue ] = useState<string>('masterbox06@gmail.com');
+export const
+  BindingModal = ({
+    modalId,
+    onClose,
+    binding,
+    onNext,
+  }: BindingModalProps) => {
+    const { t } = useTranslation('promotion');
+    const [value, setValue] = useState<string>('');
+    const [error, setError] = useState<string | null>(null);
 
-  const isValid = value && binding.inputRegex.test(value);
+    const dispatch = useDispatch();
+    const { inputType } = useSelector((state: RootState) => state.confirmation);
 
-  const handleNext = () => {
-    setValue('');
-    onNext();
-  };
+    const [sendCode] = useSendEmailConfirmationCodeMutation();
 
-  const phoneMask = '+7 (___) ___-__-__';
-  console.log(value)
+    const isValid = value && binding.inputRegex.test(value);
 
-  return (
-    <CentralModal modalId={modalId} title={binding.title} onClose={onClose}>
-      <div className={ss.content}>
-        <div className={ss.innerContent}>
-          <RewardsCards stepIndex={binding.stepIndex} />
+    const handleNext = async () => {
+      try {
+        if (inputType === 'email') {
+          await sendCode({ email: value.trim() }).unwrap();
+          dispatch(setInputValue(value.trim()));
 
-          <div className={ss.progressBarSection}>
-            <div className={ss.progressBarSectionHeader}>
-              <span>{binding.stepIndex}/{binding.stepsTotal} этапов</span>
-              <span className={ss.progressReward}>
-                Рейтинг и награды <img src={clan} height={12} width={12} alt="reward" />
-              </span>
+          setValue('');
+          onNext();
+        }
+      } catch (err) {
+        const error = err as { status: number };
+        if (error.status === 409) {
+          setError('Такой email уже привязан');
+        } else {
+          setError('Произошла ошибка при отправке кода подтверждения.');
+        }
+      }
+      
+    };
+    
+    const phoneMask = '+7 (___) ___-__-__';
+
+    return (
+      <CentralModal modalId={modalId} title={binding.title} onClose={onClose}>
+        <div className={ss.content}>
+          <div className={ss.innerContent}>
+            <RewardsCards stepIndex={binding.stepIndex} />
+
+            <div className={ss.progressBarSection}>
+              <div className={ss.progressBarSectionHeader}>
+                <span>{binding.stepIndex}/{binding.stepsTotal} {t("p36")}</span>
+                <span className={ss.progressReward}>
+                  {t('p37')} <img src={clan} height={12} width={12} alt="reward" />
+                </span>
+              </div>
+              <div className={clsx(ss.progressBar, binding.stepIndex - 1 ? ss.active : '')}>
+                <div className={ss.progressBarInner} style={{ width: `${((binding.stepIndex - 1) / 2) * 100}%` }} />
+              </div>
             </div>
-            <div className={clsx(ss.progressBar, binding.stepIndex - 1 ? ss.active : '')}>
-              <div className={ss.progressBarInner} style={{ width: `${((binding.stepIndex - 1) / 2) * 100}%` }} />
+
+            <div className={s.inputGroup}>
+              <label>{binding.inputLabel}</label>
+              <div className={s.inputWrapper}>
+                {binding.inputLabel === 'Номер телефона WhatsApp' ? (
+                  <InputMask
+                    mask={phoneMask}
+                    replacement={{ _: /\d/ }}
+                    value={value}
+                    onChange={(e) => {
+                      setValue(e.target.value);
+                      setError('');
+                    }}
+                    className={`${s.input} ${!isValid ? s.invalid : ''}`}
+                    placeholder={binding.placeholder}
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={value}
+                    onChange={(e) => {
+                      setValue(e.target.value);
+                      setError('');
+                    }}
+                    className={`${s.input} ${!isValid ? s.invalid : ''}`}
+                    placeholder={binding.placeholder}
+                  />
+                )}
+                <img className={s.statusIcon} src={!isValid ? dots : tick} />
+              </div>
             </div>
+            {error && <p className={s.errorMessage}>{error}</p>}
+            <span className={ss.semiText}>{binding.description}</span>
           </div>
 
-          <div className={s.inputGroup}>
-            <label>{binding.inputLabel}</label>
-            <div className={s.inputWrapper}>
-              {binding.inputLabel === 'Номер телефона WhatsApp' ? (
-                <InputMask
-                  mask={phoneMask}
-                  replacement={{ _: /\d/ }}
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                  className={`${s.input} ${!isValid ? s.invalid : ''}`}
-                  placeholder={binding.placeholder}
-                />
-              ) : (
-                <input
-                  type="text"
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                  className={`${s.input} ${!isValid ? s.invalid : ''}`}
-                  placeholder={binding.placeholder}
-                />
-              )}
-              <img className={s.statusIcon} src={!isValid ? dots : tick} />
-            </div>
-          </div>
-          <span className={ss.semiText}>{binding.description}</span>
+          <Button disabled={!isValid} onClick={handleNext}>{binding.buttonNext}</Button>
         </div>
-
-        <Button disabled={!isValid} onClick={handleNext}>{binding.buttonNext}</Button>
-      </div>
-    </CentralModal>
-  );
-};
+      </CentralModal>
+    );
+  };

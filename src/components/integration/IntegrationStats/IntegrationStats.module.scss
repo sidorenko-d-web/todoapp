@@ -2,13 +2,14 @@
 
 
 .IntegrationStatsWrp {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
     width: 100%;
     gap: 5px;
-    height: 53px;
-
     margin-top: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 
     .IntegrationStat {
         display: flex;
@@ -20,6 +21,7 @@
         background-color: #1C1D22;
         border-radius: 12px;
         gap: 5px;
+        flex: 1;
 
         .typeWrp {
             display: flex;

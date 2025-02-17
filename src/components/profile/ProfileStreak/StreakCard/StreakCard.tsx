@@ -9,22 +9,40 @@ import { DayType } from '../../../../types';
 import { StreakDay } from './StreakDay';
 import { useTranslation } from 'react-i18next';
 
+interface WeekData {
+  date: string;
+  status: string;
+  is_notified_at_morning: boolean;
+  is_notified_at_afternoon: boolean;
+  is_notified_at_evening: boolean;
+  is_notified_at_late_evening: boolean;
+  is_notified_at_night: boolean;
+  is_notified_at_late_night: boolean;
+}
+
 interface StreakCardProps {
-  streakCount: number;
-  freezeCount?: number;
   days?: { day: number; type: DayType }[];
-  progress?: number;
   onlyStreak?: boolean;
+  streakDays: number;
+  frozenDays?: number;
+  weekData?: WeekData[];
 }
 
 export const StreakCard: React.FC<StreakCardProps> = ({
-  streakCount,
-  freezeCount,
   days,
-  progress,
   onlyStreak,
+  streakDays,
+  frozenDays,
+  weekData,
 }) => {
   const { t } = useTranslation('profile');
+
+  const calculateLevel = () => {
+    const maxStreak = 30;
+    const maxLevel = 5;
+
+    return Math.min(maxLevel, Math.floor((streakDays / maxStreak) * maxLevel));
+  };
 
   return (
     <div className={styles.wrp}>
@@ -33,11 +51,13 @@ export const StreakCard: React.FC<StreakCardProps> = ({
           <span className={styles.badge}>{t('p12')}</span>
 
           <div className={styles.title}>
-            <h2 className={styles.daysInARow}>{streakCount} {t('p13')}</h2>
+            <h2 className={styles.daysInARow}>
+              {streakDays} {t('p13')}
+            </h2>
             {!onlyStreak && (
               <div className={styles.freezeCount}>
-                <span>{freezeCount}</span>
-                <img src={snowflake} />
+                <span>{frozenDays}</span>
+                <img src={snowflake} alt="Freeze Icon" />
               </div>
             )}
           </div>
@@ -50,22 +70,31 @@ export const StreakCard: React.FC<StreakCardProps> = ({
           {days && (
             <div className={styles.streakDays}>
               {days.map(({ day, type }, index) => (
-                <StreakDay key={day} dayNumber={day} type={type} weekIndex={index} />
+                <StreakDay
+                  key={day}
+                  dayNumber={day}
+                  type={type}
+                  weekIndex={index}
+                  weekData={weekData ?? []}
+                />
               ))}
             </div>
           )}
 
           <div className={styles.progressContainer}>
             <div className={`${styles['progressBarTextWrp']} ${styles['progressText']}`}>
-              <span>{progress}/{t('p14')}</span>
+              <span>
+                {streakDays}/{t('p14')}
+              </span>
               <span className={styles.reward}>
                 {t('p15')}
                 <div className={styles.chestImgContainer}>
-                  <img src={chestIcon} className={styles.chestImg} />
+                  <img src={chestIcon} className={styles.chestImg} alt="Chest Icon" />
                 </div>
               </span>
             </div>
-            <ProgressLine level={3} color="red" />
+
+            <ProgressLine level={calculateLevel()} color="red" />
           </div>
         </>
       )}

@@ -56,7 +56,6 @@
   padding: 4px 4px 4px 7px;
   border-radius: 10px;
   background: var.$color-badge-bg;
-
 }
 
 .badge {
@@ -112,7 +111,10 @@
   background: var.$footer-bg;
 }
 
-.cardBlock, .vipCard, .cardBox, .vipCardBox {
+.cardBlock,
+.vipCard,
+.cardBox,
+.vipCardBox {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -139,10 +141,12 @@
   background-color: var.$footer-bg;
   border-radius: 8px;
   box-sizing: border-box;
+
   overflow: hidden;
 }
 
-.card img, .cardBox img {
+.card img,
+.cardBox img {
   max-width: 100%;
   max-height: 100%;
 }
@@ -163,7 +167,7 @@
   font-size: 12px;
   color: #fff;
   border-radius: 4px;
-  background: linear-gradient(90deg, #1551E8 -1.82%, #E84951 100%);
+  background: linear-gradient(90deg, #1551e8 -1.82%, #e84951 100%);
   z-index: 2;
 }
 

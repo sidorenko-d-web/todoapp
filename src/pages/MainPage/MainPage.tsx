@@ -12,8 +12,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, useGetAllIntegrationsQuery } from '../../redux';
 import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/RewardForIntegrationModal.tsx';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export const MainPage: FC = () => {
+  const { t } = useTranslation('guide');
   const { getModalState, openModal, closeModal } = useModal();
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
@@ -141,12 +143,10 @@ export const MainPage: FC = () => {
           zIndex={1500}
           description={
             <>
-              В MiniApp ты сможешь почувствовать себя настоящим блогером и зарабатывать,
-              создавая контент!
+            {t('g11')}
               <br />
               <br />
-              Давай{' '}
-              <span style={{ color: '#2F80ED' }}>создадим твою первую интеграцию</span>!
+              {t('g12')} <span style={{ color: '#2F80ED' }}>{t('g13')}</span>!
             </>
           }
         />
@@ -164,12 +164,11 @@ export const MainPage: FC = () => {
             zIndex={1500}
             description={
               <>
-                Чтобы получить доступ к интеграциям от разных брендов,{' '}
-                <span style={{ color: '#2F80ED' }}>надо оформить подписку!</span>
+                {t('g14')}{' '}
+                <span style={{ color: '#2F80ED' }}>{t('g15')}</span>
                 <br />
                 <br />
-                Пока подписка активна, ты можешь делать любые интеграции на выбор: фото,
-                видео или текст!
+                {t('g16')}
               </>
             }
           />
@@ -190,18 +189,14 @@ export const MainPage: FC = () => {
       {creatingIntegrationModalState.isOpen &&
         !guideVisibility.createIntegrationFirstGuideShown && (
           <CreatingIntegrationGuide
-            onClose={() =>
-              handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)
-            }
-            buttonText="Отлично!"
+            onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)}
+            buttonText={t('g17')}
             description={
               <>
-                Вверху можно увидеть{' '}
-                <span style={{ color: '#2F80ED' }}>актуальные тренды.</span>
+                {t('g18')} <span style={{ color: '#2F80ED' }}>{t('g19')}</span>
                 <br />
                 <br />
-                Если будешь делать интеграции о том, что сейчас актуально - твой заработок
-                будет больше!
+                {t('g20')}
               </>
             }
             align="left"
@@ -213,18 +208,14 @@ export const MainPage: FC = () => {
         guideVisibility.createIntegrationFirstGuideShown &&
         !guideVisibility.createIntegrationSecondGuideShown && (
           <CreatingIntegrationGuide
-            onClose={() =>
-              handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
-            }
-            buttonText="Хорошо!"
+            onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)}
+            buttonText={t('g21')}
             description={
               <>
-                Интеграции бывают трех видов:{' '}
-                <span style={{ color: '#2F80ED' }}>Текстовые, Фото и Видео. </span>
+                {t('g22')} <span style={{ color: '#2F80ED' }}>{t('g23')} </span>
                 <br />
                 <br />
-                Ты можешь делать любые интеграции, но для начала нужно купить необходимую
-                аппаратуру.
+                {t('g24')}
               </>
             }
             align="right"

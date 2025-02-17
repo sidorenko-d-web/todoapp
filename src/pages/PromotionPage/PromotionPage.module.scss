@@ -20,6 +20,10 @@
       font-size: 20px;
       font-weight: 600;
       line-height: 100%;
+
+      @media (min-width: var.$breakpoint-md) {
+        font-size: 24px;
+      }
     }
 
     .badges {
