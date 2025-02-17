@@ -7,6 +7,7 @@ import { MODALS, localStorageConsts } from '../constants';
 import { LanguageSelectionModal, SettingsModal, WalletConnectionModal } from '../components';
 import { AudioBg, useModal } from '../hooks';
 
+import roadmapBg from '../assets/icons/roadmap-bg.png';
 
 const Layout = () => {
   const location = useLocation();
@@ -26,7 +27,8 @@ const Layout = () => {
 
   return (
     <div className={styles.wrp}>
-      {showRoadmapBg &&  <div className={styles.bg_image}/>}
+      {/* {showRoadmapBg &&  <div className={styles.bg_image}/>} */}
+      {showRoadmapBg &&  <img style={{border: 'none'}} src={roadmapBg} className={styles.bg_image}/>}
       {showHeader && <Header />}
       <main className={styles.content + ' ' + (showHeader ? styles.withHeader : '')}>
         <Outlet />
