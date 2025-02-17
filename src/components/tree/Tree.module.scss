@@ -1,7 +1,8 @@
 @use '../../assets/styles/index.scss' as var;
 
 .container {
-  height: 100%;
+  height: calc(var(--tg-viewport-stable-height) - 90px - 50px);
+  overflow: scroll;
   display: flex;
   flex-direction: column;
   align-items: center;

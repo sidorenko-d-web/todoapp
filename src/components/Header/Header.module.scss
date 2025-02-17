@@ -20,8 +20,15 @@ $header-border: 1px solid $color-header-border-dark;
   inset: 0 0 auto 0;
   z-index: 20;
   //padding: 10px 10px 0;
-  padding: calc(var(--tg-content-safe-area-inset-top) + 60px) 10px 0px;
+  padding: calc(var(--tg-content-safe-area-inset-top) + 60px) 10px 0;
+  //margin-top: calc(var(--tg-content-safe-area-inset-top) + 50px);
   margin: 0;
+
+  // Prevent user from scrolling while interacting with header
+  touch-action: none; /* Prevents all touch actions */
+  user-select: none; /* Prevents text selection */
+  -webkit-user-select: none;
+  -webkit-touch-callout: none; /* Prevents iOS callout */
 }
 
 .lowerHeader {

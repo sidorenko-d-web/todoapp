@@ -13,20 +13,27 @@
   flex-direction: column;
   width: 100%;
   max-width: 1728px;
+
+  height: calc(var(--tg-viewport-stable-height) - 20px);
   //height: calc(100vh - 140px);
-  height: calc(var(--tg-viewport-height) - 110px);
-  //padding: 20px 15px;
-  padding: calc(var(--tg-content-safe-area-inset-top) + 80px) 15px 20px;
-  overflow-y: scroll;
+
+  padding: 20px 15px;
+  //padding: calc(var(--tg-safe-area-inset-top) + 80px) 15px 20px;
+  overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
   scroll-behavior: smooth;
 
 
   &.withHeader {
-    margin-top: calc(var(--tg-content-safe-area-inset-top) + 80px);
-    //padding-top: var(--tg-content-safe-area-inset-top) + 60px;
-    //margin-top: var(--tg-content-safe-area-inset-top) + 60px;
+    //margin-top: 70px;
+    margin-top: calc(var(--tg-content-safe-area-inset-top) + 50px);
+    padding-top: calc(var(--tg-content-safe-area-inset-top) + 40px);
+    margin-bottom: calc(var(--tg-content-safe-area-inset-bottom) + 90px);
+
+    &.reducedMargin {
+      margin-top: var(--tg-content-safe-area-inset-top);
+    }
   }
 }
 
@@ -34,10 +41,7 @@
 
 .settingsIcon {
   position: fixed;
-  //top: calc(var(--tg-safe-area-inset-top));
-  //top: calc(var(--tg-content-safe-area-inset-top) / 1.5 + var(--tg-content-safe-area-inset-top) / 1.5);
   top: calc(var(--tg-safe-area-inset-top) + 6px);
-  //top: calc(var(--tg-content-safe-area-inset-top) / 2);
   right: calc(var(--tg-safe-area-inset-right) + 95px);
   z-index: 50;
 }

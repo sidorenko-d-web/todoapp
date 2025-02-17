@@ -68,6 +68,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       const trxId = await sendUSDT(Number(item.price_usdt));
       setCurrentTrxId(trxId || '');
     } catch (error) {
+      console.log("Error while sending USDT transaction", error)
       failTransaction(handleUsdtPayment);
     }
   };

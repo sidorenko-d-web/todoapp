@@ -11,6 +11,11 @@ const Layout = () => {
   const location = useLocation();
 
   const showHeader = !location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/);
+  const needsReducedMargin = [
+    '/',
+    '/progressTree',
+    location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/)
+  ].includes(location.pathname);
 
   const { openModal } = useModal();
 
@@ -21,6 +26,10 @@ const Layout = () => {
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
   }, []);
 
+  const contentClassName = `${styles.content} ${
+    showHeader ? styles.withHeader : ''
+  } ${needsReducedMargin ? styles.reducedMargin : ''}`;
+
   return (
     <>
       <div className={styles.settingsIcon}>
@@ -28,7 +37,7 @@ const Layout = () => {
       </div>
     <div className={styles.wrp}>
       {showHeader && <Header />}
-      <main className={styles.content + ' ' + (showHeader ? styles.withHeader : '')}>
+      <main className={contentClassName}>
         <Outlet />
 
         {/* Modals */}
