@@ -15,7 +15,7 @@ export const Footer = () => {
 
 
   useEffect(() => {
-    setActiveButton((currentFooterItemId >= 0 && currentFooterItemId <= 4) ? currentFooterItemId : 0);
+    setActiveButton((currentFooterItemId >= 0 && currentFooterItemId <= 4) ? currentFooterItemId : -1);
   }, [currentFooterItemId]);
 
   const handleFooterItemClick = (id: number, redirectTo: string) => {
