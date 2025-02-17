@@ -5,6 +5,16 @@
   height: 100vh;
   margin: 0 auto;
   overflow: hidden;
+
+  .bg_image {
+    position: fixed;
+    width: 100vw;
+    height: calc(100% - 81px);
+    background-image: url('../assets/icons/roadmap-bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 }
 
 .content {

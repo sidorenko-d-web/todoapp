@@ -77,9 +77,11 @@
 
 .spiner {
   position: absolute;
-  top: -166%;
-  left: -66%;
+  top: -280%;
+  left: -135%;
   transform: translate(-50%, -50%) rotate(0deg);
+  width: 190px;
+  height: 190px;
   z-index: -2;
   animation: spin 6s linear infinite;
 }

@@ -7,12 +7,15 @@ import { MODALS, localStorageConsts } from '../constants';
 import { LanguageSelectionModal, SettingsModal, WalletConnectionModal } from '../components';
 import { AudioBg, useModal } from '../hooks';
 
+
 const Layout = () => {
   const location = useLocation();
 
   const showHeader = !location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/);
+  const showRoadmapBg = location.pathname === '/progressTree';
 
   const { openModal } = useModal();
+
 
   useEffect(() => {
     const isNeedToOpenChest = localStorage.getItem(
@@ -23,6 +26,7 @@ const Layout = () => {
 
   return (
     <div className={styles.wrp}>
+      {showRoadmapBg &&  <div className={styles.bg_image}/>}
       {showHeader && <Header />}
       <main className={styles.content + ' ' + (showHeader ? styles.withHeader : '')}>
         <Outlet />
