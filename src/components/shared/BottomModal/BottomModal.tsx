@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { useModal } from '../../../hooks';
 
 import modalGripIcon from '../../../assets/icons/modal-grip.svg';
+import { Button } from '..';
 
 interface BottomModalProps {
   modalId: string;
@@ -60,9 +61,9 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
                   {title}
                   {titleIcon && <img src={titleIcon} alt={'title'} width={14} height={14} />}
                 </h2>
-                <button className={s.closeBtn} onClick={onClose}>
+                <Button className={s.closeBtn} onClick={onClose}>
                   <img src={closeIcon} alt={'Close'} width={14} height={14} />
-                </button>
+                </Button>
               </div>
             </header>
             <div className={s.content}>{children}</div>

@@ -9,6 +9,7 @@ import LossOfProgress from './LossOfProgress/LossOfProgress';
 import GetGift from './GetGift/GetGift';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectTrack, selectVolume, setTrack, setVolume } from '../../redux';
+import { ItemUpgradedModal } from '../../components';
 export default function DevModals() {
   const { openModal } = useModal();
   // const [playSound] = useSound(SOUNDS.chestOpen, { volume });
@@ -17,17 +18,25 @@ export default function DevModals() {
 
   const dispatch = useDispatch();
 
+  const item = {
+    id: 'a',
+    name: 'Постер',
+    item_category: 'video',
+    level: 1,
+    price_internal: 190,
+    item_rarity: 'red',
+    depends: null,
+    price_usdt: '10',
+    boost: {},
+    image_url: null,
+    item_premium_level: 'base',
+  };
+
   return (
     <>
-      <button onClick={() => dispatch(setVolume(volume > 0.01 ? volume - 0.05 : 0.0))}>
-        -
-      </button>
-      <button onClick={() => dispatch(setTrack(track === 1 ? 2 : track === 2 ? 3 : 1))}>
-        change track
-      </button>
-      <button onClick={() => dispatch(setVolume(volume < 1 ? volume + 0.05 : 1))}>
-        +
-      </button>
+      <button onClick={() => dispatch(setVolume(volume > 0.01 ? volume - 0.05 : 0.0))}>-</button>
+      <button onClick={() => dispatch(setTrack(track === 1 ? 2 : track === 2 ? 3 : 1))}>change track</button>
+      <button onClick={() => dispatch(setVolume(volume < 1 ? volume + 0.05 : 1))}>+</button>
       {/* <button onClick={() => playSound()}>upgrade item</button> */}
       {/* <button onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button> */}
       <div>
@@ -35,9 +44,7 @@ export default function DevModals() {
         <DaysInARowModal />
       </div>
       <div>
-        <button onClick={() => openModal(MODALS.INTEGRATION_REWARD)}>
-          REWARD Integration
-        </button>
+        <button onClick={() => openModal(MODALS.INTEGRATION_REWARD)}>REWARD Integration</button>
         <RewardForIntegrationModal />
       </div>
       <div>
@@ -59,6 +66,10 @@ export default function DevModals() {
       <div>
         <button onClick={() => openModal(MODALS.GET_GIFT)}>Get Gift</button>
         <GetGift />
+      </div>
+      <div>
+        <button onClick={() => openModal(MODALS.UPGRADED_ITEM, { item, mode: 'item' })}>upgraded</button>
+        <ItemUpgradedModal />
       </div>
     </>
   );

@@ -7,7 +7,9 @@ export const Floor = () => {
     <>
       <img className={styles.treshinaLeft} src={TreshinaLeft} alt="" />
       <img className={styles.treshinaRight} src={TreshinaRight} alt="" />
-      <div className={styles.floor}></div>
+      <div className={styles.floorWrapper}>
+        <div className={styles.floor}></div>
+      </div>
     </>
   );
 };

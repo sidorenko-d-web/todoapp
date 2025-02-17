@@ -47,19 +47,11 @@ const getPremiumLevelOrder = (level: TypeItemQuality) =>
 
 function sortByPremiumLevel(items: IShopItem[]) {
   return [...items].sort(
-    (a, b) =>
-      getPremiumLevelOrder(a.item_premium_level) -
-      getPremiumLevelOrder(b.item_premium_level),
+    (a, b) => getPremiumLevelOrder(a.item_premium_level) - getPremiumLevelOrder(b.item_premium_level),
   );
 }
 
-export const InventoryCard: FC<Props> = ({
-  disabled,
-  isBlocked,
-  isUpgradeEnabled = true,
-  item,
-  isB,
-}) => {
+export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled = true, item, isB }) => {
   const { t, i18n } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const dispatch = useDispatch();
@@ -105,9 +97,7 @@ export const InventoryCard: FC<Props> = ({
     } catch (error) {}
   };
 
-  const locale = ['ru', 'en'].includes(i18n.language)
-    ? (i18n.language as 'ru' | 'en')
-    : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.storeCard}>
@@ -115,9 +105,7 @@ export const InventoryCard: FC<Props> = ({
         <div
           className={clsx(
             styles.image,
-            item.item_rarity === 'yellow'
-              ? styles.purpleImage
-              : item.item_rarity === 'green' && styles.redImage,
+            item.item_rarity === 'yellow' ? styles.purpleImage : item.item_rarity === 'green' && styles.redImage,
           )}
         >
           <img
@@ -125,20 +113,9 @@ export const InventoryCard: FC<Props> = ({
             className={clsx(isBlocked && styles.disabledImage)}
             alt=""
           />
-          {/* <div style={{width: 60, height: 60}}>
-            <SpineAnimation
-              name={item.name}
-              skin={item.item_premium_level}
-              jsonUrl="https://storage.yandexcloud.net/miniapp-v2-dev/тетрадь-1.json"
-              atlasUrl="https://storage.yandexcloud.net/miniapp-v2-dev/тетрадь-1atlas.txt"
-            />
-          </div> */}
+
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
-          {!isBlocked && (
-            <p>
-              {item.item_premium_level === 'advanced' ? 'adv' : item.item_premium_level}
-            </p>
-          )}
+          {!isBlocked && <p>{item.item_premium_level === 'advanced' ? 'adv' : item.item_premium_level}</p>}
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>
@@ -169,21 +146,13 @@ export const InventoryCard: FC<Props> = ({
           >
             {t('s20')} {item.level} {isB && t('s21')}
           </p>
-          <div
-            className={clsx(
-              styles.stats,
-              (isBlocked || disabled) && styles.disabledStats,
-            )}
-          >
+          <div className={clsx(styles.stats, (isBlocked || disabled) && styles.disabledStats)}>
             <div className={styles.statsItem}>
               <p>+{formatAbbreviation(item.boost.views, 'number', { locale: locale })}</p>
               <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
-              <p>
-                +
-                {formatAbbreviation(item.boost.subscribers, 'number', { locale: locale })}
-              </p>
+              <p>+{formatAbbreviation(item.boost.subscribers, 'number', { locale: locale })}</p>
               <img src={SubscriberCoin} alt="" />
             </div>
             <div className={styles.statsItem}>
@@ -204,13 +173,7 @@ export const InventoryCard: FC<Props> = ({
         (disabled ? (
           <p className={styles.disabledText}>
             {t('s22')} “
-            <span
-              className={
-                item.item_rarity === 'yellow'
-                  ? styles.itemNameBlue
-                  : styles.itemNamePurple
-              }
-            >
+            <span className={item.item_rarity === 'yellow' ? styles.itemNameBlue : styles.itemNamePurple}>
               Компьютерный стул - Base
             </span>
             ”. {t('s23')}
@@ -261,17 +224,11 @@ export const InventoryCard: FC<Props> = ({
                         : styles.itemRed,
                       item.item_premium_level === 'advanced'
                         ? index > 1 && styles.itemLocked
-                        : item.item_premium_level === 'base' &&
-                            index > 0 &&
-                            styles.itemLocked,
+                        : item.item_premium_level === 'base' && index > 0 && styles.itemLocked,
                     )}
                     key={_item.id}
                   >
-                    <img
-                      src={_item.image_url + svgHeadersString}
-                      className={styles.itemImage}
-                      alt=""
-                    />
+                    <img src={_item.image_url + svgHeadersString} className={styles.itemImage} alt="" />
                     <img src={LockIcon} className={styles.lock} alt="" />
                   </div>
                 ))}
