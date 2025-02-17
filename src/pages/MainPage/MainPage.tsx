@@ -30,7 +30,6 @@ export const MainPage: FC = () => {
         reduxDispatch(setIntegrationReadyForPublishing(true));
         reduxDispatch(setLastIntegrationId(data.integrations[0].id));
       } else {
-        console.log('refetched, not creared');
         reduxDispatch(setIntegrationReadyForPublishing(false));
         reduxDispatch(setLastIntegrationId(""));
       }

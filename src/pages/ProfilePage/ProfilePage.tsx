@@ -9,17 +9,22 @@ import {
   ProfileStatsMini,
   StreakCard,
 } from '../../components/profile';
-import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../redux';
+import { setActiveFooterItemId, useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../redux';
 import RewardsList from '../../components/profile/RewardsCard/RewardsList';
 import { getWeekData } from '../../utils';
 import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 import { useGetPushLineQuery } from '../../redux/api/pushLine/api';
+import { useDispatch } from 'react-redux';
 export const ProfilePage: React.FC = () => {
   const { t } = useTranslation('profile');
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
+
+
+  const dispatch = useDispatch();
+
   const {
     data: userProfileData,
     error: userError,
@@ -33,6 +38,11 @@ export const ProfilePage: React.FC = () => {
   } = useGetTopProfilesQuery();
 
   const [, setIsModalShown] = useState(false);
+
+  useEffect(() => {
+    dispatch(setActiveFooterItemId(-1));
+  });
+
   useEffect(() => {
     const lastShownTimestamp = localStorage.getItem('daysInARowModalTimestamp');
     const now = Date.now();
