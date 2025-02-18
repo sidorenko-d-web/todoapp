@@ -6,6 +6,10 @@ import s from './BindingConfirmationModal.module.scss';
 import ss from '../shared.module.scss';
 import { Button, CentralModal } from '../../shared';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, useConfirmEmailMutation } from '../../../redux';
+import { setInputType } from '../../../redux/slices/confirmation';
+
 type BindingConfirmationModalProps = {
   modalId: string;
   onClose: () => void;
@@ -14,14 +18,21 @@ type BindingConfirmationModalProps = {
 };
 
 export const BindingConfirmationModal = ({
-                                           modalId,
-                                           onClose,
-                                           confirmation,
-                                           onNext,
-                                         }: BindingConfirmationModalProps) => {
-  const [ value, setValue ] = useState<string>('');
-  const [ timer, setTimer ] = useState<number>(20);
+  modalId,
+  onClose,
+  confirmation,
+  onNext,
+}: BindingConfirmationModalProps) => {
+  const [value, setValue] = useState<string>('');
+  const [timer, setTimer] = useState<number>(20);
+  const [error, setError] = useState('');
   const isValid = value && value.length === 6;
+
+  const dispatch = useDispatch();
+  const { inputValue, inputType } = useSelector((state: RootState) => state.confirmation);
+
+
+  const [confirmEmail] = useConfirmEmailMutation();
 
   useEffect(() => {
     if (timer > 0) {
@@ -30,15 +41,30 @@ export const BindingConfirmationModal = ({
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [ timer ]);
+  }, [timer]);
 
   const handleResend = () => {
     setTimer(20);
   };
 
-  const handleNext = () => {
-    setValue('');
-    onNext();
+  const handleNext = async () => {
+    if (!isValid) return;
+
+    try {
+      if (inputType === 'email') {
+        await confirmEmail({ email: inputValue, confirmation_code: value }).unwrap();
+        dispatch(setInputType('phone'));
+      }
+      setValue('');
+      onNext();
+    } catch (err) {
+      const error = err as { status: number };
+      if (error.status === 400) {
+        setError('Введён неверный код подтверждения');
+      } else {
+        setError('Произошла ошибка при отправке кода подтверждения.');
+      }
+    }
   };
 
   return (
@@ -50,9 +76,8 @@ export const BindingConfirmationModal = ({
           <OtpInput
             value={value}
             onChange={(val) => {
-              if (/^\d*$/.test(val)) {
-                setValue(val);
-              }
+              setError('');
+              setValue(val); // Allow any input (no regex check)
             }}
             numInputs={6}
             containerStyle={s.inputContainer}
@@ -61,13 +86,15 @@ export const BindingConfirmationModal = ({
               <input
                 {...props}
                 onKeyDown={(e) => {
-                  if (!/^\d$/.test(e.key) &&
+                  // Allow all keys except for specific control keys
+                  if (
                     e.key !== 'Backspace' &&
                     e.key !== 'ArrowLeft' &&
                     e.key !== 'ArrowRight' &&
                     e.key !== 'Delete' &&
-                    e.key !== 'Tab') {
-                    e.preventDefault();
+                    e.key !== 'Tab'
+                  ) {
+                    // Allow any input (no regex check)
                   }
 
                   if (props.onKeyDown) {
@@ -77,6 +104,8 @@ export const BindingConfirmationModal = ({
               />
             )}
           />
+
+          {error && <p className={s.errorMessage}>{error}</p>}
 
           <Button
             className={ss.textButton}

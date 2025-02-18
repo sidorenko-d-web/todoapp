@@ -10,3 +10,4 @@ export * from './tree'
 export * from './tracking'
 export * from './room'
 export * from './pushLine'
+export * from './confirmations';

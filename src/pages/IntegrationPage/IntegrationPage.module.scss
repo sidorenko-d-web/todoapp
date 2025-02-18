@@ -20,7 +20,11 @@
         font-weight: 600;
         width: 100%;
         text-align: center;
-        margin-bottom: 0;
+        margin-bottom: 10px;
+
+        @media (min-width: var.$breakpoint-md) {
+            font-size: 24px;
+        }
     }
 
     .integrationNameWrp {
@@ -54,8 +58,6 @@
             }
         }
     }
-
-   
 
     .commentsSectionTitleWrp {
         margin-top: 20px;

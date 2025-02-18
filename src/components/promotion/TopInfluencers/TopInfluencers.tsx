@@ -6,11 +6,11 @@ import { InfluencerRatingSteps, MODALS, useInfluencerRatingSteps } from '../../.
 import { TopUsers } from '../Modal';
 import { useModal } from '../../../hooks';
 import classNames from 'classnames';
-import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../../redux';
+import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUserQuery } from '../../../redux';
 import { BindingConfirmationModal, BindingModal, BindingSuccessModal, TrackedButton } from '../../';
 
 import s from './TopInfluencers.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../helpers';
 
@@ -27,6 +27,13 @@ export const TopInfluencers = () => {
 
   const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
 
+  const { data: userData } = useGetUserQuery();
+
+  useEffect(() => {
+    if(userData?.is_email_verified) {
+      setInfluencersUnlockingStep('phone');
+    }
+  })
   const userPosition = userProfileData && topProfiles
     ? topProfiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
     : -1;

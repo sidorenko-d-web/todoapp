@@ -191,6 +191,7 @@ $header-border: 1px solid $color-header-border-dark;
   background: $color-header-content-dark;
 
   .coins {
+
     @include number-text;
     font-size: 14px;
   }

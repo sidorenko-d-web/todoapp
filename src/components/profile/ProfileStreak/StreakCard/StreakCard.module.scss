@@ -20,12 +20,12 @@
       border-radius: 10px;
       padding: 10px;
       background-color: var.$footer-bg;
-      width: 65px;
-      background-image: url('../../../../assets/icons/fire-red.svg');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: contain;
-      background-size: 50%;
+      width: 90px;
+
+      img {
+        width: 65px;
+        margin: 0 auto;
+      }
     }
 
     .daysInARowWrp {
@@ -34,19 +34,36 @@
 
       .daysInARow {
         margin: 0;
+
         color: var.$color-grayish-white;
-        white-space: nowrap;
+        white-space: normal;
         text-overflow: ellipsis;
       }
 
       .badge {
-        color: var.$color-red;
+        color: var.$color-blue-primary;
         padding: 5px;
         width: fit-content;
         border-radius: 4px;
         font-size: 14px;
         background-color: var.$color-gray;
       }
+    }
+    .badgePurple {
+      color: var.$color-purple;
+      padding: 5px;
+      width: fit-content;
+      border-radius: 4px;
+      font-size: 14px;
+      background-color: var.$color-gray;
+    }
+    .badgeRed {
+      color: var.$color-red;
+      padding: 5px;
+      width: fit-content;
+      border-radius: 4px;
+      font-size: 14px;
+      background-color: var.$color-gray;
     }
   }
 
@@ -62,6 +79,7 @@
   .freezeCount {
     display: flex;
     align-items: center;
+    margin-right: 10px;
     font-weight: 500;
     gap: 5px;
     font-size: 20px;
@@ -111,6 +129,9 @@
       align-items: center;
       justify-content: center;
       padding-left: 10px;
+      img {
+        width: 20px;
+      }
     }
   }
 

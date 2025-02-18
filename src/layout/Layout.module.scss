@@ -55,6 +55,16 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   height: 100vh;
   margin: 0 auto;
   overflow: hidden;
+
+  .bg_image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: calc(100% + 20px);
+    z-index: -1;
+    transition: transform 0.1s ease-out;
+  }
 }
 
 .content {
