@@ -25,7 +25,7 @@ const Layout = () => {
     );
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
   }, []);
-  
+
   useEffect(() => {
     if (showRoadmapBg) {
       const handleScroll = () => {
@@ -51,6 +51,7 @@ const Layout = () => {
           style={{ transform: `translateY(-${bgOffset}px)` }}
         />
       )}
+      
       {showHeader && <Header />}
       <main className={styles.content + ' ' + (showHeader ? styles.withHeader : '')}>
         <Outlet />
