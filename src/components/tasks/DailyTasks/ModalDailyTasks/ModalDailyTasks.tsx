@@ -13,7 +13,8 @@ import CrossRedIcon from '../../../../assets/icons/cross-red-in-circle.svg';
 import { formatAbbreviation } from '../../../../helpers';
 import { Button } from '../../../shared';
 import { TaskBoost, DailyQuestion, Task } from '../../../../redux/api/tasks/dto';
-import { useGetTaskQuestionsQuery, useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
+import { useGetTaskQuestionsQuery, useUpdateTaskMutation, useGetDailyRewardQuery } from '../../../../redux/api/tasks/api';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 type ModalDailyTasksProps = {
   modalId: string;
@@ -45,6 +46,10 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
   const [channelLink, setChannelLink] = useState(task.external_link);
 
+  const { data: rewardData, error: rewardError } = useGetDailyRewardQuery(taskId, {
+    skip: !task.is_completed,
+  });
+
   useEffect(() => {
     if (isQuestionsArray && questions) {
       setAnsweredQuestions(
@@ -54,6 +59,15 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
       );
     }
   }, [questions, isQuestionsArray, task.completed_stages]);
+
+  useEffect(() => {
+    if (task.is_completed && !task.is_reward_given && rewardData) {
+      console.log('Reward Data:', rewardData);
+    }
+    if (rewardError && 'status' in rewardError && (rewardError as FetchBaseQueryError).status !== 409) {
+      console.error('Error fetching reward data:', rewardError);
+    }
+  }, [task.is_completed, task.is_reward_given, rewardData, rewardError]);
 
   const getQuestionStates = (): QuestionState[] => {
     if (!isQuestionsArray || !questions) return [];
@@ -76,6 +90,10 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   }
 
   const currentQuestion = questions[currentQuestionIndex];
+  if (!currentQuestion) {
+    return null;
+  }
+
   const correctAnswer = currentQuestion.answer_options.find(option => option.is_correct);
   const isCorrectAnswer = selectedOption === correctAnswer?.id;
 

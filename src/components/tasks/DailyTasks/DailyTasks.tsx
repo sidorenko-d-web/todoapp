@@ -12,9 +12,8 @@ type QuestionState = 'solved' | 'current' | 'closed';
 
 export const DailyTasks: FC = () => {
   const { openModal, closeModal } = useModal();
-  const { data: tasksData } = useGetTasksQuery();
+  const { data: tasksData } = useGetTasksQuery({ is_actual: true });
   const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
-
   const dailyTask = useMemo(() => {
     if (!tasksData?.assignments) return null;
     const dailyTasks = tasksData.assignments.filter(task => task.category === 'daily');

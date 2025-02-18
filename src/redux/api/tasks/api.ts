@@ -1,16 +1,17 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import { GetTasksResponse, UpdateTaskRequest, UpdateTaskResponse, GetTaskQuestionsResponse, GetDailyRewardResponse, GetTaskQuestionsErrorResponse } from './dto';
+import { GetTasksResponse, UpdateTaskRequest, UpdateTaskResponse, GetTaskQuestionsResponse, GetDailyRewardResponse, GetTaskQuestionsErrorResponse, TaskBoost } from './dto';
 
 export const tasksApi = createApi({
   reducerPath: 'tasksApi',
   baseQuery: baseQueryReauth,
   tagTypes: ['Tasks'],
   endpoints: builder => ({
-    getTasks: builder.query<GetTasksResponse, void>({
-      query: () => ({
+    getTasks: builder.query<GetTasksResponse, void | { is_actual?: boolean }>({
+      query: (params) => ({
         url: '/assignments',
         method: 'GET',
+        params: params ? { is_actual: params.is_actual } : undefined,
       }),
       providesTags: ['Tasks']
     }),
@@ -35,6 +36,13 @@ export const tasksApi = createApi({
       }),
       providesTags: ['Tasks']
     }),
+    getBoost: builder.query<TaskBoost, void>({
+      query: () => ({
+        url: '/assignments/boost',
+        method: 'GET',
+      }),
+      providesTags: ['Tasks']
+    }),
   }),
 });
 
@@ -43,6 +51,7 @@ export const {
   useGetTaskQuestionsQuery,
   useUpdateTaskMutation,
   useGetDailyRewardQuery,
+  useGetBoostQuery,
 } = tasksApi;
 
 

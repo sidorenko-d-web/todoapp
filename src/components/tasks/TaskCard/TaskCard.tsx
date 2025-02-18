@@ -143,7 +143,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
               {boost?.subscribers || 0} <img src={subscribersIcon} height={14} width={14} alt="subscribers" />
             </span> */}
             <span className={s.reward}>
-              0 <img src={giftIcon} height={14} width={14} alt="gift" />
+              ??? <img src={giftIcon} height={14} width={14} alt="gift" />
             </span>
           </div>
         </section>

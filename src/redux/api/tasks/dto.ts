@@ -18,6 +18,7 @@ export type Task = {
   is_completed: boolean;
   completed_stages: number;
   link: string;
+  is_reward_given: boolean;
 }
 
 export type GetTasksResponse = {
