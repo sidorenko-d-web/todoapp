@@ -34,6 +34,7 @@ type BaseTaskProps = {
   isCompleted?: boolean;
   isTopTask?: boolean;
   isDailyTask?: boolean;
+  isSocialTask?: boolean;
   questionStates?: QuestionState[];
   boost?: TaskBoost;
 };
@@ -79,6 +80,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      errorText,
                                                      boost,
                                                      isDailyTask,
+                                                     isSocialTask,
                                                    }) => {
   // Функция для получения иконки на основе состояния
   const getIconByState = (state: QuestionState) => {
@@ -97,6 +99,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       [s.completed]: isCompleted,
       [s.topTask]: isTopTask,
       [s.dailyTask]: isDailyTask,
+      [s.socialTask]: isSocialTask,
     })}>
       <section className={s.header}>
         {icon && <img className={s.icon} src={icon} height={40} width={40} alt="icon" />}
