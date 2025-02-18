@@ -41,22 +41,17 @@ export const MainPage: FC = () => {
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
   useEffect(() => {
-    refetch();
-  }, []);
-
-  useEffect(() => {
-    if (data) {
-      if (data.integrations[0].status === 'created') {
-        console.log('=== created: ' + data.integrations[0].id);
+    refetch().then(() => {
+      if (data?.integrations[0].status === 'created') {
         reduxDispatch(setIntegrationReadyForPublishing(true));
         reduxDispatch(setLastIntegrationId(data.integrations[0].id));
       } else {
-        console.log('1== created: ');
         reduxDispatch(setIntegrationReadyForPublishing(false));
         reduxDispatch(setLastIntegrationId(""));
       }
-    }
-  }, [data]);
+    });
+  }, []);
+
 
   const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
 

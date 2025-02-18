@@ -16,6 +16,8 @@ export const ProfilePage: React.FC = () => {
   const { t } = useTranslation('profile');
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
+
+
   const {
     data: userProfileData,
     error: userError,
@@ -28,7 +30,8 @@ export const ProfilePage: React.FC = () => {
     isLoading: isTopProfilesLoading,
   } = useGetTopProfilesQuery();
 
-  const [ , setIsModalShown ] = useState(false);
+  const [, setIsModalShown] = useState(false);
+
   useEffect(() => {
     const lastShownTimestamp = localStorage.getItem('daysInARowModalTimestamp');
     const now = Date.now();
