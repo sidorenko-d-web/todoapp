@@ -117,7 +117,7 @@
   line-height: 130%;
   letter-spacing: -0.8px;
   color: var.$color-text-semi-transparent;
-  text-wrap: pretty;
+  text-wrap: wrap;
 
   @include var.multi-fz(14px, 16px);
 }

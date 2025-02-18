@@ -18,9 +18,9 @@ export const PromotionPage: React.FC = () => {
 
   const { data: topProfilesData, error: topProfilesError, isLoading: isTopProfilesLoading } = useGetTopProfilesQuery();
   const { data: usersCountData } = useGetUsersCountQuery();
-  const userPosition = userProfileData && topProfilesData?.profiles
-    ? topProfilesData.profiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
-    : -1;
+  // const userPosition = userProfileData && topProfilesData?.profiles
+  //   ? topProfilesData.profiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
+  //   : -1;
 
   useEffect(() => {
     dispatch(setActiveFooterItemId(3));

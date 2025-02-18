@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../helpers';
 
 export default function RewardForIntegrationModal() {
-  const {t, i18n } = useTranslation('integrations');
+  const { t, i18n } = useTranslation('integrations');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal } = useModal();
 
@@ -40,44 +40,46 @@ export default function RewardForIntegrationModal() {
         <Lottie animationData={reward} loop={false} className={styles.reward} />
       </div>
       <div className={styles.images}>
-        <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
+        <Lottie animationData={blueLightAnimation} loop={true} className={styles.light}  />
       </div>
-      <div className={styles.info}>
-        <div className={styles.top}>
-          <div className={styles.lightning}>
-            <img src={lightning} />
+      <div className={styles.wrapper}>
+        <div className={styles.info}>
+          <div className={styles.top}>
+            <div className={styles.lightning}>
+              <img src={lightning} />
+            </div>
+            <img className={styles.integration} src={integration} />
           </div>
-          <img className={styles.integration} src={integration} />
-        </div>
-        <div className={styles.bottom}>
-          <h2 className={styles.title}>{t('i28')}</h2>
-          <div className={styles.rate}>
-            <img src={starBlue} />
-            <img src={starGray} />
-            <img src={starGray} />
+          <div className={styles.bottom}>
+            <h2 className={styles.title}>{t('i28')}</h2>
+            <div className={styles.rate}>
+              <img src={starBlue} />
+              <img src={starGray} />
+              <img src={starGray} />
+            </div>
+            <div className={styles.progress}>
+              <div className={styles.progressBar} />
+            </div>
           </div>
-          <div className={styles.progress}>
-            <div className={styles.progressBar} />
+        </div>
+        <div className={styles.icons}>
+          <div className={styles.item}>
+            <span>+{formatAbbreviation(1500, 'number', { locale: locale })}</span>
+            <img src={coin} className={styles.coin} />
+          </div>
+          <div className={styles.item}>
+            <span>+{formatAbbreviation(500, 'number', { locale: locale })}</span>
+            <img src={subscribers} />
           </div>
         </div>
-      </div>
-      <div className={styles.icons}>
-        <div className={styles.item}>
-          <span>+{formatAbbreviation(1500, 'number', {locale: locale})}</span>
-          <img src={coin} className={styles.coin} />
+        <div className={styles.desc}>
+          <p>{t('i29')}</p>
         </div>
-        <div className={styles.item}>
-          <span>+{formatAbbreviation(500, 'number', {locale: locale})}</span>
-          <img src={subscribers} />
-        </div>
+        <Button variant={'blue'} onClick={() => {
+          dispatch(setIsPublishedModalClosed(true));
+          closeModal(MODALS.INTEGRATION_REWARD);
+        }}>{t('i30')}</Button>
       </div>
-      <div className={styles.desc}>
-        <p>{t('i29')}</p>
-      </div>
-      <Button variant={'blue'} onClick={() => {
-        dispatch(setIsPublishedModalClosed(true));
-        closeModal(MODALS.INTEGRATION_REWARD);
-      }}>{t('i30')}</Button>
     </CentralModal>
   );
 }

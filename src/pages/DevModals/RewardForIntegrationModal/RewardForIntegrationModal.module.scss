@@ -2,6 +2,7 @@
 @use 'sass:color';
 
 .images {
+  pointer-events: none;
   position: relative;
   display: flex;
   justify-content: center;
@@ -18,6 +19,9 @@
       width: 120%;
     }
   }
+}
+
+.wrapper {
 }
 
 .info {
@@ -137,6 +141,7 @@
 }
 
 .background {
+  pointer-events: none;
   position: fixed;
   top: 0;
   left: 0;
