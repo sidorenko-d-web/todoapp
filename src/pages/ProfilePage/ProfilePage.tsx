@@ -20,6 +20,8 @@ export const ProfilePage: React.FC = () => {
   const { t } = useTranslation('profile');
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
+
+
   const {
     data: userProfileData,
     error: userError,
