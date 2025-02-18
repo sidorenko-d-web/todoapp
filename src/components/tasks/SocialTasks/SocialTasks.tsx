@@ -3,20 +3,18 @@ import { TaskCard } from '../';
 import telegramIcon from '../../../assets/icons/telegram.png';
 import instagramIcon from '../../../assets/icons/instagram.png';
 import s from '../styles.module.scss';
-import { useGetTasksQuery } from '../../../redux/api/tasks/api';
+import { Task } from '../../../redux/api/tasks/dto';
 
 const TELEGRAM_CHANNEL_URL = 'https://t.me/pushtoyours';
 
-export const SocialTasks: FC = () => {
-  const { data: tasksData } = useGetTasksQuery();
-  
-  const socialTasks = tasksData?.assignments.filter(
-    task => task.category === 'subscribe'
-  ) || [];
+type SocialTasksProps = {
+  tasks: Task[];
+};
 
-  const completedTasks = socialTasks.filter(task => task.is_completed).length;
+export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
+  const completedTasks = tasks.filter(task => task.is_completed).length;
 
-  const handleTaskClick = (task: any) => {
+  const handleTaskClick = (task: Task) => {
     if (task.title.toLowerCase().includes('telegram')) {
       window.open(TELEGRAM_CHANNEL_URL, '_blank');
     } else if (task.external_link) {
@@ -28,10 +26,10 @@ export const SocialTasks: FC = () => {
     <section className={s.section}>
       <div className={s.sectionHeader}>
         <h2 className={s.sectionTitle}>Подписки на социальные сети</h2>
-        <span className={s.count}>{completedTasks}/{socialTasks.length}</span>
+        <span className={s.count}>{completedTasks}/{tasks.length}</span>
       </div>
       <div className={s.tasksList}>
-        {socialTasks.map(task => (
+        {tasks.map(task => (
           <TaskCard
             key={task.id}
             title={task.title}

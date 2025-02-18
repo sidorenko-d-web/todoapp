@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState } from 'react';
 import { TaskCard } from '../TaskCard';
 import magicBallIcon from '../../../assets/icons/magic-ball.png';
 import chestIcon from '../../../assets/icons/chest-purple.svg';
@@ -6,7 +6,7 @@ import { MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import s from '../styles.module.scss';
 import { ModalTopTasks } from './ModalTopTasks';
-import { useGetTasksQuery } from '../../../redux/api/tasks/api';
+import { Task } from '../../../redux/api/tasks/dto';
 
 interface TaskState {
   currentStep: number;
@@ -15,32 +15,18 @@ interface TaskState {
   hasError?: boolean;
 }
 
-export const TopTasks: FC = () => {
+type TopTasksProps = {
+  task: Task;
+};
+
+export const TopTasks: FC<TopTasksProps> = ({ task }) => {
   const { openModal, closeModal } = useModal();
-  const { data: tasksData } = useGetTasksQuery();
-  
-  const channelTask = tasksData?.assignments.find(
-    task => task.category === 'create_channel'
-  );
-  
   const [taskState, setTaskState] = useState<TaskState>({
-    currentStep: 0,
-    totalSteps: 4,
-    completed: false,
+    currentStep: task.completed_stages,
+    totalSteps: task.stages,
+    completed: task.is_completed,
     hasError: false
   });
-
-  // Обновляем состояние когда получаем данные с сервера
-  useEffect(() => {
-    if (channelTask) {
-      setTaskState(prev => ({
-        ...prev,
-        currentStep: channelTask.completed_stages,
-        totalSteps: channelTask.stages,
-        completed: channelTask.is_completed,
-      }));
-    }
-  }, [channelTask]);
 
   const handleOpenTopTasks = () => {
     openModal(MODALS.TOP_TASK);
@@ -67,10 +53,6 @@ export const TopTasks: FC = () => {
     return 'Выполнить';
   };
 
-  if (!channelTask) {
-    return null;
-  }
-
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
@@ -81,13 +63,13 @@ export const TopTasks: FC = () => {
       </div>
       <div className={s.tasksList}>
         <TaskCard
-          title={channelTask.title}
-          description={channelTask.description}
+          title={task.title}
+          description={task.description}
           icon={magicBallIcon}
           buttonType="secondary"
-          income={Number(channelTask.boost.income_per_second)}
-          subscribers={channelTask.boost.subscribers}
-          passiveIncome={Number(channelTask.boost.income_per_second)}
+          income={Number(task.boost.income_per_second)}
+          subscribers={task.boost.subscribers}
+          passiveIncome={Number(task.boost.income_per_second)}
           showProgressBar
           progress={progress}
           totalSteps={taskState.totalSteps}
@@ -104,10 +86,10 @@ export const TopTasks: FC = () => {
       </div>
       <ModalTopTasks
         modalId={MODALS.TOP_TASK}
-        taskId={channelTask.id}
+        taskId={task.id}
         onClose={handleCloseModal}
         onStateChange={handleStateChange}
-        task={channelTask}
+        task={task}
       />
     </section>
   );

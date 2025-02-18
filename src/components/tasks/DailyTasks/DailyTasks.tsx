@@ -3,40 +3,33 @@ import { TaskCard } from '../';
 import giftIcon from '../../../assets/icons/gift.svg';
 import { MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
-import { useGetTasksQuery } from '../../../redux/api/tasks/api';
 import { Task } from '../../../redux/api/tasks/dto';
 import s from '../styles.module.scss';
 import { ModalDailyTasks } from './ModalDailyTasks';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
-export const DailyTasks: FC = () => {
+type DailyTasksProps = {
+  task: Task;
+};
+
+export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const { openModal, closeModal } = useModal();
-  const { data: tasksData } = useGetTasksQuery({ is_actual: true });
   const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
-  const dailyTask = useMemo(() => {
-    if (!tasksData?.assignments) return null;
-    const dailyTasks = tasksData.assignments.filter(task => task.category === 'daily');
-    return dailyTasks[dailyTasks.length - 1];
-  }, [tasksData]);
 
   // Инициализируем состояния на основе количества этапов из API
   useEffect(() => {
-    if (dailyTask) {
-      setQuestionStates(Array(dailyTask.stages).fill('closed').map((state, index) => 
-        index === 0 ? 'current' : state
-      ));
-    }
-  }, [dailyTask]);
+    setQuestionStates(Array(task.stages).fill('closed').map((state, index) => 
+      index === 0 ? 'current' : state
+    ));
+  }, [task]);
 
   const completedCount = useMemo(() => {
     return questionStates.filter(state => state === 'solved').length;
   }, [questionStates]);
 
   const handleOpenGift = () => {
-    if (dailyTask) {
-      openModal(MODALS.DAILY_TASKS);
-    }
+    openModal(MODALS.DAILY_TASKS);
   };
 
   const handleCloseModal = () => {
@@ -47,41 +40,36 @@ export const DailyTasks: FC = () => {
     setQuestionStates(newStates);
   };
 
-  const isCompleted = dailyTask?.is_completed || questionStates.every(state => state === 'solved');
-
-  if (!dailyTask) {
-    return null;
-  }
+  const isCompleted = task.is_completed || questionStates.every(state => state === 'solved');
 
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
         <h2 className={s.sectionTitle}>Ежедневное</h2>
-        <span className={s.count}>{completedCount}/{dailyTask.stages}</span>
+        <span className={s.count}>{completedCount}/{task.stages}</span>
       </div>
       <div className={s.tasksList}>
         <TaskCard
-          title={dailyTask.title}
-          description={dailyTask.description}
+          title={task.title}
+          description={task.description}
           type="progress"
           icon={giftIcon}
           buttonText={isCompleted ? 'Забрать награду' : 'Открыть подарок'}
           disabled={isCompleted}
           onClick={handleOpenGift}
           questionStates={questionStates}
-          boost={dailyTask.boost}
-          totalSteps={dailyTask.stages}
-          completedSteps={dailyTask.completed_stages}
+          boost={task.boost}
+          totalSteps={task.stages}
         />
       </div>
       <ModalDailyTasks
         modalId={MODALS.DAILY_TASKS}
         onClose={handleCloseModal}
         onStateChange={handleQuestionStatesChange}
-        taskId={dailyTask.id}
-        totalSteps={dailyTask.stages}
-        boost={dailyTask.boost}
-        task={dailyTask}
+        taskId={task.id}
+        totalSteps={task.stages}
+        boost={task.boost}
+        task={task}
       />
     </section>
   );

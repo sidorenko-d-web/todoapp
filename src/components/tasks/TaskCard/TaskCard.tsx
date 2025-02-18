@@ -35,7 +35,6 @@ type BaseTaskProps = {
   isTopTask?: boolean;
   questionStates?: QuestionState[];
   boost?: TaskBoost;
-  completedSteps?: number;
 };
 
 type DefaultTaskProps = {
@@ -78,7 +77,6 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      isTopTask,
                                                      errorText,
                                                      boost,
-                                                     completedSteps,
                                                    }) => {
   // Функция для получения иконки на основе состояния
   const getIconByState = (state: QuestionState) => {

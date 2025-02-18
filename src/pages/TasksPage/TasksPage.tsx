@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
 import coinIcon from '../../assets/icons/coin.png';
 
@@ -9,13 +9,23 @@ import { useGetTasksQuery } from '../../redux/api/tasks';
 import { useGetBoostQuery } from '../../redux/api/tasks/api';
 
 export const TasksPage: FC = () => {
-  const { data, error, isLoading } = useGetTasksQuery();
+  const { data, error, isLoading } = useGetTasksQuery({ is_actual: true });
   const { data: boostData } = useGetBoostQuery();
-  
-  useEffect(() => {
-    const dailyTasks = data?.assignments.filter(task => task.category === 'daily');
-    console.log('Все задания:', data?.assignments);
-    console.log('Ежедневные задания:', dailyTasks);
+
+  const dailyTask = useMemo(() => {
+    if (!data?.assignments) return null;
+    const dailyTasks = data.assignments.filter(task => task.category === 'daily');
+    return dailyTasks[dailyTasks.length - 1];
+  }, [data]);
+
+  const topTask = useMemo(() => {
+    if (!data?.assignments) return null;
+    return data.assignments.find(task => task.category === 'create_channel');
+  }, [data]);
+
+  const socialTasks = useMemo(() => {
+    if (!data?.assignments) return [];
+    return data.assignments.filter(task => task.category === 'subscribe');
   }, [data]);
 
   useEffect(() => {
@@ -46,16 +56,15 @@ export const TasksPage: FC = () => {
       <section className={s.topSection}>
         <h1 className={s.pageTitle}>Задания</h1>
         <div className={s.badges}>
-          <span className={s.badge}>+{formatAbbreviation(100)} <img src={subscribersIcon} height={14} width={14}
-                                              alt={'subscribers'} /></span>
+          <span className={s.badge}>+{formatAbbreviation(100)} <img src={subscribersIcon} height={14} width={14} alt={'subscribers'} /></span>
           <span className={s.badge}>+{formatAbbreviation(150)} <img src={coinIcon} height={14} width={14} alt={'income'} /></span>
           <span className={s.badge}>+{formatAbbreviation(1)} <img src={coinIcon} height={14} width={14} alt={'income'} />/сек.</span>
         </div>
       </section>
 
-      <DailyTasks />
-      <TopTasks />
-      <SocialTasks />
+      {dailyTask && <DailyTasks task={dailyTask} />}
+      {topTask && <TopTasks task={topTask} />}
+      {socialTasks.length > 0 && <SocialTasks tasks={socialTasks} />}
     </main>
   );
 };
