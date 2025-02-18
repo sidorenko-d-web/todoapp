@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
 import gift from '../../assets/icons/gift.svg';
-import spinner from '../../assets/icons/spinner-blue.svg';
+import spinner from '../../assets/icons/purple-glow.svg';
 import { useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery } from '../../redux';
 import { useTreeProgress } from '../../hooks';
 import { formatAbbreviation } from '../../helpers';
