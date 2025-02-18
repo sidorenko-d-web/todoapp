@@ -16,7 +16,7 @@ import { formatAbbreviation } from '../../../helpers';
 
 export const TopInfluencers = () => {
   const { t, i18n } = useTranslation('promotion');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
   const INFLUENCER_RATING_STEPS = useInfluencerRatingSteps();
   const [ isInfluencersLocked, setIsInfluencersLocked ] = useState(true);
@@ -30,10 +30,10 @@ export const TopInfluencers = () => {
   const { data: userData } = useGetUserQuery();
 
   useEffect(() => {
-    if(userData?.is_email_verified) {
+    if (userData?.is_email_verified) {
       setInfluencersUnlockingStep('phone');
     }
-  })
+  });
   const userPosition = userProfileData && topProfiles
     ? topProfiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
     : -1;
@@ -45,31 +45,30 @@ export const TopInfluencers = () => {
       <h2 className={s.headerInfluencers}>
         <span className={s.textName}>{t('p8')}</span>
         <span className={s.badge}>
-          <span>{isInfluencersLocked ? `${t('p9')}` : `${t('p20')} ${formatAbbreviation(10000, 'number', { locale: locale })}`}</span><img
-          src={isInfluencersLocked ? lock : cup}
-          height={14} width={14} />
+          <span>{isInfluencersLocked ? `${t('p9')}` : `${t('p20')} ${formatAbbreviation(10000, 'number', { locale: locale })}`}</span>
+          <img src={isInfluencersLocked ? lock : cup} />
         </span>
       </h2>
       <section className={s.wrapperInfo}>
         <SliderSelect isInfluencersLocked={isInfluencersLocked} />
-        <div className={s.contentChest}>
+        <div>
           <div className={s.chestText}>
             <span className={classNames(s.infoName, s.text)}>{`# ${isInfluencersLocked ? '???' : position}`}</span>
             <div className={classNames(s.infoName, s.text)}>
               <span>{t('p12')}</span>
-              <img src={chest} height={14} width={14} alt="chest" />
+              <img src={chest} alt="chest" />
             </div>
           </div>
           <div className={s.progressBar}>
             <span className={s.progress} style={{ width: '15%' }}></span>
           </div>
+          <p className={s.textInfo}>
+            {isInfluencersLocked
+              ? `${t('p10')}`
+              : `${t('p21')}`}
+            <span className={s.textDay}> {t('p11')}</span>
+          </p>
         </div>
-        <p className={s.textInfo}>
-          {isInfluencersLocked
-            ? `${t('p10')}`
-            : `${t('p21')}`}
-          <span className={s.textDay}> {t('p11')}</span>
-        </p>
         <TrackedButton
           trackingData={{
             eventType: 'button',

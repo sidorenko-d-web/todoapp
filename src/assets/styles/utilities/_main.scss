@@ -1,3 +1,5 @@
+@use '../abstracts/variables' as var;
+
 @mixin transition($args...) {
   transition-timing-function: ease-out;
   transition-duration: 0.2s;
@@ -24,5 +26,43 @@
   &::-webkit-scrollbar-thumb {
     background: #505B78;
     border-radius: 2px;
+  }
+}
+
+@mixin shake($duration: 0.3s, $ease: ease-in-out) {
+  @keyframes shake {
+    0% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-5px);
+    }
+    50% {
+      transform: translateX(5px);
+    }
+    75% {
+      transform: translateX(-5px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  animation: shake $duration $ease;
+}
+
+@mixin multi-size($width-sm, $width-md, $ratio: 1) {
+  aspect-ratio: $ratio;
+  width: $width-sm;
+
+  @media (min-width: var.$breakpoint-md) {
+    width: $width-md;
+  }
+}
+
+@mixin multi-fz($fz-sm, $fz-md) {
+  font-size: $fz-sm;
+
+  @media (min-width: var.$breakpoint-md) {
+    font-size: $fz-md;
   }
 }

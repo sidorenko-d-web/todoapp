@@ -1,8 +1,9 @@
 import React from 'react';
 import styles from './StreakCard.module.scss';
 
-import chestIcon from '../../../../assets/icons/elite-chest-glowing.svg';
+import chestIcon from '../../../../assets/icons/chest-red.svg';
 import snowflake from '../../../../assets/icons/snowflake.svg';
+import fire from '../../../../assets/icons/fire-red.svg';
 import { ProgressLine } from '../../../shared';
 
 import { DayType } from '../../../../types';
@@ -29,12 +30,12 @@ interface StreakCardProps {
 }
 
 export const StreakCard: React.FC<StreakCardProps> = ({
-  days,
-  onlyStreak,
-  streakDays,
-  frozenDays,
-  weekData,
-}) => {
+                                                        days,
+                                                        onlyStreak,
+                                                        streakDays,
+                                                        frozenDays,
+                                                        weekData,
+                                                      }) => {
   const { t } = useTranslation('profile');
 
   const calculateLevel = () => {
@@ -51,9 +52,9 @@ export const StreakCard: React.FC<StreakCardProps> = ({
           <span className={styles.badge}>{t('p12')}</span>
 
           <div className={styles.title}>
-            <h2 className={styles.daysInARow}>
+            <span className={styles.daysInARow}>
               {streakDays} {t('p13')}
-            </h2>
+            </span>
             {!onlyStreak && (
               <div className={styles.freezeCount}>
                 <span>{frozenDays}</span>
@@ -62,7 +63,9 @@ export const StreakCard: React.FC<StreakCardProps> = ({
             )}
           </div>
         </div>
-        <div className={styles.fire} />
+        <div className={styles.fire}>
+          <img src={fire} alt="Streak" width={40} height={40} />
+        </div>
       </div>
 
       {!onlyStreak && (

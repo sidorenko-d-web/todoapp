@@ -1,5 +1,5 @@
 import { MODALS, SOUNDS } from '../../../constants';
-import { useModal, useAutoPlaySound } from '../../../hooks';
+import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './RewardForIntegrationModal.module.scss';
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
@@ -63,11 +63,11 @@ export default function RewardForIntegrationModal() {
       </div>
       <div className={styles.icons}>
         <div className={styles.item}>
-          <p>+{formatAbbreviation(1500, 'number', {locale: locale})}</p>
+          <span>+{formatAbbreviation(1500, 'number', {locale: locale})}</span>
           <img src={coin} className={styles.coin} />
         </div>
         <div className={styles.item}>
-          <p>+{formatAbbreviation(500, 'number', {locale: locale})}</p>
+          <span>+{formatAbbreviation(500, 'number', {locale: locale})}</span>
           <img src={subscribers} />
         </div>
       </div>

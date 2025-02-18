@@ -1,4 +1,4 @@
-@use    '../../../../assets/styles/index.scss' as var;
+@use '../../../../assets/styles/index.scss' as var;
 
 
 .badgesWrp {
@@ -12,27 +12,30 @@
     display: flex;
     align-items: center;
     border-radius: 10px;
-    font-size: 14px;
     color: white;
-    padding: 4px;
-    padding-left: 7px;
+    padding: 4px 4px 4px 7px;
     background: #212129;
+
+    img {
+      @include var.multi-size(14px, 18px)
+    }
   }
-  
+
   .value {
-    font-size: 14px;
+    @include var.multi-fz(14px, 16px);
   }
 
   .icon {
     margin-left: 5px;
   }
-  
+
   .level {
-    font-size: 10px;
     color: var.$color-text-semi-transparent;
+
+    @include var.multi-fz(10px, 12px);
   }
-  
-  
+
+
 }
 
 .noReferrals {

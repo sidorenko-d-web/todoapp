@@ -58,10 +58,10 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
               <div className={classNames(s.titleWrapper, titleWrapperStyles)}>
                 <h2 className={s.title}>
                   {title}
-                  {titleIcon && <img src={titleIcon} alt={'title'} width={14} height={14} />}
+                  {titleIcon && <img src={titleIcon} alt={'title'} />}
                 </h2>
                 <button className={s.closeBtn} onClick={onClose}>
-                  <img src={closeIcon} alt={'Close'} width={14} height={14} />
+                  <img src={closeIcon} alt={'Close'} />
                 </button>
               </div>
             </header>

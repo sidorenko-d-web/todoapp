@@ -8,9 +8,14 @@
   display: flex;
   gap: 5px;
   border-radius: 10px;
-  font-size: 14px;
   line-height: 100%;
   color: white;
+
+  @include var.multi-fz(14px, 16px);
+
+  img {
+    @include var.multi-size(14px, 16px)
+  }
 }
 
 .userCard {
@@ -33,7 +38,7 @@
 .userCardAvatar {
   padding: 5px;
   border-radius: 3px;
-  background: var.$color-gray;
+  background: var.$color-badge-bg;
 }
 
 .userCardTop {
@@ -69,9 +74,14 @@
   align-items: center;
   border-radius: 10px;
   background: var.$color-badge-bg;
-  font-size: 12px;
   font-weight: 500;
   line-height: 100%;
+
+  @include var.multi-fz(12px, 14px);
+
+  img {
+    @include var.multi-size(12px, 14px)
+  }
 
   &.notToday {
     color: var.$color-gray;
@@ -82,7 +92,12 @@
   }
 
   &.warning {
+    text-wrap: pretty;
     color: var.$color-red;
+
+    img {
+      @include var.multi-size(12px, 14px)
+    }
   }
 }
 
@@ -95,18 +110,20 @@
 }
 
 .text {
-  font-size: 14px;
   font-weight: 500;
-  line-height: 14px;
+  line-height: 100%;
   color: var.$color-white;
+
+  @include var.multi-fz(14px, 16px);
 }
 
 .level {
-  font-size: 10px;
   position: absolute;
   top: -3px;
   right: -20px;
-  color: var.$color-text-semi-transparent
+  color: var.$color-text-semi-transparent;
+
+  @include var.multi-fz(10px, 12px);
 }
 
 .userCardRank, .userCardRefs {
@@ -137,6 +154,11 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 100%;
+
+
+    @media (min-width: var.$breakpoint-md) {
+      padding: 14px;
+    }
   }
 }
 

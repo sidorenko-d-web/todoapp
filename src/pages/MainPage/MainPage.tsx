@@ -1,5 +1,15 @@
 import { FC, useEffect, useReducer } from 'react';
-import { AccelerateIntegtrationGuide, CreatingIntegrationGuide, FinishTutorialGuide, GetCoinsGuide, InitialGuide, IntegrationCreatedGuide, IntegrationCreation, PublishIntegrationButton, SubscrieGuide } from '../../components';
+import {
+  AccelerateIntegtrationGuide,
+  CreatingIntegrationGuide,
+  FinishTutorialGuide,
+  GetCoinsGuide,
+  InitialGuide,
+  IntegrationCreatedGuide,
+  IntegrationCreation,
+  PublishIntegrationButton,
+  SubscrieGuide,
+} from '../../components';
 import s from './MainPage.module.scss';
 import { AppRoute, MODALS } from '../../constants';
 import { useModal } from '../../hooks';
@@ -7,7 +17,13 @@ import { useModal } from '../../hooks';
 import { GUIDE_ITEMS } from '../../constants/guidesConstants';
 import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../utils';
 
-import { setAccelerateIntegrationGuideClosed, setActiveFooterItemId, setGetCoinsGuideShown, setIntegrationReadyForPublishing, setLastIntegrationId } from "../../redux/slices/guideSlice.ts";
+import {
+  setAccelerateIntegrationGuideClosed,
+  setActiveFooterItemId,
+  setGetCoinsGuideShown,
+  setIntegrationReadyForPublishing,
+  setLastIntegrationId,
+} from '../../redux/slices/guideSlice.ts';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, useGetAllIntegrationsQuery } from '../../redux';
 import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/RewardForIntegrationModal.tsx';

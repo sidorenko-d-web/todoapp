@@ -22,22 +22,8 @@ export const SliderSelect = ({ isInfluencersLocked }: SliderProps) => {
     arrows: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 1,
     slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 500,
-        settings: {
-          slidesToShow: 3.5,
-        },
-      },
-      {
-        breakpoint: 350,
-        settings: {
-          slidesToShow: 2.5,
-        },
-      },
-    ],
   };
 
   const { data } = useGetTopProfilesQuery(undefined, { skip: isInfluencersLocked });
@@ -56,18 +42,17 @@ export const SliderSelect = ({ isInfluencersLocked }: SliderProps) => {
               className={s.cardWrapper}
             >
               <div className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
-                <div className={s.card}>
                   <div className={s.infoRang}>
-                    <span className={s.seat}>{'#???'}</span>
+                    <span className={s.seat}>{'# ???'}</span>
                     { /*profile.fire true !== undefined &&*/ (
                       <div className={s.fireIcon}>
-                        <img src={fire} alt="fire" width={12} height={12} />
+                        <img src={fire} alt="fire" />
                         <span>???</span>
                       </div>
                     )}
                   </div>
                   <div className={s.middleRow}>
-                    <img src={lock} alt="Lock" width={44} height={44} />
+                    <img src={lock} alt="Lock" />
                   </div>
                   {/*{profile.vip && (*/}
                   {/*  <div className={s.vip}>*/}
@@ -75,7 +60,6 @@ export const SliderSelect = ({ isInfluencersLocked }: SliderProps) => {
                   {/*    <span>VIP</span>*/}
                   {/*  </div>*/}
                   {/*)}*/}
-                </div>
               </div>
             </div>
           ))
@@ -91,10 +75,10 @@ export const SliderSelect = ({ isInfluencersLocked }: SliderProps) => {
             <div className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
               <div className={s.card}>
                 <div className={s.infoRang}>
-                  <span className={s.seat}>{`#${index + 1}`}</span>
+                  <span className={s.seat}>{`# ${index + 1}`}</span>
                   { /*profile.fire true !== undefined &&*/ (
                     <div className={s.fireIcon}>
-                      <img src={fire} alt="fire" width={12} height={12} />
+                      <img src={fire} alt="fire" />
                       <span>6</span>
                     </div>
                   )}

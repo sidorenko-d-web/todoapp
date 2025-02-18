@@ -38,6 +38,11 @@ $header-border: 1px solid $color-header-border-dark;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
 
   max-height: 50px;
+
+  @media (min-width: var.$breakpoint-md) {
+    padding: 6px;
+    max-height: 64px;
+  }
 }
 
 .levelWrapper {
@@ -58,22 +63,35 @@ $header-border: 1px solid $color-header-border-dark;
     align-items: flex-end;
     justify-content: center;
 
+    @media (min-width: var.$breakpoint-md) {
+      width: 52px;
+      height: 52px;
+    }
+
     .avatarIcon {
-      width: 37px;
-      height: 37px;
-      object-fit: contain;
+      width: 32px;
+      height: 32px;
       position: absolute;
-      bottom: -3px;
-      left: calc(50% - 17px);
+      bottom: 0;
+
+      @media (min-width: var.$breakpoint-md) {
+        width: 44px;
+        height: 44px;
+      }
     }
 
     .fireIcon {
       position: absolute;
-      top: -8px;
+      top: -7px;
       left: 50%;
       transform: translateX(-50%);
       height: 15px;
       width: 15px;
+
+      @media (min-width: var.$breakpoint-md) {
+        height: 18px;
+        width: 18px;
+      }
     }
   }
 
@@ -93,16 +111,25 @@ $header-border: 1px solid $color-header-border-dark;
       background: $color-header-content-dark;
 
       padding: 4px 4px 4px 7px;
-      height: 20px;
 
       .subscribersIcon {
         width: 14px;
         height: 14px;
       }
 
+      @media (min-width: var.$breakpoint-md) {
+        padding: 4px 6px 4px 8px;
+        border-radius: 6px;
+      }
+
       .subscribersNumber {
         @include number-text;
         font-size: 14px;
+        line-height: 100%;
+
+        @media (min-width: var.$breakpoint-md) {
+          font-size: 18px;
+        }
       }
     }
 
@@ -111,6 +138,10 @@ $header-border: 1px solid $color-header-border-dark;
       flex-direction: row;
       align-items: center;
       gap: 4px;
+
+      @media (min-width: var.$breakpoint-md) {
+        gap: 6px
+      }
 
       .levelNumber {
         height: 16px;
@@ -127,6 +158,14 @@ $header-border: 1px solid $color-header-border-dark;
         border-radius: 3px;
         border: $header-border;
         background: $progress-bar-color;
+
+        @media (min-width: var.$breakpoint-md) {
+          height: 20px;
+          padding: 2px 4px;
+          border-radius: 4px;
+          font-size: 16px;
+          line-height: 100%;
+        }
       }
 
       .levelProgressBar {
@@ -135,6 +174,10 @@ $header-border: 1px solid $color-header-border-dark;
         border-radius: 3px;
         border: $header-border;
         background: $color-header-content-dark;
+
+        @media (min-width: var.$breakpoint-md) {
+          height: 20px;
+        }
 
         &::-webkit-progress-bar {
           background: $color-header-content-dark;
@@ -168,10 +211,19 @@ $header-border: 1px solid $color-header-border-dark;
   border: $header-border;
   background: $color-header-content-dark;
 
+  @media (min-width: var.$breakpoint-md) {
+    padding: 4px 6px 4px 8px;
+  }
+
   .coins {
 
     @include number-text;
     font-size: 14px;
+    line-height: 100%;
+
+    @media (min-width: var.$breakpoint-md) {
+      font-size: 18px;
+    }
   }
 
   .coinIcon {

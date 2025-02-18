@@ -6,9 +6,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  font-size: 14px;
   font-weight: 500;
   margin: 10px 0 0;
+  line-height: 100%;
+
+  @include var.multi-fz(14px, 16px);
 }
 
 .textName {
@@ -34,10 +36,17 @@
 }
 
 .wrapperList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   width: 100%;
   background: var.$color-card-bg;
   padding: 10px;
   border-radius: 12px;
+
+  @media (min-width: var.$breakpoint-md) {
+    gap: 15px;
+  }
 }
 
 .infoUser {
@@ -46,7 +55,6 @@
   align-items: flex-start;
   gap: 18px;
   justify-content: space-between;
-  margin-bottom: 10px;
 }
 
 .namePlan {
@@ -59,10 +67,15 @@
   padding: 10px;
   border-radius: 8px;
   background: var.$color-blue-primary;
-  font-size: 14px;
   font-weight: 500;
-  line-height: 16.8px;
+  line-height: 100%;
   margin: 0;
+
+  @include var.multi-fz(14px, 16px);
+
+  img {
+    @include var.multi-size(17px, 18px);
+  }
 }
 
 .locked {
@@ -71,11 +84,12 @@
 
 
 .text {
-  font-size: 14px;
   font-weight: 500;
-  line-height: 14px;
+  line-height: 100%;
   text-wrap: nowrap;
   color: var.$color-blue-primary;
+
+  @include var.multi-fz(14px, 16px);
 }
 
 .countUsers {
@@ -91,16 +105,21 @@
   gap: 5px;
   border-radius: 4px;
   background-color: var.$color-dark-gray;
+
+  img {
+    @include var.multi-size(14px, 16px)
+  }
 }
 
 .textInfoPlan {
-  margin: 10px 0;
-  font-size: 14px;
   text-align: left;
   font-weight: 500;
-  line-height: 16.8px;
+  line-height: 130%;
+  letter-spacing: -0.8px;
   color: var.$color-text-semi-transparent;
-  text-wrap: wrap;
+  text-wrap: pretty;
+
+  @include var.multi-fz(14px, 16px);
 }
 
 .headerPlan {
@@ -118,9 +137,10 @@
   border-radius: 8px;
   background: #373A43;
   padding: 10px 8px 10px 10px;
-  font-size: 14px;
   font-weight: 500;
-  line-height: 16.8px;
+  line-height: 100%;
+
+  @include var.multi-fz(14px, 16px);
 }
 
 .circle {

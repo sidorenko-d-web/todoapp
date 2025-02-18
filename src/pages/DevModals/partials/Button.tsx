@@ -5,7 +5,7 @@ import { Button as ButtonBase } from '../../../components/shared';
 
 interface Props {
   variant: 'blue' | 'red' | 'gray' | 'purple';
-  onClick?: () => any;
+  onClick?: () => void;
 }
 
 export default function Button({ variant, children, onClick }: PropsWithChildren<Props>) {

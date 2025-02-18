@@ -22,35 +22,41 @@
 .badge {
   display: flex;
   gap: 5px;
-  font-size: 14px;
   line-height: 100%;
+
+  img {
+    @include var.multi-size(12px, 14px)
+  }
 }
 
 .text {
   font-size: 14px;
   font-weight: 500;
-  line-height: 14px;
   color: var.$color-white;
+
+  @include var.multi-fz(14px, 16px);
 }
 
 
 .level {
   vertical-align: top;
-  font-size: 10px;
   color: var.$color-text-semi-transparent;
   font-weight: 500;
-  line-height: 10px;
+  line-height: 100%;
+
+  @include var.multi-fz(10px, 12px);
 }
 
 .description {
-  font-size: 14px;
   font-weight: 500;
-  line-height: 16.8px;
+  line-height: 130%;
   letter-spacing: -0.05em;
   color: var.$color-white;
   margin-bottom: 10px;
   word-wrap: break-word;
   white-space: pre-line;
+
+  @include var.multi-fz(14px, 16px);
 }
 
 .blockInput {
@@ -71,6 +77,8 @@
   background: transparent;
   color: var.$color-white;
   border: none;
+
+  @include var.multi-fz(14px, 16px);
 }
 
 .copyButton {
@@ -86,9 +94,9 @@
 }
 
 .buttonContainer {
-  margin: 40px 0;
+  margin-top: 40px;
   width: 100%;
-  height: 34px;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,4 +104,9 @@
   border-radius: 8px;
   background: var.$color-blue-primary;
   border: none;
+
+
+  @media (min-width: var.$breakpoint-md) {
+    padding: 14px;
+  }
 }
