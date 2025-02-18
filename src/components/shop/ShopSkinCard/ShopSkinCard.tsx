@@ -17,7 +17,7 @@ import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 import { useDispatch } from 'react-redux';
-import { setPoints } from '../../../redux/slices/point.ts';
+import { setPoints } from '../../../redux';
 
 interface Props {
   item: IShopSkin;
@@ -45,7 +45,6 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
   };
 
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-
 
   return (
     <div className={styles.storeCard}>

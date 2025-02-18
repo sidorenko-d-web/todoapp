@@ -17,18 +17,18 @@ type SliderProps = {
 
 export const SliderSelect = ({ isInfluencersLocked }: SliderProps) => {
   const settings: Settings = {
-    variableWidth: false, // Отключаем variableWidth
+    variableWidth: false,
     dots: false,
     arrows: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 3,
     responsive: [
       {
         breakpoint: 500,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 3.2,
           slidesToScroll: 3,
         },
       },
