@@ -21,13 +21,14 @@ interface StreakDayProps {
   type: DayType;
   weekIndex: number;
   weekData: WeekData[];
+  streakDays: number;
 }
 
 export const StreakDay: React.FC<StreakDayProps> = ({
   dayNumber,
-  type,
   weekIndex,
   weekData,
+  streakDays,
 }) => {
   const [lang, setLang] = useState<string | null>(null);
   const [currentDay, setCurrentDay] = useState<number | null>(null);
@@ -47,14 +48,13 @@ export const StreakDay: React.FC<StreakDayProps> = ({
 
   const isStreakDay =
     currentDayInfo &&
-    (currentDayInfo.status === 'unspecified' || currentDayInfo.status === 'passed') &&
+    currentDayInfo.status === 'unspecified' &&
     (currentDayInfo.is_notified_at_morning ||
       currentDayInfo.is_notified_at_afternoon ||
       currentDayInfo.is_notified_at_evening ||
       currentDayInfo.is_notified_at_late_evening ||
       currentDayInfo.is_notified_at_late_night ||
       currentDayInfo.is_notified_at_night);
-
   const isFailedDay =
     currentDayInfo && currentDayInfo.status === 'passed' && !isStreakDay;
 
@@ -62,22 +62,36 @@ export const StreakDay: React.FC<StreakDayProps> = ({
   const weekdaysEn = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
   const getIcon = () => {
-    if (isFailedDay) return <img src={freezeIcon} />;
-    if (isStreakDay) return <img src={fireIcon} />;
+    if (isFailedDay) return <img src={freezeIcon} alt="Frozen Day" />;
+    if (isStreakDay) return <img src={fireIcon} alt="Streak Day" />;
     return null;
   };
 
   return (
     <div>
       <div
-        className={`${styles['calendar-day']} 
-          ${isFailedDay ? styles.freeze : isStreakDay ? styles.streak : styles[type]} 
-          ${currentDay === dayNumber ? styles.currentDay : ''}`}
+        className={`${styles['calendarDay']} 
+        ${
+          !isFailedDay && !isStreakDay
+            ? styles.calendarDay
+            : streakDays < 30
+            ? styles.blue
+            : streakDays < 60
+            ? styles.purple
+            : styles.red
+        }
+
+   
+    ${currentDay === dayNumber ? styles.currentDay : ''}`}
       >
         {(isStreakDay || isFailedDay) && (
           <div
             className={`${styles['status-icon']} ${
-              isFailedDay ? styles.freeze : styles.streak
+              streakDays < 30
+                ? styles.iconBlue
+                : streakDays < 60
+                ? styles.iconPurple
+                : styles.iconRed
             }`}
           >
             {getIcon()}

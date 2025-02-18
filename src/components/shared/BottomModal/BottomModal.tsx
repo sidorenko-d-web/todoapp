@@ -21,20 +21,19 @@ interface BottomModalProps {
 }
 
 const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
-                                                                modalId,
-                                                                title,
-                                                                onClose,
-                                                                disabled = false,
-                                                                disableScrollLock = false,
-                                                                containerStyles,
-                                                                modalStyles,
-                                                                children,
-                                                                titleWrapperStyles,
+  modalId,
+  title,
+  onClose,
+  disabled = false,
+  disableScrollLock = false,
+  containerStyles,
+  modalStyles,
+  children,
+  titleWrapperStyles,
 
-                                                                headerStyles,
-                                                                titleIcon,
-}) =>
-{
+  headerStyles,
+  titleIcon,
+}) => {
   const { getModalState } = useModal();
 
   const { isOpen } = getModalState(modalId);
@@ -51,14 +50,19 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
   return (
     <Overlay className={classNames(s.overlay, containerStyles)}>
       <Fade open>
-        <div className={classNames(s.modal, modalStyles)} onClick={e => e.stopPropagation()}>
+        <div
+          className={classNames(s.modal, modalStyles)}
+          onClick={e => e.stopPropagation()}
+        >
           <div className={classNames({ [s.disabled]: disabled })}>
             <header className={classNames(s.header, headerStyles)}>
               <img src={modalGripIcon} alt={'Grip'} width={26} height={3} />
               <div className={classNames(s.titleWrapper, titleWrapperStyles)}>
                 <h2 className={s.title}>
                   {title}
-                  {titleIcon && <img src={titleIcon} alt={'title'} width={14} height={14} />}
+                  {titleIcon && (
+                    <img src={titleIcon} alt={'title'} width={14} height={14} />
+                  )}
                 </h2>
                 <button className={s.closeBtn} onClick={onClose}>
                   <img src={closeIcon} alt={'Close'} width={14} height={14} />
@@ -71,7 +75,6 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
       </Fade>
     </Overlay>
   );
-}
-
+};
 
 export default BottomModal;
