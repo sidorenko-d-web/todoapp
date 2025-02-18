@@ -27,30 +27,29 @@ $translateY: -15vh;
 }
 
 .floorWrapper {
-  width: 100%;
-  position: relative;
+  @extend .item;
+  transform: translateX(-58.15%);
+  top: 310px;
 }
 
 .floor {
-  @extend .item;
   background: #6e717a;
   rotate: 32deg;
   width: 800px;
-  aspect-ratio: 1/1;
+  height: 800px;
   z-index: 2;
-  top: 600px;
-  transform: skew(-30deg) translateX(-68.4%);
+  transform: skew(-30deg);
 }
 
 .treshinaLeft {
   @extend .item;
   top: 29px;
-  transform: translateX(-150%)
+  transform: translateX(-150%);
 }
 .treshinaRight {
   @extend .item;
   top: 0;
-  transform: translateX(100%)
+  transform: translateX(100%);
 }
 
 .sofa {
