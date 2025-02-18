@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './WardrobeIcon.module.scss';
 
 // import profileIconPlaceholder from '../../../assets/icons/profile-icon-placeholder.svg';
 import wardrobeIcon from '../../../assets/images/start-room/wardrobe-bg.svg';
 import { SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
-import { svgHeadersString } from '../../../constants';
 
 interface WardrobeIconProps {
   imageUrl?: string;
@@ -36,7 +35,6 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = ({ imageUrl }) => {
       }
 
       create() {
-        
         this.spineObject = this.add.spine(width / 2, width / 2, 'data', 'atlas');
         this.spineObject.scale = 1;
       }

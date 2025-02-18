@@ -4,6 +4,7 @@ import styles from './partials/Partials.module.scss';
 export const Room = () => {
   return (
     <div className={styles.room}>
+      
       <Walls />
       <Sofa />
       <Chair />

@@ -40,14 +40,7 @@ export const shopApi = createApi({
       }),
       invalidatesTags: ['items'],
     }),
-
-   
   }),
 });
 
-export const {
-  useGetShopItemsQuery,
-  useGetShopSkinsQuery,
-  useBuyItemMutation,
-  useBuySkinMutation,
-} = shopApi;
+export const { useGetShopItemsQuery, useGetShopSkinsQuery, useBuyItemMutation, useBuySkinMutation } = shopApi;
