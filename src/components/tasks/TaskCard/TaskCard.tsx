@@ -135,7 +135,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
           </div>
           <div className={s.progressTypeReward}>
             <span className={s.reward}>
-              {boost?.income_per_second || '0'} <img src={coinIcon} height={14} width={14} alt="income" />
+              {'10 - 1000'} <img src={coinIcon} height={14} width={14} alt="income" />
             </span>
             {/* <span className={s.reward}>
               {boost?.subscribers || 0} <img src={subscribersIcon} height={14} width={14} alt="subscribers" />

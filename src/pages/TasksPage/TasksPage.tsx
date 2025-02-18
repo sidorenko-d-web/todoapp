@@ -56,9 +56,18 @@ export const TasksPage: FC = () => {
       <section className={s.topSection}>
         <h1 className={s.pageTitle}>Задания</h1>
         <div className={s.badges}>
-          <span className={s.badge}>+{formatAbbreviation(100)} <img src={subscribersIcon} height={14} width={14} alt={'subscribers'} /></span>
-          <span className={s.badge}>+{formatAbbreviation(150)} <img src={coinIcon} height={14} width={14} alt={'income'} /></span>
-          <span className={s.badge}>+{formatAbbreviation(1)} <img src={coinIcon} height={14} width={14} alt={'income'} />/сек.</span>
+          <span className={s.badge}>
+            +{formatAbbreviation(boostData?.subscribers || 0)} 
+            <img src={subscribersIcon} height={14} width={14} alt={'subscribers'} />
+          </span>
+          <span className={s.badge}>
+            +{formatAbbreviation(Number(boostData?.views) || 0)} 
+            <img src={coinIcon} height={14} width={14} alt={'income'} />
+          </span>
+          <span className={s.badge}>
+            +{formatAbbreviation(Number(boostData?.income_per_second) || 0)} 
+            <img src={coinIcon} height={14} width={14} alt={'income'} />/сек.
+          </span>
         </div>
       </section>
 
