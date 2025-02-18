@@ -60,7 +60,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     return () => {
       clearInterval(timerId);
     };
-  }, [ isExpired ]);
+  }, [isExpired]);
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -105,7 +105,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
     }
     return null;
-  }
+  };
 
   return (
     <div className={`${s.integration} ${s.elevated}`}>

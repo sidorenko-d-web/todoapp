@@ -6,6 +6,11 @@
   align-items: center;
   gap: 20px;
 
+  //min-height: calc(var(--tg-viewport-stable-height) - 140px);
+  min-height: calc(var(--tg-viewport-stable-height) - 140px);
+  //height: 100%;
+  overflow-y: visible;
+
   .titleWrapper {
     display: flex;
     align-items: center;
@@ -111,10 +116,10 @@
 }
 
 .elevatedBordered {
-  z-index: 2000;
+  z-index: 200;
   border: 2px solid $color-primary;
 }
 
 .elevated {
-  z-index: 2000;
+  z-index: 200;
 }

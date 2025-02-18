@@ -52,6 +52,7 @@ export default defineConfig({
     ],
   },
   server: {
+    allowedHosts: true,
     proxy: {
       '/api/miniapp-v2-dev': {
         target: 'https://storage.yandexcloud.net',

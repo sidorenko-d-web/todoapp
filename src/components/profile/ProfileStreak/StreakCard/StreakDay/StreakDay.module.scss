@@ -16,12 +16,15 @@
   text-align: center;
   background-color: var.$footer-bg;
 
-  &.streak {
+  &.red {
     border: 2px solid var.$color-red;
   }
 
-  &.freeze {
+  &.blue {
     border: 2px solid var.$color-primary;
+  }
+  &.purple {
+    border: 2px solid var.$color-purple;
   }
 
   .status-icon {
@@ -35,12 +38,15 @@
     top: -8.5px;
     border: 0.5px solid #3a374d;
 
-    &.streak {
+    &.iconRed {
       background-color: var.$color-red;
     }
 
-    &.freeze {
+    &.iconBlue {
       background-color: var.$color-primary;
+    }
+    &.iconPurple {
+      background-color: var.$color-purple;
     }
 
     img {
@@ -66,7 +72,7 @@
 .currentDay::after {
   content: '';
   position: absolute;
-  top: 22px;
+  top: 20px;
   left: 50%;
   width: 4px;
   height: 4px;
