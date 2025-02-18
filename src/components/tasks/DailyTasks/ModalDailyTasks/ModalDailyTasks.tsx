@@ -32,8 +32,6 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
                                                             onClose,
                                                             onStateChange,
                                                             taskId,
-                                                            totalSteps,
-                                                            boost,
                                                             task,
                                                           }) => {
   const { data: questions } = useGetTaskQuestionsQuery(taskId);
@@ -43,7 +41,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
-  const [channelLink, setChannelLink] = useState(task.external_link);
+  const [channelLink] = useState(task.external_link);
 
   useEffect(() => {
     if (isQuestionsArray && questions) {

@@ -78,7 +78,6 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      isCompleted,
                                                      isTopTask,
                                                      errorText,
-                                                     boost,
                                                      isDailyTask,
                                                      isSocialTask,
                                                    }) => {
