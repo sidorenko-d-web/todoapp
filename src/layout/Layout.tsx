@@ -6,9 +6,11 @@ import { useEffect } from 'react';
 import { MODALS, localStorageConsts } from '../constants';
 import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
 import { AudioBg, useModal } from '../hooks';
+import { getOS } from '../utils';
 
 const Layout = () => {
   const location = useLocation();
+  const platform = getOS();
 
   const showHeader = !location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/);
   const needsReducedMargin = [
@@ -28,28 +30,32 @@ const Layout = () => {
 
   const contentClassName = `${styles.content} ${
     showHeader ? styles.withHeader : ''
-  } ${needsReducedMargin ? styles.reducedMargin : ''}`;
+  } ${needsReducedMargin ? styles.reducedMargin : ''} ${
+    platform ? styles[platform] : ''
+  }`;
 
   return (
     <>
-      <div className={styles.settingsIcon}>
+      <div className={`${styles.settingsIcon} ${
+        platform ? styles[platform + 'Settings'] : ''
+      }`}>
         <Settings />
       </div>
-    <div className={styles.wrp}>
-      {showHeader && <Header />}
-      <main className={contentClassName}>
-        <Outlet />
+      <div className={styles.wrp}>
+        {showHeader && <Header />}
+        <main className={contentClassName}>
+          <Outlet />
 
-        {/* Modals */}
-        <SettingsModal />
-        <WalletConnectionModal />
-        <LanguageSelectionModal />
+          {/* Modals */}
+          <SettingsModal />
+          <WalletConnectionModal />
+          <LanguageSelectionModal />
 
-        <AudioBg />
-      </main>
+          <AudioBg />
+        </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
     </>
   );
 };

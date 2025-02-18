@@ -10,6 +10,7 @@ export const Footer = () => {
   const [ activeButton, setActiveButton ] = useState<number | null>(null);
   const navigate = useNavigate();
 
+
   const footerActive = useSelector((state: RootState) => state.guide.footerActive);
   const currentFooterItemId = useSelector((state: RootState) => state.guide.activeFooterItemId);
 

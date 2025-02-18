@@ -12,6 +12,7 @@ import { setLastActiveStage } from '../../redux/slices/tree.ts';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { TrackedLink } from '../withTracking';
+import { getOS } from '../../utils';
 
 
 export const Header = () => {
@@ -23,6 +24,7 @@ export const Header = () => {
   const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
   const { i18n } = useTranslation('profile');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const platform = getOS();
 
   const userSubscribers = data?.subscribers || 0;
   let lastActiveStageNumber = 0;
@@ -49,7 +51,7 @@ export const Header = () => {
   const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${platform ? styles[platform] : ''}`}>
       {isLoading ? <p>Loading...</p> :
         <div className={styles.lowerHeader}>
           <div className={styles.levelWrapper}>

@@ -17,10 +17,10 @@ $header-border: 1px solid $color-header-border-dark;
 
 .header {
   position: fixed;
-  inset: 0 0 auto 0;
+  //inset: 0 0 auto 0;
   z-index: 20;
   //padding: 10px 10px 0;
-  padding: calc(var(--tg-content-safe-area-inset-top) + 60px) 10px 0;
+  //padding: calc(var(--tg-content-safe-area-inset-top) + 60px) 10px 0;
   //margin-top: calc(var(--tg-content-safe-area-inset-top) + 50px);
   margin: 0;
 
@@ -29,6 +29,22 @@ $header-border: 1px solid $color-header-border-dark;
   user-select: none; /* Prevents text selection */
   -webkit-user-select: none;
   -webkit-touch-callout: none; /* Prevents iOS callout */
+
+  // Paddings for each platform
+  &.ios {
+    //padding: calc(var(--tg-content-safe-area-inset-top) + 60px) 10px 0;
+    top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) + 10px);
+    left: calc(var(--tg-content-safe-area-inset-left) + 10px);
+    right: calc(var(--tg-content-safe-area-inset-right) + 10px);
+  }
+
+  &.android {
+    //padding: calc(var(--tg-content-safe-area-inset-top) + 30px) 10px 0;
+    top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) + 10px);
+    left: calc(var(--tg-content-safe-area-inset-left) + 10px);
+    right: calc(var(--tg-content-safe-area-inset-right) + 10px);
+  }
+
 }
 
 .lowerHeader {

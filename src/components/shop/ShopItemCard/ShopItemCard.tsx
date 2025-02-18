@@ -39,6 +39,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [currentTrxId, setCurrentTrxId] = useState("")
 
 
+
   const userPoints = data?.points || 0;
   const handleBuyItem = async () => {
     setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
