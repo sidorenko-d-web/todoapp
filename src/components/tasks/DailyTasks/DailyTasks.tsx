@@ -6,6 +6,7 @@ import { useModal } from '../../../hooks';
 import { Task } from '../../../redux/api/tasks/dto';
 import s from '../styles.module.scss';
 import { ModalDailyTasks } from './ModalDailyTasks';
+import { useGetDailyRewardQuery } from '../../../redux/api/tasks/api';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -16,6 +17,7 @@ type DailyTasksProps = {
 export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const { openModal, closeModal } = useModal();
   const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
+  const { refetch: getDailyReward } = useGetDailyRewardQuery(task.id, { skip: true });
 
   // Инициализируем состояния на основе количества этапов из API
   useEffect(() => {
@@ -28,7 +30,17 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
     return questionStates.filter(state => state === 'solved').length;
   }, [questionStates]);
 
-  const handleOpenGift = () => {
+  const handleOpenGift = async () => {
+    if (task.is_completed && !task.is_reward_given) {
+      console.log('Attempting to get daily reward for task:', task.id);
+      try {
+        const result = await getDailyReward();
+        console.log('Daily Reward API Response:', result);
+      } catch (error) {
+        console.error('Error fetching daily reward:', error);
+      }
+      return;
+    }
     openModal(MODALS.DAILY_TASKS);
   };
 
@@ -55,11 +67,13 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
           type="progress"
           icon={giftIcon}
           buttonText={isCompleted ? 'Забрать награду' : 'Открыть подарок'}
-          disabled={isCompleted}
+          disabled={task.is_reward_given}
           onClick={handleOpenGift}
           questionStates={questionStates}
           boost={task.boost}
           totalSteps={task.stages}
+          isCompleted={isCompleted}
+          isDailyTask={true}
         />
       </div>
       <ModalDailyTasks

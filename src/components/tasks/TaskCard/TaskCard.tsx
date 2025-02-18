@@ -33,6 +33,7 @@ type BaseTaskProps = {
   errorText?: string;
   isCompleted?: boolean;
   isTopTask?: boolean;
+  isDailyTask?: boolean;
   questionStates?: QuestionState[];
   boost?: TaskBoost;
 };
@@ -77,6 +78,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      isTopTask,
                                                      errorText,
                                                      boost,
+                                                     isDailyTask,
                                                    }) => {
   // Функция для получения иконки на основе состояния
   const getIconByState = (state: QuestionState) => {
@@ -94,6 +96,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
     <div className={classNames(s.card, {
       [s.completed]: isCompleted,
       [s.topTask]: isTopTask,
+      [s.dailyTask]: isDailyTask,
     })}>
       <section className={s.header}>
         {icon && <img className={s.icon} src={icon} height={40} width={40} alt="icon" />}
