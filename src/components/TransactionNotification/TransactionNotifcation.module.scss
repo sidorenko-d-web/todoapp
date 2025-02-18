@@ -2,22 +2,23 @@
 
 .transactionIndicator {
     position: fixed;
-    bottom: 0;
+    bottom: 10px;
     left: 0;
     right: 0;
     z-index: 50;
-    // display: flex;
-    // justify-content: center;
-    // padding-bottom: 75px;
-
-    // display: flex;
-    // width: 370px;
     margin: 0px 10px 85px;
 
     border-radius: 12px;
     border: 2px solid #282830;
     background: #1C1D22;
     box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.15);
+
+    // Disable touching
+    touch-action: none; /* Prevents all touch actions */
+    user-select: none; /* Prevents text selection */
+    -webkit-user-select: none;
+    -webkit-touch-callout: none; /* Prevents iOS callout */
+
 
     &__content {
         display: flex;

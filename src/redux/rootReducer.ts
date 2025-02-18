@@ -11,6 +11,7 @@ import {
   trackingApi,
   treeApi,
   usersApi,
+  pushLineApi
 } from './api';
 import { pushLineApi } from './api/pushLine/api';
 import { tasksApi } from './api/tasks';
@@ -40,6 +41,7 @@ const appReducer = combineReducers({
   [tasksApi.reducerPath]: tasksApi.reducer,
   [roomApi.reducerPath]: roomApi.reducer,
   [trackingApi.reducerPath]: trackingApi.reducer,
+  [pushLineApi.reducerPath]: pushLineApi.reducer
   [confirmationsApi.reducerPath]: confirmationsApi.reducer,
 });
 

@@ -50,11 +50,11 @@ export const StreakCard: React.FC<StreakCardProps> = ({
     } else if (streakDays < 120) {
       maxStreak = 120;
     }
-
     const maxLevel = 5;
 
     return Math.min(maxLevel, Math.floor((streakDays / maxStreak) * maxLevel));
   };
+
 
   let p14Key = '';
   if (streakDays < 30) {
@@ -72,6 +72,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
   } else if (streakDays >= 60) {
     p15Key = 'p15_120';
   }
+
   return (
     <div className={styles.wrp}>
       <div className={styles.header}>

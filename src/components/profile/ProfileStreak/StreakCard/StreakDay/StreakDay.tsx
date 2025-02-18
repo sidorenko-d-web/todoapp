@@ -83,15 +83,20 @@ export const StreakDay: React.FC<StreakDayProps> = ({
 
    
     ${currentDay === dayNumber ? styles.currentDay : ''}`}
+>>>>>>> main
       >
         {(isStreakDay || isFailedDay) && (
           <div
             className={`${styles['status-icon']} ${
+<<<<<<< fix_settings_and_payment
+              isFailedDay ? styles.freeze : styles.streak
+=======
               streakDays < 30
                 ? styles.iconBlue
                 : streakDays < 60
                 ? styles.iconPurple
                 : styles.iconRed
+>>>>>>> main
             }`}
           >
             {getIcon()}

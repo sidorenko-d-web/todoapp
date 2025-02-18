@@ -20,8 +20,7 @@ export const ProfilePage: React.FC = () => {
   const { t } = useTranslation('profile');
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
-
-
+  
   const {
     data: userProfileData,
     error: userError,
@@ -49,6 +48,7 @@ export const ProfilePage: React.FC = () => {
         day.is_notified_at_late_night ||
         day.is_notified_at_night),
   ).length;
+
   useEffect(() => {
     const lastShownTimestamp = localStorage.getItem('daysInARowModalTimestamp');
     const now = Date.now();
@@ -59,6 +59,7 @@ export const ProfilePage: React.FC = () => {
       setIsModalShown(true);
     }
   }, [openModal]);
+  
   useEffect(() => {
     if (streaks === 30 || streaks === 60 || streaks === 120) {
       openModal(MODALS.TASK_CHEST);
@@ -79,7 +80,7 @@ export const ProfilePage: React.FC = () => {
   const freezeDays = [29]; // TODO: replace with real data
 
   const weekData = getWeekData(streakDays, freezeDays);
-
+  console.log(data?.week_information);
   return (
     <>
       <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />

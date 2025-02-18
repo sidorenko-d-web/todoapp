@@ -76,8 +76,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         dispatch(setLastIntegrationId(data.id));
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         onClose();
-        dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
-        dispatch(profileApi.util.invalidateTags([ 'Me' ]));
+        dispatch(integrationsApi.util.invalidateTags(['Integrations']));
+        dispatch(profileApi.util.invalidateTags(['Me']));
       });
   };
 
@@ -102,7 +102,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       <div className={s.content}>
         <div className={s.skinsWrapper}>
           {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
-            <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`}>
+            <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`} >
               <img src={lightningIcon} alt="Lightning" width={20} height={20} />
             </div>
           ))}

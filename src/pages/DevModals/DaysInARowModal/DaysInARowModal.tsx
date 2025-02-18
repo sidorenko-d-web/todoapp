@@ -122,6 +122,17 @@ export default function DaysInARowModal({}: Props) {
         })}
       </div>
 
+          return (
+            <DayItem
+              key={day}
+              day={day}
+              isFrozen={isFrozen}
+              currentDay={currentDay}
+              progressStage={progressStage}
+            />
+          );
+        })}
+      </div>
       <div className={styles.progressTitle}>
         <p>
           {streakCount}/{streakCount < 30 ? '30' : streakCount < 60 ? '60' : '120'} дней
