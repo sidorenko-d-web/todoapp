@@ -91,8 +91,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
     scrollbar-width: none;
 
     &.withHeader {
-      padding-top: calc($header-position - 40px); // padding from header
-
+      padding-top: calc($header-position + 10px); // padding from header
       //padding-top: calc(var(--tg-content-safe-area-inset-top) + 20px);
       margin-bottom: calc(var(--tg-content-safe-area-inset-bottom) + 90px);
 
@@ -118,6 +117,6 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   }
 
   &.androidSettings {
-    right: calc(var(--tg-safe-area-inset-right) + 90px);
+    right: calc(var(--tg-safe-area-inset-right) + 85px);
   }
 }
