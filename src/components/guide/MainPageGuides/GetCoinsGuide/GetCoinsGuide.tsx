@@ -6,12 +6,13 @@ import { Guide } from "../../Guide/Guide";
 
 import coin from '../../../../assets/icons/coin.png';
 import { useGetUserQuery } from "../../../../redux";
+import { useTranslation } from 'react-i18next';
 
 interface GetCoinsGuideProps {
     onClose: () => void;
 }
 export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose }) => {
-
+    const { t } = useTranslation('guide');
     const { data } = useGetUserQuery();
 
     const [isOpen, setIsOpen] = useState(true);
@@ -30,18 +31,18 @@ export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose }) => {
                 top={'25%'}
                 description={
                     <>
-                        Ах, да... для этого нужно немного вложиться...
+                        {t('g25')}
                         <br />
                         <br />
-                        Держи 250 баллов для твоего блогерского старта!
+                        {t('g26')}
                         <br />
                         <br />
                         {data?.is_invited
-                            && <span>И еще <span style={{ color: '#EC7913' }}>150 баллов</span> ты получаешь от друга, который тебя пригласил!!</span>}
+                            && <span>{t('g27')} <span style={{ color: '#EC7913' }}>{t('g28')}</span> {t('g29')}</span>}
                     </>
                 }
                 onClose={onClose}>
-                <button className={styles.nextBtn} onClick={handleClose}>{`Забрать ${data?.is_invited ? '400' : '250'}`}<img src={coin} width={14} height={14} /></button>
+                <button className={styles.nextBtn} onClick={handleClose}>{`${t('g30')} ${data?.is_invited ? '400' : '250'}`}<img src={coin} width={14} height={14} /></button>
                 <img src={img1} className={styles.gifImage} height={146} width={140} />
             </Guide>}
         </>

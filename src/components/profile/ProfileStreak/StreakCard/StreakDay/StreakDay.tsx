@@ -5,46 +5,109 @@ import fireIcon from '../../../../../assets/icons/streak-fire.svg';
 import freezeIcon from '../../../../../assets/icons/streak-freeze.svg';
 import { DayType } from '../../../../../types';
 
+interface WeekData {
+  date: string;
+  status: string;
+  is_notified_at_morning: boolean;
+  is_notified_at_afternoon: boolean;
+  is_notified_at_evening: boolean;
+  is_notified_at_late_evening: boolean;
+  is_notified_at_late_night: boolean;
+  is_notified_at_night: boolean;
+}
+
 interface StreakDayProps {
   dayNumber: number;
   type: DayType;
   weekIndex: number;
+  weekData: WeekData[];
+  streakDays: number;
 }
 
-export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, type, weekIndex }) => {
+export const StreakDay: React.FC<StreakDayProps> = ({
+  dayNumber,
+  weekIndex,
+  weekData,
+  streakDays,
+}) => {
   const [lang, setLang] = useState<string | null>(null);
+  const [currentDay, setCurrentDay] = useState<number | null>(null);
+  const [currentWeekdayIndex, setCurrentWeekdayIndex] = useState<number | null>(null);
 
   useEffect(() => {
     setLang(localStorage.getItem('selectedLanguage'));
+
+    const today = new Date();
+    setCurrentDay(today.getDate());
+    setCurrentWeekdayIndex(today.getDay() === 0 ? 6 : today.getDay() - 1); // 0 - воскресенье
   }, []);
 
-  const getIcon = () => {
-    switch (type) {
-      case 'streak':
-        return <img src={fireIcon} />;
-      case 'freeze':
-        return <img src={freezeIcon} />;
-      default:
-        return null;
-    }
-  };
+  const currentDayInfo = weekData.find(day => {
+    return new Date(day.date).getDate() === dayNumber;
+  });
+
+  const isStreakDay =
+    currentDayInfo &&
+    currentDayInfo.status === 'unspecified' &&
+    (currentDayInfo.is_notified_at_morning ||
+      currentDayInfo.is_notified_at_afternoon ||
+      currentDayInfo.is_notified_at_evening ||
+      currentDayInfo.is_notified_at_late_evening ||
+      currentDayInfo.is_notified_at_late_night ||
+      currentDayInfo.is_notified_at_night);
+  const isFailedDay =
+    currentDayInfo && currentDayInfo.status === 'passed' && !isStreakDay;
 
   const weekdaysRu = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
   const weekdaysEn = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
+  const getIcon = () => {
+    if (isFailedDay) return <img src={freezeIcon} alt="Frozen Day" />;
+    if (isStreakDay) return <img src={fireIcon} alt="Streak Day" />;
+    return null;
+  };
+
   return (
     <div>
-      <div className={`${styles['calendar-day']} ${styles[type]}`}>
-        {(type === 'streak' || type === 'freeze') && (
-          <div className={`${styles['status-icon']} ${styles[type]}`}>
+      <div
+        className={`${styles['calendarDay']} 
+        ${
+          !isFailedDay && !isStreakDay
+            ? styles.calendarDay
+            : streakDays < 30
+            ? styles.blue
+            : streakDays < 60
+            ? styles.purple
+            : styles.red
+        }
+
+   
+    ${currentDay === dayNumber ? styles.currentDay : ''}`}
+      >
+        {(isStreakDay || isFailedDay) && (
+          <div
+            className={`${styles['status-icon']} ${
+              streakDays < 30
+                ? styles.iconBlue
+                : streakDays < 60
+                ? styles.iconPurple
+                : styles.iconRed
+            }`}
+          >
             {getIcon()}
           </div>
         )}
         {dayNumber}
       </div>
 
-      {/* Dynamic weekday based on weekIndex */}
-      <p className={styles.dayOfTheWeek}>{lang === 'en' ? weekdaysEn[weekIndex] : weekdaysRu[weekIndex]}</p>
+      {/* День недели */}
+      <p
+        className={`${styles.dayOfTheWeek} ${
+          currentWeekdayIndex === weekIndex ? styles.dayOfTheWeekActive : ''
+        }`}
+      >
+        {lang === 'en' ? weekdaysEn[weekIndex] : weekdaysRu[weekIndex]}
+      </p>
     </div>
   );
 };

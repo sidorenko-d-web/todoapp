@@ -4,20 +4,34 @@ import clsx from 'clsx';
 import { Button as ButtonBase } from '../../../components/shared';
 
 interface Props {
-  variant: 'blue' | 'red' | 'gray';
+  variant: 'blue' | 'red' | 'gray' | 'purple';
   onClick?: () => any;
+  onClose?: () => void;
 }
 
-export default function Button({ variant, children, onClick }: PropsWithChildren<Props>) {
+export default function Button({
+  variant,
+  children,
+  onClick,
+  onClose,
+}: PropsWithChildren<Props>) {
+  const handleClick = () => {
+    onClick?.();
+
+    onClose?.();
+  };
+
   return (
     <ButtonBase
-      onClick={() => onClick?.()}
+      onClick={handleClick}
       className={clsx(
         styles.button,
         variant === 'blue'
           ? styles.buttonBlue
           : variant === 'red'
           ? styles.buttonRed
+          : variant === 'purple'
+          ? styles.buttonPurple
           : styles.buttonGray,
       )}
     >

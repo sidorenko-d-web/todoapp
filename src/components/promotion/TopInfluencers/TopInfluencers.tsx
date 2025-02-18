@@ -2,19 +2,23 @@ import cup from '../../../assets/icons/cup.svg';
 import chest from '../../../assets/icons/chest-purple.svg';
 import lock from '../../../assets/icons/lock_icon.svg';
 import { SliderSelect } from './Slider';
-import { INFLUENCER_RATING_STEPS, InfluencerRatingSteps, MODALS } from '../../../constants';
+import { InfluencerRatingSteps, MODALS, useInfluencerRatingSteps } from '../../../constants';
 import { TopUsers } from '../Modal';
 import { useModal } from '../../../hooks';
 import classNames from 'classnames';
-import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../../redux';
+import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUserQuery } from '../../../redux';
 import { BindingConfirmationModal, BindingModal, BindingSuccessModal, TrackedButton } from '../../';
 
 import s from './TopInfluencers.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { formatAbbreviation } from '../../../helpers';
 
 export const TopInfluencers = () => {
+  const { t, i18n } = useTranslation('promotion');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
-
+  const INFLUENCER_RATING_STEPS = useInfluencerRatingSteps();
   const [ isInfluencersLocked, setIsInfluencersLocked ] = useState(true);
   const [ influencersUnlockingStep, setInfluencersUnlockingStep ] = useState<keyof InfluencerRatingSteps>('email');
 
@@ -23,6 +27,13 @@ export const TopInfluencers = () => {
 
   const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
 
+  const { data: userData } = useGetUserQuery();
+
+  useEffect(() => {
+    if(userData?.is_email_verified) {
+      setInfluencersUnlockingStep('phone');
+    }
+  })
   const userPosition = userProfileData && topProfiles
     ? topProfiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
     : -1;
@@ -32,10 +43,11 @@ export const TopInfluencers = () => {
   return (
     <>
       <h2 className={s.headerInfluencers}>
-        <span className={s.textName}>Лучшие инфлюенсеры</span>
+        <span className={s.textName}>{t('p8')}</span>
         <span className={s.badge}>
-          <span>{isInfluencersLocked ? 'Закрыто' : 'Топ 10 000'}</span><img src={isInfluencersLocked ? lock : cup}
-                                                                            height={14} width={14} />
+          <span>{isInfluencersLocked ? `${t('p9')}` : `${t('p20')} ${formatAbbreviation(10000, 'number', { locale: locale })}`}</span><img
+          src={isInfluencersLocked ? lock : cup}
+          height={14} width={14} />
         </span>
       </h2>
       <section className={s.wrapperInfo}>
@@ -44,7 +56,7 @@ export const TopInfluencers = () => {
           <div className={s.chestText}>
             <span className={classNames(s.infoName, s.text)}>{`# ${isInfluencersLocked ? '???' : position}`}</span>
             <div className={classNames(s.infoName, s.text)}>
-              <span>Драгоценный сундук</span>
+              <span>{t('p12')}</span>
               <img src={chest} height={14} width={14} alt="chest" />
             </div>
           </div>
@@ -54,19 +66,19 @@ export const TopInfluencers = () => {
         </div>
         <p className={s.textInfo}>
           {isInfluencersLocked
-            ? 'Лучшие инфлюенсеры получают Драгоценный сундук!'
-            : 'Войдите в топ #100 инфлюенсеров по количеству подписчиков на этой неделе, чтобы получить Драгоценный сундук!'}
-          <span className={s.textDay}> До выдачи призов осталось 3д.</span>
+            ? `${t('p10')}`
+            : `${t('p21')}`}
+          <span className={s.textDay}> {t('p11')}</span>
         </p>
         <TrackedButton
           trackingData={{
             eventType: 'button',
-            eventPlace: `${isInfluencersLocked ? 'Открыть доступ к рейтингу инфлюенсеров!' : 'Смотреть список'} - Продвижение - Лучшие инфлюенсеры`,
+            eventPlace: `${isInfluencersLocked ? `${t('p13')}` : `${t('p22')}`} - ${t('p1')} - ${t('p8')}`,
           }}
           className={classNames(s.buttonContainer, s.text)}
           onClick={() => openModal(isInfluencersLocked ? MODALS.BINDING : MODALS.TOP_USERS)}
         >
-          {isInfluencersLocked ? 'Открыть доступ к рейтингу инфлюенсеров!' : 'Смотреть список'}
+          {isInfluencersLocked ? `${t('p13')}` : `${t('p22')}`}
         </TrackedButton>
 
         <TopUsers modalId={MODALS.TOP_USERS} onClose={() => closeModal(MODALS.TOP_USERS)} />

@@ -8,7 +8,7 @@ import infoIcon from '../../assets/icons/info.svg';
 import { useParams } from 'react-router-dom';
 import { useGetUserProfileInfoByIdQuery } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
-
+import { useGetPushLineQuery } from '../../redux/api/pushLine/api';
 import s from './StrangerProfilePage.module.scss';
 import { Button } from '../../components/shared';
 
@@ -16,9 +16,30 @@ export const StrangerProfilePage = () => {
   const { openModal, closeModal } = useModal();
   const { profileId } = useParams();
   const { data: profile } = useGetUserProfileInfoByIdQuery(profileId || '');
-
+  const { data } = useGetPushLineQuery();
   if (!profile || !profileId) return null;
+  const frozen = data?.week_information.filter(
+    day =>
+      day.status === 'passed' &&
+      !day.is_notified_at_morning &&
+      !day.is_notified_at_afternoon &&
+      !day.is_notified_at_evening &&
+      !day.is_notified_at_late_evening &&
+      !day.is_notified_at_late_night &&
+      !day.is_notified_at_night,
+  ).length;
 
+  const streaks = data?.week_information.filter(
+    day =>
+      day &&
+      (day.status === 'unspecified' || day.status === 'passed') &&
+      (day.is_notified_at_morning ||
+        day.is_notified_at_afternoon ||
+        day.is_notified_at_evening ||
+        day.is_notified_at_late_evening ||
+        day.is_notified_at_late_night ||
+        day.is_notified_at_night),
+  ).length;
   // TODO: Раскомментировать когда на бэке будет vip данные
   return (
     <main className={s.page}>
@@ -36,10 +57,10 @@ export const StrangerProfilePage = () => {
           <div className={s.userInfo}>
             <h3 className={s.text}>{profile.username}</h3>
             <ul className={classNames(s.ulBlock, s.infoRang)}>
-              <li className={s.number}>6</li>
+              <li className={s.number}>{frozen ?? 0}</li>
               <li className={s.fireIcon}>
                 <img src={fireIcon} alt="fire" width={12} height={12} />
-                <span>{formatAbbreviation(profile.points)}</span>
+                <span>{formatAbbreviation(streaks ?? 0)}</span>
               </li>
               {/*{profile.vip &&*/}
               {/*  <li className={s.vip}>*/}

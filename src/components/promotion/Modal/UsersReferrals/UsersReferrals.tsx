@@ -7,6 +7,7 @@ import subscribersIcon from '../../../../assets/icons/subscribers.png';
 import { ReferralCard } from '../../ReferralCard/ReferralCard';
 import { useGetCurrentUsersReferralsQuery } from '../../../../redux';
 import { formatAbbreviation } from '../../../../helpers';
+import { useTranslation } from 'react-i18next';
 
 interface UserReferralsProps {
     modalId: string;
@@ -15,32 +16,32 @@ interface UserReferralsProps {
 
 
 export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }: UserReferralsProps) => {
-
-
+    const { t, i18n } = useTranslation('promotion');
+    const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
     const { data, isLoading, error } = useGetCurrentUsersReferralsQuery();
 
 
     return (
-        <BottomModal modalId={modalId} title={'Ваши реферралы'} onClose={onClose}>
+        <BottomModal modalId={modalId} title={`${t('p32')}`} onClose={onClose}>
 
             <div className={s.badgesWrp} style={{ justifyContent: 'center'}}>
                 <span className={s.badge}>
-                    <span>+{formatAbbreviation(120)}</span>
+                    <span>+{formatAbbreviation(120, 'number', {locale: locale})}</span>
                     <img src={subscribersIcon} className={s.icon} height={14} width={14} alt="Подписчики" ></img>
-                    <span className={s.level}>1ур.</span>
+                    <span className={s.level}>1{t('p4')}.</span>
                 </span>
                 <span className={s.badge}>
-                    <span className={s.value}>+{formatAbbreviation(40)}</span>
+                    <span className={s.value}>+{formatAbbreviation(40, 'number', {locale: locale})}</span>
                     <img src={subscribersIcon} className={s.icon} height={14} width={14} alt="Подписчики" ></img>
-                    <span className={s.level}>2ур.</span>
+                    <span className={s.level}>2{t('p4')}.</span>
                 </span>
 
             </div>
 
-            {isLoading && <p>Загрузка...</p>}
+            {isLoading && <p>{t('p34')}</p>}
 
-            {error && <p>Не удалось загрузить списокк рефералов</p>}
+            {error && <p>{t('p33')}</p>}
 
             {data &&
                 <>
@@ -48,7 +49,7 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
                         <ReferralCard position={index + 1} name={referral.name} total_invited={referral.total_invited} />
                     ))}
 
-                    {data.referrals.length === 0 && <p className={s.noReferrals}>У вас пока нет рефералов</p>}
+                    {data.referrals.length === 0 && <p className={s.noReferrals}>{t('p35')}</p>}
                 </>
 
 

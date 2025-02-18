@@ -24,7 +24,7 @@ export const MODALS = {
   WALLET_CONNECTION: 'walletConnection',
   BINDING: 'binding',
   BINDING_CONFIRMATION: 'binding-confirmation',
-  BINDING_SUCCESS: 'binding-success',
+  BINDING_SUCCESS: 'binding-success'
 };
 
 

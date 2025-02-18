@@ -7,6 +7,7 @@ import { useModal } from '../../../hooks';
 import s from '../styles.module.scss';
 import { ModalTopTasks } from './ModalTopTasks';
 import { Task } from '../../../redux/api/tasks/dto';
+import { useTranslation } from 'react-i18next';
 
 interface TaskState {
   currentStep: number;
@@ -20,6 +21,7 @@ type TopTasksProps = {
 };
 
 export const TopTasks: FC<TopTasksProps> = ({ task }) => {
+  const { t } = useTranslation('quests');
   const { openModal, closeModal } = useModal();
   const [taskState, setTaskState] = useState<TaskState>({
     currentStep: task.completed_stages,
@@ -48,15 +50,15 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
   const progress = (taskState.currentStep / taskState.totalSteps) * 100;
 
   const getButtonText = () => {
-    if (taskState.completed) return 'Забрать награду';
-    if (taskState.currentStep > 0) return 'Продолжить выполнение';
-    return 'Выполнить';
+    if (taskState.completed) return t('q14');
+    if (taskState.currentStep > 0) return t('q11');
+    return t('q13');
   };
 
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
-        <h2 className={s.sectionTitle}>Топ-задания</h2>
+        <h2 className={s.sectionTitle}>{t('q6')}</h2>
         <span className={s.count}>
           {taskState.currentStep}/{taskState.totalSteps}
         </span>
@@ -74,7 +76,7 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
           progress={progress}
           totalSteps={taskState.totalSteps}
           currentStep={taskState.currentStep}
-          progressReward="Драгоценный сундук"
+          progressReward={t('q10')}
           progressRewardIcon={chestIcon}
           onClick={handleOpenTopTasks}
           disabled={taskState.completed}

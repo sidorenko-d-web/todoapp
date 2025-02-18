@@ -12,6 +12,8 @@ import {
   trackingApi,
   treeApi,
   usersApi,
+  pushLineApi,
+  confirmationsApi,
 } from './api';
 import { tasksApi } from './api/tasks';
 
@@ -26,11 +28,14 @@ export const store = configureStore({
       profileApi.middleware,
       companiesApi.middleware,
       refferalsApi.middleware,
+      pushLineApi.middleware,
       usersApi.middleware,
       treeApi.middleware,
       trackingApi.middleware,
       tasksApi.middleware,
       roomApi.middleware,
+      pushLineApi.middleware,
+      confirmationsApi.middleware,
     ),
 });
 

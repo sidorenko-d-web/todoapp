@@ -7,6 +7,7 @@ import { Task } from '../../../redux/api/tasks/dto';
 import s from '../styles.module.scss';
 import { ModalDailyTasks } from './ModalDailyTasks';
 import { useGetDailyRewardQuery } from '../../../redux/api/tasks/api';
+import { useTranslation } from 'react-i18next';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -15,13 +16,15 @@ type DailyTasksProps = {
 };
 
 export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
+  const { t } = useTranslation('quests');
+
   const { openModal, closeModal } = useModal();
   const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
   const { refetch: getDailyReward } = useGetDailyRewardQuery(task.id, { skip: true });
 
   // Инициализируем состояния на основе количества этапов из API
   useEffect(() => {
-    setQuestionStates(Array(task.stages).fill('closed').map((state, index) => 
+    setQuestionStates(Array(task.stages).fill('closed').map((state, index) =>
       index === 0 ? 'current' : state
     ));
   }, [task]);
@@ -57,17 +60,17 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
-        <h2 className={s.sectionTitle}>Ежедневное</h2>
-        <span className={s.count}>{completedCount}/{task.stages}</span>
+        <h2 className={s.sectionTitle}>{t("q2")}</h2>
+        <span className={s.count}>{completedCount}/3</span>
       </div>
       <div className={s.tasksList}>
         <TaskCard
-          title={task.title}
-          description={task.description}
+          title= {t('q3')}
+          description= {t('q4')}
           type="progress"
           icon={giftIcon}
-          buttonText={isCompleted ? 'Забрать награду' : 'Открыть подарок'}
-          disabled={task.is_reward_given}
+          buttonText={isCompleted ? t('q14') : t('q5')}
+          disabled={isCompleted}
           onClick={handleOpenGift}
           questionStates={questionStates}
           boost={task.boost}

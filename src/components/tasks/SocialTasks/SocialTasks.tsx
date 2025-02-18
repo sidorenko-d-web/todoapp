@@ -5,6 +5,7 @@ import instagramIcon from '../../../assets/icons/instagram.png';
 import s from '../styles.module.scss';
 import { Task } from '../../../redux/api/tasks/dto';
 import { useGetDailyRewardQuery, useUpdateTaskMutation } from '../../../redux/api/tasks/api';
+import { useTranslation } from 'react-i18next';
 
 const TELEGRAM_CHANNEL_URL = 'https://t.me/pushtoyours';
 
@@ -13,6 +14,7 @@ type SocialTasksProps = {
 };
 
 export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
+  const { t } = useTranslation('quests');
   const completedTasks = tasks.filter(task => task.is_completed).length;
   const [updateTask] = useUpdateTaskMutation();
 
@@ -52,7 +54,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
-        <h2 className={s.sectionTitle}>Подписки на социальные сети</h2>
+        <h2 className={s.sectionTitle}>{t('q12')}</h2>
         <span className={s.count}>{completedTasks}/{tasks.length}</span>
       </div>
       <div className={s.tasksList}>
@@ -65,7 +67,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
             income={Number(task.boost.views)}
             subscribers={task.boost.subscribers}
             passiveIncome={Number(task.boost.income_per_second)}
-            buttonText={task.is_completed && !task.is_reward_given ? 'Забрать награду' : task.is_completed ? 'Выполнено' : 'Выполнить'}
+            buttonText={task.is_completed && !task.is_reward_given ? 'Забрать награду' : task.is_completed ? t('q15') : t('q13')}
             isCompleted={task.is_completed}
             showProgressBar={false}
             onClick={() => handleTaskClick(task)}

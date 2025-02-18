@@ -7,8 +7,11 @@ import { DailyTasks, SocialTasks, TopTasks } from '../../components';
 import { formatAbbreviation } from '../../helpers';
 import { useGetTasksQuery } from '../../redux/api/tasks';
 import { useGetBoostQuery } from '../../redux/api/tasks/api';
-
+import { useTranslation } from 'react-i18next';
 export const TasksPage: FC = () => {
+  const { t, i18n } = useTranslation('quests');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+
   const { data, error, isLoading } = useGetTasksQuery({ is_actual: true });
   const { data: boostData } = useGetBoostQuery();
 
@@ -44,28 +47,28 @@ export const TasksPage: FC = () => {
   });
 
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return <div>{t('q16')}...</div>;
   }
 
   if (error) {
-    return <div>Произошла ошибка при загрузке заданий</div>;
+    return <div>{t('q17')}</div>;
   }
 
   return (
     <main className={s.page}>
       <section className={s.topSection}>
-        <h1 className={s.pageTitle}>Задания</h1>
+        <h1 className={s.pageTitle}>{t('q1')}</h1>
         <div className={s.badges}>
           <span className={s.badge}>
-            +{formatAbbreviation(boostData?.subscribers || 0)} 
+            +{formatAbbreviation(boostData?.subscribers || 0, 'number', { locale: locale })}
             <img src={subscribersIcon} height={14} width={14} alt={'subscribers'} />
           </span>
           <span className={s.badge}>
-            +{formatAbbreviation(Number(boostData?.views) || 0)} 
+            +{formatAbbreviation(Number(boostData?.views) || 0, 'number', { locale: locale })}
             <img src={coinIcon} height={14} width={14} alt={'income'} />
           </span>
           <span className={s.badge}>
-            +{formatAbbreviation(Number(boostData?.income_per_second) || 0)} 
+            +{formatAbbreviation(Number(boostData?.income_per_second) || 0, 'number', { locale: locale })}
             <img src={coinIcon} height={14} width={14} alt={'income'} />/сек.
           </span>
         </div>

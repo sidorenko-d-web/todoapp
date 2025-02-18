@@ -14,6 +14,7 @@ import { formatAbbreviation } from '../../../../helpers';
 import { Button } from '../../../shared';
 import { TaskBoost, Task } from '../../../../redux/api/tasks/dto';
 import { useGetTaskQuestionsQuery, useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
+import { useTranslation } from 'react-i18next';
 
 type ModalDailyTasksProps = {
   modalId: string;
@@ -34,6 +35,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
                                                             taskId,
                                                             task,
                                                           }) => {
+  const {t } = useTranslation('quests');
   const { data: questions } = useGetTaskQuestionsQuery(taskId);
   const [updateTask] = useUpdateTaskMutation();
   const isQuestionsArray = Array.isArray(questions);
@@ -137,7 +139,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   return (
     <BottomModal
       modalId={modalId}
-      title="Ежедневный подарок"
+      title={t('q24')}
       onClose={onClose}
     >
       <div className={s.container}>
@@ -148,7 +150,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
             <img src={coinIcon} alt="coin" width={14} height={14} />
           </span>
           <span className={s.reward}>
-            0
+            ???
             <img src={giftIcon} alt="gift" width={14} height={14} />
           </span>
         </div>
@@ -222,11 +224,11 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
 
         {/* Кнопки */}
         <div className={s.buttons}>
-          <Button 
+          <Button
             className={s.answerButton}
             onClick={handleOpenGuide}
           >
-            Ответы
+            {t('q27')}
             <img src={bookIcon} alt="" className={s.buttonIcon} />
           </Button>
           <Button
@@ -236,7 +238,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
             disabled={!selectedOption}
             onClick={handleNext}
           >
-            {currentQuestionIndex === questions.length - 1 ? 'Завершить' : 'Далее'}
+            {currentQuestionIndex === questions.length - 1 ? t('q25') : t('q26')}
           </Button>
         </div>
       </div>

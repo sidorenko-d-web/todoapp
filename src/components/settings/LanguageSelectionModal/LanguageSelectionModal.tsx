@@ -2,7 +2,6 @@ import { MODALS } from "../../../constants/modals"
 import { useModal } from "../../../hooks/useModal"
 import styles from "./LanguageSelectionModal.module.scss"
 import { useState } from "react"
-
 import tick from "../../../assets/icons/input-tick.svg"
 import circle from "../../../assets/icons/circle-blue.svg"
 import russiaIcon from "../../../assets/icons/ru-flag.svg"
@@ -54,7 +53,7 @@ const LanguageOption = ({ language, isSelected, onSelect }: LanguageOptionProps)
 );
 
 export const LanguageSelectionModal = () => {
-    const { i18n } = useTranslation();
+    const {  i18n } = useTranslation();
     const { closeModal } = useModal();
     const [selectedLanguage, setSelectedLanguage] = useState<LanguageCode | null>(null);
 

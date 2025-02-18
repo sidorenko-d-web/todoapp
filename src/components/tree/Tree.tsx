@@ -4,12 +4,15 @@ import classNames from 'classnames';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
 import gift from '../../assets/icons/gift.svg';
-import spinner from '../../assets/icons/spinner-blue.svg';
+import spinner from '../../assets/icons/purple-glow.svg';
 import { useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery } from '../../redux';
 import { useTreeProgress } from '../../hooks';
 import { formatAbbreviation } from '../../helpers';
+import { useTranslation } from 'react-i18next';
 
 export const Tree = () => {
+  const { t, i18n } = useTranslation('tree');
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData } = useGetTreeInfoQuery();
   const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
   const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
@@ -75,8 +78,8 @@ export const Tree = () => {
                       </div>
                     )}
                     <p className={classNames(s.text, { [s.textActive]: isActive})}>
-                      {formatAbbreviation(stage.subscribers)} <br />
-                      подписчиков
+                      {formatAbbreviation(stage.subscribers, 'number', {locale: locale})} <br />
+                      {t('t1')}
                     </p>
                   </div>
                 )}
