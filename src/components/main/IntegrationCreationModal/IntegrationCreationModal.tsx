@@ -109,13 +109,18 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             ))}
           </div>
 
-          <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
-            {contentOptions.map((option, index) => (
-              <span
-                key={index}
-                className={`${s.tab} ${selectedOption === option.value ? s.active : ''}`}
-                onClick={() => setSelectedOption(option.value)}
-              >
+        <SpecialIntegration
+          title="Apusher. Уникальная интеграция"
+          icon=""
+        />
+
+        <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
+          {contentOptions.map((option, index) => (
+            <span
+              key={index}
+              className={`${s.tab} ${selectedOption === option.value ? s.active : ''}`}
+              onClick={() => setSelectedOption(option.value)}
+            >
               {option.label}
             </span>
             ))}
