@@ -68,11 +68,13 @@ export const InventoryCard: FC<Props> = ({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
   });
+
   const { data: itemsForImages } = useGetShopItemsQuery({
     name: item.name,
     level: 1,
     item_rarity: item.item_rarity,
   });
+
   const { refetch } = useGetCurrentUserProfileInfoQuery();
 
   const { openModal } = useModal();
@@ -140,23 +142,23 @@ export const InventoryCard: FC<Props> = ({
           )}
         </div>
         <div className={styles.title}>
-          {/* <div className={styles.headline}>
-            <h3>{item.name}</h3>
-            https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284353&m=dev#1121983015
-            {item.item_rarity === 'red' ? (
-              <div className={styles.variant}>
-                <p>{t('s14')}</p>
-              </div>
-            ) : item.item_rarity === 'yellow' ? (
-              <div className={styles.variantPurple}>
-                <p>{t('s15')}</p>
-              </div>
-            ) : (
-              <div className={styles.variantRed}>
-                <p>{t('s16')}</p>
-              </div>
-            )}
-          </div> */}
+         <div className={styles.headline}>
+            <h3>{locale === 'ru' ? item.name : item.name_eng}</h3>
+            {/*https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284353&m=dev#1121983015*/}
+            {/*{item.item_rarity === 'red' ? (*/}
+            {/*  <div className={styles.variant}>*/}
+            {/*    <p>{t('s14')}</p>*/}
+            {/*  </div>*/}
+            {/*) : item.item_rarity === 'yellow' ? (*/}
+            {/*  <div className={styles.variantPurple}>*/}
+            {/*    <p>{t('s15')}</p>*/}
+            {/*  </div>*/}
+            {/*) : (*/}
+            {/*  <div className={styles.variantRed}>*/}
+            {/*    <p>{t('s16')}</p>*/}
+            {/*  </div>*/}
+            {/*)}*/}
+          </div>
           <p
             className={
               item.item_rarity === 'green'
