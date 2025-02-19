@@ -31,14 +31,26 @@
   @include var.multi-fz(14px, 16px);
 }
 
-.wrapperInfo {
+.content {
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
   background: var.$color-card-bg;
-  padding: 10px;
   border-radius: 12px;
+
+  @media (min-width: var.$breakpoint-md) {
+    gap: 24px;
+  }
+}
+
+.wrapperInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  padding: 0 10px 10px;
 
   @media (min-width: var.$breakpoint-md) {
     gap: 24px;

@@ -1,16 +1,24 @@
 @use '../../../../assets/styles/index.scss' as var;
 
 .sliderContainer {
-  width: 100%;
   margin: 0 auto;
-  overflow: hidden;
+  width: 100%;
+  padding: 10px 0 0 10px;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
 
-  div[class~=slick-list] {
-    padding: 5px;
-  }
+.sliderContainer::-webkit-scrollbar {
+  display: none;
 }
 
 .cardWrapper {
+  scroll-snap-align: center;
+  flex-shrink: 0;
+  user-select: none;
   position: relative;
   width: 80px;
   margin-right: 10px;
