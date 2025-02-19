@@ -28,15 +28,11 @@ import { formatAbbreviation, itemsInTab } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../utils';
-import { setActiveFooterItemId} from '../../redux/slices/guideSlice';
 import {
-  BackToMainPageGuide,
   TrackedButton,
-  TreeLevelGuide,
-  UpgradeItemsGuide,
-  WelcomeToShopGuide,
 } from '../../components';
-import { setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
+import { BackToMainPageGuide, TreeLevelGuide, UpgradeItemsGuide, WelcomeToShopGuide } from '../../components';
+import { setActiveFooterItemId, setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
 
 type TypeTab<T> = { title: string; value: T };
 
@@ -47,11 +43,11 @@ interface Props {
 }
 
 export const ShopLayout: FC<PropsWithChildren<Props>> = ({
-                                                           children,
-                                                           onItemCategoryChange,
-                                                           onItemQualityChange,
-                                                           mode,
-                                                         }) => {
+  children,
+  onItemCategoryChange,
+  onItemQualityChange,
+  mode,
+}) => {
   const { t } = useTranslation('shop');
   const shopItemCategories = [
     { title: `${t('s2')}`, value: 'text' },

@@ -6,12 +6,24 @@ import { Button as ButtonBase } from '../../../components/shared';
 interface Props {
   variant: 'blue' | 'red' | 'gray' | 'purple';
   onClick?: () => void;
+  onClose?: () => void;
 }
 
-export default function Button({ variant, children, onClick }: PropsWithChildren<Props>) {
+export default function Button({
+  variant,
+  children,
+  onClick,
+  onClose,
+}: PropsWithChildren<Props>) {
+  const handleClick = () => {
+    onClick?.();
+
+    onClose?.();
+  };
+
   return (
     <ButtonBase
-      onClick={() => onClick?.()}
+      onClick={handleClick}
       className={clsx(
         styles.button,
         variant === 'blue'

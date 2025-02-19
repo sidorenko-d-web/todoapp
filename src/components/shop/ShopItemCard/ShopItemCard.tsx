@@ -8,7 +8,7 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { useModal, useSendTransaction, useUsdtTransactions } from '../../../hooks';
+import { useModal, useSendTransaction, useTonConnect, useUsdtTransactions } from '../../../hooks';
 import { useTransactionNotification } from '../../../hooks/useTransactionNotification';
 import { GUIDE_ITEMS, MODALS, svgHeadersString } from '../../../constants';
 import { useSelector } from 'react-redux';
@@ -39,6 +39,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [currentTrxId, setCurrentTrxId] = useState("")
 
 
+
   const userPoints = data?.points || 0;
   const handleBuyItem = async () => {
     setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
@@ -56,14 +57,19 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   };
 
   // for transactions
+  const {walletAddress, connectWallet} = useTonConnect()
   const { startTransaction, failTransaction, completeTransaction } = useTransactionNotification();
   const handleUsdtPayment = async () => {
+
+    if (!walletAddress) connectWallet()
+
     try {
       setError('');
       startTransaction();
       const trxId = await sendUSDT(Number(item.price_usdt));
       setCurrentTrxId(trxId || '');
     } catch (error) {
+      console.log("Error while sending USDT transaction", error)
       failTransaction(handleUsdtPayment);
     }
   };

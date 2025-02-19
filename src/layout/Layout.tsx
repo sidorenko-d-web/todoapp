@@ -4,16 +4,26 @@ import styles from './Layout.module.scss';
 import { Header } from '../components/Header/';
 import { useEffect, useState } from 'react';
 import { MODALS, localStorageConsts } from '../constants';
-import { LanguageSelectionModal, SettingsModal, WalletConnectionModal } from '../components';
+import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
 import { AudioBg, useModal } from '../hooks';
+import { getOS } from '../utils';
 
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
 
 const Layout = () => {
   const location = useLocation();
+  const platform = getOS();
 
   const showHeader = !location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/);
+
+  const needsReducedMargin = [
+    '/',
+    '/progressTree',
+    location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/)
+  ].includes(location.pathname);
+        
   const showRoadmapBg = location.pathname === '/progressTree';
+
 
   const { openModal } = useModal();
 
@@ -26,6 +36,13 @@ const Layout = () => {
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
   }, []);
 
+
+  const contentClassName = `${styles.content} ${
+    showHeader ? styles.withHeader : ''
+  } ${needsReducedMargin ? styles.reducedMargin : ''} ${
+    platform ? styles[platform] : ''
+  }`;
+  
   useEffect(() => {
     if (showRoadmapBg) {
       const handleScroll = () => {
@@ -43,28 +60,35 @@ const Layout = () => {
   }, [showRoadmapBg]);
 
   return (
-    <div className={styles.wrp}>
-      {showRoadmapBg && (
-        <img
-          src={roadmapBg}
-          className={styles.bg_image}
-          style={{ transform: `translateY(-${bgOffset}px)` }}
-        />
-      )}
-      
-      {showHeader && <Header />}
-      <main className={styles.content + ' ' + (showHeader ? styles.withHeader : '')}>
-        <Outlet />
+    <>
+      <div className={`${styles.settingsIcon} ${
+        platform ? styles[platform + 'Settings'] : ''
+      }`}>
+        <Settings />
+      </div>
+      <div className={styles.wrp}>
+        {showRoadmapBg && (
+          <img
+            src={roadmapBg}
+            className={styles.bg_image}
+            style={{ transform: `translateY(-${bgOffset}px)` }}
+          />
+        )}
+        {showHeader && <Header />}
+        <main className={contentClassName}>
+          <Outlet />
 
-        {/* Modals */}
-        <SettingsModal />
-        <WalletConnectionModal />
-        <LanguageSelectionModal />
+          {/* Modals */}
+          <SettingsModal />
+          <WalletConnectionModal />
+          <LanguageSelectionModal />
 
-        <AudioBg />
-      </main>
-      <Footer />
-    </div>
+          <AudioBg />
+        </main>
+
+        <Footer />
+      </div>
+    </>
   );
 };
 

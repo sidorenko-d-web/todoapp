@@ -45,6 +45,7 @@
 
       .daysInARow {
         margin: 0;
+
         color: var.$color-grayish-white;
         text-wrap: pretty;
         font-size: 24px;
@@ -54,13 +55,29 @@
       }
 
       .badge {
-        color: var.$color-red;
+        color: var.$color-blue-primary;
         padding: 5px;
         width: fit-content;
         border-radius: 4px;
         font-size: 14px;
         background-color: var.$color-gray;
       }
+    }
+    .badgePurple {
+      color: var.$color-purple;
+      padding: 5px;
+      width: fit-content;
+      border-radius: 4px;
+      font-size: 14px;
+      background-color: var.$color-gray;
+    }
+    .badgeRed {
+      color: var.$color-red;
+      padding: 5px;
+      width: fit-content;
+      border-radius: 4px;
+      font-size: 14px;
+      background-color: var.$color-gray;
     }
   }
 
@@ -75,6 +92,7 @@
   .freezeCount {
     display: flex;
     align-items: center;
+    margin-right: 10px;
     font-weight: 500;
     gap: 5px;
     font-size: 20px;

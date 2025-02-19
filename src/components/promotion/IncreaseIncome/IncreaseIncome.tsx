@@ -20,6 +20,9 @@ export const IncreaseIncome = () => {
   const [ showAll, setShowAll ] = useState(false);
   const { openModal, closeModal } = useModal();
 
+
+//   const { data, isLoading, error } = useGetCurrentUsersReferralsQuery();
+
   const { /*data,*/ isLoading, error } = useGetCurrentUsersReferralsQuery();
   const data = {
     referrals: [

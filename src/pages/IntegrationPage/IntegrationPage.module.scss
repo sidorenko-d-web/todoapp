@@ -7,11 +7,12 @@
     align-items: center;
 
     overflow-x: hidden;
+
     color: white;
 
     background-color: var.$color-bg;
+    min-height: calc(var(--tg-viewport-stable-height) - 140px);
 
-    height: 100%;
     margin: 0;
 
     .pageTitle {

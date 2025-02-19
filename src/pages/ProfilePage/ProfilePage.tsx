@@ -17,7 +17,6 @@ export const ProfilePage: React.FC = () => {
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
 
-
   const {
     data: userProfileData,
     error: userError,
@@ -31,6 +30,20 @@ export const ProfilePage: React.FC = () => {
   } = useGetTopProfilesQuery();
 
   const [, setIsModalShown] = useState(false);
+  const frozen = data?.week_information.filter(
+    day => day.status === 'unspecified',
+  ).length;
+
+  const streaks = data?.week_information.filter(
+    day =>
+      day.status === 'passed' &&
+      (day.is_notified_at_morning ||
+        day.is_notified_at_afternoon ||
+        day.is_notified_at_evening ||
+        day.is_notified_at_late_evening ||
+        day.is_notified_at_late_night ||
+        day.is_notified_at_night),
+  ).length;
 
   useEffect(() => {
     const lastShownTimestamp = localStorage.getItem('daysInARowModalTimestamp');
@@ -42,8 +55,9 @@ export const ProfilePage: React.FC = () => {
       setIsModalShown(true);
     }
   }, [ openModal ]);
+
   useEffect(() => {
-    if (data?.in_streak_days === 30) {
+    if (streaks === 30 || streaks === 60 || streaks === 120) {
       openModal(MODALS.TASK_CHEST);
     }
   }, [ data?.in_streak_days, openModal ]);
@@ -57,30 +71,9 @@ export const ProfilePage: React.FC = () => {
 
   const position =
     userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length!;
-  const frozen = data?.week_information.filter(
-    day =>
-      day.status === 'passed' &&
-      !day.is_notified_at_morning &&
-      !day.is_notified_at_afternoon &&
-      !day.is_notified_at_evening &&
-      !day.is_notified_at_late_evening &&
-      !day.is_notified_at_late_night &&
-      !day.is_notified_at_night,
-  ).length;
 
-  const streaks = data?.week_information.filter(
-    day =>
-      day &&
-      (day.status === 'unspecified' || day.status === 'passed') &&
-      (day.is_notified_at_morning ||
-        day.is_notified_at_afternoon ||
-        day.is_notified_at_evening ||
-        day.is_notified_at_late_evening ||
-        day.is_notified_at_late_night ||
-        day.is_notified_at_night),
-  ).length;
-  const streakDays = [ 27, 28, 30 ]; // TODO: replace with real data from API
-  const freezeDays = [ 29 ]; // TODO: replace with real data
+  const streakDays = [27, 28, 30]; // TODO: replace with real data from API
+  const freezeDays = [29]; // TODO: replace with real data
 
   const weekData = getWeekData(streakDays, freezeDays);
   console.log(data?.week_information);
