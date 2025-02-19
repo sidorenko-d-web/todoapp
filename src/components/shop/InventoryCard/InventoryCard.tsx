@@ -140,8 +140,8 @@ export const InventoryCard: FC<Props> = ({
           )}
         </div>
         <div className={styles.title}>
-          <div className={styles.headline}>
-            <h3>{item.name}</h3>
+         <div className={styles.headline}>
+            <h3>{locale === 'ru' ? item.name : item.name_eng}</h3>
             {/*https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284353&m=dev#1121983015*/}
             {/*{item.item_rarity === 'red' ? (*/}
             {/*  <div className={styles.variant}>*/}
@@ -302,7 +302,7 @@ export const InventoryCard: FC<Props> = ({
               <p>loading</p>
             ) : (
               <>
-                {formatAbbreviation(data?.items[0].price_internal || 0, 'number', { locale: locale })}{' '}
+                {formatAbbreviation(data?.items[0].price_internal || 0,'number', { locale: locale })}{' '}
                 <img src={CoinIcon} alt="" />
               </>
             )}
