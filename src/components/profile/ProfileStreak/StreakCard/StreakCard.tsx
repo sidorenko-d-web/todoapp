@@ -7,7 +7,6 @@ import FireRed from '../../../../assets/icons/fire-red.svg';
 import FirePurple from '../../../../assets/icons/fire-purple.svg';
 import chestIcon from '../../../../assets/icons/elite-chest-glowing.svg';
 import snowflake from '../../../../assets/icons/snowflake.svg';
-import fire from '../../../../assets/icons/fire-red.svg';
 import { ProgressLine } from '../../../shared';
 import { DayType } from '../../../../types';
 import { StreakDay } from './StreakDay';
