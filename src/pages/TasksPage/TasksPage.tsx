@@ -15,7 +15,7 @@ export const TasksPage: FC = () => {
 
 
   const { t, i18n } = useTranslation('quests');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const { data, error, isLoading } = useGetTasksQuery();
 
@@ -27,7 +27,7 @@ export const TasksPage: FC = () => {
   console.log('Состояние запроса:', {
     data,
     error,
-    isLoading
+    isLoading,
   });
 
   if (isLoading) {
@@ -43,10 +43,12 @@ export const TasksPage: FC = () => {
       <section className={s.topSection}>
         <h1 className={s.pageTitle}>{t('q1')}</h1>
         <div className={s.badges}>
-          <span className={s.badge}>+{formatAbbreviation(100, 'number', { locale: locale })} <img src={subscribersIcon} height={14} width={14}
-            alt={'subscribers'} /></span>
-          <span className={s.badge}>+{formatAbbreviation(150, 'number', { locale: locale })} <img src={coinIcon} height={14} width={14} alt={'income'} /></span>
-          <span className={s.badge}>+{formatAbbreviation(1, 'number', { locale: locale })} <img src={coinIcon} height={14} width={14} alt={'income'} />/{t('q9')}</span>
+          <span className={s.badge}>+{formatAbbreviation(100, 'number', { locale: locale })} <img src={subscribersIcon}
+                                                                                                  alt={'subscribers'} /></span>
+          <span className={s.badge}>+{formatAbbreviation(150, 'number', { locale: locale })} <img src={coinIcon}
+                                                                                                  alt={'income'} /></span>
+          <span className={s.badge}>+{formatAbbreviation(1, 'number', { locale: locale })} <img src={coinIcon}
+                                                                                                alt={'income'} />/{t('q9')}</span>
         </div>
       </section>
       <DailyTasks />

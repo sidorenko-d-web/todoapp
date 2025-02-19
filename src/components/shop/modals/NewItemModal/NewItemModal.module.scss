@@ -1,6 +1,7 @@
-@use '../../../../assets/styles/abstracts/colors' as *;
+@use '../../../../assets/styles' as *;
 
 .images {
+  pointer-events: none;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -13,8 +14,8 @@
   }
 
   .itemImage {
-    width: 60px;
-    height: 60px;
+    display: grid;
+    place-content: center;
     background: $color-gray;
     border: 2px solid $color-primary;
     border-radius: 8px;
@@ -22,12 +23,15 @@
     position: relative;
     margin: 40px 0 50px 0;
     animation: img-scale-anim 0.8s forwards ease;
+
+    @include multi-size(60px, 80px);
   }
 
   .itemImagePurple {
     @extend .itemImage;
     border-color: $color-purple;
   }
+
   .itemImageRed {
     @extend .itemImage;
     border-color: $color-red;
@@ -37,12 +41,14 @@
 .text {
   width: 100%;
   margin-bottom: 30px;
+
   p {
     color: $color-text-semi-transparent;
     font-weight: 500;
-    font-size: 12px;
     text-wrap: wrap;
     text-align: center;
+
+    @include multi-fz(12px, 14px);
 
     span {
       color: $color-primary;
@@ -51,11 +57,13 @@
     .spanPurple {
       color: $color-purple;
     }
+
     .spanRed {
       color: $color-red;
     }
   }
 }
+
 .stats {
   display: flex;
   align-items: center;
@@ -69,9 +77,12 @@
     gap: 2px;
     color: $color-white;
 
+    p {
+      @include multi-fz(14px, 16px)
+    }
+
     img {
-      width: 14px;
-      aspect-ratio: 14px;
+      @include multi-size(14px, 18px)
     }
   }
 }

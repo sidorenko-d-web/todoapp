@@ -16,12 +16,21 @@
       font-size: 14px;
       font-weight: 500;
       line-height: 100%;
+
+
+      @media (min-width: var.$breakpoint-md) {
+        font-size: 16px;
+      }
     }
 
     .count {
       font-size: 14px;
       font-weight: 500;
       line-height: 100%;
+
+      @media (min-width: var.$breakpoint-md) {
+        font-size: 16px;
+      }
     }
   }
 

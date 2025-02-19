@@ -21,6 +21,10 @@
   background-color: var.$color-card-bg;
   color: var.$color-text;
 
+  @media (min-width: var.$breakpoint-md) {
+    gap: 25px;
+  }
+
   .header {
     display: flex;
     align-items: start;
@@ -30,6 +34,10 @@
       aspect-ratio: 1 / 1;
       width: 40px;
       background-color: var.$color-badge-bg;
+
+      @media (min-width: var.$breakpoint-md) {
+        width: 66px;
+      }
     }
 
     .info {
@@ -71,8 +79,19 @@
     font-weight: 500;
     line-height: 100%;
 
+    @media (min-width: var.$breakpoint-md) {
+      font-size: 16px;
+    }
+
     img {
       margin-left: 2px;
+      width: 14px;
+      height: 14px;
+
+      @media (min-width: var.$breakpoint-md) {
+        width: 18px;
+        height: 18px;
+      }
     }
   }
 
@@ -112,6 +131,11 @@
 
       font-size: 14px;
       font-weight: 500;
+
+      @media (min-width: var.$breakpoint-md) {
+        padding: 14px;
+        font-size: 16px;
+      }
     }
 
     .primary {
