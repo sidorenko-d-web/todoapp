@@ -1,6 +1,7 @@
 @use '../../../../assets/styles' as *;
 
 .images {
+  pointer-events: none;
   width: 100%;
   display: flex;
   justify-content: center;

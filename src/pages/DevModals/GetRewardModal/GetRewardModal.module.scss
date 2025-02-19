@@ -1,6 +1,7 @@
 @use '../../../assets/styles/abstracts/colors' as var;
 @use 'sass:color';
 .images {
+  pointer-events: none;
   position: relative;
   display: flex;
   justify-content: center;
@@ -53,6 +54,7 @@
 }
 
 .background {
+  pointer-events: none;
   position: fixed;
   top: 0;
   left: 0;

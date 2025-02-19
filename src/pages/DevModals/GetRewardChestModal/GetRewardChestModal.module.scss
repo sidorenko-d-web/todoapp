@@ -1,6 +1,7 @@
 @use '../../../assets/styles/abstracts/colors' as var;
 @use 'sass:color';
 .images {
+  pointer-events: none;
   position: relative;
   display: flex;
   justify-content: center;
@@ -15,6 +16,7 @@
   transform: translate(-50%, -30%);
 }
 .chest {
+  pointer-events: none;
   width: 30%;
   position: relative;
   opacity: 1 !important;
@@ -57,6 +59,7 @@
 }
 
 .background {
+  pointer-events: none;
   position: fixed;
   top: 0;
   left: 0;
