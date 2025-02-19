@@ -11,10 +11,13 @@
   background: #2D2D35;
   position: fixed;
 
-  //inset: auto 0 0 0;
-  bottom: calc(var(--tg-content-safe-area-inset-bottom));
-  left: var(--tg-content-safe-area-inset-left);
-  right: var(--tg-content-safe-area-inset-right);
+  // For browser
+  inset: auto 0 0 0;
+
+  // For telegram
+  //bottom: calc(var(--tg-content-safe-area-inset-bottom));
+  //left: var(--tg-content-safe-area-inset-left);
+  //right: var(--tg-content-safe-area-inset-right);
 
   z-index: 80;
   width: 100%;
