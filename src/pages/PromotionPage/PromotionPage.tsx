@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
-import clanRed from '../../assets/icons/clanRed.svg';
 import { DevelopmentPlan, IncreaseIncome, TopInfluencers } from '../../components';
 
 import s from './PromotionPage.module.scss';
@@ -18,16 +17,14 @@ export const PromotionPage: React.FC = () => {
   const { data: userProfileData, error: userError, isLoading: isUserLoading } = useGetCurrentUserProfileInfoQuery();
 
   const { data: topProfilesData, error: topProfilesError, isLoading: isTopProfilesLoading } = useGetTopProfilesQuery();
-  const {data: usersCountData} = useGetUsersCountQuery();
-  const userPosition = userProfileData && topProfilesData?.profiles
-    ? topProfilesData.profiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
-    : -1;
+  const { data: usersCountData } = useGetUsersCountQuery();
+  // const userPosition = userProfileData && topProfilesData?.profiles
+  //   ? topProfilesData.profiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
+  //   : -1;
 
   useEffect(() => {
     dispatch(setActiveFooterItemId(3));
   }, []);
-
-  const position = userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length!;
 
   return (
     <>
@@ -38,10 +35,11 @@ export const PromotionPage: React.FC = () => {
       {(userProfileData && topProfilesData) &&
         <main className={s.page}>
           <section className={s.topSection}>
-            <h1 className={s.pageTitle}>{t("p1")}</h1>
+            <h1 className={s.pageTitle}>{t('p1')}</h1>
             <div className={s.badges}>
-              <span className={s.badge}>{`#${position}`} <img src={clanRed} height={14} width={14} alt={'income'} /></span>
-              <span className={s.badge}>+{formatAbbreviation(440, 'number', { locale: locale })} <img src={subscribersIcon} height={14} width={14}
+              {/*<span className={s.badge}>{`#${position}`} <img src={clanRed} alt={'income'} /></span>*/}
+              <span className={s.badge}>+{formatAbbreviation(0, 'number', { locale: locale })} <img
+                src={subscribersIcon}
                 alt={'subscribers'} /></span>
             </div>
             <IncreaseIncome />

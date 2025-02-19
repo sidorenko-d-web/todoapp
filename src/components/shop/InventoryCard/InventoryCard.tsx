@@ -9,8 +9,8 @@ import ChestRedIcon from '@icons/chest-red.svg';
 import ListIcon from '@icons/list.svg';
 import {
   IShopItem,
-  TypeItemQuality,
   selectVolume,
+  TypeItemQuality,
   useGetCurrentUserProfileInfoQuery,
   useGetShopItemsQuery,
   useUpgradeItemMutation,
@@ -24,9 +24,8 @@ import { useModal } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import useSound from 'use-sound';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../shared';
-import { useDispatch } from 'react-redux';
 import { setPoints } from '../../../redux/slices/point.ts';
 
 interface Props {
@@ -46,7 +45,7 @@ const getPremiumLevelOrder = (level: TypeItemQuality) =>
   }[level]);
 
 function sortByPremiumLevel(items: IShopItem[]) {
-  return [...items].sort(
+  return [ ...items ].sort(
     (a, b) =>
       getPremiumLevelOrder(a.item_premium_level) -
       getPremiumLevelOrder(b.item_premium_level),
@@ -61,25 +60,23 @@ export const InventoryCard: FC<Props> = ({
                                            isB,
                                          }) => {
 
-  const { t,i18n } = useTranslation('shop');
+  const { t, i18n } = useTranslation('shop');
   const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
   const dispatch = useDispatch();
   const { data, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
   });
-
   const { data: itemsForImages } = useGetShopItemsQuery({
     name: item.name,
     level: 1,
     item_rarity: item.item_rarity,
   });
-
   const { refetch } = useGetCurrentUserProfileInfoQuery();
 
   const { openModal } = useModal();
 
-  const [playLvlSound] = useSound(SOUNDS.levelUp, {volume: useSelector(selectVolume)});
+  const [ playLvlSound ] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
 
   const handleBuyItem = async () => {
     try {
@@ -105,10 +102,11 @@ export const InventoryCard: FC<Props> = ({
           }
         }
       }
-    } catch (error) {}
+    } catch (error) {
+    }
   };
 
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.storeCard}>
@@ -126,14 +124,14 @@ export const InventoryCard: FC<Props> = ({
             className={clsx(isBlocked && styles.disabledImage)}
             alt=""
           />
-          {/* <div style={{width: 60, height: 60}}>
-            <SpineAnimation
-              name={item.name}
-              skin={item.item_premium_level}
-              jsonUrl="https://storage.yandexcloud.net/miniapp-v2-dev/тетрадь-1.json"
-              atlasUrl="https://storage.yandexcloud.net/miniapp-v2-dev/тетрадь-1atlas.txt"
-            />
-          </div> */}
+          {/* <div style={{width: 60, height: 60}}>*/}
+          {/*  <SpineAnimation*/}
+          {/*    name={item.name}*/}
+          {/*    skin={item.item_premium_level}*/}
+          {/*    jsonUrl="https://storage.yandexcloud.net/miniapp-v2-dev/тетрадь-1.json"*/}
+          {/*    atlasUrl="https://storage.yandexcloud.net/miniapp-v2-dev/тетрадь-1atlas.txt"*/}
+          {/*  />*/}
+          {/*</div>*/}
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
           {!isBlocked && (
             <p>
@@ -164,11 +162,11 @@ export const InventoryCard: FC<Props> = ({
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                ? styles.colorPurple
-                : styles.level
+                  ? styles.colorPurple
+                  : styles.level
             }
           >
-            {t('s20')} {item.level} {isB && t("s21")}
+            {t('s20')} {item.level} {isB && t('s21')}
           </p>
           <div
             className={clsx(
@@ -177,11 +175,11 @@ export const InventoryCard: FC<Props> = ({
             )}
           >
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.views,'number', { locale: locale })}</p>
+              <p>+{formatAbbreviation(item.boost.views, 'number', { locale: locale })}</p>
               <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.subscribers,'number', { locale: locale })}</p>
+              <p>+{formatAbbreviation(item.boost.subscribers, 'number', { locale: locale })}</p>
               <img src={SubscriberCoin} alt="" />
             </div>
             <div className={styles.statsItem}>
@@ -219,8 +217,8 @@ export const InventoryCard: FC<Props> = ({
                     item.item_rarity === 'red'
                       ? ChestBlueIcon
                       : item.item_rarity === 'yellow'
-                      ? ChestPurpleIcon
-                      : ChestRedIcon
+                        ? ChestPurpleIcon
+                        : ChestRedIcon
                   }
                   alt=""
                 />
@@ -233,8 +231,8 @@ export const InventoryCard: FC<Props> = ({
                   item.item_rarity === 'red'
                     ? styles.done
                     : item.item_rarity === 'yellow'
-                    ? styles.donePurple
-                    : styles.doneRed
+                      ? styles.donePurple
+                      : styles.doneRed
                 }
                 style={{ width: item.level * 2 + '%' }}
               />
@@ -248,13 +246,13 @@ export const InventoryCard: FC<Props> = ({
                       item.item_rarity === 'red'
                         ? styles.item
                         : item.item_rarity === 'yellow'
-                        ? styles.itemPurple
-                        : styles.itemRed,
+                          ? styles.itemPurple
+                          : styles.itemRed,
                       item.item_premium_level === 'advanced'
                         ? index > 1 && styles.itemLocked
                         : item.item_premium_level === 'base' &&
-                            index > 0 &&
-                            styles.itemLocked,
+                        index > 0 &&
+                        styles.itemLocked,
                     )}
                     key={_item.id}
                   >

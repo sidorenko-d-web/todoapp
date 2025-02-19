@@ -26,8 +26,7 @@
       border-radius: 10px;
       background-color: var.$color-badge-bg;
       display: flex;
-      padding: 4px;
-      padding-left: 7px;
+      padding: 4px 4px 4px 7px;
       gap: 2px;
       justify-content: center;
       align-items: center;
@@ -37,6 +36,20 @@
         padding: 0;
         font-weight: 500;
         font-size: 14px;
+
+        @media (min-width: var.$breakpoint-md) {
+          font-size: 16px;
+        }
+      }
+
+      img {
+        width: 14px;
+        height: 14px;
+
+        @media (min-width: var.$breakpoint-md) {
+          width: 18px;
+          height: 18px;
+        }
       }
     }
   }
@@ -51,7 +64,12 @@
     background-image: url('../../../assets/icons/wardrobe.svg');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: contain;
     background-size: 60%;
+
+
+    @media (min-width: var.$breakpoint-md) {
+      width: 44px;
+      height: 44px;
+    }
   }
 }

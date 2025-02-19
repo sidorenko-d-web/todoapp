@@ -16,32 +16,6 @@ type SliderProps = {
 }
 
 export const SliderSelect = ({ isInfluencersLocked }: SliderProps) => {
-  const settings: Settings = {
-    variableWidth: false,
-    dots: false,
-    arrows: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 3,
-    responsive: [
-      {
-        breakpoint: 500,
-        settings: {
-          slidesToShow: 3.2,
-          slidesToScroll: 3,
-        },
-      },
-      {
-        breakpoint: 350,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-        },
-      },
-    ],
-  };
-
   const { data } = useGetTopProfilesQuery(undefined, { skip: isInfluencersLocked });
   const topProfiles = data?.profiles;
 
@@ -50,71 +24,67 @@ export const SliderSelect = ({ isInfluencersLocked }: SliderProps) => {
   // TODO: Раскомментировать когда на бэке будет vip данные
   return (
     <div className={s.sliderContainer}>
-      <Slider {...settings}>
-        {
-          isInfluencersLocked && Array.from({ length: 10 }).map((_, index) => (
-            <div
-              key={index}
-              className={s.cardWrapper}
-            >
-              <div className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
-                <div className={s.card}>
-                  <div className={s.infoRang}>
-                    <span className={s.seat}>{'#???'}</span>
-                    { /*profile.fire true !== undefined &&*/ (
-                      <div className={s.fireIcon}>
-                        <img src={fire} alt="fire" width={12} height={12} />
-                        <span>???</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className={s.middleRow}>
-                    <img src={lock} alt="Lock" width={44} height={44} />
-                  </div>
-                  {/*{profile.vip && (*/}
-                  {/*  <div className={s.vip}>*/}
-                  {/*    <img src={star} alt="star" />*/}
-                  {/*    <span>VIP</span>*/}
-                  {/*  </div>*/}
-                  {/*)}*/}
-                </div>
-              </div>
-            </div>
-          ))
-        }
-
-        {!isInfluencersLocked && topProfiles && topProfiles.map((profile, index) => (
-          <Link
-            draggable={false}
-            to={`/profile/${profile.id}`}
-            key={profile.id}
+      {
+        isInfluencersLocked && Array.from({ length: 10 }).map((_, index) => (
+          <div
+            key={index}
             className={s.cardWrapper}
           >
             <div className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
-              <div className={s.card}>
-                <div className={s.infoRang}>
-                  <span className={s.seat}>{`#${index + 1}`}</span>
-                  { /*profile.fire true !== undefined &&*/ (
-                    <div className={s.fireIcon}>
-                      <img src={fire} alt="fire" width={12} height={12} />
-                      <span>6</span>
-                    </div>
-                  )}
-                </div>
-                <div className={s.middleRow}>
-                  <img src={face} alt="face" />
-                </div>
-                {/*{profile.vip && (*/}
-                {/*  <div className={s.vip}>*/}
-                {/*    <img src={star} alt="star" />*/}
-                {/*    <span>VIP</span>*/}
-                {/*  </div>*/}
-                {/*)}*/}
+              <div className={s.infoRang}>
+                <span className={s.seat}>{'# ???'}</span>
+                { /*profile.fire true !== undefined &&*/ (
+                  <div className={s.fireIcon}>
+                    <img src={fire} alt="fire" />
+                    <span>???</span>
+                  </div>
+                )}
               </div>
+              <div className={s.middleRow}>
+                <img src={lock} alt="Lock" />
+              </div>
+              {/*{profile.vip && (*/}
+              {/*  <div className={s.vip}>*/}
+              {/*    <img src={star} alt="star" />*/}
+              {/*    <span>VIP</span>*/}
+              {/*  </div>*/}
+              {/*)}*/}
             </div>
-          </Link>
-        ))}
-      </Slider>
+          </div>
+        ))
+      }
+
+      {!isInfluencersLocked && topProfiles && topProfiles.map((profile, index) => (
+        <Link
+          draggable={false}
+          to={`/profile/${profile.id}`}
+          key={profile.id}
+          className={s.cardWrapper}
+        >
+          <div className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
+            <div className={s.card}>
+              <div className={s.infoRang}>
+                <span className={s.seat}>{`# ${index + 1}`}</span>
+                { /*profile.fire true !== undefined &&*/ (
+                  <div className={s.fireIcon}>
+                    <img src={fire} alt="fire" />
+                    <span>6</span>
+                  </div>
+                )}
+              </div>
+              <div className={s.middleRow}>
+                <img src={face} alt="face" />
+              </div>
+              {/*{profile.vip && (*/}
+              {/*  <div className={s.vip}>*/}
+              {/*    <img src={star} alt="star" />*/}
+              {/*    <span>VIP</span>*/}
+              {/*  </div>*/}
+              {/*)}*/}
+            </div>
+          </div>
+        </Link>
+      ))}
     </div>
   );
 };

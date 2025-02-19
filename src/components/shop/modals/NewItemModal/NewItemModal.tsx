@@ -33,7 +33,7 @@ export const NewItemModal: React.FC = () => {
   const isPrem = state.args?.item.item_rarity === 'yellow';
   const isPro = state.args?.item.item_rarity === 'green';
 
-  
+
   useAutoPlaySound(MODALS.NEW_ITEM, SOUNDS.upgradeOrBuyItem);
 
   return (

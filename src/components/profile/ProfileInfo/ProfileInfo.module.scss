@@ -56,10 +56,23 @@
       background-color: var.$color-gray;
       border-radius: 4px;
 
+      img {
+        aspect-ratio: 1;
+        width: 12px;
+
+        @media (min-width: var.$breakpoint-md) {
+          width: 18px;
+        }
+      }
+
       .position {
         font-size: 12px;
         font-weight: 500;
         margin: 0;
+
+        @media (min-width: var.$breakpoint-md) {
+          font-size: 16px;
+        }
       }
     }
 
@@ -122,12 +135,20 @@
           background-color: var.$color-primary;
           white-space: nowrap;
           margin: 0;
+
+          @media (min-width: var.$breakpoint-md) {
+            font-size: 16px;
+          }
         }
 
         .edit {
           margin-left: auto;
+          aspect-ratio: 1;
           width: 16px;
-          height: 16px;
+
+          @media (min-width: var.$breakpoint-md) {
+            width: 18px;
+          }
         }
       }
 
@@ -135,8 +156,7 @@
         font-size: 14px;
         font-weight: 500;
         color: var.$color-text-semi-transparent;
-        margin: 0;
-        margin-left: 5px;
+        margin: 0 0 0 5px;
       }
     }
 
@@ -152,11 +172,24 @@
           font-weight: 500;
           margin: 0;
           color: var.$color-text-semi-transparent;
+
+          @media (min-width: var.$breakpoint-md) {
+            font-size: 14px;
+          }
         }
 
         .subscriptionLevelWrp {
           display: flex;
           gap: 5px;
+
+          img {
+            aspect-ratio: 1;
+            width: 12px;
+
+            @media (min-width: var.$breakpoint-md) {
+              width: 16px;
+            }
+          }
 
           .subscriptionLevel {
             font-size: 12px;
@@ -164,6 +197,10 @@
             color: var.$color-text-semi-transparent;
             white-space: nowrap;
             margin: 0;
+
+            @media (min-width: var.$breakpoint-md) {
+              font-size: 14px;
+            }
           }
         }
       }

@@ -26,56 +26,43 @@ export const IncreaseIncome = () => {
   const { /*data,*/ isLoading, error } = useGetCurrentUsersReferralsQuery();
   const data = {
     referrals: [
-      {
-        name: "Иван Иванов",
-        total_invited: 10
-      },
-      {
-        name: "Алексей Смирнов",
-        total_invited: 5
-      },
-      {
-        name: "Мария Петрова",
-        total_invited: 8
-      },
-      {
-        name: "Мария Петрова",
-        total_invited: 8
-      },
-      {
-        name: "Мария Петрова",
-        total_invited: 8
-      }
-    ]
+      { name: 'Alice', total_invited: 10 },
+      { name: 'Bob', total_invited: 15 },
+      { name: 'Charlie', total_invited: 8 },
+      { name: 'David', total_invited: 12 },
+      { name: 'Eve', total_invited: 20 },
+    ],
   };
 
   const referrals = data?.referrals || [];
   const visibleReferrals = showAll ? referrals : referrals.slice(0, 3);
   const hiddenReferralsCount = referrals.length - 3;
-
+  
   return (
     <>
       <h2 className={s.headerIncrease}>
         <span className={s.textName}>{t('p2')}</span>
-        {data && data.referrals.length > 0 && <span className={s.badge}>
-          +{formatAbbreviation(440, 'number', { locale: locale })} <img src={peeps} height={14} width={14} alt="Количество peeps" />
-        </span>}
+        <span className={s.badge}>
+          +{formatAbbreviation(0, 'number', { locale: locale })} <img src={peeps}
+                                                                      alt="Количество peeps" />
+        </span>
       </h2>
       <section className={s.wrapperIncrease}>
         <div className={s.content}>
-          <img src={piggy} height={40} width={40} alt="Piggy Icon" />
+          <img className={s.piggy} src={piggy} alt="Piggy Icon" />
           <div className={s.contentFriends}>
             <h3 className={s.nameFriends}>{t('p3')}</h3>
             <ul className={s.subscribers}>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +{formatAbbreviation(120, 'number', { locale: locale })} <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+                  +{formatAbbreviation(120, 'number', { locale: locale })} <img src={subscribersIcon}
+                                                                                alt="Подписчики" />
                 </span>
                 <span className={classNames(s.level, s.text)}>1{t('p4')}.</span>
               </li>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +{formatAbbreviation(40, 'number', { locale: locale })} <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+                  +{formatAbbreviation(40, 'number', { locale: locale })} <img src={subscribersIcon} alt="Подписчики" />
                 </span>
                 <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
               </li>
@@ -83,9 +70,9 @@ export const IncreaseIncome = () => {
           </div>
         </div>
 
-        {isLoading && <p>{t("p18")}</p>}
+        {isLoading && <p>{t('p18')}</p>}
 
-        {error && <p>{t("p19")}</p>}
+        {error && <p>{t('p19')}</p>}
 
         {data && <>
           {data.referrals.length > 0 ?
@@ -99,33 +86,33 @@ export const IncreaseIncome = () => {
                   className={s.showMore}
                   onClick={() => setShowAll(true)}
                 >
-                  {t("p16")} {hiddenReferralsCount} {t("p17")}
+                  {t('p16')} {hiddenReferralsCount} {t('p17')}
                 </p>
               )}
             </div> :
-            <p className={s.noReferrals}>{t("p5")}</p>}
+            <p className={s.noReferrals}>{t('p5')}</p>}
         </>}
         <div className={s.buttonsContainer}>
           <TrackedButton
             trackingData={{
               eventType: 'button',
-              eventPlace: `${t("p6")} - ${t("p1")} - ${t("p15")}`,
+              eventPlace: `${t('p6')} - ${t('p1')} - ${t('p15')}`,
             }}
             className={classNames(s.buttonContainer, s.text)}
             onClick={() => openModal(MODALS.INVITE_FRIEND)}
           >
-            {t("p6")}
+            {t('p6')}
           </TrackedButton>
-          <TrackedButton
+          {data && data.referrals.length > 3 && <TrackedButton
             trackingData={{
               eventType: 'button',
-              eventPlace: `${t("p7")} - ${t("p1")} - ${t("p15")}`,
+              eventPlace: `${t('p7')} - ${t('p1')} - ${t('p15')}`,
             }}
             className={classNames(s.buttonContainerGray, s.text)}
             onClick={() => openModal(MODALS.USERS_REFERRALS)}
           >
-            {t("p7")}
-          </TrackedButton>
+            {t('p7')}
+          </TrackedButton>}
         </div>
         <InviteFriend modalId={MODALS.INVITE_FRIEND} onClose={() => closeModal(MODALS.INVITE_FRIEND)} />
         <UserReferrals modalId={MODALS.USERS_REFERRALS} onClose={() => closeModal(MODALS.USERS_REFERRALS)} />
