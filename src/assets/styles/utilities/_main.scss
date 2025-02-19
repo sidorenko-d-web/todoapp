@@ -29,6 +29,17 @@
   }
 }
 
+*::-webkit-scrollbar {
+  width: 4px;
+  background: #282830;
+  border-radius: 2px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #505B78;
+  border-radius: 2px;
+}
+
 @mixin shake($duration: 0.3s, $ease: ease-in-out) {
   @keyframes shake {
     0% {
