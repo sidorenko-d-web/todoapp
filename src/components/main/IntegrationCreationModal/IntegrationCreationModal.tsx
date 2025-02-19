@@ -8,7 +8,7 @@ import {
   useGetCompaniesQuery,
   useGetCurrentUserProfileInfoQuery,
 } from '../../../redux';
-import { CompanyCard } from '../';
+import { CompanyCard, SpecialIntegration } from '../';
 import { useDispatch } from 'react-redux';
 import { useInventoryItemsFilter } from '../../../hooks';
 
