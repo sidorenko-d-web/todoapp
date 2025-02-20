@@ -28,7 +28,6 @@
     border: 1px solid var.$color-border-primary;
     background-color: var.$color-primary;
     transition: box-shadow 0.3s ease-in-out;
-    box-shadow: 0 0 10px 4px rgba(72, 128, 255, 0.6);
     outline: none;
     &:disabled {
       opacity: 0.5;
@@ -36,7 +35,7 @@
     }
 
     &.glowing {
-      box-shadow: 0 0 100px 20px var.$color-blue-primary;
+      box-shadow: 0 0 10px 4px rgba(72, 128, 255, 0.6);
     }
 
     .buttonBadge {

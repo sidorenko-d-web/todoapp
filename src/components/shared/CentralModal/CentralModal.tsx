@@ -19,17 +19,17 @@ interface CentralModalProps {
 }
 
 export const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
-                                                                  modalId,
-                                                                  title,
-                                                                  onClose,
-                                                                  disabled = false,
-                                                                  disableScrollLock = false,
-                                                                  containerStyles,
-                                                                  modalStyles,
-                                                                  children,
-                                                                  headerStyles,
-                                                                  titleIcon,
-                                                                }) => {
+                                                                         modalId,
+                                                                         title,
+                                                                         onClose,
+                                                                         disabled = false,
+                                                                         disableScrollLock = false,
+                                                                         containerStyles,
+                                                                         modalStyles,
+                                                                         children,
+                                                                         headerStyles,
+                                                                         titleIcon,
+                                                                       }) => {
   const { getModalState } = useModal();
 
   const { isOpen } = getModalState(modalId);
@@ -51,9 +51,9 @@ export const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
           <div className={classNames({ [s.disabled]: disabled })}>
             <header className={classNames(s.header, headerStyles)}>
               <h2 className={s.title}>{title}{titleIcon &&
-                <img src={titleIcon} alt={'title'} width={14} height={14} />}</h2>
+                <img src={titleIcon} alt={'title'} />}</h2>
               <Button className={s.closeBtn} onClick={onClose}>
-                <img src={closeIcon} alt={'Close'} width={14} height={14} />
+                <img src={closeIcon} alt={'Close'} />
               </Button>
             </header>
             <div>{children}</div>

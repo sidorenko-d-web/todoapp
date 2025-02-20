@@ -113,6 +113,14 @@ export const formatAbbreviation = (
     const suffix = locale === 'ru' ? scaleItem.suffixRu : scaleItem.suffixEn;
     const formattedWhole = formatInt(whole);
 
+    if (scaleItem.threshold === 1e12) {
+      const truncatedValue = Math.floor(numericValue / 1e12);
+      const truncatedString = truncatedValue.toString().slice(0, 4);
+      return locale === 'ru'
+        ? `${truncatedString}... ${suffix}`
+        : `${truncatedString}...${suffix}`;
+    }
+
     if (!fracRaw) {
       return locale === 'ru'
         ? `${formattedWhole} ${suffix}`

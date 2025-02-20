@@ -4,6 +4,7 @@ import spinnerBlueIcon from '../../../assets/icons/spinner-blue.svg';
 
 import s from './SuccessfullySubscribedModal.module.scss';
 import { Button, CentralModal } from '../../shared';
+import { useTranslation } from 'react-i18next';
 
 interface SuccessfullySubscribedModalProps {
   modalId: string;
@@ -14,8 +15,9 @@ export const SuccessfullySubscribedModal: FC<SuccessfullySubscribedModalProps> =
                                                                                     modalId,
                                                                                     onClose,
                                                                                   }: SuccessfullySubscribedModalProps) => {
+  const { t } = useTranslation('guide');
   return (
-    <CentralModal modalId={modalId} title={'Подписка оформлена!'} onClose={onClose}>
+    <CentralModal modalId={modalId} title={`${t('g78')}`} onClose={onClose}>
       <div className={s.content}>
         <div className={s.reward}>
           <span className={s.badge}>+5 <img src={integrationWhiteIcon} height={24} width={24}
@@ -26,7 +28,7 @@ export const SuccessfullySubscribedModal: FC<SuccessfullySubscribedModalProps> =
         <div className={s.info}>
           <div className={s.progress}>
             <div className={s.progressInfo}>
-              <span>Подписка</span>
+              <span>{t('g76')}</span>
               <span className={s.progressIcon}>5/5 <img src={integrationWhiteIcon} height={12} width={12}
                                                         alt={'Integration'} /></span>
             </div>
@@ -37,11 +39,11 @@ export const SuccessfullySubscribedModal: FC<SuccessfullySubscribedModalProps> =
           <span
             className={s.description}
           >
-            Поздравляем! Подписка оформлена. Теперь вы можете сделать 5 интеграций!
+            {t('g79')}
           </span>
         </div>
 
-        <Button className={s.button} onClick={onClose}>Отлично!</Button>
+        <Button className={s.button} onClick={onClose}>{t('g17')}</Button>
       </div>
     </CentralModal>
   );

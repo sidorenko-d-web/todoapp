@@ -1,9 +1,8 @@
+@use '../../assets/styles/abstracts' as var;
+
 .footerItems {
   display: flex;
-
-  //padding: 10px 15px calc(var(--tg-content-safe-area-inset-bottom) + 40px);
   padding: 10px 15px 40px;
-
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -12,12 +11,12 @@
   position: fixed;
 
   // For browser
-  inset: auto 0 0 0;
+  //inset: auto 0 0 0;
 
   // For telegram
-  //bottom: calc(var(--tg-content-safe-area-inset-bottom));
-  //left: var(--tg-content-safe-area-inset-left);
-  //right: var(--tg-content-safe-area-inset-right);
+  bottom: calc(var(--tg-content-safe-area-inset-bottom));
+  left: var(--tg-content-safe-area-inset-left);
+  right: var(--tg-content-safe-area-inset-right);
 
   z-index: 80;
   width: 100%;
@@ -38,6 +37,11 @@
   border-radius: 10px;
   background: #373A43;
   border: 1px solid transparent;
+
+  @media (min-width: var.$breakpoint-md) {
+    width: 44px;
+    height: 44px;
+  }
 
   &.active {
     border-color: #2064C0;

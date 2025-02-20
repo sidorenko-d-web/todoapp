@@ -6,9 +6,7 @@ import { IntegrationCreationCard, IntegrationCreationModal } from '../';
 import { SubscribeModal, SuccessfullySubscribedModal, TrackedButton } from '../../';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  isIntegrationCreationButtonGlowing,
-} from '../../../utils/guide-functions.ts';
+import { isIntegrationCreationButtonGlowing } from '../../../utils/guide-functions.ts';
 
 import s from './IntegrationCreation.module.scss';
 import { useTranslation } from 'react-i18next';

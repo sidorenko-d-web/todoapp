@@ -6,9 +6,18 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  font-size: 14px;
   font-weight: 500;
   margin: 10px 0 0;
+
+  @include var.multi-fz(14px, 16px);
+
+  img {
+    @include var.multi-size(14px, 16px)
+  }
+}
+
+.piggy {
+  @include var.multi-size(40px, 68px)
 }
 
 .listBadge {
@@ -19,8 +28,13 @@
   display: flex;
   gap: 5px;
   border-radius: 10px;
-  font-size: 14px;
   line-height: 100%;
+
+  @include var.multi-fz(14px, 16px);
+
+  img {
+    @include var.multi-size(14px, 16px)
+  }
 }
 
 .textName {
@@ -28,10 +42,17 @@
 }
 
 .wrapperIncrease {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   width: 100%;
   background: var.$color-card-bg;
   padding: 10px;
   border-radius: 12px;
+
+  @media (min-width: var.$breakpoint-md) {
+    gap: 10px
+  }
 }
 
 .subscribers {
@@ -67,8 +88,6 @@
   align-items: center;
   justify-content: space-between;
   gap: 35px;
-  margin-bottom: 20px;
-
 }
 
 .userCard {
@@ -122,11 +141,12 @@
 }
 
 .level {
-  font-size: 10px;
   position: absolute;
   top: -3px;
   right: -20px;
-  color: var.$color-text-semi-transparent
+  color: var.$color-text-semi-transparent;
+
+  @include var.multi-fz(10px, 12px);
 }
 
 .userCardRank, .userCardRefs {
@@ -141,24 +161,36 @@
 .buttonsContainer {
   display: flex;
   gap: 10px;
+
+  @media (min-width: var.$breakpoint-md) {
+    margin-top: 14px;
+  }
 }
 
 .buttonContainer {
-  margin-top: 20px;
   padding: 10px;
-  height: 34px;
   border-radius: 8px;
   background: var.$color-blue-primary;
   border: none;
+
+  @include var.multi-fz(14px, 16px);
+
+  @media (min-width: var.$breakpoint-md) {
+    padding: 14px;
+  }
 }
 
 .buttonContainerGray {
-  margin-top: 20px;
   padding: 10px;
-  height: 34px;
   border-radius: 8px;
   background: var.$color-dark-gray;
   border: 1px solid var.$color-dark-gray-stroke;
+
+  @include var.multi-fz(14px, 16px);
+
+  @media (min-width: var.$breakpoint-md) {
+    padding: 14px;
+  }
 }
 
 .showMore {
@@ -171,5 +203,5 @@
   color: var.$color-text-super-transparent;
   font-size: 14px;
   font-weight: 500;
-  line-height: 100%;
+  line-height: 130%;
 }

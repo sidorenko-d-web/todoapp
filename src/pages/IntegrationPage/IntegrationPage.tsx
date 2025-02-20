@@ -8,7 +8,8 @@ import {
 } from '../../redux';
 import {
   Integration,
-  IntegrationComment, IntegrationPageGuide,
+  IntegrationComment,
+  IntegrationPageGuide,
   IntegrationStats,
   IntegrationStatsMini,
 } from '../../components';
@@ -18,7 +19,7 @@ import { isGuideShown, setGuideShown } from '../../utils';
 import { GUIDE_ITEMS } from '../../constants';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { setActiveFooterItemId, setElevateIntegrationStats, setFooterActive } from '../../redux/slices/guideSlice';
+import { setActiveFooterItemId, setElevateIntegrationStats, setFooterActive } from '../../redux';
 
 export const IntegrationPage: React.FC = () => {
   const { t } = useTranslation('integrations');
@@ -34,15 +35,18 @@ export const IntegrationPage: React.FC = () => {
       ? queryIntegrationId
       : integrations?.integrations[0].id;
 
-  const { data, error, isLoading } = useGetIntegrationQuery(`${integrationId}`);
-  const { data: commentData, refetch } = useGetUnansweredIntegrationCommentQuery(`${integrationId}`);
-  const [postComment] = usePostCommentIntegrationsMutation();
+  const { data, error, isLoading } = useGetIntegrationQuery(`${integrationId}`, { refetchOnMountOrArgChange: true });
+  const {
+    data: commentData,
+    refetch,
+  } = useGetUnansweredIntegrationCommentQuery(`${integrationId}`, { refetchOnMountOrArgChange: true });
+  const [ postComment ] = usePostCommentIntegrationsMutation();
 
-  const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
-  const [progress, setProgress] = useState(0);
-  const [finished, setFinished] = useState(false);
+  const [ currentCommentIndex, setCurrentCommentIndex ] = useState<number>(0);
+  const [ progress, setProgress ] = useState(0);
+  const [ finished, setFinished ] = useState(false);
 
-  const comments = commentData ? (Array.isArray(commentData) ? commentData : [commentData]) : [];
+  const comments = commentData ? (Array.isArray(commentData) ? commentData : [ commentData ]) : [];
 
   const dispatch = useDispatch();
 
@@ -55,7 +59,7 @@ export const IntegrationPage: React.FC = () => {
     if (comments.length === 0) {
       setFinished(true);
     }
-  }, [comments]);
+  }, [ comments ]);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     await postComment({ commentId, isHate: isThumbsUp });
@@ -71,6 +75,8 @@ export const IntegrationPage: React.FC = () => {
       setFinished(false);
     }
   };
+
+  console.log(data);
 
   return (
     <div className={styles.wrp}>
@@ -90,7 +96,7 @@ export const IntegrationPage: React.FC = () => {
             <p className={styles.integrationTitle}>{t('i1')} 1</p>
             <div className={styles.integrationLevelWrp}>
               <p className={styles.integrationLevel}>{data.campaign.company_name}</p>
-              <img src={integrationIcon} height={12} width={12} />
+              <img src={integrationIcon} height={12} width={12}  alt={'icon'}/>
             </div>
           </div>
           <Integration />
@@ -105,7 +111,7 @@ export const IntegrationPage: React.FC = () => {
               {comments.length === 0 ? 0 : currentCommentIndex + 1}/{comments.length}
             </p>
           </div>
-          {commentData &&  <IntegrationComment
+          {commentData && <IntegrationComment
             progres={progress}
             {...comments[currentCommentIndex]}
             onVote={handleVote}

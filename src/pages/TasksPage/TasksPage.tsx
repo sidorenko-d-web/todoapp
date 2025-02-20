@@ -8,12 +8,22 @@ import { formatAbbreviation } from '../../helpers';
 import { useGetTasksQuery } from '../../redux/api/tasks';
 import { useGetBoostQuery } from '../../redux/api/tasks/api';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { setActiveFooterItemId } from '../../redux/slices/guideSlice';
+
 export const TasksPage: FC = () => {
+  const dispatch = useDispatch();
+
+
   const { t, i18n } = useTranslation('quests');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const { data, error, isLoading } = useGetTasksQuery({ is_actual: true });
   const { data: boostData } = useGetBoostQuery();
+
+  useEffect(() => {
+    dispatch(setActiveFooterItemId(4));
+  }, []);
 
   const dailyTask = useMemo(() => {
     if (!data?.assignments) return null;
@@ -43,7 +53,7 @@ export const TasksPage: FC = () => {
   console.log('Состояние запроса:', {
     data,
     error,
-    isLoading
+    isLoading,
   });
 
   if (isLoading) {

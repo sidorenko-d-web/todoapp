@@ -105,7 +105,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       [s.socialTask]: isSocialTask,
     })}>
       <section className={s.header}>
-        {icon && <img className={s.icon} src={icon} height={40} width={40} alt="icon" />}
+        {icon && <img className={s.icon} src={icon} alt="icon" />}
         <div className={s.info}>
           <h2 className={s.title}>{title}</h2>
           <p className={s.description}>{description}</p>
@@ -115,16 +115,16 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       {type === 'default' && (
         <section className={s.rewards}>
           <span className={s.reward}>
-            +{formatAbbreviation(income ?? 0, 'number', {locale: locale})}
-            <img src={coinIcon} height={14} width={14} alt="income" />
+            +{formatAbbreviation(income ?? 0, 'number', { locale: locale })}
+            <img src={coinIcon} alt="income" />
           </span>
           <span className={s.reward}>
-            +{formatAbbreviation(subscribers ?? 0, 'number', {locale: locale})}
-            <img src={subscribersIcon} height={14} width={14} alt="subscribers" />
+            +{formatAbbreviation(subscribers ?? 0, 'number', { locale: locale })}
+            <img src={subscribersIcon} alt="subscribers" />
           </span>
           <span className={s.reward}>
-            +{formatAbbreviation(passiveIncome ?? 0, 'number', {locale: locale})}
-            <img src={coinIcon} height={14} width={14} alt="passive income" />/{t('q9')}
+            +{formatAbbreviation(passiveIncome ?? 0, 'number', { locale: locale })}
+            <img src={coinIcon} alt="passive income" />/{t('q9')}
           </span>
         </section>
       )}

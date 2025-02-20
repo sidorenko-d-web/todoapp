@@ -112,6 +112,7 @@
   }
   &.wrong {
     border: 2px solid var.$color-red;
+    @include var.shake();
 
     .selectedText {
       color: var.$color-red;
