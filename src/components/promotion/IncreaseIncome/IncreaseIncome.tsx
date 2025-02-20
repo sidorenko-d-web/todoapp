@@ -39,7 +39,7 @@ export const IncreaseIncome = () => {
               gender: "male",
               vip_skin_id: "046c8fe0-b45d-4d9b-bc63-d60f84b83ea8", // Трамп-Империя
               id: "1",
-              profile_id: "profile_1"
+              profile_id: "id1"
           },
           push_line_data: {
               status: "active",
@@ -75,7 +75,7 @@ export const IncreaseIncome = () => {
               gender: "female",
               vip_skin_id: "046c8fe0-b45d-4d9b-bc63-d60f84b83ea8", // Трамп-Империя
               id: "2",
-              profile_id: "profile_2"
+              profile_id: "id1"
           },
           push_line_data: {
               status: "inactive",
@@ -111,7 +111,7 @@ export const IncreaseIncome = () => {
               gender: "male",
               vip_skin_id: "046c8fe0-b45d-4d9b-bc63-d60f84b83ea8", // Трамп-Империя
               id: "3",
-              profile_id: "profile_3"
+              profile_id: "id3"
           },
           push_line_data: {
               status: "active",
