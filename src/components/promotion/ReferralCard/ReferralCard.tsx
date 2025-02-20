@@ -18,15 +18,15 @@ interface ReferralCardProps {
   position: number;
   name: string;
   total_invited: number;
+  days_missed: number;
 }
 
-export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, total_invited }) => {
+export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, total_invited, days_missed }) => {
   const { t, i18n } = useTranslation('promotion');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   // TODO: Добавить логику когда она будет на бэке
   const streak = 12;
-  const daysOff = position - 1;
 
   return (
     <>
@@ -39,14 +39,14 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, tota
             <div className={s.nameAndStreakWrapper}>
               <span className={s.text}>{name}</span>
               <div className={s.streakWrapper}>
-                <span className={s.streakBadge}>{streak} <img src={daysOff > 0 ? fireGrayIcon : fireBlueIcon}
+                <span className={s.streakBadge}>{streak} <img src={days_missed > 0 ? fireGrayIcon : fireBlueIcon}
                                                               alt={'Streak'} /></span>
-                {daysOff > 0 &&
-                  <span className={classNames(s.streakBadge, daysOff > 1 ? s.notInDays : s.notToday)}>{daysOff > 1 ? (
+                {days_missed > 0 &&
+                  <span className={classNames(s.streakBadge, days_missed > 1 ? s.notInDays : s.notToday)}>{days_missed > 1 ? (
                     <>
-                      <img src={infoIcon} alt="Info" /> {t('p52')}
+                      <img src={infoIcon} alt="Info" /> {days_missed} {t('p52')}
                     </>
-                  ) : `${t('p52')} :/`}</span>}
+                  ) : `${t('p53')} :/`}</span>}
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, tota
             {`(${t('p54')} ${total_invited} ${t('p55')}.)`}
           </Button>
         </div>
-        {daysOff > 1 && (
+        {days_missed > 1 && (
           <div className={s.streakWarningWrapper}>
             <span className={classNames(s.streakBadge, s.warning)}>
               <img
