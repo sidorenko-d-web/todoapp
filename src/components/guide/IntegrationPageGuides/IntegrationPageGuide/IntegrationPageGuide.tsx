@@ -23,7 +23,7 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({onClo
         
         <Guide align="left"
             zIndex={110}
-            top={'12%'}
+            top={'25%'}
             description= {
           <>
                 <div style={{wordWrap: 'break-word',whiteSpace: 'pre-line'}}>
