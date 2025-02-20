@@ -109,11 +109,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             ))}
           </div>
 
-        <SpecialIntegration
-          title="Apusher. Уникальная интеграция"
-          icon=""
-        />
-
         <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
           {contentOptions.map((option, index) => (
             <span
