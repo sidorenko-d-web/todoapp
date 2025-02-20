@@ -18,15 +18,15 @@ interface ReferralCardProps {
   position: number;
   name: string;
   total_invited: number;
+  streak: number;
   days_missed: number;
 }
 
-export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, total_invited, days_missed }) => {
+export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, total_invited, streak, days_missed }) => {
   const { t, i18n } = useTranslation('promotion');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   // TODO: Добавить логику когда она будет на бэке
-  const streak = 12;
 
   return (
     <>
@@ -39,7 +39,7 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, tota
             <div className={s.nameAndStreakWrapper}>
               <span className={s.text}>{name}</span>
               <div className={s.streakWrapper}>
-                <span className={s.streakBadge}>{streak} <img src={days_missed > 0 ? fireGrayIcon : fireBlueIcon}
+                <span className={s.streakBadge}>{streak} <img src={streak === 0 ? fireGrayIcon : fireBlueIcon}
                                                               alt={'Streak'} /></span>
                 {days_missed > 0 &&
                   <span className={classNames(s.streakBadge, days_missed > 1 ? s.notInDays : s.notToday)}>{days_missed > 1 ? (
