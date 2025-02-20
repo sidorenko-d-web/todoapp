@@ -2,27 +2,44 @@
 
 
 .wrp {
+  display: flex;
+  flex-direction: column;
+
+  background-color: var.$color-bg;
+  color: var.$color-text;
+
+  gap: 20px;
+
+  @media (min-width: var.$breakpoint-md) {
+    gap: 24px;
+  }
+
+  .info {
     display: flex;
     flex-direction: column;
+    gap: 10px
+  }
 
-    background-color: var.$color-bg;
-    color: var.$color-text;
+  .pageTitle {
+    color: #FFF;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
 
-    gap: 20px;
-
-    .pageTitle {
-        color: #FFF;
-        text-align: center;
-        font-size: 20px;
-        font-weight: 600;
-
-        margin-bottom: 5px;
+    @media (min-width: var.$breakpoint-md) {
+      font-size: 24px;
     }
+  }
 
-    .statsTitle {
-        margin-left: 5px;
-        color: var.$color-text-semi-transparent;
-        font-size: 14px;
-        margin-bottom: 10px;
+  .statsTitle {
+    margin-left: 5px;
+    color: var.$color-text-semi-transparent;
+    font-size: 14px;
+    margin-bottom: 10px;
+
+    @media (min-width: var.$breakpoint-md) {
+      font-size: 16px;
     }
+  }
 }

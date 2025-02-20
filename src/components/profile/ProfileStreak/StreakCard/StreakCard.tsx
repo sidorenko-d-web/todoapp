@@ -32,12 +32,12 @@ interface StreakCardProps {
 }
 
 export const StreakCard: React.FC<StreakCardProps> = ({
-  days,
-  onlyStreak,
-  streakDays,
-  frozenDays,
-  weekData,
-}) => {
+                                                        days,
+                                                        onlyStreak,
+                                                        streakDays,
+                                                        frozenDays,
+                                                        weekData,
+                                                      }) => {
   const { t } = useTranslation('profile');
 
   const calculateLevel = () => {
@@ -50,11 +50,11 @@ export const StreakCard: React.FC<StreakCardProps> = ({
     } else if (streakDays < 120) {
       maxStreak = 120;
     }
-
     const maxLevel = 5;
 
     return Math.min(maxLevel, Math.floor((streakDays / maxStreak) * maxLevel));
   };
+
 
   let p14Key = '';
   if (streakDays < 30) {
@@ -72,6 +72,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
   } else if (streakDays >= 60) {
     p15Key = 'p15_120';
   }
+
   return (
     <div className={styles.wrp}>
       <div className={styles.header}>
@@ -81,17 +82,17 @@ export const StreakCard: React.FC<StreakCardProps> = ({
               streakDays < 30
                 ? styles.badge
                 : streakDays < 60
-                ? styles.badgePurple
-                : styles.badgeRed
+                  ? styles.badgePurple
+                  : styles.badgeRed
             }
           >
             {t('p12')}
           </span>
 
           <div className={styles.title}>
-            <h2 className={styles.daysInARow}>
+            <span className={styles.daysInARow}>
               {streakDays} {t('p13')}
-            </h2>
+            </span>
             {!onlyStreak && (
               <div className={styles.freezeCount}>
                 <span>{frozenDays}</span>
@@ -137,8 +138,8 @@ export const StreakCard: React.FC<StreakCardProps> = ({
                       streakDays < 30
                         ? ChestBlue
                         : streakDays < 60
-                        ? ChestPurple
-                        : chestIcon
+                          ? ChestPurple
+                          : chestIcon
                     }
                     className={styles.chestImg}
                     alt="Chest Icon"

@@ -13,12 +13,13 @@ import { Button } from '../../shared';
 interface CompanyCardProps {
   company: CompanyResponseDTO;
   selected?: boolean;
+  disabled?: boolean;
   onClick?: (id: string) => void;
 }
 
 const glowing = !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
-export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick }) => {
+export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, disabled }) => {
   return (
     <Button
       className={
@@ -26,13 +27,15 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick }
         ' ' +
         (selected ? ` ${s.selected}` : '') +
         ' ' +
+        (disabled ? ` ${s.disabled}` : '') +
+        ' ' +
         (glowing ? `${s.glowing}` : '')
       }
-      onClick={() => onClick && onClick(company.id)}
+      onClick={() => onClick && !disabled && onClick(company.id)}
     >
       <header className={s.header}>
         <div className={s.icon}>
-          <img src={lightningIcon} alt="Lightning" width={12} height={12} />
+          <img src={lightningIcon} alt="Lightning" />
         </div>
         <img
           src={
@@ -41,17 +44,15 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick }
             integrationBlueIcon
           }
           alt="Company Logo"
-          width={24}
-          height={24}
           className={s.companyIcon}
         />
       </header>
       <div className={s.content}>
         <h3 className={s.title}>{company.company_name}</h3>
         <div className={s.stars}>
-          <img src={starBlueIcon} alt="" width={14} height={14} />
-          <img src={starDarkGrayIcon} alt="" width={14} height={14} />
-          <img src={starDarkGrayIcon} alt="" width={14} height={14} />
+          <img src={starBlueIcon} alt="" />
+          <img src={starDarkGrayIcon} alt="" />
+          <img src={starDarkGrayIcon} alt="" />
         </div>
         <div className={s.progressBar}>
           <div className={s.progressBarInner} style={{ width: `15%` }} />

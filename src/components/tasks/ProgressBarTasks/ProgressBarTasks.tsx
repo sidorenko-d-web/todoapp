@@ -23,7 +23,7 @@ export const ProgressBarTasks: React.FC<ProgressBarProps> = ({
         <span>{currentStep}/{totalSteps}</span>
         <span className={s.progressReward}>
           {progressReward}
-          {progressRewardIcon && <img src={progressRewardIcon} height={12} width={12} alt="reward" />}
+          {progressRewardIcon && <img src={progressRewardIcon} alt="reward" />}
         </span>
       </div>
       <div className={s.progressBar}>

@@ -39,13 +39,13 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
                     })}
                   >
                     <span>{item.namePlan}</span>
-                    {isUnlocked && <img src={tickCircle} height={17} width={17} />}
-                    {!isUnlocked && <img src={circle} height={17} width={17} />}
+                    {isUnlocked && <img src={tickCircle}  />}
+                    {!isUnlocked && <img src={circle}  />}
                   </div>
                   <span className={s.text}>{`#${index + 1}`}</span>
                 </div>
                 <div className={s.users}>
-                  <img src={lockOpen} height={14} width={14} alt="lockOpen" />
+                  <img src={lockOpen} alt="lockOpen" />
                   <span
                     className={classNames(s.countUsers, s.text)}>{formatAbbreviation(item.userCount, 'number', {locale: locale})} {t('p23')} {item.isPlatform && ` ${t('p24')}`}</span>
                 </div>

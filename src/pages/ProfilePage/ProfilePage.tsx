@@ -3,12 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DaysInARowModal from '../DevModals/DaysInARowModal/DaysInARowModal';
 import GetRewardChestModal from '../DevModals/GetRewardChestModal/GetRewardChestModal';
 import styles from './ProfilePage.module.scss';
-import {
-  ProfileInfo,
-  ProfileStats,
-  ProfileStatsMini,
-  StreakCard,
-} from '../../components/profile';
+import { ProfileInfo, ProfileStats, ProfileStatsMini, StreakCard } from '../../components/profile';
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../redux';
 import RewardsList from '../../components/profile/RewardsCard/RewardsList';
 import { getWeekData } from '../../utils';
@@ -16,11 +11,11 @@ import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 import { useGetPushLineQuery } from '../../redux/api/pushLine/api';
+
 export const ProfilePage: React.FC = () => {
   const { t } = useTranslation('profile');
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
-
 
   const {
     data: userProfileData,
@@ -49,6 +44,7 @@ export const ProfilePage: React.FC = () => {
         day.is_notified_at_late_night ||
         day.is_notified_at_night),
   ).length;
+
   useEffect(() => {
     const lastShownTimestamp = localStorage.getItem('daysInARowModalTimestamp');
     const now = Date.now();
@@ -58,18 +54,19 @@ export const ProfilePage: React.FC = () => {
       localStorage.setItem('daysInARowModalTimestamp', now.toString());
       setIsModalShown(true);
     }
-  }, [openModal]);
+  }, [ openModal ]);
+
   useEffect(() => {
     if (streaks === 30 || streaks === 60 || streaks === 120) {
       openModal(MODALS.TASK_CHEST);
     }
-  }, [data?.in_streak_days, openModal]);
+  }, [ data?.in_streak_days, openModal ]);
 
   const userPosition =
     userProfileData && topProfilesData?.profiles
       ? topProfilesData.profiles.findIndex(
-          (profile: { id: string }) => profile.id === userProfileData.id,
-        )
+        (profile: { id: string }) => profile.id === userProfileData.id,
+      )
       : -1;
 
   const position =
@@ -79,7 +76,7 @@ export const ProfilePage: React.FC = () => {
   const freezeDays = [29]; // TODO: replace with real data
 
   const weekData = getWeekData(streakDays, freezeDays);
-
+  console.log(data?.week_information);
   return (
     <>
       <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
@@ -109,20 +106,22 @@ export const ProfilePage: React.FC = () => {
             currentBlogName={userProfileData.blog_name}
           />
 
-          <ProfileInfo
-            nickname={userProfileData.username}
-            blogName={userProfileData.blog_name}
-            subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left}
-            position={position}
-            isVip={false}
-          />
+          <div className={styles.info}>
+            <ProfileInfo
+              nickname={userProfileData.username}
+              blogName={userProfileData.blog_name}
+              subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left}
+              position={position}
+              isVip={false}
+            />
 
-          <StreakCard
-            streakDays={streaks !== undefined ? streaks : 0}
-            frozenDays={frozen !== undefined ? frozen : 0}
-            days={weekData}
-            weekData={data?.week_information}
-          />
+            <StreakCard
+              streakDays={streaks !== undefined ? streaks : 0}
+              frozenDays={frozen !== undefined ? frozen : 0}
+              days={weekData}
+              weekData={data?.week_information}
+            />
+          </div>
 
           <div>
             <p className={styles.statsTitle}>{t('p4')}</p>

@@ -8,6 +8,11 @@
   border-radius: 4px;
   overflow: hidden;
 
+  @media (min-width: var.$breakpoint-md) {
+    margin-top: 6px;
+    height: 20px;
+  }
+
   .progressBarRed {
     height: 100%;
     background-color: var.$color-red;
@@ -19,6 +24,7 @@
     background-color: var.$color-blue-primary;
     transition: width 0.3s ease-in-out;
   }
+
   .progressBarPurple {
     height: 100%;
     background-color: var.$color-purple;

@@ -16,7 +16,7 @@ import { formatAbbreviation } from '../../../helpers';
 
 export const TopInfluencers = () => {
   const { t, i18n } = useTranslation('promotion');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
   const INFLUENCER_RATING_STEPS = useInfluencerRatingSteps();
   const [ isInfluencersLocked, setIsInfluencersLocked ] = useState(true);
@@ -30,10 +30,10 @@ export const TopInfluencers = () => {
   const { data: userData } = useGetUserQuery();
 
   useEffect(() => {
-    if(userData?.is_email_verified) {
+    if (userData?.is_email_verified) {
       setInfluencersUnlockingStep('phone');
     }
-  })
+  }, [ userData?.is_email_verified ]);
   const userPosition = userProfileData && topProfiles
     ? topProfiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
     : -1;
@@ -45,84 +45,85 @@ export const TopInfluencers = () => {
       <h2 className={s.headerInfluencers}>
         <span className={s.textName}>{t('p8')}</span>
         <span className={s.badge}>
-          <span>{isInfluencersLocked ? `${t('p9')}` : `${t('p20')} ${formatAbbreviation(10000, 'number', { locale: locale })}`}</span><img
-          src={isInfluencersLocked ? lock : cup}
-          height={14} width={14} />
+          <span>{isInfluencersLocked ? `${t('p9')}` : `${t('p20')} ${formatAbbreviation(10000, 'number', { locale: locale })}`}</span>
+          <img src={isInfluencersLocked ? lock : cup} />
         </span>
       </h2>
-      <section className={s.wrapperInfo}>
+      <section className={s.content}>
         <SliderSelect isInfluencersLocked={isInfluencersLocked} />
-        <div className={s.contentChest}>
-          <div className={s.chestText}>
-            <span className={classNames(s.infoName, s.text)}>{`# ${isInfluencersLocked ? '???' : position}`}</span>
-            <div className={classNames(s.infoName, s.text)}>
-              <span>{t('p12')}</span>
-              <img src={chest} height={14} width={14} alt="chest" />
+
+        <div className={s.wrapperInfo}>
+          <div>
+            <div className={s.chestText}>
+              <span className={classNames(s.infoName, s.text)}>{`# ${isInfluencersLocked ? '???' : position}`}</span>
+              <div className={classNames(s.infoName, s.text)}>
+                <span>{t('p12')}</span>
+                <img src={chest} alt="chest" />
+              </div>
             </div>
+            <div className={s.progressBar}>
+              <span className={s.progress} style={{ width: '15%' }}></span>
+            </div>
+            <p className={s.textInfo}>
+              {isInfluencersLocked
+                ? `${t('p10')}`
+                : `${t('p21')}`}
+              <span className={s.textDay}> {t('p11')}</span>
+            </p>
           </div>
-          <div className={s.progressBar}>
-            <span className={s.progress} style={{ width: '15%' }}></span>
-          </div>
-        </div>
-        <p className={s.textInfo}>
-          {isInfluencersLocked
-            ? `${t('p10')}`
-            : `${t('p21')}`}
-          <span className={s.textDay}> {t('p11')}</span>
-        </p>
-        <TrackedButton
-          trackingData={{
-            eventType: 'button',
-            eventPlace: `${isInfluencersLocked ? `${t('p13')}` : `${t('p22')}`} - ${t('p1')} - ${t('p8')}`,
-          }}
-          className={classNames(s.buttonContainer, s.text)}
-          onClick={() => openModal(isInfluencersLocked ? MODALS.BINDING : MODALS.TOP_USERS)}
-        >
-          {isInfluencersLocked ? `${t('p13')}` : `${t('p22')}`}
-        </TrackedButton>
+          <TrackedButton
+            trackingData={{
+              eventType: 'button',
+              eventPlace: `${isInfluencersLocked ? `${t('p13')}` : `${t('p22')}`} - ${t('p1')} - ${t('p8')}`,
+            }}
+            className={classNames(s.buttonContainer, s.text)}
+            onClick={() => openModal(isInfluencersLocked ? MODALS.BINDING : MODALS.TOP_USERS)}
+          >
+            {isInfluencersLocked ? `${t('p13')}` : `${t('p22')}`}
+          </TrackedButton>
 
-        <TopUsers modalId={MODALS.TOP_USERS} onClose={() => closeModal(MODALS.TOP_USERS)} />
+          <TopUsers modalId={MODALS.TOP_USERS} onClose={() => closeModal(MODALS.TOP_USERS)} />
 
-        {
-          isInfluencersLocked && <>
-            <BindingModal
-              modalId={MODALS.BINDING}
-              onClose={() => closeModal(MODALS.BINDING)}
-              binding={INFLUENCER_RATING_STEPS[influencersUnlockingStep].binding}
-              onNext={() => {
-                closeModal(MODALS.BINDING);
-                openModal(MODALS.BINDING_CONFIRMATION);
-              }}
-            />
-            <BindingConfirmationModal
-              modalId={MODALS.BINDING_CONFIRMATION}
-              onClose={() => closeModal(MODALS.BINDING_CONFIRMATION)}
-              confirmation={INFLUENCER_RATING_STEPS[influencersUnlockingStep].confirmation}
-              onNext={() => {
-                closeModal(MODALS.BINDING_CONFIRMATION);
-                openModal(MODALS.BINDING_SUCCESS);
-              }}
-            />
-            <BindingSuccessModal
-              modalId={MODALS.BINDING_SUCCESS}
-              onClose={() => closeModal(MODALS.BINDING_SUCCESS)}
-              success={INFLUENCER_RATING_STEPS[influencersUnlockingStep].success}
-              onNext={() => {
-                closeModal(MODALS.BINDING_SUCCESS);
-                switch (influencersUnlockingStep) {
-                  case 'email':
-                    setInfluencersUnlockingStep('phone');
-                    openModal(MODALS.BINDING);
-                    break;
-                  case 'phone':
-                    setInfluencersUnlockingStep('email');
-                    setIsInfluencersLocked(false);
-                    break;
-                }
-              }}
-            />
-          </>
-        }
+          {
+            isInfluencersLocked && <>
+              <BindingModal
+                modalId={MODALS.BINDING}
+                onClose={() => closeModal(MODALS.BINDING)}
+                binding={INFLUENCER_RATING_STEPS[influencersUnlockingStep].binding}
+                onNext={() => {
+                  closeModal(MODALS.BINDING);
+                  openModal(MODALS.BINDING_CONFIRMATION);
+                }}
+              />
+              <BindingConfirmationModal
+                modalId={MODALS.BINDING_CONFIRMATION}
+                onClose={() => closeModal(MODALS.BINDING_CONFIRMATION)}
+                confirmation={INFLUENCER_RATING_STEPS[influencersUnlockingStep].confirmation}
+                onNext={() => {
+                  closeModal(MODALS.BINDING_CONFIRMATION);
+                  openModal(MODALS.BINDING_SUCCESS);
+                }}
+              />
+              <BindingSuccessModal
+                modalId={MODALS.BINDING_SUCCESS}
+                onClose={() => closeModal(MODALS.BINDING_SUCCESS)}
+                success={INFLUENCER_RATING_STEPS[influencersUnlockingStep].success}
+                onNext={() => {
+                  closeModal(MODALS.BINDING_SUCCESS);
+                  switch (influencersUnlockingStep) {
+                    case 'email':
+                      setInfluencersUnlockingStep('phone');
+                      openModal(MODALS.BINDING);
+                      break;
+                    case 'phone':
+                      setInfluencersUnlockingStep('email');
+                      setIsInfluencersLocked(false);
+                      break;
+                  }
+                }}
+              />
+            </>
+          }</div>
       </section>
     </>
   );

@@ -28,7 +28,7 @@ import { useModal } from '../../../hooks';
 import { formatAbbreviation, sortByPremiumLevel } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import useSound from 'use-sound';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../shared';
 
 interface Props {
@@ -40,19 +40,28 @@ interface Props {
   item: IShopItem;
 }
 
-export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled = true, item, isB }) => {
-  const { t, i18n } = useTranslation('shop');
-  const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
-  const [equipItem, { isLoading: isEquipItemLoading }] = useEquipItemMutation();
-  const { data: equipedItems } = useGetEquipedQuery();
+
+
+export const InventoryCard: FC<Props> = ({
+                                           disabled,
+                                           isBlocked,
+                                           isUpgradeEnabled = true,
+                                           item,
+                                           isB,
+                                         }) => {
+
+  const { t,i18n } = useTranslation('shop');
+  const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
   const dispatch = useDispatch();
   const { data, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
   });
   const { refetch } = useGetCurrentUserProfileInfoQuery();
+  const [equipItem, { isLoading: isEquipItemLoading }] = useEquipItemMutation();
+  const { data: equipedItems } = useGetEquipedQuery();
   const { openModal } = useModal();
-  const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
+  const [ playLvlSound ] = useSound(SOUNDS.levelUp, {  volume: useSelector(selectVolume)  });
 
   const handleBuyItem = async () => {
     try {
@@ -79,6 +88,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         }
       }
     } catch (error) {
+    
       console.log(error);
     }
   };
@@ -95,7 +105,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const slot = Object.values(RoomItemsSlots).find(_item => _item.name.find(__item => item.name.includes(__item)))?.slot;
   const isEquipped = equipedItems?.equipped_items.find(_item => _item.id === item.id);
 
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.storeCard}>
@@ -120,8 +131,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                ? styles.colorPurple
-                : styles.level
+                  ? styles.colorPurple
+                  : styles.level
             }
           >
             {t('s20')} {item.level} {isB && t('s21')}

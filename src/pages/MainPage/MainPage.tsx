@@ -93,11 +93,8 @@ export const MainPage: FC = () => {
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(2));
 
-    if (
-      isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
-      !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED) &&
-      !purchasingSubscriptionModalState.isOpen
-    ) {
+    if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED) && !purchasingSubscriptionModalState.isOpen) {
       openModal(MODALS.SUBSCRIBE);
     }
 

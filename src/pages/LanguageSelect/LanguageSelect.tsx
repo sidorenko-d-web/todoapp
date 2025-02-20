@@ -1,6 +1,8 @@
 import styles from './LanguageSelect.module.scss';
 import checkIcon from '../../../src/assets/icons/checkmark-in-the-circle.svg';
 import circleIcon from '../../../src/assets/icons/circle-blue.svg';
+import usFlag from '../../../src/assets/icons/us-flag.svg';
+import ruFlag from '../../../src/assets/icons/ru-flag.svg';
 import { Button } from '../../components/shared';
 
 interface LanguageSelectProps {
@@ -10,8 +12,8 @@ interface LanguageSelectProps {
 }
 
 const LANGUAGES = [
-  { id: 'en', flag: '../../../src/assets/icons/us-flag.svg', label: 'English language' },
-  { id: 'ru', flag: '../../../src/assets/icons/ru-flag.svg', label: 'Русский язык' },
+  { id: 'en', flag: usFlag, label: 'English language' },
+  { id: 'ru', flag: ruFlag, label: 'Русский язык' },
 ];
 
 export const LanguageSelect = ({ selectedLanguage, onLanguageSelect, onContinue }: LanguageSelectProps) => {

@@ -1,6 +1,7 @@
 export interface IShopItem {
   id: string;
   name: string;
+  name_eng: string;
   item_category: TypeItemCategory;
   level: number;
   price_internal: string;
@@ -19,6 +20,7 @@ export interface IShopItemsResponse {
 export interface IShopSkin {
   id: string;
   name: string;
+  name_eng: string;
   wear_location: TypeWearLocation;
   limited: boolean;
   quantity: number;
@@ -45,6 +47,7 @@ export interface IShopItemsRequest {
   asc?: boolean;
   level?: number;
   name?: string;
+  name_eng?: string;
   item_rarity?: TypeItemRarity;
   item_premium_level?: TypeItemQuality;
 }

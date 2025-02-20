@@ -1,3 +1,53 @@
+//.wrp {
+//  display: flex;
+//  flex-direction: column;
+//  align-items: center;
+//  height: 100vh;
+//  margin: 0 auto;
+//  overflow: hidden;
+//}
+//
+//
+//.content {
+//  display: flex;
+//  flex-direction: column;
+//  width: 100%;
+//  max-width: 1728px;
+//
+//  height: calc(var(--tg-viewport-stable-height) - 20px);
+//  //height: calc(100vh - 140px);
+//
+//  padding: 20px 15px;
+//  //padding: calc(var(--tg-safe-area-inset-top) + 80px) 15px 20px;
+//  overflow-y: auto;
+//  overflow-x: hidden;
+//  overscroll-behavior: contain;
+//  scroll-behavior: smooth;
+//
+//
+//  &.withHeader {
+//    //margin-top: 70px;
+//    margin-top: calc(var(--tg-content-safe-area-inset-top) + 50px);
+//    padding-top: calc(var(--tg-content-safe-area-inset-top) + 40px);
+//    margin-bottom: calc(var(--tg-content-safe-area-inset-bottom) + 90px);
+//
+//    &.reducedMargin {
+//      margin-top: var(--tg-content-safe-area-inset-top);
+//    }
+//  }
+//}
+//
+//
+//
+//.settingsIcon {
+//  position: fixed;
+//  top: calc(var(--tg-safe-area-inset-top) + 6px);
+//  right: calc(var(--tg-safe-area-inset-right) + 95px);
+//  z-index: 50;
+//}
+
+$header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top));
+
 .wrp {
   display: flex;
   flex-direction: column;
@@ -22,14 +72,62 @@
   flex-direction: column;
   width: 100%;
   max-width: 1728px;
-
-  height: calc(100vh - 140px);
+  height: var(--tg-viewport-stable-height);
   padding: 20px 15px;
   overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
 
-  &.withHeader {
-    margin-top: 60px;
+  // Margin from upper telegram mini apps buttons (close, settings, menu, etc.). For both platforms
+  margin-top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top));
+
+  // iOS specific adjustments
+  &.ios {
+    -webkit-overflow-scrolling: touch;
+
+    &.withHeader {
+      padding-top: calc($header-position - 10px); // padding from header
+      margin-bottom: calc(var(--tg-content-safe-area-inset-bottom) + 90px);
+
+      &.reducedMargin {
+        margin-top: max(var(--tg-content-safe-area-inset-top), 20px);
+      }
+    }
+  }
+
+  // Android specific adjustments
+  &.android {
+    scrollbar-width: none;
+
+    &.withHeader {
+      padding-top: calc($header-position + 10px); // padding from header
+      //padding-top: calc(var(--tg-content-safe-area-inset-top) + 20px);
+      margin-bottom: calc(var(--tg-content-safe-area-inset-bottom) + 90px);
+
+      &.reducedMargin {
+        margin-top: var(--tg-content-safe-area-inset-top);
+      }
+    }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.settingsIcon {
+  position: fixed;
+  z-index: 50;
+  top: calc(var(--tg-safe-area-inset-top) + 6px);
+  //right: calc(var(--tg-safe-area-inset-right) + 95px);
+
+  &.iosSettings {
+    right: calc(var(--tg-safe-area-inset-right) + 95px);
+  }
+
+  &.androidSettings {
+    right: calc(var(--tg-safe-area-inset-right) + 85px);
   }
 
   &.isMain{

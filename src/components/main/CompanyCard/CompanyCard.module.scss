@@ -15,6 +15,9 @@
   justify-content: center;
   align-items: center;
 
+  @media (min-width: var.$breakpoint-md) {
+    height: 137px;
+  }
 
   .header {
     display: flex;
@@ -34,10 +37,26 @@
 
       border-radius: 4px;
       background-color: var.$footer-bg;
+
+      & > img {
+        width: 12px;
+        height: 12px;
+
+        @media (min-width: var.$breakpoint-md) {
+          width: 14px;
+          height: 14px;
+        }
+      }
     }
+
     .companyIcon {
       width: 95px;
       height: 42px;
+
+      @media (min-width: var.$breakpoint-md) {
+        width: 97px;
+        height: 44px;
+      }
     }
   }
 
@@ -55,6 +74,10 @@
       font-weight: 500;
       line-height: 110%;
       text-overflow: ellipsis;
+
+      @media (min-width: var.$breakpoint-md) {
+        font-size: 16px;
+      }
     }
 
     .stars {
@@ -63,6 +86,16 @@
       align-items: center;
       gap: 3px;
       align-self: stretch;
+
+      & > img {
+        width: 12px;
+        height: 12px;
+
+        @media (min-width: var.$breakpoint-md) {
+          width: 18px;
+          height: 18px;
+        }
+      }
     }
 
     .progressBar {
@@ -71,16 +104,27 @@
       background-color: var.$color-gray;
       overflow: hidden;
 
+      @media (min-width: var.$breakpoint-md) {
+        height: 20px;
+        border-radius: 4px;
+      }
+
       .progressBarInner {
         height: 100%;
         background-color: var.$color-primary;
       }
     }
   }
+
 }
 
 .selected {
   outline: 2px solid var.$color-primary;
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: .5;
 }
 
 .glowing {

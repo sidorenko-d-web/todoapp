@@ -1,7 +1,7 @@
 import styles from './Footer.module.scss';
 import { footerItems } from '../../constants';
+import { useState , useEffect} from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux';
 import { TrackedButton } from '..';
@@ -9,7 +9,7 @@ import { TrackedButton } from '..';
 export const Footer = () => {
   const [ activeButton, setActiveButton ] = useState<number | null>(null);
   const navigate = useNavigate();
-
+  
   const location = useLocation();
   const path  = location.pathname;
 

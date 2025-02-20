@@ -1,15 +1,31 @@
+@use '../../assets/styles/abstracts' as var;
+
 .footerItems {
   display: flex;
-  padding: 10px 15px 30px;
+  padding: 10px 15px 40px;
   justify-content: center;
   align-items: center;
   gap: 10px;
   border-top: 0.5px solid #555360;
   background: #2D2D35;
   position: fixed;
-  inset: auto 0 0 0;
-  z-index: 100;
+
+  // For browser
+  //inset: auto 0 0 0;
+
+  // For telegram
+  bottom: calc(var(--tg-content-safe-area-inset-bottom));
+  left: var(--tg-content-safe-area-inset-left);
+  right: var(--tg-content-safe-area-inset-right);
+
+  z-index: 80;
   width: 100%;
+
+  // Prevent user from scrolling while interacting with header
+  touch-action: none; /* Prevents all touch actions */
+  user-select: none; /* Prevents text selection */
+  -webkit-user-select: none;
+  -webkit-touch-callout: none; /* Prevents iOS callout */
 }
 
 .footerItem {
@@ -21,6 +37,11 @@
   border-radius: 10px;
   background: #373A43;
   border: 1px solid transparent;
+
+  @media (min-width: var.$breakpoint-md) {
+    width: 44px;
+    height: 44px;
+  }
 
   &.active {
     border-color: #2064C0;

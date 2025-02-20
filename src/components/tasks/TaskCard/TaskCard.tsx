@@ -5,6 +5,7 @@ import circleIcon from '../../../assets/icons/circle-blue.svg';
 import circleWhiteIcon from '../../../assets/icons/circle.svg';
 import checkIcon from '../../../assets/icons/checkmark-in-the-circle.svg';
 import giftIcon from '../../../assets/icons/gift.svg';
+import { TaskBoost } from '../../../redux/api/tasks/dto';
 
 import s from './TaskCard.module.scss';
 import { formatAbbreviation } from '../../../helpers';
@@ -33,7 +34,10 @@ type BaseTaskProps = {
   errorText?: string;
   isCompleted?: boolean;
   isTopTask?: boolean;
+  isDailyTask?: boolean;
+  isSocialTask?: boolean;
   questionStates?: QuestionState[];
+  boost?: TaskBoost;
 };
 
 type DefaultTaskProps = {
@@ -75,6 +79,8 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      isCompleted,
                                                      isTopTask,
                                                      errorText,
+                                                     isDailyTask,
+                                                     isSocialTask,
                                                    }) => {
   const { t, i18n } = useTranslation('quests');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
@@ -95,9 +101,11 @@ export const TaskCard: React.FC<TasksCardProps> = ({
     <div className={classNames(s.card, {
       [s.completed]: isCompleted,
       [s.topTask]: isTopTask,
+      [s.dailyTask]: isDailyTask,
+      [s.socialTask]: isSocialTask,
     })}>
       <section className={s.header}>
-        {icon && <img className={s.icon} src={icon} height={40} width={40} alt="icon" />}
+        {icon && <img className={s.icon} src={icon} alt="icon" />}
         <div className={s.info}>
           <h2 className={s.title}>{title}</h2>
           <p className={s.description}>{description}</p>
@@ -107,16 +115,16 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       {type === 'default' && (
         <section className={s.rewards}>
           <span className={s.reward}>
-            +{formatAbbreviation(income ?? 0, 'number', {locale: locale})}
-            <img src={coinIcon} height={14} width={14} alt="income" />
+            +{formatAbbreviation(income ?? 0, 'number', { locale: locale })}
+            <img src={coinIcon} alt="income" />
           </span>
           <span className={s.reward}>
-            +{formatAbbreviation(subscribers ?? 0, 'number', {locale: locale})}
-            <img src={subscribersIcon} height={14} width={14} alt="subscribers" />
+            +{formatAbbreviation(subscribers ?? 0, 'number', { locale: locale })}
+            <img src={subscribersIcon} alt="subscribers" />
           </span>
           <span className={s.reward}>
-            +{formatAbbreviation(passiveIncome ?? 0, 'number', {locale: locale})}
-            <img src={coinIcon} height={14} width={14} alt="passive income" />/{t('q9')}
+            +{formatAbbreviation(passiveIncome ?? 0, 'number', { locale: locale })}
+            <img src={coinIcon} alt="passive income" />/{t('q9')}
           </span>
         </section>
       )}
@@ -135,8 +143,15 @@ export const TaskCard: React.FC<TasksCardProps> = ({
             ))}
           </div>
           <div className={s.progressTypeReward}>
-            <span className={s.reward}>10 - 1000 <img src={coinIcon} height={14} width={14} alt="income" /></span>
-            <span className={s.reward}>??? <img src={giftIcon} height={14} width={14} alt="gift" /></span>
+            <span className={s.reward}>
+              {'10 - 1000'} <img src={coinIcon} height={14} width={14} alt="income" />
+            </span>
+            {/* <span className={s.reward}>
+              {boost?.subscribers || 0} <img src={subscribersIcon} height={14} width={14} alt="subscribers" />
+            </span> */}
+            <span className={s.reward}>
+              ??? <img src={giftIcon} height={14} width={14} alt="gift" />
+            </span>
           </div>
         </section>
       )}
