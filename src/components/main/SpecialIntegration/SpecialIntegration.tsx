@@ -1,6 +1,4 @@
 import styles from './SpecialIntegration.module.scss';
-import { GrowthTreeResponse, UserProfileInfoResponseDTO } from '../../../redux';
-import whiteLogo from '../../../assets/Icons/white-logo.svg';
 import goldCoinIcon from '../../../assets/Icons/coin.png';
 import blueCoinIcon from '../../../assets/Icons/coin-blue-human.svg';
 import lockIcon from '../../../assets/Icons/lock_icon.svg';
@@ -9,11 +7,10 @@ import rocketIcon from '../../../assets/Icons/rocket.svg';
 interface SpecialIntegrationProps {
   title: string;
   icon: string;
-  tree?: GrowthTreeResponse;
-  profile?: UserProfileInfoResponseDTO;
+  treeLevel: number;
 }
 
-export const SpecialIntegration = ({ title, icon, tree, profile }: SpecialIntegrationProps) => {
+export const SpecialIntegration = ({ title, icon, treeLevel }: SpecialIntegrationProps) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.mainInfo}>
@@ -37,16 +34,16 @@ export const SpecialIntegration = ({ title, icon, tree, profile }: SpecialIntegr
         </div>
 
         <div className={styles.iconWrp}>
-          <img src={whiteLogo} className={styles.icon} />
+          <img src={icon} />
         </div>
 
       </div>
 
       <div className={styles.secondaryInfo}>
-        <span className={styles.title}> Apusher. Уникальная интеграция </span>
+        <span className={styles.title}> {title} </span>
         <button className={styles.button}>
           <img className={styles.lockIcon} src={lockIcon} alt="lock" />
-          <span className={styles.buttonTitle}> Нужен уровень Дерева 100 </span>
+          <span className={styles.buttonTitle}> Нужен уровень Дерева 100. Вашь уровень - {treeLevel} </span>
           <img className={styles.lockIcon} src={lockIcon} alt="lock" />
         </button>
       </div>

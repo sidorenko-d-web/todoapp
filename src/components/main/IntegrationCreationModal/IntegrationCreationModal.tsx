@@ -25,6 +25,8 @@ import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slic
 import { CentralModal } from '../../shared';
 import { Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
+import blueWhiteLogo from '../../../assets/Icons/blue-white-logo.svg';
+
 
 interface CreatingIntegrationModalProps {
   modalId: string;
@@ -119,9 +121,14 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             ))}
           </div>
 
-          {!noItemsMessage && hasCreatingIntegration && (
-            <span className={s.message}>{t('i20')}</span>
-          )}
+        <SpecialIntegration
+          title="Apusher. Уникальная интеграция"
+          icon={blueWhiteLogo}
+        />
+
+        {!noItemsMessage && hasCreatingIntegration && (
+          <span className={s.message}>{t('i20')}</span>
+        )}
 
           {!noItemsMessage ? (
             <div className={s.companies}>
