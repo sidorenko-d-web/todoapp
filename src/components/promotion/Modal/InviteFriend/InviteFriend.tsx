@@ -23,9 +23,6 @@ export const InviteFriend: FC<InviteFriendProps> = ({
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data } = useGetUserQuery();
 
-  const inviteCode = '123456';
-
-
   const inviteTG = () => {
     const shareData = {
       title: `${t('p25')}`,
@@ -92,12 +89,12 @@ export const InviteFriend: FC<InviteFriendProps> = ({
           <div className={s.blockInput}>
             <input
               type="text"
-              value={inviteCode}
+              value={data?.id}
               readOnly
               className={s.inputLink}
             />
             <Button
-              onClick={() => navigator.clipboard.writeText(inviteCode)}
+              onClick={() => navigator.clipboard.writeText('' + data?.id)}
               className={s.copyButton}
             >
               <img src={copy} height={14} width={14} alt="copy" />
