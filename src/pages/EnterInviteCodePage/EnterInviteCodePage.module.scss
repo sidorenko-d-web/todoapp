@@ -1,0 +1,106 @@
+@use '/src/assets/styles/index.scss' as var;
+
+.root {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    background-color: var.$color-bg;
+    padding: 118px 30px 60px 30px;
+
+
+    .inputGroup {
+        position: relative;
+        width: 100%;
+        margin-top: 30px;
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: var.$color-text-semi-transparent;
+        }
+
+        .inputWrapper[data-error="true"] {
+            @include var.shake()
+        }
+
+        .input {
+            width: 100%;
+            padding: 6px 40px 6px 8px;
+            height: 36px;
+            border: 1px solid var.$color-dark-gray-stroke;
+            border-radius: 8px;
+            background: transparent;
+            color: var.$color-text-super-transparent;
+            font-size: 14px;
+        }
+
+        .invalid {
+            border-color: var.$color-red !important;
+        }
+
+        .statusIcon {
+            position: absolute;
+            right: 6px;
+            bottom: 6px;
+            width: 24px;
+            height: 24px;
+            background-color: var.$color-dark-gray;
+            padding: 5px;
+            border-radius: 6px;
+
+            &[data-error="true"] {
+                @include var.shake()
+            }
+        }
+
+        .shakeWrapper {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            animation: shake 0.3s ease-in-out;
+        }
+    }
+
+    .description {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        font-size: 14px;
+        color: var.$color-text-semi-transparent;
+        padding-top: 30px;
+        white-space: normal;
+    }
+
+    .enterCodeText {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        bottom: 60px;
+        color: var.$color-text-super-transparent;
+        font-size: 18px;
+    }
+
+    .nextBtn {
+        width: calc(100% - 60px);
+        border: none;
+        position: absolute;
+        bottom: 90px;
+        color: var.$color-gray;
+        padding: 14px;
+        border-radius: 8px;
+        font-size: 16px;
+        background-color: var.$color-button-inactive;
+        pointer-events: none;
+
+        &.validInput {
+            background-color: var.$color-primary;
+            color: white;
+            border: 1px solid var.$color-border-primary;
+            pointer-events: all;
+        }
+    }
+
+}
