@@ -8,14 +8,17 @@ import dots from '../../assets/icons/dots.svg';
 import tick from '../../assets/icons/tick-circle-gray.svg';
 import { Button } from "../../components/shared";
 
-export const EnterInviteCodePage: React.FC = () => {
+interface EnterInviteCodePageProps {
+    onContinue: () => void;
+}
+
+export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onContinue }) => {
     const [inputValue, setInputValue] = useState('');
     const [isValid, setIsValid] = useState(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
 
-        // Allow only digits and limit to 6 characters
         if (/^\d*$/.test(value) && value.length <= 6) {
             setInputValue(value);
             setIsValid(value.length === 6);
@@ -49,7 +52,7 @@ export const EnterInviteCodePage: React.FC = () => {
                 </p>
             </div>
 
-            <Button className={`${styles.nextBtn} ${isValid ? styles.validInput : ''}`}>
+            <Button className={`${styles.nextBtn} ${isValid ? styles.validInput : ''}`} onClick={onContinue}>
                 Продолжить
             </Button>
             <p className={styles.enterCodeText}>Введите код приглашения</p>

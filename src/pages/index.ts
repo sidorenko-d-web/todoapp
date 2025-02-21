@@ -7,5 +7,3 @@ export * from './ProfilePage';
 export * from './WardrobePage';
 export * from './StrangerProfilePage';
 export * from './ProgressTreePage';
-
-export * from './EnterInviteCodePage';
