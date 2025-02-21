@@ -1,7 +1,8 @@
 @use '../../assets/styles/index.scss' as var;
 
 .container {
-  height: 100%;
+  min-height: calc(var(--tg-viewport-stable-height) - 90px);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -55,7 +56,7 @@
 
 .prize,
 .priseSubscribers,
-.prizeActive {
+.prizeRight {
   position: absolute;
   top: 20px;
   right: 70px;
@@ -71,15 +72,17 @@
   top: 0;
 }
 
-.prizeActive {
+.prizeRight {
   right: -115px;
 }
 
 .spiner {
   position: absolute;
-  top: -166%;
-  left: -66%;
+  top: -290%;
+  left: -135%;
   transform: translate(-50%, -50%) rotate(0deg);
+  width: 190px;
+  height: 190px;
   z-index: -2;
   animation: spin 6s linear infinite;
 }
@@ -94,11 +97,13 @@
 }
 
 .imgPrize, .imgPrizeActive {
-  position: absolute;
-  right: 23px;
-  top: -37px;
   display: flex;
   justify-content: center;
+  align-items: center;
+  aspect-ratio: 1;
+  position: absolute;
+  right: 23px;
+  top: -48px;
   width: 40px;
   height: auto;
   border-radius: 4px;
@@ -112,11 +117,22 @@
   border: 2px solid var.$color-prize-primary;
 }
 
+.questionWrapper {
+  aspect-ratio: 1;
+  width: 18px;
+  position: absolute;
+  top: -12px;
+  padding: 1px;
+  border-radius: 2px;
+  background-color: var.$footer-bg;
+  outline: 1px solid var.$color-gray;
+}
+
 .blur {
+  aspect-ratio: 1;
   position: absolute;
   top: -1px;
   width: 40px;
-  height: 28px;
   border-radius: 4px;
   padding: 3px 6px;
   opacity: 0.6;

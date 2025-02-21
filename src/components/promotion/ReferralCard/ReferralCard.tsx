@@ -18,15 +18,15 @@ interface ReferralCardProps {
   position: number;
   name: string;
   total_invited: number;
+  streak: number;
+  days_missed: number;
 }
 
-export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, total_invited }) => {
+export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, total_invited, streak, days_missed }) => {
   const { t, i18n } = useTranslation('promotion');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   // TODO: Добавить логику когда она будет на бэке
-  const streak = 12;
-  const daysOff = position - 1;
 
   return (
     <>
@@ -34,19 +34,19 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, tota
         <div className={s.userCardTop}>
           <div className={s.infoUser}>
             <div className={s.userCardAvatar}>
-              <img src={profileIconPlaceholder} width={17.5} height={24} />
+              <img src={profileIconPlaceholder} width={24} height={24} />
             </div>
             <div className={s.nameAndStreakWrapper}>
               <span className={s.text}>{name}</span>
               <div className={s.streakWrapper}>
-                <span className={s.streakBadge}>{streak} <img src={daysOff > 0 ? fireGrayIcon : fireBlueIcon} width={12}
-                                                              height={12} alt={'Streak'} /></span>
-                {daysOff > 0 &&
-                  <span className={classNames(s.streakBadge, daysOff > 1 ? s.notInDays : s.notToday)}>{daysOff > 1 ? (
+                <span className={s.streakBadge}>{streak} <img src={streak === 0 ? fireGrayIcon : fireBlueIcon}
+                                                              alt={'Streak'} /></span>
+                {days_missed > 0 &&
+                  <span className={classNames(s.streakBadge, days_missed > 1 ? s.notInDays : s.notToday)}>{days_missed > 1 ? (
                     <>
-                      <img src={infoIcon} width={12} height={12} alt="Info" /> {t("p52")}
+                      <img src={infoIcon} alt="Info" /> {days_missed} {t('p52')}
                     </>
-                  ) : `${t("p52")} :/`}</span>}
+                  ) : `${t('p53')} :/`}</span>}
               </div>
             </div>
           </div>
@@ -55,29 +55,27 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, tota
         <div className={s.userCardBottom}>
           <div className={s.userCardBonus}>
                         <span className={s.badge}>
-                            +{formatAbbreviation(120, 'number', {locale: locale})} <img src={subscribersIcon} height={14} width={14}
-                                                            alt="Подписчики" />
+                            +{formatAbbreviation(120, 'number', { locale: locale })} <img src={subscribersIcon}
+                                                                                          alt="Подписчики" />
                         </span>
             <span className={classNames(s.level, s.text)}>1{t('p4')}.</span>
           </div>
           <div className={s.userCardBonus}>
                         <span className={s.badge}>
-                            +{formatAbbreviation(40, 'number', {locale: locale})} <img src={subscribersIcon} height={14} width={14}
-                                                           alt="Подписчики" />
+                            +{formatAbbreviation(40, 'number', { locale: locale })} <img src={subscribersIcon}
+                                                                                         alt="Подписчики" />
                         </span>
             <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
           </div>
           <Button className={classNames(s.userCardRefs, s.text)}>
-            {`(${t("p54")} ${total_invited} ${t("p55")}.)`}
+            {`(${t('p54')} ${total_invited} ${t('p55')}.)`}
           </Button>
         </div>
-        {daysOff > 1 && (
+        {days_missed > 1 && (
           <div className={s.streakWarningWrapper}>
             <span className={classNames(s.streakBadge, s.warning)}>
               <img
                 src={infoRedIcon}
-                width={12}
-                height={12}
                 alt="Info"
               /> {t('p56')}
             </span>

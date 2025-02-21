@@ -1,5 +1,15 @@
 import { FC, useEffect, useReducer } from 'react';
-import { AccelerateIntegtrationGuide, CreatingIntegrationGuide, FinishTutorialGuide, GetCoinsGuide, InitialGuide, IntegrationCreatedGuide, IntegrationCreation, PublishIntegrationButton, SubscrieGuide } from '../../components';
+import {
+  AccelerateIntegtrationGuide,
+  CreatingIntegrationGuide,
+  FinishTutorialGuide,
+  GetCoinsGuide,
+  InitialGuide,
+  IntegrationCreatedGuide,
+  IntegrationCreation,
+  PublishIntegrationButton,
+  SubscrieGuide,
+} from '../../components';
 import s from './MainPage.module.scss';
 import { AppRoute, MODALS } from '../../constants';
 import { useModal } from '../../hooks';
@@ -7,7 +17,13 @@ import { useModal } from '../../hooks';
 import { GUIDE_ITEMS } from '../../constants/guidesConstants';
 import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../utils';
 
-import { setAccelerateIntegrationGuideClosed, setActiveFooterItemId, setGetCoinsGuideShown, setIntegrationReadyForPublishing, setLastIntegrationId } from "../../redux/slices/guideSlice.ts";
+import {
+  setAccelerateIntegrationGuideClosed,
+  setActiveFooterItemId,
+  setGetCoinsGuideShown,
+  setIntegrationReadyForPublishing,
+  setLastIntegrationId,
+} from '../../redux/slices/guideSlice.ts';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, useGetAllIntegrationsQuery } from '../../redux';
 import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/RewardForIntegrationModal.tsx';
@@ -25,22 +41,17 @@ export const MainPage: FC = () => {
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
   useEffect(() => {
-    refetch();
-  }, []);
-
-  useEffect(() => {
-    if (data) {
-      if (data.integrations[0].status === 'created') {
-        console.log('=== created: ' + data.integrations[0].id);
+    refetch().then(() => {
+      if (data?.integrations[0].status === 'created') {
         reduxDispatch(setIntegrationReadyForPublishing(true));
         reduxDispatch(setLastIntegrationId(data.integrations[0].id));
       } else {
-        console.log('1== created: ');
         reduxDispatch(setIntegrationReadyForPublishing(false));
         reduxDispatch(setLastIntegrationId(""));
       }
-    }
-  }, [data]);
+    });
+  }, []);
+
 
   const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
 
@@ -81,7 +92,6 @@ export const MainPage: FC = () => {
   useEffect(() => {
 
     reduxDispatch(setActiveFooterItemId(2));
-
 
     if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
       && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED) && !purchasingSubscriptionModalState.isOpen) {

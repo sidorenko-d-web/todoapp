@@ -42,13 +42,12 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const navigate = useNavigate();
 
   const contentOptions = [
-    { label: t("i13"), value: 'text' },
-    { label: t("i14"), value: 'image' },
-    { label: t("i15"), value: 'video' },
+    { label: t('i13'), value: 'text' },
+    { label: t('i14'), value: 'image' },
+    { label: t('i15'), value: 'video' },
   ] as const;
 
   const [ selectedOption, setSelectedOption ] = useState<(typeof contentOptions)[number]['value']>('text');
-  const [ selectedCompany, setSelectedCompany ] = useState<string | null>(null);
 
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
   const [ createIntegration, { isError, error } ] = useCreateIntegrationMutation();
@@ -63,12 +62,12 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     navigate('/shop');
   };
 
-  const submitCreation = () => {
-    if (!selectedOption || !selectedCompany) return;
+  const submitCreation = (companyId: string) => {
+    if (!selectedOption || !companyId) return;
 
     createIntegration({
       content_type: selectedOption,
-      campaign_id: selectedCompany,
+      campaign_id: companyId,
     })
       .unwrap()
       .then((data) => {
@@ -76,18 +75,16 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         dispatch(setLastIntegrationId(data.id));
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         onClose();
-        dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
-        dispatch(profileApi.util.invalidateTags([ 'Me' ]));
+        dispatch(integrationsApi.util.invalidateTags(['Integrations']));
+        dispatch(profileApi.util.invalidateTags(['Me']));
       });
   };
 
-  const submitDisabled = !selectedOption || !selectedCompany || hasCreatingIntegration;
-
   const noItemsMessage = (() => {
-    const baseText = t("i16");
-    if (selectedOption === 'text' && !hasText) return baseText + t("i17");
-    if (selectedOption === 'image' && !hasImage) return baseText + t("i18");
-    if (selectedOption === 'video' && !hasVideo) return baseText + t("i19");
+    const baseText = t('i16');
+    if (selectedOption === 'text' && !hasText) return baseText + t('i17');
+    if (selectedOption === 'image' && !hasImage) return baseText + t('i18');
+    if (selectedOption === 'video' && !hasVideo) return baseText + t('i19');
     return null;
   })();
 
@@ -102,7 +99,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       <div className={s.content}>
         <div className={s.skinsWrapper}>
           {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
-            <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`}>
+            <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`} >
               <img src={lightningIcon} alt="Lightning" width={20} height={20} />
             </div>
           ))}
@@ -120,14 +117,18 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           ))}
         </div>
 
+        {!noItemsMessage && hasCreatingIntegration && (
+          <span className={s.message}>{t('i20')}</span>
+        )}
+
         {!noItemsMessage ? (
           <div className={s.companies}>
             {companies?.map(company => (
               <CompanyCard
                 key={company.id}
                 company={company}
-                selected={selectedCompany === company.id}
-                onClick={setSelectedCompany}
+                disabled={hasCreatingIntegration}
+                onClick={() => submitCreation(company.id)}
               />
             ))}
           </div>
@@ -135,27 +136,22 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           <span className={s.message}>{noItemsMessage}</span>
         )}
 
-        {!noItemsMessage && hasCreatingIntegration && (
-          <span className={s.message}>{t('i20')}</span>
-        )}
-
         {
           // @ts-expect-error No error types yet
           isError && <span className={s.errorMessage}>{error?.data?.detail}</span>
         }
 
-        <TrackedButton
+        {noItemsMessage && <TrackedButton
           trackingData={{
             eventType: 'button',
-            eventPlace: `${noItemsMessage ? 'В магазин' : 'Создать интеграцию'} - Главный экран - Окно создание интеграции`,
+            eventPlace: 'В магазин - Главный экран - Окно создание интеграции',
           }}
           className={`${s.button} 
             ${buttonGlowing ? s.glowingBtn : ''} `}
-          disabled={submitDisabled && !noItemsMessage}
-          onClick={noItemsMessage ? goToShop : submitCreation}
+          onClick={goToShop}
         >
-          {noItemsMessage ? t("i21") : t("i9")}
-        </TrackedButton>
+          {t('i21')}
+        </TrackedButton>}
       </div>
     </CentralModal>
   );

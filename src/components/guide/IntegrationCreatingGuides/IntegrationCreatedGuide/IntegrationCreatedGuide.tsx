@@ -23,7 +23,7 @@ export const IntegrationCreatedGuide: React.FC<IntegrationCreatedGuideProps> = (
         
         <Guide align="left"
             zIndex={110}
-            top={'65%'}
+            top={'55%'}
             description
             = {
                 <>

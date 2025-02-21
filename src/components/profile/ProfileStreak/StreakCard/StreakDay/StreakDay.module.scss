@@ -16,12 +16,25 @@
   text-align: center;
   background-color: var.$footer-bg;
 
+  @media (min-width: var.$breakpoint-md) {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
   &.streak {
     border: 2px solid var.$color-red;
   }
 
-  &.freeze {
+  &.red {
+    border: 2px solid var.$color-red;
+  }
+
+  &.blue {
     border: 2px solid var.$color-primary;
+  }
+  &.purple {
+    border: 2px solid var.$color-purple;
   }
 
   .status-icon {
@@ -35,12 +48,15 @@
     top: -8.5px;
     border: 0.5px solid #3a374d;
 
-    &.streak {
+    &.iconRed {
       background-color: var.$color-red;
     }
 
-    &.freeze {
+    &.iconBlue {
       background-color: var.$color-primary;
+    }
+    &.iconPurple {
+      background-color: var.$color-purple;
     }
 
     img {
@@ -55,8 +71,11 @@
   color: var.$color-gray;
   width: 100%;
   text-align: center;
-  margin: 0;
-  margin-top: 4px;
+  margin: 4px 0 0;
+
+  @media (min-width: var.$breakpoint-md) {
+    font-size: 12px;
+  }
 }
 
 .currentDay {
@@ -66,7 +85,7 @@
 .currentDay::after {
   content: '';
   position: absolute;
-  top: 22px;
+  bottom: 4px;
   left: 50%;
   width: 4px;
   height: 4px;

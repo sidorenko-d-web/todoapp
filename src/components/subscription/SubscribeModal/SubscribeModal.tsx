@@ -9,6 +9,7 @@ import { formatAbbreviation } from '../../../helpers';
 import { Button, CentralModal } from '../../shared';
 import { GUIDE_ITEMS, MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
+import { useTranslation } from 'react-i18next';
 
 interface SubscribeModalProps {
   modalId: string;
@@ -21,6 +22,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
                                                           onClose,
                                                           onSuccess,
                                                         }: SubscribeModalProps) => {
+  const { t } = useTranslation('guide');
   const [ buySubscription ] = useBuySubscriptionMutation();
 
   const buyBtnGlowing = getSubscriptionPurchased();
@@ -36,12 +38,12 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
   };
 
   return (
-    <CentralModal modalId={modalId} title={'+ 5 интеграций'} onClose={onClose} titleIcon={integrationWhiteIcon}>
+    <CentralModal modalId={modalId} title={`+ 5 ${t('g74')}`} onClose={onClose} titleIcon={integrationWhiteIcon}>
       <div className={s.content}>
         <div className={s.info}>
           <div className={s.progress}>
             <div className={s.progressInfo}>
-              <span>Подписка</span>
+              <span>{t('g76')}</span>
               <span className={s.progressIcon}>0/5 <img src={integrationWhiteIcon} height={12} width={12}
                                                         alt={'Integration'} /></span>
             </div>
@@ -52,15 +54,15 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
           <span
             className={s.description}
           >
-            Интеграции закончились. Пополните подписку и приступайте к созданию интеграций!
+            {t('g75')}
           </span>
         </div>
         <div className={s.buttons}>
           <Button className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`} onClick={handleBuySubscription}>
               {formatAbbreviation(150)} <img src={coinIcon} height={14} width={14}
                                                                                   alt={'Coin'} /></Button>
-       
-          <Button className={s.button + ' ' + s.gray}>Задание</Button>
+
+          <Button className={s.button + ' ' + s.gray}>{t('g77')}</Button>
           <Button className={s.button} disabled>{formatAbbreviation(1.99, 'currency')}</Button>
         </div>
       </div>
