@@ -7,10 +7,10 @@ import rocketIcon from '../../../assets/Icons/rocket.svg';
 interface SpecialIntegrationProps {
   title: string;
   icon: string;
-  treeLevel: number;
+  treeLevel?: number;
 }
 
-export const SpecialIntegration = ({ title, icon, treeLevel }: SpecialIntegrationProps) => {
+export const SpecialIntegration = ({ title, icon }: SpecialIntegrationProps) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.mainInfo}>
@@ -43,7 +43,7 @@ export const SpecialIntegration = ({ title, icon, treeLevel }: SpecialIntegratio
         <span className={styles.title}> {title} </span>
         <button className={styles.button}>
           <img className={styles.lockIcon} src={lockIcon} alt="lock" />
-          <span className={styles.buttonTitle}> Нужен уровень Дерева 100. Вашь уровень - {treeLevel} </span>
+          <span className={styles.buttonTitle}> Нужен уровень Дерева 100 </span>
           <img className={styles.lockIcon} src={lockIcon} alt="lock" />
         </button>
       </div>

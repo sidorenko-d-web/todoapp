@@ -4,19 +4,19 @@ import styles from './Layout.module.scss';
 import { Header } from '../components/Header/';
 import { useEffect, useState } from 'react';
 import { MODALS, localStorageConsts } from '../constants';
-import {
-  LanguageSelectionModal, Settings,
-  SettingsModal,
-  WalletConnectionModal,
-} from '../components';
-import { useModal } from '../hooks';
+import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
+import { AudioBg, useModal } from '../hooks';
 import { getOS } from '../utils';
+import { useScrollManager } from '../hooks';
 
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
 
 const Layout = () => {
   const location = useLocation();
   const platform = getOS();
+  const { openModal } = useModal();
+  const [bgOffset, setBgOffset] = useState(0);
+  const contentRef = useScrollManager();
 
   const showHeader = !location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/);
 
@@ -28,11 +28,6 @@ const Layout = () => {
         
   const showRoadmapBg = location.pathname === '/progressTree';
 
-
-  const { openModal } = useModal();
-
-  const [bgOffset, setBgOffset] = useState(0);
-
   useEffect(() => {
     const isNeedToOpenChest = localStorage.getItem(
       localStorageConsts.IS_NEED_TO_OPEN_CHEST,
@@ -40,28 +35,28 @@ const Layout = () => {
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
   }, []);
 
-
   const contentClassName = `${styles.content} ${
     showHeader ? styles.withHeader : ''
   } ${needsReducedMargin ? styles.reducedMargin : ''} ${
     platform ? styles[platform] : ''
   }`;
-  
-  useEffect(() => {
-    if (showRoadmapBg) {
-      const handleScroll = () => {
-        const scrollTop = window.scrollY;
-        const maxScroll = document.body.scrollHeight - window.innerHeight;
-        const scrollPercentage = scrollTop / maxScroll;
 
-        const newOffset = scrollPercentage * 100; 
+  useEffect(() => {
+    if (showRoadmapBg && contentRef.current) {
+      const handleScroll = () => {
+        const scrollTop = contentRef.current?.scrollTop || 0;
+        const maxScroll = (contentRef.current?.scrollHeight || 0) - (contentRef.current?.clientHeight || 0);
+        const scrollPercentage = maxScroll > 0 ? scrollTop / maxScroll : 0;
+        const newOffset = scrollPercentage * 100;
         setBgOffset(newOffset);
       };
 
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
+      contentRef.current.addEventListener("scroll", handleScroll);
+      return () => {
+        contentRef.current?.removeEventListener("scroll", handleScroll);
+      };
     }
-  }, [showRoadmapBg]);
+  }, [showRoadmapBg, contentRef.current]);
 
   return (
     <>
@@ -79,17 +74,13 @@ const Layout = () => {
           />
         )}
         {showHeader && <Header />}
-        <main className={contentClassName}>
+        <main className={contentClassName} ref={contentRef}>
           <Outlet />
-
-          {/* Modals */}
           <SettingsModal />
           <WalletConnectionModal />
           <LanguageSelectionModal />
-
-          {/*<AudioBg />*/}
+          <AudioBg />
         </main>
-
         <Footer />
       </div>
     </>

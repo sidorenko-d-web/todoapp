@@ -22,10 +22,10 @@ import {
 } from '../../../utils/guide-functions.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
-import { CentralModal } from '../../shared';
 import { Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
-import blueWhiteLogo from '../../../assets/Icons/blue-white-logo.svg';
+import { ExpandableBottomModal } from '../../shared/';
+import blueWhiteLogo from '../../../assets/Icons/blue-white-logo.svg'
 
 
 interface CreatingIntegrationModalProps {
@@ -97,7 +97,13 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const buttonGlowing = integrationCreatingModalButtonGlowing();
 
   return (
-    <CentralModal modalId={modalId} title={t('i11')} onClose={onClose} titleIcon={integrationWhiteIcon}>
+    <ExpandableBottomModal
+      modalId={modalId}
+      title={t('i11')}
+      onClose={onClose}
+      titleIcon={integrationWhiteIcon}
+      expandOnScroll={true}
+    >
       {isProfileLoading || isCompaniesLoading
         ? <Loader noMargin />
         : <div className={s.content}>
@@ -157,12 +163,12 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             }}
             className={`${s.button} 
             ${buttonGlowing ? s.glowingBtn : ''} `}
-            onClick={goToShop}
-          >
-            {t('i21')}
-          </TrackedButton>}
-        </div>
+          onClick={goToShop}
+        >
+          {t('i21')}
+        </TrackedButton>}
+      </div>
       }
-    </CentralModal>
+    </ExpandableBottomModal>
   );
 };

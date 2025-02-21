@@ -1,15 +1,5 @@
 @use '../../../assets/styles/index.scss' as var;
 
-
-.containerStyles {
-  min-height: calc(
-          var(--tg-viewport-stable-height)
-          + var(--tg-content-safe-area-inset-top)
-          + var(--tg-safe-area-inset-top)
-  );
-  padding-bottom: var(--tg-content-safe-area-inset-bottom);
-}
-
 .content {
   display: flex;
   flex-direction: column;
