@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query.ts';
-import { BoostDTO, IEquipItemRequest, IEquipedRoomResponse } from './dto.ts';
+import { BoostDTO, IEquipItemRequest, IEquipedRoomResponse, IRemoveItemRequest } from './dto.ts';
 
 export const roomApi = createApi({
   reducerPath: 'roomApi',
@@ -20,9 +20,17 @@ export const roomApi = createApi({
       }),
       providesTags: ['room'],
     }),
-    equipItem: builder.mutation<IEquipedRoomResponse, IEquipItemRequest>({
+    addItemToRoom: builder.mutation<IEquipedRoomResponse, IEquipItemRequest>({
       query: data => ({
-        url: `/room/equip`,
+        url: `/room/add`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['room'],
+    }),
+    removeItemFromRoom: builder.mutation<IEquipedRoomResponse, IRemoveItemRequest>({
+      query: data => ({
+        url: `/room/remove`,
         method: 'PATCH',
         body: data,
       }),
@@ -31,4 +39,9 @@ export const roomApi = createApi({
   }),
 });
 
-export const { useGetCurrentUserBoostQuery, useEquipItemMutation, useGetEquipedQuery } = roomApi;
+export const {
+  useGetCurrentUserBoostQuery,
+  useAddItemToRoomMutation,
+  useRemoveItemFromRoomMutation,
+  useGetEquipedQuery,
+} = roomApi;

@@ -14,10 +14,11 @@ import {
   useGetShopItemsQuery,
   useUpgradeItemMutation,
   setPoints,
-  useEquipItemMutation,
   useGetEquipedQuery,
   RoomItemsSlots,
   shopApi,
+  useAddItemToRoomMutation,
+  useRemoveItemFromRoomMutation,
 } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscribers.png';
@@ -40,28 +41,20 @@ interface Props {
   item: IShopItem;
 }
 
-
-
-export const InventoryCard: FC<Props> = ({
-                                           disabled,
-                                           isBlocked,
-                                           isUpgradeEnabled = true,
-                                           item,
-                                           isB,
-                                         }) => {
-
-  const { t,i18n } = useTranslation('shop');
-  const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
+export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled = true, item, isB }) => {
+  const { t, i18n } = useTranslation('shop');
+  const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const dispatch = useDispatch();
   const { data, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
   });
   const { refetch } = useGetCurrentUserProfileInfoQuery();
-  const [equipItem, { isLoading: isEquipItemLoading }] = useEquipItemMutation();
+  const [equipItem, { isLoading: isEquipItemLoading }] = useAddItemToRoomMutation();
+  const [removeItem, { isLoading: isRemoveItemLoading }] = useRemoveItemFromRoomMutation();
   const { data: equipedItems } = useGetEquipedQuery();
   const { openModal } = useModal();
-  const [ playLvlSound ] = useSound(SOUNDS.levelUp, {  volume: useSelector(selectVolume)  });
+  const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
 
   const handleBuyItem = async () => {
     try {
@@ -88,25 +81,32 @@ export const InventoryCard: FC<Props> = ({
         }
       }
     } catch (error) {
-    
       console.log(error);
     }
   };
 
+  const handleRemoveItem = () => {};
+
   const handleEquipItem = async () => {
-    if (!slot)
+    if (!slot && slot !== 0)
       throw new Error('error while getting slot for item, check names in "redux/api/room/dto.ts - RoomItemsSlots"');
+
+    const isSlotNotEmpty = equipedItems?.room.equipped_items.find(item => item.slot === slot);
+
     try {
-      await equipItem({ equipped_items: [{ id: item.id, slot }] });
+      if (isSlotNotEmpty) {
+        removeItem({ items_to_remove: [{ id: isSlotNotEmpty.id }] });
+      }
+      const res = await equipItem({ equipped_items: [{ id: item.id, slot }] });
+      console.log(res);
     } catch (error) {
       console.error(error);
     }
   };
   const slot = Object.values(RoomItemsSlots).find(_item => _item.name.find(__item => item.name.includes(__item)))?.slot;
-  const isEquipped = equipedItems?.equipped_items.find(_item => _item.id === item.id);
+  const isEquipped = equipedItems?.room.equipped_items.find(_item => _item.id === item.id);
 
-
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.storeCard}>
@@ -131,8 +131,8 @@ export const InventoryCard: FC<Props> = ({
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                ? styles.colorPurple
+                : styles.level
             }
           >
             {t('s20')} {item.level} {isB && t('s21')}
@@ -232,7 +232,7 @@ export const InventoryCard: FC<Props> = ({
         </div>
       ) : !isEquipped ? (
         <Button onClick={handleEquipItem} className={styles.disabledActions}>
-          {isEquipItemLoading ? <p>loading</p> : <p>{t('s28')}</p>}
+          {isEquipItemLoading || isRemoveItemLoading ? <p>loading</p> : <p>{t('s28')}</p>}
         </Button>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
@@ -261,15 +261,7 @@ export const InventoryCard: FC<Props> = ({
               </>
             )}
           </Button>
-          <Button
-            onClick={() =>
-              openModal(MODALS.UPGRADED_ITEM, {
-                item,
-                mode: 'item',
-                reward: 'reward of item',
-              })
-            }
-          >
+          <Button onClick={() => removeItem({ items_to_remove: [{ id: item.id }] })}>
             <img src={ListIcon} alt="Tasks" />
           </Button>
         </div>

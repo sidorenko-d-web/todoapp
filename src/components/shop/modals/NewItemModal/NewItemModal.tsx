@@ -39,7 +39,7 @@ export const NewItemModal: React.FC = () => {
   return (
     <CentralModal
       title="Новый предмет!"
-      onClose={handleClose}
+      onClose={() => closeModal(MODALS.NEW_ITEM)}
       modalId={MODALS.NEW_ITEM}
     >
       <div className={styles.images}>

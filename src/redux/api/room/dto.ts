@@ -1,3 +1,5 @@
+import { IShopItem } from '../shop';
+
 export type BoostDTO = {
   income_per_second: string;
   subscribers: number;
@@ -5,6 +7,11 @@ export type BoostDTO = {
 };
 
 export interface IEquipedRoomResponse {
+  items: IShopItem[];
+  room: IRoom;
+}
+
+export interface IRoom {
   id: string;
   equipped_items: IRoomItem[];
 }
@@ -16,6 +23,9 @@ export interface IRoomItem {
 
 export interface IEquipItemRequest {
   equipped_items: IRoomItem[];
+}
+export interface IRemoveItemRequest {
+  items_to_remove: { id: string }[];
 }
 
 export const RoomItemsSlots = {

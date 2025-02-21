@@ -6,10 +6,12 @@ import skinPlaceholder from '../../../assets/icons/skin-placeholder.svg';
 import { IShopSkin } from '../../../redux';
 import { Button } from '../../shared';
 import { useTranslation } from 'react-i18next';
+import { svgHeadersString } from '../../../constants';
 
 type CategorizedSkins = {
   head: IShopSkin[];
   face: IShopSkin[];
+  skin_color: IShopSkin[];
   upper_body: IShopSkin[];
   lower_body: IShopSkin[];
   entire_body: IShopSkin[];
@@ -25,6 +27,8 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ setSelectedSkinUrl }
   const [activeTab, setActiveTab] = useState('head');
   const [selected, setSelected] = useState<string | null>(null);
 
+  console.log(inventorySkinsData);
+
   if (isLoading || !inventorySkinsData) {
     return <p>Loading skins...</p>;
   }
@@ -32,6 +36,7 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ setSelectedSkinUrl }
   const categorizedSkins: CategorizedSkins = {
     head: [],
     face: [],
+    skin_color: [],
     upper_body: [],
     lower_body: [],
     entire_body: [],
@@ -40,18 +45,22 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ setSelectedSkinUrl }
   const categories = [
     { name: t('w3'), key: 'head' },
     { name: t('w4'), key: 'face' },
+    { name: t('w4-1'), key: 'skin_color' },
     { name: t('w5'), key: 'upper_body' },
-    { name: t('w6'), key: 'lower_body' }, // Merged legs & feet
+    { name: t('w6'), key: 'lower_body' }, // Merged legs & feet //bottom wear is too long to display
     { name: 'VIP', key: 'entire_body' },
   ];
 
   inventorySkinsData.skins.forEach(skin => {
-    if (skin.wear_location === 'legs' || skin.wear_location === 'feet') {
+    if (skin.wear_location === 'legs') {
       categorizedSkins.lower_body.push(skin);
     } else if (skin.wear_location in categorizedSkins) {
+      skin.wear_location === 'skin_color' && console.log('object')
       categorizedSkins[skin.wear_location as keyof CategorizedSkins].push(skin);
     }
   });
+
+  console.log(categorizedSkins);
 
   return (
     <div className={styles.container}>
@@ -79,7 +88,7 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ setSelectedSkinUrl }
               setSelectedSkinUrl(skin.image_url);
             }}
           >
-            <img src={skin.image_url || skinPlaceholder} />
+            <img src={skin.image_url + svgHeadersString || skinPlaceholder} />
           </Button>
         ))}
       </div>

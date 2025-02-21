@@ -51,31 +51,11 @@ $translateY: -15vh;
   top: 0;
   transform: translateX(100%);
 }
-
-.sofa {
+.shelf {
   @extend .item;
-  top: 260px;
-  z-index: 100;
-  transform: translateX(-10%);
+  width: 145px;
+  height: 78px;
+  top: 190px;
+  transform: translateX(-12%);
 }
 
-.chair {
-  @extend .item;
-  top: 410px;
-  transform: translateX(-140%);
-  z-index: 4;
-}
-
-.table {
-  @extend .item;
-  top: 390px;
-  transform: translateX(-53%);
-  z-index: 5;
-}
-
-.window {
-  @extend .item;
-  transform: translate(-210%) scale(0.7);
-  top: 180px;
-  z-index: 5;
-}
