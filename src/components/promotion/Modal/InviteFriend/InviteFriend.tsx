@@ -10,7 +10,6 @@ import { formatAbbreviation } from '../../../../helpers';
 import { Button } from '../../../shared';
 import { useTranslation } from 'react-i18next';
 
-
 interface InviteFriendProps {
   modalId: string;
   onClose: () => void;
@@ -25,7 +24,6 @@ export const InviteFriend: FC<InviteFriendProps> = ({
   const { data } = useGetUserQuery();
 
   const inviteTG = () => {
-
     const shareData = {
       title: `${t('p25')}`,
       text: `${t('p26')}`,
@@ -49,38 +47,59 @@ export const InviteFriend: FC<InviteFriendProps> = ({
       <ul className={s.subscribers}>
         <li className={s.listBadge}>
           <span className={s.badge}>
-            +{formatAbbreviation(120, 'number', {locale: locale})}{' '}
+            +{formatAbbreviation(120, 'number', { locale: locale })}{' '}
             <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
           </span>
           <span className={s.level}>1{t('p4')}.</span>
         </li>
         <li className={s.listBadge}>
           <span className={s.badge}>
-            +{formatAbbreviation(40, 'number', {locale: locale})}{' '}
+            +{formatAbbreviation(40, 'number', { locale: locale })}{' '}
             <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
           </span>
           <span className={s.level}>2{t('p4')}.</span>
         </li>
       </ul>
-      <div>
+      <div className={s.inputs}>
         <p className={s.description}>{t('p30')}</p>
-        <div className={s.blockInput}>
-          <input
-            type="text"
-            value={`https://t.me/wished_sentry_robot?start=${data?.id}`}
-            readOnly
-            className={s.inputLink}
-          />
-          <Button
-            onClick={() =>
-              navigator.clipboard.writeText(
-                `https://t.me/wished_sentry_robot?start=${data?.id}`,
-              )
-            }
-            className={s.copyButton}
-          >
-            <img src={copy} height={14} width={14} alt="copy" />
-          </Button>
+
+        <div>
+          <label>Ссылка для приглашения</label>
+          <div className={s.blockInput}>
+            <input
+              type="text"
+              value={`https://t.me/wished_sentry_robot?start=${data?.id}`}
+              readOnly
+              className={s.inputLink}
+            />
+            <Button
+              onClick={() =>
+                navigator.clipboard.writeText(
+                  `https://t.me/wished_sentry_robot?start=${data?.id}`,
+                )
+              }
+              className={s.copyButton}
+            >
+              <img src={copy} height={14} width={14} alt="copy" />
+            </Button>
+          </div>
+        </div>
+        <div>
+          <label>Код приглашения</label>
+          <div className={s.blockInput}>
+            <input
+              type="text"
+              value={data?.id}
+              readOnly
+              className={s.inputLink}
+            />
+            <Button
+              onClick={() => navigator.clipboard.writeText('' + data?.id)}
+              className={s.copyButton}
+            >
+              <img src={copy} height={14} width={14} alt="copy" />
+            </Button>
+          </div>
         </div>
         <Button className={classNames(s.buttonContainer, s.text)} onClick={inviteTG}>
           {t('p31')} <img src={arrow} height={14} width={14} alt="arrow" />
