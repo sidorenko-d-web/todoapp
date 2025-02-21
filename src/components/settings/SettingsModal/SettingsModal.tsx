@@ -2,13 +2,14 @@ import styles from "./SettingsModal.module.scss"
 import { MODALS } from "../../../constants/modals"
 import { useModal } from "../../../hooks/useModal"
 import russiaIcon from "../../../assets/icons/ru-flag.svg"
+import usaIcon from "../../../assets/icons/us-flag.svg"
 import cryptoWalletIcon from "../../../assets/icons/Wallet.png"
 import ArrowRight from "../../../assets/icons/arrow-right.svg"
 import {useTranslation} from 'react-i18next'
 import { CentralModal } from "../../shared"
 
 export const SettingsModal = () => {
-    const { t } = useTranslation('settings');
+    const { t, i18n } = useTranslation('settings');
     const { closeModal, openModal, } = useModal()
 
     const handleCloseModal = () => {
@@ -25,6 +26,8 @@ export const SettingsModal = () => {
         // closeModal(MODALS.SETTINGS)
     }
 
+    const currentLanguageIcon = i18n.language === 'ru' ? russiaIcon : usaIcon;
+
     return (
         <CentralModal
             modalId={MODALS.SETTINGS} 
@@ -35,7 +38,7 @@ export const SettingsModal = () => {
             <div className={styles.wrapper}>
                 <div className={styles.childModalWrapper} onClick={handleOpenLanguageSelectionModal}>
                     <div className={styles.titleAndIcon}>
-                        <img className={styles.icon} src={russiaIcon} alt="" />
+                        <img className={styles.icon} src={currentLanguageIcon} alt="" />
                         {t('s2')}
                     </div>
                     <img className={styles.arrow} src={ArrowRight} alt="" />
