@@ -22,15 +22,15 @@ export function AuthInit({ children }: AuthInitProps) {
   });
   const [isInitializing, setIsInitializing] = useState(true);
 
-  // useEffect(() => {
-  //   if (
-  //     window.Telegram &&
-  //     window.Telegram.WebApp &&
-  //     typeof window.Telegram.WebApp.requestFullscreen === 'function'
-  //   ) {
-  //     window.Telegram.WebApp.requestFullscreen();
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (
+      window.Telegram &&
+      window.Telegram.WebApp &&
+      typeof window.Telegram.WebApp.requestFullscreen === 'function'
+    ) {
+      window.Telegram.WebApp.requestFullscreen();
+    }
+  }, []);
 
   const saveCurrentStep = (step: AuthStep) => {
     if (step !== 'loading') {
@@ -71,8 +71,6 @@ export function AuthInit({ children }: AuthInitProps) {
         } else {
           saveCurrentStep('language');
         }
-
-        console.log('Current Step After Setup:', currentStep);
 
         setIsInitializing(false);
       } catch (err) {
@@ -148,7 +146,6 @@ export function AuthInit({ children }: AuthInitProps) {
       return <>{children}</>;
 
     default:
-      console.log('Rendering Loading Screen by default');
       return <LoadingScreen />;
   }
 
