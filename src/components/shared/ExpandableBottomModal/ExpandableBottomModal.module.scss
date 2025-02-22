@@ -18,9 +18,23 @@
   width: 100%;
   overflow-y: auto;
   @include var.hide-scroll;
-  transition: height 0.5s ease-in-out;
+
+  // Enhanced natural animation
+  transition:
+          height 400ms cubic-bezier(0.4, 0, 0.2, 1),
+          transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  // Prevent overflow during scale animation
+  transform-origin: bottom center;
+  will-change: transform, height;
 }
 
+.expanding {
+  // Slightly reduce scroll sensitivity during animation
+  pointer-events: none;
+}
+
+// Rest of the styles remain the same...
 .disabled {
   opacity: 0.7;
   pointer-events: none;

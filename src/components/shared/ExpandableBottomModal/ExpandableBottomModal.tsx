@@ -17,31 +17,33 @@ interface ExpandableBottomModalProps {
   titleWrapperStyles?: string;
   headerStyles?: string;
   titleIcon?: string;
-  initialHeight?: string
+  initialHeight?: string;
   expandOnScroll?: boolean;
 }
 
 export const ExpandableBottomModal: FC<PropsWithChildren<ExpandableBottomModalProps>> = ({
-                                                                modalId,
-                                                                title,
-                                                                onClose,
-                                                                disabled = false,
-                                                                disableScrollLock = false,
-                                                                containerStyles,
-                                                                modalStyles,
-                                                                titleWrapperStyles,
-                                                                headerStyles,
-                                                                titleIcon,
-                                                                children,
-                                                                initialHeight = "50vh",
-                                                                expandOnScroll = false,
-                                                              }) => {
+                                                                                           modalId,
+                                                                                           title,
+                                                                                           onClose,
+                                                                                           disabled = false,
+                                                                                           disableScrollLock = false,
+                                                                                           containerStyles,
+                                                                                           modalStyles,
+                                                                                           titleWrapperStyles,
+                                                                                           headerStyles,
+                                                                                           titleIcon,
+                                                                                           children,
+                                                                                           initialHeight = "50vh",
+                                                                                           expandOnScroll = false,
+                                                                                         }) => {
   const { getModalState } = useModal();
   const { isOpen } = getModalState(modalId);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const lastScrollY = useRef(0);
+  const expandThreshold = 20; // pixels to scroll before expanding
 
   useEffect(() => {
     if (isOpen && !disableScrollLock) {
@@ -55,24 +57,40 @@ export const ExpandableBottomModal: FC<PropsWithChildren<ExpandableBottomModalPr
     // Reset state when modal opens
     if (isOpen) {
       setIsExpanded(false);
+      setIsAnimating(false);
       if (modalRef.current) {
-        modalRef.current.style.transition = 'height 0.5s ease-in';
+        modalRef.current.style.transform = 'scale(1)';
       }
     }
   }, [isOpen]);
 
   const handleClose = () => {
-    onClose()
-    setIsExpanded(false)
-  }
+    onClose();
+    setIsExpanded(false);
+  };
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    if (!expandOnScroll) return;
+    if (!expandOnScroll || isAnimating) return;
+
     const currentScroll = e.currentTarget.scrollTop;
 
-    // Expand when scrolling down from initial position
-    if (!isExpanded && currentScroll > 0) {
+    // Only expand if scrolled past threshold
+    if (!isExpanded && currentScroll > expandThreshold) {
+      setIsAnimating(true);
       setIsExpanded(true);
+
+      // Add scale animation
+      if (modalRef.current) {
+        modalRef.current.style.transform = 'scale(1.005)';
+
+        // Reset scale after expansion
+        setTimeout(() => {
+          if (modalRef.current) {
+            modalRef.current.style.transform = 'scale(1)';
+          }
+          setIsAnimating(false);
+        }, 400); // Slightly shorter than the main animation
+      }
     }
 
     lastScrollY.current = currentScroll;
@@ -87,7 +105,9 @@ export const ExpandableBottomModal: FC<PropsWithChildren<ExpandableBottomModalPr
       <Fade open>
         <div
           ref={modalRef}
-          className={classNames(s.modal, modalStyles)}
+          className={classNames(s.modal, modalStyles, {
+            [s.expanding]: isAnimating
+          })}
           style={{ height: modalHeight }}
           onClick={e => e.stopPropagation()}
           onScroll={handleScroll}
@@ -113,4 +133,4 @@ export const ExpandableBottomModal: FC<PropsWithChildren<ExpandableBottomModalPr
       </Fade>
     </Overlay>
   );
-}
+};
