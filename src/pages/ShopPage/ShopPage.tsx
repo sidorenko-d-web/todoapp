@@ -37,8 +37,6 @@ const StorePage: FC = () => {
   }, []);
 
   useEffect(() => {
-    const itemsInTab1 = itemsInTab(shop?.items, inventory?.items);
-    console.log(itemsInTab1);
     setItems(
       itemsInTab(shop?.items, inventory?.items)[itemsRarity?.value as TypeItemRarity],
     );

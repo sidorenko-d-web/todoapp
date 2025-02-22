@@ -1,6 +1,5 @@
 @use '../../../assets/styles' as var;
 
-
 .container {
   display: flex;
   flex-direction: column;
@@ -9,7 +8,6 @@
   width: 100%;
   gap: 20px;
 }
-
 
 .tabs {
   display: flex;
@@ -35,7 +33,7 @@
 
 .vipTab {
   font-weight: 600;
-  background: linear-gradient(90deg, #1551E8 -19.37%, #E84951 121.25%);
+  background: linear-gradient(90deg, #1551e8 -19.37%, #e84951 121.25%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -43,7 +41,7 @@
 }
 
 .activeTab {
-  background: #D9DCE1;
+  background: #d9dce1;
   color: black;
 }
 
@@ -63,9 +61,14 @@
   height: 44px;
   background: #222;
   border: none;
-  padding: 20px;
   border-radius: 8px;
   cursor: pointer;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .selected {
