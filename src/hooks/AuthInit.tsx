@@ -109,9 +109,6 @@ export function AuthInit({ children }: AuthInitProps) {
 
 
   const handleInviteCodeContinue = () => {
-    localStorage.setItem('hasCompletedSetup', 'true');
-    localStorage.removeItem('currentSetupStep');
-
     saveCurrentStep('skin');
   };
 
