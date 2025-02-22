@@ -9,6 +9,7 @@ import LossOfProgress from './LossOfProgress/LossOfProgress';
 import GetGift from './GetGift/GetGift';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectTrack, selectVolume, setTrack, setVolume } from '../../redux';
+
 export default function DevModals() {
   const { openModal } = useModal();
   // const [playSound] = useSound(SOUNDS.chestOpen, { volume });
