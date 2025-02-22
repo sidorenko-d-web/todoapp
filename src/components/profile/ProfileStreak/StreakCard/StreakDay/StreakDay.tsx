@@ -39,7 +39,7 @@ export const StreakDay: React.FC<StreakDayProps> = ({
 
     const today = new Date();
     setCurrentDay(today.getDate());
-    setCurrentWeekdayIndex(today.getDay() === 0 ? 6 : today.getDay() - 1); // 0 - воскресенье
+    setCurrentWeekdayIndex(today.getDay() === 0 ? 6 : today.getDay() - 1);
   }, []);
 
   const currentDayInfo = weekData.find(day => {
@@ -48,7 +48,7 @@ export const StreakDay: React.FC<StreakDayProps> = ({
 
   const isStreakDay =
     currentDayInfo &&
-    currentDayInfo.status === 'unspecified' &&
+    currentDayInfo.status === 'passed' &&
     (currentDayInfo.is_notified_at_morning ||
       currentDayInfo.is_notified_at_afternoon ||
       currentDayInfo.is_notified_at_evening ||
@@ -56,7 +56,7 @@ export const StreakDay: React.FC<StreakDayProps> = ({
       currentDayInfo.is_notified_at_late_night ||
       currentDayInfo.is_notified_at_night);
   const isFailedDay =
-    currentDayInfo && currentDayInfo.status === 'passed' && !isStreakDay;
+    currentDayInfo && currentDayInfo.status === 'unspecified' && !isStreakDay;
 
   const weekdaysRu = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
   const weekdaysEn = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];

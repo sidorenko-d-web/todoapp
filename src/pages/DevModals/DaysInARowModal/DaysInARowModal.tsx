@@ -49,7 +49,6 @@ export default function DaysInARowModal({}: Props) {
 
     setDayNumbers(newDays);
 
-    // Find streak and frozen days based on the data
     const frozen: number[] = [];
     const streak: number[] = [];
 
@@ -80,7 +79,7 @@ export default function DaysInARowModal({}: Props) {
   return (
     <BottomModal
       modalId={MODALS.DAYS_IN_A_ROW}
-      title={`${streakCount} дней в ударе!`}
+      title={`${streakCount === 0 ? 0 : streakCount} дней в ударе!`}
       onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)}
     >
       <div className={styles.images}>
@@ -100,14 +99,14 @@ export default function DaysInARowModal({}: Props) {
           src={streakCount < 30 ? FireBlue : streakCount < 60 ? FirePurple : FireRed}
         />
         <div className={styles.days}>
-          <p>{streakCount}</p>
+          <p>{streakCount === 0 ? 0 : streakCount}</p>
         </div>
       </div>
 
       <div className={styles.days}>
         {dayNumbers.map(day => {
-          const isFrozen = streakDays.includes(day);
-          const isStreak = frozenDays.includes(day);
+          const isFrozen = frozenDays.includes(day);
+          const isStreak = streakDays.includes(day);
 
           return (
             <DayItem
@@ -124,7 +123,8 @@ export default function DaysInARowModal({}: Props) {
 
       <div className={styles.progressTitle}>
         <p>
-          {streakCount}/{streakCount < 30 ? '30' : streakCount < 60 ? '60' : '120'} дней
+          {streakCount === 0 ? 0 : streakCount}/
+          {streakCount < 30 ? '30' : streakCount < 60 ? '60' : '120'} дней
         </p>
         <div className={styles.chest}>
           <p>Каменный сундук</p>
@@ -176,12 +176,10 @@ const DayItem = ({
   date.setDate(day);
   const weekday = date.toLocaleDateString('ru-RU', { weekday: 'short' });
 
-  // Determine if the day is neither streak nor frozen, marking it as "normal"
   const isNormal = !isStreak && !isFrozen;
 
   return (
     <div className={styles.dayWrapper}>
-      {/* Show icons for streak and frozen days */}
       {isStreak && (
         <div
           className={clsx(
@@ -196,7 +194,7 @@ const DayItem = ({
       )}
 
       {isFrozen && (
-        <div className={clsx(styles.icon, styles.iconFrozen)}>
+        <div className={clsx(styles.icon, styles.iconBlue)}>
           <img src={SnowflakeIcon} />
         </div>
       )}
@@ -204,9 +202,9 @@ const DayItem = ({
       <div
         className={clsx(
           styles.day,
-          progressStage === 'red' && styles.dayRed,
-          progressStage === 'purple' && styles.dayPurple,
-          progressStage === 'blue' && styles.dayBlue,
+          (isFrozen || progressStage === 'blue') && styles.dayBlue,
+          progressStage === 'red' && !isFrozen && styles.dayRed,
+          progressStage === 'purple' && !isFrozen && styles.dayPurple,
           currentDay === day && styles.currentDay,
           isNormal && styles.dayNormal,
         )}

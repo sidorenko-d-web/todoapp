@@ -5,7 +5,7 @@ import ChestPurple from '../../../../assets/icons/chest-purple.svg';
 import FireBlue from '../../../../assets/icons/fire-blue.svg';
 import FireRed from '../../../../assets/icons/fire-red.svg';
 import FirePurple from '../../../../assets/icons/fire-purple.svg';
-import chestIcon from '../../../../assets/icons/elite-chest-glowing.svg';
+import chestIcon from '../../../../assets/icons/chest-red.svg';
 import snowflake from '../../../../assets/icons/snowflake.svg';
 import { ProgressLine } from '../../../shared';
 import { DayType } from '../../../../types';
@@ -32,12 +32,12 @@ interface StreakCardProps {
 }
 
 export const StreakCard: React.FC<StreakCardProps> = ({
-                                                        days,
-                                                        onlyStreak,
-                                                        streakDays,
-                                                        frozenDays,
-                                                        weekData,
-                                                      }) => {
+  days,
+  onlyStreak,
+  streakDays,
+  frozenDays,
+  weekData,
+}) => {
   const { t } = useTranslation('profile');
 
   const calculateLevel = () => {
@@ -54,7 +54,6 @@ export const StreakCard: React.FC<StreakCardProps> = ({
 
     return Math.min(maxLevel, Math.floor((streakDays / maxStreak) * maxLevel));
   };
-
 
   let p14Key = '';
   if (streakDays < 30) {
@@ -82,8 +81,8 @@ export const StreakCard: React.FC<StreakCardProps> = ({
               streakDays < 30
                 ? styles.badge
                 : streakDays < 60
-                  ? styles.badgePurple
-                  : styles.badgeRed
+                ? styles.badgePurple
+                : styles.badgeRed
             }
           >
             {t('p12')}
@@ -138,8 +137,8 @@ export const StreakCard: React.FC<StreakCardProps> = ({
                       streakDays < 30
                         ? ChestBlue
                         : streakDays < 60
-                          ? ChestPurple
-                          : chestIcon
+                        ? ChestPurple
+                        : chestIcon
                     }
                     className={styles.chestImg}
                     alt="Chest Icon"
