@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { useModal } from '../../../hooks';
 
 import modalGripIcon from '../../../assets/icons/modal-grip.svg';
-import { Button } from '..';
+
 
 interface BottomModalProps {
   modalId: string;

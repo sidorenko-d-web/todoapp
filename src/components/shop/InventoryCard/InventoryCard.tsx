@@ -16,7 +16,6 @@ import {
   setPoints,
   useGetEquipedQuery,
   RoomItemsSlots,
-  shopApi,
   useAddItemToRoomMutation,
   useRemoveItemFromRoomMutation,
 } from '../../../redux';
@@ -84,8 +83,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       console.log(error);
     }
   };
-
-  const handleRemoveItem = () => {};
 
   const handleEquipItem = async () => {
     if (!slot && slot !== 0)

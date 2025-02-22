@@ -4,7 +4,7 @@ import { LoadingScreen } from '../components/shared/LoadingScreen';
 import { LanguageSelect } from '../pages/LanguageSelect';
 import { SkinSetupPage } from '../pages/SkinSetupPage';
 import { useTranslation } from 'react-i18next';
-import { EnterInviteCodePage } from '../pages/EnterInviteCodePage/EnterInviteCodePage';
+import { EnterInviteCodePage } from '../pages/EnterInviteCodePage';
 
 
 type AuthInitProps = {
@@ -22,15 +22,15 @@ export function AuthInit({ children }: AuthInitProps) {
   });
   const [isInitializing, setIsInitializing] = useState(true);
 
-  // useEffect(() => {
-  //   if (
-  //     window.Telegram &&
-  //     window.Telegram.WebApp &&
-  //     typeof window.Telegram.WebApp.requestFullscreen === 'function'
-  //   ) {
-  //     window.Telegram.WebApp.requestFullscreen();
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (
+      window.Telegram &&
+      window.Telegram.WebApp &&
+      typeof window.Telegram.WebApp.requestFullscreen === 'function'
+    ) {
+      window.Telegram.WebApp.requestFullscreen();
+    }
+  }, []);
 
   const saveCurrentStep = (step: AuthStep) => {
     if (step !== 'loading') {
