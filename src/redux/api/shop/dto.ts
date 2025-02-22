@@ -35,7 +35,7 @@ export interface IShopSkinsResponse {
   skins: IShopSkin[];
 }
 
-export type TypeWearLocation = 'head' | 'face' | 'upper_body' | 'legs' | 'feet' | 'entire_body';
+export type TypeWearLocation = 'head' | 'face' | 'upper_body' | 'legs' | 'skin_color';
 export type TypeItemCategory = 'text' | 'image' | 'video' | 'decor';
 export type TypeItemQuality = 'base' | 'advanced' | 'pro';
 export type TypeItemRarity = 'red' | 'yellow' | 'green';

@@ -14,7 +14,6 @@ export const AudioBg = () => {
 
   const playAudio = () => {
     if (audioRef.current) {
-      console.log('a');
       audioRef.current.play();
     }
   };
