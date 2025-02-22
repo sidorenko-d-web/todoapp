@@ -12,9 +12,11 @@ import Lottie from 'lottie-react';
 import { blueLight, purpleLight, redLight } from '../../../../assets/animations';
 import { SOUNDS } from '../../../../constants/sounds';
 import { CentralModal } from '../../../shared';
+import { useTranslation } from 'react-i18next';
 
 export const ItemUpgradedModal = () => {
   const { closeModal, getModalState, openModal } = useModal();
+  const { t } = useTranslation('shop');
 
   const state = getModalState<{ item: IShopItem; mode: 'skin' | 'item'; reward: string }>(
     MODALS.UPGRADED_ITEM,
@@ -41,7 +43,7 @@ export const ItemUpgradedModal = () => {
   if (!newItem) return <></>;
   return (
     <CentralModal
-      title="Новый предмет!"
+      title={t('s43')}
       onClose={handleOpenChest}
       modalId={MODALS.UPGRADED_ITEM}
     >
@@ -88,7 +90,7 @@ export const ItemUpgradedModal = () => {
         <div className={styles.statItem}>
           <p>+{state.args?.item.boost.income_per_second}</p>
           <img src={CoinIcon} alt="Coin icon" />
-          <p>/cек</p>
+          <p>{t('s44')}</p>
         </div>
         <div className={styles.statItem}>
           <p>+</p>
@@ -97,11 +99,11 @@ export const ItemUpgradedModal = () => {
       </div>
       <div className={styles.text}>
         <p>
-          Поздравляем! Получен новый облик на{' '}
+          {t('s45')}{' '}
           <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>
             {state.args?.item.name}!
           </span>
-          ! Показатели увеличены, получен{' '}
+          ! {t('s46')}{' '}
           <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>
             {state.args?.reward}
           </span>
@@ -109,7 +111,7 @@ export const ItemUpgradedModal = () => {
         </p>
       </div>
       <Button onClick={handleOpenChest} variant="blue">
-        Открыть сундук!
+        {t('s47')}
       </Button>
     </CentralModal>
   );
