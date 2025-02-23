@@ -1,102 +1,97 @@
-.loadingBar {
-    background: #1e1e2e;
-    border-radius: 12px;
-    padding: 20px;
-    color: white;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .elevated {
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-  }
-  
-  .header {
+@use '../../../assets/styles/index.scss' as var;
+
+.wrp {
+  width: calc(100% - 60px);
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 30px;
+  margin-right: 30px;
+  border-radius: 10px;
+  background-color: var.$color-card-bg;
+  .integrationHeader {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+
+    .title {
+      margin: 0;
+      color: var.$color-text-semi-transparent;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 100%;
+    }
   }
-  
-  .title {
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .author {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-  }
-  
+
   .body {
-    margin-top: 15px;
-  }
-  
-  .info {
-    margin-bottom: 10px;
-  }
-  
-  .infoHeader {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-  }
-  
-  .progressBar {
-    height: 10px;
-    background: #444;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-top: 5px;
-  }
-  
-  .progressBarInner {
-    height: 100%;
-    background: #4caf50;
-    transition: width 0.3s ease-in-out;
-  }
-  
-  .iconButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #ff9800;
-    border: none;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  .iconButton img {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .iconButton:disabled {
-    background: #888;
-    cursor: not-allowed;
-  }
-  
-  .particle {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    background: #ffeb3b;
-    border-radius: 50%;
-    opacity: 0.8;
-    animation: particle-fade 0.8s ease-out;
-  }
-  
-  @keyframes particle-fade {
-    0% {
-      transform: translateY(0);
-      opacity: 1;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      .progressBar {
+        height: 16px;
+        border-radius: 3px;
+        background-color: var.$color-gray;
+        overflow: hidden;
+
+        .progressBarInner {
+          height: 100%;
+          background-color: var.$color-primary;
+        }
+      }
     }
-    100% {
-      transform: translateY(-20px);
-      opacity: 0;
+
+    .loadingText {
+      color: var.$color-pale-semi-transparent;
+      font-size: 12px;
+    }
+
+    .iconButton {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      padding: 8px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+      background-color: var.$color-primary;
+      border: none;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      .particle {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: var.$color-blue-primary;
+        pointer-events: none;
+        opacity: 1;
+        transform: scale(1);
+        animation: flyToProgress 0.8s cubic-bezier(0.42, 0, 0.58, 1) forwards;
+      }
+    }
+
+    @keyframes flyToProgress {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(-50px, -30px) scale(1.2);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(-100px, -10px) scale(0.5);
+        opacity: 0;
+      }
     }
   }
-  
+}
+
+.elevated {
+  z-index: 5000;
+}
