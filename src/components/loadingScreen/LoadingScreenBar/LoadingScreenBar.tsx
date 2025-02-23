@@ -1,39 +1,38 @@
 import { FC, useEffect, useState } from 'react';
 import rocketIcon from '../../../assets/icons/rocket.svg';
 import s from './LoadingScreenBar.module.scss';
-
 import { useTranslation } from 'react-i18next';
-
 import { Button } from '../../shared';
-
 import useSound from 'use-sound';
 import { SOUNDS } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
 
-const initialTime = 600; 
-const decrementValue = 10;
+const initialDuration = 5000;
+const updateInterval = 50;
 
-export const LoadingScreenBar: FC<{ accelerate?: () => void }> = ({ accelerate }) => {
+export const LoadingScreenBar: FC<{ accelerate?: () => void; isLoading?: boolean }> = ({ accelerate, isLoading=true }) => {
     const { t } = useTranslation('integrations');
-    const [timeLeft, setTimeLeft] = useState(initialTime);
+    const [progress, setProgress] = useState(0);
     const [speedMultiplier, setSpeedMultiplier] = useState(1);
 
-    const [playAccelerateIntegrationSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
-
-    const calculateProgress = () => ((initialTime - timeLeft) / initialTime) * 100;
+    const [playAccelerateSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
 
     useEffect(() => {
+        if (!isLoading) return;
+
+        const totalSteps = initialDuration / updateInterval;
+        const progressIncrement = 100 / totalSteps;
+
         const timerId = setInterval(() => {
-            setTimeLeft(prevTime => Math.max(prevTime - decrementValue * speedMultiplier, 0));
-        }, 100);
+            setProgress(prev => Math.min(prev + progressIncrement * speedMultiplier, 100));
+        }, updateInterval);
 
         return () => clearInterval(timerId);
-    }, [speedMultiplier]);
+    }, [isLoading, speedMultiplier]);
 
     const createParticles = () => {
         const button = document.querySelector(`.${s.iconButton}`) as HTMLElement | null;
-        
         if (!button) return;
 
         const rect = button.getBoundingClientRect();
@@ -43,7 +42,6 @@ export const LoadingScreenBar: FC<{ accelerate?: () => void }> = ({ accelerate }
         for (let i = 0; i < 5; i++) {
             const particle = document.createElement('div');
             particle.classList.add(s.particle);
-
             particle.style.left = `${rect.left - parentRect.left + rect.width / 2}px`;
             particle.style.top = `${rect.top - parentRect.top + rect.height / 2}px`;
 
@@ -56,7 +54,7 @@ export const LoadingScreenBar: FC<{ accelerate?: () => void }> = ({ accelerate }
     };
 
     const handleAccelerate = () => {
-        playAccelerateIntegrationSound();
+        playAccelerateSound();
         createParticles();
         setSpeedMultiplier(3);
         if (accelerate) accelerate();
@@ -73,7 +71,7 @@ export const LoadingScreenBar: FC<{ accelerate?: () => void }> = ({ accelerate }
                     <div className={s.progressBar}>
                         <div
                             className={s.progressBarInner}
-                            style={{ width: `${calculateProgress()}%` }}
+                            style={{ width: `${progress}%`, transition: 'width 0.05s linear' }}
                         />
                     </div>
                 </div>

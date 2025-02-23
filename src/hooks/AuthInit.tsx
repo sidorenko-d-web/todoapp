@@ -22,15 +22,23 @@ export function AuthInit({ children }: AuthInitProps) {
   });
   const [isInitializing, setIsInitializing] = useState(true);
 
+
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+
   useEffect(() => {
-    if (
-      window.Telegram &&
-      window.Telegram.WebApp &&
-      typeof window.Telegram.WebApp.requestFullscreen === 'function'
-    ) {
-      window.Telegram.WebApp.requestFullscreen();
-    }
+    const timer = setTimeout(() => setMinTimeElapsed(true), 4500);
+    return () => clearTimeout(timer);
   }, []);
+
+  // useEffect(() => {
+  //   if (
+  //     window.Telegram &&
+  //     window.Telegram.WebApp &&
+  //     typeof window.Telegram.WebApp.requestFullscreen === 'function'
+  //   ) {
+  //     window.Telegram.WebApp.requestFullscreen();
+  //   }
+  // }, []);
 
   const saveCurrentStep = (step: AuthStep) => {
     if (step !== 'loading') {
@@ -113,10 +121,9 @@ export function AuthInit({ children }: AuthInitProps) {
   };
 
 
-  if (isLoading || isInitializing) {
+  if (isLoading || isInitializing || !minTimeElapsed) {
     return <LoadingScreen />;
   }
-
   if (isError) {
     return <div style={{ color: 'red' }}>Ошибка при авторизации: {String(error)}</div>;
   }
