@@ -11,11 +11,13 @@ import { SOUNDS } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
 
-const initialTime = 800;
+const initialTime = 600; 
+const decrementValue = 10;
 
-export const LoadingScreenBar: FC<{ }> = () => {
+export const LoadingScreenBar: FC<{ accelerate?: () => void }> = ({ accelerate }) => {
     const { t } = useTranslation('integrations');
     const [timeLeft, setTimeLeft] = useState(initialTime);
+    const [speedMultiplier, setSpeedMultiplier] = useState(1);
 
     const [playAccelerateIntegrationSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
 
@@ -23,49 +25,45 @@ export const LoadingScreenBar: FC<{ }> = () => {
 
     useEffect(() => {
         const timerId = setInterval(() => {
-            setTimeLeft(prevTime => {
-                const newTime = Math.max(prevTime - 1, 0);
-                
-                return newTime;
-            });
-        }, 1000);
+            setTimeLeft(prevTime => Math.max(prevTime - decrementValue * speedMultiplier, 0));
+        }, 100);
 
         return () => clearInterval(timerId);
-    }, []);
+    }, [speedMultiplier]);
 
     const createParticles = () => {
         const button = document.querySelector(`.${s.iconButton}`) as HTMLElement | null;
         
         if (!button) return;
-    
-        const rect = button.getBoundingClientRect(); // Get button's absolute position
-        const parent = button.offsetParent as HTMLElement | null; // Ensure offsetParent exists
+
+        const rect = button.getBoundingClientRect();
+        const parent = button.offsetParent as HTMLElement | null;
         const parentRect = parent ? parent.getBoundingClientRect() : { left: 0, top: 0 };
-    
+
         for (let i = 0; i < 5; i++) {
             const particle = document.createElement('div');
             particle.classList.add(s.particle);
-    
-            // Position relative to the button
+
             particle.style.left = `${rect.left - parentRect.left + rect.width / 2}px`;
             particle.style.top = `${rect.top - parentRect.top + rect.height / 2}px`;
-    
+
             button.appendChild(particle);
-    
+
             setTimeout(() => {
                 particle.remove();
             }, 800);
         }
     };
-    
 
-    const handleAccelerateClick = () => {
+    const handleAccelerate = () => {
         playAccelerateIntegrationSound();
         createParticles();
+        setSpeedMultiplier(3);
+        if (accelerate) accelerate();
     };
 
     return (
-        <div className={`${s.wrp} ${s.elevated}`}>
+        <div className={`${s.wrp} ${s.elevated}`} onClick={handleAccelerate}>
             <div className={s.integrationHeader}>
                 <h2 className={s.title}>{t('i10')}</h2>
             </div>
@@ -81,7 +79,7 @@ export const LoadingScreenBar: FC<{ }> = () => {
                 </div>
                 <Button
                     className={s.iconButton}
-                    onClick={handleAccelerateClick}
+                    onClick={handleAccelerate}
                     disabled={false}
                     aria-label={t('i24')}
                 >
