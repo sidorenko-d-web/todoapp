@@ -23,13 +23,6 @@ export function AuthInit({ children }: AuthInitProps) {
   const [isInitializing, setIsInitializing] = useState(true);
 
 
-  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setMinTimeElapsed(true), 4500);
-    return () => clearTimeout(timer);
-  }, []);
-
   // useEffect(() => {
   //   if (
   //     window.Telegram &&
@@ -121,7 +114,7 @@ export function AuthInit({ children }: AuthInitProps) {
   };
 
 
-  if (isLoading || isInitializing || !minTimeElapsed) {
+  if (isLoading || isInitializing) {
     return <LoadingScreen />;
   }
   if (isError) {
