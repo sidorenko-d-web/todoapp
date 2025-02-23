@@ -1,0 +1,102 @@
+.loadingBar {
+    background: #1e1e2e;
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .elevated {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .author {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+  
+  .body {
+    margin-top: 15px;
+  }
+  
+  .info {
+    margin-bottom: 10px;
+  }
+  
+  .infoHeader {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+  }
+  
+  .progressBar {
+    height: 10px;
+    background: #444;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 5px;
+  }
+  
+  .progressBarInner {
+    height: 100%;
+    background: #4caf50;
+    transition: width 0.3s ease-in-out;
+  }
+  
+  .iconButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff9800;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .iconButton img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .iconButton:disabled {
+    background: #888;
+    cursor: not-allowed;
+  }
+  
+  .particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #ffeb3b;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: particle-fade 0.8s ease-out;
+  }
+  
+  @keyframes particle-fade {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+  }
+  
