@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   background-color: var.$color-bg;
-  justify-content: baseline;
+  justify-content: space-between;
 }
 
 .coin {
@@ -17,8 +17,6 @@
 }
 
 .loadingWrp {
-  margin-top: auto;
-  margin-bottom: 60px;
+  margin-bottom: 80px;
   width: 100%;
-  padding: 0 30px;
 }

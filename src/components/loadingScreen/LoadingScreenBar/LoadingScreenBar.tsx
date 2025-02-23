@@ -13,7 +13,7 @@ import { selectVolume } from '../../../redux';
 
 const initialTime = 800;
 
-export const LoadingScreenBar: FC<{ onLoadingComplete?: () => void }> = ({ onLoadingComplete }) => {
+export const LoadingScreenBar: FC<{ }> = () => {
     const { t } = useTranslation('integrations');
     const [timeLeft, setTimeLeft] = useState(initialTime);
 
@@ -25,36 +25,39 @@ export const LoadingScreenBar: FC<{ onLoadingComplete?: () => void }> = ({ onLoa
         const timerId = setInterval(() => {
             setTimeLeft(prevTime => {
                 const newTime = Math.max(prevTime - 1, 0);
-                if (newTime === 0 && onLoadingComplete) {
-                    onLoadingComplete();
-                }
+                
                 return newTime;
             });
         }, 1000);
 
         return () => clearInterval(timerId);
-    }, [onLoadingComplete]);
+    }, []);
 
     const createParticles = () => {
-        const button = document.querySelector(`.${s.iconButton}`);
-        const progressBar = document.querySelector(`.${s.progressBar}`);
-
-        if (!button || !progressBar) return;
-
+        const button = document.querySelector(`.${s.iconButton}`) as HTMLElement | null;
+        
+        if (!button) return;
+    
+        const rect = button.getBoundingClientRect(); // Get button's absolute position
+        const parent = button.offsetParent as HTMLElement | null; // Ensure offsetParent exists
+        const parentRect = parent ? parent.getBoundingClientRect() : { left: 0, top: 0 };
+    
         for (let i = 0; i < 5; i++) {
             const particle = document.createElement('div');
             particle.classList.add(s.particle);
-
-            particle.style.left = `calc(100% - 10px)`;
-            particle.style.top = `${button.clientHeight / 2}px`;
-
+    
+            // Position relative to the button
+            particle.style.left = `${rect.left - parentRect.left + rect.width / 2}px`;
+            particle.style.top = `${rect.top - parentRect.top + rect.height / 2}px`;
+    
             button.appendChild(particle);
-
+    
             setTimeout(() => {
                 particle.remove();
             }, 800);
         }
     };
+    
 
     const handleAccelerateClick = () => {
         playAccelerateIntegrationSound();

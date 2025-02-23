@@ -18,6 +18,7 @@ export const LoadingScreen = () => {
 
   return (
     <div className={styles.root}>
+      <div/>
       {showAnimation ? (
         <Lottie
           animationData={coinsAnim}
@@ -26,7 +27,7 @@ export const LoadingScreen = () => {
           style={{zIndex: '10000'}}
         />
       ) : (
-        <LoadingScreenBar onLoadingComplete={() => {}} />
+        <LoadingScreenBar/>
       )}
       <img className={styles.coin} src={loadingImage} alt="Coin" />
     </div>
