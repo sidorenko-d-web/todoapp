@@ -124,7 +124,6 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   position: fixed;
   z-index: 50;
   top: calc(var(--tg-safe-area-inset-top) + 6px);
-  //right: calc(var(--tg-safe-area-inset-right) + 95px);
 
   &.iosSettings {
     right: calc(var(--tg-safe-area-inset-right) + 95px);

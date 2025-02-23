@@ -9,6 +9,9 @@ import s from './CompanyCard.module.scss';
 import { isGuideShown } from '../../../utils';
 import { GUIDE_ITEMS } from '../../../constants';
 import { Button } from '../../shared';
+import {useGetAllIntegrationsQuery} from '../../../redux';
+
+
 
 interface CompanyCardProps {
   company: CompanyResponseDTO;
@@ -20,6 +23,48 @@ interface CompanyCardProps {
 const glowing = !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
 export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, disabled }) => {
+  const {data: integrationsData} = useGetAllIntegrationsQuery({
+    company_name: company.company_name
+  })
+
+  const getBlueStarCount = (count: number = 0) => {
+    if (count >= 18) return 3;
+    if (count >= 10) return 2;
+    if (count >= 4) return 1;
+    return 0;
+  };
+
+  const getProgressBarPercentage = (count: number = 0) => {
+    // Define star level thresholds
+    const thresholds = {
+      firstStar: 4,
+      secondStar: 10,
+      thirdStar: 18
+    };
+
+    // Calculate which progress segment we're in
+    if (count >= thresholds.thirdStar) {
+      return 100;
+    } else if (count >= thresholds.secondStar) {
+      // Progress between second and third star (10-17)
+      const progressInSegment = count - thresholds.secondStar;
+      const segmentSize = thresholds.thirdStar - thresholds.secondStar;
+      return (progressInSegment / segmentSize) * 100;
+    } else if (count >= thresholds.firstStar) {
+      // Progress between first and second star (4-9)
+      const progressInSegment = count - thresholds.firstStar;
+      const segmentSize = thresholds.secondStar - thresholds.firstStar;
+      return (progressInSegment / segmentSize) * 100;
+    } else {
+      // Progress towards first star (0-3)
+      return (count / thresholds.firstStar) * 100;
+    }
+  };
+
+  const blueStarCount = getBlueStarCount(integrationsData?.count);
+  const progressPercentage = getProgressBarPercentage(integrationsData?.count);
+
+
   return (
     <Button
       className={
@@ -50,12 +95,19 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
       <div className={s.content}>
         <h3 className={s.title}>{company.company_name}</h3>
         <div className={s.stars}>
-          <img src={starBlueIcon} alt="" />
-          <img src={starDarkGrayIcon} alt="" />
-          <img src={starDarkGrayIcon} alt="" />
+          {[...Array(3)].map((_, index) => (
+            <img
+              key={index}
+              src={index < blueStarCount ? starBlueIcon : starDarkGrayIcon}
+              alt=""
+            />
+          ))}
         </div>
         <div className={s.progressBar}>
-          <div className={s.progressBarInner} style={{ width: `15%` }} />
+          <div
+            className={s.progressBarInner}
+            style={{ width: `${progressPercentage}%` }}
+          />
         </div>
       </div>
     </Button>
