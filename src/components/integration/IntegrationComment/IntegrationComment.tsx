@@ -3,7 +3,7 @@ import coinIcon from '../../../assets/icons/coin.png';
 import { formatAbbreviation } from '../../../helpers';
 import styles from './IntegrationComment.module.scss';
 import { useSelector } from 'react-redux';
-import { RootState, selectVolume } from '../../../redux';
+import { RootState, selectButtonVolume } from '../../../redux';
 import { SOUNDS } from '../../../constants';
 import { ProgressLine } from '../../shared';
 import clsx from 'clsx';
@@ -33,11 +33,11 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const elevateComment = useSelector((state: RootState) => state.guide.elevateIntegrationStats);
 
-  const [ voteRightSound ] = useSound(SOUNDS.rightAnswer, {
-    volume: useSelector(selectVolume),
+  const [voteRightSound] = useSound(SOUNDS.rightAnswer, {
+    volume: useSelector(selectButtonVolume) * 1.5,
   });
-  const [ voteWrondSound ] = useSound(SOUNDS.wrongAnswer, {
-    volume: useSelector(selectVolume) * 5 < 1 ? useSelector(selectVolume) * 5 : 1, // too much quiet sound
+  const [voteWrongSound] = useSound(SOUNDS.wrongAnswer, {
+    volume: useSelector(selectButtonVolume) * 1.5,
   });
   const handleVoteRight = () => {
     onVote(true, id);
@@ -45,7 +45,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
   };
   const handleVoteWrong = () => {
     onVote(false, id);
-    voteWrondSound();
+    voteWrongSound();
   };
   return (
     <div className={`${styles.wrp} ${elevateComment ? styles.elevated : ''}`}>
