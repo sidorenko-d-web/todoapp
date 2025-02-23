@@ -3,6 +3,8 @@ import styles from './LoadingScreen.module.scss';
 import coinIcon from '../../../../src/assets/icons/coin.png';
 import { ProgressBar } from './ProgressBar';
 import { useTranslation } from 'react-i18next';
+import Lottie from 'lottie-react';
+import { coinsAnim } from '../../../assets/animations';
 
 export const LoadingScreen = () => {
   const { t } = useTranslation('statistics');
@@ -34,6 +36,11 @@ export const LoadingScreen = () => {
 
   return (
     <div className={styles.root}>
+      <Lottie
+        animationData={coinsAnim}
+        loop={false}
+        autoPlay={true}
+      />
       <img className={styles.coin} src={coinIcon} alt="Coin" />
       <div className={styles.loadingWrp}>
         <ProgressBar progress={progress} />
