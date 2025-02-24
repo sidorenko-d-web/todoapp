@@ -6,21 +6,13 @@
   flex-direction: column;
   align-items: center;
   background-color: var.$color-bg;
-
-  .wardrobe {
-    width: 260px;
-    margin-top: 57px;
-    margin-bottom: 20px;
-  }
-
-  .buttons {
-    margin: 0 30px 20px 30px;
-  }
 }
 .avatarSection {
-  max-width: 260px;
   width: 100%;
   padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   .avatarPreview {
     width: 280px;
@@ -32,12 +24,76 @@
     border-radius: 12px;
     border: 2px solid var.$color-dark-gray-stroke;
     background: var.$footer-bg;
+    overflow: hidden;
 
-    svg {
-      width: 48px;
-      height: 48px;
-      color: var.$color-white;
+
+    img {
+      width: 100%;
+      height: 100%;
     }
+  }
+
+  .bodyPartsContainer {
+    display: flex;
+    flex: 1;
+    margin: 20px 0;
+    background: var.$color-dark-gray-stroke;
+    border-radius: 30px;
+    padding: 3px;
+
+    .tab {
+      flex: 1;
+      padding: 5px 10px;
+      border-radius: 100px;
+      color: var.$color-text-semi-transparent;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      &.activeTab {
+        border-radius: 28px;
+        background: #d9dce1;
+        color: var.$color-black;
+      }
+    }
+    .vipTab {
+      font-weight: 600;
+      background: linear-gradient(90deg, #1551e8 -19.37%, #e84951 121.25%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+}
+
+.skinOptionsGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  width: calc(100% - 32px);
+  max-width: 315px;
+  margin-bottom: 52px;
+
+  .option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    aspect-ratio: 1;
+    background: #222;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    overflow: hidden;
+  
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  
+  .selected {
+    border: 2px solid var.$color-primary;
   }
 }
 

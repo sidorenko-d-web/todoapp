@@ -23,7 +23,7 @@ interface WardrobeTabsProps {
   wardrobe?: boolean;
 }
 
-export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({wardrobe}) => {
+export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ wardrobe }) => {
   const { t } = useTranslation('wardrobe');
   const { data: inventorySkinsData, isLoading } = useGetInventorySkinsQuery();
   const [activeTab, setActiveTab] = useState('head');
