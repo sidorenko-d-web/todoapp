@@ -232,7 +232,7 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
         <>
           {data.referrals.map((referral: any, index: number) => (
             <ReferralCard position={index + 1} name={referral.username} total_invited={referral.total_invited}
-              streak={referral.push_line_data.in_streak_days}
+              streak={referral.push_line_data.in_streak_days} id_referral={referral.character_data.id}
               days_missed={referral.push_line_data.failed_days_ago} />
           ))}
 

@@ -34,7 +34,7 @@ export function AuthInit({ children }: AuthInitProps) {
 
   const saveCurrentStep = (step: AuthStep) => {
     if (step !== 'loading') {
-      localStorage.setItem('currentSetupStep', step); 
+      localStorage.setItem('currentSetupStep', step);
     }
     setCurrentStep(step);
   };

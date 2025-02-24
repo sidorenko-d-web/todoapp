@@ -3,7 +3,12 @@ import { useTranslation } from 'react-i18next';
 import DaysInARowModal from '../DevModals/DaysInARowModal/DaysInARowModal';
 import GetRewardChestModal from '../DevModals/GetRewardChestModal/GetRewardChestModal';
 import styles from './ProfilePage.module.scss';
-import { ProfileInfo, ProfileStats, ProfileStatsMini, StreakCard } from '../../components/profile';
+import {
+  ProfileInfo,
+  ProfileStats,
+  ProfileStatsMini,
+  StreakCard,
+} from '../../components/profile';
 import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../redux';
 import RewardsList from '../../components/profile/RewardsCard/RewardsList';
 import { getWeekData } from '../../utils';
@@ -46,27 +51,24 @@ export const ProfilePage: React.FC = () => {
   ).length;
 
   useEffect(() => {
-    const lastShownTimestamp = localStorage.getItem('daysInARowModalTimestamp');
-    const now = Date.now();
-    const twentyFourHours = 24 * 60 * 60 * 1000;
-    if (!lastShownTimestamp || now - Number(lastShownTimestamp) > twentyFourHours) {
+    if (!sessionStorage.getItem('daysInARowModalShown')) {
       openModal(MODALS.DAYS_IN_A_ROW);
-      localStorage.setItem('daysInARowModalTimestamp', now.toString());
+      sessionStorage.setItem('daysInARowModalShown', 'true');
       setIsModalShown(true);
     }
-  }, [ openModal ]);
+  }, [openModal]);
 
   useEffect(() => {
     if (streaks === 30 || streaks === 60 || streaks === 120) {
       openModal(MODALS.TASK_CHEST);
     }
-  }, [ data?.in_streak_days, openModal ]);
+  }, [data?.in_streak_days, openModal]);
 
   const userPosition =
     userProfileData && topProfilesData?.profiles
       ? topProfilesData.profiles.findIndex(
-        (profile: { id: string }) => profile.id === userProfileData.id,
-      )
+          (profile: { id: string }) => profile.id === userProfileData.id,
+        )
       : -1;
 
   const position =
@@ -76,7 +78,7 @@ export const ProfilePage: React.FC = () => {
   const freezeDays = [29]; // TODO: replace with real data
 
   const weekData = getWeekData(streakDays, freezeDays);
-  console.log(data?.week_information);
+
   return (
     <>
       <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
@@ -110,7 +112,9 @@ export const ProfilePage: React.FC = () => {
             <ProfileInfo
               nickname={userProfileData.username}
               blogName={userProfileData.blog_name}
-              subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left}
+              subscriptionIntegrationsLeft={
+                userProfileData.subscription_integrations_left
+              }
               position={position}
               isVip={false}
             />
