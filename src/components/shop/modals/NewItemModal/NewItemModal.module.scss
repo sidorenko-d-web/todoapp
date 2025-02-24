@@ -24,6 +24,10 @@
     margin: 40px 0 50px 0;
     animation: img-scale-anim 0.8s forwards ease;
 
+    img{
+      width: 100%;
+    }
+
     @include multi-size(60px, 80px);
   }
 
