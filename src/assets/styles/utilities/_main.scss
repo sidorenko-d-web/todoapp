@@ -58,7 +58,7 @@
       transform: translateX(0);
     }
   }
-  animation: shake $duration $ease;
+  // animation: shake $duration $ease;
 }
 
 @mixin multi-size($width-sm, $width-md, $ratio: 1) {

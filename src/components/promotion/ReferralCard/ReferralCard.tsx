@@ -1,5 +1,3 @@
-import React from 'react';
-
 import classNames from 'classnames';
 
 import s from './ReferralCard.module.scss';
@@ -13,6 +11,7 @@ import profileIconPlaceholder from '../../../assets/icons/referral-icon-placehol
 import { formatAbbreviation } from '../../../helpers';
 import { Button } from '../../shared';
 import { useTranslation } from 'react-i18next';
+import { useMarkPushReminderSentMutation } from '../../../redux';
 
 interface ReferralCardProps {
   position: number;
@@ -20,13 +19,24 @@ interface ReferralCardProps {
   total_invited: number;
   streak: number;
   days_missed: number;
+  id_referral: number;
 }
 
-export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, total_invited, streak, days_missed }) => {
+export const ReferralCard: React.FC<ReferralCardProps> = ({id_referral, position, name, total_invited, streak, days_missed }) => {
   const { t, i18n } = useTranslation('promotion');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const [markPushReminderSent] = useMarkPushReminderSentMutation();
 
-  // TODO: Добавить логику когда она будет на бэке
+  const handleSendMessage = async () => {
+    try {
+      await markPushReminderSent(id_referral).unwrap();
+      const message = encodeURIComponent(t("p58"));
+      const telegramLink = `https://t.me/${name}?text=${message}`;
+      window.open(telegramLink, '_blank');
+    } catch (error) {
+      console.error('Ошибка:', error);
+    }
+  };
 
   return (
     <>
@@ -79,7 +89,7 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({ position, name, tota
                 alt="Info"
               /> {t('p56')}
             </span>
-            <Button className={s.warningButton}>{t('p57')}</Button>
+            <Button onClick={handleSendMessage} className={s.warningButton}>{t('p57')}</Button>
           </div>
         )}
       </div>
