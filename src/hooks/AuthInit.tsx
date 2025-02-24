@@ -22,6 +22,17 @@ export function AuthInit({ children }: AuthInitProps) {
   });
   const [isInitializing, setIsInitializing] = useState(true);
 
+  useEffect(() => {
+    if (
+      window.Telegram &&
+      window.Telegram.WebApp &&
+      typeof window.Telegram.WebApp.requestFullscreen === 'function'
+    ) {
+      window.Telegram.WebApp.requestFullscreen();
+    }
+  }, []);
+
+
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
 
   const saveCurrentStep = (step: AuthStep) => {
