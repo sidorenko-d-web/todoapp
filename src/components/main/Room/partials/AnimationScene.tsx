@@ -3,12 +3,10 @@ import { SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { useRef, useEffect, useLayoutEffect, useState } from 'react';
 import { useGetEquipedQuery } from '../../../../redux';
 import { GameObjects } from 'phaser';
+import { useNavigate, useNavigation } from 'react-router-dom';
 
 export const AnimationScene = () => {
   const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
-
-  // const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/постер_base.json`).href;
-  // const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/постер_baseatlas.txt`).href;
 
   const { data: room } = useGetEquipedQuery();
 
@@ -177,7 +175,9 @@ export const AnimationScene = () => {
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
+  const navigate = useNavigate();
+
   return (
-    <div ref={sceneRef} id="player" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1000 }}></div>
+    <div onClick={() => navigate('/dev-modals')} ref={sceneRef} id="player" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1000 }}></div>
   );
 };
