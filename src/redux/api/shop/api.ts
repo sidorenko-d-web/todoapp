@@ -38,7 +38,7 @@ export const shopApi = createApi({
         method: 'POST',
         params,
       }),
-      invalidatesTags: ['items'],
+      invalidatesTags: ['skins'],
     }),
   }),
 });

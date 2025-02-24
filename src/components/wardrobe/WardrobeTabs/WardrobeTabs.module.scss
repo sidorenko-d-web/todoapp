@@ -46,19 +46,23 @@
 }
 
 .grid {
-  width: 85%;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
   gap: 8px;
   justify-content: space-between;
 }
 
+.wardrobe{
+  padding: 0 15px;
+}
+
 .option {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 44px;
-  height: 44px;
+  width: 100%;
+  aspect-ratio: 1;
   background: #222;
   border: none;
   border-radius: 8px;
