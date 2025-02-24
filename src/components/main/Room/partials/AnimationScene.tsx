@@ -7,9 +7,6 @@ import { GameObjects } from 'phaser';
 export const AnimationScene = () => {
   const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
 
-  // const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/постер_base.json`).href;
-  // const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/постер_baseatlas.txt`).href;
-
   const { data: room } = useGetEquipedQuery();
 
   const gameRef = useRef<Phaser.Game | null>(null);
@@ -178,6 +175,7 @@ export const AnimationScene = () => {
   }, []);
 
   return (
+    // <div onClick={() => navigate('/dev-modals')} ref={sceneRef} id="player" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1000 }}></div>
     <div ref={sceneRef} id="player" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1000 }}></div>
   );
 };
