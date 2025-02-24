@@ -11,16 +11,12 @@ import { selectVolume } from '../../../redux';
 const initialDuration = 5000;
 const updateInterval = 50;
 
-export const LoadingScreenBar: FC<{ accelerate?: () => void; isLoading?: boolean }> = ({ accelerate, isLoading=true }) => {
+export const LoadingScreenBar: FC<{ accelerate?: () => void; speedMultiplier: number }> = ({ accelerate, speedMultiplier }) => {
     const { t } = useTranslation('integrations');
     const [progress, setProgress] = useState(0);
-    const [speedMultiplier, setSpeedMultiplier] = useState(1);
-
     const [playAccelerateSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
 
     useEffect(() => {
-        if (!isLoading) return;
-
         const totalSteps = initialDuration / updateInterval;
         const progressIncrement = 100 / totalSteps;
 
@@ -29,7 +25,7 @@ export const LoadingScreenBar: FC<{ accelerate?: () => void; isLoading?: boolean
         }, updateInterval);
 
         return () => clearInterval(timerId);
-    }, [isLoading, speedMultiplier]);
+    }, [speedMultiplier]);
 
     const createParticles = () => {
         const button = document.querySelector(`.${s.iconButton}`) as HTMLElement | null;
@@ -56,7 +52,6 @@ export const LoadingScreenBar: FC<{ accelerate?: () => void; isLoading?: boolean
     const handleAccelerate = () => {
         playAccelerateSound();
         createParticles();
-        setSpeedMultiplier(3);
         if (accelerate) accelerate();
     };
 
@@ -77,7 +72,7 @@ export const LoadingScreenBar: FC<{ accelerate?: () => void; isLoading?: boolean
                 </div>
                 <Button
                     className={s.iconButton}
-                    onClick={handleAccelerate}
+                    onClick={accelerate}
                     disabled={false}
                     aria-label={t('i24')}
                 >
