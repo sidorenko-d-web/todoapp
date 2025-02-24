@@ -1,31 +1,32 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import rocketIcon from '../../../assets/icons/rocket.svg';
 import s from './LoadingScreenBar.module.scss';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 
-const initialDuration = 5000;
-const updateInterval = 50;
+const INITIAL_DURATION = 1500;
+const UPDATE_INTERVAL = 25;
 
 interface LoadingScreenBarProps {
     speedMultiplier: number;
+    progress: number;
+    setProgress: React.Dispatch<React.SetStateAction<number>>;
 }
 
-
-export const LoadingScreenBar: FC<LoadingScreenBarProps> = ({ speedMultiplier }) => {
+export const LoadingScreenBar: FC<LoadingScreenBarProps> = ({ speedMultiplier, progress, setProgress }) => {
     const { t } = useTranslation('integrations');
-    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-        const totalSteps = initialDuration / updateInterval;
-        const progressIncrement = 100 / totalSteps;
+        if (progress >= 100) return;
+
+        const progressIncrement = (100 / (INITIAL_DURATION / UPDATE_INTERVAL)) * speedMultiplier;
 
         const timerId = setInterval(() => {
-            setProgress(prev => Math.min(prev + progressIncrement * speedMultiplier, 100));
-        }, updateInterval);
+            setProgress(prev => Math.min(prev + progressIncrement, 100));
+        }, UPDATE_INTERVAL);
 
         return () => clearInterval(timerId);
-    }, [speedMultiplier]);
+    }, [speedMultiplier, progress]);
 
     return (
         <div className={`${s.wrp} ${s.elevated}`}>
@@ -38,15 +39,14 @@ export const LoadingScreenBar: FC<LoadingScreenBarProps> = ({ speedMultiplier })
                     <div className={s.progressBar}>
                         <div
                             className={s.progressBarInner}
-                            style={{ width: `${progress}%`, transition: 'width 0.05s linear' }}
+                            style={{
+                                width: `${progress}%`,
+                                transition: progress >= 100 ? 'width 0.1s linear' : 'width 0.05s linear',
+                            }}
                         />
                     </div>
                 </div>
-                <Button
-                    className={s.iconButton}
-                    disabled={false}
-                    aria-label={t('i24')}
-                >
+                <Button className={s.iconButton} disabled={false} aria-label={t('i24')}>
                     <img src={rocketIcon} alt="rocket" />
                 </Button>
             </div>

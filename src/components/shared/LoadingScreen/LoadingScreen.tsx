@@ -9,33 +9,31 @@ import { SOUNDS } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
 
-const LOADING_DURATION = 1500;
 
-export const LoadingScreen = () => {
+export const LoadingScreen = ({ onAnimationComplete }: { onAnimationComplete: () => void }) => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [speedMultiplier, setSpeedMultiplier] = useState(1);
+  const [progress, setProgress] = useState(0);
   const [playAccelerateSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
 
   useEffect(() => {
-    const switchToAnimation = setTimeout(() => {
-      setShowAnimation(true);
-    }, LOADING_DURATION);
-
-    return () => clearTimeout(switchToAnimation);
-  }, []);
+    if (progress >= 99) {
+      setProgress(100);
+      setTimeout(() => {
+        setShowAnimation(true);
+      }, 100);
+    }
+  }, [progress]);
 
   const createParticles = (x: number, y: number) => {
     const root = document.querySelector(`.${styles.clickableArea}`);
-
     if (!root) return;
 
     for (let i = 0; i < 5; i++) {
       const particle = document.createElement('div');
       particle.classList.add(styles.particle);
-
       particle.style.left = `${x}px`;
       particle.style.top = `${y}px`;
-
       root.appendChild(particle);
 
       setTimeout(() => {
@@ -48,17 +46,23 @@ export const LoadingScreen = () => {
     const { clientX, clientY } = event;
     createParticles(clientX, clientY);
     playAccelerateSound();
-    setSpeedMultiplier(3);
+    setSpeedMultiplier(prev => prev * 1.5);
   };
 
   return (
     <div className={styles.root} onClick={handleAccelerate}>
+      <div/>
       <div className={styles.clickableArea}></div>
-      <div />
       {showAnimation ? (
-        <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
+        <Lottie
+          animationData={coinsAnim}
+          loop={false}
+          autoPlay={true}
+          style={{ zIndex: '10000' }}
+          onComplete={onAnimationComplete}
+        />
       ) : (
-        <LoadingScreenBar speedMultiplier={speedMultiplier} />
+        <LoadingScreenBar speedMultiplier={speedMultiplier} progress={progress} setProgress={setProgress} />
       )}
       <img className={styles.coin} src={loadingImage} alt="Coin" />
     </div>
