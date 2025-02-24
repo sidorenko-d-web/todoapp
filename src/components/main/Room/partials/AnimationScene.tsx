@@ -178,6 +178,7 @@ export const AnimationScene = () => {
   const navigate = useNavigate();
 
   return (
-    <div onClick={() => navigate('/dev-modals')} ref={sceneRef} id="player" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1000 }}></div>
+    // <div onClick={() => navigate('/dev-modals')} ref={sceneRef} id="player" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1000 }}></div>
+    <div ref={sceneRef} id="player" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1000 }}></div>
   );
 };
