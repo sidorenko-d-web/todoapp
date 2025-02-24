@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { TaskCard } from '../TaskCard';
 import magicBallIcon from '../../../assets/icons/magic-ball.png';
 import chestIcon from '../../../assets/icons/chest-purple.svg';
-import { MODALS } from '../../../constants';
+import { MODALS } from '../../../constants/modals';
 import { useModal } from '../../../hooks';
 import s from '../styles.module.scss';
 import { ModalTopTasks } from './ModalTopTasks';
@@ -30,7 +30,16 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
     hasError: false
   });
 
-  const handleOpenTopTasks = () => {
+  const handleOpenTopTasks = async () => {
+    if (taskState.completed && !task.is_reward_given) {
+      try {
+        // Здесь должен быть запрос на получение награды
+        openModal(MODALS.TASK_CHEST); // Открываем модалку с сундуком
+        return;
+      } catch (error) {
+        console.error('Error getting reward:', error);
+      }
+    }
     openModal(MODALS.TOP_TASK);
   };
 
@@ -50,7 +59,7 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
   const progress = (taskState.currentStep / taskState.totalSteps) * 100;
 
   const getButtonText = () => {
-    if (taskState.completed) return t('q14');
+    if (taskState.completed) return t('q33');
     if (taskState.currentStep > 0) return t('q11');
     return t('q13');
   };

@@ -10,6 +10,7 @@ import { useGetBoostQuery } from '../../redux/api/tasks/api';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setActiveFooterItemId } from '../../redux/slices/guideSlice';
+import GetGift from '../DevModals/GetGift/GetGift';
 
 export const TasksPage: FC = () => {
   const dispatch = useDispatch();
@@ -56,6 +57,10 @@ export const TasksPage: FC = () => {
     isLoading,
   });
 
+  useEffect(() => {
+    console.log('TasksPage render');
+  }, []);
+
   if (isLoading) {
     return <div>{t('q16')}...</div>;
   }
@@ -87,6 +92,7 @@ export const TasksPage: FC = () => {
       {dailyTask && <DailyTasks task={dailyTask} />}
       {topTask && <TopTasks task={topTask} />}
       {socialTasks.length > 0 && <SocialTasks tasks={socialTasks} />}
+      <GetGift />
     </main>
   );
 };
