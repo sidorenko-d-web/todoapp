@@ -12,7 +12,6 @@ import { Button } from '../../shared';
 import {useGetAllIntegrationsQuery} from '../../../redux';
 
 
-
 interface CompanyCardProps {
   company: CompanyResponseDTO;
   selected?: boolean;
@@ -26,6 +25,8 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
   const {data: integrationsData} = useGetAllIntegrationsQuery({
     company_name: company.company_name
   })
+  const integrationCount = integrationsData?.count ?? 0;
+
 
   const getBlueStarCount = (count: number = 0) => {
     if (count >= 18) return 3;
@@ -34,14 +35,13 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
     return 0;
   };
 
-  const getProgressBarPercentage = (count: number = 0) => {
-    // Define star level thresholds
-    const thresholds = {
-      firstStar: 4,
-      secondStar: 10,
-      thirdStar: 18
-    };
+  const thresholds = {
+    firstStar: 4,
+    secondStar: 10,
+    thirdStar: 18
+  };
 
+  const getProgressBarPercentage = (count: number = 0) => {
     // Calculate which progress segment we're in
     if (count >= thresholds.thirdStar) {
       return 100;
@@ -61,8 +61,8 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
     }
   };
 
-  const blueStarCount = getBlueStarCount(integrationsData?.count);
-  const progressPercentage = getProgressBarPercentage(integrationsData?.count);
+  const blueStarCount = getBlueStarCount(integrationCount);
+  const progressPercentage = getProgressBarPercentage(integrationCount);
 
 
   return (
@@ -95,20 +95,25 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
       <div className={s.content}>
         <h3 className={s.title}>{company.company_name}</h3>
         <div className={s.stars}>
-          {[...Array(3)].map((_, index) => (
-            <img
-              key={index}
-              src={index < blueStarCount ? starBlueIcon : starDarkGrayIcon}
-              alt=""
+            {[...Array(3)].map((_, index) => (
+              <img
+                className={integrationCount >= thresholds.thirdStar ? s.starsMax : ''}
+                key={index}
+                src={index < blueStarCount ? starBlueIcon : starDarkGrayIcon}
+                alt=""
+              />
+            ))}
+        </div>
+
+        {integrationCount < thresholds.thirdStar && (
+          <div className={s.progressBar}>
+            <div
+              className={s.progressBarInner}
+              style={{ width: `${progressPercentage}%` }}
             />
-          ))}
         </div>
-        <div className={s.progressBar}>
-          <div
-            className={s.progressBarInner}
-            style={{ width: `${progressPercentage}%` }}
-          />
-        </div>
+        )}
+
       </div>
     </Button>
   );
