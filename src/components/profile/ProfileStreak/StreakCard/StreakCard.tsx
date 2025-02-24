@@ -90,7 +90,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
 
           <div className={styles.title}>
             <span className={styles.daysInARow}>
-              {streakDays} {t('p13')}
+              {streakDays + 1} {t('p13')}
             </span>
             {!onlyStreak && (
               <div className={styles.freezeCount}>
@@ -127,7 +127,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
           <div className={styles.progressContainer}>
             <div className={`${styles['progressBarTextWrp']} ${styles['progressText']}`}>
               <span>
-                {streakDays}/{t(p14Key)}
+                {streakDays + 1}/{t(p14Key)}
               </span>
               <span className={styles.reward}>
                 {t(p15Key)}

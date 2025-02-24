@@ -60,31 +60,26 @@ export const StreakDay: React.FC<StreakDayProps> = ({
 
   const weekdaysRu = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
   const weekdaysEn = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-
+  const isCurrentDay = currentDay === dayNumber;
   const getIcon = () => {
     if (isFailedDay) return <img src={freezeIcon} alt="Frozen Day" />;
     if (isStreakDay) return <img src={fireIcon} alt="Streak Day" />;
+    if (isCurrentDay) return <img src={fireIcon} alt="Streak Day" />;
+
     return null;
   };
 
   return (
     <div>
       <div
-        className={`${styles['calendarDay']} 
-        ${
-          !isFailedDay && !isStreakDay
-            ? styles.calendarDay
-            : streakDays < 30
-            ? styles.blue
-            : streakDays < 60
-            ? styles.purple
-            : styles.red
-        }
-
-   
-    ${currentDay === dayNumber ? styles.currentDay : ''}`}
+        className={`${styles.calendarDay} ${
+          currentDay === dayNumber ? styles.currentDay : ''
+        } ${
+          (currentDay === dayNumber || isStreakDay) &&
+          (streakDays < 30 ? styles.blue : streakDays < 60 ? styles.purple : styles.red)
+        } ${!isFailedDay && !isStreakDay ? styles.calendarDay : ''}`}
       >
-        {(isStreakDay || isFailedDay) && (
+        {(isStreakDay || isFailedDay || isCurrentDay) && (
           <div
             className={`${styles['status-icon']} ${
               streakDays < 30

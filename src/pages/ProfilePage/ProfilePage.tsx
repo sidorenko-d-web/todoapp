@@ -51,12 +51,9 @@ export const ProfilePage: React.FC = () => {
   ).length;
 
   useEffect(() => {
-    const lastShownTimestamp = localStorage.getItem('daysInARowModalTimestamp');
-    const now = Date.now();
-    const twentyFourHours = 24 * 60 * 60 * 1000;
-    if (!lastShownTimestamp || now - Number(lastShownTimestamp) > twentyFourHours) {
+    if (!sessionStorage.getItem('daysInARowModalShown')) {
       openModal(MODALS.DAYS_IN_A_ROW);
-      localStorage.setItem('daysInARowModalTimestamp', now.toString());
+      sessionStorage.setItem('daysInARowModalShown', 'true');
       setIsModalShown(true);
     }
   }, [openModal]);

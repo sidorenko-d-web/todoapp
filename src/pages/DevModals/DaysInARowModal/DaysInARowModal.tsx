@@ -73,7 +73,7 @@ export default function DaysInARowModal({}: Props) {
     setStreakDays(streak);
   }, [data]);
 
-  const streakCount = streakDays.length;
+  const streakCount = streakDays.length + 1;
   const progressStage = streakCount < 30 ? 'blue' : streakCount < 60 ? 'purple' : 'red';
 
   return (
@@ -173,6 +173,7 @@ const DayItem = ({
   progressStage: 'blue' | 'purple' | 'red';
 }) => {
   const date = new Date();
+  const isCurrentDay = currentDay === day;
   date.setDate(day);
   const weekday = date.toLocaleDateString('ru-RU', { weekday: 'short' });
 
@@ -180,18 +181,19 @@ const DayItem = ({
 
   return (
     <div className={styles.dayWrapper}>
-      {isStreak && (
-        <div
-          className={clsx(
-            styles.icon,
-            progressStage === 'red' && styles.iconRed,
-            progressStage === 'purple' && styles.iconPurple,
-            progressStage === 'blue' && styles.iconBlue,
-          )}
-        >
-          <img src={FireIcon} />
-        </div>
-      )}
+      {isStreak ||
+        (isCurrentDay && (
+          <div
+            className={clsx(
+              styles.icon,
+              progressStage === 'red' && styles.iconRed,
+              progressStage === 'purple' && styles.iconPurple,
+              progressStage === 'blue' && styles.iconBlue,
+            )}
+          >
+            <img src={FireIcon} />
+          </div>
+        ))}
 
       {isFrozen && (
         <div className={clsx(styles.icon, styles.iconBlue)}>
@@ -202,11 +204,11 @@ const DayItem = ({
       <div
         className={clsx(
           styles.day,
+          isCurrentDay && styles.currentDay, // Базовый стиль для текущего дня
           (isFrozen || progressStage === 'blue') && styles.dayBlue,
           progressStage === 'red' && !isFrozen && styles.dayRed,
           progressStage === 'purple' && !isFrozen && styles.dayPurple,
-          currentDay === day && styles.currentDay,
-          isNormal && styles.dayNormal,
+          isNormal && !isCurrentDay && styles.dayNormal,
         )}
       >
         <p>{day}</p>
