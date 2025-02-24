@@ -56,12 +56,13 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   margin: 0 auto;
   overflow: hidden;
 
+  
   .bg_image {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    height: calc(100% + 20px);
+    height: calc(100% - 60px);
     z-index: -1;
     transition: transform 0.1s ease-out;
   }
@@ -72,6 +73,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   flex-direction: column;
   width: 100%;
   max-width: 1728px;
+  min-height: 100vh;
   height: var(--tg-viewport-stable-height);
   padding: 20px 15px;
   overflow-y: auto;

@@ -41,6 +41,7 @@ export const Tree = () => {
     userSubscribers,
   });
 
+
   useEffect(() => {
     if (lastActiveLevelRef.current) {
       lastActiveLevelRef.current.scrollIntoView({
@@ -103,7 +104,6 @@ export const Tree = () => {
                           autoplay
                           className={s.blickAnimation}
                         />
-                        <span></span>
                         <div className={classNames({ [s.blur]: !isActive })} />
                         <img src={giftIcon} height={20} width={20} alt="gift" />
                         {!isActive && <div className={classNames(s.questionWrapper)}>
