@@ -3,18 +3,18 @@ import rocketIcon from '../../../assets/icons/rocket.svg';
 import s from './LoadingScreenBar.module.scss';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
-import useSound from 'use-sound';
-import { SOUNDS } from '../../../constants';
-import { useSelector } from 'react-redux';
-import { selectVolume } from '../../../redux';
 
 const initialDuration = 5000;
 const updateInterval = 50;
 
-export const LoadingScreenBar: FC<{ accelerate?: () => void; speedMultiplier: number }> = ({ accelerate, speedMultiplier }) => {
+interface LoadingScreenBarProps {
+    speedMultiplier: number;
+}
+
+
+export const LoadingScreenBar: FC<LoadingScreenBarProps> = ({ speedMultiplier }) => {
     const { t } = useTranslation('integrations');
     const [progress, setProgress] = useState(0);
-    const [playAccelerateSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
 
     useEffect(() => {
         const totalSteps = initialDuration / updateInterval;
@@ -27,36 +27,8 @@ export const LoadingScreenBar: FC<{ accelerate?: () => void; speedMultiplier: nu
         return () => clearInterval(timerId);
     }, [speedMultiplier]);
 
-    const createParticles = () => {
-        const button = document.querySelector(`.${s.iconButton}`) as HTMLElement | null;
-        if (!button) return;
-
-        const rect = button.getBoundingClientRect();
-        const parent = button.offsetParent as HTMLElement | null;
-        const parentRect = parent ? parent.getBoundingClientRect() : { left: 0, top: 0 };
-
-        for (let i = 0; i < 5; i++) {
-            const particle = document.createElement('div');
-            particle.classList.add(s.particle);
-            particle.style.left = `${rect.left - parentRect.left + rect.width / 2}px`;
-            particle.style.top = `${rect.top - parentRect.top + rect.height / 2}px`;
-
-            button.appendChild(particle);
-
-            setTimeout(() => {
-                particle.remove();
-            }, 800);
-        }
-    };
-
-    const handleAccelerate = () => {
-        playAccelerateSound();
-        createParticles();
-        if (accelerate) accelerate();
-    };
-
     return (
-        <div className={`${s.wrp} ${s.elevated}`} onClick={handleAccelerate}>
+        <div className={`${s.wrp} ${s.elevated}`}>
             <div className={s.integrationHeader}>
                 <h2 className={s.title}>{t('i10')}</h2>
             </div>
@@ -72,7 +44,6 @@ export const LoadingScreenBar: FC<{ accelerate?: () => void; speedMultiplier: nu
                 </div>
                 <Button
                     className={s.iconButton}
-                    onClick={accelerate}
                     disabled={false}
                     aria-label={t('i24')}
                 >
