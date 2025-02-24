@@ -20,13 +20,19 @@ import spinnerPurple from '../../assets/icons/purple-glow.svg';
 import spinnerBlue from '../../assets/icons/blue-glow.svg';
 import spinnerRed from '../../assets/icons/red-glow.svg';
 
+import Lottie from 'lottie-react';
+import { giftBlick } from '../../assets/animations';
+
+
 export const Tree = () => {
   const { t, i18n } = useTranslation('tree');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData } = useGetTreeInfoQuery();
   const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
   const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
   const lastActiveLevelRef = useRef<HTMLDivElement | null>(null);
+
+
 
   const userSubscribers = userProfileData?.subscribers || 0;
 
@@ -42,7 +48,7 @@ export const Tree = () => {
         block: 'center',
       });
     }
-  }, [ progressPercent ]);
+  }, [progressPercent]);
 
   if (!treeData) {
     return null;
@@ -61,9 +67,9 @@ export const Tree = () => {
             const isActive = userSubscribers >= stage.subscribers;
             const bottomPosition = 150 + index * 300;
 
-            const giftColors = [ giftBlue, giftPurple, giftRed ];
-            const questionColors = [ questionBlue, questionPurple, questionRed ];
-            const spinnerColors = [ spinnerBlue, spinnerPurple, spinnerRed ];
+            const giftColors = [giftBlue, giftPurple, giftRed];
+            const questionColors = [questionBlue, questionPurple, questionRed];
+            const spinnerColors = [spinnerBlue, spinnerPurple, spinnerRed];
 
             const giftIcon = giftColors[index % giftColors.length];
             const questionIcon = questionColors[index % questionColors.length];
@@ -91,6 +97,13 @@ export const Tree = () => {
                   >
                     {stage.achievement && (
                       <div className={classNames(s.imgPrize, { [s.imgPrizeActive]: isActive })}>
+                        <Lottie
+                          animationData={giftBlick}
+                          loop
+                          autoplay
+                          className={s.blickAnimation}
+                        />
+                        <span></span>
                         <div className={classNames({ [s.blur]: !isActive })} />
                         <img src={giftIcon} height={20} width={20} alt="gift" />
                         {!isActive && <div className={classNames(s.questionWrapper)}>

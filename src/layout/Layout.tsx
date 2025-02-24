@@ -13,6 +13,8 @@ import { AudioBg, useModal } from '../hooks';
 import { getOS } from '../utils';
 
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
+import { lampTable } from '../assets/animations';
+import Lottie from 'lottie-react';
 
 const Layout = () => {
   const location = useLocation();
@@ -25,7 +27,7 @@ const Layout = () => {
     '/progressTree',
     location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/)
   ].includes(location.pathname);
-        
+
   const showRoadmapBg = location.pathname === '/progressTree';
 
 
@@ -41,12 +43,10 @@ const Layout = () => {
   }, []);
 
 
-  const contentClassName = `${styles.content} ${
-    showHeader ? styles.withHeader : ''
-  } ${needsReducedMargin ? styles.reducedMargin : ''} ${
-    platform ? styles[platform] : ''
-  }`;
-  
+  const contentClassName = `${styles.content} ${showHeader ? styles.withHeader : ''
+    } ${needsReducedMargin ? styles.reducedMargin : ''} ${platform ? styles[platform] : ''
+    }`;
+
   useEffect(() => {
     if (showRoadmapBg) {
       const handleScroll = () => {
@@ -54,7 +54,7 @@ const Layout = () => {
         const maxScroll = document.body.scrollHeight - window.innerHeight;
         const scrollPercentage = scrollTop / maxScroll;
 
-        const newOffset = scrollPercentage * 100; 
+        const newOffset = scrollPercentage * 100;
         setBgOffset(newOffset);
       };
 
@@ -65,18 +65,25 @@ const Layout = () => {
 
   return (
     <>
-      <div className={`${styles.settingsIcon} ${
-        platform ? styles[platform + 'Settings'] : ''
-      }`}>
+      <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''
+        }`}>
         <Settings />
       </div>
       <div className={styles.wrp}>
         {showRoadmapBg && (
-          <img
-            src={roadmapBg}
-            className={styles.bg_image}
-            style={{ transform: `translateY(-${bgOffset}px)` }}
-          />
+          <>
+            <img
+              src={roadmapBg}
+              className={styles.bg_image}
+              style={{ transform: `translateY(-${bgOffset}px)` }}
+            />
+            <Lottie
+              animationData={lampTable}
+              loop
+              autoplay
+              style={{position: 'absolute', bottom: '25px', transform: `translateY(-${bgOffset}px)`}}
+            />
+          </>
         )}
         {showHeader && <Header />}
         <main className={contentClassName}>
