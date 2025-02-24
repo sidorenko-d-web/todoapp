@@ -159,12 +159,8 @@
           gap: 2px;
 
           img {
-            width: 14px;
-            height: 14px;
-            @media (min-width: var.$breakpoint-md) {
-              width: 18px;
-              height: 18px;
-            }
+            width: 18px;
+            height: 18px;
           }
 
           p {
@@ -373,8 +369,8 @@
     margin-top: 20px;
 
     img {
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
     }
 
     p {

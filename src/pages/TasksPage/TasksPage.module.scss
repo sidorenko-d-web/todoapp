@@ -34,6 +34,7 @@
 
       .badge {
         display: flex;
+        align-items: center;
         padding: 4px 4px 4px 7px;
         border-radius: 10px;
         background: var.$color-badge-bg;

@@ -76,8 +76,6 @@ export const IntegrationPage: React.FC = () => {
     }
   };
 
-  console.log(data);
-
   return (
     <div className={styles.wrp}>
       <h1 className={styles.pageTitle}>{t('i1')}</h1>

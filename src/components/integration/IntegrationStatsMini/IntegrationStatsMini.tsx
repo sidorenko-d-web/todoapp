@@ -29,15 +29,15 @@ export const IntegrationStatsMini: React.FC<IntegrationStatsMiniProps> = ({ view
       <div className={styles.statsUnderTitle}>
         <div className={styles.statWrp}>
           <p className={styles.stat}>{formatAbbreviation(views, 'number', {locale:locale})}</p>
-          <img src={viewsIcon} height={14} width={14} alt="" />
+          <img src={viewsIcon} height={18} width={18} alt="" />
         </div>
         <div className={styles.statWrp}>
           <p className={styles.stat}>{formatAbbreviation(subscribers, 'number', {locale:locale})}</p>
-          <img src={subscribersIcon} height={14} width={14} alt="" />
+          <img src={subscribersIcon} height={18} width={18} alt="" />
         </div>
         <div className={styles.statWrp}>
           <p className={styles.stat}>+ {formatAbbreviation(income, 'number', {locale:locale})}</p>
-          <img src={coin} height={14} width={14} alt="" />
+          <img src={coin} height={18} width={18} alt="" />
         </div>
       </div>
       <TrackedButton trackingData={{eventType: 'button', eventPlace: 'К статистике - Интеграции'}} onClick={() => navigate(AppRoute.Statistics)} className={styles.seeStatsButton}></TrackedButton>
