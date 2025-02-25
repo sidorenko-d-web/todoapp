@@ -301,6 +301,7 @@
   }
 
   .actions {
+    height: 44px;
     margin-top: 20px;
     display: grid;
     grid-template-columns: 1fr 1fr auto;
@@ -359,6 +360,7 @@
   }
 
   .disabledUpgradeActions {
+    height: 44px;
     background: color.scale(var.$color-primary, $alpha: -80%);
     border-radius: 8px;
     display: flex;

@@ -27,27 +27,29 @@ const StatisticsPage: FC = () => {
         <div className={styles.titleWrapper}>
           <h1 className={styles.title}>{t('s1')}</h1>
           <div className={styles.scores}>
-            <div className={styles.scoresItem}>
-              <p>{formatAbbreviation(userProfileData?.total_views || 0, 'number', {locale: locale})}</p>
-              <img src={views} height={18} width={18} alt="views" />
+            <div className={styles.topScores}>
+              <div className={styles.scoresItem}>
+                <p>{formatAbbreviation(userProfileData?.total_views || 0, 'number', { locale: locale })}</p>
+                <img src={views} height={18} width={18} alt="views" />
+              </div>
+              <div className={styles.scoresItem}>
+                <p>{formatAbbreviation(userProfileData?.subscribers || 0, 'number', { locale: locale })}</p>
+                <img src={subscribers} alt="subscribers" />
+              </div>
             </div>
             <div className={styles.scoresItem}>
-              <p>{formatAbbreviation(userProfileData?.subscribers || 0, 'number', {locale: locale})}</p>
-              <img src={subscribers} alt="subscribers" />
-            </div>
-            <div className={styles.scoresItem}>
-              <p>+ {formatAbbreviation(userProfileData?.points || 0, 'number', {locale: locale})}</p>
+              <p>+ {formatAbbreviation(userProfileData?.points || 0, 'number', { locale: locale })}</p>
               <img src={coin} height={18} width={18} alt="" />
             </div>
           </div>
         </div>
-        <div className={styles.placeholder}/>
+        <div className={styles.placeholder} />
       </header>
       <div className={styles.sectionHeader}>
         <h2 className={styles.sectionTitle}>{t('s2')}</h2>
         <div className={styles.sectionCount}>
           <p>{statisticData?.count || 0}</p>
-          <img src={logo} alt="logo" width={18} height={18}/>
+          <img src={logo} alt="logo" width={18} height={18} />
         </div>
       </div>
       <div className={styles.integrationsWrapper}>

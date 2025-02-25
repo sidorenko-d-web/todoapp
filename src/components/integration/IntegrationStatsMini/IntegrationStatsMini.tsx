@@ -27,20 +27,23 @@ export const IntegrationStatsMini: React.FC<IntegrationStatsMiniProps> = ({ view
     <div className={styles.statsUnderTitleWrp}>
       <div className={styles.toCenterStats} />
       <div className={styles.statsUnderTitle}>
-        <div className={styles.statWrp}>
-          <p className={styles.stat}>{formatAbbreviation(views, 'number', {locale:locale})}</p>
-          <img src={viewsIcon} height={18} width={18} alt="" />
+        <div className={styles.topStats}>
+          <div className={styles.statWrp}>
+            <p className={styles.stat}>{formatAbbreviation(views, 'number', { locale: locale })}</p>
+            <img src={viewsIcon} height={18} width={18} alt="" />
+          </div>
+          <div className={styles.statWrp}>
+            <p className={styles.stat}>{formatAbbreviation(subscribers, 'number', { locale: locale })}</p>
+            <img src={subscribersIcon} height={18} width={18} alt="" />
+          </div>
         </div>
         <div className={styles.statWrp}>
-          <p className={styles.stat}>{formatAbbreviation(subscribers, 'number', {locale:locale})}</p>
-          <img src={subscribersIcon} height={18} width={18} alt="" />
-        </div>
-        <div className={styles.statWrp}>
-          <p className={styles.stat}>+ {formatAbbreviation(income, 'number', {locale:locale})}</p>
+          <p className={styles.stat}>+ {formatAbbreviation(income, 'number', { locale: locale })}</p>
           <img src={coin} height={18} width={18} alt="" />
         </div>
       </div>
-      <TrackedButton trackingData={{eventType: 'button', eventPlace: 'К статистике - Интеграции'}} onClick={() => navigate(AppRoute.Statistics)} className={styles.seeStatsButton}></TrackedButton>
+      <TrackedButton trackingData={{ eventType: 'button', eventPlace: 'К статистике - Интеграции' }}
+                     onClick={() => navigate(AppRoute.Statistics)} className={styles.seeStatsButton}></TrackedButton>
     </div>
   );
 };
