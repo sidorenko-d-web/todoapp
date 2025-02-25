@@ -8,6 +8,7 @@ import s from '../styles.module.scss';
 import { ModalTopTasks } from './ModalTopTasks';
 import { Task } from '../../../redux/api/tasks/dto';
 import { useTranslation } from 'react-i18next';
+import GetRewardChestModal from '../../../pages/DevModals/GetRewardChestModal/GetRewardChestModal';
 
 interface TaskState {
   currentStep: number;
@@ -38,7 +39,7 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
     if (task.is_completed && !task.is_reward_given) {
       try {
         console.log('Условия выполнены, открываем подарок');
-        openModal(MODALS.GET_GIFT);
+        openModal(MODALS.TASK_CHEST);
         return;
       } catch (error) {
         console.error('Error getting reward:', error);
@@ -66,12 +67,6 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
   };
 
   const progress = (taskState.currentStep / taskState.totalSteps) * 100;
-
-  const getButtonText = () => {
-    if (taskState.completed) return t('q33');
-    if (taskState.currentStep > 0) return t('q11');
-    return t('q13');
-  };
 
   return (
     <section className={s.section}>
@@ -111,6 +106,7 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
         onStateChange={handleStateChange}
         task={task}
       />
+      <GetRewardChestModal onClose={() => closeModal(MODALS.TASK_CHEST)} />
     </section>
   );
 };
