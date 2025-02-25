@@ -22,6 +22,7 @@ import spinnerRed from '../../assets/icons/red-glow.svg';
 
 import Lottie from 'lottie-react';
 import { giftBlick } from '../../assets/animations';
+import { Button } from '../shared';
 
 
 export const Tree = () => {
@@ -89,6 +90,7 @@ export const Tree = () => {
                     <img className={s.spiner} src={spinnerIcon} height={120} width={120} alt="spinner" />
                   )}
                 </div>
+                <Button className={s.takeRewardBtn}>Забрать</Button>
                 {stage.id > 1 && (
                   <div
                     className={classNames(s.prize, {
@@ -96,8 +98,10 @@ export const Tree = () => {
                       [s.prizeRight]: index % 2 !== 1,
                     })}
                   >
+                    {true && <img className={s.imgPrizeActive} src={spinnerBlue} height={150} width={150} alt="spinner" />}
+                    {/* TODO: rewrite when backend is ready */}
                     {stage.achievement && (
-                      <div className={classNames(s.imgPrize, { [s.imgPrizeActive]: isActive })}>
+                      <div className={classNames(s.imgPrize,)}>
                         <Lottie
                           animationData={giftBlick}
                           loop
@@ -105,8 +109,12 @@ export const Tree = () => {
                           className={s.blickAnimation}
                         />
                         <div className={classNames({ [s.blur]: !isActive })} />
-                        <img src={giftIcon} height={20} width={20} alt="gift" style={{opacity: '0.5'}}/>
-                        <div className={`${s.giftStatus} ${s.notAchieved}`}/>
+
+                        <img src={giftIcon} height={20} width={20} alt="gift" style={{ opacity: '0.5' }} />
+
+
+                         {/* TODO: rewrite when backend is ready */}
+                        <div className={`${s.giftStatus} ${s.notTaken}`} />
                         {!isActive && <div className={classNames(s.questionWrapper)}>
                           <img src={questionIcon} className={s.question} height={16} width={16} alt="question" />
                         </div>}
@@ -114,7 +122,7 @@ export const Tree = () => {
                     )}
                     <div className={classNames(s.text, { [s.textActive]: isActive })}>
                       <span>{formatAbbreviation(stage.subscribers, 'number', { locale: locale })} </span>
-                      <span style={{whiteSpace: 'normal'}}>{t('t1')}</span>
+                      <span style={{ whiteSpace: 'normal' }}>{t('t1')}</span>
                     </div>
                   </div>
                 )}
