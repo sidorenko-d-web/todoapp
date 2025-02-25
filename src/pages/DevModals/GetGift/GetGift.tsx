@@ -81,7 +81,12 @@ export default function GetGift() {
         </div>
         <p className={styles.desc}>Поздравляем! Вы улучшли основные показатели и получили дополнительные бонусы!</p>
       </div>
-      <Button variant={'blue'}>Забрать</Button>
+      <Button 
+        variant={'blue'} 
+        onClick={() => closeModal(MODALS.GET_GIFT)}
+      >
+        Забрать
+      </Button>
     </CentralModal>
   );
 }
