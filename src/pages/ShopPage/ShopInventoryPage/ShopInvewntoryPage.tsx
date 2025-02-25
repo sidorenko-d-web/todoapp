@@ -1,20 +1,10 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ShopLayout } from '../../../layout/ShopLayout/ShopLayout';
 import { useGetInventoryItemsQuery } from '../../../redux/api/inventory/api';
-import {
-  ItemUpgradedModal,
-  ItemsTab,
-  ShopUpgradedModal,
-  SkinTab,
-} from '../../../components';
-import {
-  IShopItem,
-  TypeItemCategory,
-  TypeItemRarity,
-  useGetShopItemsQuery,
-} from '../../../redux';
+import { ItemsTab, ItemUpgradedModal, Loader, ShopUpgradedModal, SkinTab } from '../../../components';
+import { IShopItem, TypeItemCategory, TypeItemRarity, useGetShopItemsQuery } from '../../../redux';
 import { compareItems } from '../../../helpers';
-import styles from '../ShopPage.module.scss'
+import styles from '../ShopPage.module.scss';
 import GetRewardChestModal from '../../DevModals/GetRewardChestModal/GetRewardChestModal';
 import { useTranslation } from 'react-i18next';
 
@@ -29,6 +19,7 @@ export const ShopInvewntoryPage = () => {
     data: inventory,
     isSuccess,
     isFetching,
+    isLoading: isInventoryLoading,
   } = useGetInventoryItemsQuery(
     {
       item_category: shopCategory?.value!,
@@ -37,7 +28,7 @@ export const ShopInvewntoryPage = () => {
     { skip: !shopCategory?.value },
   );
 
-  const { data: shop } = useGetShopItemsQuery(
+  const { data: shop, isLoading: isShopLoading } = useGetShopItemsQuery(
     {
       item_category: shopCategory?.value!,
       item_rarity: itemsQuality?.value,
@@ -90,6 +81,13 @@ export const ShopInvewntoryPage = () => {
     setItems(_items);
     setItemsForBuy(_itemsForBuy);
   }, [inventory]);
+
+  const isLoading = (
+    isInventoryLoading ||
+    isShopLoading
+  );
+
+  if (isLoading) return <Loader />;
 
   return (
     <ShopLayout

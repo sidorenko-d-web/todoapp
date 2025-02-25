@@ -23,7 +23,7 @@ import {
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
 import { CentralModal } from '../../shared';
-import { TrackedButton } from '../../';
+import { Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
 
 interface CreatingIntegrationModalProps {
@@ -51,8 +51,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
   const [ createIntegration, { isError, error } ] = useCreateIntegrationMutation();
-  const { data: profile } = useGetCurrentUserProfileInfoQuery();
-  const { data } = useGetCompaniesQuery();
+  const { data: profile, isLoading: isProfileLoading } = useGetCurrentUserProfileInfoQuery();
+  const { data, isLoading: isCompaniesLoading } = useGetCompaniesQuery();
   const companies = data?.campaigns;
 
 
@@ -75,8 +75,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         dispatch(setLastIntegrationId(data.id));
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         onClose();
-        dispatch(integrationsApi.util.invalidateTags(['Integrations']));
-        dispatch(profileApi.util.invalidateTags(['Me']));
+        dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
+        dispatch(profileApi.util.invalidateTags([ 'Me' ]));
       });
   };
 
@@ -96,63 +96,66 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   return (
     <CentralModal modalId={modalId} title={t('i11')} onClose={onClose} titleIcon={integrationWhiteIcon}>
-      <div className={s.content}>
-        <div className={s.skinsWrapper}>
-          {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
-            <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`} >
-              <img src={lightningIcon} alt="Lightning" width={20} height={20} />
-            </div>
-          ))}
-        </div>
-
-        <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
-          {contentOptions.map((option, index) => (
-            <span
-              key={index}
-              className={`${s.tab} ${selectedOption === option.value ? s.active : ''}`}
-              onClick={() => setSelectedOption(option.value)}
-            >
-              {option.label}
-            </span>
-          ))}
-        </div>
-
-        {!noItemsMessage && hasCreatingIntegration && (
-          <span className={s.message}>{t('i20')}</span>
-        )}
-
-        {!noItemsMessage ? (
-          <div className={s.companies}>
-            {companies?.map(company => (
-              <CompanyCard
-                key={company.id}
-                company={company}
-                disabled={hasCreatingIntegration}
-                onClick={() => submitCreation(company.id)}
-              />
+      {isProfileLoading || isCompaniesLoading
+        ? <Loader noMargin />
+        : <div className={s.content}>
+          <div className={s.skinsWrapper}>
+            {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
+              <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`}>
+                <img src={lightningIcon} alt="Lightning" width={20} height={20} />
+              </div>
             ))}
           </div>
-        ) : (
-          <span className={s.message}>{noItemsMessage}</span>
-        )}
 
-        {
-          // @ts-expect-error No error types yet
-          isError && <span className={s.errorMessage}>{error?.data?.detail}</span>
-        }
+          <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
+            {contentOptions.map((option, index) => (
+              <span
+                key={index}
+                className={`${s.tab} ${selectedOption === option.value ? s.active : ''}`}
+                onClick={() => setSelectedOption(option.value)}
+              >
+              {option.label}
+            </span>
+            ))}
+          </div>
 
-        {noItemsMessage && <TrackedButton
-          trackingData={{
-            eventType: 'button',
-            eventPlace: 'В магазин - Главный экран - Окно создание интеграции',
-          }}
-          className={`${s.button} 
+          {!noItemsMessage && hasCreatingIntegration && (
+            <span className={s.message}>{t('i20')}</span>
+          )}
+
+          {!noItemsMessage ? (
+            <div className={s.companies}>
+              {companies?.map(company => (
+                <CompanyCard
+                  key={company.id}
+                  company={company}
+                  disabled={hasCreatingIntegration}
+                  onClick={() => submitCreation(company.id)}
+                />
+              ))}
+            </div>
+          ) : (
+            <span className={s.message}>{noItemsMessage}</span>
+          )}
+
+          {
+            // @ts-expect-error No error types yet
+            isError && <span className={s.errorMessage}>{error?.data?.detail}</span>
+          }
+
+          {noItemsMessage && <TrackedButton
+            trackingData={{
+              eventType: 'button',
+              eventPlace: 'В магазин - Главный экран - Окно создание интеграции',
+            }}
+            className={`${s.button} 
             ${buttonGlowing ? s.glowingBtn : ''} `}
-          onClick={goToShop}
-        >
-          {t('i21')}
-        </TrackedButton>}
-      </div>
+            onClick={goToShop}
+          >
+            {t('i21')}
+          </TrackedButton>}
+        </div>
+      }
     </CentralModal>
   );
 };

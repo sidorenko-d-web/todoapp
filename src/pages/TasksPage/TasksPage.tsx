@@ -3,7 +3,7 @@ import subscribersIcon from '../../assets/icons/subscribers.png';
 import coinIcon from '../../assets/icons/coin.png';
 
 import s from './TasksPage.module.scss';
-import { DailyTasks, SocialTasks, TopTasks } from '../../components';
+import { DailyTasks, Loader, SocialTasks, TopTasks } from '../../components';
 import { formatAbbreviation } from '../../helpers';
 import { useGetTasksQuery } from '../../redux/api/tasks';
 import { useGetBoostQuery } from '../../redux/api/tasks/api';
@@ -18,8 +18,8 @@ export const TasksPage: FC = () => {
   const { t, i18n } = useTranslation('quests');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const { data, error, isLoading } = useGetTasksQuery({ is_actual: true });
-  const { data: boostData } = useGetBoostQuery();
+  const { data, error, isLoading: isTasksLoading } = useGetTasksQuery({ is_actual: true });
+  const { data: boostData, isLoading: isBoostLoading } = useGetBoostQuery();
 
   useEffect(() => {
     dispatch(setActiveFooterItemId(4));
@@ -50,15 +50,12 @@ export const TasksPage: FC = () => {
     }
   }, [boostData, error]);
 
-  console.log('Состояние запроса:', {
-    data,
-    error,
-    isLoading,
-  });
+  const isLoading = (
+    isTasksLoading ||
+    isBoostLoading
+  );
 
-  if (isLoading) {
-    return <div>{t('q16')}...</div>;
-  }
+  if (isLoading) return <Loader />;
 
   if (error) {
     return <div>{t('q17')}</div>;
