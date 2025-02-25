@@ -11,13 +11,21 @@ import { useGetAllIntegrationsQuery, useGetCurrentUserProfileInfoQuery } from '.
 import { formatAbbreviation } from '../../helpers';
 import { Button } from '../../components/shared';
 import { useTranslation } from 'react-i18next';
+import { Loader } from '../../components';
 
 const StatisticsPage: FC = () => {
   const { t, i18n } = useTranslation('statistics');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const navigate = useNavigate();
-  const { data: statisticData, isLoading } = useGetAllIntegrationsQuery();
+  const { data: statisticData, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
   const { data: userProfileData, isLoading: isUserLoading } = useGetCurrentUserProfileInfoQuery();
+
+  const isLoading = (
+    isAllIntegrationsLoading ||
+    isUserLoading
+  );
+
+  if (isLoading) return <Loader />;
 
   return (
     <div className={styles.wrapper}>

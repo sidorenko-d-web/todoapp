@@ -3,19 +3,19 @@ import { useTranslation } from 'react-i18next';
 import DaysInARowModal from '../DevModals/DaysInARowModal/DaysInARowModal';
 import GetRewardChestModal from '../DevModals/GetRewardChestModal/GetRewardChestModal';
 import styles from './ProfilePage.module.scss';
+import { ProfileInfo, ProfileStats, ProfileStatsMini, StreakCard } from '../../components/profile';
 import {
-  ProfileInfo,
-  ProfileStats,
-  ProfileStatsMini,
-  StreakCard,
-} from '../../components/profile';
-import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../redux';
+  useGetCurrentUserProfileInfoQuery,
+  useGetInventoryAchievementsQuery,
+  useGetTopProfilesQuery,
+} from '../../redux';
 import RewardsList from '../../components/profile/RewardsCard/RewardsList';
 import { getWeekData } from '../../utils';
 import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 import { useGetPushLineQuery } from '../../redux/api/pushLine/api';
+import { Loader } from '../../components';
 
 export const ProfilePage: React.FC = () => {
   const { t } = useTranslation('profile');
@@ -78,6 +78,16 @@ export const ProfilePage: React.FC = () => {
   const freezeDays = [29]; // TODO: replace with real data
 
   const weekData = getWeekData(streakDays, freezeDays);
+
+  const { isLoading: isAwardsLoading } = useGetInventoryAchievementsQuery();
+
+  const isLoading = (
+    isUserLoading ||
+    isTopProfilesLoading ||
+    isAwardsLoading
+  )
+
+  if (isLoading) return <Loader />;
 
   return (
     <>

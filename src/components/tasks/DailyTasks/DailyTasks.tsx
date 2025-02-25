@@ -1,13 +1,13 @@
 import { FC, useState, useMemo, useEffect } from 'react';
 import { TaskCard } from '../';
 import giftIcon from '../../../assets/icons/gift.svg';
-import { MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import { Task } from '../../../redux/api/tasks/dto';
 import s from '../styles.module.scss';
 import { ModalDailyTasks } from './ModalDailyTasks';
 import { useGetDailyRewardQuery } from '../../../redux/api/tasks/api';
 import { useTranslation } from 'react-i18next';
+import { MODALS } from '../../../constants/modals';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -18,7 +18,7 @@ type DailyTasksProps = {
 export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const { t } = useTranslation('quests');
 
-  const { openModal, closeModal } = useModal();
+  const { openModal, closeModal, getModalState } = useModal();
   const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
   const { refetch: getDailyReward } = useGetDailyRewardQuery(task.id, { skip: true });
 
@@ -33,15 +33,9 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
     return questionStates.filter(state => state === 'solved').length;
   }, [questionStates]);
 
-  const handleOpenGift = async () => {
-    if (task.is_completed && !task.is_reward_given) {
-      console.log('Attempting to get daily reward for task:', task.id);
-      try {
-        const result = await getDailyReward();
-        console.log('Daily Reward API Response:', result);
-      } catch (error) {
-        console.error('Error fetching daily reward:', error);
-      }
+  const handleOpenGift = () => {
+    if (task.is_completed || questionStates.every(state => state === 'solved') && !task.is_reward_given) {
+      openModal(MODALS.GET_GIFT);
       return;
     }
     openModal(MODALS.DAILY_TASKS);
@@ -65,12 +59,12 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
       </div>
       <div className={s.tasksList}>
         <TaskCard
-          title= {t('q3')}
-          description= {t('q4')}
+          title={t('q3')}
+          description={t('q4')}
           type="progress"
           icon={giftIcon}
-          buttonText={isCompleted ? t('q14') : t('q5')}
-          disabled={isCompleted}
+          buttonText={isCompleted && !task.is_reward_given ? t('q33') : isCompleted ? t('q15') : t('q5')}
+          disabled={task.is_reward_given}
           onClick={handleOpenGift}
           questionStates={questionStates}
           boost={task.boost}
