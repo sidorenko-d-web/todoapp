@@ -1,4 +1,4 @@
-import { MODALS } from '../../../constants';
+import { MODALS } from '../../../constants/modals';
 import { useModal } from '../../../hooks';
 import styles from './GetGift.module.scss';
 import Button from '../partials/Button';
@@ -13,9 +13,17 @@ import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
 
 export default function GetGift() {
-  const { closeModal } = useModal();
+  const { closeModal, getModalState } = useModal();
+  const { isOpen } = getModalState(MODALS.GET_GIFT);
+
+  if (!isOpen) return null;
+  
   return (
-    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={'Подарок открыт!'}>
+    <CentralModal 
+      onClose={() => closeModal(MODALS.GET_GIFT)} 
+      modalId={MODALS.GET_GIFT} 
+      title={'Подарок открыт!'}
+    >
       <div className={styles.background}>
         <Lottie animationData={reward} loop={false} className={styles.reward} />
       </div>
@@ -73,7 +81,12 @@ export default function GetGift() {
         </div>
         <p className={styles.desc}>Поздравляем! Вы улучшли основные показатели и получили дополнительные бонусы!</p>
       </div>
-      <Button variant={'blue'}>Забрать</Button>
+      <Button 
+        variant={'blue'} 
+        onClick={() => closeModal(MODALS.GET_GIFT)}
+      >
+        Забрать
+      </Button>
     </CentralModal>
   );
 }
