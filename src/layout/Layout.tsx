@@ -47,21 +47,24 @@ const Layout = () => {
     } ${needsReducedMargin ? styles.reducedMargin : ''} ${platform ? styles[platform] : ''
     }`;
 
-  useEffect(() => {
-    if (showRoadmapBg) {
-      const handleScroll = () => {
-        const scrollTop = window.scrollY;
-        const maxScroll = document.body.scrollHeight - window.innerHeight;
-        const scrollPercentage = scrollTop / maxScroll;
-
-        const newOffset = scrollPercentage * 100;
-        setBgOffset(newOffset);
-      };
-
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
-  }, [showRoadmapBg]);
+    useEffect(() => {
+      if (showRoadmapBg) {
+        const contentElement = document.querySelector(`.${styles.content}`);
+        if (!contentElement) return;
+    
+        const handleScroll = () => {
+          const scrollTop = contentElement.scrollTop;
+          const maxScroll = contentElement.scrollHeight - contentElement.clientHeight;
+          const scrollPercentage = scrollTop / maxScroll;
+    
+          const newOffset = scrollPercentage * 150;
+          setBgOffset(newOffset);
+        };
+    
+        contentElement.addEventListener("scroll", handleScroll);
+        return () => contentElement.removeEventListener("scroll", handleScroll);
+      }
+    }, [showRoadmapBg]);
 
   return (
     <>
@@ -74,11 +77,11 @@ const Layout = () => {
 
 
         <>
-          {/* <img
+          <img
             src={roadmapBg}
             className={styles.bg_image}
             style={{ transform: `translateY(-${bgOffset}px)` }}
-          /> */}
+          />
           <Lottie
             animationData={lampTable}
             loop

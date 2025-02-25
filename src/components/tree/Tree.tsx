@@ -56,6 +56,7 @@ export const Tree = () => {
     return null;
   }
 
+
   return (
     <div className={s.container}>
       <div className={s.progressBarContainer}>
@@ -90,6 +91,7 @@ export const Tree = () => {
                     <img className={s.spiner} src={spinnerIcon} height={120} width={120} alt="spinner" />
                   )}
                 </div>
+
                 <Button className={s.takeRewardBtn}>Забрать</Button>
                 {stage.id > 1 && (
                   <div
@@ -113,7 +115,7 @@ export const Tree = () => {
                         <img src={giftIcon} height={20} width={20} alt="gift" style={{ opacity: '0.5' }} />
 
 
-                         {/* TODO: rewrite when backend is ready */}
+                        {/* TODO: rewrite when backend is ready */}
                         <div className={`${s.giftStatus} ${s.notTaken}`} />
                         {!isActive && <div className={classNames(s.questionWrapper)}>
                           <img src={questionIcon} className={s.question} height={16} width={16} alt="question" />
