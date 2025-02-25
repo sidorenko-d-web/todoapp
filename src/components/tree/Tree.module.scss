@@ -182,7 +182,14 @@
   letter-spacing: -0.05em;
   text-align: center;
   overflow: hidden;
-  color: var.$color-text-super-transparent;
+
+  span {
+    color: var.$color-text-semi-transparent;
+
+    &.inactive {
+      color: var.$color-pale-semi-transparent;  
+    }
+  }
 }
 
 .textActive {

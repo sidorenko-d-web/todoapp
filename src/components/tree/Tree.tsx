@@ -105,7 +105,7 @@ export const Tree = () => {
                           className={s.blickAnimation}
                         />
                         <div className={classNames({ [s.blur]: !isActive })} />
-                        <img src={giftIcon} height={20} width={20} alt="gift" />
+                        <img src={giftIcon} height={20} width={20} alt="gift" style={{opacity: '0.5'}}/>
                         <div className={`${s.giftStatus} ${s.notAchieved}`}/>
                         {!isActive && <div className={classNames(s.questionWrapper)}>
                           <img src={questionIcon} className={s.question} height={16} width={16} alt="question" />
