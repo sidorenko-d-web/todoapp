@@ -20,13 +20,18 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
                                                                             integration,
                                                                           }) => {
   const { t } = useTranslation('integrations');
-
   const dispatch = useDispatch();
   const initialTime = 3600;
   const [ timeLeft, setTimeLeft ] = useState(integration.time_left);
   const [ isExpired, setIsExpired ] = useState(false);
   const [ playAccelerateIntegrationSound ] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
-  const calculateProgress = () => ((initialTime - timeLeft) / initialTime) * 100;
+  const calculateProgress = () => {
+    const createdAt = new Date(integration.created_at).getTime();
+    const now = new Date().getTime();
+    const elapsedSeconds = Math.floor((now - createdAt) / 1000);
+    
+    return Math.min((elapsedSeconds / initialTime) * 100, 100);
+  };
 
   const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
     integrationId: integration.id,
