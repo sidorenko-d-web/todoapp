@@ -9,7 +9,6 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { TonClientProvider } from './providers/TonClientProvider';
 import { TransactionNotificationProvider } from './providers/TransactionNotificationProvider/';
 
-
 declare global {
   interface Window {
     Telegram: any;
@@ -23,7 +22,8 @@ function App() {
         <ModalsProvider>
           <AuthInit>
             <HistoryRouter history={browserHistory}>
-              <TonConnectUIProvider language='ru' manifestUrl={"https://raw.githubusercontent.com/TimurZheksimbaev/First-TON-Project/refs/heads/main/apusher-tonconnect-manifest.json"}>
+              <TonConnectUIProvider language="ru"
+                                    manifestUrl={'https://raw.githubusercontent.com/TimurZheksimbaev/First-TON-Project/refs/heads/main/apusher-tonconnect-manifest.json'}>
                 <TonClientProvider>
                   <TransactionNotificationProvider>
                     <AppRouter />
@@ -35,7 +35,7 @@ function App() {
         </ModalsProvider>
       </Provider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
