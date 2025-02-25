@@ -21,6 +21,7 @@ type TopTasksProps = {
 };
 
 export const TopTasks: FC<TopTasksProps> = ({ task }) => {
+  
   const { t } = useTranslation('quests');
   const { openModal, closeModal } = useModal();
   const [taskState, setTaskState] = useState<TaskState>({
@@ -31,15 +32,23 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
   });
 
   const handleOpenTopTasks = async () => {
-    if (taskState.completed && !task.is_reward_given) {
+    console.log('Task completion status:', task.is_completed);
+    console.log('Is reward given:', task.is_reward_given);
+    
+    if (task.is_completed && !task.is_reward_given) {
       try {
-        // Здесь должен быть запрос на получение награды
-        openModal(MODALS.TASK_CHEST); // Открываем модалку с сундуком
+        console.log('Условия выполнены, открываем подарок');
+        openModal(MODALS.GET_GIFT);
         return;
       } catch (error) {
         console.error('Error getting reward:', error);
       }
+    } else {
+      console.log('Условия не выполнены:');
+      console.log('- task.is_completed:', task.is_completed);
+      console.log('- !task.is_reward_given:', !task.is_reward_given);
     }
+    
     openModal(MODALS.TOP_TASK);
   };
 
@@ -88,10 +97,10 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
           progressReward={t('q10')}
           progressRewardIcon={chestIcon}
           onClick={handleOpenTopTasks}
-          disabled={taskState.completed}
-          buttonText={getButtonText()}
+          disabled={task.is_reward_given}
+          buttonText={task.is_completed && !task.is_reward_given ? t('q33') : task.is_completed ? t('q15') : t('q13')}
           errorText={taskState.hasError ? 'Ошибка: повторите попытку' : undefined}
-          isCompleted={taskState.completed}
+          isCompleted={task.is_completed}
           isTopTask={true}
         />
       </div>
