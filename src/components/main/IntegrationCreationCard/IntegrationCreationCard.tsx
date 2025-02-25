@@ -20,13 +20,21 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
                                                                             integration,
                                                                           }) => {
   const { t } = useTranslation('integrations');
-
   const dispatch = useDispatch();
-  const initialTime = 3600;
   const [ timeLeft, setTimeLeft ] = useState(integration.time_left);
+  const [ initialTimeLeft ] = useState(integration.time_left);
   const [ isExpired, setIsExpired ] = useState(false);
   const [ playAccelerateIntegrationSound ] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
-  const calculateProgress = () => ((initialTime - timeLeft) / initialTime) * 100;
+
+  const calculateProgress = () => {
+    return ((initialTimeLeft - timeLeft) / initialTimeLeft) * 100;
+  };
+
+  const [progress, setProgress] = useState(calculateProgress());
+
+  useEffect(() => {
+    setProgress(calculateProgress());
+  }, [timeLeft]);
 
   const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
     integrationId: integration.id,
@@ -125,7 +133,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
           <div className={s.progressBar}>
             <div
               className={s.progressBarInner}
-              style={{ width: `${calculateProgress()}%` }}
+              style={{ width: `${progress}%` }}
             />
           </div>
         </div>

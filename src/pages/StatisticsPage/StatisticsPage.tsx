@@ -11,13 +11,21 @@ import { useGetAllIntegrationsQuery, useGetCurrentUserProfileInfoQuery } from '.
 import { formatAbbreviation } from '../../helpers';
 import { Button } from '../../components/shared';
 import { useTranslation } from 'react-i18next';
+import { Loader } from '../../components';
 
 const StatisticsPage: FC = () => {
   const { t, i18n } = useTranslation('statistics');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const navigate = useNavigate();
-  const { data: statisticData, isLoading } = useGetAllIntegrationsQuery();
+  const { data: statisticData, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
   const { data: userProfileData, isLoading: isUserLoading } = useGetCurrentUserProfileInfoQuery();
+
+  const isLoading = (
+    isAllIntegrationsLoading ||
+    isUserLoading
+  );
+
+  if (isLoading) return <Loader />;
 
   return (
     <div className={styles.wrapper}>
@@ -28,26 +36,26 @@ const StatisticsPage: FC = () => {
           <h1 className={styles.title}>{t('s1')}</h1>
           <div className={styles.scores}>
             <div className={styles.scoresItem}>
-              <p>{formatAbbreviation(userProfileData?.total_views || 0, 'number', {locale: locale})}</p>
+              <p>{formatAbbreviation(userProfileData?.total_views || 0, 'number', { locale: locale })}</p>
               <img src={views} alt="views" />
             </div>
             <div className={styles.scoresItem}>
-              <p>{formatAbbreviation(userProfileData?.subscribers || 0, 'number', {locale: locale})}</p>
+              <p>{formatAbbreviation(userProfileData?.subscribers || 0, 'number', { locale: locale })}</p>
               <img src={subscribers} alt="subscribers" />
             </div>
             <div className={styles.scoresItem}>
-              <p>+ {formatAbbreviation(userProfileData?.points || 0, 'number', {locale: locale})}</p>
+              <p>+ {formatAbbreviation(userProfileData?.points || 0, 'number', { locale: locale })}</p>
               <img src={coin} height={14} width={14} alt="" />
             </div>
           </div>
         </div>
-        <div className={styles.placeholder}/>
+        <div className={styles.placeholder} />
       </header>
       <div className={styles.sectionHeader}>
         <h2 className={styles.sectionTitle}>{t('s2')}</h2>
         <div className={styles.sectionCount}>
           <p>{statisticData?.count || 0}</p>
-          <img src={logo} alt="logo" width={14} height={14}/>
+          <img src={logo} alt="logo" width={14} height={14} />
         </div>
       </div>
       <div className={styles.integrationsWrapper}>

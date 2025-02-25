@@ -100,8 +100,8 @@ const Layout = () => {
         <WalletConnectionModal />
         <LanguageSelectionModal />
 
-        <AudioBg />
-      </main>
+          {/*<AudioBg />*/}
+        </main>
 
       <Footer />
     </div></>

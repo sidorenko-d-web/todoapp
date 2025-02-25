@@ -1,23 +1,29 @@
 import React, { useEffect } from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
-import { DevelopmentPlan, IncreaseIncome, TopInfluencers } from '../../components';
+import { DevelopmentPlan, IncreaseIncome, Loader, TopInfluencers } from '../../components';
 
 import s from './PromotionPage.module.scss';
-import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUsersCountQuery } from '../../redux';
+import {
+  setActiveFooterItemId,
+  useGetCurrentUserProfileInfoQuery,
+  useGetCurrentUsersReferralsQuery,
+  useGetTopProfilesQuery,
+  useGetUserQuery,
+  useGetUsersCountQuery,
+} from '../../redux';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { setActiveFooterItemId } from '../../redux';
 
 export const PromotionPage: React.FC = () => {
   const dispatch = useDispatch();
 
   const { t, i18n } = useTranslation('promotion');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { data: userProfileData, error: userError, isLoading: isUserLoading } = useGetCurrentUserProfileInfoQuery();
+  const { data: userProfileData, error: userError, isLoading: isCurrentUserProfileLoading } = useGetCurrentUserProfileInfoQuery();
 
   const { data: topProfilesData, error: topProfilesError, isLoading: isTopProfilesLoading } = useGetTopProfilesQuery();
-  const { data: usersCountData } = useGetUsersCountQuery();
+  const { data: usersCountData, isLoading: isUsersCountLoading } = useGetUsersCountQuery();
   // const userPosition = userProfileData && topProfilesData?.profiles
   //   ? topProfilesData.profiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
   //   : -1;
@@ -26,9 +32,22 @@ export const PromotionPage: React.FC = () => {
     dispatch(setActiveFooterItemId(3));
   }, []);
 
+  const { isLoading: isCurrentUsersReferralsLoading } = useGetCurrentUsersReferralsQuery()
+  const { isLoading: isUserLoading } = useGetUserQuery()
+
+  const isLoading = (
+    isCurrentUserProfileLoading ||
+    isTopProfilesLoading ||
+    isUsersCountLoading ||
+    isCurrentUsersReferralsLoading ||
+    isUserLoading
+  );
+
+  if (isLoading) return <Loader />;
+
   return (
     <>
-      {(isTopProfilesLoading || isUserLoading) && <p>Загрузка...</p>}
+      {(isTopProfilesLoading || isCurrentUserProfileLoading) && <p>Загрузка...</p>}
 
       {(userError || topProfilesError) && <p>Ошибка при загрузке страницы</p>}
 
