@@ -1,6 +1,6 @@
 @use '../../../../../assets/styles/index.scss' as var;
 
-.calendar-day {
+.calendarDay {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -85,7 +85,7 @@
 .currentDay::after {
   content: '';
   position: absolute;
-  bottom: 4px;
+  top: 21px;
   left: 50%;
   width: 4px;
   height: 4px;

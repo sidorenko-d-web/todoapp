@@ -38,16 +38,9 @@ export const shopApi = createApi({
         method: 'POST',
         params,
       }),
-      invalidatesTags: ['items'],
+      invalidatesTags: ['skins'],
     }),
-
-   
   }),
 });
 
-export const {
-  useGetShopItemsQuery,
-  useGetShopSkinsQuery,
-  useBuyItemMutation,
-  useBuySkinMutation,
-} = shopApi;
+export const { useGetShopItemsQuery, useGetShopSkinsQuery, useBuyItemMutation, useBuySkinMutation } = shopApi;

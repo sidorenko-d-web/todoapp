@@ -36,21 +36,23 @@ export const Guide = ({
         };
     }, [onClose]);
 
-    return (
-        <div 
-            className={`${styles.wrp} ${dimBackground ? styles.dimmed : ''}`} 
-            style={{ zIndex }}
-        >
-            <div
-                ref={contentRef} 
-                className={`${styles.content} ${align === 'left' ? styles.left : styles.right}`}
-                style={{ top }}
-            >
-                <div className={styles.description}>
-                    {description}
-                </div>
-                {children}
-            </div>
-        </div>
-    );
+    //TODO разкоментировать когда нужно будет вставить гайды
+    return
+    // return (
+    //     <div
+    //         className={`${styles.wrp} ${dimBackground ? styles.dimmed : ''}`}
+    //         style={{ zIndex }}
+    //     >
+    //         <div
+    //             ref={contentRef}
+    //             className={`${styles.content} ${align === 'left' ? styles.left : styles.right}`}
+    //             style={{ top }}
+    //         >
+    //             <div className={styles.description}>
+    //                 {description}
+    //             </div>
+    //             {children}
+    //         </div>
+    //     </div>
+    // );
 };

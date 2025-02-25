@@ -1,6 +1,6 @@
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { ShopLayout } from '../../layout/ShopLayout/ShopLayout';
-import { ItemsTab, NewItemModal, SkinTab } from '../../components';
+import { ItemsTab, Loader, NewItemModal, SkinTab } from '../../components';
 import { useGetShopItemsQuery } from '../../redux/api/shop/api';
 import { IShopItem, TypeItemCategory, TypeItemRarity } from '../../redux';
 import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
@@ -37,12 +37,17 @@ const StorePage: FC = () => {
   }, []);
 
   useEffect(() => {
-    const itemsInTab1 = itemsInTab(shop?.items, inventory?.items);
-    console.log(itemsInTab1);
     setItems(
       itemsInTab(shop?.items, inventory?.items)[itemsRarity?.value as TypeItemRarity],
     );
   }, [ inventory, shop ]);
+
+  const isLoading = (
+    isShopFetching ||
+    isInventoryFetching
+  );
+
+  if (isLoading) return <Loader />;
 
   return (
     <ShopLayout

@@ -9,9 +9,11 @@ import { ShopIcon } from '../../../../assets/icons/shop';
 import Lottie from 'lottie-react';
 import { purpleLight, redLight } from '../../../../assets/animations';
 import { CentralModal } from '../../../shared';
+import { useTranslation } from 'react-i18next';
 
 export const ShopUpgradedModal = () => {
   const { closeModal, getModalState } = useModal();
+  const { t } = useTranslation('shop');
 
   const state = getModalState<{ item: IShopItem; isYellow: boolean }>(MODALS.UPGRADED_SHOP);
   const navigate = useNavigate();
@@ -28,7 +30,7 @@ export const ShopUpgradedModal = () => {
 
   return (
     <CentralModal
-      title="Новый предмет!"
+      title={t('s43')}
       onClose={() => closeModal(MODALS.UPGRADED_SHOP)}
       modalId={MODALS.UPGRADED_SHOP}
     >
@@ -36,21 +38,21 @@ export const ShopUpgradedModal = () => {
         <Lottie animationData={isYellow ? purpleLight : redLight} loop={true} className={styles.bgLight} />
         <div className={clsx(styles.itemImage, isYellow ? styles.itemImagePurple : styles.itemImageRed)}>
           <ShopIcon />
-          <p className={isYellow ? styles.purple :styles.red}>{isYellow ? 'Премиум' : 'Люкс'}</p>
+          <p className={isYellow ? styles.purple :styles.red}>{isYellow ? t('s55') : t('s56')}</p>
         </div>
       </div>
 
       <div className={styles.text}>
         <p>
-          Поздравляем! Теперь вам доступен Новый раздел{' '}
+          {t('s54')}{' '}
           <span className={clsx(isYellow ? styles.spanPurple : styles.spanRed)}>
-            {isYellow ? 'Премиум' : 'Люкс'}{' '}
+            {isYellow ? t('s55') : t('s56')}{' '}
           </span>
-          в магазине с более крутыми предметами!
+          {t('s57')}
         </p>
       </div>
       <Button onClick={handleClose} variant="blue">
-        Открыть магазин
+        {t('s58')}
       </Button>
     </CentralModal>
   );

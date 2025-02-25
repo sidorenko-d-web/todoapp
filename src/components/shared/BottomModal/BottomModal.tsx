@@ -7,6 +7,7 @@ import { useModal } from '../../../hooks';
 
 import modalGripIcon from '../../../assets/icons/modal-grip.svg';
 
+
 interface BottomModalProps {
   modalId: string;
   title: string;

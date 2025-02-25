@@ -78,6 +78,8 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   overflow-x: hidden;
   overscroll-behavior: contain;
   scroll-behavior: smooth;
+  position: relative;
+  z-index: 1;
 
   // Margin from upper telegram mini apps buttons (close, settings, menu, etc.). For both platforms
   margin-top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top));
@@ -128,5 +130,11 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
 
   &.androidSettings {
     right: calc(var(--tg-safe-area-inset-right) + 85px);
+  }
+
+  &.isMain{
+    padding: 0;
+    height: 100vh;
+    margin-top: 0;
   }
 }

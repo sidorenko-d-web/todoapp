@@ -1,65 +1,60 @@
-import { MODALS } from '../../constants';
-import { useModal } from '../../hooks';
-import DaysInARowModal from './DaysInARowModal/DaysInARowModal';
-import RewardForIntegrationModal from './RewardForIntegrationModal/RewardForIntegrationModal';
-import GetRewardModal from './GetRewardModal/GetRewardModal';
-import TaskCompletedModal from './TaskCompletedModal/TaskCompletedModal';
-import GetRewardChestModal from './GetRewardChestModal/GetRewardChestModal';
-import LossOfProgress from './LossOfProgress/LossOfProgress';
-import GetGift from './GetGift/GetGift';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectTrack, selectVolume, setTrack, setVolume } from '../../redux';
-export default function DevModals() {
-  const { openModal } = useModal();
-  // const [playSound] = useSound(SOUNDS.chestOpen, { volume });
-  const volume = useSelector(selectVolume);
-  const track = useSelector(selectTrack);
+import { SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
+import { useRef, useEffect } from 'react';
 
-  const dispatch = useDispatch();
+export default function DevModals() {
+  const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
+
+  const gameRef = useRef<Phaser.Game | null>(null);
+  const sceneRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!sceneRef.current) return;
+
+    class SpineScene extends Phaser.Scene {
+      jsonUrl: string | undefined;
+      atlasUrl: string | undefined;
+      spineObject: SpineGameObject | null;
+      constructor() {
+        super({ key: 'player' });
+        this.spineObject = null;
+      }
+
+      preload() {
+        const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/lampa.json`).href;
+        const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/lampa.atlas`).href;
+
+        this.load.spineJson('json', proxyImageUrl(jsonUrl));
+        this.load.spineAtlas('atlas', proxyImageUrl(atlasUrl));
+      }
+
+      create() {
+        this.spineObject = this.add.spine(50, 50, 'json', 'atlas');
+      }
+    }
+
+    const config: Phaser.Types.Core.GameConfig = {
+      type: Phaser.AUTO,
+      width: 300,
+      height: sceneRef.current.offsetHeight,
+      transparent: true,
+      scene: [SpineScene],
+      plugins: {
+        scene: [{ key: 'player', plugin: SpinePlugin, mapping: 'spine' }],
+      },
+      parent: 'player',
+    };
+
+    gameRef.current = new Phaser.Game(config);
+
+    return () => {
+      if (gameRef.current) {
+        gameRef.current.destroy(true);
+        gameRef.current = null;
+      }
+    };
+  }, [sceneRef]);
 
   return (
-    <>
-      <button onClick={() => dispatch(setVolume(volume > 0.01 ? volume - 0.05 : 0.0))}>
-        -
-      </button>
-      <button onClick={() => dispatch(setTrack(track === 1 ? 2 : track === 2 ? 3 : 1))}>
-        change track
-      </button>
-      <button onClick={() => dispatch(setVolume(volume < 1 ? volume + 0.05 : 1))}>
-        +
-      </button>
-      {/* <button onClick={() => playSound()}>upgrade item</button> */}
-      {/* <button onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button> */}
-      <div>
-        <button onClick={() => openModal(MODALS.DAYS_IN_A_ROW)}>days in a row</button>
-        <DaysInARowModal />
-      </div>
-      <div>
-        <button onClick={() => openModal(MODALS.INTEGRATION_REWARD)}>
-          REWARD Integration
-        </button>
-        <RewardForIntegrationModal />
-      </div>
-      <div>
-        <button onClick={() => openModal(MODALS.GET_REWARD)}>Get Reward</button>
-        <GetRewardModal />
-      </div>
-      <div>
-        <button onClick={() => openModal(MODALS.TASK_COMPLETED)}>Task Completed</button>
-        <TaskCompletedModal />
-      </div>
-      <div>
-        <button onClick={() => openModal(MODALS.TASK_CHEST)}>Task Chest</button>
-        <GetRewardChestModal />
-      </div>
-      <div>
-        <button onClick={() => openModal(MODALS.LOSS_PROGRESS)}>Loss Progress</button>
-        <LossOfProgress />
-      </div>
-      <div>
-        <button onClick={() => openModal(MODALS.GET_GIFT)}>Get Gift</button>
-        <GetGift />
-      </div>
-    </>
+    <div ref={sceneRef} id="player" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1000 }}></div>
   );
 }

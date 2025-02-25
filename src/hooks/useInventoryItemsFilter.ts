@@ -18,7 +18,6 @@ export const useInventoryItemsFilter = () => {
     const categories: CategorizedItems = { text: [], image: [], video: [], decor: [] };
 
     items.forEach(item => {
-      console.log(item);
       if (categories[item.item_category]) {
         categories[item.item_category].push(item);
       }
