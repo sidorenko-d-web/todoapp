@@ -53,7 +53,6 @@ const Layout = () => {
         if (!contentElement) return;
     
         const handleScroll = () => {
-        console.log('acd')
 
           const scrollTop = contentElement.scrollTop;
           const maxScroll = contentElement.scrollHeight - contentElement.clientHeight;
