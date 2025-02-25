@@ -106,15 +106,16 @@ export const Tree = () => {
                         />
                         <div className={classNames({ [s.blur]: !isActive })} />
                         <img src={giftIcon} height={20} width={20} alt="gift" />
+                        <div className={`${s.giftStatus} ${s.notAchieved}`}/>
                         {!isActive && <div className={classNames(s.questionWrapper)}>
                           <img src={questionIcon} className={s.question} height={16} width={16} alt="question" />
                         </div>}
                       </div>
                     )}
-                    <p className={classNames(s.text, { [s.textActive]: isActive })}>
-                      {formatAbbreviation(stage.subscribers, 'number', { locale: locale })} <br />
-                      {t('t1')}
-                    </p>
+                    <div className={classNames(s.text, { [s.textActive]: isActive })}>
+                      <span>{formatAbbreviation(stage.subscribers, 'number', { locale: locale })} </span>
+                      <span style={{whiteSpace: 'normal'}}>{t('t1')}</span>
+                    </div>
                   </div>
                 )}
                 {isActive && <div ref={lastActiveLevelRef} />}

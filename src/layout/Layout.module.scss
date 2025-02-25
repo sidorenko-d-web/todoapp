@@ -56,6 +56,12 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   margin: 0 auto;
   overflow: hidden;
 
+  background-image: url('../assets/pages-bg/roadmap-bg.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
   
   .bg_image {
     position: fixed;

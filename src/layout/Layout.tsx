@@ -65,43 +65,42 @@ const Layout = () => {
 
   return (
     <>
-      <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''
-        }`}>
-        <Settings />
-      </div>
-      <div className={styles.wrp}>
-        {showRoadmapBg && (
+     <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''
+      }`}>
+      <Settings />
+    </div>
+    <div className={styles.wrp}>
+      {showRoadmapBg && (
 
 
-          <>
-            <img
-              src={roadmapBg}
-              className={styles.bg_image}
-              style={{ transform: `translateY(-${bgOffset}px)` }}
-            />
-            <Lottie
-              animationData={lampTable}
-              loop
-              autoplay
-              style={{position: 'fixed', bottom: '20px'}}
-            />
-          </>
-        )}
-        {showHeader && <Header />}
-        <main className={contentClassName}>
-          <Outlet />
+        <>
+          {/* <img
+            src={roadmapBg}
+            className={styles.bg_image}
+            style={{ transform: `translateY(-${bgOffset}px)` }}
+          /> */}
+          <Lottie
+            animationData={lampTable}
+            loop
+            autoplay
+            style={{position: 'fixed', bottom: '20px'}}
+          />
+        </>
+      )}
+      {showHeader && <Header />}
+      <main className={contentClassName}>
+        <Outlet />
 
-          {/* Modals */}
-          <SettingsModal />
-          <WalletConnectionModal />
-          <LanguageSelectionModal />
+        {/* Modals */}
+        <SettingsModal />
+        <WalletConnectionModal />
+        <LanguageSelectionModal />
 
-          <AudioBg />
-        </main>
+        <AudioBg />
+      </main>
 
-        <Footer />
-      </div>
-    </>
+      <Footer />
+    </div></>
   );
 };
 
