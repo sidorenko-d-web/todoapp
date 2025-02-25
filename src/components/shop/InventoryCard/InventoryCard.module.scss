@@ -286,7 +286,18 @@
         @extend .item;
         opacity: 0.5;
         border: transparent;
-
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: var(--lvl-height, 0%);
+          background: var.$color-text-semi-transparent;
+          opacity: 0.6;
+          backdrop-filter: blur(5px);
+          transition: width 0.3s ease;
+        }
         .lock {
           display: block;
         }
@@ -343,6 +354,8 @@
       &:last-child {
         flex: 1;
         border: none;
+        opacity: 0.3;
+        pointer-events: none;
       }
 
       @media (min-width: var.$breakpoint-md) {

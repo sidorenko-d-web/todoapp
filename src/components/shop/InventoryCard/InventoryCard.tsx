@@ -45,7 +45,7 @@ const getPremiumLevelOrder = (level: TypeItemQuality) =>
   }[level]);
 
 function sortByPremiumLevel(items: IShopItem[]) {
-  return [ ...items ].sort(
+  return [...items].sort(
     (a, b) =>
       getPremiumLevelOrder(a.item_premium_level) -
       getPremiumLevelOrder(b.item_premium_level),
@@ -53,15 +53,14 @@ function sortByPremiumLevel(items: IShopItem[]) {
 }
 
 export const InventoryCard: FC<Props> = ({
-                                           disabled,
-                                           isBlocked,
-                                           isUpgradeEnabled = true,
-                                           item,
-                                           isB,
-                                         }) => {
-
+  disabled,
+  isBlocked,
+  isUpgradeEnabled = true,
+  item,
+  isB,
+}) => {
   const { t, i18n } = useTranslation('shop');
-  const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
+  const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const dispatch = useDispatch();
   const { data, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
@@ -76,7 +75,7 @@ export const InventoryCard: FC<Props> = ({
 
   const { openModal } = useModal();
 
-  const [ playLvlSound ] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
+  const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
 
   const handleBuyItem = async () => {
     try {
@@ -102,11 +101,12 @@ export const InventoryCard: FC<Props> = ({
           }
         }
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language)
+    ? (i18n.language as 'ru' | 'en')
+    : 'ru';
 
   return (
     <div className={styles.storeCard}>
@@ -140,7 +140,7 @@ export const InventoryCard: FC<Props> = ({
           )}
         </div>
         <div className={styles.title}>
-         <div className={styles.headline}>
+          <div className={styles.headline}>
             <h3>{locale === 'ru' ? item.name : item.name_eng}</h3>
             {/*https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284353&m=dev#1121983015*/}
             {/*{item.item_rarity === 'red' ? (*/}
@@ -162,8 +162,8 @@ export const InventoryCard: FC<Props> = ({
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                ? styles.colorPurple
+                : styles.level
             }
           >
             {t('s20')} {item.level} {isB && t('s21')}
@@ -179,11 +179,19 @@ export const InventoryCard: FC<Props> = ({
               <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.subscribers, 'number', { locale: locale })}</p>
+              <p>
+                +
+                {formatAbbreviation(item.boost.subscribers, 'number', { locale: locale })}
+              </p>
               <img src={SubscriberCoin} alt="" />
             </div>
             <div className={styles.statsItem}>
-              <p>+{formatAbbreviation(item.boost.income_per_second, 'number', { locale: locale })}</p>
+              <p>
+                +
+                {formatAbbreviation(item.boost.income_per_second, 'number', {
+                  locale: locale,
+                })}
+              </p>
               <img src={CoinIcon} alt="" />
               <p>/{t('s13')}</p>
             </div>
@@ -207,65 +215,72 @@ export const InventoryCard: FC<Props> = ({
             ”. {t('s23')}
           </p>
         ) : (
-          <div className={styles.progress}>
-            <div className={styles.text}>
-              <p>{item.level}/50 {t('s24')} </p>
-              <div className={styles.goal}>
-                <p>{t('s25')}</p>
-                <img
-                  src={
-                    item.item_rarity === 'red'
-                      ? ChestBlueIcon
-                      : item.item_rarity === 'yellow'
+          item.level >= 10 && (
+            <div className={styles.progress}>
+              <div className={styles.text}>
+                <p>
+                  {item.level}/50 {t('s24')}{' '}
+                </p>
+                <div className={styles.goal}>
+                  <p>{t('s25')}</p>
+                  <img
+                    src={
+                      item.item_rarity === 'red'
+                        ? ChestBlueIcon
+                        : item.item_rarity === 'yellow'
                         ? ChestPurpleIcon
                         : ChestRedIcon
-                  }
-                  alt=""
-                />
+                    }
+                    alt=""
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className={styles.progressBar}>
-              <div
-                className={
-                  item.item_rarity === 'red'
-                    ? styles.done
-                    : item.item_rarity === 'yellow'
+              <div className={styles.progressBar}>
+                <div
+                  className={
+                    item.item_rarity === 'red'
+                      ? styles.done
+                      : item.item_rarity === 'yellow'
                       ? styles.donePurple
                       : styles.doneRed
-                }
-                style={{ width: item.level * 2 + '%' }}
-              />
-            </div>
+                  }
+                  style={{
+                    width: `${((item.level - 10) / 40) * 100}%`,
+                  }}
+                />
+              </div>
 
-            <div className={styles.items}>
-              {itemsForImages?.items &&
-                sortByPremiumLevel(itemsForImages?.items).map((_item, index) => (
-                  <div
-                    className={clsx(
-                      item.item_rarity === 'red'
-                        ? styles.item
-                        : item.item_rarity === 'yellow'
+              <div className={styles.items}>
+                {itemsForImages?.items &&
+                  sortByPremiumLevel(itemsForImages?.items).map((_item, index) => (
+                    <div
+                      className={clsx(
+                        item.item_rarity === 'red'
+                          ? styles.item
+                          : item.item_rarity === 'yellow'
                           ? styles.itemPurple
                           : styles.itemRed,
-                      item.item_premium_level === 'advanced'
-                        ? index > 1 && styles.itemLocked
-                        : item.item_premium_level === 'base' &&
-                        index > 0 &&
-                        styles.itemLocked,
-                    )}
-                    key={_item.id}
-                  >
-                    <img
-                      src={_item.image_url + svgHeadersString}
-                      className={styles.itemImage}
-                      alt=""
-                    />
-                    <img src={LockIcon} className={styles.lock} alt="" />
-                  </div>
-                ))}
+                        item.item_premium_level === 'advanced'
+                          ? index > 1 && styles.itemLocked
+                          : item.item_premium_level === 'base' &&
+                              index > 0 &&
+                              styles.itemLocked,
+                      )}
+                      key={_item.id}
+                      style={{ '--lvl-height': `${(item.level / 50) * 100}%` }}
+                    >
+                      <img
+                        src={_item.image_url + svgHeadersString}
+                        className={styles.itemImage}
+                        alt=""
+                      />
+                      <img src={LockIcon} className={styles.lock} alt="" />
+                    </div>
+                  ))}
+              </div>
             </div>
-          </div>
+          )
         ))}
 
       {isBlocked ? (
@@ -287,7 +302,9 @@ export const InventoryCard: FC<Props> = ({
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
           <Button>
-            {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', { locale: locale })}
+            {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', {
+              locale: locale,
+            })}
           </Button>
           <Button
             className={clsx(
@@ -302,7 +319,9 @@ export const InventoryCard: FC<Props> = ({
               <p>loading</p>
             ) : (
               <>
-                {formatAbbreviation(data?.items[0].price_internal || 0,'number', { locale: locale })}{' '}
+                {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {
+                  locale: locale,
+                })}{' '}
                 <img src={CoinIcon} alt="" />
               </>
             )}
