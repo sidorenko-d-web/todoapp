@@ -7,6 +7,7 @@ import {
   InitialGuide,
   IntegrationCreatedGuide,
   IntegrationCreation,
+  Loader,
   PublishIntegrationButton,
   Room,
   SubscrieGuide,
@@ -26,7 +27,13 @@ import {
   setLastIntegrationId,
 } from '../../redux/slices/guideSlice.ts';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, useGetAllIntegrationsQuery } from '../../redux';
+import {
+  RootState,
+  useGetAllIntegrationsQuery,
+  useGetCurrentUserProfileInfoQuery,
+  useGetEquipedQuery,
+  useGetIntegrationsQuery,
+} from '../../redux';
 import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/RewardForIntegrationModal.tsx';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -37,7 +44,7 @@ export const MainPage: FC = () => {
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
 
-  const { data, refetch } = useGetAllIntegrationsQuery();
+  const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
 
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
@@ -75,7 +82,7 @@ export const MainPage: FC = () => {
     }
   }
 
-  const [guideVisibility, dispatch] = useReducer(guideReducer, initialState);
+  const [ guideVisibility, dispatch ] = useReducer(guideReducer, initialState);
 
   const purchasingSubscriptionModalState = getModalState(MODALS.SUBSCRIBE);
   const creatingIntegrationModalState = getModalState(MODALS.CREATING_INTEGRATION);
@@ -88,7 +95,7 @@ export const MainPage: FC = () => {
     if (creatingIntegrationModalState.isOpen) {
       closeModal(MODALS.SUBSCRIBE);
     }
-  }, [creatingIntegrationModalState.isOpen]);
+  }, [ creatingIntegrationModalState.isOpen ]);
 
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(2));
@@ -137,14 +144,27 @@ export const MainPage: FC = () => {
     // }
   }, []);
 
+  const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
+  const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
+
+  const { isLoading: isCurrentUserProfileInfoLoading } = useGetCurrentUserProfileInfoQuery();
+  const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
+  const { isLoading: isRoomLoading } = useGetEquipedQuery();
+
+  const isLoading = (
+    isAllIntegrationsLoading ||
+    isCurrentUserProfileInfoLoading ||
+    isIntegrationsLoading ||
+    isRoomLoading
+  );
+
+  if (isLoading) return <Loader />;
+
   return (
     <main className={s.page}>
       <Room />
-      {!useSelector((state: RootState) => state.guide.integrationReadyForPublishing) ? (
-        <IntegrationCreation />
-      ) : (
-        <PublishIntegrationButton />
-      )}
+
+      {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
       {!guideVisibility.firstGuideShown && (
         <InitialGuide onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)} />
@@ -250,7 +270,7 @@ export const MainPage: FC = () => {
         )}
 
       {!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN) &&
-        useSelector((state: RootState) => state.guide.isPublishedModalClosed) && (
+        isPublishedModalClosed && (
           <IntegrationCreatedGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
