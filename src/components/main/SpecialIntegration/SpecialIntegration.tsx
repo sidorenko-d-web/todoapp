@@ -3,17 +3,17 @@ import goldCoinIcon from '../../../assets/Icons/coin.png';
 import blueCoinIcon from '../../../assets/Icons/coin-blue-human.svg';
 import lockIcon from '../../../assets/Icons/lock_icon.svg';
 import rocketIcon from '../../../assets/Icons/rocket.svg';
-import classname from "classnames"
+import classname from 'classnames';
 import { useTranslation } from 'react-i18next';
-import {CompanyResponseDTO, useCreateIntegrationMutation} from '../../../redux';
+import { CompanyResponseDTO, useCreateIntegrationMutation } from '../../../redux';
 
 interface SpecialIntegrationProps {
-  integration: CompanyResponseDTO
+  integration: CompanyResponseDTO;
 }
 
 export const SpecialIntegration = ({ integration }: SpecialIntegrationProps) => {
-  const {t} = useTranslation('integrations');
-  const [ createIntegration, { isError, error } ] = useCreateIntegrationMutation();
+  const { t } = useTranslation('integrations');
+  const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
   const isLocked = integration.growth_tree_stage < 100;
   return (
     <div className={styles.wrapper}>
@@ -46,25 +46,29 @@ export const SpecialIntegration = ({ integration }: SpecialIntegrationProps) => 
       <div className={styles.secondaryInfo}>
         <span className={styles.title}> {integration.company_name} </span>
 
-        <button 
-        className={classname(styles.button, {[styles.locked]: isLocked})}
-        onClick={() => createIntegration({
-          campaign_id: integration.id,
-          content_type: 'text'
-        })}
+        <button
+          className={classname(styles.button, { [styles.locked]: isLocked })}
+          onClick={() => createIntegration({
+            campaign_id: integration.id,
+            content_type: 'text',
+          })}
         >
           {
-          // @ts-expect-error No error types yet
-          isError && <span className={styles.errorMessage}>{error?.data?.detail}</span>
+            isError ? (
+              // @ts-expect-error No error types yet
+              <span className={styles.errorMessage}>{error?.data?.detail}</span>
+            ) : (
+              <>
+                {isLocked && <img className={styles.lockIcon} src={lockIcon} alt="lock" />}
+                <span className={styles.buttonTitle}>
+                  {isLocked ? t('i32') : t('i31')}
+                </span>
+                {isLocked && <img className={styles.lockIcon} src={lockIcon} alt="lock" />}
+              </>
+            )
           }
-          
-          {isLocked && <img className={styles.lockIcon} src={lockIcon} alt="lock" /> }
 
-          <span className={styles.buttonTitle}> 
-            {isLocked ? t('i32') : t('i31')} 
-          </span>
 
-          {isLocked && <img className={styles.lockIcon} src={lockIcon} alt="lock" /> }
         </button>
       </div>
     </div>
