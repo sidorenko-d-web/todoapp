@@ -25,7 +25,6 @@ import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slic
 import { Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
 import { ExpandableBottomModal } from '../../shared/';
-import blueWhiteLogo from '../../../assets/Icons/blue-white-logo.svg'
 
 
 interface CreatingIntegrationModalProps {
@@ -57,6 +56,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const { data, isLoading: isCompaniesLoading } = useGetCompaniesQuery();
   const companies = data?.campaigns;
 
+  const uniqueCompany = companies?.find(company => company.is_unique === true) || null;
 
   const goToShop = () => {
     setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
@@ -127,10 +127,11 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             ))}
           </div>
 
-        <SpecialIntegration
-          title="Apusher. Уникальная интеграция"
-          icon={blueWhiteLogo}
-        />
+        {uniqueCompany && (
+          <SpecialIntegration
+            integration={uniqueCompany}
+          />
+        )}
 
         {!noItemsMessage && hasCreatingIntegration && (
           <span className={s.message}>{t('i20')}</span>

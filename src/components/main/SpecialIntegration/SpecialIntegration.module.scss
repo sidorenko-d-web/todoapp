@@ -105,9 +105,26 @@
     gap: 4px;
     flex: 1 0 0;
     border-radius: 8px;
-    background: rgba(47, 128, 237, 0.20);
+    background: #2F80ED;
     border: none;
     align-self: stretch;
+
+    &.locked {
+      background: rgba(47, 128, 237, 0.20);
+    }
+    
+    &:active:not(.locked) {
+      transition: background-color 0.2s ease;
+      background-color: rgba(47, 128, 237, 0.20);
+    }
+
+
+    .errorMessage {
+      color: var.$color-red;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 100%;
+    }
 
     .buttonTitle {
       color: #D9DCE1;
