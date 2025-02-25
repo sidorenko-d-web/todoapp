@@ -53,11 +53,13 @@ const Layout = () => {
         if (!contentElement) return;
     
         const handleScroll = () => {
+        console.log('acd')
+
           const scrollTop = contentElement.scrollTop;
           const maxScroll = contentElement.scrollHeight - contentElement.clientHeight;
           const scrollPercentage = scrollTop / maxScroll;
     
-          const newOffset = scrollPercentage * 150;
+          const newOffset = scrollPercentage * 100;
           setBgOffset(newOffset);
         };
     
