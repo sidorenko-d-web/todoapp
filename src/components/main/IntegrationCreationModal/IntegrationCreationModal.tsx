@@ -8,7 +8,7 @@ import {
   useGetCompaniesQuery,
   useGetCurrentUserProfileInfoQuery,
 } from '../../../redux';
-import { CompanyCard } from '../';
+import { CompanyCard, SpecialIntegration } from '../';
 import { useDispatch } from 'react-redux';
 import { useInventoryItemsFilter } from '../../../hooks';
 
@@ -22,9 +22,10 @@ import {
 } from '../../../utils/guide-functions.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
-import { CentralModal } from '../../shared';
 import { Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
+import { ExpandableBottomModal } from '../../shared/';
+
 
 interface CreatingIntegrationModalProps {
   modalId: string;
@@ -55,6 +56,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const { data, isLoading: isCompaniesLoading } = useGetCompaniesQuery();
   const companies = data?.campaigns;
 
+  const uniqueCompany = companies?.find(company => company.is_unique === true) || null;
 
   const goToShop = () => {
     setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
@@ -95,7 +97,13 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const buttonGlowing = integrationCreatingModalButtonGlowing();
 
   return (
-    <CentralModal modalId={modalId} title={t('i11')} onClose={onClose} titleIcon={integrationWhiteIcon}>
+    <ExpandableBottomModal
+      modalId={modalId}
+      title={t('i11')}
+      onClose={onClose}
+      titleIcon={integrationWhiteIcon}
+      expandOnScroll={true}
+    >
       {isProfileLoading || isCompaniesLoading
         ? <Loader noMargin />
         : <div className={s.content}>
@@ -107,21 +115,27 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             ))}
           </div>
 
-          <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
-            {contentOptions.map((option, index) => (
-              <span
-                key={index}
-                className={`${s.tab} ${selectedOption === option.value ? s.active : ''}`}
-                onClick={() => setSelectedOption(option.value)}
-              >
+        <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
+          {contentOptions.map((option, index) => (
+            <span
+              key={index}
+              className={`${s.tab} ${selectedOption === option.value ? s.active : ''}`}
+              onClick={() => setSelectedOption(option.value)}
+            >
               {option.label}
             </span>
             ))}
           </div>
 
-          {!noItemsMessage && hasCreatingIntegration && (
-            <span className={s.message}>{t('i20')}</span>
-          )}
+        {uniqueCompany && (
+          <SpecialIntegration
+            integration={uniqueCompany}
+          />
+        )}
+
+        {!noItemsMessage && hasCreatingIntegration && (
+          <span className={s.message}>{t('i20')}</span>
+        )}
 
           {!noItemsMessage ? (
             <div className={s.companies}>
@@ -150,12 +164,12 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             }}
             className={`${s.button} 
             ${buttonGlowing ? s.glowingBtn : ''} `}
-            onClick={goToShop}
-          >
-            {t('i21')}
-          </TrackedButton>}
-        </div>
+          onClick={goToShop}
+        >
+          {t('i21')}
+        </TrackedButton>}
+      </div>
       }
-    </CentralModal>
+    </ExpandableBottomModal>
   );
 };

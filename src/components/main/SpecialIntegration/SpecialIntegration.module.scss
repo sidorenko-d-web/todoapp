@@ -1,0 +1,143 @@
+@use '../../../assets/styles/index.scss' as var;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 8px;
+  border: 2px solid #2F80ED;
+  background: #282830;
+  gap: 5px;
+}
+
+.mainInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 8px;
+  align-self: stretch;
+  background: #373A43;
+  border-radius: 8px;
+
+  .items {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: start;
+  }
+
+  .coinsWrapper {
+    display: flex;
+    padding: 3px;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    border-radius: 4px;
+    background: #2D2D35;
+
+    .rocketIcon {
+      width: 17px;
+      height: 17px;
+    }
+
+    .mainInfoIcon {
+      width: 14px;
+      height: 14px;
+    }
+
+    .text {
+      color: var.$color-white;
+      text-align: center;
+      font-family: var.$font-default;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+    }
+  }
+
+
+
+  .iconWrp {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 220px;
+    height: 50px;
+  }
+}
+
+
+.secondaryInfo {
+  display: flex;
+  padding: 5px 8px 8px 8px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  align-self: stretch;
+
+
+  color: #D9DCE1;
+  text-align: center;
+  font-family: var.$font-default;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+
+  .title {
+    color: #AFB9D4;
+    text-align: center;
+    font-family: var.$font-default;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  .button {
+    display: flex;
+    padding: 14px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    flex: 1 0 0;
+    border-radius: 8px;
+    background: #2F80ED;
+    border: none;
+    align-self: stretch;
+
+    &.locked {
+      background: rgba(47, 128, 237, 0.20);
+    }
+    
+    &:active:not(.locked) {
+      background-color: rgba(47, 128, 237, 0.20);
+    }
+
+
+    .errorMessage {
+      color: var.$color-red;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 100%;
+    }
+
+    .buttonTitle {
+      color: #D9DCE1;
+      text-align: center;
+      font-family: var.$font-default;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    .lockIcon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
