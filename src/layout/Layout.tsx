@@ -5,7 +5,7 @@ import { Header } from '../components/Header/';
 import { useEffect, useState } from 'react';
 import { MODALS, localStorageConsts } from '../constants';
 import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
-import { AudioBg, useModal } from '../hooks';
+import { useModal } from '../hooks';
 import { getOS } from '../utils';
 import { useScrollManager } from '../hooks';
 
