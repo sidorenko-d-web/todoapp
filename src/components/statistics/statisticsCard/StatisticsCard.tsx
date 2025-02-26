@@ -36,11 +36,11 @@ const StatisticsCard: FC<Props> = ({ views, points, companyName, onClick }) => {
           <div className={styles.scores}>
             <div className={styles.item}>
               <p>{formatAbbreviation(views, 'number', {locale: locale})}</p>
-              <img src={view} alt="" width={14} height={14}/>
+              <img src={view} alt="" width={18} height={18}/>
             </div>
             <div className={styles.item}>
               <p>{formatAbbreviation(points, 'number', {locale: locale})}</p>
-              <img src={CoinIcon} alt="" width={14} height={14}/>
+              <img src={CoinIcon} alt="" width={18} height={18}/>
             </div>
           </div>
         </div>

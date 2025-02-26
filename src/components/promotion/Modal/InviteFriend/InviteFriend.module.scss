@@ -44,7 +44,6 @@ label {
   @include var.multi-fz(14px, 16px);
 }
 
-
 .level {
   vertical-align: top;
   color: var.$color-text-semi-transparent;
@@ -122,4 +121,15 @@ label {
   @media (min-width: var.$breakpoint-md) {
     padding: 14px;
   }
+}
+
+.save {
+  position: absolute;
+  top: 88%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var.$color-white;
+  background: var.$color-blue-primary;
+  padding: 8px;
+  border-radius: 8px;
 }

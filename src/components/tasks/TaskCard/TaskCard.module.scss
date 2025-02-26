@@ -32,12 +32,12 @@
 
     .icon {
       aspect-ratio: 1 / 1;
-      width: 40px;
-      background-color: var.$color-badge-bg;
+      width: 66px;
+    }
 
-      @media (min-width: var.$breakpoint-md) {
-        width: 66px;
-      }
+    .iconSocial {
+      aspect-ratio: 1 / 1;
+      width: 60px;
     }
 
     .info {
@@ -75,6 +75,7 @@
 
   .reward {
     display: flex;
+    align-items: center;
     font-size: 14px;
     font-weight: 500;
     line-height: 100%;
@@ -85,13 +86,8 @@
 
     img {
       margin-left: 2px;
-      width: 14px;
-      height: 14px;
-
-      @media (min-width: var.$breakpoint-md) {
-        width: 18px;
-        height: 18px;
-      }
+      width: 18px;
+      height: 18px;
     }
   }
 
@@ -116,6 +112,7 @@
   }
 
   .buttons {
+    height: 44px;
     display: flex;
     gap: 10px;
     position: relative;

@@ -9,7 +9,7 @@ import {
   SettingsModal,
   WalletConnectionModal,
 } from '../components';
-import { AudioBg, useModal } from '../hooks';
+import { useModal } from '../hooks';
 import { getOS } from '../utils';
 
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';

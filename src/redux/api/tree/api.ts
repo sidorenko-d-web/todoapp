@@ -11,6 +11,9 @@ export const treeApi = createApi({
       query: () => ({
         url: '/growth-tree',
         method: 'GET',
+        params: {
+          limit: 450,
+        }
       })
     })
   })

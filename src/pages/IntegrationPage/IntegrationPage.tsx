@@ -105,7 +105,7 @@ export const IntegrationPage: React.FC = () => {
             <p className={styles.integrationTitle}>{t('i1')} 1</p>
             <div className={styles.integrationLevelWrp}>
               <p className={styles.integrationLevel}>{data.campaign.company_name}</p>
-              <img src={integrationIcon} height={12} width={12}  alt={'icon'}/>
+              <img src={integrationIcon} height={16} width={16}  alt={'icon'}/>
             </div>
           </div>
           <Integration />
