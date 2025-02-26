@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { ShopLayout } from '../../layout/ShopLayout/ShopLayout';
 import { ItemsTab, Loader, NewItemModal, SkinTab } from '../../components';
 import { useGetShopItemsQuery } from '../../redux/api/shop/api';
-import { IShopItem, TypeItemCategory, TypeItemRarity } from '../../redux';
+import { IShopItem, TypeItemCategory, TypeItemRarity, useGetCurrentUserBoostQuery } from '../../redux';
 import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
 import styles from './ShopPage.module.scss';
 import { itemsInTab } from '../../helpers';
@@ -19,14 +19,14 @@ const StorePage: FC = () => {
 
   const dispatch = useDispatch();
 
-  const { data: shop, isFetching: isShopFetching } = useGetShopItemsQuery({
+  const { data: shop, isLoading: isShopLoading, isFetching: isShopFetching } = useGetShopItemsQuery({
     item_category: shopCategory?.value as TypeItemCategory,
     level: 1,
     item_rarity: itemsRarity?.value,
     item_premium_level: 'base',
   });
 
-  const { data: inventory, isFetching: isInventoryFetching } = useGetInventoryItemsQuery({
+  const { data: inventory, isLoading: isInventoryLoading, isFetching: isInventoryFetching } = useGetInventoryItemsQuery({
     item_category: shopCategory?.value as TypeItemCategory,
   });
 
@@ -42,9 +42,10 @@ const StorePage: FC = () => {
     );
   }, [ inventory, shop ]);
 
+  const { isLoading: isBoostLoading } = useGetCurrentUserBoostQuery();
+
   const isLoading = (
-    isShopFetching ||
-    isInventoryFetching
+    isBoostLoading
   );
 
   if (isLoading) return <Loader />;
@@ -55,14 +56,14 @@ const StorePage: FC = () => {
       onItemCategoryChange={setShopCategory}
       onItemQualityChange={setItemsQuality}
     >
-      {isShopFetching || isInventoryFetching ? (
-        <p style={{ color: '#fff' }}>Loading...</p>
+      {isShopLoading || isShopFetching || isInventoryLoading || isInventoryFetching ? (
+        <Loader className={styles.itemsLoader} />
       ) : !shopCategory || !itemsRarity ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
-      ) : shopCategory?.title !==  t('s6') ? (
+      ) : shopCategory?.title !== t('s6') ? (
         items?.length === 0 ? (
           <p className={styles.emptyText}>
-            {t("s37")}
+            {t('s37')}
           </p>
         ) : (
           <ItemsTab shopCategory={shopCategory} shopItems={items} />

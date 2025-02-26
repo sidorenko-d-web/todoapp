@@ -4,13 +4,10 @@ import styles from './Layout.module.scss';
 import { Header } from '../components/Header/';
 import { useEffect, useState } from 'react';
 import { MODALS, localStorageConsts } from '../constants';
-import {
-  LanguageSelectionModal, Settings,
-  SettingsModal,
-  WalletConnectionModal,
-} from '../components';
-import { useModal } from '../hooks';
+import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
+import { AudioBg, useModal } from '../hooks';
 import { getOS } from '../utils';
+import { useScrollManager } from '../hooks';
 
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
 import Lottie from 'lottie-react';
@@ -19,6 +16,9 @@ import { lampTable } from '../assets/animations';
 const Layout = () => {
   const location = useLocation();
   const platform = getOS();
+  const { openModal } = useModal();
+  const [bgOffset, setBgOffset] = useState(0);
+  const contentRef = useScrollManager();
 
   const showHeader = !location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/);
 
@@ -30,11 +30,6 @@ const Layout = () => {
 
   const showRoadmapBg = location.pathname === '/progressTree';
 
-
-  const { openModal } = useModal();
-
-  const [bgOffset, setBgOffset] = useState(0);
-
   useEffect(() => {
     const isNeedToOpenChest = localStorage.getItem(
       localStorageConsts.IS_NEED_TO_OPEN_CHEST,
@@ -42,69 +37,60 @@ const Layout = () => {
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
   }, []);
 
-
   const contentClassName = `${styles.content} ${showHeader ? styles.withHeader : ''
     } ${needsReducedMargin ? styles.reducedMargin : ''} ${platform ? styles[platform] : ''
     }`;
 
-    useEffect(() => {
-      if (showRoadmapBg) {
-        const contentElement = document.querySelector(`.${styles.content}`);
-        if (!contentElement) return;
-    
-        const handleScroll = () => {
+  useEffect(() => {
+    if (showRoadmapBg && contentRef.current) {
+      const handleScroll = () => {
+        const scrollTop = contentRef.current?.scrollTop || 0;
+        const maxScroll = (contentRef.current?.scrollHeight || 0) - (contentRef.current?.clientHeight || 0);
+        const scrollPercentage = maxScroll > 0 ? scrollTop / maxScroll : 0;
+        const newOffset = scrollPercentage * 100;
+        setBgOffset(newOffset);
+      };
 
-          const scrollTop = contentElement.scrollTop;
-          const maxScroll = contentElement.scrollHeight - contentElement.clientHeight;
-          const scrollPercentage = scrollTop / maxScroll;
-    
-          const newOffset = scrollPercentage * 100;
-          setBgOffset(newOffset);
-        };
-    
-        contentElement.addEventListener("scroll", handleScroll);
-        return () => contentElement.removeEventListener("scroll", handleScroll);
-      }
-    }, [showRoadmapBg]);
+      contentRef.current.addEventListener("scroll", handleScroll);
+      return () => {
+        contentRef.current?.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [showRoadmapBg, contentRef.current]);
 
   return (
     <>
-     <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''
-      }`}>
-      <Settings />
-    </div>
-    <div className={styles.wrp}>
-      {showRoadmapBg && (
-
-
-        <>
-          <img
-            src={roadmapBg}
-            className={styles.bg_image}
-            style={{ transform: `translateY(-${bgOffset}px)` }}
-          />
-          <Lottie
-            animationData={lampTable}
-            loop
-            autoplay
-            style={{position: 'fixed', bottom: '20px'}}
-          />
-        </>
-      )}
-      {showHeader && <Header />}
-      <main className={contentClassName}>
-        <Outlet />
-
-        {/* Modals */}
-        <SettingsModal />
-        <WalletConnectionModal />
-        <LanguageSelectionModal />
-
-          {/*<AudioBg />*/}
+      <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''
+        }`}>
+        <Settings />
+      </div>
+      <div className={styles.wrp}>
+        {showRoadmapBg && (
+          <>
+            <img
+              src={roadmapBg}
+              className={styles.bg_image}
+              style={{ transform: `translateY(-${bgOffset}px)` }}
+            />
+            <Lottie
+              animationData={lampTable}
+              loop
+              autoplay
+              style={{ position: 'fixed', bottom: '20px' }}
+            />
+          </>
+        )}
+        {showHeader && <Header />}
+        <main className={contentClassName} ref={contentRef}>
+          <Outlet />
+          <SettingsModal />
+          <WalletConnectionModal />
+          <LanguageSelectionModal />
+          <AudioBg />
         </main>
-
-      <Footer />
-    </div></>
+        <Footer />
+      </div>
+    </>
   );
 };
 
