@@ -5,9 +5,10 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  margin-top: 50px;
+  margin-bottom: 100px;
 
-  //min-height: calc(var(--tg-viewport-stable-height) - 140px);
-  min-height: calc(var(--tg-viewport-stable-height) - 140px);
+  // min-height: calc(var(--tg-viewport-stable-height) - 140px); //not working properly on test server
   //height: 100%;
   overflow-y: visible;
 
@@ -71,8 +72,8 @@
           align-items: center;
 
           img {
-            width: 14px;
-            height: 14px;
+            width: 18px;
+            height: 18px;
             margin-left: 2px;
           }
 
@@ -82,10 +83,6 @@
           }
 
           @media (min-width: $breakpoint-md) {
-            img {
-              width: 18px;
-              height: 18px;
-            }
             p {
               font-size: 16px;
             }

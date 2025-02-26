@@ -51,9 +51,15 @@
 
   .scores {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
     gap: 5px;
+    align-items: center;
+
+    .topScores {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+    }
 
     .scoresItem {
       display: flex;
@@ -65,8 +71,8 @@
       line-height: 100%;
 
       img {
-        width: 14px;
-        height: 14px;
+        width: 18px;
+        height: 18px;
         margin-left: 2px;
       }
 

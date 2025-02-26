@@ -26,21 +26,21 @@ export const IntegrationStats: React.FC<IntegrationStatsProps> = ({subscribers, 
             <div className={`${styles.IntegrationStat} ${elevateStats ? styles.elevated : ''}`}>
                 <p className={styles.amount}>{formatAbbreviation(subscribers, 'number', {locale: locale})}</p>
                 <div className={styles.typeWrp}>
-                    <img src={subscribersIcon} width={12} height={12}/>
+                    <img src={subscribersIcon} width={14} height={14}/>
                     <p className={styles.type}>{t('i5')}</p>
                 </div>
             </div>
             <div className={`${styles.IntegrationStat} ${elevateStats ? styles.elevated : ''}`}>
                 <p className={styles.amount}>{formatAbbreviation(views, 'number', {locale: locale})}</p>
                 <div className={styles.typeWrp}>
-                    <img src={viewsIcon} width={12} height={12}/>
+                    <img src={viewsIcon} width={14} height={14}/>
                     <p className={styles.type}>{t('i6')}</p>
                 </div>
             </div>
             <div className={`${styles.IntegrationStat} ${elevateStats ? styles.elevated : ''}`}>
                 <p className={styles.amount}>{formatAbbreviation(income, 'number', {locale: locale})}</p>
                 <div className={styles.typeWrp}>
-                    <img src={coinIcon} width={12} height={12}/>
+                    <img src={coinIcon} width={14} height={14}/>
                     <p className={styles.type}>{t('i7')}</p>
                 </div>
             </div>

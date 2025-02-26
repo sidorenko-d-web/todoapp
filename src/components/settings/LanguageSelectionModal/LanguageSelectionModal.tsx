@@ -58,8 +58,6 @@ export const LanguageSelectionModal = () => {
     const [selectedLanguage, setSelectedLanguage] = useState<LanguageCode | null>(null);
 
     const handleCloseModal = () => {
-        // TODO: implement language change logic
-
         closeModal(MODALS.LANGUAGE_SELECTION);
     };
 

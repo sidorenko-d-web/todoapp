@@ -1,15 +1,25 @@
-import React, { useState } from "react";
-import styles from "./WardrobePage.module.scss";
-import { WardrobeIcon, WardrobeInfo, WardrobeTabs } from "../../components";
+import React from 'react';
+import styles from './WardrobePage.module.scss';
+import { Loader, WardrobeIcon, WardrobeInfo, WardrobeTabs } from '../../components';
+import { useGetInventorySkinsQuery } from '../../redux';
+import { useGetCharacterQuery } from '../../redux/api/character';
 
 export const WardrobePage: React.FC = () => {
-    const [selectedSkinUrl, setSelectedSkinUrl] = useState<string | undefined>(undefined);
+  const { isLoading: isInventorySkinsLoading } = useGetInventorySkinsQuery();
+  const { isLoading: isCharacterLoading } = useGetCharacterQuery();
 
-    return (
-        <div className={styles.wrp}>
-            <WardrobeInfo />
-            <WardrobeIcon imageUrl={selectedSkinUrl} />
-            <WardrobeTabs setSelectedSkinUrl={setSelectedSkinUrl} />
-        </div>
-    );
+  const isLoading = (
+    isInventorySkinsLoading ||
+    isCharacterLoading
+  );
+
+  if (isLoading) return <Loader />;
+
+  return (
+    <div className={styles.wrp}>
+      <WardrobeInfo />
+      <WardrobeIcon />
+      <WardrobeTabs wardrobe={true} />
+    </div>
+  );
 };

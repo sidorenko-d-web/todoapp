@@ -13,10 +13,12 @@ import { blueLight, purpleLight, redLight } from '../../../../assets/animations'
 import { useDispatch } from 'react-redux';
 import { setItemBought } from '../../../../redux/slices/guideSlice';
 import { CentralModal } from '../../../shared';
+import { useTranslation } from 'react-i18next';
 
 
 export const NewItemModal: React.FC = () => {
   const { closeModal, getModalState } = useModal();
+  const { t } = useTranslation('shop');
 
   const state = getModalState<{ item: IShopItem; mode: 'skin' | 'item' }>(
     MODALS.NEW_ITEM,
@@ -38,8 +40,8 @@ export const NewItemModal: React.FC = () => {
 
   return (
     <CentralModal
-      title="Новый предмет!"
-      onClose={handleClose}
+      title={t('s43')}
+      onClose={() => closeModal(MODALS.NEW_ITEM)}
       modalId={MODALS.NEW_ITEM}
     >
       <div className={styles.images}>
@@ -72,31 +74,31 @@ export const NewItemModal: React.FC = () => {
           <div className={styles.statItem}>
             <p>+{state.args?.item.boost.income_per_second}</p>
             <img src={CoinIcon} alt="Coin icon" />
-            <p>/cек</p>
+            <p>{t('s44')}</p>
           </div>
         </div>
       )}
       <div className={styles.text}>
         {state.args?.mode === 'skin' ? (
           <p>
-            Поздравляем! Получен новый образ{' '}
+            {t('s48')}{' '}
             <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>
               {state.args?.item.name}!
             </span>{' '}
-            Можно надеть в гардеробе!
+            {t('s49')}
           </p>
         ) : (
           <p>
-            Поздравляем! Получен новый предмет{' '}
+            {t('s50')}{' '}
             <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>
               {state.args?.item.name}!
             </span>{' '}
-            Доступно для улучшения в инвентаре!
+            {t('s51')}
           </p>
         )}
       </div>
       <Button onClick={handleClose} variant="blue">
-        {state.args?.mode === 'skin' ? 'Надеть!' : 'Открыть инвентарь'}
+        {state.args?.mode === 'skin' ? t('s52') : t('s53')}
       </Button>
     </CentralModal>
   );

@@ -11,3 +11,4 @@ export * from './useSendTransaction'
 export * from './useAsyncInitialize'
 export * from './useUsdtTransactions'
 export * from './useGenerateId'
+export * from "./useScrollManager"

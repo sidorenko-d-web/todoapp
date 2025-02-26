@@ -20,14 +20,14 @@ interface ProfileStatsMiniProps {
 }
 
 export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
-                                                                    subscribers,
-                                                                    daysInARow,
-                                                                    position,
-                                                                    onlyBadges,
-                                                                    totalViews,
-                                                                  }) => {
+  subscribers,
+  daysInARow,
+  position,
+  onlyBadges,
+  totalViews,
+}) => {
   const { i18n } = useTranslation('shop');
-  const locale = [ 'ru', 'en' ].includes(i18n.language)
+  const locale = ['ru', 'en'].includes(i18n.language)
     ? (i18n.language as 'ru' | 'en')
     : 'ru';
 
@@ -56,7 +56,7 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
         </div>
 
         <div className={styles.statWrp}>
-          <p className={styles.stat}>{daysInARow}</p>
+          <p className={styles.stat}>{daysInARow + 1}</p>
           <img src={fireIcon} />
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import subscribersIcon from '../../../../assets/icons/subscribers.png';
 import copy from '../../../../assets/icons/copy.svg';
 import arrow from '../../../../assets/icons/arrow.svg';
@@ -16,12 +16,24 @@ interface InviteFriendProps {
 }
 
 export const InviteFriend: FC<InviteFriendProps> = ({
-  modalId,
-  onClose,
-}: InviteFriendProps) => {
+                                                      modalId,
+                                                      onClose,
+                                                    }: InviteFriendProps) => {
   const { t, i18n } = useTranslation('promotion');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data } = useGetUserQuery();
+
+  const [isCopiedLink, setIsCopiedLink] = useState(false);
+
+  const copyToClipboard = async (text: string, setCopiedState: (value: boolean) => void) => {
+    try {
+      setCopiedState(true);
+      setTimeout(() => setCopiedState(false), 1000);
+      await navigator.clipboard.writeText('' + text);
+    } catch (error) {
+      console.error('Ошибка при копировании:', error);
+    }
+  };
 
   const inviteTG = () => {
     const shareData = {
@@ -73,14 +85,10 @@ export const InviteFriend: FC<InviteFriendProps> = ({
               className={s.inputLink}
             />
             <Button
-              onClick={() =>
-                navigator.clipboard.writeText(
-                  `https://t.me/wished_sentry_robot?start=${data?.id}`,
-                )
-              }
+              onClick={() => copyToClipboard(`https://t.me/wished_sentry_robot?start=${data?.id}`, setIsCopiedLink)}
               className={s.copyButton}
             >
-              <img src={copy} height={14} width={14} alt="copy" />
+               <img src={copy} height={14} width={14} alt="copy" />
             </Button>
           </div>
         </div>
@@ -94,12 +102,13 @@ export const InviteFriend: FC<InviteFriendProps> = ({
               className={s.inputLink}
             />
             <Button
-              onClick={() => navigator.clipboard.writeText('' + data?.id)}
+              onClick={() => copyToClipboard(String(data?.id), setIsCopiedLink)}
               className={s.copyButton}
             >
-              <img src={copy} height={14} width={14} alt="copy" />
+               <img src={copy} height={14} width={14} alt="copy" />
             </Button>
           </div>
+        {isCopiedLink && <div className={s.save}>{t('p59')}</div>}
         </div>
         <Button className={classNames(s.buttonContainer, s.text)} onClick={inviteTG}>
           {t('p31')} <img src={arrow} height={14} width={14} alt="arrow" />

@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 import useSound from 'use-sound';
 import { SOUNDS } from '../../../constants';
 import { useSelector } from 'react-redux';
-import { selectVolume } from '../../../redux';
+import { selectButtonVolume } from '../../../redux';
 
 interface Props
   extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
@@ -11,7 +11,7 @@ interface Props
 
 export const Button = ({ children, onClick, ...props }: Props) => {
   const [playClickSound] = useSound(SOUNDS.buttonClick, {
-    volume: useSelector(selectVolume) === 0 ? 0 : 2 ,
+    volume: useSelector(selectButtonVolume) * 7,
   });
 
   const handleOnClick = () => {
