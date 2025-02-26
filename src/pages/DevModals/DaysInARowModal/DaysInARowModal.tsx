@@ -24,7 +24,7 @@ interface Props {
   onClose?: () => void;
 }
 
-export default function DaysInARowModal({}: Props) {
+export default function DaysInARowModal({onClose}: Props) {
   const { closeModal } = useModal();
   const { data } = useGetPushLineQuery();
   const [currentDay, setCurrentDay] = useState(new Date().getDate());
@@ -150,7 +150,7 @@ export default function DaysInARowModal({}: Props) {
         />
       </div>
       <Button
-        onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)}
+        onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))}
         variant={streakCount < 30 ? 'blue' : streakCount < 60 ? 'purple' : 'red'}
       >
         Отлично!
@@ -204,7 +204,7 @@ const DayItem = ({
       <div
         className={clsx(
           styles.day,
-          isCurrentDay && styles.currentDay, // Базовый стиль для текущего дня
+          isCurrentDay && styles.currentDay,
           (isFrozen || progressStage === 'blue') && styles.dayBlue,
           progressStage === 'red' && !isFrozen && styles.dayRed,
           progressStage === 'purple' && !isFrozen && styles.dayPurple,
