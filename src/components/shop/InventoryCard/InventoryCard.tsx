@@ -258,7 +258,14 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               </>
             )}
           </Button>
-          <Button onClick={() => removeItem({ items_to_remove: [{ id: item.id }] })}>
+
+          <Button
+            disabled={false}
+            onClick={() => {
+              console.log('object');
+              removeItem({ items_to_remove: [{ id: item.id }] });
+            }}
+          >
             <img src={ListIcon} alt="Tasks" />
           </Button>
         </div>

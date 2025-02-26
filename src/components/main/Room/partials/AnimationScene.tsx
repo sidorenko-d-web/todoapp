@@ -23,15 +23,15 @@ export const AnimationScene = () => {
     const itemsInSlots = {
       1: { width: 0, height: 0, x: -1000, y: -1000, z: -100 }, // walls === not here
       0: { width: 0, height: 0, x: -1000, y: -1000, z: -100 }, // floor === not here
-      2: { width: 160, height: 160, x: -6, y: 455, z: 2 }, //desc
-      3: { width: 120, height: 120, x: -50, y: 415, z: 1 }, //chair
+      2: { width: 160, height: 160, x: -6, y: 455, z: 3 }, //desc
+      3: { width: 120, height: 120, x: -50, y: 415, z: 2 }, //chair
       4: { width: 150, height: 150, x: 60, y: 320, z: 0 }, //sofa
       5: { width: 150, height: 150, x: -125, y: 260, z: 0 }, //window
       6: { width: 35, height: 35, x: -70, y: 223, z: 0 }, //poster
       7: { width: 35, height: 35, x: 100, y: 245, z: 0 }, //lens
       8: { width: 40, height: 40, x: 60, y: 228, z: 0 }, //note
       9: { width: 100, height: 100, x: 70, y: 210, z: 100 }, //light portable
-      10: { width: 240, height: 240, x: -70, y: 390, z: 0 }, //carpet
+      10: { width: 240, height: 240, x: -70, y: 390, z: -10 }, //carpet
       11: { width: 40, height: 40, x: 15, y: 425, z: 101 }, //camera
       12: { width: 140, height: 140, x: 90, y: 500, z: 99 }, //stand
       13: { width: 60, height: 60, x: 30, y: 398, z: 100 }, //lightDesc
@@ -71,6 +71,8 @@ export const AnimationScene = () => {
       }
 
       preload() {
+        if (!sceneRef.current) return;
+        if (!gameRef.current) return;
         room?.items.forEach((item, i) => {
           if (animated.find(_item => item.name === _item.name)) {
             const jsonUrl = new URL(
