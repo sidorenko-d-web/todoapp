@@ -69,15 +69,15 @@ export const TasksPage: FC = () => {
         <div className={s.badges}>
           <span className={s.badge}>
             +{formatAbbreviation(boostData?.subscribers || 0, 'number', { locale: locale })}
-            <img src={subscribersIcon} height={14} width={14} alt={'subscribers'} />
+            <img src={subscribersIcon} height={18} width={18} alt={'subscribers'} />
           </span>
           <span className={s.badge}>
             +{formatAbbreviation(Number(boostData?.views) || 0, 'number', { locale: locale })}
-            <img src={coinIcon} height={14} width={14} alt={'income'} />
+            <img src={coinIcon} height={18} width={18} alt={'income'} />
           </span>
           <span className={s.badge}>
             +{formatAbbreviation(Number(boostData?.income_per_second) || 0, 'number', { locale: locale })}
-            <img src={coinIcon} height={14} width={14} alt={'income'} />/сек.
+            <img src={coinIcon} height={18} width={18} alt={'income'} />/сек.
           </span>
         </div>
       </section>
