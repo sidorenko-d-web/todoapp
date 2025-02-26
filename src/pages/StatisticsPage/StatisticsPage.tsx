@@ -61,6 +61,7 @@ const StatisticsPage: FC = () => {
               views={integration.views}
               points={integration.income}
               companyName={integration.campaign.company_name}
+              number={integration?.number}
               onClick={() => navigate(`/integrations/${integration.id}`)}
             />
           ))

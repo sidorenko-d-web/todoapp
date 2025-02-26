@@ -88,7 +88,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     if (!slot && slot !== 0)
       throw new Error('error while getting slot for item, check names in "redux/api/room/dto.ts - RoomItemsSlots"');
 
-    const isSlotNotEmpty = equipedItems?.room.equipped_items.find(item => item.slot === slot);
+    const isSlotNotEmpty = equipedItems?.equipped_items.find(item => item.slot === slot);
 
     try {
       if (isSlotNotEmpty) {
@@ -101,7 +101,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     }
   };
   const slot = Object.values(RoomItemsSlots).find(_item => _item.name.find(__item => item.name.includes(__item)))?.slot;
-  const isEquipped = equipedItems?.room.equipped_items.find(_item => _item.id === item.id);
+  const isEquipped = equipedItems?.equipped_items.find(_item => _item.id === item.id);
 
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 

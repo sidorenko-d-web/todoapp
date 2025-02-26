@@ -29,17 +29,17 @@ export const AnimationScene = () => {
       5: { width: 150, height: 150, x: -125, y: 260, z: 0 }, //window
       6: { width: 35, height: 35, x: -70, y: 223, z: 0 }, //poster
       7: { width: 35, height: 35, x: 100, y: 245, z: 0 }, //lens
-      8: { width: 40, height: 40, x: 55, y: 228, z: 0 }, //note
+      8: { width: 40, height: 40, x: 60, y: 228, z: 0 }, //note
       9: { width: 100, height: 100, x: 70, y: 210, z: 100 }, //light portable
       10: { width: 240, height: 240, x: -70, y: 390, z: 0 }, //carpet
       11: { width: 40, height: 40, x: 15, y: 425, z: 101 }, //camera
       12: { width: 140, height: 140, x: 90, y: 500, z: 99 }, //stand
       13: { width: 60, height: 60, x: 30, y: 398, z: 100 }, //lightDesc
       14: { width: 45, height: 45, x: -40, y: 427, z: 100 }, //mic
-      15: { width: 40, height: 40, x: 35, y: 210, z: 0 }, //photograph
+      15: { width: 40, height: 40, x: 35, y: 210, z: 1000 }, //photograph
       16: { width: 58, height: 58, x: -15, y: 444, z: 102 }, //pc
       17: { width: 17, height: 17, x: 15, y: 400, z: 100 }, //pen
-      18: { width: 50, height: 50, x: 6, y: 188, z: 0 }, //lamp
+      18: { width: 50, height: 50, x: 6, y: 188, z: 10 }, //lamp
       19: { width: 70, height: 70, x: -120, y: 485, z: 0 }, //ottoman
       20: { width: 60, height: 60, x: 145, y: 390, z: 0 }, //plant
     };
@@ -48,6 +48,8 @@ export const AnimationScene = () => {
       { animation: '2_idle', name: 'Постер', skin: () => 'default' },
       { animation: 'animation', name: 'Камера любительская', skin: (prem_lvl: string) => prem_lvl },
       { animation: 'animation', name: 'Камера профессиональная', skin: (prem_lvl: string) => prem_lvl },
+      { animation: 'animation', name: 'Мыльница', skin: (prem_lvl: string) => prem_lvl },
+      { animation: 'animation', name: 'Фикус', skin: (prem_lvl: string) => prem_lvl },
     ];
 
     const baseItems = [
@@ -87,8 +89,7 @@ export const AnimationScene = () => {
             this.load.spineJson('json' + i, proxyImageUrl(jsonUrl));
             this.load.spineAtlas('atlas' + i, proxyImageUrl(atlasUrl));
           } else {
-            const slot = room?.room.equipped_items.find(_item => _item.id === item.id)!
-              .slot! as keyof typeof itemsInSlots;
+            const slot = room?.equipped_items.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
             console.log(slot);
             const { width, height } = itemsInSlots[slot];
             this.load.svg('item' + i, proxyImageUrl(item.image_url!), { width, height });
@@ -107,11 +108,10 @@ export const AnimationScene = () => {
         room?.items.forEach(async (item, i) => {
           const animatedItem = animated.find(_item => item.name === _item.name);
           if (animatedItem) {
-            const slot = room?.room.equipped_items.find(_item => _item.id === item.id)!
-              .slot! as keyof typeof itemsInSlots;
+            const slot = room?.equipped_items.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
             const _item = itemsInSlots[slot];
 
-            if (slot === 11 && room.room.equipped_items.find(item => item.slot === 12)) {
+            if (slot === 11 && room.equipped_items.find(item => item.slot === 12)) {
               this.objects?.push(this.add.spine(center + _item.x + 70, _item.y + 12, 'json' + i, 'atlas' + i));
             } else {
               this.objects?.push(this.add.spine(center + _item.x, _item.y, 'json' + i, 'atlas' + i));
@@ -124,14 +124,13 @@ export const AnimationScene = () => {
             this.objects[i]?.skeleton.setSkinByName(animatedItem.skin(item.item_premium_level));
             this.objects[i]?.setDepth(_item.z);
           } else {
-            const slot = room?.room.equipped_items.find(_item => _item.id === item.id)!
-              .slot! as keyof typeof itemsInSlots;
+            const slot = room?.equipped_items.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
             const _item = itemsInSlots[slot];
             this.objects?.push(this.add.image(center + _item.x, _item.y, 'item' + i));
             this.objects[i]?.setDepth(_item.z);
           }
         });
-        const slots = room?.room.equipped_items.map(item => item.slot);
+        const slots = room?.equipped_items.map(item => item.slot);
 
         baseItems.forEach(item => {
           if (!slots?.includes(item.slot)) {

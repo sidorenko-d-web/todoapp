@@ -36,7 +36,6 @@ export const roomApi = createApi({
       }),
       invalidatesTags: ['room'],
     }),
-    
   }),
 });
 

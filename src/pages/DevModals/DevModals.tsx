@@ -20,23 +20,26 @@ export default function DevModals() {
       }
 
       preload() {
-        const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/lampa.json`).href;
-        const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/lampa.atlas`).href;
+        const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/лампа_base.json`).href;
+        const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/лампа_baseatlas.txt`).href;
 
         this.load.spineJson('json', proxyImageUrl(jsonUrl));
         this.load.spineAtlas('atlas', proxyImageUrl(atlasUrl));
       }
 
       create() {
-        this.spineObject = this.add.spine(50, 50, 'json', 'atlas');
+        this.spineObject = this.add.spine(100, 100, 'json', 'atlas');
+        this.spineObject.scale = 0.1;
+        this.spineObject.skeleton.setSkinByName('base');
+        console.log(this.spineObject);
       }
     }
 
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
       width: 300,
-      height: sceneRef.current.offsetHeight,
-      transparent: true,
+      height: 300,
+      backgroundColor: '#255',
       scene: [SpineScene],
       plugins: {
         scene: [{ key: 'player', plugin: SpinePlugin, mapping: 'spine' }],
@@ -54,7 +57,5 @@ export default function DevModals() {
     };
   }, [sceneRef]);
 
-  return (
-    <div ref={sceneRef} id="player" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1000 }}></div>
-  );
+  return <div ref={sceneRef} id="player" style={{ width: '100%', height: '100%', marginTop: 100 }}></div>;
 }
