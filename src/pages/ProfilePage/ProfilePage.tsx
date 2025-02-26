@@ -128,7 +128,6 @@ export const ProfilePage: React.FC = () => {
               position={position}
               isVip={false}
             />
-
             <StreakCard
               streakDays={streaks !== undefined ? streaks : 0}
               frozenDays={frozen !== undefined ? frozen : 0}

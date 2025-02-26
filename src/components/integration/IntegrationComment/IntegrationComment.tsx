@@ -62,7 +62,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
           <p className={styles.amount}>{progres}/5</p>
           <div className={styles.rewardWrp}>
             <p className={styles.reward}>+{formatAbbreviation(100, 'number', {locale: locale})}</p>
-            <img src={coinIcon} width={12} height={12} />
+            <img src={coinIcon} width={18} height={18} />
           </div>
         </div>
         <ProgressLine level={progres} color="blue" />
