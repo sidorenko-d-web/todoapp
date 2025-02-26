@@ -10,27 +10,30 @@ import { useTranslation } from 'react-i18next';
 interface Props {
   id: string;
   views: number;
+  number: number;
   points: string;
   companyName: string;
   onClick: () => void;
 }
 
-const StatisticsCard: FC<Props> = ({ views, points, companyName, onClick }) => {
+const StatisticsCard: FC<Props> = ({ views, points, companyName, onClick, number }) => {
   const { t, i18n } = useTranslation('statistics');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <>
       <div className={styles.statisticsCard} onClick={onClick} style={{ cursor: 'pointer' }}>
         <div className={styles.left}>
-          <img src={integrations} alt="" width={40} height={40}/>
+          <img src={integrations} alt="" width={40} height={40} />
         </div>
         <div className={styles.right}>
           <div className={styles.header}>
-            <p className={styles.title}>{t('s5')} 1</p>
+            <p className={styles.title}>
+              {t('s5')} {number}
+            </p>
             <div className={styles.logo}>
               <p>{companyName}</p>
-              <img src={logo} alt="" width={14} height={14}/>
+              <img src={logo} alt="" width={14} height={14} />
             </div>
           </div>
           <div className={styles.scores}>

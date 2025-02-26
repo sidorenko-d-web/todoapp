@@ -8,12 +8,11 @@ export type BoostDTO = {
 
 export interface IEquipedRoomResponse {
   items: IShopItem[];
-  room: IRoom;
+  equipped_items: IRoomItem[];
 }
 
 export interface IRoom {
   id: string;
-  equipped_items: IRoomItem[];
 }
 
 export interface IRoomItem {
