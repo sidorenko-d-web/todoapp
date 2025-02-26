@@ -61,17 +61,10 @@ export const integrationsApi = createApi({
       },
       providesTags: ['Integrations'],
     }),
-    getAllIntegrations: builder.query<IntegrationsResponseDTO, IntegrationsQueryRequestDTO>({
-      query: ( params ) => ({
+    getAllIntegrations: builder.query<IntegrationsResponseDTO, void>({
+      query: () => ({
         url: '/integrations',
         method: 'GET',
-        params: {
-          company_name: params.company_name,
-          status: params.status,
-          asc: params.asc,
-          offset: params.offset,
-          limit: params.limit
-        }
       }),
     }),
     updateTimeLeft: builder.mutation<IntegrationResponseDTO, IntegrationUpdateRequestDTO>({
