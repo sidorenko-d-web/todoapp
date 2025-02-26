@@ -15,23 +15,21 @@ import { Loader } from '../../components';
 
 const StatisticsPage: FC = () => {
   const { t, i18n } = useTranslation('statistics');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const navigate = useNavigate();
   const { data: statisticData, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
   const { data: userProfileData, isLoading: isUserLoading } = useGetCurrentUserProfileInfoQuery();
 
-  const isLoading = (
-    isAllIntegrationsLoading ||
-    isUserLoading
-  );
+  const isLoading = isAllIntegrationsLoading || isUserLoading;
 
   if (isLoading) return <Loader />;
 
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
-        <Button className={styles.backButton} onClick={() => navigate(-1)}><img src={back} alt="Back" width={22}
-                                                                                height={22} /></Button>
+        <Button className={styles.backButton} onClick={() => navigate(-1)}>
+          <img src={back} alt="Back" width={22} height={22} />
+        </Button>
         <div className={styles.titleWrapper}>
           <h1 className={styles.title}>{t('s1')}</h1>
           <div className={styles.scores}>
@@ -64,17 +62,19 @@ const StatisticsPage: FC = () => {
         {isLoading && isUserLoading ? (
           <p className={styles.info}>{t('s3')}</p>
         ) : statisticData?.count != 0 ? (
-          statisticData?.integrations.map(integration => (
-            <StatisticsCard
-              key={integration.id}
-              id={integration.id}
-              views={integration.views}
-              points={integration.income}
-              companyName={integration.campaign.company_name}
-              number={integration?.number}
-              onClick={() => navigate(`/integrations/${integration.id}`)}
-            />
-          ))
+          statisticData?.integrations
+            .filter(item => item.status === 'published')
+            .map(integration => (
+              <StatisticsCard
+                key={integration.id}
+                id={integration.id}
+                views={integration.views}
+                points={integration.income}
+                companyName={integration.campaign.company_name}
+                number={integration?.number}
+                onClick={() => navigate(`/integrations/${integration.id}`)}
+              />
+            ))
         ) : (
           <p className={styles.info}>{t('s3')}</p>
         )}

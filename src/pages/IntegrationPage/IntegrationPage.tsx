@@ -33,7 +33,9 @@ export const IntegrationPage: React.FC = () => {
     skip: !queryIntegrationId && queryIntegrationId === 'undefined',
   });
 
-  const integrationId = queryIntegrationId !== 'undefined' ? queryIntegrationId : integrations?.integrations[0].id;
+  // console.log(integrations?.integrations.find(item))
+
+  const integrationId = queryIntegrationId !== 'undefined' ? queryIntegrationId : integrations?.integrations.find(item => item.status === 'published')?.id;
 
   const {
     data,
@@ -63,9 +65,9 @@ export const IntegrationPage: React.FC = () => {
   }, []);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
-    await postComment({ commentId, isHate: !isThumbsUp });
+    const res = await postComment({ commentId, isHate: !isThumbsUp });
     await refetchCurrentIntegration();
-
+    console.log(res.data ? 'угадано' : 'не угадано')
     if (currentCommentIndex + 1 < comments.length) {
       setCurrentCommentIndex(prevIndex => prevIndex + 1);
     } else {
@@ -88,11 +90,11 @@ export const IntegrationPage: React.FC = () => {
       {isLoading && <p>{t('i3')}</p>}
       {(error || !integrationId) && <p>{t('i2')}</p>}
 
-      {data?.status === 'published' && (
+      {data  && (
         <>
           <IntegrationStatsMini views={data.views} subscribers={data.subscribers} income={data.income} />
           <div className={styles.integrationNameWrp}>
-            <p className={styles.integrationTitle}>{t('i1')} 1</p>
+            <p className={styles.integrationTitle}>{t('i1')} {data.number}</p>
             <div className={styles.integrationLevelWrp}>
               <p className={styles.integrationLevel}>{data.campaign.company_name}</p>
               <img src={integrationIcon} height={16} width={16}  alt={'icon'}/>
