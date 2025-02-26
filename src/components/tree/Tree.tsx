@@ -20,9 +20,9 @@ import spinnerPurple from '../../assets/icons/purple-glow.svg';
 import spinnerBlue from '../../assets/icons/blue-glow.svg';
 import spinnerRed from '../../assets/icons/red-glow.svg';
 
-import Lottie from 'lottie-react';
 import { giftBlick } from '../../assets/animations';
 import { Button } from '../shared';
+import LazyLottie from './LazyLottie';
 
 
 export const Tree = () => {
@@ -52,6 +52,8 @@ export const Tree = () => {
     }
   }, [progressPercent]);
 
+
+  
   if (!treeData) {
     return null;
   }
@@ -104,12 +106,9 @@ export const Tree = () => {
                     {/* TODO: rewrite when backend is ready */}
                     {stage.achievement && (
                       <div className={classNames(s.imgPrize,)}>
-                        <Lottie
-                          animationData={giftBlick}
-                          loop
-                          autoplay
-                          className={s.blickAnimation}
-                        />
+                        <div className={s.blickAnimation}>
+                          <LazyLottie animationData={giftBlick}/>
+                        </div>
                         <div className={classNames({ [s.blur]: !isActive })} />
 
                         <img src={giftIcon} height={20} width={20} alt="gift" style={{ opacity: '0.5' }} />
