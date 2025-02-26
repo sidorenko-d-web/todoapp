@@ -19,14 +19,14 @@ const StorePage: FC = () => {
 
   const dispatch = useDispatch();
 
-  const { data: shop, isLoading: isShopLoading } = useGetShopItemsQuery({
+  const { data: shop, isLoading: isShopLoading, isFetching: isShopFetching } = useGetShopItemsQuery({
     item_category: shopCategory?.value as TypeItemCategory,
     level: 1,
     item_rarity: itemsRarity?.value,
     item_premium_level: 'base',
   });
 
-  const { data: inventory, isLoading: isInventoryLoading } = useGetInventoryItemsQuery({
+  const { data: inventory, isLoading: isInventoryLoading, isFetching: isInventoryFetching } = useGetInventoryItemsQuery({
     item_category: shopCategory?.value as TypeItemCategory,
   });
 
@@ -56,7 +56,7 @@ const StorePage: FC = () => {
       onItemCategoryChange={setShopCategory}
       onItemQualityChange={setItemsQuality}
     >
-      {isShopLoading || isInventoryLoading ? (
+      {isShopLoading || isShopFetching || isInventoryLoading || isInventoryFetching ? (
         <Loader className={styles.itemsLoader} />
       ) : !shopCategory || !itemsRarity ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
