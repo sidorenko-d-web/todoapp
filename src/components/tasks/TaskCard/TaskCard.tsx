@@ -109,7 +109,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       [s.socialTask]: isSocialTask,
     })}>
       <section className={s.header}>
-        {icon && <img className={s.icon} src={icon} alt="icon" />}
+        {icon && <img className={classNames(s.icon, {[s.iconSocial]: isSocialTask})} src={icon} alt="icon" />}
         <div className={s.info}>
           <h2 className={s.title}>{title}</h2>
           <p className={s.description}>{description}</p>
@@ -148,10 +148,10 @@ export const TaskCard: React.FC<TasksCardProps> = ({
           </div>
           <div className={s.progressTypeReward}>
             <span className={s.reward}>
-              {'10 - 1000'} <img src={coinIcon} height={14} width={14} alt={t('q38')} />
+              {'10 - 1000'} <img src={coinIcon} height={18} width={18} alt={t('q38')} />
             </span>
             <span className={s.reward}>
-              ??? <img src={giftIcon} height={14} width={14} alt={t('q34')} />
+              ??? <img src={giftIcon} height={18} width={18} alt={t('q34')} />
             </span>
           </div>
         </section>

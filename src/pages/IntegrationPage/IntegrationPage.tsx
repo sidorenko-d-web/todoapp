@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styles from './IntegrationPage.module.scss';
 import {
+  setActiveFooterItemId,
+  setElevateIntegrationStats,
+  setFooterActive,
   useGetIntegrationQuery,
   useGetIntegrationsQuery,
   useGetUnansweredIntegrationCommentQuery,
@@ -12,6 +15,7 @@ import {
   IntegrationPageGuide,
   IntegrationStats,
   IntegrationStatsMini,
+  Loader,
 } from '../../components';
 import integrationIcon from '../../assets/icons/integration-icon.svg';
 import { useParams } from 'react-router-dom';
@@ -19,7 +23,6 @@ import { isGuideShown, setGuideShown } from '../../utils';
 import { GUIDE_ITEMS } from '../../constants';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { setActiveFooterItemId, setElevateIntegrationStats, setFooterActive } from '../../redux';
 
 export const IntegrationPage: React.FC = () => {
   const { t } = useTranslation('integrations');
@@ -35,11 +38,12 @@ export const IntegrationPage: React.FC = () => {
   const {
     data,
     error,
-    isLoading,
+    isLoading: isIntegrationLoading,
     refetch: refetchCurrentIntegration,
   } = useGetIntegrationQuery(`${integrationId}`, { refetchOnMountOrArgChange: true });
   const {
     data: commentData,
+    isLoading: isUnansweredIntegrationCommentLoading,
     refetch,
     isSuccess,
   } = useGetUnansweredIntegrationCommentQuery(`${integrationId}`, {
@@ -70,7 +74,12 @@ export const IntegrationPage: React.FC = () => {
     }
   };
 
-  console.log(commentData);
+  const isLoading = (
+    isIntegrationLoading ||
+    isUnansweredIntegrationCommentLoading
+  );
+
+  if (isLoading) return <Loader />;
 
   return (
     <div className={styles.wrp}>
@@ -79,14 +88,14 @@ export const IntegrationPage: React.FC = () => {
       {isLoading && <p>{t('i3')}</p>}
       {(error || !integrationId) && <p>{t('i2')}</p>}
 
-      {data && (
+      {data?.status === 'published' && (
         <>
           <IntegrationStatsMini views={data.views} subscribers={data.subscribers} income={data.income} />
           <div className={styles.integrationNameWrp}>
             <p className={styles.integrationTitle}>{t('i1')} 1</p>
             <div className={styles.integrationLevelWrp}>
               <p className={styles.integrationLevel}>{data.campaign.company_name}</p>
-              <img src={integrationIcon} height={12} width={12} alt={'icon'} />
+              <img src={integrationIcon} height={16} width={16}  alt={'icon'}/>
             </div>
           </div>
           <Integration />

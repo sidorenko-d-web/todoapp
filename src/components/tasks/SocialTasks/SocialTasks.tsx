@@ -6,6 +6,8 @@ import s from '../styles.module.scss';
 import { Task } from '../../../redux/api/tasks/dto';
 import { useGetDailyRewardQuery, useUpdateTaskMutation } from '../../../redux/api/tasks/api';
 import { useTranslation } from 'react-i18next';
+import { useModal } from '../../../hooks';
+import { MODALS } from '../../../constants/modals';
 
 const TELEGRAM_CHANNEL_URL = 'https://t.me/pushtoyours';
 
@@ -17,16 +19,14 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
   const { t } = useTranslation('quests');
   const completedTasks = tasks.filter(task => task.is_completed).length;
   const [updateTask] = useUpdateTaskMutation();
+  const { openModal, closeModal } = useModal();
+  const { refetch: getDailyReward } = useGetDailyRewardQuery('', { skip: true });
 
   const handleTaskClick = async (task: Task) => {
     if (task.is_completed && !task.is_reward_given) {
-      try {
-        const { refetch: getDailyReward } = useGetDailyRewardQuery(task.id, { skip: true });
-        const result = await getDailyReward();
-        console.log('Social Reward API Response:', result);
-      } catch (error) {
-        console.error('Error fetching social reward:', error);
-      }
+      console.log('Attempting to open GetGift modal');
+      openModal(MODALS.GET_GIFT);
+      console.log('Modal open called');
       return;
     }
 

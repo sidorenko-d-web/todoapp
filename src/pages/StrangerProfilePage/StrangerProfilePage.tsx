@@ -11,13 +11,16 @@ import { formatAbbreviation } from '../../helpers';
 import { useGetPushLineQuery } from '../../redux/api/pushLine/api';
 import s from './StrangerProfilePage.module.scss';
 import { Button } from '../../components/shared';
+import { Loader } from '../../components';
 
 export const StrangerProfilePage = () => {
   const { openModal, closeModal } = useModal();
   const { profileId } = useParams();
-  const { data: profile } = useGetUserProfileInfoByIdQuery(profileId || '');
-  const { data } = useGetPushLineQuery();
-  if (!profile || !profileId) return null;
+  const { data: profile, isLoading: isUserLoading } = useGetUserProfileInfoByIdQuery(profileId || '');
+  const { data, isLoading: isPushLineLoading } = useGetPushLineQuery();
+  
+  if (!profile || !profileId) return <Loader />;
+
   const frozen = data?.week_information.filter(
     day =>
       day.status === 'passed' &&
@@ -40,6 +43,14 @@ export const StrangerProfilePage = () => {
         day.is_notified_at_late_night ||
         day.is_notified_at_night),
   ).length;
+
+  const isLoading = (
+    isUserLoading ||
+    isPushLineLoading
+  );
+
+  if (isLoading) return <Loader />;
+
   // TODO: Раскомментировать когда на бэке будет vip данные
   return (
     <main className={s.page}>

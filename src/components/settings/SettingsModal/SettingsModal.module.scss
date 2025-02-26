@@ -6,11 +6,9 @@
     gap: 10px;
 }
 
-
-
 .titleStyles {
     display: flex;
-    padding: 5px 12px 10px 12px;
+    padding: 10px 12px 10px 12px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -39,7 +37,7 @@
 
 .childModalWrapper {
     display: flex;
-    padding: 6px 6px 6px 8px;
+    padding: 6px 11px 6px 8px;
     gap: 15px;
     align-self: stretch;
     justify-content: space-between;
@@ -61,10 +59,11 @@
 }
 
 .icon {
-    width: 14px;
-    height: 14px;
+    width: 17px;
+    height: 17px;
 }
 
 .arrow {
-    padding: 5px;
+    width: 16px;
+    height: 16px;
 }
