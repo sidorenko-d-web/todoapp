@@ -19,11 +19,12 @@ import { formatAbbreviation } from '../../../helpers';
 
 export default function RewardForIntegrationModal() {
   const { t, i18n } = useTranslation('integrations');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { closeModal } = useModal();
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const { closeModal, getModalState } = useModal();
+
+  const { args } = getModalState(MODALS.INTEGRATION_REWARD);
 
   const dispatch = useDispatch();
-
 
   useAutoPlaySound(MODALS.INTEGRATION_REWARD, SOUNDS.rewardHuge);
 
@@ -40,7 +41,7 @@ export default function RewardForIntegrationModal() {
         <Lottie animationData={reward} loop={false} className={styles.reward} />
       </div>
       <div className={styles.images}>
-        <Lottie animationData={blueLightAnimation} loop={true} className={styles.light}  />
+        <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
       </div>
       <div className={styles.wrapper}>
         <div className={styles.info}>
@@ -48,10 +49,12 @@ export default function RewardForIntegrationModal() {
             <div className={styles.lightning}>
               <img src={lightning} />
             </div>
-            <img className={styles.integration} src={integration} />
+            {/* @ts-ignore */}
+            <img className={styles.integration} src={args?.image_url ?? integration} />
           </div>
-          <div className={styles.bottom}>
-            <h2 className={styles.title}>{t('i28')}</h2>
+          <div className={styles.bottom}> 
+            {/* @ts-ignore */}
+            <h2 className={styles.title}>{args?.company_name}</h2>
             <div className={styles.rate}>
               <img src={starBlue} />
               <img src={starGray} />
@@ -75,10 +78,15 @@ export default function RewardForIntegrationModal() {
         <div className={styles.desc}>
           <p>{t('i29')}</p>
         </div>
-        <Button variant={'blue'} onClick={() => {
-          dispatch(setIsPublishedModalClosed(true));
-          closeModal(MODALS.INTEGRATION_REWARD);
-        }}>{t('i30')}</Button>
+        <Button
+          variant={'blue'}
+          onClick={() => {
+            dispatch(setIsPublishedModalClosed(true));
+            closeModal(MODALS.INTEGRATION_REWARD);
+          }}
+        >
+          {t('i30')}
+        </Button>
       </div>
     </CentralModal>
   );
