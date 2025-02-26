@@ -30,27 +30,32 @@ export const IntegrationPage: React.FC = () => {
     integrationId: string | undefined;
   }>();
   const { data: integrations } = useGetIntegrationsQuery(undefined, {
-    skip: !!queryIntegrationId && queryIntegrationId !== 'undefined',
+    skip: !queryIntegrationId && queryIntegrationId === 'undefined',
   });
 
-  const integrationId =
-    queryIntegrationId !== 'undefined'
-      ? queryIntegrationId
-      : integrations?.integrations[0].id;
+  // console.log(integrations?.integrations.find(item))
 
-  const { data, error, isLoading: isIntegrationLoading } = useGetIntegrationQuery(`${integrationId}`, { refetchOnMountOrArgChange: true });
+  const integrationId = queryIntegrationId !== 'undefined' ? queryIntegrationId : integrations?.integrations.find(item => item.status === 'published')?.id;
+
+  const {
+    data,
+    error,
+    isLoading: isIntegrationLoading,
+    refetch: refetchCurrentIntegration,
+  } = useGetIntegrationQuery(`${integrationId}`, { refetchOnMountOrArgChange: true });
   const {
     data: commentData,
     isLoading: isUnansweredIntegrationCommentLoading,
     refetch,
-  } = useGetUnansweredIntegrationCommentQuery(`${integrationId}`, { refetchOnMountOrArgChange: true });
-  const [ postComment ] = usePostCommentIntegrationsMutation();
+    isSuccess,
+  } = useGetUnansweredIntegrationCommentQuery(`${integrationId}`, {
+    refetchOnMountOrArgChange: true,
+  });
+  const [postComment] = usePostCommentIntegrationsMutation();
 
-  const [ currentCommentIndex, setCurrentCommentIndex ] = useState<number>(0);
-  const [ progress, setProgress ] = useState(0);
-  const [ finished, setFinished ] = useState(false);
+  const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
 
-  const comments = commentData ? (Array.isArray(commentData) ? commentData : [ commentData ]) : [];
+  const comments = commentData ? (Array.isArray(commentData) ? commentData : [commentData]) : [];
 
   const dispatch = useDispatch();
 
@@ -59,24 +64,15 @@ export const IntegrationPage: React.FC = () => {
     dispatch(setFooterActive(true));
   }, []);
 
-  useEffect(() => {
-    if (comments.length === 0) {
-      setFinished(true);
-    }
-  }, [ comments ]);
-
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
-    await postComment({ commentId, isHate: isThumbsUp });
-
-    setProgress(prevProgress => (prevProgress + 1) % 5);
-
+    const res = await postComment({ commentId, isHate: !isThumbsUp });
+    await refetchCurrentIntegration();
+    console.log(res.data ? 'угадано' : 'не угадано')
     if (currentCommentIndex + 1 < comments.length) {
       setCurrentCommentIndex(prevIndex => prevIndex + 1);
     } else {
-      setFinished(true);
       await refetch();
       setCurrentCommentIndex(0);
-      setFinished(false);
     }
   };
 
@@ -94,47 +90,43 @@ export const IntegrationPage: React.FC = () => {
       {isLoading && <p>{t('i3')}</p>}
       {(error || !integrationId) && <p>{t('i2')}</p>}
 
-      {data?.status === 'created' && (
+      {data  && (
         <>
-          <IntegrationStatsMini
-            views={data.views}
-            subscribers={data.subscribers}
-            income={data.income}
-          />
+          <IntegrationStatsMini views={data.views} subscribers={data.subscribers} income={data.income} />
           <div className={styles.integrationNameWrp}>
-            <p className={styles.integrationTitle}>{t('i1')} 1</p>
+            <p className={styles.integrationTitle}>{t('i1')} {data.number}</p>
             <div className={styles.integrationLevelWrp}>
               <p className={styles.integrationLevel}>{data.campaign.company_name}</p>
               <img src={integrationIcon} height={16} width={16}  alt={'icon'}/>
             </div>
           </div>
           <Integration />
-          <IntegrationStats
-            views={data.views}
-            income={data.income}
-            subscribers={data.subscribers}
-          />
+          <IntegrationStats views={data.views} income={data.income} subscribers={data.subscribers} />
           <div className={styles.commentsSectionTitleWrp}>
             <p className={styles.commentsSectionTitle}>{t('i4')}</p>
             <p className={styles.commentsAmount}>
-              {comments.length === 0 ? 0 : currentCommentIndex + 1}/{comments.length}
+              {data.comments_generated}/{20}
             </p>
           </div>
-          {commentData && <IntegrationComment
-            progres={progress}
-            {...comments[currentCommentIndex]}
-            onVote={handleVote}
-            hateText={commentData?.is_hate}
-            finished={finished}
-          />}
+          {
+            <IntegrationComment
+              progres={data.comments_answered_correctly % 5}
+              {...comments[currentCommentIndex]}
+              onVote={handleVote}
+              hateText={commentData?.is_hate}
+              finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
+            />
+          }
         </>
-
       )}
-      {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
-        <IntegrationPageGuide onClose={() => {
-          setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
-          dispatch(setElevateIntegrationStats(false));
-        }} />}
+      {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
+        <IntegrationPageGuide
+          onClose={() => {
+            setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+            dispatch(setElevateIntegrationStats(false));
+          }}
+        />
+      )}
     </div>
   );
 };

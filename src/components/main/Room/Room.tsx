@@ -12,13 +12,12 @@ export const Room = () => {
     <div className={styles.room}>
       <AnimationScene />
       <Walls />
-      {/* todo: return this code when backend fix room endpoint */}
-      {/* {!data?.room.equipped_items.find(item => item.slot === RoomItemsSlots.wall.slot) && (
+      {!data?.equipped_items.find(item => item.slot === RoomItemsSlots.wall.slot) && (
         <img className={styles.treshinaLeft} src={TreshinaLeft} alt="trishimna-right" />
       )}
-      {!data?.room.equipped_items.find(item => item.slot === RoomItemsSlots.wall.slot) && (
+      {!data?.equipped_items.find(item => item.slot === RoomItemsSlots.wall.slot) && (
         <img className={styles.treshinaRight} src={TreshinaRight} alt="treshina-left" />
-      )} */}
+      )}
       <img className={styles.shelf} src={Shelf} alt="shelf" />
 
       <Floor />
