@@ -108,6 +108,26 @@ export const InventoryCard: FC<Props> = ({
     ? (i18n.language as 'ru' | 'en')
     : 'ru';
 
+  const levelCap =
+    item.level < 10
+      ? 10
+      : item.level < 20
+      ? 20
+      : item.level < 30
+      ? 30
+      : item.level < 40
+      ? 40
+      : item.level < 50
+      ? 50
+      : item.level < 60
+      ? 60
+      : item.level < 70
+      ? 70
+      : item.level < 80
+      ? 80
+      : item.level < 90
+      ? 90
+      : 100;
   return (
     <div className={styles.storeCard}>
       <div className={styles.header}>
@@ -215,12 +235,12 @@ export const InventoryCard: FC<Props> = ({
             ”. {t('s23')}
           </p>
         ) : (
-          item.level >= 10 && (
-            <div className={styles.progress}>
-              <div className={styles.text}>
-                <p>
-                  {item.level}/50 {t('s24')}{' '}
-                </p>
+          <div className={styles.progress}>
+            <div className={styles.text}>
+              <p>
+                {item.level}/{levelCap} {t('s24')}{' '}
+              </p>
+              {item.level >= 10 && (
                 <div className={styles.goal}>
                   <p>{t('s25')}</p>
                   <img
@@ -234,8 +254,10 @@ export const InventoryCard: FC<Props> = ({
                     alt=""
                   />
                 </div>
-              </div>
+              )}
+            </div>
 
+            {item.level >= 10 && (
               <div className={styles.progressBar}>
                 <div
                   className={
@@ -246,41 +268,47 @@ export const InventoryCard: FC<Props> = ({
                       : styles.doneRed
                   }
                   style={{
-                    width: `${((item.level - 10) / 40) * 100}%`,
+                    width: `${Math.min((item.level % 10) * 10, 100)}%`,
                   }}
                 />
               </div>
+            )}
 
-              <div className={styles.items}>
-                {itemsForImages?.items &&
-                  sortByPremiumLevel(itemsForImages?.items).map((_item, index) => (
-                    <div
-                      className={clsx(
-                        item.item_rarity === 'red'
-                          ? styles.item
-                          : item.item_rarity === 'yellow'
-                          ? styles.itemPurple
-                          : styles.itemRed,
-                        item.item_premium_level === 'advanced'
-                          ? index > 1 && styles.itemLocked
-                          : item.item_premium_level === 'base' &&
-                              index > 0 &&
-                              styles.itemLocked,
-                      )}
-                      key={_item.id}
-                      style={{ '--lvl-height': `${(item.level / 50) * 100}%` }}
-                    >
-                      <img
-                        src={_item.image_url + svgHeadersString}
-                        className={styles.itemImage}
-                        alt=""
-                      />
-                      <img src={LockIcon} className={styles.lock} alt="" />
-                    </div>
-                  ))}
-              </div>
+            <div className={styles.items}>
+              {itemsForImages?.items &&
+                sortByPremiumLevel(itemsForImages?.items).map((_item, index) => (
+                  <div
+                    className={clsx(
+                      item.item_rarity === 'red'
+                        ? styles.item
+                        : item.item_rarity === 'yellow'
+                        ? styles.itemPurple
+                        : styles.itemRed,
+                      item.item_premium_level === 'advanced'
+                        ? index > 1 && styles.itemLocked
+                        : item.item_premium_level === 'base' &&
+                            index > 0 &&
+                            styles.itemLocked,
+                    )}
+                    key={_item.id}
+                    style={
+                      item.level < 50 && index === 1
+                        ? { '--lvl-height': `${(item.level / 50) * 100}%` }
+                        : item.level >= 50 && index === 2
+                        ? { '--lvl-height': `${((item.level - 50) / 50) * 100}%` }
+                        : {}
+                    }
+                  >
+                    <img
+                      src={_item.image_url + svgHeadersString}
+                      className={styles.itemImage}
+                      alt=""
+                    />
+                    <img src={LockIcon} className={styles.lock} alt="" />
+                  </div>
+                ))}
             </div>
-          )
+          </div>
         ))}
 
       {isBlocked ? (
