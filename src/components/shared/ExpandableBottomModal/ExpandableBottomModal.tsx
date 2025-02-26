@@ -44,7 +44,7 @@ export const ExpandableBottomModal: FC<PropsWithChildren<ExpandableBottomModalPr
   const modalRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const lastScrollY = useRef(0);
-  const expandThreshold = 20;
+  const expandThreshold = 0;
 
   useEffect(() => {
     if (isOpen) {
@@ -156,4 +156,3 @@ export const ExpandableBottomModal: FC<PropsWithChildren<ExpandableBottomModalPr
     </Overlay>
   );
 };
-

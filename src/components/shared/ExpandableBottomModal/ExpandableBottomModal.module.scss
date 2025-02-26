@@ -20,9 +20,8 @@
   @include var.hide-scroll;
 
   & {
-    transition:
-            height 400ms cubic-bezier(0.4, 0, 0.2, 1),
-            transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: height 400ms cubic-bezier(0.4, 0, 0.2, 1);
+            //transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
       // Prevent overflow during scale animation
     transform-origin: bottom center;
