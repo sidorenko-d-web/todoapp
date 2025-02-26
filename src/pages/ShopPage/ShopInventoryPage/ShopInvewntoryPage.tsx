@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ShopLayout } from '../../../layout/ShopLayout/ShopLayout';
-import { useGetInventoryItemsQuery } from '../../../redux/api/inventory/api';
+import { useGetInventoryItemsQuery } from '../../../redux';
 import { ItemsTab, ItemUpgradedModal, Loader, ShopUpgradedModal, SkinTab } from '../../../components';
 import { IShopItem, TypeItemCategory, TypeItemRarity, useGetShopItemsQuery } from '../../../redux';
 import { compareItems } from '../../../helpers';
