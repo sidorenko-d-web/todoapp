@@ -24,8 +24,7 @@ import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
 import { Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
-// import { ExpandableBottomModal } from '../../shared/';
-import {TestExpandableBottomModal} from "../../shared"
+import { ExpandableBottomModal } from '../../shared/';
 
 
 interface CreatingIntegrationModalProps {
@@ -98,7 +97,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const buttonGlowing = integrationCreatingModalButtonGlowing();
 
   return (
-    <TestExpandableBottomModal
+    <ExpandableBottomModal
       modalId={modalId}
       title={t('i11')}
       onClose={onClose}
@@ -168,9 +167,9 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           onClick={goToShop}
         >
           {t('i21')}
-        </TrackedButton>}
+        </TrackedButton> }                             
       </div>
       }
-    </TestExpandableBottomModal>
+    </ExpandableBottomModal>
   );
 };

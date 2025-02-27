@@ -5,4 +5,3 @@ export * from './common'
 export * from './SpineAnimations'
 export * from './Button'
 export * from "./ExpandableBottomModal"
-export * from "./TestExpandableBottomModal"
