@@ -19,7 +19,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
 
   const { openModal, closeModal } = useModal();
   const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
-
+  
   // Инициализируем состояния на основе количества этапов из API
   useEffect(() => {
     setQuestionStates(Array(task.stages).fill('closed').map((state, index) =>
@@ -57,6 +57,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
       </div>
       <div className={s.tasksList}>
         <TaskCard
+          id={task.id}
           title={t('q3')}
           description={t('q4')}
           type="progress"
