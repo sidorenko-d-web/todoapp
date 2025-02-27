@@ -27,7 +27,7 @@ import useSound from 'use-sound';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../shared';
 import { setPoints } from '../../../redux/slices/point.ts';
-import { GetRewardChestModal } from '../../../pages/DevModals/GetRewardChestModal';
+
 interface Props {
   disabled?: boolean;
   isUpgradeEnabled?: boolean;
@@ -73,7 +73,7 @@ export const InventoryCard: FC<Props> = ({
   });
   const { refetch } = useGetCurrentUserProfileInfoQuery();
 
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
 
   const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
   const [lastTriggeredLevel, setLastTriggeredLevel] = useState(0);
@@ -84,6 +84,9 @@ export const InventoryCard: FC<Props> = ({
       setLastTriggeredLevel(item.level);
     }
   }, [item.level, lastTriggeredLevel]);
+  useEffect(() => {
+    closeModal(MODALS.TASK_CHEST);
+  }, []);
   const handleBuyItem = async () => {
     try {
       const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
@@ -298,10 +301,14 @@ export const InventoryCard: FC<Props> = ({
                     key={_item.id}
                     style={
                       item.level < 50 && index === 1
-                        ? { '--lvl-height': `${(item.level / 50) * 100}%` }
+                        ? ({
+                            '--lvl-height': `${(item.level / 50) * 100}%`,
+                          } as React.CSSProperties)
                         : item.level >= 50 && index === 2
-                        ? { '--lvl-height': `${((item.level - 50) / 50) * 100}%` }
-                        : {}
+                        ? ({
+                            '--lvl-height': `${((item.level - 50) / 50) * 100}%`,
+                          } as React.CSSProperties)
+                        : undefined
                     }
                   >
                     <img
