@@ -3,7 +3,7 @@ import s from './Tree.module.scss';
 import classNames from 'classnames';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
-import { useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery } from '../../redux';
+import { useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery, useUnlockAchievementMutation } from '../../redux';
 import { useTreeProgress } from '../../hooks';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +33,7 @@ export const Tree = () => {
   const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
   const lastActiveLevelRef = useRef<HTMLDivElement | null>(null);
 
-
+const [ unlockAchievement ] = useUnlockAchievementMutation();
 
   const userSubscribers = userProfileData?.subscribers || 0;
 
@@ -58,6 +58,14 @@ export const Tree = () => {
     return null;
   }
 
+  const handleUnlock = async (id: string) => {
+    try {
+      await unlockAchievement({ achievement_id: id }).unwrap();
+      alert('Achievement unlocked!');
+    } catch (err) {
+      alert('Failed to unlock achievement.');
+    }
+  };
 
   return (
     <div className={s.container}>
@@ -94,7 +102,10 @@ export const Tree = () => {
                   )}
                 </div>
 
-                <Button className={s.takeRewardBtn}>Забрать</Button>
+                {
+                  stage.achievement.is_avaliable && 
+                    <Button className={s.takeRewardBtn} onClick={() => handleUnlock(stage.achievement.id)}>Забрать</Button>
+                }
                 {stage.id > 1 && (
                   <div
                     className={classNames(s.prize, {
@@ -102,8 +113,8 @@ export const Tree = () => {
                       [s.prizeRight]: index % 2 !== 1,
                     })}
                   >
-                    {true && <img className={s.imgPrizeActive} src={spinnerBlue} height={150} width={150} alt="spinner" />}
-                    {/* TODO: rewrite when backend is ready */}
+                    {stage.achievement.is_avaliable
+                     && <img className={s.imgPrizeActive} src={spinnerBlue} height={150} width={150} alt="spinner" />}
                     {stage.achievement && (
                       <div className={classNames(s.imgPrize,)}>
                         <div className={s.blickAnimation}>
@@ -115,10 +126,13 @@ export const Tree = () => {
 
 
                         {/* TODO: rewrite when backend is ready */}
-                        <div className={`${s.giftStatus} ${s.notTaken}`} />
-                        {!isActive && <div className={classNames(s.questionWrapper)}>
+                        <div className={`${s.giftStatus} 
+                          ${(stage.achievement.is_avaliable && !stage.achievement.is_unlocked)
+                             || stage.achievement.is_unlocked? s.notTaken : ''}
+                          ${(!stage.achievement.is_avaliable && !stage.achievement.is_unlocked)? s.notAchieved : ''}`} />
+                        {/* {!isActive && <div className={classNames(s.questionWrapper)}>
                           <img src={questionIcon} className={s.question} height={16} width={16} alt="question" />
-                        </div>}
+                        </div>} */}
                       </div>
                     )}
                     <div className={classNames(s.text, { [s.textActive]: isActive })}>
