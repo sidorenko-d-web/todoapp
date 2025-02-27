@@ -7,7 +7,6 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import HeadIcon from '../../../assets/icons/head_icon.svg';
 import FaceIcon from '../../../assets/icons/face_icon.svg';
 import LegsIcon from '../../../assets/icons/face_icon.svg';
-import FeetIcon from '../../../assets/icons/face_icon.svg';
 import PersonIcon from '../../../assets/icons/person_icon.svg';
 import VIPIcon from '../../../assets/icons/star_check_icon.svg';
 import ListIcon from '../../../assets/icons/list.svg';
@@ -25,7 +24,7 @@ interface Props {
 }
 
 export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
-  const { t,i18n } = useTranslation('shop');
+  const { t, i18n } = useTranslation('shop');
   const [buySkin, { isLoading }] = useBuySkinMutation();
   const dispatch = useDispatch();
   const { openModal } = useModal();
@@ -36,7 +35,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
       dispatch(setPoints((prevPoints: number) => prevPoints + 1));
       console.log(res);
       if (!res.error) {
-        shopApi.util.resetApiState()
+        shopApi.util.resetApiState();
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' });
       }
     } catch (error) {
@@ -62,8 +61,6 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
                 <img src={FaceIcon} className={styles.personIcon} />
               ) : item.wear_location === 'entire_body' ? (
                 <img src={PersonIcon} className={styles.personIcon} />
-              ) : item.wear_location === 'feet' ? (
-                <img src={FeetIcon} className={styles.personIcon} />
               ) : (
                 <img src={LegsIcon} className={styles.personIcon} />
               )}
@@ -83,14 +80,12 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
       <div className={styles.actions}>
         {item.limited ? (
           <Button className={styles.vipButton}>
-            {formatAbbreviation(item.price_usdt, 'currency',{ locale: locale })} ({t('s10')} {item.quantity} {t('s11')}.)
+            {formatAbbreviation(item.price_usdt, 'currency', { locale: locale })} ({t('s10')} {item.quantity} {t('s11')}
+            .)
           </Button>
         ) : mode === 'shop' ? (
           <>
-            <Button
-              className={styles.button}
-              onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' })}
-            >
+            <Button className={styles.button} onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' })}>
               {formatAbbreviation(item.price_usdt, 'currency', { locale: locale })}
             </Button>
             <Button className={styles.priceButton} onClick={handleBuySkin}>

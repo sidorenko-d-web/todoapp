@@ -1,0 +1,61 @@
+$translateY: -15vh;
+
+.item {
+  position: absolute;
+  left: 50%;
+}
+
+.room {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.wallsWrapper {
+  display: flex;
+  aspect-ratio: 402/885;
+  width: 100%;
+
+  .wallLeft {
+    background: #bac2d3;
+    flex: 358;
+  }
+  .wallRight {
+    flex: 345;
+    background: #96a1bc;
+  }
+}
+
+.floorWrapper {
+  @extend .item;
+  transform: translateX(-58.15%);
+  top: 310px;
+}
+
+.floor {
+  background: #6e717a;
+  rotate: 32deg;
+  width: 800px;
+  height: 800px;
+  z-index: 2;
+  transform: skew(-30deg);
+}
+
+.treshinaLeft {
+  @extend .item;
+  top: 29px;
+  transform: translateX(-150%);
+}
+.treshinaRight {
+  @extend .item;
+  top: 0;
+  transform: translateX(100%);
+}
+.shelf {
+  @extend .item;
+  width: 145px;
+  height: 78px;
+  top: 190px;
+  transform: translateX(-12%);
+}
+

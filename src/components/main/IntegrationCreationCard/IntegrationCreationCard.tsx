@@ -22,16 +22,24 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   const { t } = useTranslation('integrations');
 
   const dispatch = useDispatch();
-  const initialTime = 3600;
   const [ timeLeft, setTimeLeft ] = useState(integration.time_left);
+  const [ initialTimeLeft ] = useState(integration.time_left);
   const [ isExpired, setIsExpired ] = useState(false);
   const [ playAccelerateIntegrationSound ] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
-  const calculateProgress = () => ((initialTime - timeLeft) / initialTime) * 100;
-
   const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
     integrationId: integration.id,
     onSuccess: newTimeLeft => setTimeLeft(newTimeLeft),
   });
+
+  const calculateProgress = () => {
+    return ((initialTimeLeft - timeLeft) / initialTimeLeft) * 100;
+  };
+
+  const [progress, setProgress] = useState(calculateProgress());
+
+  useEffect(() => {
+    setProgress(calculateProgress());
+  }, [timeLeft]);
 
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -63,16 +71,17 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   }, [isExpired]);
 
   const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
+    return `${hours}:${minutes < 10 ? `0${minutes}` : minutes}:${secs < 10 ? `0${secs}` : secs}`;
   };
 
   const handleAccelerateClick = () => {
     if (!isExpired) {
       playAccelerateIntegrationSound();
       dispatch(setLastIntegrationId(integration.id));
-      void accelerateIntegration(1);
+      void accelerateIntegration(10000);
       createParticles();
     }
   };
@@ -125,7 +134,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
           <div className={s.progressBar}>
             <div
               className={s.progressBarInner}
-              style={{ width: `${calculateProgress()}%` }}
+              style={{ width: `${progress}%` }}
             />
           </div>
         </div>

@@ -207,7 +207,7 @@ export const IncreaseIncome = () => {
   const referrals = data?.referrals || [];
   const visibleReferrals = referrals.slice(0, 3);
   const hiddenReferralsCount = referrals.length - 3;
-  
+
   return (
     <>
       <h2 className={s.headerIncrease}>
@@ -249,6 +249,7 @@ export const IncreaseIncome = () => {
             <div className={s.referralsList}>
               {visibleReferrals.map((referral, index) => (
                 <ReferralCard key={index} position={index + 1} name={referral.username}
+                              id_referral={Number(referral.character_data.id)}
                               total_invited={referral.total_invited} streak= {referral.push_line_data.in_streak_days}
                               days_missed={referral.push_line_data.failed_days_ago}/>
               ))}

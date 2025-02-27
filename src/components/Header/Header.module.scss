@@ -135,8 +135,8 @@ $header-border: 1px solid $color-header-border-dark;
       padding: 4px 4px 4px 7px;
 
       .subscribersIcon {
-        width: 14px;
-        height: 14px;
+        width: 18px;
+        height: 18px;
       }
 
       @media (min-width: var.$breakpoint-md) {
@@ -249,7 +249,7 @@ $header-border: 1px solid $color-header-border-dark;
   }
 
   .coinIcon {
-    height: 14px;
-    width: 14px;
+    height: 18px;
+    width: 18px;
   }
 }

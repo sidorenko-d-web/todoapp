@@ -13,15 +13,15 @@ export const integrationsApi = createApi({
   reducerPath: 'integrationsApi',
   baseQuery: baseQueryReauth,
   tagTypes: ['Integrations', 'IntegrationComments'],
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getIntegration: builder.query<IntegrationResponseDTO, string>({
-      query: (integrationId) => ({
+      query: integrationId => ({
         url: `/integrations/${integrationId}`,
         method: 'GET',
       }),
     }),
     createIntegration: builder.mutation<IntegrationResponseDTO, CreateIntegrationRequestDTO>({
-      query: (body) => ({
+      query: body => ({
         url: '/integrations',
         method: 'POST',
         body,
@@ -36,22 +36,20 @@ export const integrationsApi = createApi({
     }),
 
     getUnansweredIntegrationComment: builder.query<UnansweredIntegrationCommentDTO, string>({
-      query: (integrationId) => ({
+      query: integrationId => ({
         url: `/integrations/comments/${integrationId}`,
         method: 'GET',
       }),
-      providesTags: (_error, _result, integrationId) => [
-        { type: 'IntegrationComments' as const, id: integrationId }
-      ],
+      providesTags: (_error, _result, integrationId) => [{ type: 'IntegrationComments' as const, id: integrationId }],
     }),
     getIntegrations: builder.query<IntegrationsResponseDTO, IntegrationsQueryRequestDTO | void>({
-      query: (queryParams) => {
+      query: queryParams => {
         const params = queryParams
           ? Object.entries(queryParams)
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            .filter(([_, value]) => value !== undefined && value !== null)
-            .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
-            .join('&')
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              .filter(([_, value]) => value !== undefined && value !== null)
+              .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+              .join('&')
           : '';
 
         return {
@@ -75,13 +73,13 @@ export const integrationsApi = createApi({
       }),
       invalidatesTags: ['Integrations'],
     }),
-    publishIntegration: builder.mutation<IntegrationResponseDTO, string> ({
-      query: (integrationId) => ({
+    publishIntegration: builder.mutation<IntegrationResponseDTO, string>({
+      query: integrationId => ({
         url: `/integrations/${integrationId}/publish`,
-        method: 'PATCH'
+        method: 'PATCH',
       }),
       invalidatesTags: ['Integrations'],
-    })
+    }),
   }),
 });
 
@@ -93,5 +91,5 @@ export const {
   usePostCommentIntegrationsMutation,
   useGetUnansweredIntegrationCommentQuery,
   useUpdateTimeLeftMutation,
-  usePublishIntegrationMutation
+  usePublishIntegrationMutation,
 } = integrationsApi;

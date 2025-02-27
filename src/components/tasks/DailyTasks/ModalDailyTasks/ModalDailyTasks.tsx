@@ -42,8 +42,10 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(task.completed_stages);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
+  const [shake, setShake] = useState(false);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
   const [channelLink] = useState(task.external_link);
+  const isVibrationSupported = 'vibrate' in navigator;
 
   useEffect(() => {
     if (isQuestionsArray && questions) {
@@ -102,8 +104,8 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
             completed_stages: newCompletedStages,
             link: task.external_link,
             question_id: currentQuestion.id,
-            answer_option_id: selectedOption as string
-          }
+            answer_option_id: selectedOption as string,
+          },
         });
 
         onStateChange?.(getQuestionStates());
@@ -115,12 +117,25 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
         }
 
         setCurrentQuestionIndex(prev => prev + 1);
-        setSelectedOption(null);
+        setSelectedOption(null); // Сбрасываем выбранный ответ
+        setShowResult(false); // Сбрасываем состояние результата
       } catch (error) {
         console.error('Error updating task:', error);
       }
     } else {
-      setShowResult(true);
+      setShowResult(true); // Показываем результат (неправильный ответ)
+      setShake(true); // Запускаем анимацию тряски
+
+      // Вибрация на телефоне
+      if (isVibrationSupported) {
+        navigator.vibrate(200); // Вибрация на 200 миллисекунд
+      }
+
+      // Сбрасываем анимацию и результат через 500 мс
+      setTimeout(() => {
+        setShake(false); // Останавливаем анимацию
+        setShowResult(false); // Сбрасываем результат
+      }, 500);
     }
   };
 
@@ -198,6 +213,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
                   className={classNames(s.option, {
                     [s.selected]: isSelected && !isWrong,
                     [s.wrong]: isWrong,
+                    [s.shake]: shake && isWrong,
                   })}
                   onClick={() => handleSelectOption(option.id)}
                 >
@@ -233,9 +249,9 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
           </Button>
           <Button
             className={classNames(s.nextButton, {
-              [s.active]: selectedOption !== null,
+              [s.active]: selectedOption !== null && !shake, // Блокируем кнопку при анимации
             })}
-            disabled={!selectedOption}
+            disabled={!selectedOption || shake} // Блокируем кнопку при анимации
             onClick={handleNext}
           >
             {currentQuestionIndex === questions.length - 1 ? t('q25') : t('q26')}

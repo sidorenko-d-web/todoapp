@@ -2,6 +2,8 @@ export type CompanyResponseDTO = {
   company_name: string;
   image_url: string;
   id: string;
+  is_unique: boolean;
+  growth_tree_stage: number;
 }
 
 export type CompaniesResponseDTO = {
@@ -14,4 +16,5 @@ export type CompaniesQueryRequestDTO = {
   asc?: boolean;
   offset?: number;
   limit?: number;
+  is_unique?: boolean;
 }

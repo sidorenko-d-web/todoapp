@@ -1,4 +1,4 @@
-import { IShopItem } from '../../redux';
+import { IShopItem, TypeItemQuality } from '../../redux';
 
 export const compareItems = (item1: IShopItem, item2: IShopItem) => {
   return (
@@ -47,3 +47,17 @@ export const itemsInTab = (shopItems?: IShopItem[], inventoryItems?: IShopItem[]
   };
   return tabItems;
 };
+
+
+export const getPremiumLevelOrder = (level: TypeItemQuality) =>
+  ({
+    base: 0,
+    advanced: 1,
+    pro: 2,
+  }[level]);
+
+export function sortByPremiumLevel(items: IShopItem[]) {
+  return [...items].sort(
+    (a, b) => getPremiumLevelOrder(a.item_premium_level) - getPremiumLevelOrder(b.item_premium_level),
+  );
+}

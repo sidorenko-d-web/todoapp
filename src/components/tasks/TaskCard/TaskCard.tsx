@@ -70,7 +70,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      progress,
                                                      progressReward,
                                                      progressRewardIcon,
-                                                     buttonText = 'Выполнить',
+                                                     buttonText,
                                                      buttonType = 'primary',
                                                      isLoading,
                                                      disabled,
@@ -83,7 +83,11 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      isSocialTask,
                                                    }) => {
   const { t, i18n } = useTranslation('quests');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+
+  // Устанавливаем значения по умолчанию с использованием перевода
+  const defaultButtonText = buttonText || t('q13');
+  const defaultErrorText = errorText || t('q32');
 
   // Функция для получения иконки на основе состояния
   const getIconByState = (state: QuestionState) => {
@@ -105,7 +109,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       [s.socialTask]: isSocialTask,
     })}>
       <section className={s.header}>
-        {icon && <img className={s.icon} src={icon} alt="icon" />}
+        {icon && <img className={classNames(s.icon, {[s.iconSocial]: isSocialTask})} src={icon} alt="icon" />}
         <div className={s.info}>
           <h2 className={s.title}>{title}</h2>
           <p className={s.description}>{description}</p>
@@ -116,15 +120,15 @@ export const TaskCard: React.FC<TasksCardProps> = ({
         <section className={s.rewards}>
           <span className={s.reward}>
             +{formatAbbreviation(income ?? 0, 'number', { locale: locale })}
-            <img src={coinIcon} alt="income" />
+            <img src={coinIcon} alt={t('q38')} />
           </span>
           <span className={s.reward}>
             +{formatAbbreviation(subscribers ?? 0, 'number', { locale: locale })}
-            <img src={subscribersIcon} alt="subscribers" />
+            <img src={subscribersIcon} alt={t('q36')} />
           </span>
           <span className={s.reward}>
             +{formatAbbreviation(passiveIncome ?? 0, 'number', { locale: locale })}
-            <img src={coinIcon} alt="passive income" />/{t('q9')}
+            <img src={coinIcon} alt={t('q38')} />/{t('q39')}
           </span>
         </section>
       )}
@@ -144,13 +148,10 @@ export const TaskCard: React.FC<TasksCardProps> = ({
           </div>
           <div className={s.progressTypeReward}>
             <span className={s.reward}>
-              {'10 - 1000'} <img src={coinIcon} height={14} width={14} alt="income" />
+              {'10 - 1000'} <img src={coinIcon} height={18} width={18} alt={t('q38')} />
             </span>
-            {/* <span className={s.reward}>
-              {boost?.subscribers || 0} <img src={subscribersIcon} height={14} width={14} alt="subscribers" />
-            </span> */}
             <span className={s.reward}>
-              ??? <img src={giftIcon} height={14} width={14} alt="gift" />
+              ??? <img src={giftIcon} height={18} width={18} alt={t('q34')} />
             </span>
           </div>
         </section>
@@ -168,7 +169,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
 
       {errorText && (
         <div className={s.errorText}>
-          {errorText}
+          {defaultErrorText}
         </div>
       )}
 
@@ -176,13 +177,13 @@ export const TaskCard: React.FC<TasksCardProps> = ({
         <TrackedButton
           trackingData={{
             eventType: 'button',
-            eventPlace: `${buttonText} - ${t('q1')} - ${title}`,
+            eventPlace: `${defaultButtonText} - ${t('q1')} - ${title}`,
           }}
           className={`${s.button} ${s[buttonType]} ${isLoading ? s.loading : ''}`}
           disabled={disabled || isLoading}
           onClick={() => onClick?.()}
         >
-          {buttonText}
+          {defaultButtonText}
         </TrackedButton>
       </section>
     </div>
