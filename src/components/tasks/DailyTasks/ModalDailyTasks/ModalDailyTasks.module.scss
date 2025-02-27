@@ -119,6 +119,9 @@
       opacity: 1;
     }
   }
+  &.correct {
+    border: 2px solid var.$color-green;
+  }
 }
 
 .selectWrapper {
