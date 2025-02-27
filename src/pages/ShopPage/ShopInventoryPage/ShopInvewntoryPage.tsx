@@ -96,8 +96,6 @@ export const ShopInvewntoryPage = () => {
     isBoostLoading
   );
 
-  console.info(isShopLoading, isInventoryLoading);
-
   if (isLoading) return <Loader />;
 
   return (
@@ -107,7 +105,7 @@ export const ShopInvewntoryPage = () => {
       onItemQualityChange={setItemsQuality}
     >
       {
-        isShopLoading || isShopFetching || isInventoryLoading || isInventoryFetching || isEquipedLoading ? (
+        isShopLoading ||  isEquipedLoading ? (
           <Loader className={styles.itemsLoader} />
         ) : !isInventoryLoading && !isSuccess && shopCategory?.title !== 'Вы' ? (
           <p className={styles.emptyText}>{t('s38')}</p>

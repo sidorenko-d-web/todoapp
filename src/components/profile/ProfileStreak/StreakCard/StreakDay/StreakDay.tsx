@@ -77,7 +77,7 @@ export const StreakDay: React.FC<StreakDayProps> = ({
         } ${
           (currentDay === dayNumber || isStreakDay) &&
           (streakDays < 30 ? styles.blue : streakDays < 60 ? styles.purple : styles.red)
-        } ${!isFailedDay && !isStreakDay ? styles.calendarDay : ''}`}
+        } ${!isFailedDay && !isStreakDay ? styles.calendarDay : ''} ${isFailedDay && styles.failedDay}`}
       >
         {(isStreakDay || isFailedDay || isCurrentDay) && (
           <div

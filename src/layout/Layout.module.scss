@@ -69,8 +69,6 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   }
 }
 
-
-
 .content {
   display: flex;
   flex-direction: column;
@@ -123,8 +121,6 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
       display: none;
     }
   }
-
-
 }
 
 .settingsIcon {
