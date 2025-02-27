@@ -2,12 +2,11 @@ import { FC, useState, useMemo, useEffect } from 'react';
 import { TaskCard } from '../';
 import giftIcon from '../../../assets/icons/gift.svg';
 import { useModal } from '../../../hooks';
-import { Task } from '../../../redux/api/tasks/dto';
+import { Task } from '../../../redux/api/tasks';
 import s from '../styles.module.scss';
 import { ModalDailyTasks } from './ModalDailyTasks';
-import { useGetDailyRewardQuery } from '../../../redux/api/tasks/api';
 import { useTranslation } from 'react-i18next';
-import { MODALS } from '../../../constants/modals';
+import { MODALS } from '../../../constants';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -18,9 +17,8 @@ type DailyTasksProps = {
 export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const { t } = useTranslation('quests');
 
-  const { openModal, closeModal, getModalState } = useModal();
+  const { openModal, closeModal } = useModal();
   const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
-  const { refetch: getDailyReward } = useGetDailyRewardQuery(task.id, { skip: true });
 
   // Инициализируем состояния на основе количества этапов из API
   useEffect(() => {

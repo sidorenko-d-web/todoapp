@@ -5,7 +5,10 @@ import { MODALS } from '../../../constants/modals.ts';
 import { RootState, useGetAllIntegrationsQuery, usePublishIntegrationMutation } from '../../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
-import { setCreateIntegrationButtonGlowing, setIntegrationReadyForPublishing } from '../../../redux/slices/guideSlice.ts';
+import {
+  setCreateIntegrationButtonGlowing,
+  setIntegrationReadyForPublishing,
+} from '../../../redux/slices/guideSlice.ts';
 import { setGuideShown } from '../../../utils/index.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { useTranslation } from 'react-i18next';
@@ -43,9 +46,11 @@ export const PublishIntegrationButton: React.FC = () => {
       dispatch(setIntegrationReadyForPublishing(false));
       dispatch(setCreateIntegrationButtonGlowing(false));
 
-      await publishIntegration(integrationIdToPublish).unwrap();
-
-      openModal(MODALS.INTEGRATION_REWARD);
+      const res = await publishIntegration(integrationIdToPublish);
+      if (!res.error) {
+        const { company_name, image_url } = res.data.campaign;
+        openModal(MODALS.INTEGRATION_REWARD, { company_name, image_url });
+      }
     } catch (error) {
       console.error('Failed to publish integration:', error);
     } finally {

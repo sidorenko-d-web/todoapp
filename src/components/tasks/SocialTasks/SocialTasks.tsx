@@ -3,11 +3,11 @@ import { TaskCard } from '../';
 import telegramIcon from '../../../assets/icons/telegram.png';
 import instagramIcon from '../../../assets/icons/instagram.png';
 import s from '../styles.module.scss';
-import { Task } from '../../../redux/api/tasks/dto';
-import { useGetDailyRewardQuery, useUpdateTaskMutation } from '../../../redux/api/tasks/api';
+import { Task } from '../../../redux/api/tasks';
+import { useUpdateTaskMutation } from '../../../redux/api/tasks';
 import { useTranslation } from 'react-i18next';
 import { useModal } from '../../../hooks';
-import { MODALS } from '../../../constants/modals';
+import { MODALS } from '../../../constants';
 
 const TELEGRAM_CHANNEL_URL = 'https://t.me/pushtoyours';
 
@@ -19,8 +19,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
   const { t } = useTranslation('quests');
   const completedTasks = tasks.filter(task => task.is_completed).length;
   const [updateTask] = useUpdateTaskMutation();
-  const { openModal, closeModal } = useModal();
-  const { refetch: getDailyReward } = useGetDailyRewardQuery('', { skip: true });
+  const { openModal } = useModal();
 
   const handleTaskClick = async (task: Task) => {
     if (task.is_completed && !task.is_reward_given) {
