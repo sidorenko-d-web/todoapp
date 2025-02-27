@@ -11,6 +11,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setActiveFooterItemId } from '../../redux/slices/guideSlice';
 import GetGift from '../DevModals/GetGift/GetGift';
+import { useModal } from '../../hooks';
+import { MODALS } from '../../constants';
 
 export const TasksPage: FC = () => {
   const dispatch = useDispatch();
@@ -19,12 +21,24 @@ export const TasksPage: FC = () => {
   const { t, i18n } = useTranslation('quests');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const { data, error, isLoading: isTasksLoading } = useGetTasksQuery({ is_actual: true });
+  const { data, error, isLoading: isTasksLoading, refetch } = useGetTasksQuery({ is_actual: true });
   const { data: boostData, isLoading: isBoostLoading } = useGetBoostQuery();
 
   useEffect(() => {
     dispatch(setActiveFooterItemId(4));
   }, []);
+
+  const { getModalState } = useModal();
+
+  const isGetGiftModalOpen = getModalState(MODALS.GET_GIFT).isOpen;
+
+  useEffect(() => {
+    if (!isGetGiftModalOpen) {
+      console.log('refetching data')
+      refetch();
+    }
+  }, [isGetGiftModalOpen]);
+
 
   const dailyTask = useMemo(() => {
     if (!data?.assignments) return null;
