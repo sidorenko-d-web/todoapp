@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './InventoryCard.module.scss';
 import clsx from 'clsx';
 //@ts-ignore
@@ -27,7 +27,7 @@ import useSound from 'use-sound';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../shared';
 import { setPoints } from '../../../redux/slices/point.ts';
-
+import { GetRewardChestModal } from '../../../pages/DevModals/GetRewardChestModal';
 interface Props {
   disabled?: boolean;
   isUpgradeEnabled?: boolean;
@@ -76,7 +76,14 @@ export const InventoryCard: FC<Props> = ({
   const { openModal } = useModal();
 
   const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
+  const [lastTriggeredLevel, setLastTriggeredLevel] = useState(0);
 
+  useEffect(() => {
+    if (item.level % 10 === 0 && item.level <= 100 && item.level !== lastTriggeredLevel) {
+      openModal(MODALS.TASK_CHEST);
+      setLastTriggeredLevel(item.level);
+    }
+  }, [item.level, lastTriggeredLevel]);
   const handleBuyItem = async () => {
     try {
       const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
@@ -257,22 +264,20 @@ export const InventoryCard: FC<Props> = ({
               )}
             </div>
 
-            {item.level >= 10 && (
-              <div className={styles.progressBar}>
-                <div
-                  className={
-                    item.item_rarity === 'red'
-                      ? styles.done
-                      : item.item_rarity === 'yellow'
-                      ? styles.donePurple
-                      : styles.doneRed
-                  }
-                  style={{
-                    width: `${Math.min((item.level % 10) * 10, 100)}%`,
-                  }}
-                />
-              </div>
-            )}
+            <div className={styles.progressBar}>
+              <div
+                className={
+                  item.item_rarity === 'red'
+                    ? styles.done
+                    : item.item_rarity === 'yellow'
+                    ? styles.donePurple
+                    : styles.doneRed
+                }
+                style={{
+                  width: `${Math.min((item.level % 10) * 10, 100)}%`,
+                }}
+              />
+            </div>
 
             <div className={styles.items}>
               {itemsForImages?.items &&
