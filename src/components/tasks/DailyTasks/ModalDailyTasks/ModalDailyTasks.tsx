@@ -92,8 +92,6 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   };
 
   const handleNext = async () => {
-    setSelectedOption(null);
-
     if (isCorrectAnswer) {
       setCorrect(true);
       setTimeout(() => setCorrect(false), 1000);
