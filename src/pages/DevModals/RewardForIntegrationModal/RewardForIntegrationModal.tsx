@@ -67,11 +67,11 @@ export default function RewardForIntegrationModal() {
         </div>
         <div className={styles.icons}>
           <div className={styles.item}>
-            <span>+{formatAbbreviation(1500, 'number', { locale: locale })}</span>
+            <span>+{formatAbbreviation(Number(args?.base_income), 'number', { locale: locale })}</span>
             <img src={coin} className={styles.coin} />
           </div>
           <div className={styles.item}>
-            <span>+{formatAbbreviation(500, 'number', { locale: locale })}</span>
+            <span>+{formatAbbreviation(Number(args?.base_subscribers), 'number', { locale: locale })}</span>
             <img src={subscribers} />
           </div>
         </div>
