@@ -188,7 +188,14 @@ export const TaskCard: React.FC<TasksCardProps> = ({
           disabled={disabled || isLoading}
           onClick={() => onClick?.()}
         >
-          {defaultButtonText}
+          {isLoading ? (
+            <>
+              {defaultButtonText}
+              <span className={s.loadingDots}>...</span>
+            </>
+          ) : (
+            defaultButtonText
+          )}
         </TrackedButton>
       </section>
     </div>
