@@ -18,10 +18,9 @@ export default function GetGift() {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
 
-  const taskId = localStorage.getItem('taskId');
-
+  
   if(isOpen) {
-
+    const taskId = localStorage.getItem('taskId');
     console.log('getting reward for ', taskId)
     useGetDailyRewardQuery(''+taskId);
   }
