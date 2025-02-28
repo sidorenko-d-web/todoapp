@@ -33,8 +33,11 @@ export const Header = () => {
   
   useEffect(() => {
     //needed to re-render header when gift modal closes to update the coin number
-    setUpdateHeader(prev => prev + 1);
-    console.log('update '+ updateHeader);
+    if(isOpen) {
+      setUpdateHeader(prev => prev + 1);
+      refetch();
+      console.log('update '+ updateHeader);
+    }
   }, [isOpen]);
 
 
