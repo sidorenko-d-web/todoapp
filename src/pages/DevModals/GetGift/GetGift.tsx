@@ -11,11 +11,21 @@ import reward from '../../../assets/animations/reward.json';
 import gift from '../../../assets/icons/gift.svg';
 import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
+import { useGetDailyRewardQuery } from '../../../redux/api/tasks';
+
 
 export default function GetGift() {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
 
+  
+  if(isOpen) {
+    const taskId = localStorage.getItem('taskId');
+    console.log('getting reward for ', taskId)
+    useGetDailyRewardQuery(''+taskId);
+  }
+
+  
   if (!isOpen) return null;
   
   return (
@@ -83,7 +93,9 @@ export default function GetGift() {
       </div>
       <Button 
         variant={'blue'} 
-        onClick={() => closeModal(MODALS.GET_GIFT)}
+        onClick={() => {
+          closeModal(MODALS.GET_GIFT);
+        }}
       >
         Забрать
       </Button>
