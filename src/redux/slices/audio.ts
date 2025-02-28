@@ -7,9 +7,9 @@ interface initialState {
 }
 
 const initialState: initialState = {
-  volume: 0.01,
+  volume: 0.0105,
   track: 1,
-  buttonVolume: 2,
+  buttonVolume: 2.1,
 };
 
 const audioSlice = createSlice({

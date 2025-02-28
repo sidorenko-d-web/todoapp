@@ -14,9 +14,11 @@ import classNames from 'classnames';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
 
+
 type QuestionState = 'solved' | 'current' | 'closed';
 
 type BaseTaskProps = {
+  id?: string;
   title: string;
   description: string;
   icon?: string;
@@ -58,6 +60,7 @@ type ProgressTaskProps = {
 type TasksCardProps = BaseTaskProps & (DefaultTaskProps | ProgressTaskProps);
 
 export const TaskCard: React.FC<TasksCardProps> = ({
+                                                     id,
                                                      title,
                                                      description,
                                                      icon,
@@ -186,7 +189,10 @@ export const TaskCard: React.FC<TasksCardProps> = ({
           }}
           className={`${s.button} ${s[buttonType]} ${isLoading ? s.loading : ''}`}
           disabled={disabled || isLoading}
-          onClick={() => onClick?.()}
+          onClick={() => {
+            localStorage.setItem('taskId', ''+ id);
+            onClick?.();
+          }}
         >
           {isLoading ? (
             <>

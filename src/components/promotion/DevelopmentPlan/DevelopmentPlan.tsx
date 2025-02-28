@@ -28,7 +28,8 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
         <ul className={s.list}>
           {INFO_TEXT.map((item, index) => {
             const isUnlocked = usersCount >= item.userCount && !item.isPlatform;
-            const isDescriptionUnlocked = index <= 4;
+            const isDescriptionBlurred = index >= 1;
+            const isNumbersBlurred = index >= 8;
 
             return (
               <li key={index} className={s.wrapperList}>
@@ -47,9 +48,9 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
                 <div className={s.users}>
                   <img src={lockOpen} alt="lockOpen" />
                   <span
-                    className={classNames(s.countUsers, s.text)}>{formatAbbreviation(item.userCount, 'number', {locale: locale})} {t('p23')} {item.isPlatform && ` ${t('p24')}`}</span>
+                    className={classNames(s.countUsers, s.text)}>{isNumbersBlurred ? '???' : formatAbbreviation(item.userCount, 'number', {locale: locale})} {t('p23')} {item.isPlatform && ` ${t('p24')}`}</span>
                 </div>
-                <p className={s.textInfoPlan}>{isDescriptionUnlocked ? item.description : '*****'}</p>
+                <p className={s.textInfoPlan}>{isDescriptionBlurred ? '*****' : item.description}</p>
               </li>
             );
           })}
