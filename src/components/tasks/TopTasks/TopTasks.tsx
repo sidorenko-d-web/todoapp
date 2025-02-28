@@ -96,6 +96,7 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
           buttonText={task.is_completed && !task.is_reward_given ? t('q33') : task.is_completed ? t('q15') : t('q13')}
           errorText={taskState.hasError ? 'Ошибка: повторите попытку' : undefined}
           isCompleted={task.is_completed}
+          isRewardGiven={task.is_reward_given}
           isTopTask={true}
         />
       </div>
