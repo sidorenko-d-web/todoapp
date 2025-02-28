@@ -14,7 +14,6 @@ import { useTranslation } from 'react-i18next';
 import { TrackedLink } from '../withTracking';
 import { getOS } from '../../utils';
 
-
 export const Header = () => {
   const { data, isLoading, refetch } = useGetCurrentUserProfileInfoQuery();
   const { data: treeData } = useGetTreeInfoQuery();

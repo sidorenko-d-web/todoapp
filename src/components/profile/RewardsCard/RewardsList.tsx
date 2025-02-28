@@ -36,8 +36,6 @@ const RewardsList: React.FC = () => {
       });
   }, [awardsData]);
 
-  console.log(mappedRewards)
-
   return (
     <>
       {awardsLoading && <p>{t('p3')}</p>}

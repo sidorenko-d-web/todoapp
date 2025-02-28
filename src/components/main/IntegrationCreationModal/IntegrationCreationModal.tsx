@@ -34,10 +34,10 @@ interface CreatingIntegrationModalProps {
 }
 
 export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
-                                                                              modalId,
-                                                                              onClose,
-                                                                              hasCreatingIntegration,
-                                                                            }) => {
+  modalId,
+  onClose,
+  hasCreatingIntegration,
+}) => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,10 +48,10 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     { label: t('i15'), value: 'video' },
   ] as const;
 
-  const [ selectedOption, setSelectedOption ] = useState<(typeof contentOptions)[number]['value']>('text');
+  const [selectedOption, setSelectedOption] = useState<(typeof contentOptions)[number]['value']>('text');
 
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
-  const [ createIntegration, { isError, error } ] = useCreateIntegrationMutation();
+  const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
   const { data: profile, isLoading: isProfileLoading } = useGetCurrentUserProfileInfoQuery();
   const { data, isLoading: isCompaniesLoading } = useGetCompaniesQuery();
   const companies = data?.campaigns;
@@ -77,8 +77,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         dispatch(setLastIntegrationId(data.id));
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         onClose();
-        dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
-        dispatch(profileApi.util.invalidateTags([ 'Me' ]));
+        dispatch(integrationsApi.util.invalidateTags(['Integrations']));
+        dispatch(profileApi.util.invalidateTags(['Me']));
       });
   };
 
@@ -102,7 +102,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       title={t('i11')}
       onClose={onClose}
       titleIcon={integrationWhiteIcon}
-      expandOnScroll={true}
+      overlayOpacity={0.7}
     >
       {isProfileLoading || isCompaniesLoading
         ? <Loader noMargin />
@@ -115,27 +115,27 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             ))}
           </div>
 
-        <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
-          {contentOptions.map((option, index) => (
-            <span
-              key={index}
-              className={`${s.tab} ${selectedOption === option.value ? s.active : ''}`}
-              onClick={() => setSelectedOption(option.value)}
-            >
-              {option.label}
-            </span>
+          <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
+            {contentOptions.map((option, index) => (
+              <span
+                key={index}
+                className={`${s.tab} ${selectedOption === option.value ? s.active : ''}`}
+                onClick={() => setSelectedOption(option.value)}
+              >
+                {option.label}
+              </span>
             ))}
           </div>
 
-        {uniqueCompany && (
-          <SpecialIntegration
-            integration={uniqueCompany}
-          />
-        )}
+          {uniqueCompany && (
+            <SpecialIntegration
+              integration={uniqueCompany}
+            />
+          )}
 
-        {!noItemsMessage && hasCreatingIntegration && (
-          <span className={s.message}>{t('i20')}</span>
-        )}
+          {!noItemsMessage && hasCreatingIntegration && (
+            <span className={s.message}>{t('i20')}</span>
+          )}
 
           {!noItemsMessage ? (
             <div className={s.companies}>
@@ -167,7 +167,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           onClick={goToShop}
         >
           {t('i21')}
-        </TrackedButton>}
+        </TrackedButton> }                             
       </div>
       }
     </ExpandableBottomModal>
