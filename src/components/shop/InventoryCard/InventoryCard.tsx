@@ -44,14 +44,14 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const { t, i18n } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const dispatch = useDispatch();
-  const { data, isFetching } = useGetShopItemsQuery({
+  const { data, isLoading: isItemsLoading } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
   });
-  const { refetch } = useGetCurrentUserProfileInfoQuery();
+  const { refetch, isLoading: isCurrentProfileLoading } = useGetCurrentUserProfileInfoQuery();
   const [equipItem, { isLoading: isEquipItemLoading }] = useAddItemToRoomMutation();
   const [removeItem, { isLoading: isRemoveItemLoading }] = useRemoveItemFromRoomMutation();
-  const { data: equipedItems } = useGetEquipedQuery();
+  const { data: equipedItems, refetch: refetchEquipped, isLoading: isEquippedLoading } = useGetEquipedQuery();
   const { openModal } = useModal();
   const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
 
@@ -62,6 +62,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       if (!res.error) {
         playLvlSound();
         refetch();
+        refetchEquipped();
         dispatch(setPoints((prevPoints: number) => prevPoints + 1));
         if (item.level === 49) {
           if (item.item_premium_level === 'pro') {
@@ -215,7 +216,14 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         </div>
       )}
 
-      {isBlocked ? (
+      {isEquipItemLoading ||
+      isLoading ||
+      isItemsLoading ||
+      isRemoveItemLoading ||
+      isEquippedLoading ||
+      isCurrentProfileLoading ? (
+        <p style={{color: '#fff', fontSize: 16, padding: '16px 0', textAlign: 'center'}}>Loading</p>
+      ) : isBlocked ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>{t('s26')}</p>
@@ -247,7 +255,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             disabled={item.level === 50}
             onClick={handleBuyItem}
           >
-            {isLoading || isFetching ? (
+            {isLoading || isItemsLoading ? (
               <p>loading</p>
             ) : (
               <>

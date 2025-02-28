@@ -109,6 +109,7 @@ export const AnimationScene = () => {
       create() {
         room?.items.forEach(async (item, i) => {
           const animatedItem = animated.find(_item => item.name === _item.name);
+          console.log(animatedItem)
           if (animatedItem) {
             const slot = room?.equipped_items.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
             const _item = itemsInSlots[slot];
@@ -121,10 +122,11 @@ export const AnimationScene = () => {
 
             this.objects[i].scale = _item.width / this.spine.getSkeletonData('json' + i, 'atlas' + i).width;
             //@ts-ignore
-            this.objects[i]?.animationState?.setAnimation(0, animatedItem.animation, true);
+            // this.objects[i]?.animationState?.setAnimation(0, animatedItem.animation, true);
             //@ts-ignore
             this.objects[i]?.skeleton.setSkinByName(animatedItem.skin(item.item_premium_level));
             this.objects[i]?.setDepth(_item.z);
+            console.log(this.objects[i])
           } else {
             const slot = room?.equipped_items.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
             const _item = itemsInSlots[slot];

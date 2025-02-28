@@ -155,6 +155,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const isTabsNotEmpty =
     [ ...(itemsInTabs.green ?? []), ...(itemsInTabs.yellow ?? []) ].length > 0;
 
+    console.log(itemsInTabs)
+
   return (
     <>
       <div className={styles.wrapper}>

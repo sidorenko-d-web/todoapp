@@ -3,7 +3,9 @@ import styles from './WardrobeIcon.module.scss';
 
 // import profileIconPlaceholder from '../../../assets/icons/profile-icon-placeholder.svg';
 import wardrobeIcon from '../../../assets/images/start-room/wardrobe-bg.svg';
-import { SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
+import { Skin, SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
+import { WardrobeTabs } from '../WardrobeTabs';
+import { useGetShopSkinsQuery } from '../../../redux';
 
 interface WardrobeIconProps {
   imageUrl?: string;
@@ -12,40 +14,59 @@ interface WardrobeIconProps {
 const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
 
 export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
-  const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/spine-boy.json`).href;
-  const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/spine-boy.atlas`).href;
+  const sceneRef = useRef<HTMLDivElement | null>(null);
+
+  const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/pers_2.json`).href;
+  const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/pers_2atlas.txt`).href;
+  const jsonUrl1 = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/anfas_happy.json`).href;
+  const atlasUrl1 = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/anfas_happyatlas.txt`).href;
 
   const gameRef = useRef<Phaser.Game | null>(null);
+  const spineSceneRef = useRef<SpineScene | null>(null);
 
-  const width = window.screen.width - 30;
-
-  useEffect(() => {
-    class SpineScene extends Phaser.Scene {
-      jsonUrl: string | undefined;
-      atlasUrl: string | undefined;
-      spineObject: SpineGameObject | null;
-      constructor() {
-        super({ key: 'player' });
-        this.spineObject = null;
-      }
-
-      preload() {
-        this.load.spineJson('data', proxyImageUrl(jsonUrl));
-        this.load.spineAtlas('atlas', proxyImageUrl(atlasUrl));
-      }
-
-      create() {
-        this.spineObject = this.add.spine(width / 2, width / 2, 'data', 'atlas');
-        this.spineObject.scale = 1;
-      }
+  class SpineScene extends Phaser.Scene {
+    jsonUrl: string | undefined;
+    atlasUrl: string | undefined;
+    spineObject: SpineGameObject | null;
+    constructor() {
+      super({ key: 'player' });
+      this.spineObject = null;
     }
 
+    preload() {
+      this.load.spineJson('data', proxyImageUrl(jsonUrl));
+      this.load.spineAtlas('atlas', proxyImageUrl(atlasUrl));
+      this.load.spineJson('happy', proxyImageUrl(jsonUrl1));
+      this.load.spineAtlas('happyatlass', proxyImageUrl(atlasUrl1));
+    }
+
+    create() {
+      const width = this.sys.game.config.width as number;
+      const center = width / 2;
+      if (!this.add.spine) return;
+      this.spineObject = this.add.spine(center, center + 40, 'data', 'atlas');
+      this.spineObject.scale = 0.2;
+      console.log(this.spineObject.skeleton.data.animations);
+      this.spineObject.animationState.setAnimation(0, 'animtion0', true);
+      spineSceneRef.current = this;
+    }
+
+    makeHappy() {
+      if (!this.spineObject) return;
+      this.spineObject.animationState.setAnimation(0, 'happy');
+    }
+  }
+
+  useEffect(() => {
+    if (!sceneRef.current) return;
+
+    const width = sceneRef.current.offsetWidth;
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
       width: width,
-      height: width,
-      transparent: true,
+      height: sceneRef.current.offsetHeight,
       scene: [SpineScene],
+      transparent: true,
       plugins: {
         scene: [{ key: 'player', plugin: SpinePlugin, mapping: 'spine' }],
       },
@@ -60,11 +81,25 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
         gameRef.current = null;
       }
     };
-  });
+  }, []);
+
+  const handleMakeHappy = () => {
+    if (spineSceneRef.current) {
+      spineSceneRef.current.makeHappy();
+    }
+  };
+
   return (
-    <div className={styles.wrp}>
-      <img src={wardrobeIcon} alt="Wardrobe Icon" />
-      <div id={'player'} style={{ position: 'absolute', top: 0, borderRadius: 8, overflow: 'hidden' }} />
-    </div>
+    <>
+      <div className={styles.wrp}>
+        <img src={wardrobeIcon} alt="Wardrobe Icon" />
+        <div
+          id={'player'}
+          ref={sceneRef}
+          style={{ position: 'absolute', top: 0, borderRadius: 8, overflow: 'hidden', width: '100%', height: '100%' }}
+        />
+      </div>
+      <WardrobeTabs wardrobe={true} handleChangeSkin={handleMakeHappy} />
+    </>
   );
 };

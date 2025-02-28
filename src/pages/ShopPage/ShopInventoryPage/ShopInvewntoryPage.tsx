@@ -85,7 +85,7 @@ export const ShopInvewntoryPage = () => {
         ),
       );
 
-    setItems(_items);
+    setItems(_items?.reverse());
     setItemsForBuy(_itemsForBuy);
   }, [ inventory ]);
 
@@ -96,7 +96,7 @@ export const ShopInvewntoryPage = () => {
     isBoostLoading
   );
 
-  console.info(isShopLoading, isInventoryLoading);
+  console.info(itemsForBuy?.[0]);
 
   if (isLoading) return <Loader />;
 
@@ -107,7 +107,7 @@ export const ShopInvewntoryPage = () => {
       onItemQualityChange={setItemsQuality}
     >
       {
-        isShopLoading || isShopFetching || isInventoryLoading || isInventoryFetching || isEquipedLoading ? (
+        isShopLoading || isInventoryLoading || isEquipedLoading ? (
           <Loader className={styles.itemsLoader} />
         ) : !isInventoryLoading && !isSuccess && shopCategory?.title !== 'Вы' ? (
           <p className={styles.emptyText}>{t('s38')}</p>
