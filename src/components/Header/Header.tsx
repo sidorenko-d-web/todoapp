@@ -7,7 +7,7 @@ import { RootState, useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery } fro
 import { useNavigate } from 'react-router-dom';
 import { AppRoute, MODALS } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { setLastActiveStage } from '../../redux/slices/tree.ts';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
@@ -26,17 +26,16 @@ export const Header = () => {
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const platform = getOS();
 
-  const [updateHeader, setUpdateHeader] = useState(0);
-
   const { getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
   
   useEffect(() => {
     //needed to re-render header when gift modal closes to update the coin number
     if(isOpen) {
-      setUpdateHeader(prev => prev + 1);
-      refetch();
-      console.log('update '+ updateHeader);
+      refetch().then(() => {
+        console.log('update '+ data?.points);
+
+      });
     }
   }, [isOpen]);
 
