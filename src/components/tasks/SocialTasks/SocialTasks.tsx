@@ -68,6 +68,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
             passiveIncome={Number(task.boost.income_per_second)}
             buttonText={task.is_completed && !task.is_reward_given ? t('q33') : task.is_completed ? t('q15') : t('q13')}
             isCompleted={task.is_completed}
+            isRewardGiven={task.is_reward_given}
             showProgressBar={false}
             onClick={() => handleTaskClick(task)}
             disabled={task.is_reward_given}

@@ -156,44 +156,111 @@
     border: 2px solid #9747FF;
     background: var(--, #1C1D22);
     box-shadow: 0px 0px 16px 0px rgba(151, 71, 255, 0.50);
+  }
 
-    &.dailyTask, &.socialTask {
-      border: 2px solid #2F80ED;
-      box-shadow: 0px 0px 16px 0px rgba(47, 128, 237, 0.50);
+  &.ru {
+    &.completed {
+      &.dailyTask, &.socialTask {
+        border: 2px solid #2F80ED;
+        box-shadow: 0px 0px 16px 0px rgba(47, 128, 237, 0.50);
 
+        &::before {
+          content: '';
+          position: absolute;
+          bottom: -46px;
+          width: 147px;
+          height: 147px;
+          background-image: url('../../../assets/icons/bg-light-blue.svg');
+          background-size: contain;
+          background-repeat: no-repeat;
+          z-index: 0;
+          opacity: 0.8;
+          pointer-events: none;
+          animation: rotate 4s linear infinite;
+        }
+      }
+
+      &.topTask {
+        &::before {
+          content: '';
+          position: absolute;
+          bottom: -46px;
+          width: 147px;
+          height: 147px;
+          background-image: url('../../../assets/icons/bg-light-purple.svg');
+          background-size: contain;
+          background-repeat: no-repeat;
+          z-index: 0;
+          opacity: 0.8;
+          pointer-events: none;
+          animation: rotate 4s linear infinite;
+        }
+      }
+    }
+
+    &.rewardGiven {
       &::before {
-        content: '';
-        position: absolute;
-        left: -1px;
-        bottom: -46px;
-        width: 147px;
-        height: 147px;
-        background-image: url('../../../assets/icons/bg-light-blue.svg');
-        background-size: contain;
-        background-repeat: no-repeat;
-        z-index: 0;
-        opacity: 0.8;
-        pointer-events: none;
-        animation: rotate 4s linear 1;
+        left: -4px;
+      }
+    }
+
+    &:not(.rewardGiven) {
+      &::before {
+        left: 15px;
       }
     }
   }
 
-  &.completed.topTask {
-    &::before {
-      content: '';
-      position: absolute;
-      left: -1px;
-      bottom: -46px;
-      width: 147px;
-      height: 147px;
-      background-image: url('../../../assets/icons/bg-light-purple.svg');
-      background-size: contain;
-      background-repeat: no-repeat;
-      z-index: 0;
-      opacity: 0.8;
-      pointer-events: none;
-      animation: rotate 4s linear 1;
+  &.en {
+    &.completed {
+      &.dailyTask, &.socialTask {
+        border: 2px solid #2F80ED;
+        box-shadow: 0px 0px 16px 0px rgba(47, 128, 237, 0.50);
+
+        &::before {
+          content: '';
+          position: absolute;
+          bottom: -46px;
+          width: 147px;
+          height: 147px;
+          background-image: url('../../../assets/icons/bg-light-blue.svg');
+          background-size: contain;
+          background-repeat: no-repeat;
+          z-index: 0;
+          opacity: 0.8;
+          pointer-events: none;
+          animation: rotate 4s linear infinite;
+        }
+      }
+
+      &.topTask {
+        &::before {
+          content: '';
+          position: absolute;
+          bottom: -46px;
+          width: 147px;
+          height: 147px;
+          background-image: url('../../../assets/icons/bg-light-purple.svg');
+          background-size: contain;
+          background-repeat: no-repeat;
+          z-index: 0;
+          opacity: 0.8;
+          pointer-events: none;
+          animation: rotate 4s linear infinite;
+        }
+      }
+    }
+
+    &.rewardGiven {
+      &::before {
+        left: -29px;
+      }
+    }
+
+    &:not(.rewardGiven) {
+      &::before {
+        left: 6px;
+      }
     }
   }
 }

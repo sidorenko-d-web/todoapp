@@ -33,6 +33,7 @@ type BaseTaskProps = {
   onClick?: () => void;
   errorText?: string;
   isCompleted?: boolean;
+  isRewardGiven?: boolean;
   isTopTask?: boolean;
   isDailyTask?: boolean;
   isSocialTask?: boolean;
@@ -77,6 +78,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
                                                      onClick,
                                                      questionStates = [ 'closed', 'closed', 'closed' ],
                                                      isCompleted,
+                                                     isRewardGiven,
                                                      isTopTask,
                                                      errorText,
                                                      isDailyTask,
@@ -107,6 +109,9 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       [s.topTask]: isTopTask,
       [s.dailyTask]: isDailyTask,
       [s.socialTask]: isSocialTask,
+      [s.ru]: locale === 'ru',
+      [s.en]: locale === 'en',
+      [s.rewardGiven]: isRewardGiven
     })}>
       <section className={s.header}>
         {icon && <img className={classNames(s.icon, {[s.iconSocial]: isSocialTask})} src={icon} alt="icon" />}

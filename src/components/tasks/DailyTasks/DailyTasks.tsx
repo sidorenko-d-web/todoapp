@@ -68,6 +68,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
           boost={task.boost}
           totalSteps={task.stages}
           isCompleted={isCompleted}
+          isRewardGiven={task.is_reward_given}
           isDailyTask={true}
         />
       </div>
