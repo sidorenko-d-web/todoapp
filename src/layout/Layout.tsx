@@ -3,11 +3,10 @@ import { Outlet, useLocation } from 'react-router-dom';
 import styles from './Layout.module.scss';
 import { Header } from '../components/Header/';
 import { useEffect, useState } from 'react';
-import { MODALS, localStorageConsts } from '../constants';
+import { localStorageConsts, MODALS } from '../constants';
 import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
-import { useModal } from '../hooks';
+import { AudioBg, useModal, useScrollManager } from '../hooks';
 import { getOS } from '../utils';
-import { useScrollManager } from '../hooks';
 
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
 
@@ -79,7 +78,7 @@ const Layout = () => {
           <SettingsModal />
           <WalletConnectionModal />
           <LanguageSelectionModal />
-          {/* <AudioBg /> */}
+           <AudioBg />
         </main>
         <Footer />
       </div>
