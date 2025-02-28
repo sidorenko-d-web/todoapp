@@ -54,6 +54,7 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
   const [channelLink, setChannelLink] = useState('');
   const progress = (completedSteps.filter(step => step).length / task.stages) * 100;
   const [updateTask] = useUpdateTaskMutation();
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     setCurrentStepIndex(task.completed_stages);
@@ -153,6 +154,19 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
             progressRewardIcon={chestIcon}
           />
         </div>
+
+        {hasError && (
+          <div className={s.errorWrapper}>
+            <div className={s.errorMessage}>
+              <span className={s.errorTitle}>
+                {t('Задание не прошло проверку!')}
+              </span>
+              <span className={s.errorDescription}>
+                {t('Данный этап был выполнен некорректно. Подробно изучите нашу статью по выполнению данного задания и повторите попытку еще раз!')}
+              </span>
+            </div>
+          </div>
+        )}
 
         <div className={s.question}>
           <span className={s.linkLabel}>{t('q28')}</span>
