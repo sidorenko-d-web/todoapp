@@ -74,8 +74,15 @@ export const ProfilePage: React.FC = () => {
   const position =
     userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length!;
 
-  const streakDays = [27, 28, 30]; // TODO: replace with real data from API
-  const freezeDays = [29]; // TODO: replace with real data
+  const weekInformation = data?.week_information || [];
+
+  const streakDays = weekInformation
+    .filter(day => day.status === 'passed')
+    .map(day => new Date(day.date).getDate());
+
+  const freezeDays = weekInformation
+    .filter(day => day.status === 'frozen')
+    .map(day => new Date(day.date).getDate());
 
   const weekData = getWeekData(streakDays, freezeDays);
 
