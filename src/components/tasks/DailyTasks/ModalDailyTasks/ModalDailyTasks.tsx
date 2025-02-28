@@ -12,7 +12,7 @@ import bookIcon from '../../../../assets/icons/book.svg';
 import CrossRedIcon from '../../../../assets/icons/cross-red-in-circle.svg';
 import { formatAbbreviation } from '../../../../helpers';
 import { Button } from '../../../shared';
-import { TaskBoost, Task } from '../../../../redux/api/tasks/dto';
+import { Task, TaskBoost } from '../../../../redux/api/tasks/dto';
 import { useGetTaskQuestionsQuery, useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
 import { useTranslation } from 'react-i18next';
 
@@ -35,16 +35,17 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
                                                             taskId,
                                                             task,
                                                           }) => {
-  const {t } = useTranslation('quests');
+  const { t } = useTranslation('quests');
   const { data: questions } = useGetTaskQuestionsQuery(taskId);
-  const [updateTask] = useUpdateTaskMutation();
+  const [ updateTask ] = useUpdateTaskMutation();
   const isQuestionsArray = Array.isArray(questions);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(task.completed_stages);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [showResult, setShowResult] = useState(false);
-  const [shake, setShake] = useState(false);
-  const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
-  const [channelLink] = useState(task.external_link);
+  const [ currentQuestionIndex, setCurrentQuestionIndex ] = useState(task.completed_stages);
+  const [ selectedOption, setSelectedOption ] = useState<string | null>(null);
+  const [ showResult, setShowResult ] = useState(false);
+  const [ shake, setShake ] = useState(false);
+  const [ correct, setCorrect ] = useState(false);
+  const [ answeredQuestions, setAnsweredQuestions ] = useState<boolean[]>([]);
+  const [ channelLink ] = useState(task.external_link);
   const isVibrationSupported = 'vibrate' in navigator;
 
   useEffect(() => {
@@ -52,10 +53,10 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
       setAnsweredQuestions(
         Array(questions.length)
           .fill(false)
-          .map((_, index) => index < task.completed_stages)
+          .map((_, index) => index < task.completed_stages),
       );
     }
-  }, [questions, isQuestionsArray, task.completed_stages]);
+  }, [ questions, isQuestionsArray, task.completed_stages ]);
 
   const getQuestionStates = (): QuestionState[] => {
     if (!isQuestionsArray || !questions) return [];
@@ -71,7 +72,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
 
   useEffect(() => {
     onStateChange?.(getQuestionStates());
-  }, [currentQuestionIndex, answeredQuestions, task.completed_stages]);
+  }, [ currentQuestionIndex, answeredQuestions, task.completed_stages ]);
 
   if (!isQuestionsArray || !questions || questions.length === 0) {
     return null;
@@ -92,7 +93,10 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
 
   const handleNext = async () => {
     if (isCorrectAnswer) {
-      const newAnsweredQuestions = [...answeredQuestions];
+      setCorrect(true);
+      setTimeout(() => setSelectedOption(null), 1000);
+
+      const newAnsweredQuestions = [ ...answeredQuestions ];
       newAnsweredQuestions[currentQuestionIndex] = true;
       setAnsweredQuestions(newAnsweredQuestions);
 
@@ -117,7 +121,8 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
         }
 
         setCurrentQuestionIndex(prev => prev + 1);
-        setSelectedOption(null); // Сбрасываем выбранный ответ
+        setSelectedOption(null)
+        setCorrect(false);
         setShowResult(false); // Сбрасываем состояние результата
       } catch (error) {
         console.error('Error updating task:', error);
@@ -206,14 +211,16 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
             {currentQuestion.answer_options.map(option => {
               const isSelected = selectedOption === option.id;
               const isWrong = showResult && isSelected && !option.is_correct;
+              const isCorrect = isSelected && correct;
 
               return (
                 <div
                   key={option.id}
                   className={classNames(s.option, {
-                    [s.selected]: isSelected && !isWrong,
+                    [s.selected]: isSelected && (!isWrong || !isCorrect),
                     [s.wrong]: isWrong,
                     [s.shake]: shake && isWrong,
+                    [s.correct]: isCorrect,
                   })}
                   onClick={() => handleSelectOption(option.id)}
                 >
@@ -225,9 +232,11 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
                   </span>
                   <div className={s.selectWrapper}>
                     <img
-                      src={isSelected
-                        ? (showResult && isWrong ? CrossRedIcon : checkIcon)
-                        : circleIcon}
+                      src={
+                        isSelected || isCorrect
+                          ? (showResult && isWrong ? CrossRedIcon : checkIcon)
+                          : circleIcon
+                      }
                       className={s.icon}
                       alt=""
                     />

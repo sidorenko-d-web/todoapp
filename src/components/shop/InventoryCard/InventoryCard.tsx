@@ -9,15 +9,15 @@ import ChestRedIcon from '@icons/chest-red.svg';
 import ListIcon from '@icons/list.svg';
 import {
   IShopItem,
-  selectVolume,
-  useGetCurrentUserProfileInfoQuery,
-  useGetShopItemsQuery,
-  useUpgradeItemMutation,
-  setPoints,
-  useGetEquipedQuery,
   RoomItemsSlots,
+  selectVolume,
+  setPoints,
   useAddItemToRoomMutation,
+  useGetCurrentUserProfileInfoQuery,
+  useGetEquipedQuery,
+  useGetShopItemsQuery,
   useRemoveItemFromRoomMutation,
+  useUpgradeItemMutation,
 } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscribers.png';
@@ -44,7 +44,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const { t, i18n } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const dispatch = useDispatch();
-  const { data, isLoading: isItemsLoading } = useGetShopItemsQuery({
+  const { data, isLoading: isItemsLoading, isFetching } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
   });
@@ -252,19 +252,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 ? styles.upgradeItemPurple
                 : item.item_rarity === 'green' && styles.upgradeItemRed,
             )}
-            disabled={item.level === 50}
+            disabled={item.level === 50 || isLoading || isFetching}
             onClick={handleBuyItem}
           >
-            {isLoading || isItemsLoading ? (
-              <p>loading</p>
-            ) : (
-              <>
-                {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {
-                  locale: locale,
-                })}{' '}
-                <img src={CoinIcon} alt="" />
-              </>
-            )}
+            {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {
+              locale: locale,
+            })}{' '}
+            <img src={CoinIcon} alt="" />
           </Button>
 
           <Button
