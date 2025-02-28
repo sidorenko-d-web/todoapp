@@ -5,14 +5,15 @@ import FireIcon from '../../assets/icons/avatar-fire.svg';
 import SubscribersIcon from '../../assets/icons/subscribers.png';
 import { RootState, useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery } from '../../redux';
 import { useNavigate } from 'react-router-dom';
-import { AppRoute } from '../../constants';
+import { AppRoute, MODALS } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { setLastActiveStage } from '../../redux/slices/tree.ts';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { TrackedLink } from '../withTracking';
 import { getOS } from '../../utils';
+import { useModal } from '../../hooks/index.ts';
 
 export const Header = () => {
   const { data, isLoading, refetch } = useGetCurrentUserProfileInfoQuery();
@@ -24,6 +25,18 @@ export const Header = () => {
   const { i18n } = useTranslation('profile');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const platform = getOS();
+
+  const [updateHeader, setUpdateHeader] = useState(0);
+
+  const { getModalState } = useModal();
+  const { isOpen } = getModalState(MODALS.GET_GIFT);
+  
+  useEffect(() => {
+    //needed to re-render header when gift modal closes to update the coin number
+    setUpdateHeader(prev => prev + 1);
+    console.log('update '+ updateHeader);
+  }, [isOpen]);
+
 
   const userSubscribers = data?.subscribers || 0;
   let lastActiveStageNumber = 0;

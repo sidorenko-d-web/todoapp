@@ -34,6 +34,7 @@ export const TasksPage: FC = () => {
 
   useEffect(() => {
     if (!isGetGiftModalOpen) {
+      //needed to re-render header when gift modal closes to update the button text
       console.log('refetching data')
       refetch();
     }
