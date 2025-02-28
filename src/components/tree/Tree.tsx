@@ -12,9 +12,6 @@ import giftBlue from '../../assets/icons/gift.svg';
 import giftPurple from '../../assets/icons/gift-purple.svg';
 import giftRed from '../../assets/icons/gift-red.svg';
 
-import questionBlue from '../../assets/icons/question-blue.svg';
-import questionPurple from '../../assets/icons/question-purple.svg';
-import questionRed from '../../assets/icons/question-red.svg';
 
 import spinnerPurple from '../../assets/icons/purple-glow.svg';
 import spinnerBlue from '../../assets/icons/blue-glow.svg';
@@ -81,11 +78,9 @@ const [ unlockAchievement ] = useUnlockAchievementMutation();
             const bottomPosition = 150 + index * 300;
 
             const giftColors = [giftBlue, giftPurple, giftRed];
-            const questionColors = [questionBlue, questionPurple, questionRed];
             const spinnerColors = [spinnerBlue, spinnerPurple, spinnerRed];
 
             const giftIcon = giftColors[index % giftColors.length];
-            const questionIcon = questionColors[index % questionColors.length];
             const spinnerIcon = spinnerColors[index % spinnerColors.length];
 
             return (
@@ -125,19 +120,17 @@ const [ unlockAchievement ] = useUnlockAchievementMutation();
                         <img src={giftIcon} height={20} width={20} alt="gift" style={{ opacity: '0.5' }} />
 
 
-                        {/* TODO: rewrite when backend is ready */}
                         <div className={`${s.giftStatus} 
                           ${(stage.achievement.is_avaliable && !stage.achievement.is_unlocked)
                              || stage.achievement.is_unlocked? s.notTaken : ''}
                           ${(!stage.achievement.is_avaliable && !stage.achievement.is_unlocked)? s.notAchieved : ''}`} />
-                        {/* {!isActive && <div className={classNames(s.questionWrapper)}>
-                          <img src={questionIcon} className={s.question} height={16} width={16} alt="question" />
-                        </div>} */}
                       </div>
                     )}
-                    <div className={classNames(s.text, { [s.textActive]: isActive })}>
-                      <span>{formatAbbreviation(stage.subscribers, 'number', { locale: locale })} </span>
-                      <span style={{ whiteSpace: 'normal' }}>{t('t1')}</span>
+                    <div className={classNames(s.text, { [s.textActive]: stage.achievement.is_avaliable })}>
+                      <span className={`${(!stage.achievement.is_avaliable && !stage.achievement.is_unlocked)? s.inactive : ''}`}>
+                        {formatAbbreviation(stage.subscribers, 'number', { locale: locale })} </span>
+                      <span  className={`${(!stage.achievement.is_avaliable && !stage.achievement.is_unlocked) ? s.inactive : ''}`} 
+                        style={{ whiteSpace: 'normal' }}>{t('t1')}</span>
                     </div>
                   </div>
                 )}
