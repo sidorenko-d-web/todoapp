@@ -19,7 +19,7 @@ export const TasksPage: FC = () => {
 
 
   const { t, i18n } = useTranslation('quests');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const { data, error, isLoading: isTasksLoading, refetch } = useGetTasksQuery({ is_actual: true });
   const { data: boostData, isLoading: isBoostLoading } = useGetBoostQuery();
@@ -33,10 +33,9 @@ export const TasksPage: FC = () => {
   const isGetGiftModalOpen = getModalState(MODALS.GET_GIFT).isOpen;
 
   useEffect(() => {
-    if (isGetGiftModalOpen) {
-      //needed to re-render header when gift modal closes to update the button text
-      refetch();
-    }
+    console.log('refetching tasks!!')
+    //needed to re-render header when gift modal closes to update the button text
+    refetch();
   }, [isGetGiftModalOpen]);
 
 
