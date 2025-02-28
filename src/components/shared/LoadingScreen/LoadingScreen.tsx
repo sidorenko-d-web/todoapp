@@ -43,15 +43,17 @@ export const LoadingScreen = ({ onAnimationComplete }: { onAnimationComplete: ()
   };
 
   const handleAccelerate = (event: React.MouseEvent) => {
-    const { clientX, clientY } = event;
-    createParticles(clientX, clientY);
-    playAccelerateSound();
-    setSpeedMultiplier(prev => prev * 1.5);
+    if (progress < 100) {
+      const { clientX, clientY } = event;
+      createParticles(clientX, clientY);
+      playAccelerateSound();
+      setSpeedMultiplier(prev => prev * 1.5);
+    }
   };
 
   return (
     <div className={styles.root} onClick={handleAccelerate}>
-      <div/>
+      <div />
       <div className={styles.clickableArea}></div>
       {showAnimation ? (
         <Lottie
