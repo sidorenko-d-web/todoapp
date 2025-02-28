@@ -94,7 +94,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   const handleNext = async () => {
     if (isCorrectAnswer) {
       setCorrect(true);
-      setTimeout(() => setCorrect(false), 1000);
+      setTimeout(() => setSelectedOption(null), 1000);
 
       const newAnsweredQuestions = [ ...answeredQuestions ];
       newAnsweredQuestions[currentQuestionIndex] = true;
@@ -121,7 +121,8 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
         }
 
         setCurrentQuestionIndex(prev => prev + 1);
-        setSelectedOption(null); // Сбрасываем выбранный ответ
+        setSelectedOption(null)
+        setCorrect(false);
         setShowResult(false); // Сбрасываем состояние результата
       } catch (error) {
         console.error('Error updating task:', error);
@@ -216,7 +217,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
                 <div
                   key={option.id}
                   className={classNames(s.option, {
-                    [s.selected]: isSelected && !isWrong,
+                    [s.selected]: isSelected && (!isWrong || !isCorrect),
                     [s.wrong]: isWrong,
                     [s.shake]: shake && isWrong,
                     [s.correct]: isCorrect,
