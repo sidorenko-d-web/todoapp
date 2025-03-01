@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import s from './Loader.module.scss';
 import Lottie from 'lottie-react';
-import { handAnimation } from '../../assets/animations';
+import { coinLoadingAnimation } from '../../assets/animations';
 import clsx from 'clsx';
 
 export type LoaderProps = {
@@ -29,7 +29,7 @@ export const Loader = ({ className, noMargin }: LoaderProps) => {
       className,
     )}>
       <Lottie
-        animationData={handAnimation}
+        animationData={coinLoadingAnimation}
         loop={true}
         autoplay={true}
         className={s.hand}
