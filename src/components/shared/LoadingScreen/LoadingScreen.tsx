@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './LoadingScreen.module.scss';
-import loadingImage from '../../../assets/icons/loading.svg';
+import loadingVid from '../../../assets/gif/loading.mp4';
 import Lottie from 'lottie-react';
 import { coinsAnim } from '../../../assets/animations';
 import { LoadingScreenBar } from '../../loadingScreen/LoadingScreenBar/LoadingScreenBar';
@@ -66,7 +66,7 @@ export const LoadingScreen = ({ onAnimationComplete }: { onAnimationComplete: ()
       ) : (
         <LoadingScreenBar speedMultiplier={speedMultiplier} progress={progress} setProgress={setProgress} />
       )}
-      <img className={styles.coin} src={loadingImage} alt="Coin" />
+      <video className={styles.coin} src={loadingVid} autoPlay muted loop  width={460} height={420}/>
     </div>
   );
 };

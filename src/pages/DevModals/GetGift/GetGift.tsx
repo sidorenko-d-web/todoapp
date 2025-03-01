@@ -12,28 +12,31 @@ import gift from '../../../assets/icons/gift.svg';
 import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
 import { useGetDailyRewardQuery } from '../../../redux/api/tasks';
+import { useEffect } from 'react';
 
-
-export default function GetGift() {
+export default function GetGift({ refetchTasks }: { refetchTasks: () => void }) {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
 
-  
-  if(isOpen) {
-    const taskId = localStorage.getItem('taskId');
-    console.log('getting reward for ', taskId)
-    useGetDailyRewardQuery(''+taskId);
-  }
+  const { isSuccess } = useGetDailyRewardQuery(localStorage.getItem('taskId') ?? '', {
+    skip: !isOpen,
+  });
 
-  
+  useEffect(() => {
+    if (isSuccess) {
+      localStorage.setItem('dailyTaskRewardGiven', '1');
+      refetchTasks();
+    }
+  }, [isSuccess, refetchTasks]);
+
+  const handleClose = () => {
+    closeModal(MODALS.GET_GIFT);
+  };
+
   if (!isOpen) return null;
-  
+
   return (
-    <CentralModal 
-      onClose={() => closeModal(MODALS.GET_GIFT)} 
-      modalId={MODALS.GET_GIFT} 
-      title={'Подарок открыт!'}
-    >
+    <CentralModal onClose={handleClose} modalId={MODALS.GET_GIFT} title={'Подарок открыт!'}>
       <div className={styles.background}>
         <Lottie animationData={reward} loop={false} className={styles.reward} />
       </div>
@@ -91,12 +94,7 @@ export default function GetGift() {
         </div>
         <p className={styles.desc}>Поздравляем! Вы улучшли основные показатели и получили дополнительные бонусы!</p>
       </div>
-      <Button 
-        variant={'blue'} 
-        onClick={() => {
-          closeModal(MODALS.GET_GIFT);
-        }}
-      >
+      <Button variant={'blue'} onClick={handleClose}>
         Забрать
       </Button>
     </CentralModal>
