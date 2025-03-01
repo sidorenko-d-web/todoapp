@@ -14,6 +14,7 @@ export type Achievement = {
   boost: Boost;
   image_url: string;
   is_unlocked: boolean;
+  is_avaliable: boolean;
   unlocked_at: string;
   id: string;
 };
