@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './LoadingScreen.module.scss';
 import loadingVid from '../../../assets/gif/loading.mp4';
 import Lottie from 'lottie-react';
@@ -51,6 +51,19 @@ export const LoadingScreen = ({ onAnimationComplete }: { onAnimationComplete: ()
     }
   };
 
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 2;
+
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => console.warn('Autoplay blocked:', error));
+      }
+    }
+  }, []);
+
   return (
     <div className={styles.root} onClick={handleAccelerate}>
       <div />
@@ -66,7 +79,7 @@ export const LoadingScreen = ({ onAnimationComplete }: { onAnimationComplete: ()
       ) : (
         <LoadingScreenBar speedMultiplier={speedMultiplier} progress={progress} setProgress={setProgress} />
       )}
-      <video className={styles.coin} src={loadingVid} autoPlay muted loop  width={460} height={420}/>
+      <video ref={videoRef}  className={styles.coin} src={loadingVid} autoPlay muted loop playsInline preload='auto' width={460} height={420}/>
     </div>
   );
 };
