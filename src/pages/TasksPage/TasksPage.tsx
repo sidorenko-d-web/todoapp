@@ -28,6 +28,7 @@ export const TasksPage: FC = () => {
   }, []);
 
 
+  console.log('Refetch Success')
   const dailyTask = useMemo(() => {
     if (!data?.assignments) return null;
     const dailyTasks = data.assignments.filter(task => task.category === 'daily');

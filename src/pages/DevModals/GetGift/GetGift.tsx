@@ -12,7 +12,6 @@ import gift from '../../../assets/icons/gift.svg';
 import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
 import { useGetDailyRewardQuery } from '../../../redux/api/tasks';
-import { useEffect } from 'react';
 
 export default function GetGift({ refetchTasks }: { refetchTasks: () => void }) {
   const { closeModal, getModalState } = useModal();
@@ -22,14 +21,10 @@ export default function GetGift({ refetchTasks }: { refetchTasks: () => void }) 
     skip: !isOpen,
   });
 
-  useEffect(() => {
-    if (isSuccess) {
-      localStorage.setItem('dailyTaskRewardGiven', '1');
-      refetchTasks();
-    }
-  }, [isSuccess, refetchTasks]);
 
   const handleClose = () => {
+    //todo: add success change when telegram subscription reward logic is implemented
+    refetchTasks();
     closeModal(MODALS.GET_GIFT);
   };
 
