@@ -3,6 +3,7 @@ import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './RewardForIntegrationModal.module.scss';
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
+import views from '../../../assets/icons/views.png';
 import subscribers from '../../../assets/icons/subscribers.png';
 import integration from '../../../assets/icons/integration-blue.svg';
 import starBlue from '../../../assets/icons/star-blue.svg';
@@ -67,12 +68,16 @@ export default function RewardForIntegrationModal() {
         </div>
         <div className={styles.icons}>
           <div className={styles.item}>
-            <span>+{formatAbbreviation(1500, 'number', { locale: locale })}</span>
+            <span>+{formatAbbreviation(Number(args?.base_income), 'number', { locale: locale })}</span>
             <img src={coin} className={styles.coin} />
           </div>
           <div className={styles.item}>
-            <span>+{formatAbbreviation(500, 'number', { locale: locale })}</span>
+            <span>+{formatAbbreviation(Number(args?.base_subscribers), 'number', { locale: locale })}</span>
             <img src={subscribers} />
+          </div>
+          <div className={styles.item}>
+            <span>+{formatAbbreviation(Number(args?.base_views), 'number', { locale: locale })}</span>
+            <img src={views} />
           </div>
         </div>
         <div className={styles.desc}>
