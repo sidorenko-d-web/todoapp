@@ -235,7 +235,7 @@ export function AuthInit({ children }: AuthInitProps) {
       );
 
     case 'signin':
-      return <LoadingScreen />; // Show loading during sign-in process
+      return <LoadingScreen onAnimationComplete={() => setIsAnimationFinished(true)} />; // Show loading during sign-in process
 
     case 'skin':
       return <SkinSetupPage onContinue={handleSkinContinue} />;
