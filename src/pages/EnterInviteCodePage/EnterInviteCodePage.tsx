@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import styles from './EnterInviteCodePage.module.scss';
 
 import lock from '../../assets/icons/lock-gray.svg';
@@ -6,56 +6,111 @@ import lockOpen from '../../assets/icons/lock-blue-open.svg';
 
 import dots from '../../assets/icons/dots.svg';
 import tick from '../../assets/icons/tick-circle-gray.svg';
-import { Button } from "../../components/shared";
+import { Button } from '../../components/shared';
+import { useSendReferralCodeMutation } from '../../redux';
+import { useTranslation } from 'react-i18next';
 
 interface EnterInviteCodePageProps {
-    onContinue: () => void;
+  onContinue: () => void;
+  referral_id: number;
 }
 
-export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onContinue }) => {
-    const [inputValue, setInputValue] = useState('');
-    const [isValid, setIsValid] = useState(false);
+interface ReferralErrorResponse {
+  status: number;
+  message: string;
+  type: 'ReferrerNotFound' | 'UserAlreadyIsReferral' | 'UserNotFoundInBotDatabaseException' | 'UnknownError';
+}
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
+export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onContinue, referral_id }) => {
+  const {t} = useTranslation('referral')
+  const [inputValue, setInputValue] = useState('');
+  const [isValid, setIsValid] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [sendReferralCode, { isLoading, isSuccess }] = useSendReferralCodeMutation();
 
-        if (/^\d*$/.test(value) && value.length <= 6) {
-            setInputValue(value);
-            setIsValid(value.length === 6);
-        }
-    };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
 
-    return (
-        <div className={styles.root}>
-            <img src={isValid ? lockOpen : lock} className={styles.lock} width={120} height={120} />
+    if (/^\d*$/.test(value)) {
+      setInputValue(value);
+      setIsValid(true)
+    }
+  };
 
-            <div className={styles.inputGroup}>
-                <label>Код приглашения</label>
-                <div className={styles.inputWrapper}>
-                    <input
-                        type="text"
-                        value={inputValue}
-                        onChange={handleInputChange}
-                        className={`${styles.input} ${!isValid && inputValue.length === 6 ? styles.invalid : ''}`}
-                        placeholder="..."
-                        maxLength={6}
-                    />
-                    <img
-                        className={styles.statusIcon}
-                        src={isValid ? tick : dots}
-                        alt="status"
-                    />
-                </div>
+  const handleSubmit = async () => {
+    if (!isValid || isLoading) return;
 
-                <p className={styles.description}>
-                    Это закрытый проект. Введите код приглашения или перейдите по ссылке-приглашению от участника
-                </p>
-            </div>
+    setErrorMessage('');
 
-            <Button className={`${styles.nextBtn} ${isValid ? styles.validInput : ''}`} onClick={onContinue}>
-                Продолжить
-            </Button>
-            <p className={styles.enterCodeText}>Введите код приглашения</p>
+    try {
+      await sendReferralCode({
+        referral_id,
+        referral_code: Number.parseInt(inputValue)
+      }).unwrap()
+
+      onContinue();
+    } catch (error) {
+      console.log("Error during referral code submission:", error);
+
+      const err = error as ReferralErrorResponse;
+      console.error('Referral code error:', err)
+
+      switch (err.type) {
+        case 'ReferrerNotFound':
+          setErrorMessage(err.message);
+          break;
+        case 'UserAlreadyIsReferral':
+          setErrorMessage(err.message);
+          // If user is already a referral, we can still continue
+          setTimeout(() => {
+            onContinue();
+          }, 1000);
+          break;
+        case 'UserNotFoundInBotDatabaseException':
+          setErrorMessage(err.message);
+          break;
+        default:
+          setErrorMessage(err.message);
+      }
+
+      setIsValid(false);
+    }
+  };
+
+  return (
+    <div className={styles.root}>
+      <img src={isSuccess ? lockOpen : lock} className={styles.lock} width={120} height={120} />
+
+      <div className={styles.inputGroup}>
+        <label>{t('r1')}</label>
+        <div className={styles.inputWrapper}>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            className={`${styles.input} ${!isValid ? styles.invalid : ''}`}
+            placeholder="..."
+          />
+          <img
+            className={styles.statusIcon}
+            src={isValid ? tick : dots}
+            alt="status"
+          />
         </div>
-    );
+
+        <p className={styles.description}>
+          {t('r2')}
+        </p>
+      </div>
+
+      {errorMessage && (
+        <p className={styles.description}>{errorMessage}</p>
+      )}
+
+      <Button className={`${styles.nextBtn} ${isValid ? styles.validInput : ''}`} onClick={handleSubmit}>
+        {isLoading ? t("r5") : t("r4")}
+      </Button>
+      <p className={styles.enterCodeText}>{t('r3')}</p>
+    </div>
+  );
 };
