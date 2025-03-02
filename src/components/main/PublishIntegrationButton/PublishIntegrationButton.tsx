@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants/modals.ts';
-import { RootState, useGetAllIntegrationsQuery, usePublishIntegrationMutation } from '../../../redux';
+import { RootState, useClaimRewardForIntegrationMutation, useGetAllIntegrationsQuery, usePublishIntegrationMutation } from '../../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
 import {
@@ -19,6 +19,8 @@ export const PublishIntegrationButton: React.FC = () => {
   const { openModal } = useModal();
 
   const [publishIntegration] = usePublishIntegrationMutation();
+  const [claimRewardForIntegration] = useClaimRewardForIntegrationMutation();
+
   const { data, refetch } = useGetAllIntegrationsQuery();
   const [isPublishing, setIsPublishing] = useState(false);
 
@@ -46,10 +48,25 @@ export const PublishIntegrationButton: React.FC = () => {
       dispatch(setIntegrationReadyForPublishing(false));
       dispatch(setCreateIntegrationButtonGlowing(false));
 
-      const res = await publishIntegration(integrationIdToPublish);
-      if (!res.error) {
-        const { company_name, image_url } = res.data.campaign;
-        openModal(MODALS.INTEGRATION_REWARD, { company_name, image_url });
+      const publishRes = await publishIntegration(integrationIdToPublish);
+      if (!publishRes.error) {
+        const rewardRes = await claimRewardForIntegration(integrationIdToPublish);
+
+        if (!rewardRes.error) {
+          const { company_name, image_url } = publishRes.data.campaign;
+          const {  base_income, base_views, base_subscribers } = publishRes.data;
+  
+          console.log('OPENING MODALL')
+          openModal(MODALS.INTEGRATION_REWARD, { 
+            company_name, 
+            image_url, 
+            base_income, 
+            base_views, 
+            base_subscribers 
+          });
+        } else {
+          console.error('Failed to claim reward:', rewardRes.error);
+        }
       }
     } catch (error) {
       console.error('Failed to publish integration:', error);

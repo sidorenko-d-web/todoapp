@@ -27,7 +27,7 @@ export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose }) => {
     return (
         <>
             {data && <Guide align="left"
-                zIndex={110}
+                zIndex={11110}
                 top={'25%'}
                 description={
                     <>

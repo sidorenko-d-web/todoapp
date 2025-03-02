@@ -92,6 +92,8 @@
   align-self: stretch;
   border-radius: 8px;
 
+  -webkit-tap-highlight-color: transparent;
+
   span {
     color: var.$color-text;
     flex-grow: 1;
@@ -111,11 +113,19 @@
     }
   }
   &.wrong, .shake {
-    border: 2px solid var.$color-red;
+    outline: 2px solid var.$color-red;
     @include var.shake();
 
     .selectedText {
       color: var.$color-red;
+      opacity: 1;
+    }
+  }
+  &.correct {
+    outline: 2px solid var.$color-green;
+
+    .selectedText {
+      color: var.$color-green;
       opacity: 1;
     }
   }

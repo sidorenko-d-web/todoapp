@@ -1,7 +1,7 @@
 import styles from './TransactionNotifcation.module.scss'
-import { handAnimation } from '../../assets/animations';
+import { coinLoadingAnimation } from '../../assets/animations';
 import refresh from "../../assets/icons/refresh.svg"
-import { TickCircle } from "../../assets/Icons/tickCircle";
+import { TickCircle } from "../../assets/icons/tickCircle";
 import Lottie from 'lottie-react';
 import { useTranslation } from 'react-i18next';
 
@@ -38,7 +38,7 @@ export const TransactionNotification: React.FC<TransactionNotificationProps> = (
         ) : (
           <>
             <Lottie
-              animationData={handAnimation}
+              animationData={coinLoadingAnimation}
               loop={true}
               autoplay={true}
               className={styles.lottie}

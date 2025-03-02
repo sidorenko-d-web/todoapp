@@ -12,19 +12,21 @@ import { useDispatch } from 'react-redux';
 import { setActiveFooterItemId } from '../../redux/slices/guideSlice';
 import GetGift from '../DevModals/GetGift/GetGift';
 
+
 export const TasksPage: FC = () => {
   const dispatch = useDispatch();
 
 
   const { t, i18n } = useTranslation('quests');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const { data, error, isLoading: isTasksLoading } = useGetTasksQuery({ is_actual: true });
+  const { data, error, isLoading: isTasksLoading, refetch } = useGetTasksQuery({ is_actual: true });
   const { data: boostData, isLoading: isBoostLoading } = useGetBoostQuery();
 
   useEffect(() => {
     dispatch(setActiveFooterItemId(4));
   }, []);
+
 
   const dailyTask = useMemo(() => {
     if (!data?.assignments) return null;
@@ -85,7 +87,7 @@ export const TasksPage: FC = () => {
       {dailyTask && <DailyTasks task={dailyTask} />}
       {topTask && <TopTasks task={topTask} />}
       {socialTasks.length > 0 && <SocialTasks tasks={socialTasks} />}
-      <GetGift />
+      <GetGift refetchTasks={refetch}/>
     </main>
   );
 };
