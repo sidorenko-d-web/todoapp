@@ -91,7 +91,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     if (!isExpired) {
       playAccelerateIntegrationSound();
       dispatch(setLastIntegrationId(integration.id));
-      void accelerateIntegration(1000);
+      void accelerateIntegration(1);
       createParticles();
     }
   };

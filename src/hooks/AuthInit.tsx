@@ -48,7 +48,7 @@ export function AuthInit({ children }: AuthInitProps) {
 
   useEffect(() => {
     const initAuth = async () => {
-      const minLoadingTime = new Promise(resolve => setTimeout(resolve, 3500));
+      //const minLoadingTime = new Promise(resolve => setTimeout(resolve, 3500));
 
       try {
         const hasCompletedSetup = localStorage.getItem('hasCompletedSetup');
@@ -73,7 +73,7 @@ export function AuthInit({ children }: AuthInitProps) {
         localStorage.setItem('access_token', authResponse.access_token);
         localStorage.setItem('refresh_token', authResponse.refresh_token);
 
-        await minLoadingTime;
+        // await minLoadingTime;
 
         if (hasCompletedSetup) {
           saveCurrentStep('completed');
@@ -85,7 +85,7 @@ export function AuthInit({ children }: AuthInitProps) {
 
         setIsInitializing(false);
       } catch (err) {
-        await minLoadingTime;
+        // await minLoadingTime;
         console.error('Ошибка при авторизации:', err);
         setIsInitializing(false);
         const savedStep = localStorage.getItem('currentSetupStep') as AuthStep;
@@ -129,7 +129,7 @@ export function AuthInit({ children }: AuthInitProps) {
 
 
   if (isLoading || isInitializing || !isAnimationFinished) {
-    return <LoadingScreen onAnimationComplete={() => setIsAnimationFinished(true)} />;
+    return <LoadingScreen isAuthComplete={!isLoading} onAnimationComplete={() => setIsAnimationFinished(true)} />;
   }
 
   if (isError) {
@@ -137,7 +137,7 @@ export function AuthInit({ children }: AuthInitProps) {
   }
   switch (currentStep) {
     case 'loading':
-      return <LoadingScreen onAnimationComplete={() => setIsAnimationFinished(true)} />;
+      return <LoadingScreen isAuthComplete={!isLoading} onAnimationComplete={() => setIsAnimationFinished(true)} />;
 
     case 'language':
       return (
@@ -161,7 +161,7 @@ export function AuthInit({ children }: AuthInitProps) {
       return <>{children}</>;
 
     default:
-      return <LoadingScreen onAnimationComplete={() => setIsAnimationFinished(true)} />;
+      return <LoadingScreen isAuthComplete={!isLoading} onAnimationComplete={() => setIsAnimationFinished(true)} />;
   }
 
 }
