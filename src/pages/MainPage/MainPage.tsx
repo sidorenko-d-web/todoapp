@@ -38,6 +38,8 @@ import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/Re
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { incrementAcceleration } from '../../redux/slices/integrationAcceleration.ts';
+
 export const MainPage: FC = () => {
   const { t } = useTranslation('guide');
   const { getModalState, openModal, closeModal } = useModal();
@@ -161,8 +163,12 @@ export const MainPage: FC = () => {
 
   if (isLoading) return <Loader />;
 
+  const accelerateIntegration = () => {
+    reduxDispatch(incrementAcceleration());
+  }
+
   return (
-    <main className={s.page}>
+    <main className={s.page} onClick={accelerateIntegration}>
       <Room />
 
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
