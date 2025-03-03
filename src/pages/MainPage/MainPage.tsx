@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useReducer } from 'react';
+import { FC, useEffect, useReducer } from 'react';
 import {
   AccelerateIntegtrationGuide,
   CreatingIntegrationGuide,

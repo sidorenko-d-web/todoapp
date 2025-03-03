@@ -51,6 +51,16 @@ export const LoadingScreen = ({ onAnimationComplete }: { onAnimationComplete: ()
     }
   };
 
+  useEffect(() => {
+    if (showAnimation) {
+      const animationTimeout = setTimeout(() => {
+        onAnimationComplete();
+      }, 1500);
+
+      return () => clearTimeout(animationTimeout);
+    }
+  }, [showAnimation]);
+  
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {

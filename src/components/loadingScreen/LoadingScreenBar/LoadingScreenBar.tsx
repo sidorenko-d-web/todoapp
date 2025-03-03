@@ -1,10 +1,11 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import rocketIcon from '../../../assets/icons/rocket.svg';
 import s from './LoadingScreenBar.module.scss';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 
 const INITIAL_DURATION = 1500;
+const MIN_DISPLAY_TIME = 1000; 
 const UPDATE_INTERVAL = 25;
 
 interface LoadingScreenBarProps {
@@ -15,6 +16,16 @@ interface LoadingScreenBarProps {
 
 export const LoadingScreenBar: FC<LoadingScreenBarProps> = ({ speedMultiplier, progress, setProgress }) => {
     const { t } = useTranslation('integrations');
+    const [minTimePassed, setMinTimePassed] = useState(false);
+
+    // Ensure the loading bar is visible for at least 2 seconds
+    useEffect(() => {
+        const minTimeTimeout = setTimeout(() => {
+            setMinTimePassed(true);
+        }, MIN_DISPLAY_TIME);
+
+        return () => clearTimeout(minTimeTimeout);
+    }, []);
 
     useEffect(() => {
         if (progress >= 100) return;
@@ -22,11 +33,17 @@ export const LoadingScreenBar: FC<LoadingScreenBarProps> = ({ speedMultiplier, p
         const progressIncrement = (100 / (INITIAL_DURATION / UPDATE_INTERVAL)) * speedMultiplier;
 
         const timerId = setInterval(() => {
-            setProgress(prev => Math.min(prev + progressIncrement, 100));
+            setProgress(prev => {
+                // Prevent progress from reaching 100% before 2 seconds
+                if (!minTimePassed && prev + progressIncrement >= 100) {
+                    return prev; // Stop at the current progress until time passes
+                }
+                return Math.min(prev + progressIncrement, 100);
+            });
         }, UPDATE_INTERVAL);
 
         return () => clearInterval(timerId);
-    }, [speedMultiplier, progress]);
+    }, [speedMultiplier, progress, minTimePassed]);
 
     return (
         <div className={`${s.wrp} ${s.elevated}`}>
