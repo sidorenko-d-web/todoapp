@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
-import { IntegrationResponseDTO, integrationsApi, selectVolume } from '../../../redux';
+import { IntegrationResponseDTO, integrationsApi, RootState, selectVolume } from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration } from '../../../hooks';
 import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
@@ -11,6 +11,7 @@ import { setIntegrationReadyForPublishing, setLastIntegrationId } from '../../..
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
+import { setIntegrationCreating } from '../../../redux/slices/integrationAcceleration';
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
@@ -29,7 +30,22 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
     integrationId: integration.id,
     onSuccess: newTimeLeft => setTimeLeft(newTimeLeft),
-  });
+  }); 
+
+  useEffect(() => {
+    dispatch(setIntegrationCreating(true));
+    console.log('set integration creating');
+  }, [])
+
+  const [ acceleration, setAcceleration ] = useState(0);
+  const reduxAcceleration = useSelector((state: RootState) => state.acceleration.acceleration);
+  
+  useEffect(() => {
+    if(acceleration != reduxAcceleration) {
+      handleAccelerateClick();
+      setAcceleration(reduxAcceleration);
+    }
+  }, [reduxAcceleration]);
 
   const calculateProgress = () => {
     return ((initialTimeLeft - timeLeft) / initialTimeLeft) * 100;
@@ -62,6 +78,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     }, 1000);
 
     if (isExpired) {
+      dispatch(setIntegrationCreating(false));
       clearInterval(timerId);
     }
 
@@ -81,7 +98,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     if (!isExpired) {
       playAccelerateIntegrationSound();
       dispatch(setLastIntegrationId(integration.id));
-      void accelerateIntegration(10000);
+      void accelerateIntegration(1);
       createParticles();
     }
   };
@@ -96,8 +113,8 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
       const particle = document.createElement('div');
       particle.classList.add(s.particle);
 
-      particle.style.left = `calc(100% - 10px)`;
-      particle.style.top = `${button.clientHeight / 2}px`;
+      // particle.style.left = `calc(100% - 10px)`;
+      // particle.style.top = `${button.clientHeight / 2}px`;
 
       button.appendChild(particle);
 

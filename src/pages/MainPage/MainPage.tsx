@@ -38,6 +38,8 @@ import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/Re
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { incrementAcceleration } from '../../redux/slices/integrationAcceleration.ts';
+
 export const MainPage: FC = () => {
   const { t } = useTranslation('guide');
   const { getModalState, openModal, closeModal } = useModal();
@@ -62,6 +64,8 @@ export const MainPage: FC = () => {
 
   const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
 
+  const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+
   const initialState = {
     firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
     secondGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN),
@@ -81,7 +85,7 @@ export const MainPage: FC = () => {
     }
   }
 
-  const [ guideVisibility, dispatch ] = useReducer(guideReducer, initialState);
+  const [guideVisibility, dispatch] = useReducer(guideReducer, initialState);
 
   const purchasingSubscriptionModalState = getModalState(MODALS.SUBSCRIBE);
   const creatingIntegrationModalState = getModalState(MODALS.CREATING_INTEGRATION);
@@ -89,13 +93,13 @@ export const MainPage: FC = () => {
   const handleGuideClose = (guideId: string) => {
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
-  
+
 
   useEffect(() => {
     if (creatingIntegrationModalState.isOpen) {
       closeModal(MODALS.SUBSCRIBE);
     }
-  }, [ creatingIntegrationModalState.isOpen ]);
+  }, [creatingIntegrationModalState.isOpen]);
 
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(2));
@@ -151,6 +155,10 @@ export const MainPage: FC = () => {
   const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
   const { isLoading: isRoomLoading } = useGetEquipedQuery();
 
+  useEffect(() => {
+    reduxDispatch(setActiveFooterItemId(2));
+  }, []);
+
   const isLoading = (
     isAllIntegrationsLoading ||
     isCurrentUserProfileInfoLoading ||
@@ -160,8 +168,18 @@ export const MainPage: FC = () => {
 
   if (isLoading) return <Loader />;
 
+  const accelerateIntegration = () => {
+    if (integrationCurrentlyCreating) {
+      reduxDispatch(incrementAcceleration());
+    }
+  }
+
   return (
-    <main className={s.page}>
+    <main className={s.page} onClick={accelerateIntegration}>
+      {integrationCurrentlyCreating && <div
+        style={{ position: 'absolute', top: '0', zIndex: '15000', height: '70%', width: '100%', backgroundColor: 'transparent' }}
+        onClick={accelerateIntegration} />}
+
       <Room />
 
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
