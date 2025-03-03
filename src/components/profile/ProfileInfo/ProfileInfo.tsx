@@ -78,17 +78,17 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
               }} to={AppRoute.ProgressTree} className={styles.subscribers}>
               {lastActiveStage}
             </TrackedLink>
-            {!nonEditable && (
-              <img
-                className={styles.edit}
-                src={editIcon}
-                onClick={() => openModal(MODALS.CHANGING_NICKNAME)}
-                alt=""
-              />
-            )}
+            {/*{!nonEditable && (*/}
+            {/*  <img*/}
+            {/*    className={styles.edit}*/}
+            {/*    src={editIcon}*/}
+            {/*    onClick={() => openModal(MODALS.CHANGING_NICKNAME)}*/}
+            {/*    alt=""*/}
+            {/*  />*/}
+            {/*)}*/}
           </div>
 
-          <p className={styles.blogName}>{blogName}</p>
+          {/*<p className={styles.blogName}>{blogName}</p>*/}
         </div>
 
         <div className={styles.subscription}>

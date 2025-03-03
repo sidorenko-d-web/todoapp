@@ -47,7 +47,7 @@ export const SpecialIntegration = ({ integration }: SpecialIntegrationProps) => 
         <span className={styles.title}> {integration.company_name} </span>
 
         <button
-          className={classname(styles.button, { [styles.locked]: isLocked })}
+          className={classname(styles.button, { [styles.locked]: isLocked || error })}
           onClick={() => createIntegration({
             campaign_id: integration.id,
             content_type: 'text',
@@ -56,7 +56,10 @@ export const SpecialIntegration = ({ integration }: SpecialIntegrationProps) => 
           {
             isError ? (
               // @ts-expect-error No error types yet
-              <span className={styles.errorMessage}>{error?.data?.detail}</span>
+              <span className={styles.errorMessage}>
+                <img className={styles.lockIcon} src={lockIcon} alt="lock" />
+                  {t('i32')}
+                <img className={styles.lockIcon} src={lockIcon} alt="lock" /></span>
             ) : (
               <>
                 {isLocked && <img className={styles.lockIcon} src={lockIcon} alt="lock" />}

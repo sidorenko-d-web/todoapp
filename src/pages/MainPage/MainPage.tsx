@@ -59,7 +59,6 @@ export const MainPage: FC = () => {
     });
   }, []);
 
-
   const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
 
   const initialState = {
@@ -105,10 +104,10 @@ export const MainPage: FC = () => {
       openModal(MODALS.SUBSCRIBE);
     }
 
-    if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
-      && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
-      navigate(AppRoute.Shop);
-    }
+    // if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
+    //   && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+    //   navigate(AppRoute.Shop);
+    // }
 
     if (
       isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
@@ -134,14 +133,14 @@ export const MainPage: FC = () => {
       openModal(MODALS.CREATING_INTEGRATION);
     }
 
-    if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
-      && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
-      navigate(AppRoute.Shop);
-    }
+    // if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+    //   && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
+    //   navigate(AppRoute.Shop);
+    // }
 
-    if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
-      navigate(AppRoute.ShopInventory);
-    }
+    // if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+    //   navigate(AppRoute.ShopInventory);
+    // }
   }, []);
 
   const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
