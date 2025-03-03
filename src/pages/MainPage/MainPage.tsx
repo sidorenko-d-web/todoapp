@@ -85,7 +85,7 @@ export const MainPage: FC = () => {
     }
   }
 
-  const [ guideVisibility, dispatch ] = useReducer(guideReducer, initialState);
+  const [guideVisibility, dispatch] = useReducer(guideReducer, initialState);
 
   const purchasingSubscriptionModalState = getModalState(MODALS.SUBSCRIBE);
   const creatingIntegrationModalState = getModalState(MODALS.CREATING_INTEGRATION);
@@ -93,13 +93,13 @@ export const MainPage: FC = () => {
   const handleGuideClose = (guideId: string) => {
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
-  
+
 
   useEffect(() => {
     if (creatingIntegrationModalState.isOpen) {
       closeModal(MODALS.SUBSCRIBE);
     }
-  }, [ creatingIntegrationModalState.isOpen ]);
+  }, [creatingIntegrationModalState.isOpen]);
 
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(2));
@@ -165,14 +165,18 @@ export const MainPage: FC = () => {
   if (isLoading) return <Loader />;
 
   const accelerateIntegration = () => {
-    if(integrationCurrentlyCreating) {
-      console.log('clicked accelerate')
+    if (integrationCurrentlyCreating) {
       reduxDispatch(incrementAcceleration());
     }
   }
 
   return (
     <main className={s.page} onClick={accelerateIntegration}>
+
+      {integrationCurrentlyCreating && <div
+        style={{ position: 'absolute', top: '0', zIndex: '15000', height: '70%', width: '100%', backgroundColor: 'transparent' }}
+        onClick={accelerateIntegration} />}
+        
       <Room />
 
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
