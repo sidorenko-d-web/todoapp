@@ -255,7 +255,7 @@ export function AuthInit({ children }: AuthInitProps) {
           onContinue={handleInviteCodeContinue}
           // Это расскоментить для билда
           // referral_id={window.Telegram.WebApp.initData.user.id}
-          referral_id={1488618801}
+          referral_id={currentUserTelegramId ?? 0}
         />
       );
 
