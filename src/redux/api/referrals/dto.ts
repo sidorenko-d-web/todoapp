@@ -39,6 +39,18 @@ export type ReferralDTO = {
     push_line_data: PushLineData;
 };
 
+export type ReferralCodeDTO = {
+    referral_code: number
+    referral_id: number
+}
+
+export type NewReferrerRequestDTO = {
+    id: number
+    name: string
+    username: string
+    invited_by: number
+    reward_for_invited: number
+}
 
 export type GetReferralsDTO = {
     referrals: ReferralDTO[];

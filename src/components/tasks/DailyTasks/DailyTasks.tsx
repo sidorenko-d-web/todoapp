@@ -1,4 +1,4 @@
-import { FC, useState, useMemo, useEffect } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { TaskCard } from '../';
 import giftIcon from '../../../assets/icons/gift.svg';
 import { useModal } from '../../../hooks';
@@ -18,18 +18,19 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const { t } = useTranslation('quests');
 
   const { openModal, closeModal } = useModal();
-  const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
+
+  const [ questionStates, setQuestionStates ] = useState<QuestionState[]>([]);
 
   // Инициализируем состояния на основе количества этапов из API
   useEffect(() => {
     setQuestionStates(Array(task.stages).fill('closed').map((state, index) =>
-      index === 0 ? 'current' : state
+      index === 0 ? 'current' : state,
     ));
-  }, [task]);
+  }, [ task ]);
 
   const completedCount = useMemo(() => {
     return questionStates.filter(state => state === 'solved').length;
-  }, [questionStates]);
+  }, [ questionStates ]);
 
   const handleOpenGift = () => {
     if (task.is_completed || questionStates.every(state => state === 'solved') && !task.is_reward_given) {
@@ -52,11 +53,12 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
-        <h2 className={s.sectionTitle}>{t("q2")}</h2>
+        <h2 className={s.sectionTitle}>{t('q2')}</h2>
         <span className={s.count}>{completedCount}/3</span>
       </div>
       <div className={s.tasksList}>
         <TaskCard
+          id={task.id}
           title={t('q3')}
           description={t('q4')}
           type="progress"
@@ -68,6 +70,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
           boost={task.boost}
           totalSteps={task.stages}
           isCompleted={isCompleted}
+          isRewardGiven={task.is_reward_given}
           isDailyTask={true}
         />
       </div>

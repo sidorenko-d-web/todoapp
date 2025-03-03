@@ -3,116 +3,103 @@
 .overlay {
   display: flex;
   justify-content: center;
-  align-items: end;
+  align-items: flex-end;
   background-color: rgba(0, 0, 0, 0.85);
-  height: 100svh;
+  height: 100vh;
   overflow-y: auto;
 }
 
 .modal {
-  max-height: 90svh;
   background-color: var.$color-bg;
   border: 1px solid var.$color-dark-gray;
   border-bottom: none;
   border-radius: 12px 12px 0 0;
   width: 100%;
+  height: 50vh; /* Start at half height */
   overflow-y: auto;
-  @include var.hide-scroll;
-
-  & {
-    transition:
-            height 400ms cubic-bezier(0.4, 0, 0.2, 1),
-            transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
-
-      // Prevent overflow during scale animation
-    transform-origin: bottom center;
-    will-change: transform, height;
+  transition: all 0.3s ease;
+  animation: slideUp 0.3s forwards;
+  
+  &.expanded {
+    height: 85vh;
+  }
+  
+  &.closing {
+    animation: slideDown 0.3s forwards;
   }
 }
 
-.expanding {
-  // Slightly reduce scroll sensitivity during animation
-  pointer-events: none;
+@keyframes slideDown {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
 }
 
-// Rest of the styles remain the same...
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
 .disabled {
   opacity: 0.7;
   pointer-events: none;
 }
 
+.dragHandle {
+  cursor: grab;
+  width: 100%;
+  user-select: none;
+  touch-action: none;
+}
+
 .header {
-  position: relative;
+  position: sticky;
   top: 0;
   left: 0;
   z-index: 50;
   width: 100%;
-
+  padding: 12px;
+  background-color: var.$color-bg;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
-  gap: 5px;
+}
 
-  margin-bottom: 5px;
-  padding: 5px 12px 10px;
-
-  & > img {
-    width: 14px;
-    height: 14px;
-
-    @media (min-width: var.$breakpoint-md) {
-      width: 16px;
-      height: 16px;
-    }
-  }
+.gripIcon {
+  width: 26px;
+  height: 3px;
+  margin-bottom: 10px;
 }
 
 .titleWrapper {
-  display: flex;
-  position: relative;
   width: 100%;
+  display: flex;
   justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .title {
-  display: flex;
-  justify-content: center;
-  gap: 5px;
-
   color: var.$color-text;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
-  line-height: 100%;
-
   margin: 0;
-
-  @media (min-width: var.$breakpoint-md) {
-    font-size: 16px;
-  }
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .closeBtn {
-  background-color: transparent;
-  border: none;
   position: absolute;
   right: 0;
-}
-
-.closeIcon {
-  @include var.transition(color);
-  color: #3c3937;
-
-  background-color: transparent;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
   border: none;
-
-  fill: currentcolor;
-
-  &:hover {
-    color: var.$color-black;
-  }
+  padding: 5px;
+  cursor: pointer;
 }
 
 .content {
-  padding: 10px 15px 40px 15px;
+  padding: 16px;
+  overflow-y: auto;
 }

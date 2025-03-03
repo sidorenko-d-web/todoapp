@@ -1,1 +1,1 @@
-export * from './ExpandableBottomModal.tsx'
+export * from "./ExpandableBottomModal"

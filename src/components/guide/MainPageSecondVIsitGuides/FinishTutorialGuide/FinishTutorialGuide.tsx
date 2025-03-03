@@ -22,7 +22,7 @@ export const FinishTutorialGuide: React.FC<FinishTutorialGuideProps> = ({onClose
     return (
         
         <Guide align="right"
-            zIndex={110}
+            zIndex={11110}
             top={'53%'}
             description={
                 <>{t('g32')}

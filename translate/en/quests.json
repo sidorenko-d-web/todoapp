@@ -1,7 +1,7 @@
 {
   "q1": "Quests",
-  "q2": "Daily",
-  "q3": "Daily Gift",
+  "q2": "Apusher Quiz",
+  "q3": "Reward",
   "q4": "Answer 3 questions to open.",
   "q5": "Open gift",
   "q6": "Top tasks",
@@ -48,5 +48,6 @@
   "q47": "Channel link",
   "q48": "Enter channel link",
   "q49": "Guide",
-  "q50": "Social networks"
+  "q50": "Social networks",
+  "q51": "Checking"
 }

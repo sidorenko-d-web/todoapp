@@ -1,8 +1,8 @@
 import styles from './SpecialIntegration.module.scss';
-import goldCoinIcon from '../../../assets/Icons/coin.png';
-import blueCoinIcon from '../../../assets/Icons/coin-blue-human.svg';
-import lockIcon from '../../../assets/Icons/lock_icon.svg';
-import rocketIcon from '../../../assets/Icons/rocket.svg';
+import goldCoinIcon from '../../../assets/icons/coin.png';
+import blueCoinIcon from '../../../assets/icons/coin-blue-human.svg';
+import lockIcon from '../../../assets/icons/lock_icon.svg';
+import rocketIcon from '../../../assets/icons/rocket.svg';
 import classname from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { CompanyResponseDTO, useCreateIntegrationMutation } from '../../../redux';

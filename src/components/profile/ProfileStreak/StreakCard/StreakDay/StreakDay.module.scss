@@ -38,6 +38,10 @@
     border: 2px solid var.$color-purple;
   }
 
+  &.failedDay {
+    border: 2px solid var.$color-frozen-blue;
+  }
+
   .status-icon {
     width: 16px;
     height: 16px;

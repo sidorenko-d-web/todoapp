@@ -56,18 +56,18 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   margin: 0 auto;
   overflow: hidden;
 
+
+  
   .bg_image {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    height: calc(100% + 20px);
+    height: auto;
     z-index: -1;
     transition: transform 0.1s ease-out;
   }
 }
-
-
 
 .content {
   display: flex;
@@ -120,8 +120,6 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
       display: none;
     }
   }
-
-
 }
 
 .settingsIcon {
