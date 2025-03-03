@@ -71,14 +71,23 @@ export const useAuthFlow = () => {
     }
   };
 
+  const handleLanguageContinue = async () => {
+    saveCurrentStep('signin');
+    const success = await performAuthentication();
+    if (success) {
+      saveCurrentStep('skin');
+    } else {
+      if (currentStep !== 'invite_code') {
+        saveCurrentStep('language');
+      }
+    }
+  };
+
+
   const handleLanguageSelect = async (language: string) => {
     setSelectedLanguage(language);
     localStorage.setItem('selectedLanguage', language);
     await i18n.changeLanguage(language);
-  };
-
-  const handleLanguageContinue = () => {
-    saveCurrentStep('invite_code');
   };
 
   const handleInviteCodeContinue = async () => {
