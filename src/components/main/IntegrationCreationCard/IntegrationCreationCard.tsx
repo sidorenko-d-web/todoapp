@@ -30,7 +30,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
     integrationId: integration.id,
     onSuccess: newTimeLeft => setTimeLeft(newTimeLeft),
-  }); 
+  });
 
   useEffect(() => {
     dispatch(setIntegrationCreating(true));
@@ -39,7 +39,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
 
   const [ acceleration, setAcceleration ] = useState(0);
   const reduxAcceleration = useSelector((state: RootState) => state.acceleration.acceleration);
-  
+
   useEffect(() => {
     if(acceleration != reduxAcceleration) {
       handleAccelerateClick();
@@ -98,7 +98,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     if (!isExpired) {
       playAccelerateIntegrationSound();
       dispatch(setLastIntegrationId(integration.id));
-      void accelerateIntegration(1);
+      void accelerateIntegration(500);
       createParticles();
     }
   };

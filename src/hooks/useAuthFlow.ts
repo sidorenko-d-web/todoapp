@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useGetUserQuery, useSignInMutation } from '../redux';
 import { MODALS } from '../constants';
 import { extractTelegramIdFromInitData } from '../utils';

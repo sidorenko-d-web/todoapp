@@ -145,7 +145,7 @@
 .level {
   position: absolute;
   top: -3px;
-  right: -20px;
+  right: -25px;
   color: var.$color-text-semi-transparent;
 
   @include var.multi-fz(10px, 12px);
