@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useReducer } from 'react';
+import { FC, useEffect, useReducer } from 'react';
 import {
   AccelerateIntegtrationGuide,
   CreatingIntegrationGuide,
@@ -47,7 +47,6 @@ export const MainPage: FC = () => {
   const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
 
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
-
   useEffect(() => {
     refetch().then(() => {
       if (data?.integrations[0].status === 'created') {
