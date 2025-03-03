@@ -12,8 +12,11 @@ export const useWebApp = () => {
     WebApp.SettingsButton.show();
 
     const handleSettingsClick = () => {
-      WebApp.SettingsButton.hide();
-      openModal(MODALS.SETTINGS);
+      // TODO: не забыть расскоментить и при запуске проекта
+      // WebApp.SettingsButton.hide();
+      // openModal(MODALS.SETTINGS);
+
+      localStorage.clear()
     };
 
     WebApp.SettingsButton.onClick(handleSettingsClick);
