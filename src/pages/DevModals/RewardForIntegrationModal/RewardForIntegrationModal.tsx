@@ -13,10 +13,10 @@ import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import reward from '../../../assets/animations/reward.json';
 import { useDispatch } from 'react-redux';
-import { setIsPublishedModalClosed } from '../../../redux/slices/guideSlice';
 import { CentralModal } from '../../../components/shared';
 import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../helpers';
+import { setIsPublishedModalClosed, setNeedToPlayHappy } from '../../../redux';
 
 export default function RewardForIntegrationModal() {
   const { t, i18n } = useTranslation('integrations');
@@ -33,6 +33,7 @@ export default function RewardForIntegrationModal() {
     <CentralModal
       onClose={() => {
         dispatch(setIsPublishedModalClosed(true));
+        dispatch(setNeedToPlayHappy(true));
         closeModal(MODALS.INTEGRATION_REWARD);
       }}
       modalId={MODALS.INTEGRATION_REWARD}
@@ -53,7 +54,7 @@ export default function RewardForIntegrationModal() {
             {/* @ts-ignore */}
             <img className={styles.integration} src={args?.image_url ?? integration} />
           </div>
-          <div className={styles.bottom}> 
+          <div className={styles.bottom}>
             {/* @ts-ignore */}
             <h2 className={styles.title}>{args?.company_name}</h2>
             <div className={styles.rate}>

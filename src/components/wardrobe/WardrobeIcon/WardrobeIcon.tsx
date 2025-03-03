@@ -3,9 +3,8 @@ import styles from './WardrobeIcon.module.scss';
 
 // import profileIconPlaceholder from '../../../assets/icons/profile-icon-placeholder.svg';
 import wardrobeIcon from '../../../assets/images/start-room/wardrobe-bg.svg';
-import { Skin, SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
+import { SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { WardrobeTabs } from '../WardrobeTabs';
-import { useGetShopSkinsQuery } from '../../../redux';
 
 interface WardrobeIconProps {
   imageUrl?: string;
@@ -40,7 +39,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
       const width = this.sys.game.config.width as number;
       const center = width / 2;
       if (!this.add.spine) return;
-      this.spineObject = this.add.spine(center, center , 'data', 'atlas');
+      this.spineObject = this.add.spine(center, center, 'data', 'atlas');
       this.spineObject.scale = 0.15;
       spineSceneRef.current = this;
     }

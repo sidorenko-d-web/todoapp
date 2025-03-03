@@ -1,5 +1,5 @@
 import { Action, combineReducers } from 'redux';
-import { audioReducer, authReducer } from './slices';
+import { animationStateReducer, audioReducer, authReducer } from './slices';
 import {
   authApi,
   companiesApi,
@@ -25,25 +25,26 @@ import { characterApi } from './api/character/api.ts';
 
 const appReducer = combineReducers({
   auth: authReducer,
-  treeSlice: treeReducer,
   guide: guideReducer,
+  treeSlice: treeReducer,
   audioSlice: audioReducer,
   pointSlice: pointsReducer,
   confirmation: confirmationReducer,
+  animationStateSlice: animationStateReducer,
   [authApi.reducerPath]: authApi.reducer,
   [shopApi.reducerPath]: shopApi.reducer,
-  [pushLineApi.reducerPath]: pushLineApi.reducer,
-  [integrationsApi.reducerPath]: integrationsApi.reducer,
+  [treeApi.reducerPath]: treeApi.reducer,
+  [roomApi.reducerPath]: roomApi.reducer,
+  [tasksApi.reducerPath]: tasksApi.reducer,
+  [usersApi.reducerPath]: usersApi.reducer,
   [profileApi.reducerPath]: profileApi.reducer,
+  [pushLineApi.reducerPath]: pushLineApi.reducer,
+  [trackingApi.reducerPath]: trackingApi.reducer,
+  [characterApi.reducerPath]: characterApi.reducer,
   [companiesApi.reducerPath]: companiesApi.reducer,
   [referralsApi.reducerPath]: referralsApi.reducer,
-  [usersApi.reducerPath]: usersApi.reducer,
-  [treeApi.reducerPath]: treeApi.reducer,
-  [tasksApi.reducerPath]: tasksApi.reducer,
-  [roomApi.reducerPath]: roomApi.reducer,
-  [trackingApi.reducerPath]: trackingApi.reducer,
+  [integrationsApi.reducerPath]: integrationsApi.reducer,
   [confirmationsApi.reducerPath]: confirmationsApi.reducer,
-  [characterApi.reducerPath]: characterApi.reducer,
 });
 
 export const rootReducer = (state: any, action: Action) => {
