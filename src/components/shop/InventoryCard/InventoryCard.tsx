@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import styles from './InventoryCard.module.scss';
 import clsx from 'clsx';
 //@ts-ignore
@@ -27,7 +27,7 @@ import useSound from 'use-sound';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../shared';
 import { setPoints } from '../../../redux/slices/point.ts';
-
+import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 interface Props {
   disabled?: boolean;
   isUpgradeEnabled?: boolean;
@@ -46,19 +46,19 @@ const getPremiumLevelOrder = (level: TypeItemQuality) =>
 
 function sortByPremiumLevel(items: IShopItem[]) {
   return [...items].sort(
-    (a, b) =>
-      getPremiumLevelOrder(a.item_premium_level) -
-      getPremiumLevelOrder(b.item_premium_level),
+    (a, b) => getPremiumLevelOrder(a.item_premium_level) - getPremiumLevelOrder(b.item_premium_level),
   );
 }
 
-export const InventoryCard: FC<Props> = ({
-  disabled,
-  isBlocked,
-  isUpgradeEnabled = true,
-  item,
-  isB,
-}) => {
+export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled = true, item, isB }) => {
+  let s25Key = '';
+  if (item.level < 50) {
+    s25Key = 's25';
+  } else if (item.level >= 50 && item.level < 100) {
+    s25Key = 's25_100';
+  } else if (item.level >= 100 && item.level <= 150) {
+    s25Key = 's25_150';
+  }
   const { t, i18n } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const dispatch = useDispatch();
@@ -73,20 +73,45 @@ export const InventoryCard: FC<Props> = ({
   });
   const { refetch } = useGetCurrentUserProfileInfoQuery();
 
-  const { openModal, closeModal } = useModal();
+  const { openModal } = useModal();
 
   const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
-  const [lastTriggeredLevel, setLastTriggeredLevel] = useState(0);
+
+  const prevLvl = useRef<number | null>(null);
 
   useEffect(() => {
-    if (item.level % 10 === 0 && item.level <= 100 && item.level !== lastTriggeredLevel) {
-      openModal(MODALS.TASK_CHEST);
-      setLastTriggeredLevel(item.level);
+    const lastTriggeredLevel = Number(localStorage.getItem('lastTriggeredLevel')) || 0;
+
+    if (prevLvl.current === null) {
+      prevLvl.current = item.level;
+      return;
     }
-  }, [item.level, lastTriggeredLevel]);
-  useEffect(() => {
-    closeModal(MODALS.TASK_CHEST);
-  }, []);
+
+    if (
+      item.level % 10 === 0 &&
+      item.level <= 100 &&
+      item.level !== lastTriggeredLevel &&
+      item.level !== 50 &&
+      item.level !== 100 &&
+      item.level !== 150 &&
+      item.level !== prevLvl.current
+    ) {
+      openModal(MODALS.GET_GIFT);
+      localStorage.setItem('lastTriggeredLevel', item.level);
+    }
+
+    if (
+      (item.level === 50 || item.level === 100 || item.level === 150) &&
+      item.level !== lastTriggeredLevel &&
+      item.level !== prevLvl.current
+    ) {
+      openModal(MODALS.TASK_CHEST);
+      localStorage.setItem('lastTriggeredLevel', String(item.level));
+    }
+
+    prevLvl.current = item.level;
+  }, [item.level]);
+
   const handleBuyItem = async () => {
     try {
       const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
@@ -114,9 +139,7 @@ export const InventoryCard: FC<Props> = ({
     } catch (error) {}
   };
 
-  const locale = ['ru', 'en'].includes(i18n.language)
-    ? (i18n.language as 'ru' | 'en')
-    : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const levelCap =
     item.level < 10
@@ -137,16 +160,25 @@ export const InventoryCard: FC<Props> = ({
       ? 80
       : item.level < 90
       ? 90
-      : 100;
+      : item.level < 100
+      ? 100
+      : item.level < 110
+      ? 110
+      : item.level < 120
+      ? 120
+      : item.level < 130
+      ? 130
+      : item.level < 140
+      ? 140
+      : 150;
   return (
     <div className={styles.storeCard}>
+      {<GetGift lvl={item.level} />}
       <div className={styles.header}>
         <div
           className={clsx(
             styles.image,
-            item.item_rarity === 'yellow'
-              ? styles.purpleImage
-              : item.item_rarity === 'green' && styles.redImage,
+            item.item_rarity === 'yellow' ? styles.purpleImage : item.item_rarity === 'green' && styles.redImage,
           )}
         >
           <img
@@ -163,11 +195,7 @@ export const InventoryCard: FC<Props> = ({
           {/*  />*/}
           {/*</div>*/}
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
-          {!isBlocked && (
-            <p>
-              {item.item_premium_level === 'advanced' ? 'adv' : item.item_premium_level}
-            </p>
-          )}
+          {!isBlocked && <p>{item.item_premium_level === 'advanced' ? 'adv' : item.item_premium_level}</p>}
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>
@@ -198,21 +226,13 @@ export const InventoryCard: FC<Props> = ({
           >
             {t('s20')} {item.level} {isB && t('s21')}
           </p>
-          <div
-            className={clsx(
-              styles.stats,
-              (isBlocked || disabled) && styles.disabledStats,
-            )}
-          >
+          <div className={clsx(styles.stats, (isBlocked || disabled) && styles.disabledStats)}>
             <div className={styles.statsItem}>
               <p>+{formatAbbreviation(item.boost.views, 'number', { locale: locale })}</p>
               <img src={ViewsIcon} />
             </div>
             <div className={styles.statsItem}>
-              <p>
-                +
-                {formatAbbreviation(item.boost.subscribers, 'number', { locale: locale })}
-              </p>
+              <p>+{formatAbbreviation(item.boost.subscribers, 'number', { locale: locale })}</p>
               <img src={SubscriberCoin} alt="" />
             </div>
             <div className={styles.statsItem}>
@@ -233,13 +253,7 @@ export const InventoryCard: FC<Props> = ({
         (disabled ? (
           <p className={styles.disabledText}>
             {t('s22')} “
-            <span
-              className={
-                item.item_rarity === 'yellow'
-                  ? styles.itemNameBlue
-                  : styles.itemNamePurple
-              }
-            >
+            <span className={item.item_rarity === 'yellow' ? styles.itemNameBlue : styles.itemNamePurple}>
               Компьютерный стул - Base
             </span>
             ”. {t('s23')}
@@ -250,12 +264,18 @@ export const InventoryCard: FC<Props> = ({
               <p>
                 {item.level}/{levelCap} {t('s24')}{' '}
               </p>
-              {item.level >= 10 && (
+              {
                 <div className={styles.goal}>
-                  <p>{t('s25')}</p>
+                  <p>{t(s25Key)}</p>
                   <img
                     src={
-                      item.item_rarity === 'red'
+                      item.level < 50
+                        ? ChestBlueIcon
+                        : item.level >= 50 && item.level < 100
+                        ? ChestPurpleIcon
+                        : item.level >= 100 && item.level <= 150
+                        ? ChestRedIcon
+                        : item.item_rarity === 'red'
                         ? ChestBlueIcon
                         : item.item_rarity === 'yellow'
                         ? ChestPurpleIcon
@@ -264,7 +284,7 @@ export const InventoryCard: FC<Props> = ({
                     alt=""
                   />
                 </div>
-              )}
+              }
             </div>
 
             <div className={styles.progressBar}>
@@ -277,7 +297,7 @@ export const InventoryCard: FC<Props> = ({
                     : styles.doneRed
                 }
                 style={{
-                  width: `${Math.min((item.level % 10) * 10, 100)}%`,
+                  width: `${Math.min(((item.level % 10) / 10) * 100, 100)}%`,
                 }}
               />
             </div>
@@ -294,9 +314,7 @@ export const InventoryCard: FC<Props> = ({
                         : styles.itemRed,
                       item.item_premium_level === 'advanced'
                         ? index > 1 && styles.itemLocked
-                        : item.item_premium_level === 'base' &&
-                            index > 0 &&
-                            styles.itemLocked,
+                        : item.item_premium_level === 'base' && index > 0 && styles.itemLocked,
                     )}
                     key={_item.id}
                     style={
@@ -311,11 +329,7 @@ export const InventoryCard: FC<Props> = ({
                         : undefined
                     }
                   >
-                    <img
-                      src={_item.image_url + svgHeadersString}
-                      className={styles.itemImage}
-                      alt=""
-                    />
+                    <img src={_item.image_url + svgHeadersString} className={styles.itemImage} alt="" />
                     <img src={LockIcon} className={styles.lock} alt="" />
                   </div>
                 ))}
