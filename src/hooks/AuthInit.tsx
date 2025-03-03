@@ -25,16 +25,23 @@ export function AuthInit({ children }: AuthInitProps) {
     return localStorage.getItem('selectedLanguage') || 'en';
   });
   const [isInitializing, setIsInitializing] = useState(true);
+  const [loadingStarted, setLoadingStarted] = useState(false);
 
-  // useEffect(() => {
-  //   if (
-  //     window.Telegram &&
-  //     window.Telegram.WebApp &&
-  //     typeof window.Telegram.WebApp.requestFullscreen === 'function'
-  //   ) {
-  //     window.Telegram.WebApp.requestFullscreen();
-  //   }
-  // }, []);
+  useEffect(() => {
+    if(isLoading) {
+      setLoadingStarted(true);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (
+      window.Telegram &&
+      window.Telegram.WebApp &&
+      typeof window.Telegram.WebApp.requestFullscreen === 'function'
+    ) {
+      window.Telegram.WebApp.requestFullscreen();
+    }
+  }, []);
 
 
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
@@ -129,7 +136,7 @@ export function AuthInit({ children }: AuthInitProps) {
 
 
   if (isLoading || isInitializing || !isAnimationFinished) {
-    return <LoadingScreen isAuthComplete={!isLoading} onAnimationComplete={() => setIsAnimationFinished(true)} />;
+    return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
   }
 
   if (isError) {
@@ -137,7 +144,7 @@ export function AuthInit({ children }: AuthInitProps) {
   }
   switch (currentStep) {
     case 'loading':
-      return <LoadingScreen isAuthComplete={!isLoading} onAnimationComplete={() => setIsAnimationFinished(true)} />;
+      return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
 
     case 'language':
       return (
@@ -161,7 +168,7 @@ export function AuthInit({ children }: AuthInitProps) {
       return <>{children}</>;
 
     default:
-      return <LoadingScreen isAuthComplete={!isLoading} onAnimationComplete={() => setIsAnimationFinished(true)} />;
+      return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
   }
 
 }
