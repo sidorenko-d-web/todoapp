@@ -9,6 +9,8 @@ import { AudioBg, useModal, useScrollManager } from '../hooks';
 import { getOS } from '../utils';
 
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
+import Lottie from 'lottie-react';
+import { lampTable } from '../assets/animations';
 
 const Layout = () => {
   const location = useLocation();
@@ -24,7 +26,7 @@ const Layout = () => {
     '/progressTree',
     location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/)
   ].includes(location.pathname);
-        
+
   const showRoadmapBg = location.pathname === '/progressTree';
 
   useEffect(() => {
@@ -34,11 +36,9 @@ const Layout = () => {
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
   }, []);
 
-  const contentClassName = `${styles.content} ${
-    showHeader ? styles.withHeader : ''
-  } ${needsReducedMargin ? styles.reducedMargin : ''} ${
-    platform ? styles[platform] : ''
-  }`;
+  const contentClassName = `${styles.content} ${showHeader ? styles.withHeader : ''
+    } ${needsReducedMargin ? styles.reducedMargin : ''} ${platform ? styles[platform] : ''
+    }`;
 
   useEffect(() => {
     if (showRoadmapBg && contentRef.current) {
@@ -59,18 +59,25 @@ const Layout = () => {
 
   return (
     <>
-      <div className={`${styles.settingsIcon} ${
-        platform ? styles[platform + 'Settings'] : ''
-      }`}>
+      <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''
+        }`}>
         <Settings />
       </div>
       <div className={styles.wrp}>
         {showRoadmapBg && (
-          <img
-            src={roadmapBg}
-            className={styles.bg_image}
-            style={{ transform: `translateY(-${bgOffset}px)` }}
-          />
+          <>
+            <img
+              src={roadmapBg}
+              className={styles.bg_image}
+              style={{ transform: `translateY(-${bgOffset}px)` }}
+            />
+            <Lottie
+              animationData={lampTable}
+              loop
+              autoplay
+              style={{ position: 'fixed', bottom: '20px' }}
+            />
+          </>
         )}
         {showHeader && <Header />}
         <main className={contentClassName} ref={contentRef}>
@@ -78,7 +85,7 @@ const Layout = () => {
           <SettingsModal />
           <WalletConnectionModal />
           <LanguageSelectionModal />
-           <AudioBg />
+          <AudioBg />
         </main>
         <Footer />
       </div>
