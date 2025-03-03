@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from 'react'; // Add useRef
+import { useEffect, useState, useRef } from 'react';
 import styles from './LoadingScreen.module.scss';
 import loadingVid from '../../../assets/gif/loading.mp4';
-import Lottie from 'lottie-react';
-import { coinsAnim } from '../../../assets/animations';
-import { LoadingScreenBar, LoadingScreenBarRef } from '../../loadingScreen/LoadingScreenBar/LoadingScreenBar'; // Import the ref interface
+// import Lottie from 'lottie-react';
+// import { coinsAnim } from '../../../assets/animations';
+import { LoadingScreenBar, LoadingScreenBarRef } from '../../loadingScreen/LoadingScreenBar/LoadingScreenBar';
 import useSound from 'use-sound';
 import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
 import { useSelector } from 'react-redux';
@@ -70,7 +70,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
     if (showAnimation) {
       const animationTimeout = setTimeout(() => {
         onAnimationComplete();
-      }, 1700);
+      }, 100);
 
       return () => clearTimeout(animationTimeout);
     }
@@ -94,7 +94,8 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
       <div />
       <div className={styles.clickableArea}></div>
       {showAnimation ? (
-        <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
+        // <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
+        <></>
       ) : (
         <LoadingScreenBar 
           ref={loadingScreenBarRef}
