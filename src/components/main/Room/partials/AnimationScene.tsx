@@ -32,41 +32,71 @@ export const AnimationScene = () => {
       8: { width: 40, height: 40, x: 60, y: 228, z: 0 }, //note
       9: { width: 100, height: 100, x: 70, y: 210, z: 100 }, //light portable
       10: { width: 240, height: 240, x: -70, y: 390, z: -10 }, //carpet
-      11: { width: 40, height: 40, x: 15, y: 425, z: 101 }, //camera
+      11: { width: 40, height: 40, x: 22, y: 420, z: 101 }, //camera
       12: { width: 140, height: 140, x: 90, y: 500, z: 99 }, //stand
       13: { width: 60, height: 60, x: 30, y: 398, z: 100 }, //lightDesc
-      14: { width: 45, height: 45, x: -40, y: 427, z: 100 }, //mic
+      14: { width: 45, height: 45, x: -60, y: 420, z: 100 }, //mic
       15: { width: 40, height: 40, x: 35, y: 210, z: 1000 }, //photograph
-      16: { width: 58, height: 58, x: -15, y: 444, z: 102 }, //pc
+      16: { width: 58, height: 58, x: -17, y: 443, z: 102 }, //pc
       17: { width: 17, height: 17, x: 15, y: 400, z: 100 }, //pen
-      18: { width: 50, height: 50, x: 6, y: 188, z: 10 }, //lamp
+      18: { width: 50, height: 50, x: 2, y: 187, z: 10 }, //lamp
       19: { width: 70, height: 70, x: -120, y: 485, z: 0 }, //ottoman
       20: { width: 60, height: 60, x: 145, y: 390, z: 0 }, //plant
     };
 
     const animated = [
-      { animation: '2_idle', name: 'Постер', skin: () => 'default' },
-      { animation: 'animation', name: 'Камера любительская', skin: (prem_lvl: string) => prem_lvl },
-      { animation: 'animation', name: 'Камера профессиональная', skin: (prem_lvl: string) => prem_lvl },
-      { animation: 'animation', name: 'Мыльница', skin: (prem_lvl: string) => prem_lvl },
-      { animation: 'animation', name: 'Фикус', skin: (prem_lvl: string) => prem_lvl },
+      { animation: '2_idle', name: 'Постерbase', skin: () => 'default', width: 35, x: -70, y: 223 },
+      { animation: 'animation', name: 'Постерadvanced', skin: () => 'default', width: 190, x: -70, y: 223 },
+      { animation: 'anim_2', name: 'Постерpro', skin: () => 'default', width: 37, x: -70, y: 223 },
+      {
+        animation: 'animation',
+        name: 'Камера любительская',
+        skin: (prem_lvl: string) => prem_lvl,
+        width: 40,
+        x: 22,
+        y: 420,
+      },
+      {
+        animation: 'animation',
+        name: 'Камера профессиональная',
+        skin: (prem_lvl: string) => prem_lvl,
+        width: 65,
+        x: 22,
+        y: 420,
+      },
+      { animation: 'animation', name: 'Мыльница', skin: (prem_lvl: string) => prem_lvl, width: 40, x: 35, y: 210 },
+      { animation: 'animation', name: 'Фотоаппарат', skin: (prem_lvl: string) => prem_lvl, width: 30, x: 35, y: 210 },
+      { animation: 'animation', name: 'Фикус', skin: (prem_lvl: string) => prem_lvl, width: 60, x: 145, y: 390 },
+      {
+        animation: '4_blink_2',
+        name: 'Лампа настольная',
+        skin: (prem_lvl: string) => prem_lvl,
+        width: 60,
+        x: 30,
+        y: 398,
+      },
+      { animation: 'blink_2', name: 'Лампа', skin: (prem_lvl: string) => prem_lvl, width: 28, x: 2, y: 187 },
+      { animation: 'animation', name: 'ПКbase', skin: (prem_lvl: string) => prem_lvl, width: 100, x: -27, y: 425 },
+      { animation: 'animation', name: 'ПКadvanced', skin: (prem_lvl: string) => prem_lvl, width: 100, x: -27, y: 425 },
+      { animation: 'animation', name: 'ПК', skin: (prem_lvl: string) => prem_lvl, width: 100, x: -27, y: 425 },
+      { animation: '2_idle', name: 'Ноутбук', skin: (prem_lvl: string) => prem_lvl, width: 52, x: -15, y: 439 },
     ];
 
     const baseItems = [
       { name: 'broken-sofa', slot: 4, width: 140, height: 140, x: 60, y: 320, z: 0 },
-      { name: 'chair', slot: 3, width: 46, height: 46, x: -48, y: 430, z: 0 },
-      { name: 'table', slot: 2, width: 140, height: 140, x: -6, y: 455, z: 0 },
+      { name: 'chair', slot: 3, width: 46, height: 46, x: -48, y: 430, z: 2 },
+      { name: 'table', slot: 2, width: 140, height: 140, x: -6, y: 455, z: 3 },
       { name: 'window', slot: 5, width: 110, height: 110, x: -125, y: 260, z: 0 },
     ];
 
     class SpineScene extends Phaser.Scene {
       jsonUrl: string | undefined;
       atlasUrl: string | undefined;
-      spineObject: SpineGameObject | null;
+      person: SpineGameObject | null;
       objects: (GameObjects.Image | SpineGameObject)[];
       constructor() {
         super({ key: 'player' });
-        this.spineObject = null;
+        this.person = null;
         this.objects = [];
       }
 
@@ -74,25 +104,25 @@ export const AnimationScene = () => {
         if (!sceneRef.current) return;
         if (!gameRef.current) return;
         room?.items.forEach((item, i) => {
-          if (animated.find(_item => item.name === _item.name)) {
+          if (
+            animated.find(_item => item.name === _item.name) ||
+            animated.find(_item => item.name + item.item_premium_level === _item.name)
+          ) {
+            const name = (item.name === 'ПК' ? 'Компьютер' : item.name)
+              .toLowerCase()
+              .replace(' ', '_')
+              .replace('й', 'н');
             const jsonUrl = new URL(
-              `https://storage.yandexcloud.net/miniapp-v2-dev/${item.name
-                .toLowerCase()
-                .replace(' ', '_')
-                .replace('й', 'н')}_${item.item_premium_level}.json`,
+              `https://storage.yandexcloud.net/miniapp-v2-dev/${name}_${item.item_premium_level}.json`,
             ).href;
             const atlasUrl = new URL(
-              `https://storage.yandexcloud.net/miniapp-v2-dev/${item.name
-                .toLowerCase()
-                .replace(' ', '_')
-                .replace('й', 'н')}_${item.item_premium_level}atlas.txt`,
+              `https://storage.yandexcloud.net/miniapp-v2-dev/${name}_${item.item_premium_level}atlas.txt`,
             ).href;
 
             this.load.spineJson('json' + i, proxyImageUrl(jsonUrl));
             this.load.spineAtlas('atlas' + i, proxyImageUrl(atlasUrl));
           } else {
             const slot = room?.equipped_items.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
-            console.log(slot);
             const { width, height } = itemsInSlots[slot];
             this.load.svg('item' + i, proxyImageUrl(item.image_url!), { width, height });
           }
@@ -104,29 +134,57 @@ export const AnimationScene = () => {
             { width: item.width, height: item.height },
           );
         });
+
+        const personUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/pers_izometria.json`).href;
+        const personAtlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/pers_izometriaatlas.txt`).href;
+
+        this.load.spineJson('personJson', proxyImageUrl(personUrl));
+        this.load.spineAtlas('personAtlas', proxyImageUrl(personAtlasUrl));
       }
 
       create() {
+        this.person = this.add.spine(center - 40, 385, 'personJson', 'personAtlas');
+        this.person.scale = 0.07;
+        this.person.animationState.setAnimation(0, '2_idle (основа)', true);
+        this.person.setDepth(3);
+        this.person.setInteractive();
+        this.person.animationState.data.defaultMix = 0.3;
+        this.person.name = 'person';
+        console.log(this.person);
+        this.input.on(
+          'pointerdown',
+          (_: any, gameObject: SpineGameObject[]) => {
+            if (gameObject.find(item => item.name === this.person?.name)) {
+              this.person?.animationState.setAnimation(0, '3_work', false);
+              setTimeout(() => {
+                this.person?.animationState.setAnimation(0, '2_idle (основа)', true);
+              }, 4000);
+            }
+          },
+          this,
+        );
+
         room?.items.forEach(async (item, i) => {
-          const animatedItem = animated.find(_item => item.name === _item.name);
-          console.log(animatedItem)
+          let animatedItem = animated.find(_item => item.name === _item.name);
+          if (!animatedItem) animatedItem = animated.find(_item => item.name + item.item_premium_level === _item.name);
           if (animatedItem) {
             const slot = room?.equipped_items.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
             const _item = itemsInSlots[slot];
 
             if (slot === 11 && room.equipped_items.find(item => item.slot === 12)) {
-              this.objects?.push(this.add.spine(center + _item.x + 70, _item.y + 12, 'json' + i, 'atlas' + i));
+              this.objects?.push(
+                this.add.spine(center + animatedItem.x + 65, animatedItem.y + 17, 'json' + i, 'atlas' + i),
+              );
             } else {
-              this.objects?.push(this.add.spine(center + _item.x, _item.y, 'json' + i, 'atlas' + i));
+              this.objects?.push(this.add.spine(center + animatedItem.x, animatedItem.y, 'json' + i, 'atlas' + i));
             }
 
-            this.objects[i].scale = _item.width / this.spine.getSkeletonData('json' + i, 'atlas' + i).width;
+            this.objects[i].scale = animatedItem.width / this.spine.getSkeletonData('json' + i, 'atlas' + i).width;
             //@ts-ignore
-            // this.objects[i]?.animationState?.setAnimation(0, animatedItem.animation, true);
+            this.objects[i]?.animationState?.setAnimation(0, animatedItem.animation, true);
             //@ts-ignore
             this.objects[i]?.skeleton.setSkinByName(animatedItem.skin(item.item_premium_level));
             this.objects[i]?.setDepth(_item.z);
-            console.log(this.objects[i])
           } else {
             const slot = room?.equipped_items.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
             const _item = itemsInSlots[slot];

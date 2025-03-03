@@ -16,10 +16,8 @@ const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.
 export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
   const sceneRef = useRef<HTMLDivElement | null>(null);
 
-  const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/pers_2.json`).href;
-  const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/pers_2atlas.txt`).href;
-  const jsonUrl1 = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/anfas_happy.json`).href;
-  const atlasUrl1 = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/anfas_happyatlas.txt`).href;
+  const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/anfas_happy.json`).href;
+  const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/anfas_happyatlas.txt`).href;
 
   const gameRef = useRef<Phaser.Game | null>(null);
   const spineSceneRef = useRef<SpineScene | null>(null);
@@ -36,18 +34,14 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
     preload() {
       this.load.spineJson('data', proxyImageUrl(jsonUrl));
       this.load.spineAtlas('atlas', proxyImageUrl(atlasUrl));
-      this.load.spineJson('happy', proxyImageUrl(jsonUrl1));
-      this.load.spineAtlas('happyatlass', proxyImageUrl(atlasUrl1));
     }
 
     create() {
       const width = this.sys.game.config.width as number;
       const center = width / 2;
       if (!this.add.spine) return;
-      this.spineObject = this.add.spine(center, center + 40, 'data', 'atlas');
-      this.spineObject.scale = 0.2;
-      console.log(this.spineObject.skeleton.data.animations);
-      this.spineObject.animationState.setAnimation(0, 'animtion0', true);
+      this.spineObject = this.add.spine(center, center , 'data', 'atlas');
+      this.spineObject.scale = 0.15;
       spineSceneRef.current = this;
     }
 

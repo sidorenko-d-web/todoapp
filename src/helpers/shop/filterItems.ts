@@ -10,7 +10,7 @@ export const filter = (item: IShopItem, inventoryItems?: IShopItem[]) => {
   return !inventoryItem;
 };
 
-export const itemsInTab = (shopItems?: IShopItem[], inventoryItems?: IShopItem[]) => {
+export const itemsInTab = (shopItems?: IShopItem[], inventoryItems?: IShopItem[], inventoryMode?: boolean) => {
   const tabItems = {
     red: shopItems
       ?.filter(item => item.item_rarity === 'red')
@@ -18,18 +18,20 @@ export const itemsInTab = (shopItems?: IShopItem[], inventoryItems?: IShopItem[]
 
     yellow: shopItems
       ?.filter(item => item.item_rarity === 'yellow')
+      .filter(item => (inventoryMode ? true : !inventoryItems?.find(_item => compareItems(item, _item))))
       .filter(item =>
-        inventoryItems?.find(_item => 
+        inventoryItems?.find(
+          _item =>
             _item.name === item.depends &&
             _item.level === 50 &&
             _item.item_premium_level === 'pro' &&
-            item.item_premium_level === 'base'
-          
+            item.item_premium_level === 'base',
         ),
       ),
 
     green: shopItems
       ?.filter(item => item.item_rarity === 'green')
+      .filter(item => (inventoryMode ? true : !inventoryItems?.find(_item => compareItems(item, _item))))
       .filter(item =>
         inventoryItems?.find(
           _item =>
