@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSignInMutation } from '../redux';
+import { useGetUserQuery, useSignInMutation } from '../redux';
 import { LoadingScreen } from '../components/shared/LoadingScreen';
 import { LanguageSelect } from '../pages/LanguageSelect';
 import { SkinSetupPage } from '../pages/SkinSetupPage';
@@ -8,35 +8,7 @@ import { EnterInviteCodePage } from '../pages/EnterInviteCodePage';
 import { MODALS } from '../constants';
 import DaysInARowModal from '../pages/DevModals/DaysInARowModal/DaysInARowModal.tsx';
 import { useModal } from './useModal.ts';
-
-// Функция для получения телеаграм айди из init_data, для реферального кода, позже ее можно просто убрать
-function extractUserIdFromInitData(initData: string): number | null {
-  try {
-    // Look for the pattern that indicates the user ID
-    const idPattern = /%2522id%2522%253A(\d+)%252C%2522/;
-    const match = initData.match(idPattern);
-
-    if (match && match[1]) {
-      return Number(match[1]);
-    }
-
-    // If we can't find it with regex, try decoding the entire string
-    const decodedData = decodeURIComponent(initData);
-    const userDataStart = decodedData.indexOf('"user":');
-
-    if (userDataStart !== -1) {
-      const userJson = decodedData.substring(userDataStart + 7);
-      const userEnd = userJson.indexOf('}') + 1;
-      const userObject = JSON.parse(userJson.substring(0, userEnd));
-      return userObject.id;
-    }
-
-    return null;
-  } catch (error) {
-    console.error('Error extracting user ID:', error);
-    return null;
-  }
-}
+import { extractTelegramIdFromInitData } from '../utils';
 
 type AuthInitProps = {
   children: React.ReactNode;
@@ -47,6 +19,7 @@ type AuthStep = 'loading' | 'language' | 'invite_code' | 'signin' | 'skin' | 'pu
 export function AuthInit({ children }: AuthInitProps) {
   const { i18n } = useTranslation();
   const [signIn, { isLoading, isError, error }] = useSignInMutation();
+  const {isError: isUsersError} = useGetUserQuery() // Нужно для проверки access token
   const [currentStep, setCurrentStep] = useState<AuthStep>('loading');
   const { closeModal, openModal } = useModal();
   const [selectedLanguage, setSelectedLanguage] = useState(() => {
@@ -77,6 +50,16 @@ export function AuthInit({ children }: AuthInitProps) {
     setCurrentStep(step);
   };
 
+  // Нужно для проверки access token
+  const isTokenValid = () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) return false;
+    if (isUsersError) {
+      return false
+    }
+    return true
+  }
+
   useEffect(() => {
     const initAuth = async () => {
       const minLoadingTime = new Promise(resolve => setTimeout(resolve, 3500));
@@ -90,7 +73,22 @@ export function AuthInit({ children }: AuthInitProps) {
         if (hasCompletedSetup) {
           // For users who have completed setup, skip to completed state
           // They've already gone through the entire flow, including invite code
-          saveCurrentStep('completed');
+          // saveCurrentStep('completed');
+
+          // Если токен валидный то можно ставить шаг completed
+          if (isTokenValid()) {
+            saveCurrentStep('completed');
+
+          // Если срок действия токена истек, то авторизуемся
+          } else {
+            const success = await performAuthentication();
+            if (success) {
+              saveCurrentStep('completed');
+            } else {
+              saveCurrentStep('language');
+            }
+          }
+
         } else if (savedStep && savedStep !== 'loading') {
           // Resume from saved step for users in the middle of setup
           saveCurrentStep(savedStep);
@@ -120,6 +118,7 @@ export function AuthInit({ children }: AuthInitProps) {
 
   const performAuthentication = async () => {
     try {
+      // это расскоментить для билда
       // const init_data = window.Telegram.WebApp.initData;
 
       // Андрей dehopen
@@ -129,7 +128,7 @@ export function AuthInit({ children }: AuthInitProps) {
       // const init_data = 'query_id%3DAAExhbpYAAAAADGFulh6ghzW%26user%3D%257B%2522id%2522%253A1488618801%252C%2522first_name%2522%253A%2522Viktor%2522%252C%2522last_name%2522%253A%2522St%2522%252C%2522username%2522%253A%2522STR_Viktor%2522%252C%2522language_code%2522%253A%2522ru%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252Fyt_vHT436Zb5sbv-Pui-oE8AJ9OcsFTJ2CotbwzNVoI.svg%2522%257D%26auth_date%3D1741002598%26signature%3D0H43HNiRvUOzPpWlN6zo7vIf9-d9656T33ozNYnxgtrXCcGd4_GW3oCWCwDHE70h7TSPbLQdErii4kXQVALmAA%26hash%3D06f67e0cd3beb692b345158fbb64b1b911715a004297511b5cefb3d3755c33d0&tgWebAppVersion=7.10&tgWebAppPlatform=web&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23212121%22%2C%22button_color%22%3A%22%238774e1%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22hint_color%22%3A%22%23aaaaaa%22%2C%22link_color%22%3A%22%238774e1%22%2C%22secondary_bg_color%22%3A%22%23181818%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22header_bg_color%22%3A%22%23212121%22%2C%22accent_text_color%22%3A%22%238774e1%22%2C%22section_bg_color%22%3A%22%23212121%22%2C%22section_header_text_color%22%3A%22%238774e1%22%2C%22subtitle_text_color%22%3A%22%23aaaaaa%22%2C%22destructive_text_color%22%3A%22%23ff595a%22%7D'
 
       // Тимур
-      // const init_data = 'user%3D%257B%2522id%2522%253A563486774%252C%2522first_name%2522%253A%2522%25D0%25A2%25D0%25B8%25D0%25BC%25D1%2583%25D1%2580%2522%252C%2522last_name%2522%253A%2522%25D0%2596%25D0%25B5%25D0%25BA%25D1%2581%25D0%25B8%25D0%25BC%25D0%25B1%25D0%25B0%25D0%25B5%25D0%25B2%2522%252C%2522username%2522%253A%2522masterhorny1%2522%252C%2522language_code%2522%253A%2522ru%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FC4XeN2yVR3QUy5Z20iFDDsgKdzUZi5SKp6u7yycVvJc.svg%2522%257D%26chat_instance%3D-5595947293846570514%26chat_type%3Dprivate%26auth_date%3D1740849503%26signature%3DPDZm27RrbMqCs60c1-nJzSyR_0UpHdPrbxvDclxjMpcxmsb7GZ9g0HXr2T-NkLns2p0ZCwhJAKurFHYaEhUmDg%26hash%3Df1b568c502ceea60866c7517d79d464e2c4fe4fa5898176da223cc2a042054b3&tgWebAppVersion=8.0&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22section_separator_color%22%3A%22%23213040%22%2C%22hint_color%22%3A%22%23b1c3d5%22%2C%22section_header_text_color%22%3A%22%23b1c3d5%22%2C%22destructive_text_color%22%3A%22%23ef5b5b%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22bottom_bar_bg_color%22%3A%22%23213040%22%2C%22bg_color%22%3A%22%2318222d%22%2C%22subtitle_text_color%22%3A%22%23b1c3d5%22%2C%22secondary_bg_color%22%3A%22%23131415%22%2C%22header_bg_color%22%3A%22%23131415%22%2C%22accent_text_color%22%3A%22%232ea6ff%22%2C%22button_color%22%3A%22%232ea6ff%22%2C%22section_bg_color%22%3A%22%2318222d%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22link_color%22%3A%22%2362bcf9%22%7D'
+      const init_data = 'user%3D%257B%2522id%2522%253A563486774%252C%2522first_name%2522%253A%2522%25D0%25A2%25D0%25B8%25D0%25BC%25D1%2583%25D1%2580%2522%252C%2522last_name%2522%253A%2522%25D0%2596%25D0%25B5%25D0%25BA%25D1%2581%25D0%25B8%25D0%25BC%25D0%25B1%25D0%25B0%25D0%25B5%25D0%25B2%2522%252C%2522username%2522%253A%2522masterhorny1%2522%252C%2522language_code%2522%253A%2522ru%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FC4XeN2yVR3QUy5Z20iFDDsgKdzUZi5SKp6u7yycVvJc.svg%2522%257D%26chat_instance%3D-5595947293846570514%26chat_type%3Dprivate%26auth_date%3D1740849503%26signature%3DPDZm27RrbMqCs60c1-nJzSyR_0UpHdPrbxvDclxjMpcxmsb7GZ9g0HXr2T-NkLns2p0ZCwhJAKurFHYaEhUmDg%26hash%3Df1b568c502ceea60866c7517d79d464e2c4fe4fa5898176da223cc2a042054b3&tgWebAppVersion=8.0&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22section_separator_color%22%3A%22%23213040%22%2C%22hint_color%22%3A%22%23b1c3d5%22%2C%22section_header_text_color%22%3A%22%23b1c3d5%22%2C%22destructive_text_color%22%3A%22%23ef5b5b%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22bottom_bar_bg_color%22%3A%22%23213040%22%2C%22bg_color%22%3A%22%2318222d%22%2C%22subtitle_text_color%22%3A%22%23b1c3d5%22%2C%22secondary_bg_color%22%3A%22%23131415%22%2C%22header_bg_color%22%3A%22%23131415%22%2C%22accent_text_color%22%3A%22%232ea6ff%22%2C%22button_color%22%3A%22%232ea6ff%22%2C%22section_bg_color%22%3A%22%2318222d%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22link_color%22%3A%22%2362bcf9%22%7D'
 
       // const init_data = `query_id%3DAAHa-fEBAwAAANr58QGsJmsJ%26user%3D%257B%2522id%2522%253A6475086298%252C%2522first_name%2522%253A%2522%25D0%2590%25D0%25BD%25D0%25B4%25D1%2580%25D0%25B5%25D0%25B9%2522%252C%2522last_name%2522%253A%2522%25D0%2593%25D0%25B5%25D1%2580%25D0%25B0%25D1%2581%25D0%25B8%25D0%25BC%25D0%25BE%25D0%25B2%2522%252C%2522username%2522%253A%2522De_Geras%2522%252C%2522language_code%2522%253A%2522en%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FGzJ9TEsOx7Oc1JJcHr-lzeFQB6alew8O_qoBdhO-6gGt7kZEiGJ6urTqgGlF9_Ye.svg%2522%257D%26auth_date%3D1740750454%26signature%3DwxvPQwu0hEbM3YIwQJaCRzxGcdywWYludL90wZksGq0ir7rg45O6RuZ2TwbXhZJjzy3yp6SS0CqG_iANhUfUCg%26hash%3Da25e34147c2ed695b20bf257c4fc734c52613f42a7ea8be3f6d96395b7bb6d7e&tgWebAppVersion=8.0&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22button_text_color%22%3A%22%23ffffff%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22bottom_bar_bg_color%22%3A%22%233e464c%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22section_separator_color%22%3A%22%233d3d3d%22%2C%22bg_color%22%3A%22%23282828%22%2C%22header_bg_color%22%3A%22%231c1c1c%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22section_bg_color%22%3A%22%23282828%22%2C%22button_color%22%3A%22%23007aff%22%2C%22link_color%22%3A%22%23007aff%22%2C%22hint_color%22%3A%22%23ffffff%22%2C%22destructive_text_color%22%3A%22%23ff453a%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%7D`
       // const init_data = `query_id%3DAAHa-fEBAwAAANr58QFFg6SM%26user%3D%257B%2522id%2522%253A6475086298%252C%2522first_name%2522%253A%2522%25D0%2590%25D0%25BD%25D0%25B4%25D1%2580%25D0%25B5%25D0%25B9%2522%252C%2522last_name%2522%253A%2522%25D0%2593%25D0%25B5%25D1%2580%25D0%25B0%25D1%2581%25D0%25B8%25D0%25BC%25D0%25BE%25D0%25B2%2522%252C%2522username%2522%253A%2522De_Geras%2522%252C%2522language_code%2522%253A%2522en%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FGzJ9TEsOx7Oc1JJcHr-lzeFQB6alew8O_qoBdhO-6gGt7kZEiGJ6urTqgGlF9_Ye.svg%2522%257D%26auth_date%3D1739263999%26signature%3D6Nc44J8mpAyftuBwiEXHF3YyBtkbAptwj1YO0P99Dhmkpy1G1Nw8wxfR48B22hnqfGPnxxrf9vcSenT5ylpACg%26hash%3D90880b7f94adbd34cac6cd5d023fc5822c26b6d3036709f5dd60f547d2889a2c&tgWebAppVersion=7.2&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22button_text_color%22%3A%22%23ffffff%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22link_color%22%3A%22%23007aff%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22button_color%22%3A%22%23007aff%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22bg_color%22%3A%22%23282828%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%2C%22destructive_text_color%22%3A%22%23ff453a%22%2C%22header_bg_color%22%3A%22%231c1c1c%22%2C%22section_bg_color%22%3A%22%23282828%22%2C%22hint_color%22%3A%22%23ffffff%22%7D`;
@@ -143,12 +142,9 @@ export function AuthInit({ children }: AuthInitProps) {
       // const init_data = 'query_id%3DAAHa-fEBAwAAANr58QFFg6SM%26user%3D%257B%2522id%2522%253A6475086298%252C%2522first_name%2522%253A%2522%25D0%2590%25D0%25BD%25D0%25B4%25D1%2580%25D0%25B5%25D0%25B9%2522%252C%2522last_name%2522%253A%2522%25D0%2593%25D0%25B5%25D1%2580%25D0%25B0%25D1%2581%25D0%25B8%25D0%25BC%25D0%25BE%25D0%25B2%2522%252C%2522username%2522%253A%2522De_Geras%2522%252C%2522language_code%2522%253A%2522en%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FGzJ9TEsOx7Oc1JJcHr-lzeFQB6alew8O_qoBdhO-6gGt7kZEiGJ6urTqgGlF9_Ye.svg%2522%257D%26auth_date%3D1739263999%26signature%3D6Nc44J8mpAyftuBwiEXHF3YyBtkbAptwj1YO0P99Dhmkpy1G1Nw8wxfR48B22hnqfGPnxxrf9vcSenT5ylpACg%26hash%3D90880b7f94adbd34cac6cd5d023fc5822c26b6d3036709f5dd60f547d2889a2c&tgWebAppVersion=7.2&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22button_text_color%22%3A%22%23ffffff%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22link_color%22%3A%22%23007aff%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22button_color%22%3A%22%23007aff%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22bg_color%22%3A%22%23282828%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%2C%22destructive_text_color%22%3A%22%23ff453a%22%2C%22header_bg_color%22%3A%22%231c1c1c%22%2C%22section_bg_color%22%3A%22%23282828%22%2C%22hint_color%22%3A%22%23ffffff%22%7D'
 
       // получаем телеграм айди из init_data, оно нужно в EnterInviteCodePage
-      if (init_data.startsWith("query_id") || init_data.startsWith("user=")) {
-        setCurrentUserTelegramId(extractUserIdFromInitData(init_data))
+      if (init_data.startsWith("query_id") || init_data.startsWith("user")) {
+        setCurrentUserTelegramId(Number(extractTelegramIdFromInitData(init_data)));
       }
-
-      console.log("Init data: ", init_data);
-      console.log("Telegram id: ", currentUserTelegramId)
 
       const authResponse = await signIn({
         init_data,
@@ -158,8 +154,6 @@ export function AuthInit({ children }: AuthInitProps) {
       localStorage.setItem('access_token', authResponse.access_token);
       localStorage.setItem('refresh_token', authResponse.refresh_token);
 
-      // Proceed to the next step after successful authentication
-      saveCurrentStep('skin');
 
       return true;
     } catch (err) {
@@ -212,6 +206,7 @@ export function AuthInit({ children }: AuthInitProps) {
   if (isError) {
     return <div style={{ color: 'red' }}>Ошибка при авторизации: {String(error)}</div>;
   }
+
   switch (currentStep) {
     case 'loading':
       return <LoadingScreen onAnimationComplete={() => setIsAnimationFinished(true)} />;
@@ -230,7 +225,8 @@ export function AuthInit({ children }: AuthInitProps) {
         <EnterInviteCodePage
           onContinue={handleInviteCodeContinue}
           // Это расскоментить для билда
-          referral_id={currentUserTelegramId || window.Telegram.Webapp.initData.user.id}
+          // referral_id={window.Telegram.WebApp.initData.user.id}
+          referral_id={currentUserTelegramId ?? 0}
         />
       );
 
