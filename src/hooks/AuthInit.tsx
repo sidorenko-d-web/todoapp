@@ -70,6 +70,7 @@ export function AuthInit({ children }: AuthInitProps) {
           referral_id={WebApp.initDataUnsafe.user?.id ?? 0}
           // referral_id={window.Telegram.WebApp.initDataUnsafe.user.id}
           // referral_id={563486774}
+          // referral_id={1301940582}
         />
       );
 
