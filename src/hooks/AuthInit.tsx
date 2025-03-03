@@ -272,7 +272,7 @@ export function AuthInit({ children }: AuthInitProps) {
       return <>
         {!coinsAnimationShown &&
           <Lottie animationData={coinsAnim} loop={false} autoPlay={true} 
-            initialSegment={[0, 50]} style={{ zIndex: '10000', position: 'absolute' }}
+            style={{ zIndex: '10000', position: 'absolute' }}
             onComplete={
               () => {
                 setCoinstAnimationShown(true);
