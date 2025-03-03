@@ -155,6 +155,10 @@ export const MainPage: FC = () => {
   const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
   const { isLoading: isRoomLoading } = useGetEquipedQuery();
 
+  useEffect(() => {
+    reduxDispatch(setActiveFooterItemId(2));
+  }, []);
+
   const isLoading = (
     isAllIntegrationsLoading ||
     isCurrentUserProfileInfoLoading ||
@@ -172,11 +176,10 @@ export const MainPage: FC = () => {
 
   return (
     <main className={s.page} onClick={accelerateIntegration}>
-
       {integrationCurrentlyCreating && <div
         style={{ position: 'absolute', top: '0', zIndex: '15000', height: '70%', width: '100%', backgroundColor: 'transparent' }}
         onClick={accelerateIntegration} />}
-        
+
       <Room />
 
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
