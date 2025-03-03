@@ -67,15 +67,15 @@ export function AuthInit({ children }: AuthInitProps) {
   // телеграм айди текущего пользователя, нужно для реферального кода
   const [currentUserTelegramId, setCurrentUserTelegramId] = useState<number | null>(null);
 
-  // useEffect(() => {
-  //   if (
-  //     window.Telegram &&
-  //     window.Telegram.WebApp &&
-  //     typeof window.Telegram.WebApp.requestFullscreen === 'function'
-  //   ) {
-  //     window.Telegram.WebApp.requestFullscreen();
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (
+      window.Telegram &&
+      window.Telegram.WebApp &&
+      typeof window.Telegram.WebApp.requestFullscreen === 'function'
+    ) {
+      window.Telegram.WebApp.requestFullscreen();
+    }
+  }, []);
 
 
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
