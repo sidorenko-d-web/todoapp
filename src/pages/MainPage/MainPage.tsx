@@ -65,6 +65,8 @@ export const MainPage: FC = () => {
 
   const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
 
+  const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+
   const initialState = {
     firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
     secondGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN),
@@ -164,7 +166,10 @@ export const MainPage: FC = () => {
   if (isLoading) return <Loader />;
 
   const accelerateIntegration = () => {
-    reduxDispatch(incrementAcceleration());
+    if(integrationCurrentlyCreating) {
+      console.log('clicked accelerate')
+      reduxDispatch(incrementAcceleration());
+    }
   }
 
   return (

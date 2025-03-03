@@ -2,10 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface InitialState {
   acceleration: number;
+  integrationCreating: boolean;
 }
 
 const initialState: InitialState = {
   acceleration: 0,
+  integrationCreating: false
 };
 
 const integrationAccelerationSlice = createSlice({
@@ -18,8 +20,11 @@ const integrationAccelerationSlice = createSlice({
     incrementAcceleration(state) {
       state.acceleration += 1;
     },
+    setIntegrationCreating(state, action: PayloadAction<boolean>) {
+      state.integrationCreating = action.payload;
+    }
   },
 });
 
-export const { setAcceleration, incrementAcceleration } = integrationAccelerationSlice.actions;
+export const { setAcceleration, incrementAcceleration, setIntegrationCreating } = integrationAccelerationSlice.actions;
 export default integrationAccelerationSlice.reducer;

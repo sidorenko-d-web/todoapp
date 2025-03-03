@@ -11,6 +11,7 @@ import { setIntegrationReadyForPublishing, setLastIntegrationId } from '../../..
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
+import { setIntegrationCreating } from '../../../redux/slices/integrationAcceleration';
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
@@ -30,6 +31,11 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     integrationId: integration.id,
     onSuccess: newTimeLeft => setTimeLeft(newTimeLeft),
   }); 
+
+  useEffect(() => {
+    dispatch(setIntegrationCreating(true));
+    console.log('set integration creating');
+  }, [])
 
   const [ acceleration, setAcceleration ] = useState(0);
   const reduxAcceleration = useSelector((state: RootState) => state.acceleration.acceleration);
@@ -72,6 +78,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     }, 1000);
 
     if (isExpired) {
+      dispatch(setIntegrationCreating(false));
       clearInterval(timerId);
     }
 

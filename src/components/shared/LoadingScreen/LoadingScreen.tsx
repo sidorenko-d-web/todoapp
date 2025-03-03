@@ -26,7 +26,6 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   useEffect(() => {
     Object.values(GUIDE_ITEMS).forEach(category => {
       Object.values(category).forEach(value => {
-        console.log('setting value of ', value, ' to 1' )
         localStorage.setItem(value, '1');
       });
     });
