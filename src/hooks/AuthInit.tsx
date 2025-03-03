@@ -5,6 +5,7 @@ import { SkinSetupPage } from '../pages/SkinSetupPage';
 import { EnterInviteCodePage } from '../pages/EnterInviteCodePage';
 import DaysInARowModal from '../pages/DevModals/DaysInARowModal/DaysInARowModal';
 import { useAuthFlow } from './useAuthFlow';
+import WebApp from '@twa-dev/sdk'
 
 type AuthInitProps = {
   children: React.ReactNode;
@@ -53,8 +54,9 @@ export function AuthInit({ children }: AuthInitProps) {
       return (
         <EnterInviteCodePage
           onContinue={handleInviteCodeContinue}
-          referral_id={window.Telegram.WebApp.initData.user.id}
-          // referral_id={currentUserTelegramId ?? 0}
+          referral_id={WebApp.initDataUnsafe.user?.id ?? 0}
+          // referral_id={window.Telegram.WebApp.initDataUnsafe.user.id}
+          // referral_id={563486774}
         />
       );
 
