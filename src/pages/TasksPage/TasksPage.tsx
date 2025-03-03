@@ -6,10 +6,10 @@ import s from './TasksPage.module.scss';
 import { DailyTasks, Loader, SocialTasks, TopTasks } from '../../components';
 import { formatAbbreviation } from '../../helpers';
 import { useGetTasksQuery } from '../../redux/api/tasks';
-import { useGetBoostQuery } from '../../redux/api/tasks/api';
+import { useGetBoostQuery } from '../../redux/api/tasks';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { setActiveFooterItemId } from '../../redux/slices/guideSlice';
+import { setActiveFooterItemId } from '../../redux';
 import GetGift from '../DevModals/GetGift/GetGift';
 
 
@@ -20,7 +20,7 @@ export const TasksPage: FC = () => {
   const { t, i18n } = useTranslation('quests');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const { data, error, isLoading: isTasksLoading, refetch } = useGetTasksQuery({ is_actual: true });
+  const { data, error, isLoading: isTasksLoading } = useGetTasksQuery({ is_actual: true });
   const { data: boostData, isLoading: isBoostLoading } = useGetBoostQuery();
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export const TasksPage: FC = () => {
       {dailyTask && <DailyTasks task={dailyTask} />}
       {topTask && <TopTasks task={topTask} />}
       {socialTasks.length > 0 && <SocialTasks tasks={socialTasks} />}
-      <GetGift refetchTasks={refetch}/>
+      <GetGift />
     </main>
   );
 };

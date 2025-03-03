@@ -16,7 +16,7 @@ import s from './MainPage.module.scss';
 import { AppRoute, MODALS } from '../../constants';
 import { useModal } from '../../hooks';
 
-import { GUIDE_ITEMS } from '../../constants/guidesConstants';
+import { GUIDE_ITEMS } from '../../constants';
 import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../utils';
 
 import {
@@ -25,7 +25,7 @@ import {
   setGetCoinsGuideShown,
   setIntegrationReadyForPublishing,
   setLastIntegrationId,
-} from '../../redux/slices/guideSlice.ts';
+} from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   RootState,
@@ -39,6 +39,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { incrementAcceleration } from '../../redux/slices/integrationAcceleration.ts';
+import DaysInARowModal from '../DevModals/DaysInARowModal/DaysInARowModal.tsx';
 
 export const MainPage: FC = () => {
   const { t } = useTranslation('guide');
@@ -175,6 +176,7 @@ export const MainPage: FC = () => {
 
   return (
     <main className={s.page} onClick={accelerateIntegration}>
+      <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
       {integrationCurrentlyCreating && <div
         style={{ position: 'absolute', top: '0', zIndex: '15000', height: '70%', width: '100%', backgroundColor: 'transparent' }}
         onClick={accelerateIntegration} />}

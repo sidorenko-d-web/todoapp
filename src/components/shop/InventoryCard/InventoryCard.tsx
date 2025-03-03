@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 import useSound from 'use-sound';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../shared';
-import { setPoints } from '../../../redux/slices/point.ts';
+import { setPoints } from '../../../redux';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 interface Props {
   disabled?: boolean;
@@ -97,7 +97,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       item.level !== prevLvl.current
     ) {
       openModal(MODALS.GET_GIFT);
-      localStorage.setItem('lastTriggeredLevel', item.level);
+      localStorage.setItem('lastTriggeredLevel', String(item.level));
     }
 
     if (
