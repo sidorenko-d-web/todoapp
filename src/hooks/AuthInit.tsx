@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { LoadingScreen } from '../components/shared/LoadingScreen';
 import { LanguageSelect } from '../pages/LanguageSelect';
 import { SkinSetupPage } from '../pages/SkinSetupPage';
 import { EnterInviteCodePage } from '../pages/EnterInviteCodePage';
 import DaysInARowModal from '../pages/DevModals/DaysInARowModal/DaysInARowModal';
 import { useAuthFlow } from './useAuthFlow';
+import Lottie from 'lottie-react';
+import { coinsAnim } from '../assets/animations';
+import WebApp from '@twa-dev/sdk'
 
 type AuthInitProps = {
   children: React.ReactNode;
@@ -28,9 +31,20 @@ export function AuthInit({ children }: AuthInitProps) {
     handleModalClose,
   } = useAuthFlow();
 
+  const [loadingStarted, setLoadingStarted] = useState(false);
+  const [coinsAnimationShown, setCoinstAnimationShown] = useState(false);
+
+  useEffect(() => {
+    if (isLoading) {
+      setLoadingStarted(true);
+    }
+  }, [isLoading]);
+
   if (isLoading || isInitializing || !isAnimationFinished) {
-    return <LoadingScreen onAnimationComplete={() => setIsAnimationFinished(true)} />;
+    return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
   }
+
+  
 
   if (isError) {
     return <div style={{ color: 'red' }}>Ошибка при авторизации: {String(error)}</div>;
@@ -38,7 +52,7 @@ export function AuthInit({ children }: AuthInitProps) {
 
   switch (currentStep) {
     case 'loading':
-      return <LoadingScreen onAnimationComplete={() => setIsAnimationFinished(true)} />;
+      return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
 
     case 'language':
       return (
@@ -53,13 +67,14 @@ export function AuthInit({ children }: AuthInitProps) {
       return (
         <EnterInviteCodePage
           onContinue={handleInviteCodeContinue}
-          referral_id={window.Telegram.WebApp.initData.user.id}
-          // referral_id={currentUserTelegramId ?? 0}
+          referral_id={WebApp.initDataUnsafe.user?.id ?? 0}
+          // referral_id={window.Telegram.WebApp.initDataUnsafe.user.id}
+          // referral_id={563486774}
         />
       );
 
     case 'signin':
-      return <LoadingScreen onAnimationComplete={() => setIsAnimationFinished(true)} />;
+      return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
 
     case 'skin':
       return <SkinSetupPage onContinue={handleSkinContinue} />;
@@ -68,9 +83,19 @@ export function AuthInit({ children }: AuthInitProps) {
       return <DaysInARowModal onClose={handleModalClose} />;
 
     case 'completed':
-      return <>{children}</>;
+      return <>
+        {!coinsAnimationShown &&
+          <Lottie animationData={coinsAnim} loop={false} autoPlay={true} 
+            style={{ zIndex: '10000', position: 'absolute' }}
+            onComplete={
+              () => {
+                setCoinstAnimationShown(true);
+              }
+            } />}
+        {children}
+      </>;
 
     default:
-      return <LoadingScreen onAnimationComplete={() => setIsAnimationFinished(true)} />;
+      return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
   }
 }
