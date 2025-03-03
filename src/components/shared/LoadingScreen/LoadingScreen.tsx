@@ -34,7 +34,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   useEffect(() => {
     const minLoadingTimeout = setTimeout(() => {
       setForceLoadingTimePassed(true);
-    }, 2300);
+    }, 1500);
 
     return () => clearTimeout(minLoadingTimeout);
   }, []);
