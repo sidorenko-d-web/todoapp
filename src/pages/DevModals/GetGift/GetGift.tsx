@@ -7,7 +7,7 @@ import integration from '../../../assets/icons/integration-white.svg';
 import snowflake from '../../../assets/icons/snowflake.svg';
 import subscribers from '../../../assets/icons/subscribers.svg';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
-import reward from '../../../assets/animations/reward.json';
+import confetti from '../../../assets/animations/confetti.json';
 import gift from '../../../assets/icons/gift.svg';
 import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
@@ -33,7 +33,7 @@ export default function GetGift({ refetchTasks }: { refetchTasks: () => void }) 
   return (
     <CentralModal onClose={handleClose} modalId={MODALS.GET_GIFT} title={'Подарок открыт!'}>
       <div className={styles.background}>
-        <Lottie animationData={reward} loop={false} className={styles.reward} />
+        <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
 
       <div className={styles.images}>
