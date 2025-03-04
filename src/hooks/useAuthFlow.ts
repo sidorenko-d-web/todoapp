@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useGetUserQuery, useSignInMutation } from '../redux';
-import { extractTelegramIdFromInitData } from '../utils';
 import { useTranslation } from 'react-i18next';
 import WebApp from '@twa-dev/sdk';
 
@@ -29,7 +28,6 @@ export const useAuthFlow = () => {
   const [currentStep, setCurrentStep] = useState<AuthStep>('loading');
   const [selectedLanguage, setSelectedLanguage] = useState(() => localStorage.getItem('selectedLanguage') || 'en');
   const [isInitializing, setIsInitializing] = useState(true);
-  const [currentUserTelegramId, setCurrentUserTelegramId] = useState<number | null>(null);
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
 
   const saveCurrentStep = (step: AuthStep) => {
@@ -45,7 +43,7 @@ export const useAuthFlow = () => {
   const isTokenValid = () => {
     const token = localStorage.getItem('access_token');
     if (!token) return false;
-    return !isUsersError
+    return !isUsersError;
   };
 
   const performAuthentication = async () => {
@@ -56,7 +54,7 @@ export const useAuthFlow = () => {
       // const init_data = WebApp.initData
 
       // Андрей dehopen 1301940582
-      // const init_data = 'query_id%3DAAFmCZpNAAAAAGYJmk2lHf3U%26user%3D%257B%2522id%2522%253A1301940582%252C%2522first_name%2522%253A%2522DeHopen%2522%252C%2522last_name%2522%253A%2522%2522%252C%2522username%2522%253A%2522Dehopen%2522%252C%2522language_code%2522%253A%2522ru%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252F1cxjHUxLtwio6PU0JD6u5txQhDUSCkufw8fUw9vOrZc.svg%2522%257D%26auth_date%3D1739808435%26signature%3DelBqutmHu0ehe3RR1_OBG2Z_sojd8NChAcLpdP_rnQ38ivT8QrBjtxsRyozteRaYB2_nulL9sYxaEMvFJsiqBA%26hash%3Dd099ffd45e27503ff67b3a88c5db16c4a9b7900a4fa78763cd8557cae5f8f899&tgWebAppVersion=8.0&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22destructive_text_color%22%3A%22%23ff453a%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22bottom_bar_bg_color%22%3A%22%233e464c%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%2C%22section_bg_color%22%3A%22%23282828%22%2C%22section_separator_color%22%3A%22%233d3d3d%22%2C%22bg_color%22%3A%22%23282828%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22header_bg_color%22%3A%22%231c1c1c%22%2C%22link_color%22%3A%22%23007aff%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22button_color%22%3A%22%23007aff%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22hint_color%22%3A%22%23ffffff%22%7D'
+      // const init_data = 'query_id%3DAAFmCZpNAAAAAGYJmk2lHf3U%26user%3D%257B%2522id%2522%253A1301940582%252C%2522first_name%2522%253A%2522DeHopen%2522%252C%2522last_name%2522%253A%2522%2522%252C%2522username%2522%253A%2522Dehopen%2522%252C%2522language_code%2522%253A%2522ru%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252F1cxjHUxLtwio6PU0JD6u5txQhDUSCkufw8fUw9vOrZc.svg%2522%257D%26auth_date%3D1739808435%26signature%3DelBqutmHu0ehe3RR1_OBG2Z_sojd8NChAcLpdP_rnQ38ivT8QrBjtxsRyozteRaYB2_nulL9sYxaEMvFJsiqBA%26hash%3Dd099ffd45e27503ff67b3a88c5db16c4a9b7900a4fa78763cd8557cae5f8f899&tgWebAppVersion=8.0&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22destructive_text_color%22%3A%22%23ff453a%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22bottom_bar_bg_color%22%3A%22%233e464c%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%2C%22section_bg_color%22%3A%22%23282828%22%2C%22section_separator_color%22%3A%22%233d3d3d%22%2C%22bg_color%22%3A%22%23282828%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22header_bg_color%22%3A%22%231c1c1c%22%2C%22link_color%22%3A%22%23007aff%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22button_color%22%3A%22%23007aff%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22hint_color%22%3A%22%23ffffff%22%7D';
 
       // Виктор 1488618801
       const init_data = 'query_id%3DAAExhbpYAAAAADGFuljbD2pF%26user%3D%257B%2522id%2522%253A1488618801%252C%2522first_name%2522%253A%2522Viktor%2522%252C%2522last_name%2522%253A%2522St%2522%252C%2522username%2522%253A%2522STR_Viktor%2522%252C%2522language_code%2522%253A%2522ru%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252Fyt_vHT436Zb5sbv-Pui-oE8AJ9OcsFTJ2CotbwzNVoI.svg%2522%257D%26auth_date%3D1740844692%26signature%3DlLFQG-WzHS7naTmvuvTndO--qR3sbNNcTpFpQy2Dbq9yQQdPiiUVO25JPpZjaI5mEhCP8ASKd6Txk2swr99tAw%26hash%3Dc0039b00889db04e9415a5fead01b90b59fc0c4a8c4240a207639aa1c8e7f722&tgWebAppVersion=7.10&tgWebAppPlatform=web&tgWebAppThemeParams=%7B%22bg_color%22%3A%22%23212121%22%2C%22button_color%22%3A%22%238774e1%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22hint_color%22%3A%22%23aaaaaa%22%2C%22link_color%22%3A%22%238774e1%22%2C%22secondary_bg_color%22%3A%22%23181818%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22header_bg_color%22%3A%22%23212121%22%2C%22accent_text_color%22%3A%22%238774e1%22%2C%22section_bg_color%22%3A%22%23212121%22%2C%22section_header_text_color%22%3A%22%238774e1%22%2C%22subtitle_text_color%22%3A%22%23aaaaaa%22%2C%22destructive_text_color%22%3A%22%23ff595a%22%7D'
@@ -67,11 +65,8 @@ export const useAuthFlow = () => {
       // Марго 1259832544
       // const init_data = 'query_id%3DAAHghBdLAAAAAOCEF0szYRvU%26user%3D%257B%2522id%2522%253A1259832544%252C%2522first_name%2522%253A%2522%25D0%259C%25D0%25B0%25D1%2580%25D0%25B3%25D0%25BE%25F0%259F%258D%2591%2522%252C%2522last_name%2522%253A%2522%255B%25D0%259D%25D0%2595%2520%25D0%2591%25D0%2595%25D0%25A1%25D0%259F%25D0%259E%25D0%259A%25D0%259E%25D0%2598%25D0%25A2%25D0%25AC%255D%2522%252C%2522username%2522%253A%2522Margonesex%2522%252C%2522language_code%2522%253A%2522ru%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FFKxsxrnykyLu0kA2__5ZVmOF-zIxlsp8Cu8H-IFsmUk.svg%2522%257D%26auth_date%3D1741031727%26signature%3DD7ZrfpixtIE6JRPggPsrCVeZZ7f0hvwq4Qhmkg9a4Xnkgp33UFfhUm7MfDw8T6S_phwyl0otUHySWpbZtJiwAA%26hash%3D626b181635b66cd7977d5f841d26bba24b8d18316069b63d5c46965b1df10e85&tgWebAppVersion=8.0&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22bottom_bar_bg_color%22%3A%22%233e464c%22%2C%22link_color%22%3A%22%23007aff%22%2C%22button_color%22%3A%22%23007aff%22%2C%22hint_color%22%3A%22%23ffffff%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22section_bg_color%22%3A%22%23282828%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22header_bg_color%22%3A%22%231c1c1c%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22destructive_text_color%22%3A%22%23ff453a%22%2C%22section_separator_color%22%3A%22%233d3d3d%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%2C%22bg_color%22%3A%22%23282828%22%7D'
 
-      console.log("Telegram init data: ", WebApp.initData)
+      console.log('Telegram init data: ', WebApp.initData);
 
-      if (init_data.startsWith('query_id') || init_data.startsWith('user')) {
-        setCurrentUserTelegramId(Number(extractTelegramIdFromInitData(init_data)));
-      }
       const authResponse = await signIn({ init_data }).unwrap();
 
       localStorage.setItem('access_token', authResponse.access_token);
@@ -135,7 +130,7 @@ export const useAuthFlow = () => {
     const initAuth = async () => {
       const minLoadingTime = new Promise(resolve => setTimeout(resolve, 3500));
       try {
-        const hasCompletedSetup = localStorage.getItem('hasCompletedSetup');
+        const hasCompletedSetup = localStorage.getItem("currentSetupStep") === 'completed';
         const savedStep = localStorage.getItem('currentSetupStep') as AuthStep;
         await minLoadingTime;
 
@@ -143,12 +138,7 @@ export const useAuthFlow = () => {
           if (isTokenValid()) {
             saveCurrentStep('completed');
           } else {
-            const success = await performAuthentication();
-            if (success) {
-              saveCurrentStep('completed');
-            } else {
-              saveCurrentStep('language');
-            }
+            await performAuthentication();
           }
         } else if (savedStep && savedStep !== 'loading') {
           saveCurrentStep(savedStep);
@@ -179,7 +169,6 @@ export const useAuthFlow = () => {
     isAnimationFinished,
     setIsAnimationFinished,
     selectedLanguage,
-    currentUserTelegramId,
     isError,
     error,
     handleLanguageSelect,
