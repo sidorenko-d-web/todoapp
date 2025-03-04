@@ -40,7 +40,7 @@ const LanguageOption = ({ language, isSelected, onSelect }: LanguageOptionProps)
             <div className={styles.countryIconWrapper}>
                 <img className={styles.countryIcon} src={language.icon} alt={`${language.name} icon`} />
             </div>
-            {language.name}
+            <span> {language.name} </span>
         </div>
         <div className={styles.selectionIconWrapper}>
             <img
@@ -58,8 +58,6 @@ export const LanguageSelectionModal = () => {
     const [selectedLanguage, setSelectedLanguage] = useState<LanguageCode | null>(null);
 
     const handleCloseModal = () => {
-        // TODO: implement language change logic
-
         closeModal(MODALS.LANGUAGE_SELECTION);
     };
 

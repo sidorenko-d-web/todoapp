@@ -6,6 +6,7 @@
 
 .badge {
   display: flex;
+  align-items: center;
   gap: 5px;
   border-radius: 10px;
   line-height: 100%;
@@ -14,7 +15,8 @@
   @include var.multi-fz(14px, 16px);
 
   img {
-    @include var.multi-size(14px, 16px)
+    width: 16px;
+    height: 16px;
   }
 }
 

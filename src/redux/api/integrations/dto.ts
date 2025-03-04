@@ -8,8 +8,19 @@ export type IntegrationResponseDTO = {
   income: string;
   views: number;
   subscribers: number;
+  comments_generated: number;
+  comments_answered: number;
+  comments_answered_correctly: number;
+  genre_id: number;
+  number: number;
+  published_at: string;
   created_at: string;
   updated_at: string;
+
+  base_income: string;
+  base_views: number;
+  base_subscribers: number;
+
   campaign: {
     company_name: string;
     image_url: string;
@@ -18,7 +29,7 @@ export type IntegrationResponseDTO = {
 };
 
 export type IntegrationsResponseDTO = {
-  count: number
+  count: number;
   integrations: IntegrationResponseDTO[];
 };
 
@@ -28,24 +39,23 @@ export type IntegrationsQueryRequestDTO = {
   asc?: boolean;
   offset?: number;
   limit?: number;
-}
+};
 
 export type UnansweredIntegrationCommentDTO = {
-  id: string,
-  author_username: string,
-  comment_text: string,
-  is_hate: boolean
-}
-
+  id: string;
+  author_username: string;
+  comment_text: string;
+  is_hate: boolean;
+};
 
 export type CreateIntegrationRequestDTO = {
   campaign_id: string;
-  content_type: string
-}
+  content_type: string;
+};
 
 export type CreateIntegrationCommentDTO = {
-  is_hate: boolean
-}
+  is_hate: boolean;
+};
 
 export interface IntegrationUpdateRequestDTO {
   integrationId: string;

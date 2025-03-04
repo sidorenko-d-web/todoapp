@@ -23,7 +23,8 @@ function App() {
         <ModalsProvider>
           <AuthInit>
             <HistoryRouter history={browserHistory}>
-              <TonConnectUIProvider language='ru' manifestUrl={"https://raw.githubusercontent.com/TimurZheksimbaev/First-TON-Project/refs/heads/main/apusher-tonconnect-manifest.json"}>
+              <TonConnectUIProvider language="ru"
+                manifestUrl={'https://raw.githubusercontent.com/TimurZheksimbaev/First-TON-Project/refs/heads/main/apusher-tonconnect-manifest.json'}>
                 <TonClientProvider>
                   <TransactionNotificationProvider>
                     <AppRouter />
@@ -35,7 +36,7 @@ function App() {
         </ModalsProvider>
       </Provider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

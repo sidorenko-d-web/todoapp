@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
-import { IntegrationResponseDTO, integrationsApi, selectVolume } from '../../../redux';
+import { IntegrationResponseDTO, integrationsApi, RootState, selectVolume } from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration } from '../../../hooks';
 import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
@@ -11,6 +11,7 @@ import { setIntegrationReadyForPublishing, setLastIntegrationId } from '../../..
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
+import { setIntegrationCreating } from '../../../redux/slices/integrationAcceleration';
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
@@ -22,16 +23,39 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   const { t } = useTranslation('integrations');
 
   const dispatch = useDispatch();
-  const initialTime = 3600;
   const [ timeLeft, setTimeLeft ] = useState(integration.time_left);
+  const [ initialTimeLeft ] = useState(integration.time_left);
   const [ isExpired, setIsExpired ] = useState(false);
   const [ playAccelerateIntegrationSound ] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
-  const calculateProgress = () => ((initialTime - timeLeft) / initialTime) * 100;
-
   const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
     integrationId: integration.id,
     onSuccess: newTimeLeft => setTimeLeft(newTimeLeft),
   });
+
+  useEffect(() => {
+    dispatch(setIntegrationCreating(true));
+    console.log('set integration creating');
+  }, [])
+
+  const [ acceleration, setAcceleration ] = useState(0);
+  const reduxAcceleration = useSelector((state: RootState) => state.acceleration.acceleration);
+
+  useEffect(() => {
+    if(acceleration != reduxAcceleration) {
+      handleAccelerateClick();
+      setAcceleration(reduxAcceleration);
+    }
+  }, [reduxAcceleration]);
+
+  const calculateProgress = () => {
+    return ((initialTimeLeft - timeLeft) / initialTimeLeft) * 100;
+  };
+
+  const [progress, setProgress] = useState(calculateProgress());
+
+  useEffect(() => {
+    setProgress(calculateProgress());
+  }, [timeLeft]);
 
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -54,6 +78,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     }, 1000);
 
     if (isExpired) {
+      dispatch(setIntegrationCreating(false));
       clearInterval(timerId);
     }
 
@@ -63,16 +88,17 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
   }, [isExpired]);
 
   const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
+    return `${hours}:${minutes < 10 ? `0${minutes}` : minutes}:${secs < 10 ? `0${secs}` : secs}`;
   };
 
   const handleAccelerateClick = () => {
     if (!isExpired) {
       playAccelerateIntegrationSound();
       dispatch(setLastIntegrationId(integration.id));
-      void accelerateIntegration(1);
+      void accelerateIntegration(500);
       createParticles();
     }
   };
@@ -87,8 +113,8 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
       const particle = document.createElement('div');
       particle.classList.add(s.particle);
 
-      particle.style.left = `calc(100% - 10px)`;
-      particle.style.top = `${button.clientHeight / 2}px`;
+      // particle.style.left = `calc(100% - 10px)`;
+      // particle.style.top = `${button.clientHeight / 2}px`;
 
       button.appendChild(particle);
 
@@ -125,7 +151,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
           <div className={s.progressBar}>
             <div
               className={s.progressBarInner}
-              style={{ width: `${calculateProgress()}%` }}
+              style={{ width: `${progress}%` }}
             />
           </div>
         </div>

@@ -17,23 +17,26 @@
   }
 
   .statsUnderTitle {
-    width: 100%;
-    max-width: 225px;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-self: center;
     gap: 5px;
-    margin-top: 5px;
-    flex-grow: 1;
+    width: 100%;
+    max-width: 225px;
+
+    .topStats {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 5px;
+    }
 
     .statWrp {
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 3px;
-
       height: fit-content;
       padding: 5px 5px 5px 7px;
       border-radius: 10px;
@@ -50,7 +53,6 @@
     @media (min-width: var.$breakpoint-md) {
       flex-direction: row;
     }
-
   }
 
   .seeStatsButton {

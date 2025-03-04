@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import DaysInARowModal from '../DevModals/DaysInARowModal/DaysInARowModal';
 import GetRewardChestModal from '../DevModals/GetRewardChestModal/GetRewardChestModal';
 import styles from './ProfilePage.module.scss';
 import { ProfileInfo, ProfileStats, ProfileStatsMini, StreakCard } from '../../components/profile';
-import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery } from '../../redux';
+import {
+  useGetCurrentUserProfileInfoQuery,
+  useGetInventoryAchievementsQuery,
+  useGetTopProfilesQuery,
+} from '../../redux';
 import RewardsList from '../../components/profile/RewardsCard/RewardsList';
 import { getWeekData } from '../../utils';
 import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
-import { useGetPushLineQuery } from '../../redux/api/pushLine/api';
+import { useGetPushLineQuery } from '../../redux';
+import { Loader } from '../../components';
 
 export const ProfilePage: React.FC = () => {
   const { t } = useTranslation('profile');
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
+
+  useEffect(() => {
+    openModal(MODALS.TASK_CHEST)
+  }, []);
 
   const {
     data: userProfileData,
@@ -46,40 +54,54 @@ export const ProfilePage: React.FC = () => {
   ).length;
 
   useEffect(() => {
-    const lastShownTimestamp = localStorage.getItem('daysInARowModalTimestamp');
-    const now = Date.now();
-    const twentyFourHours = 24 * 60 * 60 * 1000;
-    if (!lastShownTimestamp || now - Number(lastShownTimestamp) > twentyFourHours) {
+    if (!sessionStorage.getItem('daysInARowModalShown')) {
       openModal(MODALS.DAYS_IN_A_ROW);
-      localStorage.setItem('daysInARowModalTimestamp', now.toString());
+      sessionStorage.setItem('daysInARowModalShown', 'true');
       setIsModalShown(true);
     }
-  }, [ openModal ]);
+  }, [openModal]);
 
   useEffect(() => {
     if (streaks === 30 || streaks === 60 || streaks === 120) {
       openModal(MODALS.TASK_CHEST);
     }
-  }, [ data?.in_streak_days, openModal ]);
+  }, [data?.in_streak_days, openModal]);
 
   const userPosition =
     userProfileData && topProfilesData?.profiles
       ? topProfilesData.profiles.findIndex(
-        (profile: { id: string }) => profile.id === userProfileData.id,
-      )
+          (profile: { id: string }) => profile.id === userProfileData.id,
+        )
       : -1;
 
   const position =
     userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length!;
 
-  const streakDays = [27, 28, 30]; // TODO: replace with real data from API
-  const freezeDays = [29]; // TODO: replace with real data
+  const weekInformation = data?.week_information || [];
+
+  const streakDays = weekInformation
+    .filter(day => day.status === 'passed')
+    .map(day => new Date(day.date).getDate());
+
+  const freezeDays = weekInformation
+    .filter(day => day.status === 'frozen')
+    .map(day => new Date(day.date).getDate());
 
   const weekData = getWeekData(streakDays, freezeDays);
-  console.log(data?.week_information);
+
+  const { isLoading: isAwardsLoading } = useGetInventoryAchievementsQuery();
+
+  const isLoading = (
+    isUserLoading ||
+    isTopProfilesLoading ||
+    isAwardsLoading
+  )
+
+  if (isLoading) return <Loader />;
+
   return (
     <>
-      <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
+
       <GetRewardChestModal onClose={() => closeModal(MODALS.TASK_CHEST)} />
 
       {(isUserLoading || isTopProfilesLoading) && <p>{t('p3')}</p>}
@@ -110,11 +132,12 @@ export const ProfilePage: React.FC = () => {
             <ProfileInfo
               nickname={userProfileData.username}
               blogName={userProfileData.blog_name}
-              subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left}
+              subscriptionIntegrationsLeft={
+                userProfileData.subscription_integrations_left
+              }
               position={position}
               isVip={false}
             />
-
             <StreakCard
               streakDays={streaks !== undefined ? streaks : 0}
               frozenDays={frozen !== undefined ? frozen : 0}

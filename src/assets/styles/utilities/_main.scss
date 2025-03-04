@@ -24,7 +24,7 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #505B78;
+    background: #505b78;
     border-radius: 2px;
   }
 }
@@ -36,11 +36,12 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background: #505B78;
+  background: #505b78;
   border-radius: 2px;
 }
 
 @mixin shake($duration: 0.3s, $ease: ease-in-out) {
+  animation: shake $duration $ease;
   @keyframes shake {
     0% {
       transform: translateX(0);
@@ -58,7 +59,7 @@
       transform: translateX(0);
     }
   }
-  animation: shake $duration $ease;
+ // animation: shake $duration $ease;
 }
 
 @mixin multi-size($width-sm, $width-md, $ratio: 1) {

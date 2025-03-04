@@ -7,14 +7,19 @@ import snowflake from '../../../assets/icons/snowflake.svg';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import chestAnimation from '../../../assets/animations/kamen_fixed.json';
-import reward from '../../../assets/animations/reward.json';
-import { SOUNDS, localStorageConsts, MODALS } from '../../../constants';
+import confetti from '../../../assets/animations/confetti.json';
+import { localStorageConsts, MODALS, SOUNDS } from '../../../constants';
 import { CentralModal } from '../../../components/shared';
+import { useTranslation } from 'react-i18next';
+
 interface GetRewardChestModalProps {
   onClose?: () => void;
 }
+
 export default function GetRewardChestModal({}: GetRewardChestModalProps) {
   const { closeModal } = useModal();
+  const { t } = useTranslation('shop');
+
   const handleClose = () => {
     closeModal(MODALS.TASK_CHEST);
     localStorage.removeItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
@@ -26,10 +31,10 @@ export default function GetRewardChestModal({}: GetRewardChestModalProps) {
     <CentralModal
       onClose={handleClose}
       modalId={MODALS.TASK_CHEST}
-      title={'Сундук открыт!'}
+      title={t('s40')}
     >
       <div className={styles.background}>
-        <Lottie animationData={reward} loop={false} className={styles.reward} />
+        <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
       <div className={styles.images}>
         <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
@@ -52,15 +57,12 @@ export default function GetRewardChestModal({}: GetRewardChestModalProps) {
           <div className={styles.itemIcon}>Adv.</div>
         </div>
         <div className={styles.desc}>
-          <p>
-            Поздравляем! Вы получили дополнительные интеграции, заморозку и учлучшение
-            предмета!
-          </p>
+          <p>{t('s41')}</p>
         </div>
       </div>
       <div className={styles.button}>
         <Button variant={'blue'} onClick={handleClose}>
-          Забрать
+          {t('s42')}
         </Button>
       </div>
     </CentralModal>

@@ -3,11 +3,11 @@ import styles from './ProgressLine.module.scss';
 
 interface ProgressLineProps {
   level: number;
-  color: 'red' | 'blue' | 'purple'; // Добавлен цвет purple
+  color: 'red' | 'blue' | 'purple';
 }
 
 export const ProgressLine: React.FC<ProgressLineProps> = ({ level, color }) => {
-  const progressWidth = `${Math.max((level / 5) * 100, 10)}%`;
+  const progressWidth = `${Math.max((level / 5) * 100, 5)}%`;
 
   return (
     <div className={styles.progressContainer}>
@@ -16,7 +16,7 @@ export const ProgressLine: React.FC<ProgressLineProps> = ({ level, color }) => {
       ) : color === 'blue' ? (
         <div className={styles.progressBarBlue} style={{ width: progressWidth }} />
       ) : (
-        <div className={styles.progressBarPurple} style={{ width: progressWidth }} /> // Добавлено условие для purple
+        <div className={styles.progressBarPurple} style={{ width: progressWidth }} />
       )}
     </div>
   );

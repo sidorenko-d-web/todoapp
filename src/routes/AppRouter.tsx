@@ -20,11 +20,8 @@ import StatisticsPage from '../pages/StatisticsPage/StatisticsPage';
 
 import DevModals from '../pages/DevModals/DevModals.tsx';
 import { ShopInvewntoryPage } from '../pages/ShopPage';
-import { useWebApp } from '../hooks/useWebApp.ts';
 
 function AppRouter(): JSX.Element | null {
-  useWebApp(); // WebApp SDK initialization
-
   const location = useLocation();
 
   useEffect(() => {

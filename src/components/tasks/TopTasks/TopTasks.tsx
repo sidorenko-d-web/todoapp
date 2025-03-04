@@ -2,12 +2,13 @@ import { FC, useState } from 'react';
 import { TaskCard } from '../TaskCard';
 import magicBallIcon from '../../../assets/icons/magic-ball.png';
 import chestIcon from '../../../assets/icons/chest-purple.svg';
-import { MODALS } from '../../../constants';
+import { MODALS } from '../../../constants/modals';
 import { useModal } from '../../../hooks';
 import s from '../styles.module.scss';
 import { ModalTopTasks } from './ModalTopTasks';
 import { Task } from '../../../redux/api/tasks/dto';
 import { useTranslation } from 'react-i18next';
+import GetRewardChestModal from '../../../pages/DevModals/GetRewardChestModal/GetRewardChestModal';
 
 interface TaskState {
   currentStep: number;
@@ -21,6 +22,7 @@ type TopTasksProps = {
 };
 
 export const TopTasks: FC<TopTasksProps> = ({ task }) => {
+  
   const { t } = useTranslation('quests');
   const { openModal, closeModal } = useModal();
   const [taskState, setTaskState] = useState<TaskState>({
@@ -30,7 +32,24 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
     hasError: false
   });
 
-  const handleOpenTopTasks = () => {
+  const handleOpenTopTasks = async () => {
+    console.log('Task completion status:', task.is_completed);
+    console.log('Is reward given:', task.is_reward_given);
+    
+    if (task.is_completed && !task.is_reward_given) {
+      try {
+        console.log('Условия выполнены, открываем подарок');
+        openModal(MODALS.TASK_CHEST);
+        return;
+      } catch (error) {
+        console.error('Error getting reward:', error);
+      }
+    } else {
+      console.log('Условия не выполнены:');
+      console.log('- task.is_completed:', task.is_completed);
+      console.log('- !task.is_reward_given:', !task.is_reward_given);
+    }
+    
     openModal(MODALS.TOP_TASK);
   };
 
@@ -48,12 +67,6 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
   };
 
   const progress = (taskState.currentStep / taskState.totalSteps) * 100;
-
-  const getButtonText = () => {
-    if (taskState.completed) return t('q14');
-    if (taskState.currentStep > 0) return t('q11');
-    return t('q13');
-  };
 
   return (
     <section className={s.section}>
@@ -79,10 +92,11 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
           progressReward={t('q10')}
           progressRewardIcon={chestIcon}
           onClick={handleOpenTopTasks}
-          disabled={taskState.completed}
-          buttonText={getButtonText()}
+          disabled={task.is_reward_given}
+          buttonText={task.is_completed && !task.is_reward_given ? t('q33') : task.is_completed ? t('q15') : t('q13')}
           errorText={taskState.hasError ? 'Ошибка: повторите попытку' : undefined}
-          isCompleted={taskState.completed}
+          isCompleted={task.is_completed}
+          isRewardGiven={task.is_reward_given}
           isTopTask={true}
         />
       </div>
@@ -93,6 +107,7 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
         onStateChange={handleStateChange}
         task={task}
       />
+      <GetRewardChestModal onClose={() => closeModal(MODALS.TASK_CHEST)} />
     </section>
   );
 };

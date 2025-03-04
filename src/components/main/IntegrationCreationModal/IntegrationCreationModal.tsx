@@ -8,7 +8,7 @@ import {
   useGetCompaniesQuery,
   useGetCurrentUserProfileInfoQuery,
 } from '../../../redux';
-import { CompanyCard } from '../';
+import { CompanyCard, SpecialIntegration } from '../';
 import { useDispatch } from 'react-redux';
 import { useInventoryItemsFilter } from '../../../hooks';
 
@@ -22,9 +22,10 @@ import {
 } from '../../../utils/guide-functions.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
-import { CentralModal } from '../../shared';
-import { TrackedButton } from '../../';
+import { Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
+import { ExpandableBottomModal } from '../../shared/';
+
 
 interface CreatingIntegrationModalProps {
   modalId: string;
@@ -33,10 +34,10 @@ interface CreatingIntegrationModalProps {
 }
 
 export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
-                                                                              modalId,
-                                                                              onClose,
-                                                                              hasCreatingIntegration,
-                                                                            }) => {
+  modalId,
+  onClose,
+  hasCreatingIntegration,
+}) => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,14 +48,15 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     { label: t('i15'), value: 'video' },
   ] as const;
 
-  const [ selectedOption, setSelectedOption ] = useState<(typeof contentOptions)[number]['value']>('text');
+  const [selectedOption, setSelectedOption] = useState<(typeof contentOptions)[number]['value']>('text');
 
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
-  const [ createIntegration, { isError, error } ] = useCreateIntegrationMutation();
-  const { data: profile } = useGetCurrentUserProfileInfoQuery();
-  const { data } = useGetCompaniesQuery();
+  const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
+  const { data: profile, isLoading: isProfileLoading } = useGetCurrentUserProfileInfoQuery();
+  const { data, isLoading: isCompaniesLoading } = useGetCompaniesQuery();
   const companies = data?.campaigns;
 
+  const uniqueCompany = companies?.find(company => company.is_unique === true) || null;
 
   const goToShop = () => {
     setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
@@ -95,64 +97,79 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const buttonGlowing = integrationCreatingModalButtonGlowing();
 
   return (
-    <CentralModal modalId={modalId} title={t('i11')} onClose={onClose} titleIcon={integrationWhiteIcon}>
-      <div className={s.content}>
-        <div className={s.skinsWrapper}>
-          {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
-            <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`} >
-              <img src={lightningIcon} alt="Lightning" width={20} height={20} />
-            </div>
-          ))}
-        </div>
-
-        <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
-          {contentOptions.map((option, index) => (
-            <span
-              key={index}
-              className={`${s.tab} ${selectedOption === option.value ? s.active : ''}`}
-              onClick={() => setSelectedOption(option.value)}
-            >
-              {option.label}
-            </span>
-          ))}
-        </div>
-
-        {!noItemsMessage && hasCreatingIntegration && (
-          <span className={s.message}>{t('i20')}</span>
-        )}
-
-        {!noItemsMessage ? (
-          <div className={s.companies}>
-            {companies?.map(company => (
-              <CompanyCard
-                key={company.id}
-                company={company}
-                disabled={hasCreatingIntegration}
-                onClick={() => submitCreation(company.id)}
-              />
+    <ExpandableBottomModal
+      modalId={modalId}
+      title={t('i11')}
+      onClose={onClose}
+      titleIcon={integrationWhiteIcon}
+      overlayOpacity={0.7}
+    >
+      {isProfileLoading || isCompaniesLoading
+        ? <Loader noMargin />
+        : <div className={s.content}>
+          <div className={s.skinsWrapper}>
+            {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
+              <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`}>
+                <img src={lightningIcon} alt="Lightning" width={20} height={20} />
+              </div>
             ))}
           </div>
-        ) : (
-          <span className={s.message}>{noItemsMessage}</span>
-        )}
 
-        {
-          // @ts-expect-error No error types yet
-          isError && <span className={s.errorMessage}>{error?.data?.detail}</span>
-        }
+          <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
+            {contentOptions.map((option, index) => (
+              <span
+                key={index}
+                className={`${s.tab} ${selectedOption === option.value ? s.active : ''}`}
+                onClick={() => setSelectedOption(option.value)}
+              >
+                {option.label}
+              </span>
+            ))}
+          </div>
+          {uniqueCompany && (
+            <SpecialIntegration
+              integration={uniqueCompany}
+            />
+          )}
 
-        {noItemsMessage && <TrackedButton
-          trackingData={{
-            eventType: 'button',
-            eventPlace: 'В магазин - Главный экран - Окно создание интеграции',
-          }}
-          className={`${s.button} 
+          {!noItemsMessage && hasCreatingIntegration && (
+            <span className={s.message}>{t('i20')}</span>
+          )}
+
+          {!noItemsMessage ? (
+            <div className={s.companies}>
+              {companies?.map(company => (
+                <CompanyCard
+                  key={company.id}
+                  company={company}
+                  disabled={hasCreatingIntegration}
+                  onClick={() => submitCreation(company.id)}
+                />
+              ))}
+
+            </div>
+          ) : (
+            <span className={s.message}>{noItemsMessage}</span>
+          )}
+
+          {
+            // @ts-expect-error No error types yet
+            isError && <span className={s.errorMessage}>{error?.data?.detail}</span>
+          }
+
+          {noItemsMessage && <TrackedButton
+            trackingData={{
+              eventType: 'button',
+              eventPlace: 'В магазин - Главный экран - Окно создание интеграции',
+            }}
+            className={`${s.button} 
             ${buttonGlowing ? s.glowingBtn : ''} `}
           onClick={goToShop}
         >
           {t('i21')}
-        </TrackedButton>}
+        </TrackedButton> }                             
       </div>
-    </CentralModal>
+      }
+    </ExpandableBottomModal>
   );
 };

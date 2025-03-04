@@ -37,12 +37,12 @@ export const Guide = ({
     }, [onClose]);
 
     return (
-        <div 
-            className={`${styles.wrp} ${dimBackground ? styles.dimmed : ''}`} 
+        <div
+            className={`${styles.wrp} ${dimBackground ? styles.dimmed : ''}`}
             style={{ zIndex }}
         >
             <div
-                ref={contentRef} 
+                ref={contentRef}
                 className={`${styles.content} ${align === 'left' ? styles.left : styles.right}`}
                 style={{ top }}
             >

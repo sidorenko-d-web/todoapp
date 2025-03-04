@@ -1,44 +1,111 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styles from './LoadingScreen.module.scss';
-import coinIcon from '../../../../src/assets/icons/coin.png';
-import { ProgressBar } from './ProgressBar';
-import { useTranslation } from 'react-i18next';
+import loadingVid from '../../../assets/gif/loading.mp4';
+// import Lottie from 'lottie-react';
+// import { coinsAnim } from '../../../assets/animations';
+import { LoadingScreenBar, LoadingScreenBarRef } from '../../loadingScreen/LoadingScreenBar/LoadingScreenBar';
+import useSound from 'use-sound';
+import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
+import { useSelector } from 'react-redux';
+import { selectVolume } from '../../../redux';
 
-export const LoadingScreen = () => {
-  const { t } = useTranslation('statistics');
-  const [dots, setDots] = useState('.');
+interface LoadingScreenProps {
+  onAnimationComplete: () => void;
+  isAuthComplete: boolean;
+}
+
+export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingScreenProps) => {
+  const [showAnimation, setShowAnimation] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [speedMultiplier, setSpeedMultiplier] = useState(1);
+  const [forceLoadingTimePassed, setForceLoadingTimePassed] = useState(false);
+  const [playAccelerateSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
+  const loadingScreenBarRef = useRef<LoadingScreenBarRef>(null);
 
+  //TODO убрать когда надо будет отображать гайды
   useEffect(() => {
-    const dotsInterval = setInterval(() => {
-      setDots(prev => (prev.length >= 3 ? '.' : prev + '.'));
-    }, 500);
-
-    return () => clearInterval(dotsInterval);
+    Object.values(GUIDE_ITEMS).forEach(category => {
+      Object.values(category).forEach(value => {
+        localStorage.setItem(value, '1');
+      });
+    });
   }, []);
 
-  // Управление прогрессом
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
-        }
-        return prev + 1;
-      });
-    }, 20);
+    const minLoadingTimeout = setTimeout(() => {
+      setForceLoadingTimePassed(true);
+    }, 1500);
 
-    return () => clearInterval(interval);
+    return () => clearTimeout(minLoadingTimeout);
+  }, []);
+
+  useEffect(() => {
+    if (isAuthComplete && forceLoadingTimePassed) {
+      setSpeedMultiplier(4);
+    }
+  }, [isAuthComplete, forceLoadingTimePassed]);
+
+  useEffect(() => {
+    if (progress >= 99) {
+      setProgress(100);
+      setTimeout(() => {
+        setShowAnimation(true);
+      }, 100);
+    }
+  }, [progress]);
+
+  const handleAccelerate = () => {
+    if (!showAnimation) {
+      playAccelerateSound();
+      setSpeedMultiplier(prev => prev * 1.5);
+
+      if (loadingScreenBarRef.current) {
+        loadingScreenBarRef.current.createParticles();
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (showAnimation) {
+      const animationTimeout = setTimeout(() => {
+        onAnimationComplete();
+      }, 100);
+
+      return () => clearTimeout(animationTimeout);
+    }
+  }, [showAnimation]);
+
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 2;
+
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => console.warn('Autoplay blocked:', error));
+      }
+    }
   }, []);
 
   return (
-    <div className={styles.root}>
-      <img className={styles.coin} src={coinIcon} alt="Coin" />
-      <div className={styles.loadingWrp}>
-        <ProgressBar progress={progress} />
-        <div className={styles.text}>{t('s3')}{dots}</div>
-      </div>
+    <div className={styles.root} onClick={handleAccelerate}>
+      <div />
+      <div className={styles.clickableArea}></div>
+      {showAnimation ? (
+        // <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
+        <></>
+      ) : (
+        <LoadingScreenBar 
+          ref={loadingScreenBarRef}
+          speedMultiplier={speedMultiplier} 
+          progress={progress} 
+          setProgress={setProgress} 
+          isAuthComplete={isAuthComplete} 
+        />
+      )}
+      <video ref={videoRef} className={styles.coin} 
+        src={loadingVid} autoPlay muted loop playsInline preload="auto" width={410} height={420} />
     </div>
   );
 };

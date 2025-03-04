@@ -11,11 +11,22 @@ export const treeApi = createApi({
       query: () => ({
         url: '/growth-tree',
         method: 'GET',
+        params: {
+          limit: 450,
+        }
       })
+    }), 
+    unlockAchievement: builder.mutation<string, {achievement_id: string}>({
+      query: ({ achievement_id }) => ({
+        url: `/growth-tree/${achievement_id}`,
+        method: 'POST'
+      }),
+      invalidatesTags: ['Tree']
     })
   })
 })
 
 export const {
-  useGetTreeInfoQuery
+  useGetTreeInfoQuery,
+  useUnlockAchievementMutation
 } = treeApi
