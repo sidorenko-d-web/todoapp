@@ -100,9 +100,9 @@ export const ShopInvewntoryPage = () => {
       onItemQualityChange={setItemsQuality}
     >
       {
-        isShopLoading ||  isEquipedLoading ? (
+        isShopLoading || isEquipedLoading || isInventoryFetching || isShopFetching ? (
           <Loader className={styles.itemsLoader} />
-        ) : !isInventoryLoading && !isSuccess && shopCategory?.title !== 'Вы' ? (
+        ) : !(isShopLoading || isEquipedLoading) && (!isInventoryLoading && !isSuccess && shopCategory?.title !== 'Вы') ? (
           <p className={styles.emptyText}>{t('s38')}</p>
         ) : !shopCategory || !itemsQuality ? (
           <p style={{ color: '#fff' }}>Error occured while getting data</p>

@@ -48,6 +48,8 @@ const StorePage: FC = () => {
     isBoostLoading
   );
 
+  console.log(shopCategory, itemsRarity, items);
+
   if (isLoading) return <Loader />;
 
   return (
@@ -58,7 +60,7 @@ const StorePage: FC = () => {
     >
       {isShopLoading || isShopFetching || isInventoryLoading || isInventoryFetching ? (
         <Loader className={styles.itemsLoader} />
-      ) : !shopCategory || !itemsRarity ? (
+      ) : !(isShopLoading || isShopFetching || isInventoryLoading || isInventoryFetching) && (!shopCategory || !itemsRarity) ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
       ) : shopCategory?.title !== t('s6') ? (
         items?.length === 0 ? (
