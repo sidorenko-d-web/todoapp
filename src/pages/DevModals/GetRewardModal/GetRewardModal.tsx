@@ -1,12 +1,13 @@
 import { MODALS, SOUNDS } from '../../../constants';
-import { useModal, useAutoPlaySound } from '../../../hooks';
+import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './GetRewardModal.module.scss';
 import coin from '../../../assets/icons/coin.png';
 import Button from '../partials/Button';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
-import reward from '../../../assets/animations/reward.json';
+import confetti from '../../../assets/animations/confetti.json';
 import { CentralModal } from '../../../components/shared';
+
 export default function GetRewardModal() {
   const { closeModal } = useModal();
 
@@ -19,7 +20,7 @@ export default function GetRewardModal() {
       title={'Награда получена!'}
     >
       <div className={styles.background}>
-        <Lottie animationData={reward} loop={false} className={styles.reward} />
+        <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
       <div className={styles.images}>
         <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
