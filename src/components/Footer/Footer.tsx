@@ -13,7 +13,6 @@ export const Footer = () => {
   const location = useLocation();
   const path  = location.pathname;
 
-  const footerActive = useSelector((state: RootState) => state.guide.footerActive);
   const currentFooterItemId = useSelector((state: RootState) => state.guide.activeFooterItemId);
 
 

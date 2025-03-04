@@ -3,7 +3,6 @@ import { LoadingScreen } from '../components/shared/LoadingScreen';
 import { LanguageSelect } from '../pages/LanguageSelect';
 import { SkinSetupPage } from '../pages/SkinSetupPage';
 import { EnterInviteCodePage } from '../pages/EnterInviteCodePage';
-import DaysInARowModal from '../pages/DevModals/DaysInARowModal/DaysInARowModal';
 import { useAuthFlow } from './useAuthFlow';
 import Lottie from 'lottie-react';
 import { coinsAnim } from '../assets/animations';
@@ -23,12 +22,10 @@ export function AuthInit({ children }: AuthInitProps) {
     selectedLanguage,
     // currentUserTelegramId,
     isError,
-    error,
     handleLanguageSelect,
     handleLanguageContinue,
     handleInviteCodeContinue,
     handleSkinContinue,
-    handleModalClose,
   } = useAuthFlow();
 
   const [loadingStarted, setLoadingStarted] = useState(false);
@@ -47,7 +44,7 @@ export function AuthInit({ children }: AuthInitProps) {
   
 
   if (isError) {
-    return <div style={{ color: 'red' }}>Ошибка при авторизации: {String(error)}</div>;
+    console.error(  )
   }
 
   switch (currentStep) {
@@ -74,14 +71,11 @@ export function AuthInit({ children }: AuthInitProps) {
         />
       );
 
-    case 'signin':
+    case 'final_loading':
       return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
 
     case 'skin':
       return <SkinSetupPage onContinue={handleSkinContinue} />;
-
-    case 'push':
-      return <DaysInARowModal onClose={handleModalClose} />;
 
     case 'completed':
       return <>

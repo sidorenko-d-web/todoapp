@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from './TreeGuide.module.scss';
 
 import img1 from '../../../assets/gif/guide1.gif';
-import { Guide } from "../Guide/Guide";
+import { Guide } from '../Guide';
 
 import gift from '../../../assets/icons/gift.svg';
 import cup from '../../../assets/icons/medal-gold.svg';

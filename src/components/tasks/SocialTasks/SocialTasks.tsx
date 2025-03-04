@@ -34,22 +34,21 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
         localStorage.setItem('pendingTaskId', task.id);
         localStorage.setItem('pendingTaskStartTime', Date.now().toString());
 
+        const linkToOpen = task.title.toLowerCase().includes('telegram')
+          ? (task.external_link || TELEGRAM_CHANNEL_URL)
+          : (task.external_link || 'https://instagram.com');
+        window.open(linkToOpen, '_blank');
+
         // Ждем 30 секунд
         await new Promise(resolve => setTimeout(resolve, 30000));
 
-        const response = await updateTask({
+        await updateTask({
           id: task.id,
           data: {
             completed_stages: task.stages,
-            link: task.external_link
-          }
+            link: task.external_link,
+          },
         }).unwrap();
-
-        if (task.title.toLowerCase().includes('telegram')) {
-          window.open(response.link || TELEGRAM_CHANNEL_URL, '_blank');
-        } else if (task.external_link) {
-          window.open(response.link || task.external_link, '_blank');
-        }
 
         localStorage.removeItem('pendingTaskId');
         localStorage.removeItem('pendingTaskStartTime');

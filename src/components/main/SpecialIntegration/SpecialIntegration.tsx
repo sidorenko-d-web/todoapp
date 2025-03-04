@@ -55,7 +55,6 @@ export const SpecialIntegration = ({ integration }: SpecialIntegrationProps) => 
         >
           {
             isError ? (
-              // @ts-expect-error No error types yet
               <span className={styles.errorMessage}>
                 <img className={styles.lockIcon} src={lockIcon} alt="lock" />
                   {t('i32')}

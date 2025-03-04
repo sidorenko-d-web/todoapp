@@ -1,4 +1,4 @@
-import { MODALS } from '../../../constants/modals';
+import { MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import styles from './GetGift.module.scss';
 import Button from '../partials/Button';
