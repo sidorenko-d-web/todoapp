@@ -7,8 +7,9 @@ import snowflake from '../../../assets/icons/snowflake.svg';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import chestAnimation from '../../../assets/animations/kamen_fixed.json';
-import reward from '../../../assets/animations/reward.json';
-import { SOUNDS, localStorageConsts, MODALS } from '../../../constants';
+// import reward from '../../../assets/animations/reward.json';
+import confetti from '../../../assets/animations/confetti.json';
+import { localStorageConsts, MODALS, SOUNDS } from '../../../constants';
 import { CentralModal } from '../../../components/shared';
 import { useTranslation } from 'react-i18next';
 
@@ -34,7 +35,8 @@ export default function GetRewardChestModal({}: GetRewardChestModalProps) {
       title={t('s40')}
     >
       <div className={styles.background}>
-        <Lottie animationData={reward} loop={false} className={styles.reward} />
+        {/*<Lottie animationData={reward} loop={false} className={styles.reward} />*/}
+        <Lottie animationData={confetti} loop={true} className={styles.reward} />
       </div>
       <div className={styles.images}>
         <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />

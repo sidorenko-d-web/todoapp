@@ -22,6 +22,10 @@ export const ProfilePage: React.FC = () => {
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
 
+  useEffect(() => {
+    openModal(MODALS.TASK_CHEST)
+  }, []);
+
   const {
     data: userProfileData,
     error: userError,
