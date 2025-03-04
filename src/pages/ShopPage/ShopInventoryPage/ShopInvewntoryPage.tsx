@@ -28,7 +28,7 @@ export const ShopInvewntoryPage = () => {
     isLoading: isInventoryLoading,
   } = useGetInventoryItemsQuery(
     {
-      item_category: shopCategory?.value!,
+      item_category: shopCategory?.value,
       item_rarity: itemsQuality?.value as TypeItemRarity,
     },
     { skip: !shopCategory?.value },
@@ -36,7 +36,7 @@ export const ShopInvewntoryPage = () => {
 
   const { data: shop, isLoading: isShopLoading } = useGetShopItemsQuery(
     {
-      item_category: shopCategory?.value!,
+      item_category: shopCategory?.value,
       item_rarity: itemsQuality?.value,
       level: 1,
     },
@@ -100,7 +100,7 @@ export const ShopInvewntoryPage = () => {
       onItemQualityChange={setItemsQuality}
     >
       {
-        isShopLoading || isEquipedLoading || isInventoryFetching || isShopFetching ? (
+        isShopLoading || isEquipedLoading ? (
           <Loader className={styles.itemsLoader} />
         ) : !(isShopLoading || isEquipedLoading) && (!isInventoryLoading && !isSuccess && shopCategory?.title !== 'Вы') ? (
           <p className={styles.emptyText}>{t('s38')}</p>

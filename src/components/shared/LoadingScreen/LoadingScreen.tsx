@@ -23,13 +23,13 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   const loadingScreenBarRef = useRef<LoadingScreenBarRef>(null);
 
   //TODO убрать когда надо будет отображать гайды
-  useEffect(() => {
-    Object.values(GUIDE_ITEMS).forEach(category => {
-      Object.values(category).forEach(value => {
-        localStorage.setItem(value, '1');
-      });
-    });
-  }, []);
+  // useEffect(() => {
+  //   Object.values(GUIDE_ITEMS).forEach(category => {
+  //     Object.values(category).forEach(value => {
+  //       localStorage.setItem(value, '1');
+  //     });
+  //   });
+  // }, []);
 
   useEffect(() => {
     const minLoadingTimeout = setTimeout(() => {

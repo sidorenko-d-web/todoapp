@@ -13,10 +13,10 @@ export const useWebApp = () => {
 
     const handleSettingsClick = () => {
       // TODO: не забыть расскоментить и при запуске проекта
-      // WebApp.SettingsButton.hide();
-      // openModal(MODALS.SETTINGS);
+      WebApp.SettingsButton.hide();
+      openModal(MODALS.SETTINGS);
 
-      localStorage.clear()
+      // localStorage.clear()
     };
 
     WebApp.SettingsButton.onClick(handleSettingsClick);

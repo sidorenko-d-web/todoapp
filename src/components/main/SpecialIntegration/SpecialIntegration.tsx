@@ -69,8 +69,6 @@ export const SpecialIntegration = ({ integration }: SpecialIntegrationProps) => 
               </>
             )
           }
-
-
         </button>
       </div>
     </div>
