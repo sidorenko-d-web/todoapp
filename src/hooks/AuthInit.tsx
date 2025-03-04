@@ -42,8 +42,6 @@ export function AuthInit({ children }: AuthInitProps) {
     return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
   }
 
-  
-
   if (isError) {
     console.error(  )
   }
