@@ -1,4 +1,4 @@
-import { MODALS } from '../../../constants/modals';
+import { MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import styles from './GetGift.module.scss';
 import Button from '../partials/Button';
@@ -7,42 +7,52 @@ import integration from '../../../assets/icons/integration-white.svg';
 import snowflake from '../../../assets/icons/snowflake.svg';
 import subscribers from '../../../assets/icons/subscribers.svg';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
+import redLightAnimation from '../../../assets/animations/redLight.json';
+import purpleLightAnimation from '../../../assets/animations/purpleLight.json';
 import reward from '../../../assets/animations/reward.json';
 import gift from '../../../assets/icons/gift.svg';
+import giftRed from '../../../assets/icons/gift-red.svg';
+import giftPurple from '../../../assets/icons/gift-purple.svg';
 import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
-import { useGetDailyRewardQuery } from '../../../redux/api/tasks';
-
-export default function GetGift({ refetchTasks }: { refetchTasks: () => void }) {
+interface Props {
+  lvl?: number;
+}
+export default function GetGift({ lvl }: Props) {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
 
-  const { isSuccess } = useGetDailyRewardQuery(localStorage.getItem('taskId') ?? '', {
-    skip: !isOpen,
-  });
-
-
-  const handleClose = () => {
-    //todo: add success change when telegram subscription reward logic is implemented
-    refetchTasks();
-    closeModal(MODALS.GET_GIFT);
-  };
-
   if (!isOpen) return null;
 
+  let giftImage;
+
+  if (lvl == null || (lvl >= 0 && lvl < 50)) {
+    giftImage = <img src={gift} className={styles.gift} />;
+  } else if (lvl >= 50 && lvl < 100) {
+    giftImage = <img src={giftPurple} className={styles.gift} />;
+  } else if (lvl >= 100 && lvl < 150) {
+    giftImage = <img src={giftRed} className={styles.gift} />;
+  }
+
+  let giftLight;
+
+  if (lvl == null || (lvl >= 0 && lvl < 50)) {
+    giftLight = <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />;
+  } else if (lvl >= 50 && lvl < 100) {
+    giftLight = <Lottie animationData={purpleLightAnimation} loop={true} className={styles.light} />;
+  } else if (lvl >= 100 && lvl < 150) {
+    giftLight = <Lottie animationData={redLightAnimation} loop={true} className={styles.light} />;
+  }
   return (
-    <CentralModal onClose={handleClose} modalId={MODALS.GET_GIFT} title={'Подарок открыт!'}>
+    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={'Подарок открыт!'}>
       <div className={styles.background}>
         <Lottie animationData={reward} loop={false} className={styles.reward} />
       </div>
 
-      <div className={styles.images}>
-        <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
-      </div>
+      <div className={styles.images}>{giftLight}</div>
 
       <div className={styles.info}>
-        <img src={gift} className={styles.gift} />
-
+        {giftImage}
         <div className={styles.statsContainer}>
           <div className={styles.stat}>
             <span className={styles.statValue}>+0,15</span>
@@ -89,7 +99,10 @@ export default function GetGift({ refetchTasks }: { refetchTasks: () => void }) 
         </div>
         <p className={styles.desc}>Поздравляем! Вы улучшли основные показатели и получили дополнительные бонусы!</p>
       </div>
-      <Button variant={'blue'} onClick={handleClose}>
+      <Button
+        variant={lvl == null || (lvl >= 0 && lvl < 50) ? 'blue' : lvl >= 50 && lvl < 100 ? 'purple' : 'red'}
+        onClick={() => closeModal(MODALS.GET_GIFT)}
+      >
         Забрать
       </Button>
     </CentralModal>

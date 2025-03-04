@@ -53,16 +53,12 @@ export const ShopInvewntoryPage = () => {
             _item.name === item.name &&
             _item.item_rarity === item.item_rarity &&
             _item.item_premium_level === 'advanced',
-        )
-          ? true
-          : false;
+        );
       } else if (item.item_premium_level === 'advanced') {
         return !arr.find(
           _item =>
             _item.name === item.name && _item.item_rarity === item.item_rarity && _item.item_premium_level === 'pro',
-        )
-          ? true
-          : false;
+        );
       } else {
         return true;
       }

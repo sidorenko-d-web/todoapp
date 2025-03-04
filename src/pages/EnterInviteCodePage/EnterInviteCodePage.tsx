@@ -25,8 +25,9 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onCont
   const {t} = useTranslation('referral')
   const [inputValue, setInputValue] = useState('');
   const [isValid, setIsValid] = useState(false);
+  const [isSentCode, setIsSentCode] = useState(false)
   const [errorMessage, setErrorMessage] = useState('');
-  const [sendReferralCode, { isLoading, isSuccess }] = useSendReferralCodeMutation();
+  const [sendReferralCode, { isLoading }] = useSendReferralCodeMutation();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -51,7 +52,7 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onCont
         referral_id,
         referral_code: Number.parseInt(inputValue)
       }).unwrap()
-
+      setIsSentCode(true)
       onContinue();
     } catch (error) {
       const err = error as ReferralErrorResponse;
@@ -60,28 +61,30 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onCont
       switch (err.type) {
         case 'ReferrerNotFound':
           setErrorMessage(err.message);
+          setIsValid(false)
           break;
         case 'UserAlreadyIsReferral':
-          setErrorMessage(err.message);
+          setIsSentCode(true)
           // If user is already a referral, we can still continue
           setTimeout(() => {
             onContinue();
-          }, 1000);
+          }, 500);
           break;
         case 'UserNotFoundInBotDatabaseException':
           setErrorMessage(err.message);
+          setIsValid(false)
           break;
         default:
           setErrorMessage(err.message);
+          setIsValid(false)
       }
 
-      setIsValid(false);
     }
   };
 
   return (
     <div className={styles.root}>
-      <img src={isSuccess ? lockOpen : lock} className={styles.lock} width={120} height={120} />
+      <img src={isSentCode ? lockOpen : lock} className={styles.lock} width={120} height={120} />
 
       <div className={styles.inputGroup}>
         <label>{t('r1')}</label>

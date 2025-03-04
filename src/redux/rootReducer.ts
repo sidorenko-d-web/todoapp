@@ -22,6 +22,7 @@ import guideReducer from './slices/guideSlice.ts';
 import { pointsReducer } from './slices/point.ts';
 import { confirmationsApi } from './api/confirmations/api.ts';
 import { characterApi } from './api/character/api.ts';
+import accelerationReducer from './slices/integrationAcceleration.ts';
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -30,6 +31,7 @@ const appReducer = combineReducers({
   audioSlice: audioReducer,
   pointSlice: pointsReducer,
   confirmation: confirmationReducer,
+  acceleration: accelerationReducer,
   animationStateSlice: animationStateReducer,
   [authApi.reducerPath]: authApi.reducer,
   [shopApi.reducerPath]: shopApi.reducer,

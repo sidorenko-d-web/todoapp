@@ -52,7 +52,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
       {!finished ? (
         <div className={styles.usernameAndComment}>
           <p className={styles.username}>{author_username}:</p>
-          <p className={clsx(styles.negativeCommentText, { [styles.positiveCommentText]: hateText })}>{comment_text}</p>
+          <p className={clsx(styles.positiveCommentText, { [styles.negativeCommentText]: hateText })}>{comment_text}</p>
         </div>
       ) : (
         <p className={styles.noComment}>{t('i8')}</p>
