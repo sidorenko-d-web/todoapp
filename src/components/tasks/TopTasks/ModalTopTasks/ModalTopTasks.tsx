@@ -8,7 +8,8 @@ import checkIcon from '../../../../assets/icons/checkmark-in-the-circle.svg';
 import bookIcon from '../../../../assets/icons/book.svg';
 import coinBlueIcon from '../../../../assets/icons/coin-blue-human.svg';
 import { ProgressBarTasks } from '../../ProgressBarTasks';
-import chestIcon from '../../../../assets/icons/chest-purple.svg';
+import chestIconPurple from '../../../../assets/icons/chest-purple.svg';
+import chestIconRed from '../../../../assets/icons/chest-red.svg';
 import { useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
 import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../../helpers';
@@ -52,6 +53,7 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
     Array(task.stages).fill(false).map((_, index) => index < task.completed_stages)
   );
   const [channelLink, setChannelLink] = useState('');
+  const [channelLink2, setChannelLink2] = useState('');
   const progress = (completedSteps.filter(step => step).length / task.stages) * 100;
   const [updateTask] = useUpdateTaskMutation();
   const [hasError, setHasError] = useState(false);
@@ -116,6 +118,10 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
     return task.description;
   };
 
+  const getChestIcon = () => {
+    return currentStepIndex === 3 ? chestIconRed : chestIconPurple;
+  };
+
   return (
     <BottomModal
       modalId={modalId}
@@ -151,7 +157,8 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
             totalSteps={task.stages}
             progress={progress}
             progressReward={t('q10')}
-            progressRewardIcon={chestIcon}
+            progressRewardIcon={getChestIcon()}
+            color={currentStepIndex === 3 ? '#E84949' : '#9747FF'}
           />
         </div>
 
@@ -189,11 +196,34 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
             </div>
           </div>
           <h3 className={s.questionText}>{getStepDescription()}</h3>
+
+          <span className={s.linkLabel} style={{ marginTop: '20px' }}>{t('q52')}</span>
+          <div className={s.options}>
+            <div className={s.option}>
+              <input
+                type="text"
+                className={s.channelInput}
+                value={channelLink2}
+                onChange={(e) => setChannelLink2(e.target.value)}
+                placeholder={"..."}
+              />
+              <div className={s.selectWrapper}>
+                <img
+                  src={completedSteps[currentStepIndex] ? checkIcon : dotsIcon}
+                  className={s.icon}
+                  alt=""
+                />
+              </div>
+            </div>
+          </div>
+          <h3 className={s.questionText2}>{getStepDescription()}</h3>
         </div>
 
         <div className={s.buttons}>
           <button 
-            className={s.answerButton}
+            className={classNames(s.answerButton, {
+              [s.stage4]: currentStepIndex === 3
+            })}
             onClick={handleOpenGuide}
           >
             {t('q30')}

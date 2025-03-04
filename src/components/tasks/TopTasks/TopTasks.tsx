@@ -1,7 +1,8 @@
 import { FC, useState } from 'react';
 import { TaskCard } from '../TaskCard';
 import magicBallIcon from '../../../assets/icons/magic-ball.png';
-import chestIcon from '../../../assets/icons/chest-purple.svg';
+import chestIconPurple from '../../../assets/icons/chest-purple.svg';
+import chestIconRed from '../../../assets/icons/chest-red.svg';
 import { MODALS } from '../../../constants/modals';
 import { useModal } from '../../../hooks';
 import s from '../styles.module.scss';
@@ -71,6 +72,10 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
 
   const progress = (taskState.currentStep / taskState.totalSteps) * 100;
 
+  const getChestIcon = () => {
+    return taskState.currentStep === 3 ? chestIconPurple : chestIconPurple;
+  };
+
   return (
     <section className={s.section}>
       {/* Добавляем тестовую кнопку только в режиме разработки */}
@@ -111,7 +116,7 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
           totalSteps={taskState.totalSteps}
           currentStep={taskState.currentStep}
           progressReward={t('q10')}
-          progressRewardIcon={chestIcon}
+          progressRewardIcon={getChestIcon()}
           onClick={handleOpenTopTasks}
           disabled={task.is_reward_given}
           buttonText={task.is_completed && !task.is_reward_given ? t('q33') : task.is_completed ? t('q15') : t('q13')}

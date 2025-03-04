@@ -8,6 +8,7 @@ interface ProgressBarProps {
   progress: number;
   progressReward?: string;
   progressRewardIcon?: string;
+  color?: string;
 }
 
 export const ProgressBarTasks: React.FC<ProgressBarProps> = ({
@@ -16,6 +17,7 @@ export const ProgressBarTasks: React.FC<ProgressBarProps> = ({
                                                           progress,
                                                           progressReward,
                                                           progressRewardIcon,
+                                                          color
                                                         }) => {
   return (
     <section className={s.progressBarSection}>
@@ -27,7 +29,13 @@ export const ProgressBarTasks: React.FC<ProgressBarProps> = ({
         </span>
       </div>
       <div className={s.progressBar}>
-        <div className={s.progressBarInner} style={{ width: `${progress}%` }} />
+        <div 
+          className={s.progressBarInner} 
+          style={{ 
+            width: `${progress}%`,
+            backgroundColor: color
+          }} 
+        />
       </div>
     </section>
   );

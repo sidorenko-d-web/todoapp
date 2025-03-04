@@ -80,6 +80,16 @@
   letter-spacing: -0.7px;
 }
 
+.questionText2 {
+  align-self: stretch;
+  color: #505B78;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 130%;
+  letter-spacing: -0.7px;
+}
 
 .options {
   display: flex;
@@ -175,6 +185,11 @@
   color: var.$color-text;
   border: 1px solid var(---, #7A2BC3);
   background: #9747FF;
+
+  &.stage4 {
+    border: 1px solid #C93232;
+    background: #E84949;
+  }
 }
 
 .nextButton {
