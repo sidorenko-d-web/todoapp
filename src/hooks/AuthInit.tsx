@@ -7,12 +7,14 @@ import { useAuthFlow } from './useAuthFlow';
 import Lottie from 'lottie-react';
 import { coinsAnim } from '../assets/animations';
 import WebApp from '@twa-dev/sdk'
+import { useWebApp } from './useWebApp.ts';
 
 type AuthInitProps = {
   children: React.ReactNode;
 };
 
 export function AuthInit({ children }: AuthInitProps) {
+  useWebApp()
   const {
     currentStep,
     isLoading,
@@ -20,7 +22,6 @@ export function AuthInit({ children }: AuthInitProps) {
     isAnimationFinished,
     setIsAnimationFinished,
     selectedLanguage,
-    // currentUserTelegramId,
     isError,
     handleLanguageSelect,
     handleLanguageContinue,
