@@ -11,8 +11,8 @@ import { useGetTopProfilesQuery } from '../../../../redux';
 import { Link } from 'react-router-dom';
 
 type SliderProps = {
-  isInfluencersLocked?: boolean
-}
+  isInfluencersLocked?: boolean;
+};
 
 export const SliderSelect = ({ isInfluencersLocked }: SliderProps) => {
   const { data } = useGetTopProfilesQuery(undefined, { skip: isInfluencersLocked });
@@ -23,21 +23,22 @@ export const SliderSelect = ({ isInfluencersLocked }: SliderProps) => {
   // TODO: Раскомментировать когда на бэке будет vip данные
   return (
     <div className={s.sliderContainer}>
-      {
-        isInfluencersLocked && Array.from({ length: 10 }).map((_, index) => (
-          <div
-            key={index}
-            className={s.cardWrapper}
-          >
-            <div className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
+      {isInfluencersLocked &&
+        Array.from({ length: 10 }).map((_, index) => (
+          <div key={index} className={s.cardWrapper}>
+            <div
+              className={classNames(s.cardBlock, {
+                /*{ [s.vipCard]: profile.vip }*/
+              })}
+            >
               <div className={s.infoRang}>
                 <span className={s.seat}>{'# ???'}</span>
-                { /*profile.fire true !== undefined &&*/ (
-                  <div className={s.fireIcon}>
+                {
+                  /*profile.fire true !== undefined &&*/ <div className={s.fireIcon}>
                     <img src={fire} alt="fire" />
                     <span>???</span>
                   </div>
-                )}
+                }
               </div>
               <div className={s.middleRow}>
                 <img src={lock} alt="Lock" />
@@ -50,40 +51,45 @@ export const SliderSelect = ({ isInfluencersLocked }: SliderProps) => {
               {/*)}*/}
             </div>
           </div>
-        ))
-      }
+        ))}
 
-      {!isInfluencersLocked && topProfiles && topProfiles.map((profile, index) => (
-        <Link
-          draggable={false}
-          to={`/profile/${profile.id}`}
-          key={profile.id}
-          className={s.cardWrapper}
-        >
-          <div className={classNames(s.cardBlock, {/*{ [s.vipCard]: profile.vip }*/ })}>
-            <div className={s.card}>
-              <div className={s.infoRang}>
-                <span className={s.seat}>{`# ${index + 1}`}</span>
-                { /*profile.fire true !== undefined &&*/ (
-                  <div className={s.fireIcon}>
-                    <img src={fire} alt="fire" />
-                    <span>6</span>
-                  </div>
-                )}
+      {!isInfluencersLocked &&
+        topProfiles &&
+        topProfiles.map((profile, index) => (
+          <Link
+            draggable={false}
+            to={`/profile/${profile.id}`}
+            key={profile.id}
+            className={s.cardWrapper}
+          >
+            <div
+              className={classNames(s.cardBlock, {
+                /*{ [s.vipCard]: profile.vip }*/
+              })}
+            >
+              <div className={s.card}>
+                <div className={s.infoRang}>
+                  <span className={s.seat}>{`# ${index + 1}`}</span>
+                  {
+                    /*profile.fire true !== undefined &&*/ <div className={s.fireIcon}>
+                      <img src={fire} alt="fire" />
+                      <span>6</span>
+                    </div>
+                  }
+                </div>
+                <div className={s.middleRow}>
+                  <img src={face} alt="face" />
+                </div>
+                {/*{profile.vip && (*/}
+                {/*  <div className={s.vip}>*/}
+                {/*    <img src={star} alt="star" />*/}
+                {/*    <span>VIP</span>*/}
+                {/*  </div>*/}
+                {/*)}*/}
               </div>
-              <div className={s.middleRow}>
-                <img src={face} alt="face" />
-              </div>
-              {/*{profile.vip && (*/}
-              {/*  <div className={s.vip}>*/}
-              {/*    <img src={star} alt="star" />*/}
-              {/*    <span>VIP</span>*/}
-              {/*  </div>*/}
-              {/*)}*/}
             </div>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        ))}
     </div>
   );
 };

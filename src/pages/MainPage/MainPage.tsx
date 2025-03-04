@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useReducer } from 'react';
+import { FC, useEffect, useReducer } from 'react';
 import {
   AccelerateIntegtrationGuide,
   CreatingIntegrationGuide,
@@ -16,7 +16,7 @@ import s from './MainPage.module.scss';
 import { AppRoute, MODALS } from '../../constants';
 import { useModal } from '../../hooks';
 
-import { GUIDE_ITEMS } from '../../constants/guidesConstants';
+import { GUIDE_ITEMS } from '../../constants';
 import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../utils';
 
 import {
@@ -25,7 +25,7 @@ import {
   setGetCoinsGuideShown,
   setIntegrationReadyForPublishing,
   setLastIntegrationId,
-} from '../../redux/slices/guideSlice.ts';
+} from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   RootState,
@@ -38,6 +38,9 @@ import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/Re
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { incrementAcceleration } from '../../redux/slices/integrationAcceleration.ts';
+import DaysInARowModal from '../DevModals/DaysInARowModal/DaysInARowModal.tsx';
+
 export const MainPage: FC = () => {
   const { t } = useTranslation('guide');
   const { getModalState, openModal, closeModal } = useModal();
@@ -47,7 +50,6 @@ export const MainPage: FC = () => {
   const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
 
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
-
   useEffect(() => {
     refetch().then(() => {
       if (data?.integrations[0].status === 'created') {
@@ -60,8 +62,9 @@ export const MainPage: FC = () => {
     });
   }, []);
 
-
   const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
+
+  const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
   const initialState = {
     firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
@@ -82,7 +85,7 @@ export const MainPage: FC = () => {
     }
   }
 
-  const [ guideVisibility, dispatch ] = useReducer(guideReducer, initialState);
+  const [guideVisibility, dispatch] = useReducer(guideReducer, initialState);
 
   const purchasingSubscriptionModalState = getModalState(MODALS.SUBSCRIBE);
   const creatingIntegrationModalState = getModalState(MODALS.CREATING_INTEGRATION);
@@ -90,13 +93,13 @@ export const MainPage: FC = () => {
   const handleGuideClose = (guideId: string) => {
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
-  
+
 
   useEffect(() => {
     if (creatingIntegrationModalState.isOpen) {
       closeModal(MODALS.SUBSCRIBE);
     }
-  }, [ creatingIntegrationModalState.isOpen ]);
+  }, [creatingIntegrationModalState.isOpen]);
 
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(2));
@@ -106,10 +109,10 @@ export const MainPage: FC = () => {
       openModal(MODALS.SUBSCRIBE);
     }
 
-    if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
-      && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
-      navigate(AppRoute.Shop);
-    }
+    // if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
+    //   && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+    //   navigate(AppRoute.Shop);
+    // }
 
     if (
       isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
@@ -135,14 +138,14 @@ export const MainPage: FC = () => {
       openModal(MODALS.CREATING_INTEGRATION);
     }
 
-    if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
-      && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
-      navigate(AppRoute.Shop);
-    }
+    // if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+    //   && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
+    //   navigate(AppRoute.Shop);
+    // }
 
-    if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
-      navigate(AppRoute.ShopInventory);
-    }
+    // if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+    //   navigate(AppRoute.ShopInventory);
+    // }
   }, []);
 
   const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
@@ -151,6 +154,10 @@ export const MainPage: FC = () => {
   const { isLoading: isCurrentUserProfileInfoLoading } = useGetCurrentUserProfileInfoQuery();
   const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
   const { isLoading: isRoomLoading } = useGetEquipedQuery();
+
+  useEffect(() => {
+    reduxDispatch(setActiveFooterItemId(2));
+  }, []);
 
   const isLoading = (
     isAllIntegrationsLoading ||
@@ -161,8 +168,19 @@ export const MainPage: FC = () => {
 
   if (isLoading) return <Loader />;
 
+  const accelerateIntegration = () => {
+    if (integrationCurrentlyCreating) {
+      reduxDispatch(incrementAcceleration());
+    }
+  }
+
   return (
-    <main className={s.page}>
+    <main className={s.page} onClick={accelerateIntegration}>
+      <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
+      {integrationCurrentlyCreating && <div
+        style={{ position: 'absolute', top: '0', zIndex: '15000', height: '70%', width: '100%', backgroundColor: 'transparent' }}
+        onClick={accelerateIntegration} />}
+
       <Room />
 
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}

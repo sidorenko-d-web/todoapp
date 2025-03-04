@@ -18,6 +18,7 @@ export const IncreaseIncome = () => {
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
   const { data, isLoading, error } = useGetCurrentUsersReferralsQuery();
+
   // const data = {
   //   referrals: [
   //     {

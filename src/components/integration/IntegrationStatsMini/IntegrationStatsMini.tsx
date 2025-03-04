@@ -11,13 +11,11 @@ import { formatAbbreviation } from '../../../helpers';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
 
-
 interface IntegrationStatsMiniProps {
   views: number;
   subscribers: number;
   income: string;
 }
-
 
 export const IntegrationStatsMini: React.FC<IntegrationStatsMiniProps> = ({ views, subscribers, income }) => {
   const navigate = useNavigate();
@@ -36,10 +34,10 @@ export const IntegrationStatsMini: React.FC<IntegrationStatsMiniProps> = ({ view
             <p className={styles.stat}>{formatAbbreviation(subscribers, 'number', { locale: locale })}</p>
             <img src={subscribersIcon} height={18} width={18} alt="" />
           </div>
-        </div>
-        <div className={styles.statWrp}>
+          <div className={styles.statWrp}>
           <p className={styles.stat}>+ {formatAbbreviation(income, 'number', { locale: locale })}</p>
           <img src={coin} height={18} width={18} alt="" />
+        </div>
         </div>
       </div>
       <TrackedButton trackingData={{ eventType: 'button', eventPlace: 'К статистике - Интеграции' }}

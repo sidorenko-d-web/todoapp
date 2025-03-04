@@ -126,7 +126,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
               </span>
             ))}
           </div>
-
           {uniqueCompany && (
             <SpecialIntegration
               integration={uniqueCompany}
@@ -147,6 +146,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                   onClick={() => submitCreation(company.id)}
                 />
               ))}
+
             </div>
           ) : (
             <span className={s.message}>{noItemsMessage}</span>

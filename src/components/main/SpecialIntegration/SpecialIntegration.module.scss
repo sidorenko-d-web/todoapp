@@ -119,10 +119,14 @@
 
 
     .errorMessage {
-      color: var.$color-red;
-      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      color: var.$color-white;
       font-weight: 500;
-      line-height: 100%;
+      font-size: 14px;
+      line-height: 14px;
+      letter-spacing: -5%;
     }
 
     .buttonTitle {

@@ -4,14 +4,12 @@ import styles from './ProfileInfo.module.scss';
 
 import profileImagePlaceholder from '../../../assets/icons/profile-icon-placeholder.svg';
 import clanIcon from '../../../assets/icons/clan-red.svg';
-import editIcon from '../../../assets/icons/edit.svg';
 import vipIcon from '../../../assets/icons/vip.svg';
 
 import subscriptionLeveIcon from '../../../assets/icons/subscription-level.svg';
 
 import { ProgressLine } from '../../shared';
-import { useModal } from '../../../hooks';
-import { AppRoute, MODALS } from '../../../constants';
+import { AppRoute } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux';
 import { useTranslation } from 'react-i18next';
@@ -28,14 +26,11 @@ interface ProfileInfoProps {
 
 export const ProfileInfo: React.FC<ProfileInfoProps> = ({
                                                           nickname,
-                                                          blogName,
                                                           subscriptionIntegrationsLeft,
                                                           position,
                                                           isVip,
-                                                          nonEditable,
                                                         }) => {
   const { t } = useTranslation('profile');
-  const { openModal } = useModal();
   const lastActiveStage = useSelector(
     (state: RootState) => state.treeSlice.lastActiveStage,
   );
@@ -78,17 +73,17 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
               }} to={AppRoute.ProgressTree} className={styles.subscribers}>
               {lastActiveStage}
             </TrackedLink>
-            {!nonEditable && (
-              <img
-                className={styles.edit}
-                src={editIcon}
-                onClick={() => openModal(MODALS.CHANGING_NICKNAME)}
-                alt=""
-              />
-            )}
+            {/*{!nonEditable && (*/}
+            {/*  <img*/}
+            {/*    className={styles.edit}*/}
+            {/*    src={editIcon}*/}
+            {/*    onClick={() => openModal(MODALS.CHANGING_NICKNAME)}*/}
+            {/*    alt=""*/}
+            {/*  />*/}
+            {/*)}*/}
           </div>
 
-          <p className={styles.blogName}>{blogName}</p>
+          {/*<p className={styles.blogName}>{blogName}</p>*/}
         </div>
 
         <div className={styles.subscription}>

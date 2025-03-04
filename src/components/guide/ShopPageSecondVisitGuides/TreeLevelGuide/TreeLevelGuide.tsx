@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './TreeLevelGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
-import { Guide } from '../../Guide/Guide';
+import { Guide } from '../../Guide';
 
 import LockIcon from '../../../../assets/icons/lock_icon.svg';
 import { useTranslation } from 'react-i18next';
