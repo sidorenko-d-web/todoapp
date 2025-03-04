@@ -96,6 +96,10 @@ export const TaskCard: React.FC<TasksCardProps> = ({
 
   // Функция для получения иконки на основе состояния
   const getIconByState = (state: QuestionState) => {
+    if(isRewardGiven) {
+      return checkIcon;
+    }
+
     switch (state) {
       case 'solved':
         return checkIcon;

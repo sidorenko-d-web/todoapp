@@ -5,7 +5,7 @@ import coin from '../../../assets/icons/coin.png';
 import subscribers from '../../../assets/icons/subscribers.png';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
-import reward from '../../../assets/animations/reward.json';
+import confetti from '../../../assets/animations/confetti.json';
 import { MODALS, SOUNDS } from '../../../constants';
 import { CentralModal } from '../../../components/shared';
 
@@ -20,7 +20,7 @@ export default function TaskCompletedModal() {
       title={'Задание выполнено!'}
     >
       <div className={styles.background}>
-        <Lottie animationData={reward} loop={false} className={styles.reward} />
+        <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
       <div className={styles.info}>
         <div className={styles.top}>

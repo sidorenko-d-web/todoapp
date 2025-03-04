@@ -26,7 +26,6 @@ export const ShopInvewntoryPage = () => {
     data: inventory,
     isSuccess,
     isLoading: isInventoryLoading,
-    isFetching: isInventoryFetching,
   } = useGetInventoryItemsQuery(
     {
       item_category: shopCategory?.value!,
@@ -35,7 +34,7 @@ export const ShopInvewntoryPage = () => {
     { skip: !shopCategory?.value },
   );
 
-  const { data: shop, isLoading: isShopLoading, isFetching: isShopFetching } = useGetShopItemsQuery(
+  const { data: shop, isLoading: isShopLoading } = useGetShopItemsQuery(
     {
       item_category: shopCategory?.value!,
       item_rarity: itemsQuality?.value,
@@ -54,18 +53,14 @@ export const ShopInvewntoryPage = () => {
             _item.name === item.name &&
             _item.item_rarity === item.item_rarity &&
             _item.item_premium_level === 'advanced',
-        )
-          ? true
-          : false;
+        );
       } else if (item.item_premium_level === 'advanced') {
         return !arr.find(
           _item =>
             _item.name === item.name &&
             _item.item_rarity === item.item_rarity &&
             _item.item_premium_level === 'pro',
-        )
-          ? true
-          : false;
+        );
       } else {
         return true;
       }
@@ -105,9 +100,9 @@ export const ShopInvewntoryPage = () => {
       onItemQualityChange={setItemsQuality}
     >
       {
-        isShopLoading ||  isEquipedLoading ? (
+        isShopLoading || isEquipedLoading || isInventoryFetching || isShopFetching ? (
           <Loader className={styles.itemsLoader} />
-        ) : !isInventoryLoading && !isSuccess && shopCategory?.title !== 'Вы' ? (
+        ) : !(isShopLoading || isEquipedLoading) && (!isInventoryLoading && !isSuccess && shopCategory?.title !== 'Вы') ? (
           <p className={styles.emptyText}>{t('s38')}</p>
         ) : !shopCategory || !itemsQuality ? (
           <p style={{ color: '#fff' }}>Error occured while getting data</p>

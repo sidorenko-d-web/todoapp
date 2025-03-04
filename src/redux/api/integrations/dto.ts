@@ -16,6 +16,11 @@ export type IntegrationResponseDTO = {
   published_at: string;
   created_at: string;
   updated_at: string;
+
+  base_income: string;
+  base_views: number;
+  base_subscribers: number;
+
   campaign: {
     company_name: string;
     image_url: string;

@@ -22,9 +22,7 @@ interface CompanyCardProps {
 const glowing = !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
 export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, disabled }) => {
-  const {data: integrationsData} = useGetAllIntegrationsQuery({
-    company_name: company.company_name
-  })
+  const {data: integrationsData} = useGetAllIntegrationsQuery()
   const integrationCount = integrationsData?.count ?? 0;
 
 
