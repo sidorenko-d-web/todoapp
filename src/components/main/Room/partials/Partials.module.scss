@@ -31,6 +31,7 @@ $translateY: -15vh;
   @extend .item;
   transform: translateX(-58.15%);
   top: 310px;
+  background: 'red';
 }
 
 .floor {
@@ -42,10 +43,32 @@ $translateY: -15vh;
   transform: skew(-30deg);
   overflow: hidden;
 
-  img{
+  img {
     width: 100%;
     height: 100%;
-    scale: 1.2
+    scale: 1.2;
+  }
+
+  .repairSkew {
+    position: absolute;
+    top: 0;
+    transform: skew(5.5deg) scaleY(1.5) translate(100px, -300px);
+    scale: 0.5;
+    rotate: -45deg;
+  }
+}
+
+.floorTexture {
+  background: #000;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+
+  img {
+    width: 10%;
+    height: 10%;
+    transform: skew(0deg) rotate(0);
   }
 }
 

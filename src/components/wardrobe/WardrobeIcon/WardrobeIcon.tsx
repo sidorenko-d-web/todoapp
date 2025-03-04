@@ -43,7 +43,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
       this.spineObject.scale = 0.15;
       spineSceneRef.current = this;
     }
-
+    
     makeHappy() {
       if (!this.spineObject) return;
       this.spineObject.animationState.setAnimation(0, 'happy');
