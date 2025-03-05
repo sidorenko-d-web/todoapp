@@ -38,8 +38,8 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
     hasError: false
   });
 
-  // Добавляем состояние для тестового режима
-  const [isTestMode] = useState(process.env.NODE_ENV === 'development');
+  // // Добавляем состояние для тестового режима
+  // const [isTestMode] = useState(process.env.NODE_ENV === 'development');
 
   const handleOpenTopTasks = async () => {
     console.log('Task completion status:', task.is_completed);
@@ -94,7 +94,7 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
 
   return (
     <section className={s.section}>
-      {/* Добавляем тестовую кнопку только в режиме разработки */}
+      {/* Добавляем тестовую кнопку только в режиме разработки
       {isTestMode && (
         <button 
           onClick={() => openModal(MODALS.TOP_TASK)}
@@ -110,7 +110,7 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
         >
           Открыть модальное окно (тест)
         </button>
-      )}
+      )} */}
 
       <div className={s.sectionHeader}>
         <h2 className={s.sectionTitle}>{t('q6')}</h2>
