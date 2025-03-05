@@ -49,7 +49,7 @@ export default function GetRewardChestModal({}: GetRewardChestModalProps) {
         <div className={styles.items}>
           <div className={styles.item}>
             <p>+{points}</p>
-            <img src={coin} height={18} width={18}/>
+            <img src={coin} />
           </div>
           <div className={styles.item}>
             <p>+{subscribers}</p>
@@ -57,7 +57,7 @@ export default function GetRewardChestModal({}: GetRewardChestModalProps) {
           </div>
           <div className={styles.item}>
             <p>+{freezes}</p>
-            <img src={snowflake} height={18} width={18}/>
+            <img src={snowflake}/>
           </div>
           <div className={styles.itemIcon}>Adv.</div>
         </div>
