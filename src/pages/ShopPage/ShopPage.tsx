@@ -1,14 +1,14 @@
 import { FC, useEffect, useState } from 'react';
 import { ShopLayout } from '../../layout/ShopLayout/ShopLayout';
 import { ItemsTab, Loader, NewItemModal, SkinTab } from '../../components';
-import { useGetShopItemsQuery } from '../../redux/api/shop/api';
+import { useGetShopItemsQuery } from '../../redux';
 import { IShopItem, TypeItemCategory, TypeItemRarity, useGetCurrentUserBoostQuery } from '../../redux';
-import { useGetInventoryItemsQuery } from '../../redux/api/inventory/api';
+import { useGetInventoryItemsQuery } from '../../redux';
 import styles from './ShopPage.module.scss';
 import { itemsInTab } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { setActiveFooterItemId } from '../../redux/slices/guideSlice';
+import { setActiveFooterItemId } from '../../redux';
 
 type TypeTab<T> = { title: string; value: T };
 
@@ -47,8 +47,6 @@ const StorePage: FC = () => {
   const isLoading = (
     isBoostLoading
   );
-
-  console.log(shopCategory, itemsRarity, items);
 
   if (isLoading) return <Loader />;
 

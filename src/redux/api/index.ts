@@ -11,3 +11,4 @@ export * from './tracking'
 export * from './room'
 export * from './pushLine'
 export * from './confirmations';
+export * from './chests';

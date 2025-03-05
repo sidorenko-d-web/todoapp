@@ -27,6 +27,6 @@ dist-ssr
 *.sln
 *.sw?
 
-src/hooks/AuthInit.tsx/
+src/hooks/Auth/AuthInit.tsx/
 
 /node_modules

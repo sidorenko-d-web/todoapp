@@ -119,7 +119,6 @@ const [ unlockAchievement ] = useUnlockAchievementMutation();
 
                         <img src={giftIcon} height={20} width={20} alt="gift" style={{ opacity: '0.5' }} />
 
-
                         <div className={`${s.giftStatus} 
                           ${(stage.achievement.is_avaliable && !stage.achievement.is_unlocked)
                              || stage.achievement.is_unlocked? s.notTaken : ''}
