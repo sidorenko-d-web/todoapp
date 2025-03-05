@@ -9,6 +9,7 @@ import tick from '../../assets/icons/tick-circle-gray.svg';
 import { Button } from '../../components/shared';
 import { useSendReferralCodeMutation } from '../../redux';
 import { useTranslation } from 'react-i18next';
+import classNames from 'classnames';
 
 interface EnterInviteCodePageProps {
   onContinue: () => void;
@@ -26,6 +27,7 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onCont
   const [inputValue, setInputValue] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [isSentCode, setIsSentCode] = useState(false)
+  const [isFocus, setIsFocus] = useState(false)
   const [errorMessage, setErrorMessage] = useState('');
   const [sendReferralCode, { isLoading }] = useSendReferralCodeMutation();
 
@@ -93,6 +95,8 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onCont
             type="text"
             value={inputValue}
             onChange={handleInputChange}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
             className={`${styles.input} ${!isValid ? styles.invalid : ''}`}
             placeholder="..."
           />
@@ -112,10 +116,10 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onCont
         <p className={styles.description}>{errorMessage}</p>
       )}
 
-      <Button className={`${styles.nextBtn} ${isValid ? styles.validInput : ''}`} onClick={handleSubmit}>
+      <Button className={classNames(styles.nextBtn, {[styles.validInput]: isValid}, {[styles.btnFocus]: isFocus})} onClick={handleSubmit}>
         {isLoading ? t("r5") : t("r4")}
       </Button>
-      <p className={styles.enterCodeText}>{t('r3')}</p>
+      <p className={classNames(styles.enterCodeText, {[styles.textFocus]: isFocus})}>{t('r3')}</p>
     </div>
   );
 };

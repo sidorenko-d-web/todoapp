@@ -25,7 +25,6 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
   const {data: integrationsData} = useGetAllIntegrationsQuery()
   const integrationCount = integrationsData?.count ?? 0;
 
-
   const getBlueStarCount = (count: number = 0) => {
     if (count >= 18) return 3;
     if (count >= 10) return 2;

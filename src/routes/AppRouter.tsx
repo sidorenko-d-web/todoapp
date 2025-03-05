@@ -19,12 +19,9 @@ import Layout from '../layout/Layout.tsx';
 import StatisticsPage from '../pages/StatisticsPage/StatisticsPage';
 
 import DevModals from '../pages/DevModals/DevModals.tsx';
-import { ShopInvewntoryPage } from '../pages/ShopPage';
-import { useWebApp } from '../hooks';
+import { ShopInventoryPage } from '../pages/ShopPage';
 
 function AppRouter(): JSX.Element | null {
-  useWebApp(); // WebApp SDK initialization
-
   const location = useLocation();
 
   useEffect(() => {
@@ -43,7 +40,7 @@ function AppRouter(): JSX.Element | null {
         <Route path={AppRoute.Profile} element={<ProfilePage />} />
         <Route path={AppRoute.StrangerProfile} element={<StrangerProfilePage />} />
         <Route path={AppRoute.Promotion} element={<PromotionPage />} />
-        <Route path={AppRoute.ShopInventory} element={<ShopInvewntoryPage />} />
+        <Route path={AppRoute.ShopInventory} element={<ShopInventoryPage />} />
         <Route path={'dev-modals'} element={<DevModals />} />
         <Route path={AppRoute.Wardrobe} element={<WardrobePage/>} />
         <Route path={AppRoute.ProgressTree} element={<ProgressTreePage/>} />

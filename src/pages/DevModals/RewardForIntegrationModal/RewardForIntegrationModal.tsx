@@ -11,7 +11,7 @@ import starGray from '../../../assets/icons/star-dark-gray.svg';
 import lightning from '../../../assets/icons/lightning.svg';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
-import reward from '../../../assets/animations/reward.json';
+import confetti from '../../../assets/animations/confetti.json';
 import { useDispatch } from 'react-redux';
 import { setIsPublishedModalClosed } from '../../../redux/slices/guideSlice';
 import { CentralModal } from '../../../components/shared';
@@ -39,7 +39,7 @@ export default function RewardForIntegrationModal() {
       title={t('i27')}
     >
       <div className={styles.background}>
-        <Lottie animationData={reward} loop={false} className={styles.reward} />
+        <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
       <div className={styles.images}>
         <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
