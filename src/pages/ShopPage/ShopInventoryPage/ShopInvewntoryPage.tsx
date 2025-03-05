@@ -47,9 +47,7 @@ export const ShopInventoryPage = () => {
 
   useEffect(() => {
     if (inventory && shop && shopCategory) {
-      const filteredInventory = inventory.items.filter(
-        item => item.item_category === shopCategory.value,
-      );
+      const filteredInventory = inventory.items.filter(item => item.item_category === shopCategory.value);
 
       const _items = filteredInventory.filter((item, _, arr) => {
         if (item.item_premium_level === 'base') {
@@ -62,18 +60,14 @@ export const ShopInventoryPage = () => {
         } else if (item.item_premium_level === 'advanced') {
           return !arr.find(
             _item =>
-              _item.name === item.name &&
-              _item.item_rarity === item.item_rarity &&
-              _item.item_premium_level === 'pro',
+              _item.name === item.name && _item.item_rarity === item.item_rarity && _item.item_premium_level === 'pro',
           );
         } else {
           return true;
         }
       });
 
-      const filteredShop = shop.items.filter(
-        item => item.item_category === shopCategory.value,
-      );
+      const filteredShop = shop.items.filter(item => item.item_category === shopCategory.value);
 
       const _itemsForBuy = filteredShop
         .filter(item => !filteredInventory.find(_item => compareItems(item, _item)))
@@ -81,16 +75,14 @@ export const ShopInventoryPage = () => {
           filteredInventory.find(
             _item =>
               _item.level === 50 &&
-              ((item.item_premium_level === 'advanced' &&
-                  _item.item_premium_level === 'base') ||
-                (item.item_premium_level === 'pro' &&
-                  _item.item_premium_level === 'advanced')) &&
+              ((item.item_premium_level === 'advanced' && _item.item_premium_level === 'base') ||
+                (item.item_premium_level === 'pro' && _item.item_premium_level === 'advanced')) &&
               _item.name === item.name,
           ),
         );
-
-    setItems(_items?.reverse());
-    setItemsForBuy(_itemsForBuy);
+      setItems(_items?.reverse());
+      setItemsForBuy(_itemsForBuy);
+    }
   }, [inventory]);
 
   const { isLoading: isBoostLoading } = useGetCurrentUserBoostQuery();
@@ -102,9 +94,9 @@ export const ShopInventoryPage = () => {
 
   return (
     <ShopLayout mode="inventory" onItemCategoryChange={setShopCategory} onItemQualityChange={setItemsQuality}>
-      {isShopLoading ||isInventoryLoading || isEquipedLoading ? (
+      {isShopLoading || isEquipedLoading ? (
         <Loader className={styles.itemsLoader} />
-      ) : !(isShopLoading || isEquipedLoading) && (!isInventoryLoading && !isSuccess && shopCategory?.title !== 'Вы') ? (
+      ) : !isInventoryLoading && !isSuccess && shopCategory?.title !== 'Вы' ? (
         <p className={styles.emptyText}>{t('s38')}</p>
       ) : !shopCategory || !itemsQuality ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
@@ -112,10 +104,7 @@ export const ShopInventoryPage = () => {
         isSuccess && (
           <>
             {itemsForBuy?.[0] && <ItemsTab shopCategory={shopCategory} shopItems={itemsForBuy} />}
-            <ItemsTab
-              shopCategory={shopCategory}
-              inventoryItems={items?.sort((a, b) => a.name.localeCompare(b.name))}
-            />
+            <ItemsTab shopCategory={shopCategory} inventoryItems={items} />
           </>
         )
       ) : (

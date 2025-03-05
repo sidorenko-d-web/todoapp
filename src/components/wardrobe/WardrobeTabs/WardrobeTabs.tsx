@@ -78,11 +78,13 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ wardrobe, handleChan
       upper_body_skin_id: prevSkins.upper_body,
       legs_skin_id: prevSkins.legs,
       skin_color_id: prevSkins.skin_color,
-      gender: character.gender, 
+      gender: character.gender,
     };
     try {
       handleChangeSkin((await updateCharacter(body)).data);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

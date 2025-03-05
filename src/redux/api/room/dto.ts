@@ -9,6 +9,7 @@ export type BoostDTO = {
 export interface IEquipedRoomResponse {
   items: IShopItem[];
   equipped_items: IRoomItem[];
+  achievements: IAchievement[];
 }
 
 export interface IRoom {
@@ -21,12 +22,12 @@ export interface IRoomItem {
 }
 
 export interface IEquipItemRequest {
-  equipped_items: IRoomItem[];
-  equipped_achievements: IAchievement[];
+  equipped_items?: IRoomItem[];
+  equipped_achievements?: { id: string, slot: 100 }[];
 }
 export interface IRemoveItemRequest {
-  items_to_remove: { id: string }[];
-  achievements_to_remove: { id: string }[];
+  items_to_remove?: { id: string }[];
+  achievements_to_remove?: { id: string }[];
 }
 
 export const RoomItemsSlots = {

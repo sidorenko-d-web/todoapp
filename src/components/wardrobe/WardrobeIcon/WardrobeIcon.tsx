@@ -3,42 +3,24 @@ import styles from './WardrobeIcon.module.scss';
 
 // import profileIconPlaceholder from '../../../assets/icons/profile-icon-placeholder.svg';
 import wardrobeIcon from '../../../assets/images/start-room/wardrobe-bg.svg';
-import { Skin, SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
+import { SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { WardrobeTabs } from '../WardrobeTabs';
 import { ICharacterResponse, useGetCharacterQuery } from '../../../redux/api/character';
-import { TypeWearLocation } from '../../../redux';
+import { WardrobeSpineScene } from '../../../constants/wardrobeAnimation';
 
 interface WardrobeIconProps {
   imageUrl?: string;
 }
 
-const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
-
 export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
   const sceneRef = useRef<HTMLDivElement | null>(null);
-
-  const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/anfas_happy.json`).href;
-  const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/anfas_happyatlas.txt`).href;
 
   const gameRef = useRef<Phaser.Game | null>(null);
   const spineSceneRef = useRef<SpineScene | null>(null);
 
-    const { data: character, isLoading } = useGetCharacterQuery();
+  const { data: character, isLoading } = useGetCharacterQuery();
 
-  class SpineScene extends Phaser.Scene {
-    jsonUrl: string | undefined;
-    atlasUrl: string | undefined;
-    spineObject: SpineGameObject | null;
-    constructor() {
-      super({ key: 'player1' });
-      this.spineObject = null;
-    }
-
-    preload() {
-      this.load.spineJson('data', proxyImageUrl(jsonUrl));
-      this.load.spineAtlas('atlas', proxyImageUrl(atlasUrl));
-    }
-
+  class SpineScene extends WardrobeSpineScene {
     create() {
       const width = this.sys.game.config.width as number;
       const center = width / 2;
@@ -46,35 +28,8 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
       this.spineObject = this.add.spine(center, center, 'data', 'atlas');
       this.spineObject.scale = 0.15;
       spineSceneRef.current = this;
-
-      this.changeSkin();
-    }
-
-    makeHappy() {
-      if (!this.spineObject) return;
-      this.spineObject.animationState.setAnimation(0, 'happy');
-    }
-
-    changeSkin(updatedCharacter?: ICharacterResponse) {
-      if (!this.spineObject) return;
-      const allSkins = this.spineObject.skeleton.data.skins;
-      const headSkin = allSkins.find(item => item.name.includes(getSkin('head') ?? 'голова 18'))!
-      const bottomSkin = allSkins.find(item => item.name.includes(getSkin('legs') ?? 'штаны базовые'))!;
-      const upSkin = allSkins.find(item => item.name.includes(getSkin('upper_body') ?? 'футболка базовая'))!;
-      
-      const skin = new Skin('created');
-      skin.addSkin(bottomSkin);
-      skin.addSkin(upSkin);
-      skin.addSkin(headSkin);
-
-
-      this.spineObject.skeleton.setSkin(skin); 
-
-      function getSkin(wear_location: TypeWearLocation) {
-        return (updatedCharacter ?? character)?.skins
-          .find(item => item.wear_location === wear_location)
-          ?.name.toLowerCase();
-      }
+  
+      this.changeSkin(character);
     }
   }
 
