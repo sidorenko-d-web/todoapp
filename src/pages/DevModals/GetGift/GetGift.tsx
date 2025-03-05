@@ -9,12 +9,13 @@ import subscribers from '../../../assets/icons/subscribers.svg';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import redLightAnimation from '../../../assets/animations/redLight.json';
 import purpleLightAnimation from '../../../assets/animations/purpleLight.json';
-import reward from '../../../assets/animations/reward.json';
+import confetti from '../../../assets/animations/confetti.json';
 import gift from '../../../assets/icons/gift.svg';
 import giftRed from '../../../assets/icons/gift-red.svg';
 import giftPurple from '../../../assets/icons/gift-purple.svg';
 import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
+
 interface Props {
   lvl?: number;
 }
@@ -46,7 +47,7 @@ export default function GetGift({ lvl }: Props) {
   return (
     <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={'Подарок открыт!'}>
       <div className={styles.background}>
-        <Lottie animationData={reward} loop={false} className={styles.reward} />
+        <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
 
       <div className={styles.images}>{giftLight}</div>

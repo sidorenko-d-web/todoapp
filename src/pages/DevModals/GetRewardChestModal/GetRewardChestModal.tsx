@@ -2,13 +2,13 @@ import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './GetRewardChestModal.module.scss';
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
-import integration from '../../../assets/icons/integration-white.svg';
+import subscribersIcon from '../../../assets/icons/subscribers.svg';
 import snowflake from '../../../assets/icons/snowflake.svg';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import chestAnimation from '../../../assets/animations/kamen_fixed.json';
-import reward from '../../../assets/animations/reward.json';
-import { SOUNDS, localStorageConsts, MODALS } from '../../../constants';
+import confetti from '../../../assets/animations/confetti.json';
+import { localStorageConsts, MODALS, SOUNDS } from '../../../constants';
 import { CentralModal } from '../../../components/shared';
 import { useTranslation } from 'react-i18next';
 
@@ -17,8 +17,13 @@ interface GetRewardChestModalProps {
 }
 
 export default function GetRewardChestModal({}: GetRewardChestModalProps) {
-  const { closeModal } = useModal();
+  const { closeModal, getModalState } = useModal();
   const { t } = useTranslation('shop');
+
+  const { args } = getModalState(MODALS.TASK_CHEST) ?? {}; // Ensure args is at least an empty object
+  const points = typeof args?.points === 'number' ? args.points : 0;
+  const subscribers = typeof args?.subscribers === 'number' ? args.subscribers : 0;
+  const freezes = typeof args?.freezes === 'number' ? args.freezes : 0;
 
   const handleClose = () => {
     closeModal(MODALS.TASK_CHEST);
@@ -34,7 +39,7 @@ export default function GetRewardChestModal({}: GetRewardChestModalProps) {
       title={t('s40')}
     >
       <div className={styles.background}>
-        <Lottie animationData={reward} loop={false} className={styles.reward} />
+        <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
       <div className={styles.images}>
         <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
@@ -43,16 +48,16 @@ export default function GetRewardChestModal({}: GetRewardChestModalProps) {
         <Lottie animationData={chestAnimation} loop={false} className={styles.chest} />
         <div className={styles.items}>
           <div className={styles.item}>
-            <p>+150</p>
+            <p>+{points}</p>
             <img src={coin} />
           </div>
           <div className={styles.item}>
-            <p>+3</p>
-            <img src={integration} />
+            <p>+{subscribers}</p>
+            <img src={subscribersIcon} height={18} width={18}/>
           </div>
           <div className={styles.item}>
-            <p>+1</p>
-            <img src={snowflake} />
+            <p>+{freezes}</p>
+            <img src={snowflake}/>
           </div>
           <div className={styles.itemIcon}>Adv.</div>
         </div>

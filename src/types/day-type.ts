@@ -1,1 +1,1 @@
-export type DayType = 'streak' | 'freeze' | 'regular';
+export type DayType = 'passed' | 'freeze' | 'regular';

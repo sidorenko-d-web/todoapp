@@ -212,7 +212,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             />
           )}
         </div>
-
         {children}
       </div>
 

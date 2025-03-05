@@ -12,6 +12,7 @@ import {
   treeApi,
   usersApi,
   pushLineApi,
+  chestApi
 } from './api';
 
 import { tasksApi } from './api/tasks';
@@ -47,6 +48,7 @@ const appReducer = combineReducers({
   [referralsApi.reducerPath]: referralsApi.reducer,
   [integrationsApi.reducerPath]: integrationsApi.reducer,
   [confirmationsApi.reducerPath]: confirmationsApi.reducer,
+  [chestApi.reducerPath]: chestApi.reducer,
 });
 
 export const rootReducer = (state: any, action: Action) => {
