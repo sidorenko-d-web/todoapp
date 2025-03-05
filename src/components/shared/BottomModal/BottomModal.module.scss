@@ -57,18 +57,7 @@
   align-items: center;
   gap: 5px;
 
-  margin-bottom: 5px;
   padding: 5px 12px 10px;
-
-  & > img {
-    width: 14px;
-    height: 14px;
-
-    @media (min-width: var.$breakpoint-md) {
-      width: 16px;
-      height: 16px;
-    }
-  }
 }
 
 .titleWrapper {
@@ -118,4 +107,16 @@
 
 .content {
   padding: 10px 15px 40px 15px;
+}
+
+.save {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var.$color-white;
+  background: var.$color-blue-primary;
+  padding: 8px;
+  border-radius: 8px;
+  z-index: 9;
 }
