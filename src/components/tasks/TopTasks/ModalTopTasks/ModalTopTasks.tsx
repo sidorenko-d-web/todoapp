@@ -197,26 +197,30 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
           </div>
           <h3 className={s.questionText}>{getStepDescription()}</h3>
 
-          <span className={s.linkLabel} style={{ marginTop: '20px' }}>{t('q52')}</span>
-          <div className={s.options}>
-            <div className={s.option}>
-              <input
-                type="text"
-                className={s.channelInput}
-                value={channelLink2}
-                onChange={(e) => setChannelLink2(e.target.value)}
-                placeholder={"..."}
-              />
-              <div className={s.selectWrapper}>
-                <img
-                  src={completedSteps[currentStepIndex] ? checkIcon : dotsIcon}
-                  className={s.icon}
-                  alt=""
-                />
+          {currentStepIndex === 3 && (
+            <>
+              <span className={s.linkLabel} style={{ marginTop: '20px' }}>{t('q52')}</span>
+              <div className={s.options}>
+                <div className={s.option}>
+                  <input
+                    type="text"
+                    className={s.channelInput}
+                    value={channelLink2}
+                    onChange={(e) => setChannelLink2(e.target.value)}
+                    placeholder={"..."}
+                  />
+                  <div className={s.selectWrapper}>
+                    <img
+                      src={completedSteps[currentStepIndex] ? checkIcon : dotsIcon}
+                      className={s.icon}
+                      alt=""
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <h3 className={s.questionText2}>{getStepDescription()}</h3>
+              <h3 className={s.questionText2}>{getStepDescription()}</h3>
+            </>
+          )}
         </div>
 
         <div className={s.buttons}>
