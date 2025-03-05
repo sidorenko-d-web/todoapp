@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { LoadingScreen } from '../components/shared/LoadingScreen';
-import { LanguageSelect } from '../pages/LanguageSelect';
-import { SkinSetupPage } from '../pages/SkinSetupPage';
-import { EnterInviteCodePage } from '../pages/EnterInviteCodePage';
-import { useAuthFlow } from './useAuthFlow';
+import { LoadingScreen } from '../../components/shared/LoadingScreen';
+import { LanguageSelect } from '../../pages/LanguageSelect';
+import { SkinSetupPage } from '../../pages/SkinSetupPage';
+import { EnterInviteCodePage } from '../../pages/EnterInviteCodePage';
+import { useAuthFlow } from './useAuthFlow.ts';
 import Lottie from 'lottie-react';
-import { coinsAnim } from '../assets/animations';
+import { coinsAnim } from '../../assets/animations';
 import WebApp from '@twa-dev/sdk'
-import { useWebApp } from './useWebApp.ts';
+import { useWebApp } from '../useWebApp.ts';
 
 type AuthInitProps = {
   children: React.ReactNode;

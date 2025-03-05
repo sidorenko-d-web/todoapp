@@ -1,5 +1,5 @@
 export * from './useModal'
-export * from './AuthInit'
+export * from './Auth'
 export * from './useInventoryItemsFilter'
 export * from './useTreeProgress'
 export * from './useAccelerateIntegration'
