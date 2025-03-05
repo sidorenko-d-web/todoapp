@@ -1,10 +1,12 @@
 export type Boost = {
-  income_per_second: string;
-  x_income_per_second: string;
+  points: string;
+  subscribers: number;
+  income_per_second?: string;
+  x_income_per_second?: string;
   additional_integrations_for_subscription: number;
   subscribers_for_first_level_referrals: number;
   subscribers_for_second_level_referrals: number;
-};
+}
 
 export type Achievement = {
   name: string;
@@ -14,10 +16,9 @@ export type Achievement = {
   boost: Boost;
   image_url: string;
   is_unlocked: boolean;
-  is_avaliable: boolean;
-  unlocked_at: string;
   id: string;
-};
+  is_available: boolean;
+}
 
 export type GrowthTreeStage = {
   id: number;

@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
 import { useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery, useUnlockAchievementMutation } from '../../redux';
-import { useTreeProgress } from '../../hooks';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 
@@ -24,21 +23,12 @@ import LazyLottie from './LazyLottie';
 
 export const Tree = () => {
   const { t, i18n } = useTranslation('tree');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { data: treeData } = useGetTreeInfoQuery();
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const { data: treeData, refetch } = useGetTreeInfoQuery();
   const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
-  const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
   const lastActiveLevelRef = useRef<HTMLDivElement | null>(null);
 
-const [ unlockAchievement ] = useUnlockAchievementMutation();
-
-  const userSubscribers = userProfileData?.subscribers || 0;
-
-  const { progressPercent } = useTreeProgress({
-    treeData,
-    userSubscribers,
-  });
-
+  const [ unlockAchievement ] = useUnlockAchievementMutation();
 
   useEffect(() => {
     if (lastActiveLevelRef.current) {
@@ -47,18 +37,16 @@ const [ unlockAchievement ] = useUnlockAchievementMutation();
         block: 'center',
       });
     }
-  }, [progressPercent]);
+  }, []);
 
 
-  
   if (!treeData) {
     return null;
   }
 
   const handleUnlock = async (id: string) => {
     try {
-      await unlockAchievement({ achievement_id: id }).unwrap();
-      alert('Achievement unlocked!');
+      await unlockAchievement({ achievement_id: id }).unwrap().then(() => refetch());
     } catch (err) {
       alert('Failed to unlock achievement.');
     }
@@ -68,17 +56,16 @@ const [ unlockAchievement ] = useUnlockAchievementMutation();
     <div className={s.container}>
       <div className={s.progressBarContainer}>
         <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300}px` }}>
-          <div
-            className={s.progressFill}
-            style={{ height: `${progressPercent}%` }}
-            ref={progressBarContainerRef}
-          />
           {treeData?.growth_tree_stages.map((stage, index) => {
-            const isActive = userSubscribers >= stage.subscribers;
+            const isRewardAvailable = stage.achievement.is_available;
+            const isRewardClaimed = stage.achievement.is_unlocked;
+            const showReward = stage.achievement.boost.subscribers > 0; // Не показываем первый элемент, тк награды в нем нулевые
+
+            const isActive = userProfileData && stage.id <= userProfileData.growth_tree_stage_id;
             const bottomPosition = 150 + index * 300;
 
-            const giftColors = [giftBlue, giftPurple, giftRed];
-            const spinnerColors = [spinnerBlue, spinnerPurple, spinnerRed];
+            const giftColors = [ giftBlue, giftPurple, giftRed ];
+            const spinnerColors = [ spinnerBlue, spinnerPurple, spinnerRed ];
 
             const giftIcon = giftColors[index % giftColors.length];
             const spinnerIcon = spinnerColors[index % spinnerColors.length];
@@ -98,38 +85,45 @@ const [ unlockAchievement ] = useUnlockAchievementMutation();
                 </div>
 
                 {
-                  stage.achievement.is_avaliable && 
-                    <Button className={s.takeRewardBtn} onClick={() => handleUnlock(stage.achievement.id)}>Забрать</Button>
+                  isRewardAvailable && showReward &&
+                  <Button className={s.takeRewardBtn}
+                          onClick={() => handleUnlock(stage.achievement.id)}>Забрать</Button>
                 }
-                {stage.id > 1 && (
+                {showReward && (
                   <div
                     className={classNames(s.prize, {
                       [s.priseSubscribers]: !stage.achievement,
                       [s.prizeRight]: index % 2 !== 1,
                     })}
                   >
-                    {stage.achievement.is_avaliable
-                     && <img className={s.imgPrizeActive} src={spinnerBlue} height={150} width={150} alt="spinner" />}
+                    {isRewardAvailable
+                      && <img className={s.imgPrizeActive} src={spinnerBlue} height={150} width={150} alt="spinner" />}
                     {stage.achievement && (
-                      <div className={classNames(s.imgPrize,)}>
-                        <div className={s.blickAnimation}>
-                          <LazyLottie animationData={giftBlick}/>
-                        </div>
-                        <div className={classNames({ [s.blur]: !isActive })} />
+                      <div className={classNames(s.imgPrize)}>
+                        {!isRewardClaimed && (
+                          <>
+                            <div className={s.blickAnimation}>
+                              <LazyLottie animationData={giftBlick} />
+                            </div>
+                            <div className={classNames({ [s.blur]: !isActive })} />
+                          </>
+                        )}
 
-                        <img src={giftIcon} height={20} width={20} alt="gift" style={{ opacity: '0.5' }} />
+                        <img src={giftIcon} height={20} width={20} alt="gift" />
 
 
                         <div className={`${s.giftStatus} 
-                          ${(stage.achievement.is_avaliable && !stage.achievement.is_unlocked)
-                             || stage.achievement.is_unlocked? s.notTaken : ''}
-                          ${(!stage.achievement.is_avaliable && !stage.achievement.is_unlocked)? s.notAchieved : ''}`} />
+                          ${(isRewardAvailable && !stage.achievement.is_unlocked)
+                        || stage.achievement.is_unlocked ? s.notTaken : ''}
+                          ${(!isRewardAvailable && !stage.achievement.is_unlocked) ? s.notAchieved : ''}`} />
                       </div>
                     )}
-                    <div className={classNames(s.text, { [s.textActive]: stage.achievement.is_avaliable })}>
-                      <span className={`${(!stage.achievement.is_avaliable && !stage.achievement.is_unlocked)? s.inactive : ''}`}>
+                    <div className={classNames(s.text, { [s.textActive]: isRewardAvailable })}>
+                      <span
+                        className={`${(!isRewardAvailable && !stage.achievement.is_unlocked) ? s.inactive : ''}`}>
                         {formatAbbreviation(stage.subscribers, 'number', { locale: locale })} </span>
-                      <span  className={`${(!stage.achievement.is_avaliable && !stage.achievement.is_unlocked) ? s.inactive : ''}`} 
+                      <span
+                        className={`${(!isRewardAvailable && !stage.achievement.is_unlocked) ? s.inactive : ''}`}
                         style={{ whiteSpace: 'normal' }}>{t('t1')}</span>
                     </div>
                   </div>

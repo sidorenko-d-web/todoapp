@@ -1,7 +1,6 @@
 export * from './useModal'
 export * from './Auth'
 export * from './useInventoryItemsFilter'
-export * from './useTreeProgress'
 export * from './useAccelerateIntegration'
 export * from './AudioBg'
 export * from './useAutoPlaySound'
