@@ -4,4 +4,5 @@ export type AuthStep =
   | 'invite_code'
   | 'skin'
   | 'final_loading'
+  | 'push_line'
   | 'completed';

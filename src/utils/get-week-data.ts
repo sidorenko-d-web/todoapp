@@ -22,7 +22,7 @@ export const getWeekData = (streakDays: number[], freezeDays: number[]): StreakD
     const dayNumber = date.getDate();
 
     let type: DayType = "regular";
-    if (streakDays.includes(dayNumber)) type = "streak";
+    if (streakDays.includes(dayNumber)) type = "passed";
     else if (freezeDays.includes(dayNumber)) type = "freeze";
 
     weekData.push({ day: dayNumber, type });
