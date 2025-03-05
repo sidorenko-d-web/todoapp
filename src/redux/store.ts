@@ -14,6 +14,7 @@ import {
   usersApi,
   pushLineApi,
   confirmationsApi,
+  chestApi,
 } from './api';
 import { tasksApi } from './api/tasks';
 import { characterApi } from './api/character';
@@ -38,6 +39,7 @@ export const store = configureStore({
       pushLineApi.middleware,
       confirmationsApi.middleware,
       characterApi.middleware,
+      chestApi.middleware
     ),
 });
 

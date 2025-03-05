@@ -12,6 +12,7 @@ import {
   treeApi,
   usersApi,
   pushLineApi,
+  chestApi
 } from './api';
 
 import { tasksApi } from './api/tasks';
@@ -46,6 +47,7 @@ const appReducer = combineReducers({
   [trackingApi.reducerPath]: trackingApi.reducer,
   [confirmationsApi.reducerPath]: confirmationsApi.reducer,
   [characterApi.reducerPath]: characterApi.reducer,
+  [chestApi.reducerPath]: chestApi.reducer,
 });
 
 export const rootReducer = (state: any, action: Action) => {
