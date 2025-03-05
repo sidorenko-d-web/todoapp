@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { LoadingScreen } from '../components/shared/LoadingScreen';
-import { LanguageSelect } from '../pages/LanguageSelect';
-import { SkinSetupPage } from '../pages/SkinSetupPage';
-import { EnterInviteCodePage } from '../pages/EnterInviteCodePage';
-import { useAuthFlow } from './useAuthFlow';
+import { LoadingScreen } from '../../components/shared/LoadingScreen';
+import { LanguageSelect } from '../../pages/LanguageSelect';
+import { SkinSetupPage } from '../../pages/SkinSetupPage';
+import { EnterInviteCodePage } from '../../pages/EnterInviteCodePage';
+import { useAuthFlow } from './useAuthFlow.ts';
 import Lottie from 'lottie-react';
-import { coinsAnim } from '../assets/animations';
+import { coinsAnim } from '../../assets/animations';
 import WebApp from '@twa-dev/sdk'
-import { useWebApp } from './useWebApp.ts';
-import DaysInARowModal from '../pages/DevModals/DaysInARowModal/DaysInARowModal.tsx';
+import { useWebApp } from '../useWebApp.ts';
+import DaysInARowModal from '../../pages/DevModals/DaysInARowModal/DaysInARowModal.tsx';
 
 type AuthInitProps = {
   children: React.ReactNode;
@@ -23,7 +23,6 @@ export function AuthInit({ children }: AuthInitProps) {
     isAnimationFinished,
     setIsAnimationFinished,
     selectedLanguage,
-    isError,
     handleLanguageSelect,
     handleLanguageContinue,
     handleInviteCodeContinue,
@@ -42,10 +41,6 @@ export function AuthInit({ children }: AuthInitProps) {
 
   if (isLoading || isInitializing || !isAnimationFinished) {
     return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
-  }
-
-  if (isError) {
-    console.error(  )
   }
 
   switch (currentStep) {
@@ -67,8 +62,9 @@ export function AuthInit({ children }: AuthInitProps) {
           onContinue={handleInviteCodeContinue}
           // referral_id={WebApp.initDataUnsafe.user?.id ?? 0}
           // referral_id={window.Telegram.WebApp.initDataUnsafe.user.id}
-          // referral_id={1488618801}
-          referral_id={1301940582}
+          // referral_id={563486774}
+          // referral_id={1259832544}
+           referral_id={1301940582}
         />
       );
 
