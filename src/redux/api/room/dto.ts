@@ -1,4 +1,4 @@
-import { IShopItem } from '../shop';
+import { IAchievement, IShopItem } from '../shop';
 
 export type BoostDTO = {
   income_per_second: string;
@@ -22,9 +22,11 @@ export interface IRoomItem {
 
 export interface IEquipItemRequest {
   equipped_items: IRoomItem[];
+  equipped_achievements: IAchievement[];
 }
 export interface IRemoveItemRequest {
   items_to_remove: { id: string }[];
+  achievements_to_remove: { id: string }[];
 }
 
 export const RoomItemsSlots = {
