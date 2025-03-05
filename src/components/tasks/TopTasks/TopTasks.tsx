@@ -48,7 +48,6 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
 
         if (task.title === 'Создайте свой канал!') {
           const result = await claimChestReward({ chest_reward_reason: 'create_channel_assignment' }).unwrap();
-
           console.log('Reward claimed:', result);
 
           openModal(MODALS.TASK_CHEST, {
@@ -56,8 +55,6 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
             subscribers: result.reward.subscribers,
             freezes: result.reward.freezes,
           });
-        } else {
-          console.log('adas')
         }
         return;
       } catch (error) {
