@@ -1,9 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import s from './Tree.module.scss';
 import classNames from 'classnames';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
-import { useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery, useUnlockAchievementMutation } from '../../redux';
+import {
+  Boost,
+  useGetCurrentUserProfileInfoQuery,
+  useGetTreeInfoQuery,
+  useUnlockAchievementMutation,
+} from '../../redux';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 
@@ -19,14 +24,19 @@ import spinnerRed from '../../assets/icons/red-glow.svg';
 import { giftBlick } from '../../assets/animations';
 import { Button } from '../shared';
 import LazyLottie from './LazyLottie';
+import { useModal } from '../../hooks';
+import { MODALS } from '../../constants';
+import GetGift from '../../pages/DevModals/GetGift/GetGift';
 
 
 export const Tree = () => {
+  const { openModal } = useModal();
   const { t, i18n } = useTranslation('tree');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData, refetch } = useGetTreeInfoQuery();
   const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
   const lastActiveLevelRef = useRef<HTMLDivElement | null>(null);
+  const [ currentBoost, setCurrentBoost ] = useState<Boost | null>(null);
 
   const [ unlockAchievement ] = useUnlockAchievementMutation();
 
@@ -39,14 +49,16 @@ export const Tree = () => {
     }
   }, []);
 
-
   if (!treeData) {
     return null;
   }
 
-  const handleUnlock = async (id: string) => {
+  const handleUnlock = async (id: string, boost: Boost) => {
     try {
-      await unlockAchievement({ achievement_id: id }).unwrap().then(() => refetch());
+      await unlockAchievement({ achievement_id: id }).unwrap();
+      setCurrentBoost(boost);
+      openModal(MODALS.GET_GIFT);
+      refetch();
     } catch (err) {
       alert('Failed to unlock achievement.');
     }
@@ -85,9 +97,9 @@ export const Tree = () => {
                 </div>
 
                 {
-                  isRewardAvailable && showReward &&
+                  // isRewardAvailable && showReward &&
                   <Button className={s.takeRewardBtn}
-                          onClick={() => handleUnlock(stage.achievement.id)}>Забрать</Button>
+                          onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}>Забрать</Button>
                 }
                 {showReward && (
                   <div
@@ -134,6 +146,8 @@ export const Tree = () => {
           })}
         </div>
       </div>
+
+      <GetGift boost={currentBoost} />
     </div>
   );
 };
