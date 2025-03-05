@@ -22,7 +22,7 @@ export const ProfilePage: React.FC = () => {
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
 
-  const [claimChestReward, { data: chestRewardData }] = useClaimChestRewardMutation();
+  const [claimChestReward] = useClaimChestRewardMutation();
 
   const {
     data: userProfileData,
@@ -62,12 +62,19 @@ export const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     if (streaks === 30 || streaks === 60 || streaks === 120) {
-      openModal(MODALS.TASK_CHEST);
       claimChestReward({ chest_reward_reason: 'push_line' }).unwrap()
-        .then(result => console.log('Reward claimed:', result))
+        .then(result => {
+          console.log('Reward claimed:', result);
+          openModal(MODALS.TASK_CHEST, {
+            points: result.reward.points,
+            subscribers: result.reward.subscribers,
+            freezes: result.reward.freezes,
+          });
+        })
         .catch(err => console.error('Error claiming reward:', err));
     }
-  }, [data?.in_streak_days, openModal, chestRewardData]);
+  }, [streaks, claimChestReward, openModal]);
+  
 
   const userPosition =
     userProfileData && topProfilesData?.profiles

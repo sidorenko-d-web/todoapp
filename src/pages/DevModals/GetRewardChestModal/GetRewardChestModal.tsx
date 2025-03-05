@@ -17,8 +17,13 @@ interface GetRewardChestModalProps {
 }
 
 export default function GetRewardChestModal({}: GetRewardChestModalProps) {
-  const { closeModal } = useModal();
+  const { closeModal, getModalState } = useModal();
   const { t } = useTranslation('shop');
+
+  const { args } = getModalState(MODALS.TASK_CHEST) ?? {}; // Ensure args is at least an empty object
+  const points = typeof args?.points === 'number' ? args.points : 0;
+  const subscribers = typeof args?.subscribers === 'number' ? args.subscribers : 0;
+  const freezes = typeof args?.freezes === 'number' ? args.freezes : 0;
 
   const handleClose = () => {
     closeModal(MODALS.TASK_CHEST);
@@ -43,15 +48,15 @@ export default function GetRewardChestModal({}: GetRewardChestModalProps) {
         <Lottie animationData={chestAnimation} loop={false} className={styles.chest} />
         <div className={styles.items}>
           <div className={styles.item}>
-            <p>+150</p>
+            <p>+{points}</p>
             <img src={coin} />
           </div>
           <div className={styles.item}>
-            <p>+3</p>
+            <p>+{subscribers}</p>
             <img src={integration} />
           </div>
           <div className={styles.item}>
-            <p>+1</p>
+            <p>+{freezes}</p>
             <img src={snowflake} />
           </div>
           <div className={styles.itemIcon}>Adv.</div>

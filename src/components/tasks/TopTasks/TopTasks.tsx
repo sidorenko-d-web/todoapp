@@ -28,7 +28,7 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
   const { openModal, closeModal } = useModal();
 
 
-  const [claimChestReward, { data: chestRewardData }] = useClaimChestRewardMutation();
+  const [claimChestReward] = useClaimChestRewardMutation();
 
   const [taskState, setTaskState] = useState<TaskState>({
     currentStep: task.completed_stages,
@@ -44,11 +44,18 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
     if (task.is_completed && !task.is_reward_given) {
       try {
         console.log('Условия выполнены, открываем подарок');
-        openModal(MODALS.TASK_CHEST);
+
+
         if (task.title === 'Создайте свой канал') {
-          claimChestReward({ chest_reward_reason: 'create_channel_assignment' }).unwrap()
-            .then(result => console.log('Reward claimed:', result))
-            .catch(err => console.error('Error claiming reward:', err));
+          const result = await claimChestReward({ chest_reward_reason: 'create_channel_assignment' }).unwrap();
+
+          console.log('Reward claimed:', result);
+
+          openModal(MODALS.TASK_CHEST, {
+            points: result.reward.points,
+            subscribers: result.reward.subscribers,
+            freezes: result.reward.freezes,
+          });
         }
         return;
       } catch (error) {
