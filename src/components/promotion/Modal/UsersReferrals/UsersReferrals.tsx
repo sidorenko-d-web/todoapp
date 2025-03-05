@@ -236,6 +236,7 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({
           {data.referrals.map((referral: any, index: number) => (
             <ReferralCard
               key={index}
+              id_referral={referral.id_referral}
               position={index + 1}
               name={referral.username}
               total_invited={referral.total_invited}

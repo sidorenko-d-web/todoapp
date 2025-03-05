@@ -100,7 +100,7 @@ export const ShopInvewntoryPage = () => {
       onItemQualityChange={setItemsQuality}
     >
       {
-        isShopLoading || isEquipedLoading || isInventoryFetching || isShopFetching ? (
+        isShopLoading || isEquipedLoading ? (
           <Loader className={styles.itemsLoader} />
         ) : !(isShopLoading || isEquipedLoading) && (!isInventoryLoading && !isSuccess && shopCategory?.title !== 'Вы') ? (
           <p className={styles.emptyText}>{t('s38')}</p>
