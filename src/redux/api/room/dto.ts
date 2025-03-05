@@ -30,7 +30,7 @@ export interface IRemoveItemRequest {
 export const RoomItemsSlots = {
   wall: {
     slot: 0,
-    name: ['Бетонные стены', 'Стена', 'Обои'],
+    name: ['Бетонные стены', 'Стены', 'Обои'],
   },
   floor: {
     slot: 1,

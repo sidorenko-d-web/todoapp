@@ -115,12 +115,12 @@ export class SpineSceneBase extends Phaser.Scene {
   }
 
   //helpers for scene creation
-  createPerson({ center }: Pick<contextProps, 'center'>) {
+  createPerson({ center }: Pick<contextProps, 'center'>, isWorking: boolean) {
     this.person = this.add.spine(center - 40, 385, 'personJson', 'personAtlas');
     this.person.scale = 0.07;
     this.person.setDepth(3);
-    this.person.setInteractive();
-    this.person.animationState.data.defaultMix = 0.3;
+    this.person.animationState.data.defaultMix = 0.1;
+    this.setCurrentLoopedAnimation(isWorking)
   }
 
   createAnimatedItem(
@@ -158,7 +158,6 @@ export class SpineSceneBase extends Phaser.Scene {
 
   createBaseItems({ equipped_items, center }: contextProps) {
     const slots = equipped_items?.map(item => item.slot);
-
     baseItems.forEach(item => {
       if (!slots?.includes(item.slot)) {
         const added = this.add.image(center + item.x, item.y, item.name);
@@ -166,6 +165,12 @@ export class SpineSceneBase extends Phaser.Scene {
         this.objects?.push(added);
       }
     });
+  }
+
+  setCurrentLoopedAnimation(isWorking: Boolean,) {
+    console.log('isWorking', isWorking);
+    if (isWorking) this.setWorking();
+    else this.setIdle();
   }
 
   //animation state setters

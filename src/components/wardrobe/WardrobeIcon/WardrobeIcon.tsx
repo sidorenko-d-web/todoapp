@@ -3,8 +3,10 @@ import styles from './WardrobeIcon.module.scss';
 
 // import profileIconPlaceholder from '../../../assets/icons/profile-icon-placeholder.svg';
 import wardrobeIcon from '../../../assets/images/start-room/wardrobe-bg.svg';
-import { SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
+import { Skin, SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { WardrobeTabs } from '../WardrobeTabs';
+import { ICharacterResponse, useGetCharacterQuery } from '../../../redux/api/character';
+import { TypeWearLocation } from '../../../redux';
 
 interface WardrobeIconProps {
   imageUrl?: string;
@@ -21,12 +23,14 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
   const gameRef = useRef<Phaser.Game | null>(null);
   const spineSceneRef = useRef<SpineScene | null>(null);
 
+    const { data: character, isLoading } = useGetCharacterQuery();
+
   class SpineScene extends Phaser.Scene {
     jsonUrl: string | undefined;
     atlasUrl: string | undefined;
     spineObject: SpineGameObject | null;
     constructor() {
-      super({ key: 'player' });
+      super({ key: 'player1' });
       this.spineObject = null;
     }
 
@@ -42,16 +46,40 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
       this.spineObject = this.add.spine(center, center, 'data', 'atlas');
       this.spineObject.scale = 0.15;
       spineSceneRef.current = this;
+
+      this.changeSkin();
     }
-    
+
     makeHappy() {
       if (!this.spineObject) return;
       this.spineObject.animationState.setAnimation(0, 'happy');
     }
+
+    changeSkin(updatedCharacter?: ICharacterResponse) {
+      if (!this.spineObject) return;
+      const allSkins = this.spineObject.skeleton.data.skins;
+      const headSkin = allSkins.find(item => item.name.includes(getSkin('head') ?? 'голова 18'))!
+      const bottomSkin = allSkins.find(item => item.name.includes(getSkin('legs') ?? 'штаны базовые'))!;
+      const upSkin = allSkins.find(item => item.name.includes(getSkin('upper_body') ?? 'футболка базовая'))!;
+      
+      const skin = new Skin('created');
+      skin.addSkin(bottomSkin);
+      skin.addSkin(upSkin);
+      skin.addSkin(headSkin);
+
+
+      this.spineObject.skeleton.setSkin(skin); 
+
+      function getSkin(wear_location: TypeWearLocation) {
+        return (updatedCharacter ?? character)?.skins
+          .find(item => item.wear_location === wear_location)
+          ?.name.toLowerCase();
+      }
+    }
   }
 
   useEffect(() => {
-    if (!sceneRef.current) return;
+    if (!sceneRef.current || isLoading) return;
 
     const width = sceneRef.current.offsetWidth;
     const config: Phaser.Types.Core.GameConfig = {
@@ -61,9 +89,9 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
       scene: [SpineScene],
       transparent: true,
       plugins: {
-        scene: [{ key: 'player', plugin: SpinePlugin, mapping: 'spine' }],
+        scene: [{ key: 'player1', plugin: SpinePlugin, mapping: 'spine' }],
       },
-      parent: 'player',
+      parent: 'player1',
     };
 
     gameRef.current = new Phaser.Game(config);
@@ -74,10 +102,11 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
         gameRef.current = null;
       }
     };
-  }, []);
+  }, [isLoading]);
 
-  const handleMakeHappy = () => {
+  const handleMakeHappy = (updatedCharacter: ICharacterResponse) => {
     if (spineSceneRef.current) {
+      spineSceneRef.current.changeSkin(updatedCharacter);
       spineSceneRef.current.makeHappy();
     }
   };
@@ -87,7 +116,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
       <div className={styles.wrp}>
         <img src={wardrobeIcon} alt="Wardrobe Icon" />
         <div
-          id={'player'}
+          id={'player1'}
           ref={sceneRef}
           style={{ position: 'absolute', top: 0, borderRadius: 8, overflow: 'hidden', width: '100%', height: '100%' }}
         />

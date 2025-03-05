@@ -1,8 +1,8 @@
-//@ts-ignore
-import { SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
+import { Skin, SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { useRef, useEffect, useLayoutEffect, useState } from 'react';
 import {
   IShopItem,
+  TypeWearLocation,
   selectIsNeedToPlayHappy,
   selectIsWorking,
   setNeedToPlayHappy,
@@ -10,9 +10,11 @@ import {
 } from '../../../../redux';
 import { SpineSceneBase, animated } from '../../../../constants';
 import { useDispatch, useSelector } from 'react-redux';
+import { ICharacterResponse, useGetCharacterQuery } from '../../../../redux/api/character';
 
 export const AnimationScene = () => {
   const { data: room } = useGetEquipedQuery();
+  const { data: character, isLoading } = useGetCharacterQuery();
 
   const gameRef = useRef<Phaser.Game | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
@@ -35,7 +37,7 @@ export const AnimationScene = () => {
   }, []);
 
   useEffect(() => {
-    if (!sceneRef.current) return;
+    if (!sceneRef.current || isLoading) return;
 
     const width = sceneRef.current.offsetWidth;
     const contextProps = { equipped_items: room?.equipped_items, center: width / 2 };
@@ -59,7 +61,7 @@ export const AnimationScene = () => {
       }
 
       create() {
-        this.createPerson(contextProps);
+        this.createPerson(contextProps, isWorking);
 
         //devided creating items of animated and static
         room?.items.forEach(async (item, i) => {
@@ -69,12 +71,35 @@ export const AnimationScene = () => {
           } else {
             this.createSVGItem(item, i, contextProps);
           }
-
-          this.createBaseItems(contextProps);
         });
+        this.createBaseItems(contextProps);
 
         spineSceneRef.current = this;
         setIsLoaded(true);
+        this.changeSkin();
+      }
+
+      changeSkin(updatedCharacter?: ICharacterResponse) {
+        if (!this.person) return;
+        const allSkins = this.person.skeleton.data.skins;
+        const headSkin = allSkins.find(item => item.name.includes(getSkin('head') ?? 'голова 18'))!;
+        const bottomSkin = allSkins.find(item => item.name.includes(getSkin('legs') ?? 'штаны базовые'))!;
+        const upSkin = allSkins.find(item => item.name.includes(getSkin('upper_body') ?? 'футболка базовая'))!;
+
+        const skin = new Skin('created');
+        skin.addSkin(bottomSkin);
+        skin.addSkin(upSkin);
+        skin.addSkin(headSkin);
+
+        console.log(allSkins);
+
+        this.person.skeleton.setSkin(skin);
+
+        function getSkin(wear_location: TypeWearLocation) {
+          return (updatedCharacter ?? character)?.skins
+            .find(item => item.wear_location === wear_location)
+            ?.name.toLowerCase();
+        }
       }
     }
 
@@ -104,14 +129,12 @@ export const AnimationScene = () => {
         gameRef.current = null;
       }
     };
-  }, [sceneRef, size]);
+  }, [sceneRef, size, isLoading]);
 
   useEffect(() => {
     if (!spineSceneRef.current) return;
-    console.log('isWorking', isWorking);
-    if (isWorking) spineSceneRef.current?.setWorking();
-    else spineSceneRef.current?.setIdle();
-  }, [isWorking, spineSceneRef.current, isLoaded]);
+    spineSceneRef.current?.setCurrentLoopedAnimation(isWorking);
+  }, [isWorking, spineSceneRef.current, isLoaded, size]);
 
   useEffect(() => {
     if (!spineSceneRef.current) return;

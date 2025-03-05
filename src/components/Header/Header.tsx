@@ -17,11 +17,11 @@ import { useModal } from '../../hooks';
 
 export const Header = () => {
   const { data, isLoading, refetch } = useGetCurrentUserProfileInfoQuery(undefined, {
-    pollingInterval: 1000, // 1 сек
+    pollingInterval: 10000, // 1 сек //добавил до 10 сек тк не приятно тормозит приложение
   });
 
   const { data: treeData } = useGetTreeInfoQuery(undefined, {
-    pollingInterval: 1000, // 1 сек
+    pollingInterval: 10000, // 1 сек //добавил до 10 сек тк не приятно тормозит приложение
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();

@@ -14,10 +14,6 @@ export const Floor = () => {
       <div className={styles.floorWrapper}>
         <div className={styles.floor}>
           {floor?.item_rarity === 'red' && <img src={floor?.image_url + svgHeadersString} alt="floor" />}
-          <div className={styles.floorTexture}>
-            <img src={floor?.image_url + svgHeadersString} alt="" />
-            <img src={floor?.image_url + svgHeadersString} alt="" />
-          </div>
         </div>
       </div>
     </>

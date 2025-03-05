@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import styles from './InventoryCard.module.scss';
 import clsx from 'clsx';
 //@ts-ignore
@@ -9,10 +9,14 @@ import ChestRedIcon from '@icons/chest-red.svg';
 import ListIcon from '@icons/list.svg';
 import {
   IShopItem,
+  RoomItemsSlots,
   selectVolume,
   TypeItemQuality,
+  useAddItemToRoomMutation,
   useGetCurrentUserProfileInfoQuery,
+  useGetEquipedQuery,
   useGetShopItemsQuery,
+  useRemoveItemFromRoomMutation,
   useUpgradeItemMutation,
 } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
@@ -175,7 +179,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 
-  const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 
   const levelCap =
     item.level < 10
@@ -413,7 +416,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             disabled={item.level === 50 || isLoading || isItemsLoading}
             onClick={handleBuyItem}
           >
-            {isLoading || isFetching ? (
+            {isLoading || isUpdateLoading ? (
               <p>loading</p>
             ) : (
               <>

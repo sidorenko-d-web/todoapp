@@ -4,13 +4,15 @@ import styles from './partials/Partials.module.scss';
 import TreshinaRight from '../../../assets/images/start-room/treshina-right.svg';
 import TreshinaLeft from '../../../assets/images/start-room/treshina-left.svg';
 import Shelf from '../../../assets/images/start-room/shelf.svg';
+import { useLocation } from 'react-router-dom';
 
 export const Room = () => {
   const { data } = useGetEquipedQuery();
-  console.log(data)
+  
+  const location = useLocation().pathname;
   return (
     <div className={styles.room}>
-      <AnimationScene />
+      {location === '/' && <AnimationScene />}
       <Walls />
       {!data?.equipped_items.find(item => item.slot === RoomItemsSlots.wall.slot) && (
         <img className={styles.treshinaLeft} src={TreshinaLeft} alt="trishimna-right" />
