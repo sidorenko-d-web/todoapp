@@ -2,7 +2,7 @@ import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './GetRewardChestModal.module.scss';
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
-import integration from '../../../assets/icons/integration-white.svg';
+import subscribersIcon from '../../../assets/icons/subscribers.svg';
 import snowflake from '../../../assets/icons/snowflake.svg';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
@@ -49,15 +49,15 @@ export default function GetRewardChestModal({}: GetRewardChestModalProps) {
         <div className={styles.items}>
           <div className={styles.item}>
             <p>+{points}</p>
-            <img src={coin} />
+            <img src={coin} height={18} width={18}/>
           </div>
           <div className={styles.item}>
             <p>+{subscribers}</p>
-            <img src={integration} />
+            <img src={subscribersIcon} height={18} width={18}/>
           </div>
           <div className={styles.item}>
             <p>+{freezes}</p>
-            <img src={snowflake} />
+            <img src={snowflake} height={18} width={18}/>
           </div>
           <div className={styles.itemIcon}>Adv.</div>
         </div>
