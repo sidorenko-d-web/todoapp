@@ -97,7 +97,7 @@ export const Tree = () => {
                 </div>
 
                 {
-                  // isRewardAvailable && showReward &&
+                  isRewardAvailable && showReward &&
                   <Button className={s.takeRewardBtn}
                           onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}>Забрать</Button>
                 }
