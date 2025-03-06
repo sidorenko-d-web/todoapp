@@ -57,7 +57,7 @@ export const PromotionPage: React.FC = () => {
             <h1 className={s.pageTitle}>{t('p1')}</h1>
             <div className={s.badges}>
               {/*<span className={s.badge}>{`#${position}`} <img src={clanRed} alt={'income'} /></span>*/}
-              <span className={s.badge}>+{formatAbbreviation(0, 'number', { locale: locale })} <img
+              <span className={s.badge}>+{formatAbbreviation(1, 'number', { locale: locale })} <img
                 src={subscribersIcon}
                 alt={'subscribers'} /></span>
             </div>
