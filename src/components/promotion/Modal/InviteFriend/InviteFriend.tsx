@@ -55,19 +55,19 @@ export const InviteFriend: FC<InviteFriendProps> = ({
   };
 
   return (
-    <BottomModal modalId={modalId} title={`${t('p28')}`} onClose={onClose}>
+    <BottomModal modalId={modalId} title={`${t('p28')}`} onClose={onClose} isCopiedLink={isCopiedLink}>
       <ul className={s.subscribers}>
         <li className={s.listBadge}>
           <span className={s.badge}>
             +{formatAbbreviation(120, 'number', { locale: locale })}{' '}
-            <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+            <img src={subscribersIcon} height={18} width={18} alt="Подписчики" />
           </span>
           <span className={s.level}>1{t('p4')}.</span>
         </li>
         <li className={s.listBadge}>
           <span className={s.badge}>
             +{formatAbbreviation(40, 'number', { locale: locale })}{' '}
-            <img src={subscribersIcon} height={14} width={14} alt="Подписчики" />
+            <img src={subscribersIcon} height={18} width={18} alt="Подписчики" />
           </span>
           <span className={s.level}>2{t('p4')}.</span>
         </li>
@@ -76,7 +76,7 @@ export const InviteFriend: FC<InviteFriendProps> = ({
         <p className={s.description}>{t('p30')}</p>
 
         <div>
-          <label>Ссылка для приглашения</label>
+          <label>{t('p60')}</label>
           <div className={s.blockInput}>
             <input
               type="text"
@@ -93,7 +93,7 @@ export const InviteFriend: FC<InviteFriendProps> = ({
           </div>
         </div>
         <div>
-          <label>Код приглашения</label>
+          <label>{t('p61')}</label>
           <div className={s.blockInput}>
             <input
               type="text"
@@ -105,13 +105,12 @@ export const InviteFriend: FC<InviteFriendProps> = ({
               onClick={() => copyToClipboard(String(data?.id), setIsCopiedLink)}
               className={s.copyButton}
             >
-               <img src={copy} height={14} width={14} alt="copy" />
+              <img src={copy} height={16} width={16} alt="copy" />
             </Button>
           </div>
-        {isCopiedLink && <div className={s.save}>{t('p59')}</div>}
         </div>
         <Button className={classNames(s.buttonContainer, s.text)} onClick={inviteTG}>
-          {t('p31')} <img src={arrow} height={14} width={14} alt="arrow" />
+          {t('p31')} <img src={arrow} height={16} width={16} alt="arrow" />
         </Button>
       </div>
     </BottomModal>
