@@ -5,6 +5,7 @@ import closeIcon from '../../../assets/icons/close.svg';
 import classNames from 'classnames';
 import { useModal } from '../../../hooks';
 import modalGripIcon from '../../../assets/icons/modal-grip.svg';
+import { useTranslation } from 'react-i18next';
 
 interface BottomModalProps {
   modalId: string;
@@ -17,6 +18,7 @@ interface BottomModalProps {
   titleWrapperStyles?: string;
   headerStyles?: string;
   titleIcon?: string;
+  isCopiedLink?: boolean;
 }
 
 const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
@@ -30,11 +32,14 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
   children,
   titleWrapperStyles,
   headerStyles,
-  titleIcon,
+                                                                titleIcon,
+                                                                isCopiedLink,
 }) => {
   const { getModalState } = useModal();
   const { isOpen } = getModalState(modalId);
   const [isClosing, setIsClosing] = useState(false);
+  const { t } = useTranslation('promotion');
+
 
   // Handle scroll lock
   useEffect(() => {
@@ -62,6 +67,7 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
       onClick={handleClose}
       style={{backgroundColor: `rgba(0, 0, 0, 0.7)`}}
     >
+      {isCopiedLink && <div className={s.save}>{t('p59')}</div>}
       <div
         className={classNames(
           s.modal,

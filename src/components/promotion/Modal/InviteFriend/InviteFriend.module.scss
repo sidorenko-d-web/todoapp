@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  margin: 5px 16px 20px 0
+  margin: 0 16px 20px 0
 }
 
 label {
@@ -28,12 +28,9 @@ label {
 
 .badge {
   display: flex;
+  align-items: center;
   gap: 5px;
   line-height: 100%;
-
-  img {
-    @include var.multi-size(12px, 14px)
-  }
 }
 
 .text {
@@ -58,7 +55,6 @@ label {
   line-height: 130%;
   letter-spacing: -0.05em;
   color: var.$color-white;
-  margin-bottom: 10px;
   word-wrap: break-word;
   white-space: pre-line;
 
@@ -68,12 +64,12 @@ label {
 .inputs {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
 
 .blockInput {
   width: 100%;
-  height: 36px;
+  height: 38px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -94,8 +90,8 @@ label {
 }
 
 .copyButton {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,7 +102,7 @@ label {
 }
 
 .buttonContainer {
-  margin-top: 40px;
+  margin-top: 20px;
   width: 100%;
   padding: 10px;
   display: flex;
@@ -117,19 +113,7 @@ label {
   background: var.$color-blue-primary;
   border: none;
 
-
   @media (min-width: var.$breakpoint-md) {
     padding: 14px;
   }
-}
-
-.save {
-  position: absolute;
-  top: 88%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: var.$color-white;
-  background: var.$color-blue-primary;
-  padding: 8px;
-  border-radius: 8px;
 }
