@@ -55,8 +55,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   height: 100vh;
   margin: 0 auto;
   overflow: hidden;
-
-
+  padding: 0 15px;
   
   .bg_image {
     position: fixed;
