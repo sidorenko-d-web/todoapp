@@ -118,4 +118,8 @@
 
 .content {
   padding: 10px 15px 40px 15px;
+
+  &.topUsers {
+    padding-top: 0;
+  }
 }

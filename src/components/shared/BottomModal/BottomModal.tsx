@@ -51,7 +51,7 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
     setTimeout(() => {
       onClose();
       setIsClosing(false);
-    }, 80); 
+    }, 80);
   };
 
   if (!isOpen) return null;
@@ -60,7 +60,7 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
     <Overlay
       className={classNames(s.overlay, containerStyles)}
       onClick={handleClose}
-      style={{backgroundColor: `rgba(0, 0, 0, 0.7)`}}
+      style={{ backgroundColor: `rgba(0, 0, 0, 0.7)` }}
     >
       <div
         className={classNames(
@@ -86,7 +86,9 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
               </button>
             </div>
           </header>
-          <div className={s.content}>{children}</div>
+          <div className={classNames(s.content, { [s.topUsers]: title === 'Топ 10 000 инфлюенсеров' })}>
+            {children}
+          </div>
         </div>
       </div>
     </Overlay>
