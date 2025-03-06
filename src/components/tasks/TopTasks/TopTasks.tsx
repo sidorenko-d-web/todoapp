@@ -2,7 +2,6 @@ import { FC, useState } from 'react';
 import { TaskCard } from '../TaskCard';
 import magicBallIcon from '../../../assets/icons/magic-ball.png';
 import chestIconPurple from '../../../assets/icons/chest-purple.svg';
-import chestIconRed from '../../../assets/icons/chest-red.svg';
 import { MODALS } from '../../../constants/modals';
 import { useModal } from '../../../hooks';
 import s from '../styles.module.scss';

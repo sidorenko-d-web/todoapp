@@ -64,7 +64,8 @@ export function AuthInit({ children }: AuthInitProps) {
           // referral_id={window.Telegram.WebApp.initDataUnsafe.user.id}
           // referral_id={563486774}
           // referral_id={1259832544}
-           referral_id={1301940582}
+          //  referral_id={1301940582}
+          referral_id={6547551264}
         />
       );
 
@@ -78,6 +79,7 @@ export function AuthInit({ children }: AuthInitProps) {
       return <DaysInARowModal onClose={handleModalClose} />;
 
     case 'completed':
+
       return <>
         {!coinsAnimationShown &&
           <Lottie animationData={coinsAnim} loop={false} autoPlay={true} 

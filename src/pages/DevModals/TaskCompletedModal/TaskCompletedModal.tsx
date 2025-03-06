@@ -2,14 +2,20 @@ import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './TaskCompletedModal.module.scss';
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
-import subscribers from '../../../assets/icons/subscribers.png';
+import subscribers_img from '../../../assets/icons/subscribers.png';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import confetti from '../../../assets/animations/confetti.json';
 import { MODALS, SOUNDS } from '../../../constants';
 import { CentralModal } from '../../../components/shared';
 
-export default function TaskCompletedModal() {
+interface TaskCompletedModalProps {
+  income: number;
+  subscribers: number;
+  passiveIncome: number;
+}
+
+export default function TaskCompletedModal({ income, subscribers, passiveIncome }: TaskCompletedModalProps) {
   const { closeModal } = useModal();
 
   useAutoPlaySound(MODALS.TASK_COMPLETED, SOUNDS.rewardHuge);
@@ -33,7 +39,7 @@ export default function TaskCompletedModal() {
               />
             </div>
             <div className={styles.content}>
-              <p>+100</p>
+              <p>+{income}</p>
               <img src={coin} />
             </div>
           </div>
@@ -46,8 +52,8 @@ export default function TaskCompletedModal() {
               />
             </div>
             <div className={styles.content}>
-              <p>+150</p>
-              <img src={subscribers} />
+              <p>+{subscribers}</p>
+              <img src={subscribers_img} />
             </div>
           </div>
           <div className={styles.item}>
@@ -59,7 +65,7 @@ export default function TaskCompletedModal() {
               />
             </div>
             <div className={styles.content}>
-              <p>+5</p>
+              <p>+{passiveIncome}</p>
               <img src={coin} />
               <p>/сек.</p>
             </div>
@@ -74,5 +80,6 @@ export default function TaskCompletedModal() {
       </div>
       <Button variant={'blue'}>Забрать</Button>
     </CentralModal>
+
   );
 }
