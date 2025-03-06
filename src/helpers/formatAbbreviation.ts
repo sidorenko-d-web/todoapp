@@ -19,7 +19,7 @@ const scales: ScaleConfig[] = [
 ];
 
 export const formatAbbreviation = (
-  value: number | string | Date | undefined | null, // Добавлены типы undefined и null
+  value: number | string | Date | undefined | null,
   abbreviationType: AbbreviationType = 'number',
   { locale = 'ru', decimals = 3, currencySymbol = ' $USDT' }: FormatAbbreviationOptions = {},
 ): string => {
@@ -44,9 +44,9 @@ export const formatAbbreviation = (
       ? value
       : typeof value === 'string'
         ? parseFloat(value.replace(/\s+/g, '').replace(',', '.'))
-        : value instanceof Date // Проверяем, является ли value объектом Date
+        : value instanceof Date
           ? value.getTime()
-          : NaN; // Если value не подходит ни под один тип, возвращаем NaN
+          : NaN;
 
   if (Number.isNaN(numericValue)) return String(value);
 
