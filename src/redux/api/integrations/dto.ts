@@ -8,6 +8,7 @@ export type IntegrationResponseDTO = {
   income: string;
   views: number;
   subscribers: number;
+  future_statistics: FutureStatisticsDTO
   comments_generated: number;
   comments_answered: number;
   comments_answered_correctly: number;
@@ -27,6 +28,12 @@ export type IntegrationResponseDTO = {
     id: string;
   };
 };
+
+export type FutureStatisticsDTO = {
+  income: string
+  views: number
+  subscribers: number
+}
 
 export type IntegrationsResponseDTO = {
   count: number;
