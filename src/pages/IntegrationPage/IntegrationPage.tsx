@@ -42,7 +42,13 @@ export const IntegrationPage: React.FC = () => {
     error,
     isLoading: isIntegrationLoading,
     refetch: refetchCurrentIntegration,
-  } = useGetIntegrationQuery(`${integrationId}`, { refetchOnMountOrArgChange: true });
+  } = useGetIntegrationQuery(`${integrationId}`, {
+    refetchOnMountOrArgChange: true,
+    // pollingInterval: 5 * 60 * 1000
+    pollingInterval: 10 * 1000
+  });
+
+
   const {
     data: commentData,
     isLoading: isUnansweredIntegrationCommentLoading,
@@ -92,7 +98,11 @@ export const IntegrationPage: React.FC = () => {
 
       {data  && (
         <>
-          <IntegrationStatsMini views={data.views} subscribers={data.subscribers} income={data.income} />
+          <IntegrationStatsMini
+            views={data.views}
+            subscribers={data.subscribers}
+            income={data.income}
+          />
           <div className={styles.integrationNameWrp}>
             <p className={styles.integrationTitle}>{t('i1')} {data.number}</p>
             <div className={styles.integrationLevelWrp}>
@@ -101,7 +111,11 @@ export const IntegrationPage: React.FC = () => {
             </div>
           </div>
           <Integration />
-          <IntegrationStats views={data.views} income={data.income} subscribers={data.subscribers} />
+          <IntegrationStats
+            views={data.views}
+            income={data.income}
+            subscribers={data.subscribers}
+          />
           <div className={styles.commentsSectionTitleWrp}>
             <p className={styles.commentsSectionTitle}>{t('i4')}</p>
             <p className={styles.commentsAmount}>
