@@ -6,7 +6,7 @@ import fireBlueIcon from '../../../assets/icons/fire-blue.svg';
 import fireGrayIcon from '../../../assets/icons/fire-gray.svg';
 import infoIcon from '../../../assets/icons/info.svg';
 import infoRedIcon from '../../../assets/icons/info-red.svg';
-
+import { useGetUserProfileInfoByIdQuery } from '../../../redux';
 import profileIconPlaceholder from '../../../assets/icons/referral-icon-placeholder.svg';
 import { formatAbbreviation } from '../../../helpers';
 import { Button } from '../../shared';
@@ -31,7 +31,7 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
 }) => {
   const { t, i18n } = useTranslation('promotion');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-
+  const { data } = useGetUserProfileInfoByIdQuery(id_referral);
   const handleSendMessage = () => {
     try {
       const message = encodeURIComponent(locale === 'ru' ? t('p58') : t('p58'));
@@ -77,13 +77,15 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
         <div className={s.userCardBottom}>
           <div className={s.userCardBonus}>
             <span className={s.badge}>
-              +{formatAbbreviation(120, 'number', { locale: locale })} <img src={subscribersIcon} alt="Подписчики" />
+              +{formatAbbreviation(data?.subscribers, 'number', { locale: locale })}{' '}
+              <img src={subscribersIcon} alt="Подписчики" />
             </span>
             <span className={classNames(s.level, s.text)}>1{t('p4')}.</span>
           </div>
           <div className={s.userCardBonus}>
             <span className={s.badge}>
-              +{formatAbbreviation(40, 'number', { locale: locale })} <img src={subscribersIcon} alt="Подписчики" />
+              +{formatAbbreviation(data?.subscribers_for_second_level_referrals, 'number', { locale: locale })}{' '}
+              <img src={subscribersIcon} alt="Подписчики" />
             </span>
             <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
           </div>
