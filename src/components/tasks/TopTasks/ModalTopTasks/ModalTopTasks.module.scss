@@ -42,8 +42,7 @@
   .step {
     color: var.$color-text;
     text-align: center;
-    font-size: 14px;
-    font-style: normal;
+    font-size: 16px;
     font-weight: 500;
     line-height: 100%; /* 14px */
     letter-spacing: -0.7px;
@@ -66,7 +65,7 @@
 .question {
   display: flex;
   flex-direction: column;
-  padding-bottom: 30px;
+  padding-bottom: 40px;
 
 }
 
@@ -83,7 +82,6 @@
 .questionText2 {
   align-self: stretch;
   color: #505B78;
-  font-family: Inter;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -96,7 +94,7 @@
   flex-direction: column;
   gap: 10px;
   width: 100%;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
 }
 
 .option {
@@ -163,9 +161,10 @@
 
 .answerButton,
 .nextButton {
+  height: 44px;
   padding: 10px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
@@ -207,9 +206,8 @@
 .linkLabel {
   color: #AFB9D4;
   font-size: 12px;
-  font-style: normal;
   font-weight: 500;
-  line-height: 100%; /* 12px */
+  line-height: 100%;
   letter-spacing: -0.6px;
   padding-bottom: 6px;
 }
@@ -231,7 +229,7 @@
 
 .errorWrapper {
   padding-bottom: 20px;
-  
+
   .errorMessage {
     display: flex;
     padding: 10px;
@@ -243,7 +241,7 @@
     border-radius: 8px;
     background: rgba(31, 35, 46, 0.95);
   }
-  
+
   .errorTitle {
     color: #E84949;
     text-align: left;
@@ -255,7 +253,7 @@
     letter-spacing: -0.8px;
     width: 100%;
   }
-  
+
   .errorDescription {
     color: #AFB9D4;
     font-family: Inter;

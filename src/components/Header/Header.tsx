@@ -3,12 +3,11 @@ import CoinIcon from '../../assets/icons/coin.png';
 import AvatarIcon from '../../assets/icons/person.svg';
 import FireIcon from '../../assets/icons/avatar-fire.svg';
 import SubscribersIcon from '../../assets/icons/subscribers.png';
-import { RootState, useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery } from '../../redux';
+import { RootState, setLastActiveStage, useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery } from '../../redux';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute, MODALS } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { setLastActiveStage } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { TrackedLink } from '../withTracking';
@@ -17,11 +16,11 @@ import { useModal } from '../../hooks';
 
 export const Header = () => {
   const { data, isLoading, refetch } = useGetCurrentUserProfileInfoQuery(undefined, {
-    pollingInterval: 1000, // 1 сек
+    pollingInterval: 10000, // 10 сек
   });
 
   const { data: treeData } = useGetTreeInfoQuery(undefined, {
-    pollingInterval: 1000, // 1 сек
+    pollingInterval: 10000, // 10 сек
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
