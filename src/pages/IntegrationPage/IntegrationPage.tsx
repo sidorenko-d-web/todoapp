@@ -44,10 +44,17 @@ export const IntegrationPage: React.FC = () => {
     refetch: refetchCurrentIntegration,
   } = useGetIntegrationQuery(`${integrationId}`, {
     refetchOnMountOrArgChange: true,
-    // pollingInterval: 5 * 60 * 1000
-    pollingInterval: 10 * 1000
+    pollingInterval: 5 * 60 * 1000
   });
 
+  useEffect(() => {
+    if (!data) return;
+    const refetchInterval = setInterval(() => {
+      refetchCurrentIntegration();
+    }, 5 * 60 * 1000); // 5 minutes
+
+    return () => clearInterval(refetchInterval);
+  }, [data, refetchCurrentIntegration]);
 
   const {
     data: commentData,
@@ -102,6 +109,8 @@ export const IntegrationPage: React.FC = () => {
             views={data.views}
             subscribers={data.subscribers}
             income={data.income}
+            futureStatistics={data.future_statistics}
+            lastUpdatedAt={data.updated_at}
           />
           <div className={styles.integrationNameWrp}>
             <p className={styles.integrationTitle}>{t('i1')} {data.number}</p>
@@ -115,6 +124,8 @@ export const IntegrationPage: React.FC = () => {
             views={data.views}
             income={data.income}
             subscribers={data.subscribers}
+            futureStatistics={data.future_statistics}
+            lastUpdatedAt={data.updated_at}
           />
           <div className={styles.commentsSectionTitleWrp}>
             <p className={styles.commentsSectionTitle}>{t('i4')}</p>

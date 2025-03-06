@@ -13,11 +13,22 @@ import { useTranslation } from 'react-i18next';
 import { TrackedLink } from '../withTracking';
 import { getOS } from '../../utils';
 import { useModal } from '../../hooks';
+import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
 
 export const Header = () => {
   const { data, isLoading, refetch } = useGetCurrentUserProfileInfoQuery(undefined, {
     pollingInterval: 10000, // 10 сек
   });
+
+  const {totalEarned, subscribers} = useIncrementingProfileStats({
+    profileId: data?.id || "",
+    basePoints: data?.points || "0",
+    baseSubscribers: data?.subscribers || 0,
+    baseTotalViews: data?.total_views || 0,
+    baseTotalEarned: data?.total_earned || "0",
+    futureStatistics: data?.future_statistics,
+    lastUpdatedAt: data?.updated_at
+  })
 
   const { data: treeData } = useGetTreeInfoQuery(undefined, {
     pollingInterval: 10000, // 10 сек
@@ -76,7 +87,7 @@ export const Header = () => {
             <div className={styles.info}>
               <div className={styles.subscribers}>
                 <p
-                  className={styles.subscribersNumber}>{formatAbbreviation(data?.subscribers || 0, 'number', { locale: locale })}</p>
+                  className={styles.subscribersNumber}>{formatAbbreviation(subscribers || 0, 'number', { locale: locale })}</p>
                 <img className={styles.subscribersIcon} src={SubscribersIcon} alt="SubscribersIcon" />
               </div>
 
@@ -96,7 +107,7 @@ export const Header = () => {
 
           <div className={styles.coinsWrapper}>
             <p
-              className={styles.coins}>{formatAbbreviation(showCoins ? (data?.points || 0) : '0', 'number', { locale: locale })}</p>
+              className={styles.coins}>{formatAbbreviation(showCoins ? (totalEarned || 0) : '0', 'number', { locale: locale })}</p>
             <img className={styles.coinIcon} src={CoinIcon} alt="CoinIcon" />
           </div>
         </div>
