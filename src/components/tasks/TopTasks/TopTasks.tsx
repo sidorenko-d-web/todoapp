@@ -23,11 +23,8 @@ type TopTasksProps = {
 };
 
 export const TopTasks: FC<TopTasksProps> = ({ task }) => {
-
   const { t } = useTranslation('quests');
   const { openModal, closeModal } = useModal();
-
-
   const [claimChestReward] = useClaimChestRewardMutation();
 
   const [taskState, setTaskState] = useState<TaskState>({
@@ -37,38 +34,34 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
     hasError: false
   });
 
-  // // Добавляем состояние для тестового режима
-  // const [isTestMode] = useState(process.env.NODE_ENV === 'development');
-
   const handleOpenTopTasks = async () => {
     console.log('Task completion status:', task.is_completed);
     console.log('Is reward given:', task.is_reward_given);
+    console.log('Current step:', task.completed_stages);
 
     if (task.is_completed && !task.is_reward_given) {
+      openModal(MODALS.TASK_CHEST, {
+        points: 0,
+        subscribers: 0,
+        freezes: 0,
+      });
+
       try {
-        console.log('Условия выполнены, открываем подарок');
+        const result = await claimChestReward({ chest_reward_reason: 'create_channel_assignment' }).unwrap();
+        console.log('Reward claimed:', result);
 
-        if (task.title === 'Создайте свой канал!') {
-          const result = await claimChestReward({ chest_reward_reason: 'create_channel_assignment' }).unwrap();
-          console.log('Reward claimed:', result);
-
-          openModal(MODALS.TASK_CHEST, {
-            points: result.reward.points,
-            subscribers: result.reward.subscribers,
-            freezes: result.reward.freezes,
-          });
-        }
-        return;
+        openModal(MODALS.TASK_CHEST, {
+          points: result.reward.points,
+          subscribers: result.reward.subscribers,
+          freezes: result.reward.freezes,
+        });
       } catch (error) {
         console.error('Error getting reward:', error);
       }
-    } else {
-      console.log('Условия не выполнены:');
-      console.log('- task.is_completed:', task.is_completed);
-      console.log('- !task.is_reward_given:', !task.is_reward_given);
+      return;
+    } else if (task.completed_stages === 3 || !task.is_completed) {
+      openModal(MODALS.TOP_TASK);
     }
-
-    openModal(MODALS.TOP_TASK);
   };
 
   const handleCloseModal = () => {
@@ -90,26 +83,18 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
     return taskState.currentStep === 3 ? chestIconPurple : chestIconPurple;
   };
 
+  const getButtonText = () => {
+    if (task.is_completed && !task.is_reward_given) {
+      return t('q33'); // "Забрать награду"
+    }
+    if (task.is_completed) {
+      return t('q15'); // "Выполнено"
+    }
+    return t('q13'); // "Выполнить"
+  };
+
   return (
     <section className={s.section}>
-      {/* Добавляем тестовую кнопку только в режиме разработки
-      {isTestMode && (
-        <button 
-          onClick={() => openModal(MODALS.TOP_TASK)}
-          style={{ 
-            marginBottom: '10px',
-            padding: '8px 16px',
-            background: '#4CAF50',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
-        >
-          Открыть модальное окно (тест)
-        </button>
-      )} */}
-
       <div className={s.sectionHeader}>
         <h2 className={s.sectionTitle}>{t('q6')}</h2>
         <span className={s.count}>
@@ -133,7 +118,7 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
           progressRewardIcon={getChestIcon()}
           onClick={handleOpenTopTasks}
           disabled={task.is_reward_given}
-          buttonText={task.is_completed && !task.is_reward_given ? t('q33') : task.is_completed ? t('q15') : t('q13')}
+          buttonText={getButtonText()}
           errorText={taskState.hasError ? 'Ошибка: повторите попытку' : undefined}
           isCompleted={task.is_completed}
           isRewardGiven={task.is_reward_given}
