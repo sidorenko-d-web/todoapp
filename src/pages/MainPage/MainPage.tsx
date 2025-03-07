@@ -159,6 +159,16 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(2));
   }, []);
 
+  useEffect(() => {
+    const lastOpenedDate = localStorage.getItem('lastOpenedDate');
+    const currentDate = new Date().toLocaleDateString();
+
+    if (lastOpenedDate !== currentDate) {
+      openModal(MODALS.DAYS_IN_A_ROW);
+      localStorage.setItem('lastOpenedDate', currentDate);
+    }
+  }, []);
+
   const isLoading = (
     isAllIntegrationsLoading ||
     isCurrentUserProfileInfoLoading ||
