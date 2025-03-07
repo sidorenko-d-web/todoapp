@@ -27,7 +27,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
   const handleTaskClick = async (task: Task) => {
     if (task.is_completed && !task.is_reward_given) {
       setSelectedTask(task);
-      openModal(MODALS.TASK_COMPLETED);
+      openModal(MODALS.GET_GIFT);
       return;
     }
 

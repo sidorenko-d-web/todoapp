@@ -13,7 +13,9 @@ import { ProgressBarTasks } from '../ProgressBarTasks';
 import classNames from 'classnames';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
-
+import Lottie from 'lottie-react';
+import blueLightAnimation from '../../../assets/animations/blueLight.json';
+import purpleLightAnimation from '../../../assets/animations/purpleLight.json';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -110,6 +112,14 @@ export const TaskCard: React.FC<TasksCardProps> = ({
     }
   };
 
+  let animationLight;
+  
+  if (isTopTask) {
+    animationLight = <Lottie animationData={purpleLightAnimation} loop={true} className={s.lightAnimation} />;
+  } else if (isDailyTask || isSocialTask) {
+    animationLight = <Lottie animationData={blueLightAnimation} loop={true} className={s.lightAnimation} />;
+  }
+
   return (
     <div className={classNames(s.card, {
       [s.completed]: isCompleted,
@@ -120,6 +130,12 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       [s.en]: locale === 'en',
       [s.rewardGiven]: isRewardGiven
     })}>
+      {isCompleted && (
+        <div className={s.animationWrapper}>
+          {animationLight}
+        </div>
+      )}
+      
       <section className={s.header}>
         {icon && <img className={classNames(s.icon, {[s.iconSocial]: isSocialTask})} src={icon} alt="icon" />}
         <div className={s.info}>
@@ -186,6 +202,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       )}
 
       <section className={s.buttons}>
+        {isCompleted && <div className={s.images}>{animationLight}</div>}
         <TrackedButton
           trackingData={{
             eventType: 'button',
