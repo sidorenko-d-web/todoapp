@@ -13,7 +13,6 @@
   position: absolute;
   width: 30px;
   height: 100%;
-  margin-top: 100px;
   border: 2px solid var.$color-dark-gray-stroke;
   background: var.$color-gray;
   border-bottom: none;
@@ -68,7 +67,7 @@
   position: absolute;
   top: -20px;
   right: 80px;
-  min-width: 120px;
+  min-width: 108px;
   width: auto;
   height: auto;
   min-height: 42px;
@@ -81,7 +80,7 @@
 }
 
 .prizeRight {
-  right: -150px;
+  right: -130px;
 }
 
 .spiner {
@@ -125,11 +124,6 @@
   align-items: center;
   width: 44px;
   aspect-ratio: 1;
-  position: absolute;
-  right: 40px;
-  top: -48px;
-  width: 40px;
-  height: auto;
   border-radius: 4px;
   padding: 3px 6px;
   background: var.$color-card-bg;
