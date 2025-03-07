@@ -3,10 +3,17 @@ import tickCircle from '../../../assets/icons/tickCircle.svg';
 import circle from '../../../assets/icons/circle.svg';
 import s from './DevelopmentPlan.module.scss';
 import classNames from 'classnames';
-import { INFO_TEXT } from './constantsPlan.ts';
+import { INFO_TEXT_RU, INFO_TEXT_EN } from './constantsPlan.ts';
 import React from 'react';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
+
+interface InfoTextItem {
+  userCount: number;
+  namePlan: string;
+  description: string;
+  isPlatform?: boolean;
+}
 
 type DevelopmentPlanProps = {
   usersCount: number;
@@ -14,19 +21,25 @@ type DevelopmentPlanProps = {
 
 export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) => {
   const { t, i18n } = useTranslation('promotion');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const unlockedCount = INFO_TEXT.filter((item) => usersCount >= item.userCount).length;
-  const totalCount = INFO_TEXT.length;
+  const supportedLocales = ['ru', 'en'];
+  const locale = supportedLocales.includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const INFO_TEXT = {
+    ru: INFO_TEXT_RU,
+    en: INFO_TEXT_EN,
+  };
+  const infoText = INFO_TEXT[locale];
+  const unlockedCount = infoText.filter((item: InfoTextItem) => usersCount >= item.userCount).length;
+  const totalCount = infoText.length;
 
   return (
     <>
       <div className={s.headerDevelopment}>
-        <span className={s.textName}>{t("p14")}</span>
+        <span className={s.textName}>{t('p14')}</span>
         <span className={s.badge}>{unlockedCount}/{totalCount}</span>
       </div>
       <section className={s.component}>
         <ul className={s.list}>
-          {INFO_TEXT.map((item, index) => {
+          {infoText.map((item: InfoTextItem, index: number) => {
             const isUnlocked = usersCount >= item.userCount && !item.isPlatform;
             const isDescriptionBlurred = index >= 1;
             const isNumbersBlurred = index >= 8;
@@ -34,21 +47,22 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
             return (
               <li key={index} className={s.wrapperList}>
                 <div className={s.infoUser}>
-                  <div
-                    className={classNames(s.namePlan, {
-                      [s.locked]: !isUnlocked,
-                    })}
-                  >
+                  <div className={classNames(s.namePlan, { [s.locked]: !isUnlocked })}>
                     <span>{item.namePlan}</span>
-                    {isUnlocked && <img src={tickCircle}  />}
-                    {!isUnlocked && <img src={circle}  />}
+                    {isUnlocked ? (
+                      <img src={tickCircle} alt={t('altText.tickCircle')} />
+                    ) : (
+                      <img src={circle} alt={t('altText.circle')} />
+                    )}
                   </div>
                   <span className={s.text}>{`#${index + 1}`}</span>
                 </div>
                 <div className={s.users}>
                   <img src={lockOpen} alt="lockOpen" />
-                  <span
-                    className={classNames(s.countUsers, s.text)}>{isNumbersBlurred ? '???' : formatAbbreviation(item.userCount, 'number', {locale: locale})} {t('p23')} {item.isPlatform && ` ${t('p24')}`}</span>
+                  <span className={classNames(s.countUsers, s.text)}>
+                    {isNumbersBlurred ? '???' : formatAbbreviation(item.userCount, 'number', { locale })}{' '}
+                    {t('p23')} {item.isPlatform && ` ${t('p24')}`}
+                  </span>
                 </div>
                 <p className={s.textInfoPlan}>{isDescriptionBlurred ? '*****' : item.description}</p>
               </li>

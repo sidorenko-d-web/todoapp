@@ -4,10 +4,10 @@
 .wrp {
   display: flex;
   flex-direction: column;
-  margin-top: -50px;
+  margin-top: 50px;
   background-color: var.$color-bg;
   color: var.$color-text;
-
+  padding: 0 15px;
   gap: 20px;
 
   @media (min-width: var.$breakpoint-md) {

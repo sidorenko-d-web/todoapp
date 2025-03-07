@@ -10,6 +10,7 @@ import { Button, CentralModal } from '../../shared';
 import { GUIDE_ITEMS, MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import { useTranslation } from 'react-i18next';
+import list from '../../../assets/icons/list.svg';
 
 interface SubscribeModalProps {
   modalId: string;
@@ -58,12 +59,10 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
           </span>
         </div>
         <div className={s.buttons}>
-          <Button className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`} onClick={handleBuySubscription}>
-              {formatAbbreviation(150)} <img src={coinIcon} height={14} width={14}
-                                                                                  alt={'Coin'} /></Button>
-
-          <Button className={s.button + ' ' + s.gray}>{t('g77')}</Button>
           <Button className={s.button} disabled>{formatAbbreviation(1.99, 'currency')}</Button>
+          <Button className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`} onClick={handleBuySubscription}>
+              {formatAbbreviation(15000000)} <img src={coinIcon} height={14} width={14} alt={'Coin'} /></Button>
+          <Button className={s.button + ' ' + s.gray}><img src={list} height={16} width={16} alt={'list'} /></Button>
         </div>
       </div>
     </CentralModal>
