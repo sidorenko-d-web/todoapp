@@ -108,27 +108,51 @@ export const Tree = () => {
                       [s.prizeRight]: index % 2 !== 1,
                     })}
                   >
-                    {isRewardAvailable
-                      && <img className={s.imgPrizeActive} src={spinnerBlue} height={150} width={150} alt="spinner" />}
-                    {stage.achievement && (
-                      <div className={classNames(s.imgPrize)}>
-                        {!isRewardClaimed && (
-                          <>
-                            <div className={s.blickAnimation}>
-                              <LazyLottie animationData={giftBlick} />
-                            </div>
-                            <div className={classNames({ [s.blur]: !isActive })} />
-                          </>
-                        )}
+                    <div className={s.rewardsIconsWrapper}>
+                      {/* Блок с подарком */}
+                      {stage.achievement && (
+                        <div className={classNames(s.imgPrize)}>
+                          {!isRewardClaimed && (
+                            <>
+                              <div className={s.blickAnimation}>
+                                <LazyLottie animationData={giftBlick} />
+                              </div>
+                              <div className={classNames({ [s.blur]: !isActive })} />
+                            </>
+                          )}
 
-                        <img src={giftIcon} height={20} width={20} alt="gift" />
+                          <img src={giftIcon} height={20} width={20} alt="gift" />
 
                         <div className={`${s.giftStatus} 
                           ${(isRewardAvailable && !stage.achievement.is_unlocked)
-                        || stage.achievement.is_unlocked ? s.notTaken : ''}
+                          || stage.achievement.is_unlocked ? s.notTaken : ''}
                           ${(!isRewardAvailable && !stage.achievement.is_unlocked) ? s.notAchieved : ''}`} />
-                      </div>
-                    )}
+
+                          {isRewardAvailable &&
+                            <img className={s.imgPrizeActive} src={spinnerBlue} height={150} width={150}
+                                 alt="spinner" />
+                          }
+                        </div>
+                      )}
+
+                      {/* Блок с доп наградой */}
+                      {stage.achievement.image_url && (
+                        <div className={s.imgPrize}>
+                          {!isRewardClaimed && (
+                            <>
+                              <div className={s.blickAnimation}>
+                                <LazyLottie animationData={giftBlick} />
+                              </div>
+                              <div className={classNames({ [s.blur]: !isActive })} />
+                            </>
+                          )}
+
+                          <img src={stage.achievement.image_url} height={20} width={20} alt="reward" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Блок с кол-вом подписчиков  */}
                     <div className={classNames(s.text, { [s.textActive]: isRewardAvailable })}>
                       <span
                         className={`${(!isRewardAvailable && !stage.achievement.is_unlocked) ? s.inactive : ''}`}>
