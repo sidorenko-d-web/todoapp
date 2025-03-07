@@ -12,54 +12,49 @@ import bookIcon from '../../../../assets/icons/book.svg';
 import CrossRedIcon from '../../../../assets/icons/cross-red-in-circle.svg';
 import { formatAbbreviation } from '../../../../helpers';
 import { Button } from '../../../shared';
-import { Task, TaskBoost } from '../../../../redux/api/tasks/dto';
-import { useGetTaskQuestionsQuery, useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
+import { Task, TaskBoost, Question } from '../../../../redux/api/tasks/dto';
+import { useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
 import { useTranslation } from 'react-i18next';
 
-type ModalDailyTasksProps = {
+interface ModalDailyTasksProps {
   modalId: string;
   onClose: () => void;
   onStateChange: (states: QuestionState[]) => void;
   taskId: string;
-  totalSteps: number;
-  boost: TaskBoost;
   task: Task;
-};
+}
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
 export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
-                                                            modalId,
-                                                            onClose,
-                                                            onStateChange,
-                                                            taskId,
-                                                            task,
-                                                          }) => {
-  const { t } = useTranslation('quests');
-  const { data: questions } = useGetTaskQuestionsQuery(taskId);
-  const [ updateTask ] = useUpdateTaskMutation();
-  const isQuestionsArray = Array.isArray(questions);
-  const [ currentQuestionIndex, setCurrentQuestionIndex ] = useState(task.completed_stages);
-  const [ selectedOption, setSelectedOption ] = useState<string | null>(null);
-  const [ showResult, setShowResult ] = useState(false);
-  const [ shake, setShake ] = useState(false);
-  const [ correct, setCorrect ] = useState(false);
-  const [ answeredQuestions, setAnsweredQuestions ] = useState<boolean[]>([]);
-  const [ channelLink ] = useState(task.external_link);
+  modalId,
+  onClose,
+  onStateChange,
+  taskId,
+  task,
+}) => {
+  const { t, i18n } = useTranslation('quests');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const [updateTask] = useUpdateTaskMutation();
+  const questions = task.questions || [];
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(task.completed_stages);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [showResult, setShowResult] = useState(false);
+  const [shake, setShake] = useState(false);
+  const [correct, setCorrect] = useState(false);
+  const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
+  const [channelLink] = useState(locale === 'en' ? task.external_link_eng || task.external_link : task.external_link);
   const isVibrationSupported = 'vibrate' in navigator;
 
   useEffect(() => {
-    if (isQuestionsArray && questions) {
-      setAnsweredQuestions(
-        Array(questions.length)
-          .fill(false)
-          .map((_, index) => index < task.completed_stages),
-      );
-    }
-  }, [ questions, isQuestionsArray, task.completed_stages ]);
+    setAnsweredQuestions(
+      Array(questions.length)
+        .fill(false)
+        .map((_, index) => index < task.completed_stages),
+    );
+  }, [questions.length, task.completed_stages]);
 
   const getQuestionStates = (): QuestionState[] => {
-    if (!isQuestionsArray || !questions) return [];
     return questions.map((_, index) => {
       if (index < task.completed_stages) {
         return 'solved';
@@ -72,9 +67,9 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
 
   useEffect(() => {
     onStateChange?.(getQuestionStates());
-  }, [ currentQuestionIndex, answeredQuestions, task.completed_stages ]);
+  }, [currentQuestionIndex, answeredQuestions, task.completed_stages]);
 
-  if (!isQuestionsArray || !questions || questions.length === 0) {
+  if (questions.length === 0) {
     return null;
   }
 
@@ -96,7 +91,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
       setCorrect(true);
       setTimeout(() => setSelectedOption(null), 1000);
 
-      const newAnsweredQuestions = [ ...answeredQuestions ];
+      const newAnsweredQuestions = [...answeredQuestions];
       newAnsweredQuestions[currentQuestionIndex] = true;
       setAnsweredQuestions(newAnsweredQuestions);
 
@@ -121,25 +116,23 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
         }
 
         setCurrentQuestionIndex(prev => prev + 1);
-        setSelectedOption(null)
+        setSelectedOption(null);
         setCorrect(false);
-        setShowResult(false); // Сбрасываем состояние результата
+        setShowResult(false);
       } catch (error) {
         console.error('Error updating task:', error);
       }
     } else {
-      setShowResult(true); // Показываем результат (неправильный ответ)
-      setShake(true); // Запускаем анимацию тряски
+      setShowResult(true);
+      setShake(true);
 
-      // Вибрация на телефоне
       if (isVibrationSupported) {
-        navigator.vibrate(200); // Вибрация на 200 миллисекунд
+        navigator.vibrate(200);
       }
 
-      // Сбрасываем анимацию и результат через 500 мс
       setTimeout(() => {
-        setShake(false); // Останавливаем анимацию
-        setShowResult(false); // Сбрасываем результат
+        setShake(false);
+        setShowResult(false);
       }, 500);
     }
   };
@@ -205,7 +198,11 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
 
         {/* Вопрос */}
         <div className={s.question}>
-          <h3 className={s.questionText}>{currentQuestion.question_text}</h3>
+          <h3 className={s.questionText}>
+            {locale === 'en' 
+              ? currentQuestion.question_text_eng 
+              : currentQuestion.question_text}
+          </h3>
 
           <div className={s.options}>
             {currentQuestion.answer_options.map(option => {
@@ -228,7 +225,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
                     [s.selectedText]: isSelected && !isWrong,
                     [s.wrongText]: isWrong,
                   })}>
-                    {option.answer_text}
+                    {locale === 'en' ? option.answer_text_eng : option.answer_text}
                   </span>
                   <div className={s.selectWrapper}>
                     <img
@@ -258,9 +255,9 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
           </Button>
           <Button
             className={classNames(s.nextButton, {
-              [s.active]: selectedOption !== null && !shake, // Блокируем кнопку при анимации
+              [s.active]: selectedOption !== null && !shake,
             })}
-            disabled={!selectedOption || shake} // Блокируем кнопку при анимации
+            disabled={!selectedOption || shake}
             onClick={handleNext}
           >
             {currentQuestionIndex === questions.length - 1 ? t('q25') : t('q26')}

@@ -120,6 +120,27 @@
     position: relative;
     z-index: 1;
 
+    // .images {
+    //   position: absolute;
+    //   width: 100%;
+    //   height: 100%;
+    //   top: 0;
+    //   left: 0;
+    //   display: flex;
+    //   justify-content: center;
+    //   align-items: center;
+    //   z-index: 0;
+    //   pointer-events: none;
+
+    //   .lightAnimation {
+    //     position: absolute;
+    //     width: 147px;
+    //     height: 147px;
+    //     bottom: -46px;
+    //     opacity: 0.8;
+    //   }
+    // }
+
     .button {
       display: flex;
       padding: 10px;
@@ -127,6 +148,9 @@
       align-items: center;
       border-radius: 8px;
       color: var.$color-text;
+      // position: relative;
+      // width: 100%;
+      // z-index: 1;
 
       font-size: 14px;
       font-weight: 500;
@@ -156,113 +180,17 @@
   &.completed {
     border-radius: 12px;
     border: 2px solid #9747FF;
-    background: var(--, #1C1D22);
+    background: #1C1D22;
     box-shadow: 0px 0px 16px 0px rgba(151, 71, 255, 0.50);
-  }
 
-  &.ru {
-    &.completed {
-      &.dailyTask, &.socialTask {
-        border: 2px solid #2F80ED;
-        box-shadow: 0px 0px 16px 0px rgba(47, 128, 237, 0.50);
-
-        &::before {
-          content: '';
-          position: absolute;
-          bottom: -46px;
-          width: 147px;
-          height: 147px;
-          background-image: url('../../../assets/icons/bg-light-blue.svg');
-          background-size: contain;
-          background-repeat: no-repeat;
-          z-index: 0;
-          opacity: 0.8;
-          pointer-events: none;
-          animation: rotate 4s linear infinite;
-        }
-      }
-
-      &.topTask {
-        &::before {
-          content: '';
-          position: absolute;
-          bottom: -46px;
-          width: 147px;
-          height: 147px;
-          background-image: url('../../../assets/icons/bg-light-purple.svg');
-          background-size: contain;
-          background-repeat: no-repeat;
-          z-index: 0;
-          opacity: 0.8;
-          pointer-events: none;
-          animation: rotate 4s linear infinite;
-        }
-      }
+    &.dailyTask, &.socialTask {
+      border: 2px solid #2F80ED;
+      box-shadow: 0px 0px 16px 0px rgba(47, 128, 237, 0.50);
     }
 
-    &.rewardGiven {
-      &::before {
-        left: -4px;
-      }
-    }
-
-    &:not(.rewardGiven) {
-      &::before {
-        left: 15px;
-      }
-    }
-  }
-
-  &.en {
-    &.completed {
-      &.dailyTask, &.socialTask {
-        border: 2px solid #2F80ED;
-        box-shadow: 0px 0px 16px 0px rgba(47, 128, 237, 0.50);
-
-        &::before {
-          content: '';
-          position: absolute;
-          bottom: -46px;
-          width: 147px;
-          height: 147px;
-          background-image: url('../../../assets/icons/bg-light-blue.svg');
-          background-size: contain;
-          background-repeat: no-repeat;
-          z-index: 0;
-          opacity: 0.8;
-          pointer-events: none;
-          animation: rotate 4s linear infinite;
-        }
-      }
-
-      &.topTask {
-        &::before {
-          content: '';
-          position: absolute;
-          bottom: -46px;
-          width: 147px;
-          height: 147px;
-          background-image: url('../../../assets/icons/bg-light-purple.svg');
-          background-size: contain;
-          background-repeat: no-repeat;
-          z-index: 0;
-          opacity: 0.8;
-          pointer-events: none;
-          animation: rotate 4s linear infinite;
-        }
-      }
-    }
-
-    &.rewardGiven {
-      &::before {
-        left: -29px;
-      }
-    }
-
-    &:not(.rewardGiven) {
-      &::before {
-        left: 5px;
-      }
+    &.topTask {
+      border: 2px solid #9747FF;
+      box-shadow: 0px 0px 16px 0px rgba(151, 71, 255, 0.50);
     }
   }
 }

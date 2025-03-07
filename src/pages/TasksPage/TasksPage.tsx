@@ -20,9 +20,11 @@ export const TasksPage: FC = () => {
   const { t, i18n } = useTranslation('quests');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const { data, error, isLoading: isTasksLoading } = useGetTasksQuery();
-  // TODO яндекс не принемает этот параметр { is_actual: true }
-
+  const { data, error, isLoading: isTasksLoading } = useGetTasksQuery({
+    is_assigned: true,
+    offset: 0,
+    limit: 100,
+  });
   const { data: boostData, isLoading: isBoostLoading } = useGetBoostQuery();
 
   useEffect(() => {
@@ -32,19 +34,48 @@ export const TasksPage: FC = () => {
 
   const dailyTask = useMemo(() => {
     if (!data?.assignments) return null;
-    const dailyTasks = data.assignments.filter(task => task.category === 'daily');
-    return dailyTasks[dailyTasks.length - 1];
-  }, [data]);
+    console.log('data', data);
+    const dailyTasks = data.assignments.filter(task => task.category === 'quiz');
+    console.log('dailyTasks', dailyTasks);
+    
+    // Модифицируем задание с учетом языка
+    if (dailyTasks[dailyTasks.length - 1]) {
+      const task = dailyTasks[dailyTasks.length - 1];
+      return {
+        ...task,
+        title: locale === 'en' ? task.title_eng : task.title,
+        description: locale === 'en' ? task.description_eng : task.description,
+        external_link: locale === 'en' ? task.external_link_eng || task.external_link : task.external_link,
+      };
+    }
+    return null;
+  }, [data, locale]);
 
   const topTask = useMemo(() => {
     if (!data?.assignments) return null;
-    return data.assignments.find(task => task.category === 'create_channel');
-  }, [data]);
+    const task = data.assignments.find(task => task.category === 'create_channel');
+    if (task) {
+      return {
+        ...task,
+        title: locale === 'en' ? task.title_eng : task.title,
+        description: locale === 'en' ? task.description_eng : task.description,
+        external_link: locale === 'en' ? task.external_link_eng || task.external_link : task.external_link,
+      };
+    }
+    return null;
+  }, [data, locale]);
 
   const socialTasks = useMemo(() => {
     if (!data?.assignments) return [];
-    return data.assignments.filter(task => task.category === 'subscribe');
-  }, [data]);
+    return data.assignments
+      .filter(task => task.category === 'subscribe')
+      .map(task => ({
+        ...task,
+        title: locale === 'en' ? task.title_eng : task.title,
+        description: locale === 'en' ? task.description_eng : task.description,
+        external_link: locale === 'en' ? task.external_link_eng || task.external_link : task.external_link,
+      }));
+  }, [data, locale]);
 
   useEffect(() => {
     if (boostData) {
