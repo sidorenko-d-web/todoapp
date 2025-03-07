@@ -4,7 +4,6 @@ import styles from './GetGift.module.scss';
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
 import integration from '../../../assets/icons/integration-white.svg';
-import snowflake from '../../../assets/icons/snowflake.svg';
 import subscribers from '../../../assets/icons/subscribers.svg';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import redLightAnimation from '../../../assets/animations/redLight.json';
@@ -15,11 +14,15 @@ import giftRed from '../../../assets/icons/gift-red.svg';
 import giftPurple from '../../../assets/icons/gift-purple.svg';
 import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
+import { Boost } from '../../../redux';
+import { formatAbbreviation } from '../../../helpers';
 
 interface Props {
   lvl?: number;
+  boost?: Boost | null;
 }
-export default function GetGift({ lvl }: Props) {
+
+export default function GetGift({ lvl, boost }: Props) {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
 
@@ -44,6 +47,7 @@ export default function GetGift({ lvl }: Props) {
   } else if (lvl >= 100 && lvl < 150) {
     giftLight = <Lottie animationData={redLightAnimation} loop={true} className={styles.light} />;
   }
+
   return (
     <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={'Подарок открыт!'}>
       <div className={styles.background}>
@@ -56,25 +60,25 @@ export default function GetGift({ lvl }: Props) {
         {giftImage}
         <div className={styles.statsContainer}>
           <div className={styles.stat}>
-            <span className={styles.statValue}>+0,15</span>
+            {boost?.income_per_second && <span className={styles.statValue}>+{formatAbbreviation(boost?.income_per_second)}</span>}
             <div className={styles.statBox}>
-              <span>x1,15</span>
+              <span>x{formatAbbreviation(boost?.x_income_per_second || 0)}</span>
               <img src={coin} />
               <span className={styles.extra}>/сек.</span>
             </div>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statValue}>+10</span>
+            {/*<span className={styles.statValue}>+10</span>*/}
             <div className={styles.statBox}>
-              <span>+120</span>
+              <span>+{formatAbbreviation(boost?.subscribers_for_first_level_referrals || 0)}</span>
               <img src={subscribers} />
               <span className={styles.extra}>1 ур.</span>
             </div>
           </div>
           <div className={styles.stat}>
-            <span className={styles.statValue}>+5</span>
+            {/*<span className={styles.statValue}>+5</span>*/}
             <div className={styles.statBox}>
-              <span>+40</span>
+              <span>+{formatAbbreviation(boost?.subscribers_for_second_level_referrals || 0)}</span>
               <img src={subscribers} />
               <span className={styles.extra}>2 ур.</span>
             </div>
@@ -82,21 +86,21 @@ export default function GetGift({ lvl }: Props) {
         </div>
         <div className={styles.items}>
           <div className={styles.item}>
-            <p>+100</p>
+            <p>+{formatAbbreviation(boost?.subscribers || 0)}</p>
             <img src={subscribers} />
           </div>
           <div className={styles.item}>
-            <p>+150</p>
+            <p>+{formatAbbreviation(boost?.points || 0)}</p>
             <img src={coin} />
           </div>
-          <div className={styles.item}>
-            <p>+3</p>
+          {boost?.additional_integrations_for_subscription && <div className={styles.item}>
+            <p>+{formatAbbreviation(boost?.additional_integrations_for_subscription)}</p>
             <img src={integration} />
-          </div>
-          <div className={styles.item}>
-            <p>+1</p>
-            <img src={snowflake} />
-          </div>
+          </div>}
+          {/*<div className={styles.item}>*/}
+          {/*  <p>+1</p>*/}
+          {/*  <img src={snowflake} />*/}
+          {/*</div>*/}
         </div>
         <p className={styles.desc}>Поздравляем! Вы улучшли основные показатели и получили дополнительные бонусы!</p>
       </div>

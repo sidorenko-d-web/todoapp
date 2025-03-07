@@ -97,13 +97,13 @@ export const TopUsers: FC<InviteFriendProps> = ({
                 <ul className={classNames(s.ulBlock, s.infoRang)}>
                   <li className={s.number}>{formatAbbreviation(frozen ?? 0)}</li>
                   <li className={s.fireIcon}>
-                    <img src={fire} alt="fire" width={12} height={12} />
+                    <img src={fire} alt="fire" width={14} height={14} />
                     <span>{formatAbbreviation(streaks ?? 0)}</span>
                   </li>
                 </ul>
               </div>
               <div className={s.numUser}>
-                {`${index + 1}`}
+                {`#${index + 1}`}
                 <img src={clanRed} height={14} width={14} alt={'clanRed'} />
               </div>
             </div>

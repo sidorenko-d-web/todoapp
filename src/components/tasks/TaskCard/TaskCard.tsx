@@ -163,7 +163,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
               {'10 - 1000'} <img src={coinIcon} height={18} width={18} alt={t('q38')} />
             </span>
             <span className={s.reward}>
-              ??? <img src={giftIcon} height={18} width={18} alt={t('q34')} />
+              <img src={giftIcon} height={18} width={18} alt={t('q34')} />
             </span>
           </div>
         </section>
