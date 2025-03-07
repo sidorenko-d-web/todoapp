@@ -45,7 +45,6 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
       try {
         console.log('Условия выполнены, открываем подарок');
 
-
         if (task.title === 'Создайте свой канал!') {
           const result = await claimChestReward({ chest_reward_reason: 'create_channel_assignment' }).unwrap();
           console.log('Reward claimed:', result);

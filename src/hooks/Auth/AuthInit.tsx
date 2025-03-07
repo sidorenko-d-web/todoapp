@@ -8,7 +8,7 @@ import Lottie from 'lottie-react';
 import { coinsAnim } from '../../assets/animations';
 // import WebApp from '@twa-dev/sdk';
 import { useWebApp } from '../useWebApp.ts';
-import DaysInARowModal from '../../pages/DevModals/DaysInARowModal/DaysInARowModal.tsx';
+
 
 type AuthInitProps = {
   children: React.ReactNode;
@@ -27,7 +27,7 @@ export function AuthInit({ children }: AuthInitProps) {
     handleLanguageContinue,
     handleInviteCodeContinue,
     handleSkinContinue,
-    handleModalClose,
+    //handleModalClose
   } = useAuthFlow();
 
   const [loadingStarted, setLoadingStarted] = useState(false);
@@ -96,9 +96,8 @@ export function AuthInit({ children }: AuthInitProps) {
       console.log('object', 6);
       return <SkinSetupPage onContinue={handleSkinContinue} />;
 
-    case 'push_line':
-      console.log('object', 7);
-      return <DaysInARowModal onClose={handleModalClose} />;
+    // case 'push_line' :
+    //   return <DaysInARowModal onClose={handleModalClose} />;
 
     case 'completed':
       return (

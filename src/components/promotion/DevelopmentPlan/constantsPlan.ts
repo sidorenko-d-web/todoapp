@@ -1,4 +1,4 @@
-export const INFO_TEXT = [
+export const INFO_TEXT_RU = [
   {
     namePlan: 'Добро пожаловать!',
     userCount: 250,
@@ -64,6 +64,73 @@ export const INFO_TEXT = [
     namePlan: 'РАЗБЛОКИРОВКА ТОКЕНОВ',
     userCount: 250_000_000,
     description: 'Ранняя разблокировка токенов из общего резерва',
+    isPlatform: true,
+  },
+];
+
+export const INFO_TEXT_EN = [
+  {
+    namePlan: 'Users - Welcome!',
+    userCount: 250,
+    description: 'Welcome Bonus: 250 coins for every new user and invited user. The 5th and each subsequent user who joins via a referral link will receive 500! Get a subscription in Apusher and purchase equipment to make your first integration! Access to the store to buy your first equipment and basic room upgrades.'
+      },
+  {
+    namePlan: 'Users—Growth Tree and Precious Drops?!',
+    userCount: 500,
+    description: 'Introducing the "Growth Tree," where your progress is rewarded by Apusher with collectible precious drops and modifications to increase your income! Gain as many followers as possible!\n' +
+      'Daily login bonus available every 24 hours.\n'
+  },
+  {
+    namePlan: 'Users - Apusher Streak!',
+    userCount: 1000,
+    description: 'Test your dedication! The Apusher Streak Line launches, rewarding you for creating ad integrations daily. As bloggers say, success is no accident!'
+      },
+  {
+    namePlan: 'Users—Participate in Quizzes for Rewards!',
+    userCount: 5000,
+    description:
+      'Launch of Apusher quizzes: answer questions about Apusher correctly to earn extra income! Apusher Ambassadors recruitment!',
+  },
+  {
+    namePlan: 'Users—New Skins and a Unique Campaign by Apusher!',
+    userCount: 10_000,
+    description: 'New skins: upgraded decorations and furniture increase follower growth. Launch of a unique in-game Apusher campaign with boosted rewards in views, followers, and points.',
+  },
+  {
+    namePlan: 'Users - Premium Brands Await You!',
+    userCount: 100_000,
+    description: 'New ad orders from premium companies, bringing more views and points. Yell at your integration to speed up its creation! 😆',
+  },
+  {
+    namePlan: 'Users—Top Tasks and Rewards!',
+    userCount: 1_000_000,
+    description: 'Create your personal channel in real life, promote Apusher, and earn awesome rewards! After completing your top task, you will receive articles from us that will make Apusher even more popular, and together we will continue growing and unlocking more rewards!',
+  },
+  {
+    namePlan: 'Users—Limited Store Items',
+    userCount: 5_000_000,
+    description: 'Introducing limited items in the store: exclusive skins and decor with quantity restrictions! Don’t miss out on acquiring these items!',
+  },
+  {
+    namePlan: 'Users—Earn % for Top Tasks!',
+    userCount: 10_000_000,
+    description: 'Complete top tasks and earn a percentage of all Apusher tokens! When the platform launches, your percentage can be converted into Apusher tokens or real money, as you prefer!',
+  },
+  {
+    namePlan: 'Users - APUSHER LAUNCH! 🎉',
+    userCount: 50_000_000,
+    description: 'Congratulations to you and us on the launch of Apusher! Early token purchase at the best conditions. You can register, link your social media accounts, and provide a wallet address to receive tokens from MiniApp.',
+  },
+  {
+    namePlan: 'Platform Users - APUSHER AIRDROP',
+    userCount: 20_000_000,
+    description: 'Apusher tokens are now listed, and the AirDrop is live! You can transfer all your assets to the platform or withdraw them as real money! Register on Apusher and try completing a real Apusher order!',
+    isPlatform: true,
+  },
+  {
+    namePlan: 'Platform Users - TOKEN UNLOCKING',
+    userCount: 250_000_000,
+    description: 'Early unlocking of tokens from the general reserve.',
     isPlatform: true,
   },
 ];
