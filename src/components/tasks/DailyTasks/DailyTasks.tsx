@@ -2,12 +2,13 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { TaskCard } from '../';
 import giftIcon from '../../../assets/icons/gift.svg';
 import { useModal } from '../../../hooks';
-import { Task } from '../../../redux/api/tasks';
+import { Task } from '../../../redux/api/tasks/dto';
 import s from '../styles.module.scss';
 import { ModalDailyTasks } from './ModalDailyTasks';
 import { useTranslation } from 'react-i18next';
-import { MODALS } from '../../../constants';
+import { MODALS } from '../../../constants/modals';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
+import { useGetQuizRewardMutation } from '../../../redux/api/tasks/api';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -17,26 +18,52 @@ type DailyTasksProps = {
 
 export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const { t } = useTranslation('quests');
-
   const { openModal, closeModal } = useModal();
+  const [getQuizReward] = useGetQuizRewardMutation();
+  const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
+  const [quizPoints, setQuizPoints] = useState<string | null>(null);
 
-  const [ questionStates, setQuestionStates ] = useState<QuestionState[]>([]);
+  useEffect(() => {
+    // Пытаемся получить сохраненную награду при монтировании
+    const savedPoints = localStorage.getItem(`quiz_reward_${task.id}`);
+    if (savedPoints) {
+      setQuizPoints(savedPoints);
+    }
+  }, [task.id]);
 
-  // Инициализируем состояния на основе количества этапов из API
   useEffect(() => {
     setQuestionStates(Array(task.stages).fill('closed').map((state, index) =>
       index === 0 ? 'current' : state,
     ));
-  }, [ task ]);
+  }, [task]);
 
   const completedCount = useMemo(() => {
     return questionStates.filter(state => state === 'solved').length;
-  }, [ questionStates ]);
+  }, [questionStates]);
 
-  const handleOpenGift = () => {
-    if (task.is_completed || questionStates.every(state => state === 'solved') && !task.is_reward_given) {
-      openModal(MODALS.GET_GIFT);
-      return;
+  const handleOpenDailyTasks = async () => {
+    if (task.is_completed && !task.is_reward_given) {
+      try {
+        if (quizPoints) {
+          // Используем сохраненные points
+          openModal(MODALS.GET_GIFT, { 
+            points: quizPoints,
+            boost: task.boost
+          });
+        } else {
+          // Получаем новые points
+          const result = await getQuizReward(task.id).unwrap();
+          localStorage.setItem(`quiz_reward_${task.id}`, result.points);
+          setQuizPoints(result.points);
+          openModal(MODALS.GET_GIFT, { 
+            points: result.points,
+            boost: task.boost
+          });
+        }
+        return;
+      } catch (error) {
+        console.error('Error getting quiz reward:', error);
+      }
     }
     openModal(MODALS.DAILY_TASKS);
   };
@@ -45,8 +72,8 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
     closeModal(MODALS.DAILY_TASKS);
   };
 
-  const handleQuestionStatesChange = (newStates: QuestionState[]) => {
-    setQuestionStates(newStates);
+  const handleQuestionStatesChange = (states: QuestionState[]) => {
+    setQuestionStates(states);
   };
 
   const isCompleted = task.is_completed || questionStates.every(state => state === 'solved');
@@ -66,7 +93,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
           icon={giftIcon}
           buttonText={isCompleted && !task.is_reward_given ? t('q33') : isCompleted ? t('q15') : t('q5')}
           disabled={task.is_reward_given}
-          onClick={handleOpenGift}
+          onClick={handleOpenDailyTasks}
           questionStates={questionStates}
           boost={task.boost}
           totalSteps={task.stages}
@@ -84,8 +111,9 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
         boost={task.boost}
         task={task}
       />
-      
-    <GetGift />
+      <GetGift 
+        // points={Number(quizPoints) || 0}
+      />
     </section>
   );
 };
