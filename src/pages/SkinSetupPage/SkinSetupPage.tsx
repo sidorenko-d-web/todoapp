@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styles from './SkinSetupPage.module.scss';
 import wardrobeBg from '../../assets/images/start-room/wardrobe-bg.svg';
 import skinPlaceholder from '../../assets/icons/skin-placeholder.svg';
@@ -30,10 +30,17 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
   const [activeTab, setActiveTab] = useState('head');
   const { data: character } = useGetCharacterQuery();
   const [updateCharacter] = useUpdateCharacterMutation();
+  const personScale = 0.13;
+  const [size, setSize] = useState([0, 0]);
 
-  console.log(inventorySkinsData);
-
-
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   const handleSelectSkin = async (item: IShopSkin) => {
     if (!character) return;
@@ -72,20 +79,23 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
 
   class SpineScene extends WardrobeSpineScene {
     create() {
-      const width = 280;
-      const center = width / 2;
-      if (!this.add.spine) return;
-      this.spineObject = this.add.spine(center, center, 'data', 'atlas');
-      this.spineObject.scale = 0.12;
+      console.log('SpineScene');
+      try {
+        this.createPerson(personScale);
+      } catch (error: any) {
+        if (error.message === 'add.spine') {
+          console.log('avoid error');
+          setSize(prev => [prev[0] + 1, prev[1]]);
+        }
+      }
       spineSceneRef.current = this;
-
-      this.changeSkin(character);
+      this.changeSkin(personScale, character);
     }
   }
 
   const handleChangeSkin = (updatedCharacter: ICharacterResponse) => {
     if (spineSceneRef.current) {
-      spineSceneRef.current.changeSkin(updatedCharacter);
+      spineSceneRef.current.changeSkin(personScale, updatedCharacter);
       spineSceneRef.current.makeHappy();
     }
   };
@@ -112,8 +122,7 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
         gameRef.current = null;
       }
     };
-  }, [isLoading]);
-
+  }, [isLoading, size]);
 
   const categorizedSkins: CategorizedSkins = {
     head: [],

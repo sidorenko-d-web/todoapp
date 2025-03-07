@@ -30,17 +30,17 @@ export class WardrobeSpineScene extends Phaser.Scene {
     this.spineObject.animationState.setAnimation(0, 'happy ' + currentHappy?.split('/')[1]);
   }
 
-  createPerson() {
+  createPerson(scale: number) {
     const width = this.sys.game.config.width as number;
     const center = width / 2;
-    console.log('createPerson')
-    if(!this.add.spine) throw new Error('add.spine')
+    console.log('createPerson');
+    if (!this.add.spine) throw new Error('add.spine');
     this.spineObject = this.add.spine(center, center, 'data', 'atlas');
-    this.spineObject.scale = 0.15;
+    this.spineObject.scale = scale;
     this.spineObject.animationState.data.defaultMix = 0.5;
   }
 
-  changeSkin(updatedCharacter?: ICharacterResponse) {
+  changeSkin(scale: number, updatedCharacter?: ICharacterResponse) {
     if (!this.spineObject) return;
     const allSkins = this.spineObject.skeleton.data.skins;
     const headSkin = allSkins.find(item => item.name.includes(getSkin('head', updatedCharacter) ?? 'голова 18'))!;
@@ -62,7 +62,7 @@ export class WardrobeSpineScene extends Phaser.Scene {
     skinColor && skin.addSkin(skinColor);
 
     this.spineObject.destroy();
-    this.createPerson();
+    this.createPerson(scale);
     this.spineObject.skeleton.setSkin(skin);
 
     this.makeHappy();

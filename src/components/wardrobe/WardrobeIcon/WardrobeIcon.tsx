@@ -19,6 +19,8 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
   const [size, setSize] = useState([0, 0]);
   const { data: character, isLoading } = useGetCharacterQuery();
 
+  const personScale = 0.15
+
   useLayoutEffect(() => {
     function updateSize() {
       setSize([window.innerWidth, window.innerHeight]);
@@ -36,7 +38,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
       create() {
         console.log('SpineScene');
         try {
-          this.createPerson();
+          this.createPerson(personScale);
         } catch (error: any) {
           if (error.message === 'add.spine') {
             console.log('avoid error');
@@ -44,7 +46,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
           }
         }
         spineSceneRef.current = this;
-        this.changeSkin(character);
+        this.changeSkin(personScale, character);
       }
     }
 
