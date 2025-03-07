@@ -340,7 +340,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                       <>
                         <div className={styles.lockedOverlay50}></div>
                         <span className={styles.itemLevel}>50</span>
-                        <img src={LockIcon} className={styles.lock} alt="" style={{zIndex: '10000'}}/>
+                        <img src={LockIcon} alt="" className={styles.lockIcon}/>
                       </>
                     )}
 
@@ -348,7 +348,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                       <>
                         <div className={styles.lockedOverlay100}></div>
                         <span className={styles.itemLevel}>100</span>
-                        <img src={LockIcon} className={styles.lock} alt="" style={{zIndex: '10000'}}/>
+                        <img src={LockIcon} alt="" className={styles.lockIcon}/>
                       </>
                     )}
                   </div>
