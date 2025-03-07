@@ -6,7 +6,7 @@ import fireBlueIcon from '../../../assets/icons/fire-blue.svg';
 import fireGrayIcon from '../../../assets/icons/fire-gray.svg';
 import infoIcon from '../../../assets/icons/info.svg';
 import infoRedIcon from '../../../assets/icons/info-red.svg';
-import { useGetUserProfileInfoByIdQuery } from '../../../redux';
+import { useGetUserProfileInfoByIdQuery, useMarkPushReminderSentMutation } from '../../../redux';
 import profileIconPlaceholder from '../../../assets/icons/referral-icon-placeholder.svg';
 import { formatAbbreviation } from '../../../helpers';
 import { Button } from '../../shared';
@@ -18,7 +18,8 @@ interface ReferralCardProps {
   total_invited: number;
   streak: number;
   days_missed: number;
-  id_referral?: string;
+  id_referral?: number;
+  reminded_time?: string;
 }
 
 export const ReferralCard: React.FC<ReferralCardProps> = ({
@@ -28,14 +29,17 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
   total_invited,
   streak,
   days_missed,
+  reminded_time,
 }) => {
   const { t, i18n } = useTranslation('promotion');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { data } = useGetUserProfileInfoByIdQuery(id_referral);
-  const handleSendMessage = () => {
-    try {
-      const message = encodeURIComponent(locale === 'ru' ? t('p58') : t('p58'));
+  const { data } = useGetUserProfileInfoByIdQuery(String(id_referral));
+  const [markPushReminderSent] = useMarkPushReminderSentMutation();
 
+  const handleSendMessage = async () => {
+    try {
+      await markPushReminderSent(Number(id_referral)).unwrap();
+      const message = encodeURIComponent(locale === 'ru' ? t('p58') : t('p58'));
       const telegramLink = `https://t.me/${name}?text=${message}`;
 
       window.open(telegramLink, '_blank');
@@ -77,14 +81,20 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
         <div className={s.userCardBottom}>
           <div className={s.userCardBonus}>
             <span className={s.badge}>
-              +{formatAbbreviation(data?.subscribers, 'number', { locale: locale })}{' '}
+              +
+              {data?.subscribers !== undefined
+                ? formatAbbreviation(data.subscribers, 'number', { locale: locale })
+                : 'N/A'}{' '}
               <img src={subscribersIcon} alt="Подписчики" />
             </span>
             <span className={classNames(s.level, s.text)}>1{t('p4')}.</span>
           </div>
           <div className={s.userCardBonus}>
             <span className={s.badge}>
-              +{formatAbbreviation(data?.subscribers_for_second_level_referrals, 'number', { locale: locale })}{' '}
+              +
+              {data?.subscribers_for_second_level_referrals !== undefined
+                ? formatAbbreviation(data.subscribers_for_second_level_referrals, 'number', { locale: locale })
+                : 'N/A'}{' '}
               <img src={subscribersIcon} alt="Подписчики" />
             </span>
             <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
@@ -93,7 +103,7 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
             {`(${t('p54')} ${total_invited} ${t('p55')}.)`}
           </Button>
         </div>
-        {days_missed > 1 && (
+        {days_missed > 1 && reminded_time === null ? (
           <div className={s.streakWarningWrapper}>
             <span className={classNames(s.streakBadge, s.warning)}>
               <img src={infoRedIcon} alt="Info" /> {t('p56')}
@@ -102,7 +112,7 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
               {t('p57')}
             </Button>
           </div>
-        )}
+        ) : null}
       </div>
     </>
   );
