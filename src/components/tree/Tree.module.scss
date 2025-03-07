@@ -53,12 +53,19 @@
   border: 2px solid var.$color-border-primary;
 }
 
+.rewardsIconsWrapper {
+  display: flex;
+  gap: 5px
+}
+
 .prize,
 .priseSubscribers,
 .prizeRight {
   display: flex;
+  flex-direction: column;
+  gap: 5px;
   position: absolute;
-  top: 20px;
+  top: -20px;
   right: 80px;
   min-width: 108px;
   width: auto;
@@ -66,10 +73,6 @@
   min-height: 42px;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  padding: 3px 6px;
-  background: var.$color-card-bg;
-  border: 2px solid var.$color-dark-gray-stroke;
 }
 
 .priseSubscribers {
@@ -115,34 +118,27 @@
 
 .imgPrize,
 .imgPrizeActive {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 44px;
   aspect-ratio: 1;
-  position: absolute;
-  right: 33px;
-  top: -48px;
-  width: 40px;
-  height: auto;
   border-radius: 4px;
   padding: 3px 6px;
   background: var.$color-card-bg;
   border: 2px solid var.$color-dark-gray-stroke;
 
-
   .giftStatus {
     position: absolute;
     top: -12px;
 
-    width: 18px;
-    height: 18px;
-    background: var.$footer-bg;
+    width: 16px;
+    height: 16px;
     border-radius: 2px;
     border: 1px solid var.$color-gray;
 
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
+    background: var.$footer-bg no-repeat center;
     background-size: 85%;
 
     &.notAchieved {
@@ -152,16 +148,11 @@
     &.notTaken {
       background-image: url('../../assets/icons/gift-ready.svg');
     }
-
-
   }
 }
 
 .imgPrizeActive {
   position: absolute;
-  top: -120px;
-  left: -45px;
-  transform: translate(-50%, -50%) rotate(0deg);
   width: 190px;
   height: 190px;
   z-index: -2;
@@ -185,7 +176,7 @@
   aspect-ratio: 1;
   position: absolute;
   top: -1px;
-  width: 40px;
+  width: 44px;
   border-radius: 4px;
   padding: 3px 6px;
   opacity: 0.6;
@@ -193,9 +184,13 @@
 }
 
 .text {
+  border-radius: 4px;
+  padding: 3px 6px;
+  background: var.$color-card-bg;
+  border: 2px solid var.$color-dark-gray-stroke;
+
   display: flex;
   flex-direction: column;
-  padding: 3px;
   font-size: 16px;
   font-weight: 500;
   gap: 6px;
