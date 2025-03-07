@@ -69,8 +69,10 @@ export const Tree = () => {
       <div className={s.progressBarContainer}>
         <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300}px` }}>
           {treeData?.growth_tree_stages.map((stage, index) => {
-            const isRewardAvailable = stage.achievement.is_available;
-            const isRewardClaimed = stage.achievement.is_unlocked;
+            // const isRewardAvailable = stage.achievement.is_available;
+            const isRewardAvailable = true;
+            // const isRewardClaimed = stage.achievement.is_unlocked;
+            const isRewardClaimed = true;
             const showReward = stage.achievement.boost.subscribers > 0; // Не показываем первый элемент, тк награды в нем нулевые
 
             const isActive = userProfileData && stage.id <= userProfileData.growth_tree_stage_id;
@@ -97,7 +99,7 @@ export const Tree = () => {
                 </div>
 
                 {
-                  isRewardAvailable && showReward &&
+                  isRewardAvailable && !isRewardClaimed && showReward &&
                   <Button className={s.takeRewardBtn}
                           onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}>Забрать</Button>
                 }
@@ -108,33 +110,61 @@ export const Tree = () => {
                       [s.prizeRight]: index % 2 !== 1,
                     })}
                   >
-                    {isRewardAvailable
-                      && <img className={s.imgPrizeActive} src={spinnerBlue} height={150} width={150} alt="spinner" />}
-                    {stage.achievement && (
-                      <div className={classNames(s.imgPrize)}>
-                        {!isRewardClaimed && (
-                          <>
-                            <div className={s.blickAnimation}>
-                              <LazyLottie animationData={giftBlick} />
-                            </div>
-                            <div className={classNames({ [s.blur]: !isActive })} />
-                          </>
-                        )}
+                    <div className={s.rewardsIconsWrapper}>
+                      {/* Блок с подарком */}
+                      {stage.achievement && (
+                        <div className={classNames(s.imgPrize)}>
+                          {!isRewardClaimed && (
+                            <>
+                              <div className={s.blickAnimation}>
+                                <LazyLottie animationData={giftBlick} />
+                              </div>
+                              <div className={classNames({ [s.blur]: !isActive })} />
+                            </>
+                          )}
 
-                        <img src={giftIcon} height={20} width={20} alt="gift" />
+                          <img src={giftIcon} height={20} width={20} alt="gift" />
 
-                        <div className={`${s.giftStatus} 
-                          ${(isRewardAvailable && !stage.achievement.is_unlocked)
-                        || stage.achievement.is_unlocked ? s.notTaken : ''}
-                          ${(!isRewardAvailable && !stage.achievement.is_unlocked) ? s.notAchieved : ''}`} />
-                      </div>
-                    )}
+                          <div className={`${s.giftStatus} 
+                          ${(isRewardAvailable && !isRewardClaimed)
+                          || isRewardClaimed ? s.notTaken : ''}
+                          ${(!isRewardAvailable && !isRewardClaimed) ? s.notAchieved : ''}`} />
+
+                          {isRewardAvailable && !isRewardClaimed &&
+                            <img className={s.imgPrizeActive} src={spinnerBlue} height={150} width={150}
+                                 alt="spinner" />
+                          }
+                        </div>
+                      )}
+
+                      {/* Блок с доп наградой */}
+                      {stage.achievement.image_url && (
+                        <div className={s.imgPrize}>
+                          {!isRewardClaimed && (
+                            <>
+                              <div className={s.blickAnimation}>
+                                <LazyLottie animationData={giftBlick} />
+                              </div>
+                              <div className={classNames({ [s.blur]: !isActive })} />
+                            </>
+                          )}
+
+                          <img src={stage.achievement.image_url} height={20} width={20} alt="reward" />
+
+                          {(isRewardAvailable && !isRewardClaimed) || isRewardClaimed && <div
+                            className={`${s.giftStatus} ${s.notTaken}`}
+                          />}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Блок с кол-вом подписчиков  */}
                     <div className={classNames(s.text, { [s.textActive]: isRewardAvailable })}>
                       <span
-                        className={`${(!isRewardAvailable && !stage.achievement.is_unlocked) ? s.inactive : ''}`}>
+                        className={`${(!isRewardAvailable && !isRewardClaimed) ? s.inactive : ''}`}>
                         {formatAbbreviation(stage.subscribers, 'number', { locale: locale })} </span>
                       <span
-                        className={`${(!isRewardAvailable && !stage.achievement.is_unlocked) ? s.inactive : ''}`}
+                        className={`${(!isRewardAvailable && !isRewardClaimed) ? s.inactive : ''}`}
                         style={{ whiteSpace: 'normal' }}>{t('t1')}</span>
                     </div>
                   </div>
