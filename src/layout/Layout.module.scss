@@ -75,7 +75,6 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   width: 100%;
   max-width: 1728px;
   height: var(--tg-viewport-stable-height);
-  padding: 20px 15px;
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
@@ -93,7 +92,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
     -webkit-overflow-scrolling: touch;
 
     &.withHeader {
-      padding-top: calc($header-position - 10px); // padding from header
+      //padding-top: calc($header-position - 10px); // padding from header
       margin-bottom: calc(var(--tg-content-safe-area-inset-bottom) + 90px);
 
       &.reducedMargin {
@@ -107,12 +106,12 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
     scrollbar-width: none;
 
     &.withHeader {
-      padding-top: calc($header-position + 10px); // padding from header
-      //padding-top: calc(var(--tg-content-safe-area-inset-top) + 20px);
+      //padding-top: calc($header-position + 10px); // padding from header
+      padding-top: calc(var(--tg-content-safe-area-inset-top)  - 90px);
       margin-bottom: calc(var(--tg-content-safe-area-inset-bottom) + 90px);
 
       &.reducedMargin {
-        margin-top: var(--tg-content-safe-area-inset-top);
+        margin-top: var(--tg-content-safe-area-inset-top) + 1;
       }
     }
 

@@ -69,6 +69,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     level: 1,
     item_category: shopCategory.value as TypeItemCategory,
   });
+
   const { data: boost } = useGetCurrentUserBoostQuery()
 
   useEffect(() => {
@@ -231,7 +232,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             />
           )}
         </div>
-
         {children}
       </div>
 

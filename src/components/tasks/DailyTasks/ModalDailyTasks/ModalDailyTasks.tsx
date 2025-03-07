@@ -159,7 +159,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   return (
     <BottomModal
       modalId={modalId}
-      title={t('q24')}
+      title={t('q2')}
       onClose={onClose}
     >
       <div className={s.container}>

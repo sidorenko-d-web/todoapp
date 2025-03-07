@@ -4,6 +4,7 @@ import GetRewardChestModal from '../DevModals/GetRewardChestModal/GetRewardChest
 import styles from './ProfilePage.module.scss';
 import { ProfileInfo, ProfileStats, ProfileStatsMini, StreakCard } from '../../components/profile';
 import {
+  useClaimChestRewardMutation,
   useGetCurrentUserProfileInfoQuery,
   useGetInventoryAchievementsQuery,
   useGetTopProfilesQuery,
@@ -15,21 +16,31 @@ import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 import { useGetPushLineQuery } from '../../redux';
 import { Loader } from '../../components';
+import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
 
 export const ProfilePage: React.FC = () => {
   const { t } = useTranslation('profile');
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
 
-  useEffect(() => {
-    openModal(MODALS.TASK_CHEST)
-  }, []);
+  const [claimChestReward] = useClaimChestRewardMutation();
 
   const {
     data: userProfileData,
     error: userError,
     isLoading: isUserLoading,
+    refetch: refetchCurrentProfile
   } = useGetCurrentUserProfileInfoQuery();
+
+  useEffect(() => {
+    if (!userProfileData) return;
+    const refetchInterval = setInterval(() => {
+      refetchCurrentProfile();
+    }, 5 * 60 * 1000); // 5 minutes
+
+    return () => clearInterval(refetchInterval);
+  }, [userProfileData, refetchCurrentProfile]);
+
 
   const {
     data: topProfilesData,
@@ -63,15 +74,25 @@ export const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     if (streaks === 30 || streaks === 60 || streaks === 120) {
-      openModal(MODALS.TASK_CHEST);
+      claimChestReward({ chest_reward_reason: 'push_line' }).unwrap()
+        .then(result => {
+          console.log('Reward claimed:', result);
+          openModal(MODALS.TASK_CHEST, {
+            points: result.reward.points,
+            subscribers: result.reward.subscribers,
+            freezes: result.reward.freezes,
+          });
+        })
+        .catch(err => console.error('Error claiming reward:', err));
     }
-  }, [data?.in_streak_days, openModal]);
+  }, [streaks, claimChestReward, openModal]);
+
 
   const userPosition =
     userProfileData && topProfilesData?.profiles
       ? topProfilesData.profiles.findIndex(
-          (profile: { id: string }) => profile.id === userProfileData.id,
-        )
+        (profile: { id: string }) => profile.id === userProfileData.id,
+      )
       : -1;
 
   const position =
@@ -95,9 +116,26 @@ export const ProfilePage: React.FC = () => {
     isUserLoading ||
     isTopProfilesLoading ||
     isAwardsLoading
-  )
+  );
 
-  if (isLoading) return <Loader />;
+  const {
+    // points: displayedPoints,
+    subscribers: displayedSubscribers,
+    totalViews: displayedTotalViews,
+    totalEarned: displayedTotalEarned
+  } = useIncrementingProfileStats({
+    profileId: userProfileData?.id || '',
+    basePoints: userProfileData?.points || '0',
+    baseSubscribers: userProfileData?.subscribers || 0,
+    baseTotalViews: userProfileData?.total_views || 0,
+    baseTotalEarned: userProfileData?.total_earned || '0',
+    futureStatistics: userProfileData?.future_statistics,
+    lastUpdatedAt: userProfileData?.updated_at,
+  });
+
+  if (isLoading) {
+    return <Loader />
+  };
 
   return (
     <>
@@ -114,10 +152,10 @@ export const ProfilePage: React.FC = () => {
             <h1 className={styles.pageTitle}>{t('p1')}</h1>
 
             <ProfileStatsMini
-              subscribers={userProfileData.subscribers}
+              subscribers={displayedSubscribers}
               position={position}
               daysInARow={streaks !== undefined ? streaks : 0}
-              totalViews={userProfileData.total_views}
+              totalViews={displayedTotalViews}
             />
           </div>
 
@@ -149,12 +187,11 @@ export const ProfilePage: React.FC = () => {
           <div>
             <p className={styles.statsTitle}>{t('p4')}</p>
             <ProfileStats
-              earned={userProfileData.total_earned}
-              views={userProfileData.total_views}
+              earned={displayedTotalEarned}
+              views={displayedTotalViews}
               favoriteCompany={'Favourite company'}
               comments={userProfileData.comments_answered_correctly}
-              rewards={12}
-              coffee={5}
+              rewards={userProfileData.achievements_collected}
             />
           </div>
 

@@ -123,7 +123,7 @@ export const Tree = () => {
 
                           <img src={giftIcon} height={20} width={20} alt="gift" />
 
-                          <div className={`${s.giftStatus} 
+                        <div className={`${s.giftStatus} 
                           ${(isRewardAvailable && !stage.achievement.is_unlocked)
                           || stage.achievement.is_unlocked ? s.notTaken : ''}
                           ${(!isRewardAvailable && !stage.achievement.is_unlocked) ? s.notAchieved : ''}`} />

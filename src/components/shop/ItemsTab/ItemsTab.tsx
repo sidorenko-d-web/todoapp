@@ -10,7 +10,7 @@ interface props {
   shopCategory: {
     title: string;
     value: string;
-  };
+  } | undefined;
   shopItems?: IShopItem[];
   inventoryItems?: IShopItem[];
 }

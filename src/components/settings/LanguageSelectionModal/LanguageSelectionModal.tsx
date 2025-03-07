@@ -4,8 +4,6 @@ import styles from "./LanguageSelectionModal.module.scss"
 import { useState } from "react"
 import tick from "../../../assets/icons/input-tick.svg"
 import circle from "../../../assets/icons/circle-blue.svg"
-import russiaIcon from "../../../assets/icons/ru-flag.svg"
-import usaIcon from "../../../assets/icons/us-flag.svg"
 import { useTranslation } from 'react-i18next';
 import { CentralModal } from "../../shared"
 
@@ -14,12 +12,10 @@ const LANGUAGES = [
     {
         code: 'en',
         name: 'English language',
-        icon: usaIcon,
     },
     {
         code: 'ru',
         name: 'Русский язык',
-        icon: russiaIcon,
     },
 ];
 
@@ -37,9 +33,6 @@ const LanguageOption = ({ language, isSelected, onSelect }: LanguageOptionProps)
         onClick={() => onSelect(language.code)}
     >
         <div className={`${styles.languageAndIcon} ${isSelected ? styles.selectedText : ''}`}>
-            <div className={styles.countryIconWrapper}>
-                <img className={styles.countryIcon} src={language.icon} alt={`${language.name} icon`} />
-            </div>
             <span> {language.name} </span>
         </div>
         <div className={styles.selectionIconWrapper}>
@@ -70,7 +63,7 @@ export const LanguageSelectionModal = () => {
     return (
         <CentralModal
             modalId={MODALS.LANGUAGE_SELECTION}
-            title="Язык / Language"
+            title="Язык/Language"
             headerStyles={styles.titleStyles} 
             onClose={handleCloseModal}
         >
@@ -90,7 +83,7 @@ export const LanguageSelectionModal = () => {
                     className={styles.applyButton}
                     onClick={handleCloseModal}
                 >
-                    Apply / Применить
+                    Применить/Apply
                 </button>
             </div>
         </CentralModal>
