@@ -61,9 +61,9 @@ export const PromotionPage: React.FC = () => {
                 src={subscribersIcon}
                 alt={'subscribers'} /></span>
             </div>
-            <IncreaseIncome />
-            <TopInfluencers />
-            {usersCountData && <DevelopmentPlan usersCount={usersCountData.players} />}
+              <IncreaseIncome />
+              <TopInfluencers />
+              {usersCountData && <DevelopmentPlan usersCount={usersCountData.players} />}
           </section>
         </main>}
     </>
