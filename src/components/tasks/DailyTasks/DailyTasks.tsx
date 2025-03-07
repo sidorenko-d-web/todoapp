@@ -7,6 +7,7 @@ import s from '../styles.module.scss';
 import { ModalDailyTasks } from './ModalDailyTasks';
 import { useTranslation } from 'react-i18next';
 import { MODALS } from '../../../constants';
+import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -83,6 +84,8 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
         boost={task.boost}
         task={task}
       />
+      
+    <GetGift />
     </section>
   );
 };

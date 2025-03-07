@@ -27,7 +27,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
   const handleTaskClick = async (task: Task) => {
     if (task.is_completed && !task.is_reward_given) {
       setSelectedTask(task);
-      openModal(MODALS.GET_GIFT);
+      openModal(MODALS.TASK_COMPLETED);
       return;
     }
 
@@ -56,6 +56,10 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
         localStorage.removeItem('pendingTaskId');
         localStorage.removeItem('pendingTaskStartTime');
         setPendingTaskId(null);
+        
+        // Открываем модальное окно после успешного выполнения задания
+        setSelectedTask(task);
+        openModal(MODALS.TASK_COMPLETED);
       }
     } catch (error) {
       console.error('Error updating task:', error);

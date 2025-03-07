@@ -61,12 +61,6 @@ export const tasksApi = createApi({
       },
       providesTags: ['Tasks']
     }),
-    getTaskQuestions: builder.query<GetTaskQuestionsResponse | GetTaskQuestionsErrorResponse, string>({
-      query: (assignmentId) => ({
-        url: `/assignments/daily/questions/${assignmentId}`,
-        method: 'GET',
-      })
-    }),
     updateTask: builder.mutation<UpdateTaskResponse, { id: string; data: UpdateTaskRequest }>({
       query: ({ id, data }) => ({
         url: `/assignments/${id}`,
@@ -94,7 +88,6 @@ export const tasksApi = createApi({
 
 export const {
   useGetTasksQuery,
-  useGetTaskQuestionsQuery,
   useUpdateTaskMutation,
   useGetDailyRewardQuery,
   useGetBoostQuery,

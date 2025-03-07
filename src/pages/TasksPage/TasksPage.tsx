@@ -34,9 +34,7 @@ export const TasksPage: FC = () => {
 
   const dailyTask = useMemo(() => {
     if (!data?.assignments) return null;
-    console.log('data', data);
     const dailyTasks = data.assignments.filter(task => task.category === 'quiz');
-    console.log('dailyTasks', dailyTasks);
     return dailyTasks[0];
   }, [data]);
 
