@@ -16,7 +16,7 @@ export const useWebApp = () => {
       // WebApp.SettingsButton.hide();
       // openModal(MODALS.SETTINGS);
 
-      localStorage.clear()
+      localStorage.removeItem("currentSetupStep")
     };
 
     WebApp.SettingsButton.onClick(handleSettingsClick);

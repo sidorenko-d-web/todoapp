@@ -9,10 +9,9 @@ interface ProfileStatsProps {
   favoriteCompany: string;
   comments: number;
   rewards: number;
-  coffee: number;
 }
 
-export const ProfileStats: React.FC<ProfileStatsProps> = ({ earned, views, favoriteCompany, comments, rewards: awards, coffee }) => {
+export const ProfileStats: React.FC<ProfileStatsProps> = ({ earned, views, favoriteCompany, comments, rewards: awards }) => {
   const { t,i18n } = useTranslation('profile');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
@@ -37,10 +36,6 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ earned, views, favor
       <div className={styles.stat}>
         <span className={styles.label}>{t('p10')}</span>
         <span className={styles.value}>{formatAbbreviation(awards,'number', { locale: locale })}</span>
-      </div>
-      <div className={styles.stat}>
-        <span className={styles.label}>{t('p11')}</span>
-        <span className={styles.value}>{formatAbbreviation(coffee,'number', { locale: locale })}</span>
       </div>
     </div>
   );

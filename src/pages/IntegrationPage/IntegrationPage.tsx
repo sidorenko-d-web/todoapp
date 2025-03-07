@@ -42,7 +42,20 @@ export const IntegrationPage: React.FC = () => {
     error,
     isLoading: isIntegrationLoading,
     refetch: refetchCurrentIntegration,
-  } = useGetIntegrationQuery(`${integrationId}`, { refetchOnMountOrArgChange: true });
+  } = useGetIntegrationQuery(`${integrationId}`, {
+    refetchOnMountOrArgChange: true,
+    pollingInterval: 5 * 60 * 1000
+  });
+
+  useEffect(() => {
+    if (!data) return;
+    const refetchInterval = setInterval(() => {
+      refetchCurrentIntegration();
+    }, 5 * 60 * 1000); // 5 minutes
+
+    return () => clearInterval(refetchInterval);
+  }, [data, refetchCurrentIntegration]);
+
   const {
     data: commentData,
     isLoading: isUnansweredIntegrationCommentLoading,
@@ -92,7 +105,13 @@ export const IntegrationPage: React.FC = () => {
 
       {data  && (
         <>
-          <IntegrationStatsMini views={data.views} subscribers={data.subscribers} income={data.income} />
+          <IntegrationStatsMini
+            views={data.views}
+            subscribers={data.subscribers}
+            income={data.income}
+            futureStatistics={data.future_statistics}
+            lastUpdatedAt={data.updated_at}
+          />
           <div className={styles.integrationNameWrp}>
             <p className={styles.integrationTitle}>{t('i1')} {data.number}</p>
             <div className={styles.integrationLevelWrp}>
@@ -101,7 +120,13 @@ export const IntegrationPage: React.FC = () => {
             </div>
           </div>
           <Integration />
-          <IntegrationStats views={data.views} income={data.income} subscribers={data.subscribers} />
+          <IntegrationStats
+            views={data.views}
+            income={data.income}
+            subscribers={data.subscribers}
+            futureStatistics={data.future_statistics}
+            lastUpdatedAt={data.updated_at}
+          />
           <div className={styles.commentsSectionTitleWrp}>
             <p className={styles.commentsSectionTitle}>{t('i4')}</p>
             <p className={styles.commentsAmount}>
