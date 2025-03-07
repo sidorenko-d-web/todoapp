@@ -139,14 +139,14 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           {!noItemsMessage ? (
             <div className={s.companies}>
               {companies?.map((company) =>
-                  company.growth_tree_stage !== 100 && (
-                    <CompanyCard
-                      key={company.id}
-                      company={company}
-                      disabled={hasCreatingIntegration}
-                      onClick={() => submitCreation(company.id)}
-                    />
-                  ),
+                company.growth_tree_stage !== 100 && (
+                  <CompanyCard
+                    key={company.id}
+                    company={company}
+                    disabled={hasCreatingIntegration}
+                    onClick={() => submitCreation(company.id)}
+                  />
+                ),
               )}
             </div>
           ) : (
@@ -165,11 +165,11 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             }}
             className={`${s.button} 
             ${buttonGlowing ? s.glowingBtn : ''} `}
-          onClick={goToShop}
-        >
-          {t('i21')}
-        </TrackedButton> }                             
-      </div>
+            onClick={goToShop}
+          >
+            {t('i21')}
+          </TrackedButton>}
+        </div>
       }
     </ExpandableBottomModal>
   );
