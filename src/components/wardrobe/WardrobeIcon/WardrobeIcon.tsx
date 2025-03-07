@@ -28,18 +28,25 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  class SpineScene extends WardrobeSpineScene {
-    create() {
-      console.log('SpineScene');
-      this.createPerson();
-      spineSceneRef.current = this;
-      this.changeSkin(character);
-    }
-  }
-
   useEffect(() => {
     if (!sceneRef.current || isLoading) return;
     const width = sceneRef.current.offsetWidth;
+
+    class SpineScene extends WardrobeSpineScene {
+      create() {
+        console.log('SpineScene');
+        try {
+          this.createPerson();
+        } catch (error: any) {
+          if (error.message === 'add.spine') {
+            console.log('avoid error');
+            setSize(prev => [prev[0] + 1, prev[1]]);
+          }
+        }
+        spineSceneRef.current = this;
+        this.changeSkin(character);
+      }
+    }
 
     const createAnimation = () => {
       console.log('useEffect');

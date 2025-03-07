@@ -34,7 +34,7 @@ export class WardrobeSpineScene extends Phaser.Scene {
     const width = this.sys.game.config.width as number;
     const center = width / 2;
     console.log('createPerson')
-    if(!this.add.spine) throw new Error('no this.add')
+    if(!this.add.spine) throw new Error('add.spine')
     this.spineObject = this.add.spine(center, center, 'data', 'atlas');
     this.spineObject.scale = 0.15;
     this.spineObject.animationState.data.defaultMix = 0.5;

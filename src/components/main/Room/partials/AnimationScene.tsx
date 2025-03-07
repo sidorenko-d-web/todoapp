@@ -61,7 +61,14 @@ export const AnimationScene = () => {
       }
 
       create() {
-        this.createPerson(contextProps, isWorking);
+        try {
+          this.createPerson(contextProps, isWorking);
+        } catch (error: any) {
+          if (error.message === 'add.spine') {
+            console.log('avoid error');
+            setSize(prev => [prev[0] + 1, prev[1]]);
+          }
+        }
 
         //devided creating items of animated and static
         room?.items.forEach(async (item, i) => {
