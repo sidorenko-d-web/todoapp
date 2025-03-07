@@ -12,19 +12,17 @@ import bookIcon from '../../../../assets/icons/book.svg';
 import CrossRedIcon from '../../../../assets/icons/cross-red-in-circle.svg';
 import { formatAbbreviation } from '../../../../helpers';
 import { Button } from '../../../shared';
-import { Task, TaskBoost } from '../../../../redux/api/tasks/dto';
+import { Task, TaskBoost, Question } from '../../../../redux/api/tasks/dto';
 import { useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
 import { useTranslation } from 'react-i18next';
 
-type ModalDailyTasksProps = {
+interface ModalDailyTasksProps {
   modalId: string;
   onClose: () => void;
   onStateChange: (states: QuestionState[]) => void;
   taskId: string;
-  totalSteps: number;
-  boost: TaskBoost;
   task: Task;
-};
+}
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -35,7 +33,8 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   taskId,
   task,
 }) => {
-  const { t } = useTranslation('quests');
+  const { t, i18n } = useTranslation('quests');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const [updateTask] = useUpdateTaskMutation();
   const questions = task.questions || [];
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(task.completed_stages);
@@ -44,7 +43,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   const [shake, setShake] = useState(false);
   const [correct, setCorrect] = useState(false);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
-  const [channelLink] = useState(task.external_link);
+  const [channelLink] = useState(locale === 'en' ? task.external_link_eng || task.external_link : task.external_link);
   const isVibrationSupported = 'vibrate' in navigator;
 
   useEffect(() => {
@@ -199,7 +198,11 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
 
         {/* Вопрос */}
         <div className={s.question}>
-          <h3 className={s.questionText}>{currentQuestion.question_text}</h3>
+          <h3 className={s.questionText}>
+            {locale === 'en' 
+              ? currentQuestion.question_text_eng 
+              : currentQuestion.question_text}
+          </h3>
 
           <div className={s.options}>
             {currentQuestion.answer_options.map(option => {
@@ -222,7 +225,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
                     [s.selectedText]: isSelected && !isWrong,
                     [s.wrongText]: isWrong,
                   })}>
-                    {option.answer_text}
+                    {locale === 'en' ? option.answer_text_eng : option.answer_text}
                   </span>
                   <div className={s.selectWrapper}>
                     <img

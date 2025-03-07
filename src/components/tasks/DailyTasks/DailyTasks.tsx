@@ -107,13 +107,9 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
         onClose={handleCloseModal}
         onStateChange={handleQuestionStatesChange}
         taskId={task.id}
-        totalSteps={task.stages}
-        boost={task.boost}
         task={task}
       />
-      <GetGift 
-        // points={Number(quizPoints) || 0}
-      />
+      <GetGift />
     </section>
   );
 };

@@ -30,6 +30,9 @@ interface ModalTopTasksProps {
     };
     completed_stages: number;
     external_link: string;
+    external_link_eng?: string;
+    stages_description?: Record<number, { ENG: string; RUS: string }>;
+    description_eng?: string;
   };
 }
 
@@ -107,7 +110,8 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
   };
 
   const handleOpenGuide = () => {
-    window.open(task.external_link, '_blank');
+    const link = locale === 'en' ? task.external_link_eng || task.external_link : task.external_link;
+    window.open(link, '_blank');
   };
 
   const getStepTitle = () => {
@@ -115,7 +119,12 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
   };
 
   const getStepDescription = () => {
-    return task.description;
+    if (task.stages_description && task.stages_description[currentStepIndex + 1]) {
+      return locale === 'en' 
+        ? task.stages_description[currentStepIndex + 1].ENG 
+        : task.stages_description[currentStepIndex + 1].RUS;
+    }
+    return locale === 'en' ? task.description_eng : task.description;
   };
 
   const getChestIcon = () => {
