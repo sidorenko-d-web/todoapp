@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styles from './SkinSetupPage.module.scss';
 import wardrobeBg from '../../assets/images/start-room/wardrobe-bg.svg';
 import skinPlaceholder from '../../assets/icons/skin-placeholder.svg';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/shared';
 import { IShopSkin, useGetInventorySkinsQuery } from '../../redux';
-import { useGetCharacterQuery, useUpdateCharacterMutation } from '../../redux/api/character';
+import { ICharacterResponse, useGetCharacterQuery, useUpdateCharacterMutation } from '../../redux/api/character';
 import clsx from 'clsx';
 import { svgHeadersString } from '../../constants';
+import { SpinePlugin } from '@esotericsoftware/spine-phaser';
+import { WardrobeSpineScene } from '../../constants/wardrobeAnimation';
 
 interface SkinSetupPageProps {
   onContinue: () => void;
@@ -28,39 +30,17 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
   const [activeTab, setActiveTab] = useState('head');
   const { data: character } = useGetCharacterQuery();
   const [updateCharacter] = useUpdateCharacterMutation();
+  const personScale = 0.13;
+  const [size, setSize] = useState([0, 0]);
 
-  console.log(inventorySkinsData);
-
-  if (isLoading || !inventorySkinsData) {
-    return <p>Loading skins...</p>;
-  }
-
-  const categorizedSkins: CategorizedSkins = {
-    head: [],
-    face: [],
-    skin_color: [],
-    upper_body: [],
-    lower_body: [],
-    entire_body: [],
-  };
-
-  const categories = [
-    { name: t('w3'), key: 'head' },
-    { name: t('w4'), key: 'face' },
-    { name: t('w4-1'), key: 'skin_color' },
-    { name: t('w5'), key: 'upper_body' },
-    { name: t('w6'), key: 'lower_body' }, // Merged legs & feet //bottom wear is too long to display
-    { name: 'VIP', key: 'entire_body' },
-  ];
-
-  inventorySkinsData.skins.forEach(skin => {
-    if (skin.wear_location === 'legs') {
-      categorizedSkins.lower_body.push(skin);
-    } else if (skin.wear_location in categorizedSkins) {
-      skin.wear_location === 'skin_color' && console.log('object');
-      categorizedSkins[skin.wear_location as keyof CategorizedSkins].push(skin);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
     }
-  });
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   const handleSelectSkin = async (item: IShopSkin) => {
     if (!character) return;
@@ -81,17 +61,106 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
       skin_color_id: prevSkins.skin_color,
       gender: character.gender,
     };
+
     try {
-      const res = await updateCharacter(body);
-      console.log(res);
-    } catch (error) {}
+      const data = (await updateCharacter(body)).data;
+      if (data) {
+        handleChangeSkin(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  const sceneRef = useRef<HTMLDivElement | null>(null);
+
+  const gameRef = useRef<Phaser.Game | null>(null);
+  const spineSceneRef = useRef<SpineScene | null>(null);
+
+  class SpineScene extends WardrobeSpineScene {
+    create() {
+      console.log('SpineScene');
+      try {
+        this.createPerson(personScale);
+      } catch (error: any) {
+        if (error.message === 'add.spine') {
+          console.log('avoid error');
+          setSize(prev => [prev[0] + 1, prev[1]]);
+        }
+      }
+      spineSceneRef.current = this;
+      this.changeSkin(personScale, character);
+    }
+  }
+
+  const handleChangeSkin = (updatedCharacter: ICharacterResponse) => {
+    if (spineSceneRef.current) {
+      spineSceneRef.current.changeSkin(personScale, updatedCharacter);
+      spineSceneRef.current.makeHappy();
+    }
+  };
+
+  useEffect(() => {
+    if (!sceneRef.current || isLoading) return;
+    const config: Phaser.Types.Core.GameConfig = {
+      type: Phaser.AUTO,
+      width: 280,
+      height: 280,
+      scene: [SpineScene],
+      transparent: true,
+      plugins: {
+        scene: [{ key: 'player1', plugin: SpinePlugin, mapping: 'spine' }],
+      },
+      parent: 'player1',
+    };
+
+    gameRef.current = new Phaser.Game(config);
+
+    return () => {
+      if (gameRef.current) {
+        gameRef.current.destroy(true);
+        gameRef.current = null;
+      }
+    };
+  }, [isLoading, size]);
+
+  const categorizedSkins: CategorizedSkins = {
+    head: [],
+    face: [],
+    skin_color: [],
+    upper_body: [],
+    lower_body: [],
+    entire_body: [],
+  };
+
+  const categories = [
+    { name: t('w3'), key: 'head' },
+    { name: t('w4'), key: 'face' },
+    { name: t('w4-1'), key: 'skin_color' },
+    { name: t('w5'), key: 'upper_body' },
+    { name: t('w6'), key: 'lower_body' }, // Merged legs & feet //bottom wear is too long to display
+    { name: 'VIP', key: 'entire_body' },
+  ];
+
+  inventorySkinsData?.skins.forEach(skin => {
+    if (skin.wear_location === 'legs') {
+      categorizedSkins.lower_body.push(skin);
+    } else if (skin.wear_location in categorizedSkins) {
+      skin.wear_location === 'skin_color' && console.log('object');
+      categorizedSkins[skin.wear_location as keyof CategorizedSkins].push(skin);
+    }
+  });
 
   return (
     <div className={styles.root}>
       <div className={styles.avatarSection}>
         <div className={styles.avatarPreview}>
           <img src={wardrobeBg} alt="bg" />
+          <div
+            id={'player1'}
+            ref={sceneRef}
+            style={{ position: 'absolute', top: 72, borderRadius: 8, overflow: 'hidden', width: 280, height: 280 }}
+          />
         </div>
         <div className={styles.bodyPartsContainer}>
           {categories.map(({ name, key }) => (

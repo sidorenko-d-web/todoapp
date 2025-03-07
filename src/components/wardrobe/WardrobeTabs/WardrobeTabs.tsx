@@ -21,16 +21,15 @@ type CategorizedSkins = {
 
 interface WardrobeTabsProps {
   wardrobe?: boolean;
+  handleChangeSkin: (any: any) => void;
 }
 
-export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ wardrobe }) => {
+export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ wardrobe, handleChangeSkin }) => {
   const { t } = useTranslation('wardrobe');
   const { data: inventorySkinsData, isLoading } = useGetInventorySkinsQuery();
   const [activeTab, setActiveTab] = useState('head');
   const { data: character } = useGetCharacterQuery();
   const [updateCharacter] = useUpdateCharacterMutation();
-
-  console.log(inventorySkinsData);
 
   if (isLoading || !inventorySkinsData) {
     return <p>Loading skins...</p>;
@@ -58,7 +57,6 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ wardrobe }) => {
     if (skin.wear_location === 'legs') {
       categorizedSkins.lower_body.push(skin);
     } else if (skin.wear_location in categorizedSkins) {
-      skin.wear_location === 'skin_color' && console.log('object');
       categorizedSkins[skin.wear_location as keyof CategorizedSkins].push(skin);
     }
   });
@@ -83,9 +81,10 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ wardrobe }) => {
       gender: character.gender,
     };
     try {
-      const res = await updateCharacter(body);
-      console.log(res);
-    } catch (error) {}
+      handleChangeSkin((await updateCharacter(body)).data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

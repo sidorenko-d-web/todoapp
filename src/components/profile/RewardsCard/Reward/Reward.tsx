@@ -7,18 +7,32 @@ import trophyActive from '../../../../assets/icons/cup-active.svg';
 import trophyInactive from '../../../../assets/icons/cup-inactive.svg';
 import starBlue from '../../../../assets/icons/star-blue.svg';
 import starGray from '../../../../assets/icons/star-dark-gray.svg';
-import starWhite from '../../../../assets/icons/star-gray.svg';
 import { useTranslation } from 'react-i18next';
+import { Button } from '../../../shared';
+import {
+  useAddItemToRoomMutation,
+  useGetEquipedQuery,
+  useGetInventoryAchievementsQuery,
+  useRemoveItemFromRoomMutation,
+} from '../../../../redux';
+import clsx from 'clsx';
+import { getAchivementType } from '../../../../helpers';
 
 interface RewardProps {
   name: string;
   stars: number;
   medal: 'gold' | 'silver' | 'bronze';
   isActive: boolean;
+  id: string;
 }
 
-const Reward: React.FC<RewardProps> = ({ name, stars, medal, isActive }) => {
+const Reward: React.FC<RewardProps> = ({ name, stars, medal, isActive, id }) => {
   const { t } = useTranslation('profile');
+  const { data: equipped_items } = useGetEquipedQuery();
+
+  const { refetch } = useGetInventoryAchievementsQuery();
+  const [addAchivement] = useAddItemToRoomMutation();
+  const [removeAchivement] = useRemoveItemFromRoomMutation();
 
   const medalIcons = {
     gold: goldMedal,
@@ -26,12 +40,34 @@ const Reward: React.FC<RewardProps> = ({ name, stars, medal, isActive }) => {
     bronze: bronzeMedal,
   };
 
+  const handleEquipAchivement = async () => {
+    if (!equipped_items) return;
+    console.log(equipped_items);
+    try {
+      if (equipped_items.achievements.length > 0) {
+        const res1 = await removeAchivement({ achievements_to_remove: [{ id: equipped_items?.achievements?.[0].id }] });
+        console.log(res1, 1);
+      }
+      const res = await addAchivement({ equipped_achievements: [{ id, slot: 100 }] });
+      console.log(res, 2);
+      refetch();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const itemType = getAchivementType(name, medal);
+
   return (
     <div className={`${styles.reward} ${isActive ? styles.active : styles.inactive}`}>
       <div className={styles.left}>
         <div className={styles.rewardImage}>
           <img src={medalIcons[medal]} alt={`${medal} medal`} className={styles.medal} />
-          <img src={starWhite} alt={'Star'} className={styles.star} />
+          <img
+            src={itemType.image}
+            alt={'Star'}
+            className={clsx(styles.star, itemType.type === 'stage' && styles.stage)}
+          />
         </div>
         <div className={styles.info}>
           <span className={styles.name}>{name}</span>
@@ -43,12 +79,14 @@ const Reward: React.FC<RewardProps> = ({ name, stars, medal, isActive }) => {
         </div>
       </div>
 
-      <div className={styles.status}>
-        <img src={isActive ? trophyActive : trophyInactive} className={styles.trophy} />
-        <span className={isActive ? styles.activeText : styles.inactiveText}>
-                    {isActive ? `${t('p18')}` : `${t('p19')}`}
-                </span>
-      </div>
+      {itemType.type !== 'stage' && (
+        <Button onClick={handleEquipAchivement} className={styles.status}>
+          <img src={isActive ? trophyActive : trophyInactive} className={styles.trophy} />
+          <span className={isActive ? styles.activeText : styles.inactiveText}>
+            {isActive ? `${t('p18')}` : `${t('p19')}`}
+          </span>
+        </Button>
+      )}
     </div>
   );
 };

@@ -14,7 +14,9 @@ export const SkinTab: FC<Props> = ({ mode }) => {
 
   const { data: inventory } = useGetInventorySkinsQuery();
 
-  let skinsData = shop?.skins.filter(item => inventory?.skins.findIndex(_item => _item.id === item.id) === -1);
+  let skinsData = shop?.skins.filter(item =>
+    !inventory ? true : inventory?.skins.findIndex(_item => _item.id === item.id) === -1,
+  );
 
   let skins;
 

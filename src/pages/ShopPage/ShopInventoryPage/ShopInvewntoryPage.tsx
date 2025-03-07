@@ -19,8 +19,8 @@ type TypeTab<T> = { title: string; value: T };
 
 export const ShopInventoryPage = () => {
   const { t } = useTranslation('shop');
-  const [ shopCategory, setShopCategory ] = useState<TypeTab<TypeItemCategory>>();
-  const [ itemsQuality, setItemsQuality ] = useState<TypeTab<TypeItemRarity>>();
+  const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
+  const [itemsQuality, setItemsQuality] = useState<TypeTab<TypeItemRarity>>();
 
   const {
     data: inventory,
@@ -42,14 +42,12 @@ export const ShopInventoryPage = () => {
     },
     { skip: !shopCategory?.value },
   );
-  const [ items, setItems ] = useState<IShopItem[]>();
-  const [ itemsForBuy, setItemsForBuy ] = useState<IShopItem[]>();
+  const [items, setItems] = useState<IShopItem[]>();
+  const [itemsForBuy, setItemsForBuy] = useState<IShopItem[]>();
 
   useEffect(() => {
     if (inventory && shop && shopCategory) {
-      const filteredInventory = inventory.items.filter(
-        item => item.item_category === shopCategory.value,
-      );
+      const filteredInventory = inventory.items.filter(item => item.item_category === shopCategory.value);
 
       const _items = filteredInventory.filter((item, _, arr) => {
         if (item.item_premium_level === 'base') {
@@ -62,18 +60,14 @@ export const ShopInventoryPage = () => {
         } else if (item.item_premium_level === 'advanced') {
           return !arr.find(
             _item =>
-              _item.name === item.name &&
-              _item.item_rarity === item.item_rarity &&
-              _item.item_premium_level === 'pro',
+              _item.name === item.name && _item.item_rarity === item.item_rarity && _item.item_premium_level === 'pro',
           );
         } else {
           return true;
         }
       });
 
-      const filteredShop = shop.items.filter(
-        item => item.item_category === shopCategory.value,
-      );
+      const filteredShop = shop.items.filter(item => item.item_category === shopCategory.value);
 
       const _itemsForBuy = filteredShop
         .filter(item => !filteredInventory.find(_item => compareItems(item, _item)))
@@ -81,53 +75,41 @@ export const ShopInventoryPage = () => {
           filteredInventory.find(
             _item =>
               _item.level === 50 &&
-              ((item.item_premium_level === 'advanced' &&
-                  _item.item_premium_level === 'base') ||
-                (item.item_premium_level === 'pro' &&
-                  _item.item_premium_level === 'advanced')) &&
+              ((item.item_premium_level === 'advanced' && _item.item_premium_level === 'base') ||
+                (item.item_premium_level === 'pro' && _item.item_premium_level === 'advanced')) &&
               _item.name === item.name,
           ),
         );
-
-      setItems(_items);
+      setItems(_items?.reverse());
       setItemsForBuy(_itemsForBuy);
     }
-  }, [inventory, shop, shopCategory]);
+  }, [inventory]);
 
   const { isLoading: isBoostLoading } = useGetCurrentUserBoostQuery();
   const { isLoading: isEquipedLoading } = useGetEquipedQuery();
 
-  const isLoading = (
-    isBoostLoading
-  );
+  const isLoading = isBoostLoading;
 
   if (isLoading) return <Loader />;
 
   return (
-    <ShopLayout
-      mode="inventory"
-      onItemCategoryChange={setShopCategory}
-      onItemQualityChange={setItemsQuality}
-    >
-      {
-        isShopLoading || isEquipedLoading ? (
-          <Loader className={styles.itemsLoader} />
-        ) : !(isShopLoading || isEquipedLoading) && (!isInventoryLoading && !isSuccess && shopCategory?.title !== 'Вы') ? (
-          <p className={styles.emptyText}>{t('s38')}</p>
-        ) : !shopCategory || !itemsQuality ? (
-          <p style={{ color: '#fff' }}>Error occured while getting data</p>
-        ) : shopCategory?.title !== `${t('s6')}` ? (
-          isSuccess && (
-            <>
-              {itemsForBuy?.[0] && (
-                <ItemsTab shopCategory={shopCategory} shopItems={itemsForBuy} />
-              )}
-              <ItemsTab shopCategory={shopCategory} inventoryItems={items} />
-            </>
-          )
-        ) : (
-          <SkinTab mode="inventory" />
-        )}
+    <ShopLayout mode="inventory" onItemCategoryChange={setShopCategory} onItemQualityChange={setItemsQuality}>
+      {isShopLoading || isEquipedLoading ? (
+        <Loader className={styles.itemsLoader} />
+      ) : !isInventoryLoading && !isSuccess && shopCategory?.title !== 'Вы' ? (
+        <p className={styles.emptyText}>{t('s38')}</p>
+      ) : !shopCategory || !itemsQuality ? (
+        <p style={{ color: '#fff' }}>Error occured while getting data</p>
+      ) : shopCategory?.title !== `${t('s6')}` ? (
+        isSuccess && (
+          <>
+            {itemsForBuy?.[0] && <ItemsTab shopCategory={shopCategory} shopItems={itemsForBuy} />}
+            <ItemsTab shopCategory={shopCategory} inventoryItems={items} />
+          </>
+        )
+      ) : (
+        <SkinTab mode="inventory" />
+      )}
 
       <ItemUpgradedModal />
       <ShopUpgradedModal />

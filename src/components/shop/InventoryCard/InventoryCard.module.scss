@@ -247,14 +247,14 @@
       gap: 5px;
 
       .item {
-        border: 1px solid var.$color-primary;
+        border: 1.4px solid var.$color-primary;
         border-radius: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
         position: relative;
         background: var.$footer-bg;
-        overflow: hidden;
+
         @media (min-width: var.$breakpoint-md) {
           border-radius: 5px;
 
@@ -264,6 +264,35 @@
             border-radius: 7px;
           }
         }
+
+        .itemLevel {
+          position: absolute;
+          bottom: -15px;
+          font-size: 12px;
+          color: var.$color-grayish-white;
+          white-space: normal;
+          background: var.$color-dark-gray-stroke;
+          border-radius: 3px;
+        }
+
+
+        .lockedOverlay50 {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 50%;
+          background: var.$color-badge-bg;
+          border-bottom-right-radius: 3px;
+          border-bottom-left-radius: 3px;
+          border: 1px solid var.$color-badge-bg;
+        }
+
+        .lockedOverlay100 {
+          @extend .lockedOverlay50;
+          height: 100%;
+          border-radius: inherit;
+        }
+
 
         .itemImage {
           width: 24px;
@@ -279,12 +308,21 @@
           height: 12px;
           position: absolute;
         }
+
+        .lockIcon {
+          z-index: 15000;
+          width: 16px;
+          height: 16px;
+          position: absolute;
+          filter: brightness(80%);
+        }  
       }
 
       .itemLocked {
         @extend .item;
         opacity: 0.5;
         border: transparent;
+
         &::before {
           content: '';
           position: absolute;
@@ -297,9 +335,7 @@
           backdrop-filter: blur(5px);
           transition: width 0.3s ease;
         }
-        .lock {
-          display: block;
-        }
+      
       }
 
       .itemPurple {
@@ -310,6 +346,10 @@
       .itemRed {
         @extend .item;
         border-color: var.$color-red;
+      }
+
+      .noBorder {
+        border: 1px solid var.$color-badge-bg;
       }
     }
   }
@@ -336,7 +376,7 @@
       gap: 5px;
       box-sizing: border-box;
 
-      & > img {
+      &>img {
         width: 14px;
         aspect-ratio: 1;
 
@@ -356,8 +396,6 @@
         height: 44px;
         flex: 1;
         border: none;
-        opacity: 0.3;
-        pointer-events: none;
       }
 
       @media (min-width: var.$breakpoint-md) {
@@ -401,10 +439,12 @@
 
     @media (min-width: var.$breakpoint-md) {
       padding: 12px 0;
+
       p {
         font-size: 16px;
         line-height: 16px;
       }
+
       img {
         width: 18px;
         height: 18px;
@@ -443,3 +483,4 @@
   box-shadow: 0 0 50px var.$color-primary;
   scale: 1.1;
 }
+

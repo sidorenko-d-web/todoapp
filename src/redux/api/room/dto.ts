@@ -1,4 +1,4 @@
-import { IShopItem } from '../shop';
+import { IAchievement, IShopItem } from '../shop';
 
 export type BoostDTO = {
   income_per_second: string;
@@ -9,6 +9,7 @@ export type BoostDTO = {
 export interface IEquipedRoomResponse {
   items: IShopItem[];
   equipped_items: IRoomItem[];
+  achievements: IAchievement[];
 }
 
 export interface IRoom {
@@ -21,16 +22,18 @@ export interface IRoomItem {
 }
 
 export interface IEquipItemRequest {
-  equipped_items: IRoomItem[];
+  equipped_items?: IRoomItem[];
+  equipped_achievements?: { id: string, slot: 100 }[];
 }
 export interface IRemoveItemRequest {
-  items_to_remove: { id: string }[];
+  items_to_remove?: { id: string }[];
+  achievements_to_remove?: { id: string }[];
 }
 
 export const RoomItemsSlots = {
   wall: {
     slot: 0,
-    name: ['Бетонные стены', 'Стена', 'Обои'],
+    name: ['Бетонные стены', 'Стены', 'Обои'],
   },
   floor: {
     slot: 1,
