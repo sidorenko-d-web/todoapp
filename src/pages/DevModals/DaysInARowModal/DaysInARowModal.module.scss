@@ -114,24 +114,7 @@
 }
 
 .progress {
-  height: 18px;
-  border-radius: 3px;
-  background: var.$color-gray;
-  border: 1px solid var.$color-dark-gray-stroke;
-  overflow: hidden;
   margin-bottom: 30px;
-  .progressBar {
-    height: 16px;
-    background: var.$color-primary;
-  }
-  .progressBarPurple {
-    height: 16px;
-    background: var.$color-purple;
-  }
-  .progressBarRed {
-    height: 16px;
-    background: var.$color-red;
-  }
 }
 
 .currentDay {

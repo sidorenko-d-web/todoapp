@@ -119,7 +119,7 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
         ))}
       </div>
       <Button className={styles.continueButton} onClick={onContinue}>
-        {t('s34')}
+        {t('w7')}
       </Button>
       <div className={styles.selectText}>{t('s35')}</div>
     </div>
