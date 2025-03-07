@@ -9,7 +9,7 @@ import {
   useGetInventoryItemsQuery,
   useGetShopItemsQuery,
 } from '../../../redux';
-import { ItemsTab, ItemUpgradedModal, Loader, ShopUpgradedModal, SkinTab } from '../../../components';
+import { ItemsTab, ItemUpgradedModal, Loader, NewItemModal, ShopUpgradedModal, SkinTab } from '../../../components';
 import { compareItems } from '../../../helpers';
 import styles from '../ShopPage.module.scss';
 import GetRewardChestModal from '../../DevModals/GetRewardChestModal/GetRewardChestModal';
@@ -132,6 +132,7 @@ export const ShopInventoryPage = () => {
       <ItemUpgradedModal />
       <ShopUpgradedModal />
       <GetRewardChestModal />
+      <NewItemModal />
     </ShopLayout>
   );
 };
