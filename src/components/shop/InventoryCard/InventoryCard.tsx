@@ -38,11 +38,11 @@ interface Props {
 }
 
 const getPremiumLevelOrder = (level: TypeItemQuality) =>
-  ({
-    base: 0,
-    advanced: 1,
-    pro: 2,
-  }[level]);
+({
+  base: 0,
+  advanced: 1,
+  pro: 2,
+}[level]);
 
 function sortByPremiumLevel(items: IShopItem[]) {
   return [...items].sort(
@@ -71,6 +71,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     level: 1,
     item_rarity: item.item_rarity,
   });
+
+  console.log('items for images: ', itemsForImages);
+
   const { refetch } = useGetCurrentUserProfileInfoQuery();
 
   const { openModal } = useModal();
@@ -136,7 +139,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           }
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
@@ -145,32 +148,32 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     item.level < 10
       ? 10
       : item.level < 20
-      ? 20
-      : item.level < 30
-      ? 30
-      : item.level < 40
-      ? 40
-      : item.level < 50
-      ? 50
-      : item.level < 60
-      ? 60
-      : item.level < 70
-      ? 70
-      : item.level < 80
-      ? 80
-      : item.level < 90
-      ? 90
-      : item.level < 100
-      ? 100
-      : item.level < 110
-      ? 110
-      : item.level < 120
-      ? 120
-      : item.level < 130
-      ? 130
-      : item.level < 140
-      ? 140
-      : 150;
+        ? 20
+        : item.level < 30
+          ? 30
+          : item.level < 40
+            ? 40
+            : item.level < 50
+              ? 50
+              : item.level < 60
+                ? 60
+                : item.level < 70
+                  ? 70
+                  : item.level < 80
+                    ? 80
+                    : item.level < 90
+                      ? 90
+                      : item.level < 100
+                        ? 100
+                        : item.level < 110
+                          ? 110
+                          : item.level < 120
+                            ? 120
+                            : item.level < 130
+                              ? 130
+                              : item.level < 140
+                                ? 140
+                                : 150;
   return (
     <div className={styles.storeCard}>
       {<GetGift lvl={item.level} />}
@@ -220,8 +223,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                ? styles.colorPurple
-                : styles.level
+                  ? styles.colorPurple
+                  : styles.level
             }
           >
             {t('s20')} {item.level} {isB && t('s21')}
@@ -272,14 +275,14 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                       item.level < 50
                         ? ChestBlueIcon
                         : item.level >= 50 && item.level < 100
-                        ? ChestPurpleIcon
-                        : item.level >= 100 && item.level <= 150
-                        ? ChestRedIcon
-                        : item.item_rarity === 'red'
-                        ? ChestBlueIcon
-                        : item.item_rarity === 'yellow'
-                        ? ChestPurpleIcon
-                        : ChestRedIcon
+                          ? ChestPurpleIcon
+                          : item.level >= 100 && item.level <= 150
+                            ? ChestRedIcon
+                            : item.item_rarity === 'red'
+                              ? ChestBlueIcon
+                              : item.item_rarity === 'yellow'
+                                ? ChestPurpleIcon
+                                : ChestRedIcon
                     }
                     alt=""
                   />
@@ -293,8 +296,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                   item.item_rarity === 'red'
                     ? styles.done
                     : item.item_rarity === 'yellow'
-                    ? styles.donePurple
-                    : styles.doneRed
+                      ? styles.donePurple
+                      : styles.doneRed
                 }
                 style={{
                   width: `${Math.min(((item.level % 10) / 10) * 100, 100)}%`,
@@ -310,27 +313,44 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                       item.item_rarity === 'red'
                         ? styles.item
                         : item.item_rarity === 'yellow'
-                        ? styles.itemPurple
-                        : styles.itemRed,
-                      item.item_premium_level === 'advanced'
-                        ? index > 1 && styles.itemLocked
-                        : item.item_premium_level === 'base' && index > 0 && styles.itemLocked,
+                          ? styles.itemPurple
+                          : styles.itemRed,
+                        (_item.item_premium_level === 'advanced' && !item.is_bought) ? styles.noBorder : '',
+                        (_item.item_premium_level === 'pro' && !item.is_bought) ? styles.noBorder : ''
+                      // item.item_premium_level === 'advanced'
+                      //   ? index > 1 && styles.itemLocked
+                      //   : item.item_premium_level === 'base' && index > 0 && styles.itemLocked,
                     )}
                     key={_item.id}
                     style={
                       item.level < 50 && index === 1
                         ? ({
-                            '--lvl-height': `${(item.level / 50) * 100}%`,
-                          } as React.CSSProperties)
+                          '--lvl-height': `${(item.level / 50) * 100}%`,
+                        } as React.CSSProperties)
                         : item.level >= 50 && index === 2
-                        ? ({
+                          ? ({
                             '--lvl-height': `${((item.level - 50) / 50) * 100}%`,
                           } as React.CSSProperties)
-                        : undefined
+                          : undefined
                     }
                   >
                     <img src={_item.image_url + svgHeadersString} className={styles.itemImage} alt="" />
-                    <img src={LockIcon} className={styles.lock} alt="" />
+
+                    {(_item.item_premium_level === 'advanced' && !item.is_bought) && (
+                      <>
+                        <div className={styles.lockedOverlay50}></div>
+                        <span className={styles.itemLevel}>50</span>
+                        <img src={LockIcon} className={styles.lock} alt="" style={{zIndex: '10000'}}/>
+                      </>
+                    )}
+
+                    {(_item.item_premium_level === 'pro' && !item.is_bought) && (
+                      <>
+                        <div className={styles.lockedOverlay100}></div>
+                        <span className={styles.itemLevel}>100</span>
+                        <img src={LockIcon} className={styles.lock} alt="" style={{zIndex: '10000'}}/>
+                      </>
+                    )}
                   </div>
                 ))}
             </div>
