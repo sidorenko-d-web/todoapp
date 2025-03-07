@@ -11,6 +11,7 @@ export interface IShopItem {
   boost: IBoosts;
   image_url: string;
   item_premium_level: TypeItemQuality;
+  is_bought: boolean;
 }
 
 export interface IShopItemsResponse {
