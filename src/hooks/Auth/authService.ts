@@ -1,7 +1,7 @@
 // import WebApp from '@twa-dev/sdk';
 
 export const performSignIn = async (signIn: Function) => {
-  const init_data = window.Telegram.WebApp.initData;
+  // const init_data = window.Telegram.WebApp.initData;
   // const init_data = window.Telegram.WebApp.initDataUnsafe
   // const init_data = WebApp.initData;
 

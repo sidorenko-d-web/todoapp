@@ -20,7 +20,11 @@ export const TasksPage: FC = () => {
   const { t, i18n } = useTranslation('quests');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const { data, error, isLoading: isTasksLoading } = useGetTasksQuery();
+  const { data, error, isLoading: isTasksLoading } = useGetTasksQuery({
+    is_assigned: true,
+    offset: 0,
+    limit: 100,
+  });
   const { data: boostData, isLoading: isBoostLoading } = useGetBoostQuery();
 
   useEffect(() => {
@@ -30,8 +34,10 @@ export const TasksPage: FC = () => {
 
   const dailyTask = useMemo(() => {
     if (!data?.assignments) return null;
-    const dailyTasks = data.assignments.filter(task => task.category === 'quiz');
-    return dailyTasks[dailyTasks.length - 1];
+    console.log('data', data);
+    const dailyTasks = data.assignments.filter(task => task.category === 'quiz' && !task.is_completed);
+    console.log('dailyTasks', dailyTasks);
+    return dailyTasks[0];
   }, [data]);
 
   const topTask = useMemo(() => {

@@ -112,13 +112,13 @@ export const TaskCard: React.FC<TasksCardProps> = ({
     }
   };
 
-  let animationLight;
+  // let animationLight;
   
-  if (isTopTask) {
-    animationLight = <Lottie animationData={purpleLightAnimation} loop={true} className={s.lightAnimation} />;
-  } else if (isDailyTask || isSocialTask) {
-    animationLight = <Lottie animationData={blueLightAnimation} loop={true} className={s.lightAnimation} />;
-  }
+  // if (isTopTask) {
+  //   animationLight = <Lottie animationData={purpleLightAnimation} loop={true} className={s.lightAnimation} />;
+  // } else if (isDailyTask || isSocialTask) {
+  //   animationLight = <Lottie animationData={blueLightAnimation} loop={true} className={s.lightAnimation} />;
+  // }
 
   return (
     <div className={classNames(s.card, {
@@ -132,7 +132,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
     })}>
       {isCompleted && (
         <div className={s.animationWrapper}>
-          {animationLight}
+          {/* {animationLight} */}
         </div>
       )}
       
@@ -202,7 +202,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       )}
 
       <section className={s.buttons}>
-        {isCompleted && <div className={s.images}>{animationLight}</div>}
+        {/* {isCompleted && <div className={s.images}>{animationLight}</div>} */}
         <TrackedButton
           trackingData={{
             eventType: 'button',
