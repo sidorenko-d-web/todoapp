@@ -6,16 +6,16 @@ import { EnterInviteCodePage } from '../../pages/EnterInviteCodePage';
 import { useAuthFlow } from './useAuthFlow.ts';
 import Lottie from 'lottie-react';
 import { coinsAnim } from '../../assets/animations';
-// import WebApp from '@twa-dev/sdk'
+// import WebApp from '@twa-dev/sdk';
 import { useWebApp } from '../useWebApp.ts';
-import DaysInARowModal from '../../pages/DevModals/DaysInARowModal/DaysInARowModal.tsx';
+
 
 type AuthInitProps = {
   children: React.ReactNode;
 };
 
 export function AuthInit({ children }: AuthInitProps) {
-  useWebApp()
+  useWebApp();
   const {
     currentStep,
     isLoading,
@@ -27,7 +27,7 @@ export function AuthInit({ children }: AuthInitProps) {
     handleLanguageContinue,
     handleInviteCodeContinue,
     handleSkinContinue,
-    handleModalClose
+    //handleModalClose
   } = useAuthFlow();
 
   const [loadingStarted, setLoadingStarted] = useState(false);
@@ -40,14 +40,27 @@ export function AuthInit({ children }: AuthInitProps) {
   }, [isLoading]);
 
   if (isLoading || isInitializing || !isAnimationFinished) {
-    return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
+    console.log('object', 1);
+    return (
+      <LoadingScreen
+        isAuthComplete={!isLoading && loadingStarted}
+        onAnimationComplete={() => setIsAnimationFinished(true)}
+      />
+    );
   }
 
   switch (currentStep) {
     case 'loading':
-      return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
+      console.log('object', 2);
+      return (
+        <LoadingScreen
+          isAuthComplete={!isLoading && loadingStarted}
+          onAnimationComplete={() => setIsAnimationFinished(true)}
+        />
+      );
 
     case 'language':
+      console.log('object', 3);
       return (
         <LanguageSelect
           selectedLanguage={selectedLanguage}
@@ -57,6 +70,7 @@ export function AuthInit({ children }: AuthInitProps) {
       );
 
     case 'invite_code':
+      console.log('object', 4);
       return (
         <EnterInviteCodePage
           onContinue={handleInviteCodeContinue}
@@ -71,28 +85,45 @@ export function AuthInit({ children }: AuthInitProps) {
       );
 
     case 'final_loading':
-      return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
+      console.log('object', 5);
+      return (
+        <LoadingScreen
+          isAuthComplete={!isLoading && loadingStarted}
+          onAnimationComplete={() => setIsAnimationFinished(true)}
+        />
+      );
 
     case 'skin':
+      console.log('object', 6);
       return <SkinSetupPage onContinue={handleSkinContinue} />;
 
-    case 'push_line' :
-      return <DaysInARowModal onClose={handleModalClose} />;
+    // case 'push_line' :
+    //   return <DaysInARowModal onClose={handleModalClose} />;
 
     case 'completed':
-      return <>
-        {!coinsAnimationShown &&
-          <Lottie animationData={coinsAnim} loop={false} autoPlay={true} 
-            style={{ zIndex: '10000', position: 'absolute' }}
-            onComplete={
-              () => {
+      return (
+        <>
+          {!coinsAnimationShown && (
+            <Lottie
+              animationData={coinsAnim}
+              loop={false}
+              autoPlay={true}
+              style={{ zIndex: '10000', position: 'absolute' }}
+              onComplete={() => {
                 setCoinstAnimationShown(true);
-              }
-            } />}
-        {children}
-      </>;
+              }}
+            />
+          )}
+          {children}
+        </>
+      );
 
     default:
-      return <LoadingScreen isAuthComplete={!isLoading && loadingStarted} onAnimationComplete={() => setIsAnimationFinished(true)} />;
+      return (
+        <LoadingScreen
+          isAuthComplete={!isLoading && loadingStarted}
+          onAnimationComplete={() => setIsAnimationFinished(true)}
+        />
+      );
   }
 }

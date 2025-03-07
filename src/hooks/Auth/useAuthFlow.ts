@@ -3,8 +3,8 @@ import { useSignInMutation } from '../../redux';
 import { useTranslation } from 'react-i18next';
 import { performSignIn } from './authService';
 import { AuthStep } from './typesAuth.ts';
-import { useModal } from '../useModal.ts';
-import { MODALS } from '../../constants';
+// import { useModal } from '../useModal.ts';
+// import { MODALS } from '../../constants';
 
 export const useAuthFlow = () => {
   const { i18n } = useTranslation();
@@ -16,7 +16,7 @@ export const useAuthFlow = () => {
   const [isInitializing, setIsInitializing] = useState(true);
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
   const [requireInviteCode, setRequireInviteCode] = useState(false);
-  const { closeModal, openModal } = useModal();
+ // const { closeModal, openModal } = useModal();
 
   const saveCurrentStep = (step: AuthStep) => {
     if (step !== 'loading') {
@@ -46,27 +46,30 @@ export const useAuthFlow = () => {
   };
 
   const handleSkinContinue = () => {
-    saveCurrentStep('push_line');
-    openModal(MODALS.DAYS_IN_A_ROW)
-  };
+    // saveCurrentStep('push_line');
+    // openModal(MODALS.DAYS_IN_A_ROW)
 
-  // После выбора скина запускаем финальный лоадер, затем завершаем настройку
-  const handleModalClose = () => {
-    closeModal(MODALS.DAYS_IN_A_ROW)
     saveCurrentStep('final_loading');
     setTimeout(() => saveCurrentStep('completed'), 1500);
   };
 
+  // После выбора скина запускаем финальный лоадер, затем завершаем настройку
+  // const handleModalClose = () => {
+  //   //closeModal(MODALS.DAYS_IN_A_ROW)
+  //   saveCurrentStep('final_loading');
+  //   setTimeout(() => saveCurrentStep('completed'), 1500);
+  // };
+
   // Запрос fullscreen для Telegram WebApp
-  useEffect(() => {
-    if (
-      window.Telegram &&
-      window.Telegram.WebApp &&
-      typeof window.Telegram.WebApp.requestFullscreen === 'function'
-    ) {
-      window.Telegram.WebApp.requestFullscreen();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     window.Telegram &&
+  //     window.Telegram.WebApp &&
+  //     typeof window.Telegram.WebApp.requestFullscreen === 'function'
+  //   ) {
+  //     window.Telegram.WebApp.requestFullscreen();
+  //   }
+  // }, []);
 
   useEffect(() => {
     const initAuthFlow = async () => {
@@ -120,6 +123,6 @@ export const useAuthFlow = () => {
     handleLanguageContinue,
     handleInviteCodeContinue,
     handleSkinContinue,
-    handleModalClose
+    //handleModalClose
   };
 };

@@ -5,6 +5,7 @@ import {
   IAchievementsResponse,
   shopApi,
   IBuyItemRequest,
+  IAchievementsRequest,
 } from '../shop';
 
 export const inventoryApi = shopApi.injectEndpoints({
@@ -35,26 +36,20 @@ export const inventoryApi = shopApi.injectEndpoints({
       invalidatesTags: ['items'],
     }),
 
-    getInventoryAchievements: builder.query<IAchievementsResponse, void>({
+    getInventoryAchievements: builder.query<IAchievementsResponse, IAchievementsRequest | void>({
       query: () => ({
         url: '/inventory/achievements',
         method: 'GET',
+        params: { is_unlocked: true },
       }),
       providesTags: ['achievements'],
     }),
   }),
 });
 
-// export const inventoryApi = createApi({
-//   reducerPath: 'inventoryApi',
-//   baseQuery: baseQueryReauth,
-//   tagTypes: ['items', 'skins', 'achievements'],
-//   endpoints:
-// });
-
 export const {
   useGetInventoryItemsQuery,
   useGetInventorySkinsQuery,
   useGetInventoryAchievementsQuery,
-  useUpgradeItemMutation
+  useUpgradeItemMutation,
 } = inventoryApi;
