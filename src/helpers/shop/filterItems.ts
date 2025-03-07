@@ -1,10 +1,7 @@
 import { IShopItem, TypeItemQuality } from '../../redux';
 
 export const compareItems = (item1: IShopItem, item2: IShopItem) => {
-  return (
-    item1.name.toLowerCase() + item1.item_premium_level ===
-    item2.name.toLowerCase() + item2.item_premium_level
-  );
+  return item1.name.toLowerCase() + item1.item_premium_level === item2.name.toLowerCase() + item2.item_premium_level;
 };
 
 export const filter = (item: IShopItem, inventoryItems?: IShopItem[]) => {
@@ -13,7 +10,7 @@ export const filter = (item: IShopItem, inventoryItems?: IShopItem[]) => {
   return !inventoryItem;
 };
 
-export const itemsInTab = (shopItems?: IShopItem[], inventoryItems?: IShopItem[]) => {
+export const itemsInTab = (shopItems?: IShopItem[], inventoryItems?: IShopItem[], inventoryMode?: boolean) => {
   const tabItems = {
     red: shopItems
       ?.filter(item => item.item_rarity === 'red')
@@ -21,7 +18,7 @@ export const itemsInTab = (shopItems?: IShopItem[], inventoryItems?: IShopItem[]
 
     yellow: shopItems
       ?.filter(item => item.item_rarity === 'yellow')
-      .filter(item => !inventoryItems?.find(_item => compareItems(item, _item)))
+      .filter(item => (inventoryMode ? true : !inventoryItems?.find(_item => compareItems(item, _item))))
       .filter(item =>
         inventoryItems?.find(
           _item =>
@@ -34,7 +31,7 @@ export const itemsInTab = (shopItems?: IShopItem[], inventoryItems?: IShopItem[]
 
     green: shopItems
       ?.filter(item => item.item_rarity === 'green')
-      .filter(item => !inventoryItems?.find(_item => compareItems(item, _item)))
+      .filter(item => (inventoryMode ? true : !inventoryItems?.find(_item => compareItems(item, _item))))
       .filter(item =>
         inventoryItems?.find(
           _item =>
@@ -47,7 +44,6 @@ export const itemsInTab = (shopItems?: IShopItem[], inventoryItems?: IShopItem[]
   };
   return tabItems;
 };
-
 
 export const getPremiumLevelOrder = (level: TypeItemQuality) =>
   ({

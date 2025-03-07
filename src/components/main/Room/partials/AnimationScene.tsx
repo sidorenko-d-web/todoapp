@@ -1,146 +1,123 @@
-//@ts-ignore
-import { SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
+import { Skin, SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { useRef, useEffect, useLayoutEffect, useState } from 'react';
-import { useGetEquipedQuery } from '../../../../redux';
-import { GameObjects } from 'phaser';
+import {
+  IShopItem,
+  TypeWearLocation,
+  selectIsNeedToPlayHappy,
+  selectIsWorking,
+  setNeedToPlayHappy,
+  useGetEquipedQuery,
+} from '../../../../redux';
+import { SpineSceneBase, animated } from '../../../../constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { ICharacterResponse, useGetCharacterQuery } from '../../../../redux/api/character';
 
 export const AnimationScene = () => {
-  const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
-
   const { data: room } = useGetEquipedQuery();
+  const { data: character, isLoading } = useGetCharacterQuery();
 
   const gameRef = useRef<Phaser.Game | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
+  const spineSceneRef = useRef<SpineSceneBase | null>(null);
 
   const [size, setSize] = useState([0, 0]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const isWorking = useSelector(selectIsWorking);
+  const isNeedToPlayHappy = useSelector(selectIsNeedToPlayHappy);
+
+  const dispatch = useDispatch();
+
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   useEffect(() => {
-    if (!sceneRef.current) return;
+    if (!sceneRef.current || isLoading) return;
 
     const width = sceneRef.current.offsetWidth;
-    const center = width / 2;
+    const contextProps = { equipped_items: room?.equipped_items, center: width / 2 };
 
-    const itemsInSlots = {
-      1: { width: 0, height: 0, x: -1000, y: -1000, z: -100 }, // walls === not here
-      0: { width: 0, height: 0, x: -1000, y: -1000, z: -100 }, // floor === not here
-      2: { width: 160, height: 160, x: -6, y: 455, z: 2 }, //desc
-      3: { width: 120, height: 120, x: -50, y: 415, z: 1 }, //chair
-      4: { width: 150, height: 150, x: 60, y: 320, z: 0 }, //sofa
-      5: { width: 150, height: 150, x: -125, y: 260, z: 0 }, //window
-      6: { width: 35, height: 35, x: -70, y: 223, z: 0 }, //poster
-      7: { width: 35, height: 35, x: 100, y: 245, z: 0 }, //lens
-      8: { width: 40, height: 40, x: 60, y: 228, z: 0 }, //note
-      9: { width: 100, height: 100, x: 70, y: 210, z: 100 }, //light portable
-      10: { width: 240, height: 240, x: -70, y: 390, z: 0 }, //carpet
-      11: { width: 40, height: 40, x: 15, y: 425, z: 101 }, //camera
-      12: { width: 140, height: 140, x: 90, y: 500, z: 99 }, //stand
-      13: { width: 60, height: 60, x: 30, y: 398, z: 100 }, //lightDesc
-      14: { width: 45, height: 45, x: -40, y: 427, z: 100 }, //mic
-      15: { width: 40, height: 40, x: 35, y: 210, z: 1000 }, //photograph
-      16: { width: 58, height: 58, x: -15, y: 444, z: 102 }, //pc
-      17: { width: 17, height: 17, x: 15, y: 400, z: 100 }, //pen
-      18: { width: 50, height: 50, x: 6, y: 188, z: 10 }, //lamp
-      19: { width: 70, height: 70, x: -120, y: 485, z: 0 }, //ottoman
-      20: { width: 60, height: 60, x: 145, y: 390, z: 0 }, //plant
-    };
-
-    const animated = [
-      { animation: '2_idle', name: 'Постер', skin: () => 'default' },
-      { animation: 'animation', name: 'Камера любительская', skin: (prem_lvl: string) => prem_lvl },
-      { animation: 'animation', name: 'Камера профессиональная', skin: (prem_lvl: string) => prem_lvl },
-      { animation: 'animation', name: 'Мыльница', skin: (prem_lvl: string) => prem_lvl },
-      { animation: 'animation', name: 'Фикус', skin: (prem_lvl: string) => prem_lvl },
-    ];
-
-    const baseItems = [
-      { name: 'broken-sofa', slot: 4, width: 140, height: 140, x: 60, y: 320, z: 0 },
-      { name: 'chair', slot: 3, width: 46, height: 46, x: -48, y: 430, z: 0 },
-      { name: 'table', slot: 2, width: 140, height: 140, x: -6, y: 455, z: 0 },
-      { name: 'window', slot: 5, width: 110, height: 110, x: -125, y: 260, z: 0 },
-    ];
-
-    class SpineScene extends Phaser.Scene {
-      jsonUrl: string | undefined;
-      atlasUrl: string | undefined;
-      spineObject: SpineGameObject | null;
-      objects: (GameObjects.Image | SpineGameObject)[];
-      constructor() {
-        super({ key: 'player' });
-        this.spineObject = null;
-        this.objects = [];
-      }
-
+    class SpineScene extends SpineSceneBase {
       preload() {
-        room?.items.forEach((item, i) => {
-          if (animated.find(_item => item.name === _item.name)) {
-            const jsonUrl = new URL(
-              `https://storage.yandexcloud.net/miniapp-v2-dev/${item.name
-                .toLowerCase()
-                .replace(' ', '_')
-                .replace('й', 'н')}_${item.item_premium_level}.json`,
-            ).href;
-            const atlasUrl = new URL(
-              `https://storage.yandexcloud.net/miniapp-v2-dev/${item.name
-                .toLowerCase()
-                .replace(' ', '_')
-                .replace('й', 'н')}_${item.item_premium_level}atlas.txt`,
-            ).href;
+        if (!(sceneRef.current && gameRef.current)) return;
 
-            this.load.spineJson('json' + i, proxyImageUrl(jsonUrl));
-            this.load.spineAtlas('atlas' + i, proxyImageUrl(atlasUrl));
+        this.loadPerson();
+
+        //devided loading items of animated and static
+        room?.items.forEach(item => {
+          if (findAnimatedItem(item)) {
+            this.loadAnimatedItem(item);
           } else {
-            const slot = room?.equipped_items.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
-            console.log(slot);
-            const { width, height } = itemsInSlots[slot];
-            this.load.svg('item' + i, proxyImageUrl(item.image_url!), { width, height });
+            this.loadSvgItem(item, contextProps);
           }
         });
-        baseItems.forEach(item => {
-          this.load.svg(
-            item.name,
-            proxyImageUrl('https://storage.yandexcloud.net/miniapp-v2-dev/' + item.name + '.svg'),
-            { width: item.width, height: item.height },
-          );
-        });
+
+        this.loadBaseItems();
       }
 
       create() {
+        try {
+          this.createPerson(contextProps, isWorking);
+        } catch (error: any) {
+          if (error.message === 'add.spine') {
+            console.log('avoid error');
+            setSize(prev => [prev[0] + 1, prev[1]]);
+          }
+        }
+
+        //devided creating items of animated and static
         room?.items.forEach(async (item, i) => {
-          const animatedItem = animated.find(_item => item.name === _item.name);
+          const animatedItem = findAnimatedItem(item);
           if (animatedItem) {
-            const slot = room?.equipped_items.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
-            const _item = itemsInSlots[slot];
-
-            if (slot === 11 && room.equipped_items.find(item => item.slot === 12)) {
-              this.objects?.push(this.add.spine(center + _item.x + 70, _item.y + 12, 'json' + i, 'atlas' + i));
-            } else {
-              this.objects?.push(this.add.spine(center + _item.x, _item.y, 'json' + i, 'atlas' + i));
-            }
-
-            this.objects[i].scale = _item.width / this.spine.getSkeletonData('json' + i, 'atlas' + i).width;
-            //@ts-ignore
-            this.objects[i]?.animationState?.setAnimation(0, animatedItem.animation, true);
-            //@ts-ignore
-            this.objects[i]?.skeleton.setSkinByName(animatedItem.skin(item.item_premium_level));
-            this.objects[i]?.setDepth(_item.z);
+            this.createAnimatedItem(item, i, animatedItem, contextProps);
           } else {
-            const slot = room?.equipped_items.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
-            const _item = itemsInSlots[slot];
-            this.objects?.push(this.add.image(center + _item.x, _item.y, 'item' + i));
-            this.objects[i]?.setDepth(_item.z);
+            this.createSVGItem(item, i, contextProps);
           }
         });
-        const slots = room?.equipped_items.map(item => item.slot);
+        this.createBaseItems(contextProps);
 
-        baseItems.forEach(item => {
-          if (!slots?.includes(item.slot)) {
-            const added = this.add.image(center + item.x, item.y, item.name);
-            added.setDepth(item.z);
-            this.objects?.push(added);
-          }
-        });
+        spineSceneRef.current = this;
+        setIsLoaded(true);
+        this.changeSkin();
+      }
+
+      changeSkin(updatedCharacter?: ICharacterResponse) {
+        if (!this.person) return;
+        const allSkins = this.person.skeleton.data.skins;
+        const headSkin = allSkins.find(item => item.name.includes(getSkin('head') ?? 'голова 18'))!;
+        const bottomSkin = allSkins.find(item => item.name.includes(getSkin('legs') ?? 'штаны базовые'))!;
+        const upSkin = allSkins.find(item => item.name.includes(getSkin('upper_body') ?? 'футболка базовая'))!;
+        const face = allSkins.find(item => item.name.includes(getSkin('face') ?? 'лицо 1'))!;
+        const skinColor = allSkins.find(item => item.name.includes(getSkin('skin_color') ?? 'кожа базовая'))!;
+
+        const skin = new Skin('created');
+        skin.name = face.name.split('/')[1];
+        skin.addSkin(bottomSkin);
+        skin.addSkin(upSkin);
+        skin.addSkin(headSkin);
+        skin.addSkin(face);
+        skin.addSkin(skinColor);
+
+        this.person.skeleton.setSkin(skin);
+
+        function getSkin(wear_location: TypeWearLocation) {
+          return (updatedCharacter ?? character)?.skins
+            .find(item => item.wear_location === wear_location)
+            ?.name.toLowerCase();
+        }
       }
     }
+
+    const findAnimatedItem = (item: IShopItem) => {
+      let animatedItem = animated.find(_item => item.name === _item.name);
+      if (!animatedItem) animatedItem = animated.find(_item => item.name + item.item_premium_level === _item.name);
+      return animatedItem;
+    };
 
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
@@ -160,21 +137,34 @@ export const AnimationScene = () => {
       if (gameRef.current) {
         gameRef.current.destroy(true);
         gameRef.current = null;
+        spineSceneRef.current = null;
       }
     };
-  }, [sceneRef, size]);
+  }, [sceneRef, size, isLoading]);
 
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
+  useEffect(() => {
+    if (!spineSceneRef.current) return;
+    spineSceneRef.current?.setCurrentLoopedAnimation(isWorking);
+  }, [isWorking, spineSceneRef.current, isLoaded, size]);
+
+  useEffect(() => {
+    if (!spineSceneRef.current) return;
+    if (isNeedToPlayHappy) {
+      spineSceneRef.current?.setHappy();
+      setTimeout(() => {
+        dispatch(setNeedToPlayHappy(false));
+        if (isNeedToPlayHappy) spineSceneRef.current?.setIdle();
+      }, 4000);
     }
-    window.addEventListener('resize', updateSize);
-    updateSize();
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
+  }, [isNeedToPlayHappy, spineSceneRef.current, isLoaded]);
 
   return (
-    // <div onClick={() => navigate('/dev-modals')} ref={sceneRef} id="player" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1000 }}></div>
-    <div ref={sceneRef} id="player" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1000 }}></div>
+    <>
+      <div
+        ref={sceneRef}
+        id="player"
+        style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1000 }}
+      ></div>
+    </>
   );
 };

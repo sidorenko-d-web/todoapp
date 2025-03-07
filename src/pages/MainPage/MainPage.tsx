@@ -101,52 +101,52 @@ export const MainPage: FC = () => {
     }
   }, [creatingIntegrationModalState.isOpen]);
 
-  useEffect(() => {
-    reduxDispatch(setActiveFooterItemId(2));
+  // useEffect(() => {
+  //   reduxDispatch(setActiveFooterItemId(2));
 
-    if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
-      && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED) && !purchasingSubscriptionModalState.isOpen) {
-      openModal(MODALS.SUBSCRIBE);
-    }
+  //   if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
+  //     && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED) && !purchasingSubscriptionModalState.isOpen) {
+  //     openModal(MODALS.SUBSCRIBE);
+  //   }
 
-    // if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
-    //   && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
-    //   navigate(AppRoute.Shop);
-    // }
+  //   // if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
+  //   //   && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+  //   //   navigate(AppRoute.Shop);
+  //   // }
 
-    if (
-      isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
-      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-      !getSubscriptionPurchased()
-    ) {
-      openModal(MODALS.SUBSCRIBE);
-    }
+  //   if (
+  //     isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
+  //     !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+  //     !getSubscriptionPurchased()
+  //   ) {
+  //     openModal(MODALS.SUBSCRIBE);
+  //   }
 
-    if (
-      isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) &&
-      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-      !creatingIntegrationModalState.isOpen
-    ) {
-      openModal(MODALS.CREATING_INTEGRATION);
-    }
+  //   if (
+  //     isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) &&
+  //     !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+  //     !creatingIntegrationModalState.isOpen
+  //   ) {
+  //     openModal(MODALS.CREATING_INTEGRATION);
+  //   }
 
-    if (
-      isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
-      !creatingIntegrationModalState.isOpen
-    ) {
-      openModal(MODALS.CREATING_INTEGRATION);
-    }
+  //   if (
+  //     isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+  //     !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
+  //     !creatingIntegrationModalState.isOpen
+  //   ) {
+  //     openModal(MODALS.CREATING_INTEGRATION);
+  //   }
 
-    // if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
-    //   && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
-    //   navigate(AppRoute.Shop);
-    // }
+  //   // if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+  //   //   && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
+  //   //   navigate(AppRoute.Shop);
+  //   // }
 
-    // if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
-    //   navigate(AppRoute.ShopInventory);
-    // }
-  }, []);
+  //   // if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+  //   //   navigate(AppRoute.ShopInventory);
+  //   // }
+  // }, []);
 
   const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);

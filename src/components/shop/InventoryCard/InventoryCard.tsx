@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import styles from './InventoryCard.module.scss';
 import clsx from 'clsx';
 //@ts-ignore
@@ -9,10 +9,14 @@ import ChestRedIcon from '@icons/chest-red.svg';
 import ListIcon from '@icons/list.svg';
 import {
   IShopItem,
+  RoomItemsSlots,
   selectVolume,
   TypeItemQuality,
+  useAddItemToRoomMutation,
   useGetCurrentUserProfileInfoQuery,
+  useGetEquipedQuery,
   useGetShopItemsQuery,
+  useRemoveItemFromRoomMutation,
   useUpgradeItemMutation,
 } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
@@ -62,9 +66,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const { t, i18n } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const dispatch = useDispatch();
-  const { data, isFetching } = useGetShopItemsQuery({
+  const { data, isLoading: isItemsLoading } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
+    item_rarity: item.item_rarity, 
   });
   const { data: itemsForImages } = useGetShopItemsQuery({
     name: item.name,
@@ -72,7 +77,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     item_rarity: item.item_rarity,
   });
   const { refetch } = useGetCurrentUserProfileInfoQuery();
-
+  const [equipItem, { isLoading: isEquipItemLoading }] = useAddItemToRoomMutation();
+  const [removeItem, { isLoading: isRemoveItemLoading }] = useRemoveItemFromRoomMutation();
+  const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
   const { openModal } = useModal();
 
   const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
@@ -112,13 +119,19 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     prevLvl.current = item.level;
   }, [item.level]);
 
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   const handleBuyItem = async () => {
     try {
+      setIsUpdateLoading(true);
       const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
 
       if (!res.error) {
         playLvlSound();
         refetch();
+        refetchEquipped();
         dispatch(setPoints((prevPoints: number) => prevPoints + 1));
         if (item.level === 49) {
           if (item.item_premium_level === 'pro') {
@@ -136,10 +149,36 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           }
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    } finally {
+      await refetchEquipped();
+      setIsUpdateLoading(false);
+    }
   };
 
+  const handleEquipItem = async () => {
+    if (!slot && slot !== 0)
+      throw new Error('error while getting slot for item, check names in "redux/api/room/dto.ts - RoomItemsSlots"');
+    const isSlotNotEmpty = equipedItems?.equipped_items.find(item => item.slot === slot);
+
+    try {
+      if (isSlotNotEmpty) {
+        await removeItem({ items_to_remove: [{ id: isSlotNotEmpty.id }] });
+      }
+      const res = await equipItem({ equipped_items: [{ id: item.id, slot }] });
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const slot = Object.values(RoomItemsSlots).find(_item => _item.name.find(__item => item.name.includes(__item)))?.slot;
+  const isEquipped = equipedItems?.equipped_items.find(_item => _item.id === item.id);
+
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+
+  const [isUpdateLoading, setIsUpdateLoading] = useState(false);
+
 
   const levelCap =
     item.level < 10
@@ -303,20 +342,26 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             </div>
 
             <div className={styles.items}>
-              {itemsForImages?.items &&
-                sortByPremiumLevel(itemsForImages?.items).map((_item, index) => (
-                  <div
-                    className={clsx(
-                      item.item_rarity === 'red'
-                        ? styles.item
-                        : item.item_rarity === 'yellow'
-                        ? styles.itemPurple
-                        : styles.itemRed,
-                      item.item_premium_level === 'advanced'
-                        ? index > 1 && styles.itemLocked
-                        : item.item_premium_level === 'base' && index > 0 && styles.itemLocked,
-                    )}
-                    key={_item.id}
+              {(itemsForImages?.items
+                ? sortByPremiumLevel(itemsForImages?.items).filter(_item => _item.name === item.name)
+              : [
+                  { id: 1, image_url: undefined },
+                  { id: 2, image_url: undefined },
+                  { id: 3, image_url: undefined },
+                ]
+            ).map((_item, index) => (
+                <div
+                  className={clsx(
+                    item.item_rarity === 'red'
+                      ? styles.item
+                      : item.item_rarity === 'yellow'
+                      ? styles.itemPurple
+                      : styles.itemRed,
+                    item.item_premium_level === 'advanced'
+                      ? index > 1 && styles.itemLocked
+                      : item.item_premium_level === 'base' && index > 0 && styles.itemLocked,
+                  )}
+                  key={_item.id}
                     style={
                       item.level < 50 && index === 1
                         ? ({
@@ -328,31 +373,33 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                           } as React.CSSProperties)
                         : undefined
                     }
-                  >
-                    <img src={_item.image_url + svgHeadersString} className={styles.itemImage} alt="" />
-                    <img src={LockIcon} className={styles.lock} alt="" />
-                  </div>
-                ))}
+                >
+                  {item.image_url && <img src={_item.image_url + svgHeadersString} className={styles.itemImage} alt="" />}
+                  <img src={LockIcon} className={styles.lock} alt="" />
+                </div>
+              ))}
             </div>
           </div>
         ))}
 
-      {isBlocked ? (
+      {isUpdateLoading || !data?.items || equipedItems === undefined ? (
+        <p style={{ color: '#fff', fontSize: 16, padding: '16px 0', textAlign: 'center' }}>Loading</p>
+      ) : isBlocked ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>{t('s26')}</p>
           <img src={LockIcon} alt="" />
         </div>
+      ) : !isEquipped ? (
+        <Button onClick={handleEquipItem} className={styles.disabledActions}>
+          {isEquipItemLoading || isRemoveItemLoading ? <p>loading</p> : <p>{t('s28')}</p>}
+        </Button>
       ) : item.level === 50 ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>{t('s27')}</p>
           <img src={LockIcon} alt="" />
         </div>
-      ) : disabled ? (
-        <Button className={styles.disabledActions}>
-          <p>{t('s28')}</p>
-        </Button>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
           <Button>
@@ -366,10 +413,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 ? styles.upgradeItemPurple
                 : item.item_rarity === 'green' && styles.upgradeItemRed,
             )}
-            disabled={item.level === 50}
+            disabled={item.level === 50 || isLoading || isItemsLoading}
             onClick={handleBuyItem}
           >
-            {isLoading || isFetching ? (
+            {isLoading || isUpdateLoading ? (
               <p>loading</p>
             ) : (
               <>
@@ -380,14 +427,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               </>
             )}
           </Button>
+
           <Button
-            onClick={() =>
-              openModal(MODALS.UPGRADED_ITEM, {
-                item,
-                mode: 'item',
-                reward: 'reward of item',
-              })
-            }
+            disabled={false}
+            onClick={() => {
+              console.log('object');
+              removeItem({ items_to_remove: [{ id: item.id }] });
+            }}
           >
             <img src={ListIcon} alt="Tasks" />
           </Button>
