@@ -36,7 +36,6 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
 
     class SpineScene extends WardrobeSpineScene {
       create() {
-        console.log('SpineScene');
         try {
           this.createPerson(personScale);
         } catch (error: any) {
@@ -51,7 +50,6 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
     }
 
     const createAnimation = () => {
-      console.log('useEffect');
       const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
         width: width,

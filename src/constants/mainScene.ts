@@ -117,7 +117,6 @@ export class SpineSceneBase extends Phaser.Scene {
 
   //helpers for scene creation
   createPerson({ center }: Pick<contextProps, 'center'>, isWorking: boolean) {
-    console.log('creation')
     if(!this.add.spine) throw new Error('add.spine')
     this.person = this.add.spine(center - 40, 385, 'personJson', 'personAtlas');
     this.person.scale = 0.07;
@@ -172,7 +171,6 @@ export class SpineSceneBase extends Phaser.Scene {
   }
 
   setCurrentLoopedAnimation(isWorking: Boolean) {
-    console.log('isWorking', isWorking);
     if (isWorking) this.setWorking();
     else this.setIdle();
   }

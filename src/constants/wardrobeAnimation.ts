@@ -27,7 +27,6 @@ export class WardrobeSpineScene extends Phaser.Scene {
   makeHappy() {
     if (!this.spineObject) return;
     const currentHappy = this.spineObject.skeleton.skin?.name;
-    console.log(currentHappy);
     this.spineObject.animationState.setAnimation(0, 'happy ' + currentHappy?.split('/')[1]);
   }
 
@@ -41,7 +40,6 @@ export class WardrobeSpineScene extends Phaser.Scene {
   }
 
   changeSkin(scale: number, updatedCharacter?: ICharacterResponse) {
-    console.log(scale)
     if (!this.spineObject) return;
     const allSkins = this.spineObject.skeleton.data.skins;
     const headSkin = allSkins.find(item => item.name.includes(getSkin('head', updatedCharacter) ?? 'голова 18'))!;
@@ -61,12 +59,10 @@ export class WardrobeSpineScene extends Phaser.Scene {
     headSkin && skin.addSkin(headSkin);
     face && skin.addSkin(face);
     skinColor && skin.addSkin(skinColor);
-    console.log(1);
     this.spineObject.destroy();
     this.createPerson(scale);
     this.spineObject.skeleton.setSkin(skin);
 
-    console.log(2);
     this.makeHappy();
 
     if (this.timeout) clearTimeout(this.timeout);
