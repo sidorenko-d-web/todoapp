@@ -56,11 +56,11 @@ export const Walls = () => {
     },
   };
 
-  // const currentWall = Object.values(walls).find(
-  //   item => item.name === equipedWall?.item_rarity! + equipedWall?.item_premium_level,
-  // );
+  const currentWall = Object.values(walls).find(
+    item => item.name === equipedWall?.item_rarity! + equipedWall?.item_premium_level,
+  );
 
-  const currentWall = walls.greenWallDotted
+  // const currentWall = walls.greenWallDotted
 
   return (
     <div className={styles.wallsWrapper}>
