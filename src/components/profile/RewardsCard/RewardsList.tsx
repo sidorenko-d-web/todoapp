@@ -26,7 +26,7 @@ const RewardsList: React.FC = () => {
   const mappedRewards: RewardItem[] = React.useMemo(() => {
     if (!awardsData || !awardsData.achievements) return [];
     
-    return awardsData.achievements
+    return awardsData.achievements.filter(item => !item.name.includes('этапа') )
       .map((achievement: IAchievement): RewardItem => {
         const medal: 'gold' | 'silver' | 'bronze' =
           achievement.level === 3 ? 'gold' : achievement.level === 2 ? 'silver' : 'bronze';

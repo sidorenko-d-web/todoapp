@@ -19,8 +19,8 @@ export class WardrobeSpineScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.spineJson('data', proxyImageUrl(jsonUrl));
-    this.load.spineAtlas('atlas', proxyImageUrl(atlasUrl));
+    this.load.spineJson('data', (jsonUrl));
+    this.load.spineAtlas('atlas', (atlasUrl));
   }
 
   makeHappy() {
@@ -68,7 +68,7 @@ export class WardrobeSpineScene extends Phaser.Scene {
     this.makeHappy();
 
     if (this.timeout) clearTimeout(this.timeout);
-    else this.timeout = setTimeout(() => this.spineObject?.animationState.setAnimation(0, 'Idle', true), 4000);
+    this.timeout = setTimeout(() => this.spineObject?.animationState.setAnimation(0, 'Idle', true), 4000);
 
     function getSkin(wear_location: TypeWearLocation, character?: ICharacterResponse) {
       return (updatedCharacter ?? character)?.skins

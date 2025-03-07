@@ -96,7 +96,6 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
   const handleChangeSkin = (updatedCharacter: ICharacterResponse) => {
     if (spineSceneRef.current) {
       spineSceneRef.current.changeSkin(personScale, updatedCharacter);
-      spineSceneRef.current.makeHappy();
     }
   };
 
