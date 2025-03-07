@@ -1,6 +1,7 @@
 import { SpineGameObject, Skin } from '@esotericsoftware/spine-phaser';
 import { TypeWearLocation } from '../redux';
 import { ICharacterResponse } from '../redux/api/character';
+// const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
 
 const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/anfas_happy1.json`).href;
 const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/anfas_happyatlas1.txt`).href;
@@ -17,6 +18,8 @@ export class WardrobeSpineScene extends Phaser.Scene {
   }
 
   preload() {
+    // this.load.spineJson('data', proxyImageUrl(jsonUrl));
+    // this.load.spineAtlas('atlas', proxyImageUrl(atlasUrl));
     this.load.spineJson('data', (jsonUrl));
     this.load.spineAtlas('atlas', (atlasUrl));
   }
@@ -31,14 +34,14 @@ export class WardrobeSpineScene extends Phaser.Scene {
   createPerson(scale: number) {
     const width = this.sys.game.config.width as number;
     const center = width / 2;
-    console.log('createPerson');
     if (!this.add.spine) throw new Error('add.spine');
     this.spineObject = this.add.spine(center, center, 'data', 'atlas');
     this.spineObject.scale = scale;
-    this.spineObject.animationState.data.defaultMix = 0.5;
+    this.spineObject.animationState.data.defaultMix = 0.6;
   }
 
   changeSkin(scale: number, updatedCharacter?: ICharacterResponse) {
+    console.log(scale)
     if (!this.spineObject) return;
     const allSkins = this.spineObject.skeleton.data.skins;
     const headSkin = allSkins.find(item => item.name.includes(getSkin('head', updatedCharacter) ?? 'голова 18'))!;
@@ -58,11 +61,12 @@ export class WardrobeSpineScene extends Phaser.Scene {
     headSkin && skin.addSkin(headSkin);
     face && skin.addSkin(face);
     skinColor && skin.addSkin(skinColor);
-
+    console.log(1);
     this.spineObject.destroy();
     this.createPerson(scale);
     this.spineObject.skeleton.setSkin(skin);
 
+    console.log(2);
     this.makeHappy();
 
     if (this.timeout) clearTimeout(this.timeout);

@@ -19,7 +19,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
   const [size, setSize] = useState([0, 0]);
   const { data: character, isLoading } = useGetCharacterQuery();
 
-  const personScale = 0.15
+  const personScale = 0.15;
 
   useLayoutEffect(() => {
     function updateSize() {
@@ -80,7 +80,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
 
   const handleMakeHappy = (updatedCharacter: ICharacterResponse) => {
     if (spineSceneRef.current) {
-      spineSceneRef.current.changeSkin(updatedCharacter);
+      spineSceneRef.current.changeSkin(personScale, updatedCharacter);
     }
   };
 
