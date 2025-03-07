@@ -36,10 +36,11 @@ export const TasksPage: FC = () => {
     if (!data?.assignments) return null;
     console.log('data', data);
     const dailyTasks = data.assignments.filter(task => task.category === 'quiz');
+    console.log('dailyTasks', dailyTasks);
     
     // Модифицируем задание с учетом языка
-    if (dailyTasks[0]) {
-      const task = dailyTasks[0];
+    if (dailyTasks[dailyTasks.length - 1]) {
+      const task = dailyTasks[dailyTasks.length - 1];
       return {
         ...task,
         title: locale === 'en' ? task.title_eng : task.title,
