@@ -105,7 +105,7 @@ export class SpineSceneBase extends Phaser.Scene {
   loadSvgItem(item: IShopItem, { equipped_items }: Pick<contextProps, 'equipped_items'>) {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const { width, height } = itemsInSlots[slot];
-    this.load.svg('item' + item.id, proxyImageUrl(item.image_url!), { width, height });
+    this.load.svg('item' + item.id, (item.image_url!), { width, height });
   }
 
   loadBaseItems() {
@@ -191,14 +191,12 @@ export class SpineSceneBase extends Phaser.Scene {
   }
 }
 
-const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
-
 const createLink = (itemString: string, type: 'json' | 'atlas' | 'base') => {
   let string: string = '';
   if (type === 'json') string = new URL(itemsBaseUrl + itemString + '1.json').href;
   if (type === 'atlas') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
   if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
-  return proxyImageUrl(string);
+  return (string);
 };
 
 export enum PersonAnimations {

@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import svgr from 'vite-plugin-svgr';
-import {nodePolyfills} from 'vite-plugin-node-polyfills'
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -50,15 +50,5 @@ export default defineConfig({
         replacement: fileURLToPath(new URL('./translate', import.meta.url)),
       },
     ],
-  },
-  server: {
-    allowedHosts: true,
-    proxy: {
-      '/api/miniapp-v2-dev': {
-        target: 'https://storage.yandexcloud.net',
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/api\/miniapp-v2-dev/, ''),
-      },
-    },
   },
 });
