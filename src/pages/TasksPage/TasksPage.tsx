@@ -20,7 +20,9 @@ export const TasksPage: FC = () => {
   const { t, i18n } = useTranslation('quests');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const { data, error, isLoading: isTasksLoading } = useGetTasksQuery({ is_actual: true });
+  const { data, error, isLoading: isTasksLoading } = useGetTasksQuery();
+  // TODO яндекс не принемает этот параметр { is_actual: true }
+
   const { data: boostData, isLoading: isBoostLoading } = useGetBoostQuery();
 
   useEffect(() => {
