@@ -252,7 +252,8 @@ export const IncreaseIncome = () => {
                     key={index}
                     position={index + 1}
                     name={referral.username}
-                    id_referral={referral.character_data.profile_id}
+                    reminded_time={referral.reminded_at}
+                    id_referral={referral.id}
                     total_invited={referral.total_invited}
                     streak={referral.push_line_data.in_streak_days}
                     days_missed={referral.push_line_data.failed_days_ago}

@@ -6,9 +6,9 @@ import { EnterInviteCodePage } from '../../pages/EnterInviteCodePage';
 import { useAuthFlow } from './useAuthFlow.ts';
 import Lottie from 'lottie-react';
 import { coinsAnim } from '../../assets/animations';
-import WebApp from '@twa-dev/sdk'
+// import WebApp from '@twa-dev/sdk'
 import { useWebApp } from '../useWebApp.ts';
-import DaysInARowModal from '../../pages/DevModals/DaysInARowModal/DaysInARowModal.tsx';
+
 
 type AuthInitProps = {
   children: React.ReactNode;
@@ -61,8 +61,8 @@ export function AuthInit({ children }: AuthInitProps) {
         <EnterInviteCodePage
           onContinue={handleInviteCodeContinue}
           // referral_id={WebApp.initDataUnsafe.user?.id ?? 0}
-          // referral_id={window.Telegram.WebApp.initDataUnsafe.user.id}
-          referral_id={1488618801}
+          referral_id={window.Telegram.WebApp.initDataUnsafe.user.id}
+          // referral_id={563486774}
           // referral_id={1259832544}
           //  referral_id={1301940582}
         />
