@@ -25,6 +25,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  scale: 1.4;
 }
 
 .light {
@@ -74,13 +75,14 @@
   color: var.$color-text-semi-transparent;
   text-align: center;
   margin-bottom: 30px;
-  width: 100%;
+  width: 100vw;
   padding: 0 20px;
   white-space: normal;
   overflow-wrap: break-word;
   hyphens: auto;
   font-size: 14px;
   box-sizing: border-box;
+  
 }
 
 .statsContainer {

@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 export const IncreaseIncome = () => {
   const { t, i18n } = useTranslation('promotion');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
   const { data, isLoading, error } = useGetCurrentUsersReferralsQuery();
 
@@ -213,8 +213,7 @@ export const IncreaseIncome = () => {
       <h2 className={s.headerIncrease}>
         <span className={s.textName}>{t('p2')}</span>
         <span className={s.badge}>
-          +{formatAbbreviation(0, 'number', { locale: locale })} <img src={peeps}
-                                                                      alt="Количество peeps" />
+          +{formatAbbreviation(0, 'number', { locale: locale })} <img src={peeps} alt="Количество peeps" />
         </span>
       </h2>
       <section className={s.wrapperIncrease}>
@@ -225,8 +224,8 @@ export const IncreaseIncome = () => {
             <ul className={s.subscribers}>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +{formatAbbreviation(120, 'number', { locale: locale })} <img src={subscribersIcon}
-                                                                                alt="Подписчики" />
+                  +{formatAbbreviation(120, 'number', { locale: locale })}{' '}
+                  <img src={subscribersIcon} alt="Подписчики" />
                 </span>
                 <span className={classNames(s.level, s.text)}>1{t('p4')}.</span>
               </li>
@@ -244,25 +243,33 @@ export const IncreaseIncome = () => {
 
         {error && <p>{t('p19')}</p>}
 
-        {data && <>
-          {data.referrals.length > 0 ?
-            <div className={s.referralsList}>
-              {visibleReferrals.map((referral, index) => (
-                <ReferralCard key={index} position={index + 1} name={referral.username}
-                              id_referral={Number(referral.character_data.id)}
-                              total_invited={referral.total_invited} streak= {referral.push_line_data.in_streak_days}
-                              days_missed={referral.push_line_data.failed_days_ago}/>
-              ))}
-              {hiddenReferralsCount > 0 && (
-                <p
-                  className={s.showMore}
-                >
-                  {t('p16')} {hiddenReferralsCount} {t('p17')}
-                </p>
-              )}
-            </div> :
-            <p className={s.noReferrals}>{t('p5')}</p>}
-        </>}
+        {data && (
+          <>
+            {data.referrals.length > 0 ? (
+              <div className={s.referralsList}>
+                {visibleReferrals.map((referral, index) => (
+                  <ReferralCard
+                    key={index}
+                    position={index + 1}
+                    name={referral.username}
+                    reminded_time={referral.reminded_at}
+                    id_referral={referral.id}
+                    total_invited={referral.total_invited}
+                    streak={referral.push_line_data.in_streak_days}
+                    days_missed={referral.push_line_data.failed_days_ago}
+                  />
+                ))}
+                {hiddenReferralsCount > 0 && (
+                  <p className={s.showMore}>
+                    {t('p16')} {hiddenReferralsCount} {t('p17')}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className={s.noReferrals}>{t('p5')}</p>
+            )}
+          </>
+        )}
         <div className={s.buttonsContainer}>
           <TrackedButton
             trackingData={{
@@ -274,16 +281,18 @@ export const IncreaseIncome = () => {
           >
             {t('p6')}
           </TrackedButton>
-          {data && data.referrals.length > 3 && <TrackedButton
-            trackingData={{
-              eventType: 'button',
-              eventPlace: `${t('p7')} - ${t('p1')} - ${t('p15')}`,
-            }}
-            className={classNames(s.buttonContainerGray, s.text)}
-            onClick={() => openModal(MODALS.USERS_REFERRALS)}
-          >
-            {t('p7')}
-          </TrackedButton>}
+          {data && data.referrals.length > 1 && (
+            <TrackedButton
+              trackingData={{
+                eventType: 'button',
+                eventPlace: `${t('p7')} - ${t('p1')} - ${t('p15')}`,
+              }}
+              className={classNames(s.buttonContainerGray, s.text)}
+              onClick={() => openModal(MODALS.USERS_REFERRALS)}
+            >
+              {t('p7')}
+            </TrackedButton>
+          )}
         </div>
         <InviteFriend modalId={MODALS.INVITE_FRIEND} onClose={() => closeModal(MODALS.INVITE_FRIEND)} />
         <UserReferrals modalId={MODALS.USERS_REFERRALS} onClose={() => closeModal(MODALS.USERS_REFERRALS)} />

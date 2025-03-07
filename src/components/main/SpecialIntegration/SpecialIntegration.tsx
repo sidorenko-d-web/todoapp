@@ -5,7 +5,11 @@ import lockIcon from '../../../assets/icons/lock_icon.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
 import classname from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { CompanyResponseDTO, useCreateIntegrationMutation } from '../../../redux';
+import {
+  CompanyResponseDTO,
+  useCreateIntegrationMutation,
+  useGetCurrentUserProfileInfoQuery,
+} from '../../../redux';
 
 interface SpecialIntegrationProps {
   integration: CompanyResponseDTO;
@@ -13,8 +17,9 @@ interface SpecialIntegrationProps {
 
 export const SpecialIntegration = ({ integration }: SpecialIntegrationProps) => {
   const { t } = useTranslation('integrations');
-  const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
-  const isLocked = integration.growth_tree_stage < 100;
+  const [createIntegration, { isError }] = useCreateIntegrationMutation();
+  const {data: profileData, isError: isProfileError} = useGetCurrentUserProfileInfoQuery()
+  const isLocked = (profileData?.growth_tree_stage_id ?? 0) < integration.growth_tree_stage;
   return (
     <div className={styles.wrapper}>
       <div className={styles.mainInfo}>
@@ -47,18 +52,19 @@ export const SpecialIntegration = ({ integration }: SpecialIntegrationProps) => 
         <span className={styles.title}> {integration.company_name} </span>
 
         <button
-          className={classname(styles.button, { [styles.locked]: isLocked || error })}
+          className={classname(styles.button, { [styles.locked]: isLocked || isError || isProfileError })}
           onClick={() => createIntegration({
             campaign_id: integration.id,
             content_type: 'text',
           })}
         >
           {
-            isError ? (
+            isError || isProfileError ? (
               <span className={styles.errorMessage}>
                 <img className={styles.lockIcon} src={lockIcon} alt="lock" />
                   {t('i32')}
-                <img className={styles.lockIcon} src={lockIcon} alt="lock" /></span>
+                <img className={styles.lockIcon} src={lockIcon} alt="lock" />
+              </span>
             ) : (
               <>
                 {isLocked && <img className={styles.lockIcon} src={lockIcon} alt="lock" />}

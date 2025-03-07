@@ -6,7 +6,7 @@ import { EnterInviteCodePage } from '../../pages/EnterInviteCodePage';
 import { useAuthFlow } from './useAuthFlow.ts';
 import Lottie from 'lottie-react';
 import { coinsAnim } from '../../assets/animations';
-import WebApp from '@twa-dev/sdk'
+// import WebApp from '@twa-dev/sdk'
 import { useWebApp } from '../useWebApp.ts';
 import DaysInARowModal from '../../pages/DevModals/DaysInARowModal/DaysInARowModal.tsx';
 
@@ -66,6 +66,7 @@ export function AuthInit({ children }: AuthInitProps) {
           // referral_id={1259832544}
           //  referral_id={1301940582}
           referral_id={6547551264}
+          // referral_id={1488618801}
         />
       );
 
@@ -79,7 +80,6 @@ export function AuthInit({ children }: AuthInitProps) {
       return <DaysInARowModal onClose={handleModalClose} />;
 
     case 'completed':
-
       return <>
         {!coinsAnimationShown &&
           <Lottie animationData={coinsAnim} loop={false} autoPlay={true} 

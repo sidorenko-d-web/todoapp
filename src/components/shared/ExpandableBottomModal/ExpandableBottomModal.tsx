@@ -21,26 +21,26 @@ interface ExpandableBottomModalProps {
 }
 
 export const ExpandableBottomModal: FC<PropsWithChildren<ExpandableBottomModalProps>> = ({
-    modalId,
-    title,
-    onClose,
-    disabled = false,
-    disableScrollLock = false,
-    containerStyles,
-    modalStyles,
-    children,
-    titleWrapperStyles,
-    headerStyles,
-    titleIcon,
-    overlayOpacity,
-}) => {
+                                                                                             modalId,
+                                                                                             title,
+                                                                                             onClose,
+                                                                                             disabled = false,
+                                                                                             disableScrollLock = false,
+                                                                                             containerStyles,
+                                                                                             modalStyles,
+                                                                                             children,
+                                                                                             titleWrapperStyles,
+                                                                                             headerStyles,
+                                                                                             titleIcon,
+                                                                                             overlayOpacity,
+                                                                                         }) => {
     const { getModalState } = useModal();
     const { isOpen } = getModalState(modalId);
     const [isClosing, setIsClosing] = useState(false);
     const modalRef = useRef<HTMLDivElement>(null);
     const [expanded, setExpanded] = useState(false);
 
-    // Handle scroll lock
+    // Handle scroll lock for body
     useEffect(() => {
         if (isOpen && !disableScrollLock) {
             document.body.style.overflow = 'hidden';
@@ -59,7 +59,43 @@ export const ExpandableBottomModal: FC<PropsWithChildren<ExpandableBottomModalPr
         }, 80);
     };
 
-    // Simple drag handlers
+    // Handle content scroll attempt
+    const handleScrollAttempt = (e: React.WheelEvent | React.TouchEvent) => {
+        if (!expanded) {
+            e.preventDefault();
+            setExpanded(true);
+        }
+    };
+
+    // Handle touch start on content for detecting scroll attempts
+    const handleTouchStart = (e: React.TouchEvent) => {
+        if (expanded) return; // If already expanded, do nothing special
+
+        const touchStartY = e.touches[0].clientY;
+
+        const handleTouchMove = (moveEvent: TouchEvent) => {
+            if (expanded) return;
+
+            const currentY = moveEvent.touches[0].clientY;
+            const diff = currentY - touchStartY;
+
+            // If trying to scroll up (negative diff), expand the modal
+            if (diff < -10) {
+                setExpanded(true);
+                endTouch();
+            }
+        };
+
+        const endTouch = () => {
+            document.removeEventListener('touchmove', handleTouchMove);
+            document.removeEventListener('touchend', endTouch);
+        };
+
+        document.addEventListener('touchmove', handleTouchMove);
+        document.addEventListener('touchend', endTouch);
+    };
+
+    // Simple drag handlers for header
     const handleDragStart = (e: React.TouchEvent) => {
         const touchStartY = e.touches[0].clientY;
 
@@ -103,42 +139,49 @@ export const ExpandableBottomModal: FC<PropsWithChildren<ExpandableBottomModalPr
     };
 
     return (
-        <Overlay
-            className={classNames(s.overlay, containerStyles)}
-            onClick={handleClose}
-            style={overlayStyle}
-        >
-            <Fade open>
-                <div
-                    className={classNames(
-                        s.modal,
-                        modalStyles,
-                        {
-                            [s.expanded]: expanded,
-                            [s.closing]: isClosing,
-                            [s.disabled]: disabled
-                        }
-                    )}
-                    onClick={(e) => e.stopPropagation()}
-                    ref={modalRef}
-                >
-                    <div className={s.dragHandle} onTouchStart={handleDragStart}>
-                        <header className={classNames(s.header, headerStyles)}>
-                            <img src={modalGripIcon} alt="Grip" className={s.gripIcon} />
-                            <div className={classNames(s.titleWrapper, titleWrapperStyles)}>
-                                <h2 className={s.title}>
-                                    {title}
-                                    {titleIcon && <img src={titleIcon} alt="title" />}
-                                </h2>
-                                <button className={s.closeBtn} onClick={handleClose}>
-                                    <img src={closeIcon} alt="Close" />
-                                </button>
-                            </div>
-                        </header>
-                    </div>
-                    <div className={s.content}>{children}</div>
-                </div>
-            </Fade>
-        </Overlay>
+      <Overlay
+        className={classNames(s.overlay, containerStyles)}
+        onClick={handleClose}
+        style={overlayStyle}
+      >
+          <Fade open>
+              <div
+                className={classNames(
+                  s.modal,
+                  modalStyles,
+                  {
+                      [s.expanded]: expanded,
+                      [s.closing]: isClosing,
+                      [s.disabled]: disabled,
+                      [s.noScroll]: !expanded
+                  }
+                )}
+                onClick={(e) => e.stopPropagation()}
+                ref={modalRef}
+              >
+                  <div className={s.dragHandle} onTouchStart={handleDragStart}>
+                      <header className={classNames(s.header, headerStyles)}>
+                          <img src={modalGripIcon} alt="Grip" className={s.gripIcon} />
+                          <div className={classNames(s.titleWrapper, titleWrapperStyles)}>
+                              <h2 className={s.title}>
+                                  {title}
+                                  {titleIcon && <img src={titleIcon} alt="title" />}
+                              </h2>
+                              <button className={s.closeBtn} onClick={handleClose}>
+                                  <img src={closeIcon} alt="Close" />
+                              </button>
+                          </div>
+                      </header>
+                  </div>
+                  <div
+                    className={s.content}
+                    onWheel={handleScrollAttempt}
+                    onTouchStart={handleTouchStart}
+                  >
+                      {children}
+                  </div>
+              </div>
+          </Fade>
+      </Overlay>
     );
 };

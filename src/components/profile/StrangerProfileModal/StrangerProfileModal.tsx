@@ -5,7 +5,7 @@ import goldMedal from '../../../assets/icons/medal-gold.svg';
 import silverMedal from '../../../assets/icons/medal-silver.svg';
 import bronzeMedal from '../../../assets/icons/medal-bronze.svg';
 import { useGetUserProfileInfoByIdQuery } from '../../../redux';
-import { useGetPushLineQuery } from '../../../redux/api/pushLine/api';
+import { useGetPushLineQuery } from '../../../redux';
 import s from './StrangerProfileModal.module.scss';
 import { useTranslation } from 'react-i18next';
 
@@ -83,8 +83,7 @@ export const StrangerProfileModal: FC<StrangerProfileModalProps> = ({
           views={profile.total_views}
           favoriteCompany={'Favourite company'}
           comments={profile.comments_answered_correctly}
-          rewards={12}
-          coffee={5}
+          rewards={profile.achievements_collected}
         />
 
         <div className={s.rewards}>
