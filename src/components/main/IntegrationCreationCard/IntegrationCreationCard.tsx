@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
-import { IntegrationResponseDTO, integrationsApi, RootState, selectVolume } from '../../../redux';
+import { IntegrationResponseDTO, integrationsApi, RootState, selectVolume, setIsWorking } from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration } from '../../../hooks';
 import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
@@ -17,16 +17,14 @@ interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
 }
 
-export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
-                                                                            integration,
-                                                                          }) => {
+export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration }) => {
   const { t } = useTranslation('integrations');
 
   const dispatch = useDispatch();
-  const [ timeLeft, setTimeLeft ] = useState(integration.time_left);
-  const [ initialTimeLeft ] = useState(integration.time_left);
-  const [ isExpired, setIsExpired ] = useState(false);
-  const [ playAccelerateIntegrationSound ] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
+  const [timeLeft, setTimeLeft] = useState(integration.time_left);
+  const [initialTimeLeft] = useState(integration.time_left);
+  const [isExpired, setIsExpired] = useState(false);
+  const [playAccelerateIntegrationSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
   const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
     integrationId: integration.id,
     onSuccess: newTimeLeft => setTimeLeft(newTimeLeft),
@@ -61,24 +59,26 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
     if (timeLeft <= 0) {
       if (!isExpired) void accelerateIntegration(3600);
       setIsExpired(true);
-      dispatch(integrationsApi.util.invalidateTags([ 'Integrations' ]));
+      dispatch(integrationsApi.util.invalidateTags(['Integrations']));
     }
-  }, [ timeLeft, accelerateIntegration ]);
+  }, [timeLeft, accelerateIntegration]);
 
   useEffect(() => {
-    if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET)) {
-      accelerateIntegration(timeLeft-20);
+    if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET)) {
+      accelerateIntegration(timeLeft - 20);
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
+    dispatch(setIsWorking(true));
     const timerId = setInterval(() => {
       setTimeLeft(prevTime => Math.max(prevTime - 1, 0));
     }, 1000);
 
     if (isExpired) {
       dispatch(setIntegrationCreating(false));
+      dispatch(setIsWorking(false));
       clearInterval(timerId);
     }
 
@@ -131,28 +131,26 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
     }
     return null;
-  };
+  }
 
   return (
     <div className={`${s.integration} ${s.elevated}`}>
       <div className={s.integrationHeader}>
         <h2 className={s.title}>{t('i10')}</h2>
         <span className={s.author}>
-          {integration.campaign.company_name}{' '}
-          <img src={dotIcon} height={14} width={14} alt="dot" />
+          {integration.campaign.company_name} <img src={dotIcon} height={14} width={14} alt="dot" />
         </span>
       </div>
       <div className={s.body}>
         <div className={s.info}>
           <div className={s.infoHeader}>
             <span>{t('i11')}...</span>
-            <span>{t('i12')} {formatTime(timeLeft)}</span>
+            <span>
+              {t('i12')} {formatTime(timeLeft)}
+            </span>
           </div>
           <div className={s.progressBar}>
-            <div
-              className={s.progressBarInner}
-              style={{ width: `${progress}%` }}
-            />
+            <div className={s.progressBarInner} style={{ width: `${progress}%` }} />
           </div>
         </div>
         <TrackedButton

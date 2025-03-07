@@ -51,6 +51,7 @@ export interface IShopItemsRequest {
   name_eng?: string;
   item_rarity?: TypeItemRarity;
   item_premium_level?: TypeItemQuality;
+  is_bought?: boolean;
 }
 
 export interface IBoosts {
@@ -82,4 +83,7 @@ export interface IAchievement {
 export interface IAchievementsResponse {
   count: number;
   achievements: IAchievement[];
+}
+export interface IAchievementsRequest {
+  is_unlocked?: boolean;
 }

@@ -1,5 +1,7 @@
 import { SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { useRef, useEffect } from 'react';
+import { useGetShopSkinsQuery } from '../../redux';
+import { svgHeadersString } from '../../constants';
 
 export default function DevModals() {
   const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
@@ -57,5 +59,16 @@ export default function DevModals() {
     };
   }, [sceneRef]);
 
-  return <div ref={sceneRef} id="player" style={{ width: '100%', height: '100%', marginTop: 100 }}></div>;
+  const { data: skins } = useGetShopSkinsQuery();
+  console.log(skins);
+
+  return (
+    <div>
+      {skins?.skins.map(item => (
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 24, color: '#555'}}>
+          {item.name} <img src={item.image_url + svgHeadersString} width={70} height={70}/>
+        </div>
+      ))}
+    </div>
+  );
 }

@@ -4,3 +4,4 @@ export * from './guideSlice';
 export * from './confirmation';
 export * from './point';
 export * from './tree';
+export * from './animationState'

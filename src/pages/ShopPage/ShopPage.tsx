@@ -14,57 +14,56 @@ type TypeTab<T> = { title: string; value: T };
 
 const StorePage: FC = () => {
   const { t } = useTranslation('shop');
-  const [ shopCategory, setShopCategory ] = useState<TypeTab<TypeItemCategory>>();
-  const [ itemsRarity, setItemsQuality ] = useState<TypeTab<TypeItemRarity>>();
+  const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
+  const [itemsRarity, setItemsQuality] = useState<TypeTab<TypeItemRarity>>();
 
   const dispatch = useDispatch();
 
-  const { data: shop, isLoading: isShopLoading, isFetching: isShopFetching } = useGetShopItemsQuery({
+  const { 
+    data: shop,
+    isLoading: isShopLoading,
+    isFetching: isShopFetching,
+  } = useGetShopItemsQuery({
     item_category: shopCategory?.value as TypeItemCategory,
     level: 1,
     item_rarity: itemsRarity?.value,
     item_premium_level: 'base',
   });
 
-  const { data: inventory, isLoading: isInventoryLoading, isFetching: isInventoryFetching } = useGetInventoryItemsQuery({
+  const {
+    data: inventory,
+    isLoading: isInventoryLoading,
+    isFetching: isInventoryFetching,
+  } = useGetInventoryItemsQuery({
     item_category: shopCategory?.value as TypeItemCategory,
   });
 
-  const [ items, setItems ] = useState<IShopItem[]>();
+  const [items, setItems] = useState<IShopItem[]>();
 
   useEffect(() => {
     dispatch(setActiveFooterItemId(0));
   }, []);
 
   useEffect(() => {
-    setItems(
-      itemsInTab(shop?.items, inventory?.items)[itemsRarity?.value as TypeItemRarity],
-    );
-  }, [ inventory, shop ]);
+    setItems(itemsInTab(shop?.items, inventory?.items)[itemsRarity?.value as TypeItemRarity]);
+  }, [inventory, shop]);
 
   const { isLoading: isBoostLoading } = useGetCurrentUserBoostQuery();
 
-  const isLoading = (
-    isBoostLoading
-  );
+  const isLoading = isBoostLoading;
 
   if (isLoading) return <Loader />;
 
   return (
-    <ShopLayout
-      mode="shop"
-      onItemCategoryChange={setShopCategory}
-      onItemQualityChange={setItemsQuality}
-    >
+    <ShopLayout mode="shop" onItemCategoryChange={setShopCategory} onItemQualityChange={setItemsQuality}>
       {isShopLoading || isShopFetching || isInventoryLoading || isInventoryFetching ? (
         <Loader className={styles.itemsLoader} />
-      ) : !(isShopLoading || isShopFetching || isInventoryLoading || isInventoryFetching) && (!shopCategory || !itemsRarity) ? (
+      ) : !(isShopLoading || isShopFetching || isInventoryLoading || isInventoryFetching) &&
+        (!shopCategory || !itemsRarity) ? (
         <p style={{ color: '#fff' }}>Error occured while getting data</p>
       ) : shopCategory?.title !== t('s6') ? (
         items?.length === 0 ? (
-          <p className={styles.emptyText}>
-            {t('s37')}
-          </p>
+          <p className={styles.emptyText}>{t('s37')}</p>
         ) : (
           <ItemsTab shopCategory={shopCategory} shopItems={items} />
         )

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { CompanyResponseDTO } from '../../../redux';
+import { CompanyResponseDTO, useGetAllIntegrationsQuery, useGetIntegrationsQuery } from '../../../redux';
 import lightningIcon from '../../../assets/icons/lightning.svg';
 import starBlueIcon from '../../../assets/icons/star-blue.svg';
 import starDarkGrayIcon from '../../../assets/icons/star-dark-gray.svg';
@@ -9,7 +9,6 @@ import s from './CompanyCard.module.scss';
 import { isGuideShown } from '../../../utils';
 import { GUIDE_ITEMS } from '../../../constants';
 import { Button } from '../../shared';
-import {useGetAllIntegrationsQuery} from '../../../redux';
 
 
 interface CompanyCardProps {
@@ -22,7 +21,7 @@ interface CompanyCardProps {
 const glowing = !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
 export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, disabled }) => {
-  const {data: integrationsData} = useGetAllIntegrationsQuery()
+  const {data: integrationsData} = useGetIntegrationsQuery({company_name: company.company_name})
   const integrationCount = integrationsData?.count ?? 0;
 
   const getBlueStarCount = (count: number = 0) => {
