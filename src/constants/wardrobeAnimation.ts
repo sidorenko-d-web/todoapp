@@ -2,8 +2,6 @@ import { SpineGameObject, Skin } from '@esotericsoftware/spine-phaser';
 import { TypeWearLocation } from '../redux';
 import { ICharacterResponse } from '../redux/api/character';
 
-const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
-
 const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/anfas_happy1.json`).href;
 const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/anfas_happyatlas1.txt`).href;
 
