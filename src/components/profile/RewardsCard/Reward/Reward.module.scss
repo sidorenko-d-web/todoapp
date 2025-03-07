@@ -40,7 +40,12 @@
 
     .star {
       aspect-ratio: 1;
-      width: 20px;
+      width: 40px;
+
+      &.stage {
+        aspect-ratio: 1;
+        width: 20px;
+      }
     }
 
     .medal {

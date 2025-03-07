@@ -85,13 +85,16 @@ export const AnimationScene = () => {
         const headSkin = allSkins.find(item => item.name.includes(getSkin('head') ?? 'голова 18'))!;
         const bottomSkin = allSkins.find(item => item.name.includes(getSkin('legs') ?? 'штаны базовые'))!;
         const upSkin = allSkins.find(item => item.name.includes(getSkin('upper_body') ?? 'футболка базовая'))!;
+        const face = allSkins.find(item => item.name.includes(getSkin('face') ?? 'лицо 1'))!;
+        const skinColor = allSkins.find(item => item.name.includes(getSkin('skin_color') ?? 'кожа базовая'))!;
 
         const skin = new Skin('created');
+        skin.name = face.name.split('/')[1];
         skin.addSkin(bottomSkin);
         skin.addSkin(upSkin);
         skin.addSkin(headSkin);
-
-        console.log(allSkins);
+        skin.addSkin(face);
+        skin.addSkin(skinColor);
 
         this.person.skeleton.setSkin(skin);
 
@@ -127,6 +130,7 @@ export const AnimationScene = () => {
       if (gameRef.current) {
         gameRef.current.destroy(true);
         gameRef.current = null;
+        spineSceneRef.current = null;
       }
     };
   }, [sceneRef, size, isLoading]);

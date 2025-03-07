@@ -138,3 +138,13 @@ $translateY: -15vh;
   top: 190px;
   transform: translateX(-12%);
 }
+
+.reward {
+  @extend .item;
+  display: block;
+  top: 175px;
+  transform: scaleX(-1) translateX(-130%);
+  z-index: 1000;
+  width: 80px;
+  height: 80px;
+}

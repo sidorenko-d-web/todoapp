@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { AppRoute } from '../constants';
 
-
-
 import ShopPage from '../pages/ShopPage/ShopPage.tsx';
 import {
   IntegrationPage,
@@ -26,29 +24,27 @@ function AppRouter(): JSX.Element | null {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [ location.pathname ]);
-
+  }, [location.pathname]);
   return (
     <>
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route path={AppRoute.Main} element={<MainPage />} />
-        <Route path={AppRoute.Shop} element={<ShopPage />} />
-        <Route path={AppRoute.Integration} element={<IntegrationPage />} />
-        <Route path={AppRoute.Statistics} element={<StatisticsPage />} />
-        <Route path={AppRoute.Tasks} element={<TasksPage />} />
-        <Route path={AppRoute.Profile} element={<ProfilePage />} />
-        <Route path={AppRoute.StrangerProfile} element={<StrangerProfilePage />} />
-        <Route path={AppRoute.Promotion} element={<PromotionPage />} />
-        <Route path={AppRoute.ShopInventory} element={<ShopInventoryPage />} />
-        <Route path={'dev-modals'} element={<DevModals />} />
-        <Route path={AppRoute.Wardrobe} element={<WardrobePage/>} />
-        <Route path={AppRoute.ProgressTree} element={<ProgressTreePage/>} />
-      </Route>
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path={AppRoute.Wardrobe} element={<WardrobePage key={AppRoute.Wardrobe} />} />
+          <Route path={AppRoute.Shop} element={<ShopPage />} />
+          <Route path={AppRoute.Integration} element={<IntegrationPage />} />
+          <Route path={AppRoute.Statistics} element={<StatisticsPage />} />
+          <Route path={AppRoute.Tasks} element={<TasksPage />} />
+          <Route path={AppRoute.Profile} element={<ProfilePage />} />
+          <Route path={AppRoute.StrangerProfile} element={<StrangerProfilePage />} />
+          <Route path={AppRoute.Promotion} element={<PromotionPage />} />
+          <Route path={AppRoute.ShopInventory} element={<ShopInventoryPage />} />
+          <Route path={'dev-modals'} element={<DevModals />} />
+          <Route path={AppRoute.ProgressTree} element={<ProgressTreePage />} />
+          <Route path={AppRoute.Main} element={<MainPage key={AppRoute.Main} />} />
+        </Route>
+      </Routes>
     </>
   );
 }
 
 export default AppRouter;
-

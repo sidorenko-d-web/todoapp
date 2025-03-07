@@ -116,11 +116,13 @@ export class SpineSceneBase extends Phaser.Scene {
 
   //helpers for scene creation
   createPerson({ center }: Pick<contextProps, 'center'>, isWorking: boolean) {
+    console.log('creation')
     this.person = this.add.spine(center - 40, 385, 'personJson', 'personAtlas');
     this.person.scale = 0.07;
     this.person.setDepth(3);
     this.person.animationState.data.defaultMix = 0.1;
-    this.setCurrentLoopedAnimation(isWorking)
+    this.setCurrentLoopedAnimation(isWorking);
+
   }
 
   createAnimatedItem(
@@ -167,7 +169,7 @@ export class SpineSceneBase extends Phaser.Scene {
     });
   }
 
-  setCurrentLoopedAnimation(isWorking: Boolean,) {
+  setCurrentLoopedAnimation(isWorking: Boolean) {
     console.log('isWorking', isWorking);
     if (isWorking) this.setWorking();
     else this.setIdle();
@@ -180,7 +182,7 @@ export class SpineSceneBase extends Phaser.Scene {
   }
   setHappy() {
     if (!this.person) return;
-    this.person?.animationState.setAnimation(0, PersonAnimations.happy);
+    this.person?.animationState.setAnimation(0, PersonAnimations.happy + this.person.skeleton.skin?.name);
   }
   setIdle() {
     if (!this.person) return;
@@ -192,14 +194,14 @@ const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.
 
 const createLink = (itemString: string, type: 'json' | 'atlas' | 'base') => {
   let string: string = '';
-  if (type === 'json') string = new URL(itemsBaseUrl + itemString + '.json').href;
-  if (type === 'atlas') string = new URL(itemsBaseUrl + itemString + 'atlas.txt').href;
+  if (type === 'json') string = new URL(itemsBaseUrl + itemString + '1.json').href;
+  if (type === 'atlas') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
   if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
   return proxyImageUrl(string);
 };
 
 export enum PersonAnimations {
-  idle = '2_idle (основа)',
-  work = '3_work',
-  happy = '4_happy',
+  idle = '2 idle (основа)',
+  work = '3 work',
+  happy = '4 happy ',
 }

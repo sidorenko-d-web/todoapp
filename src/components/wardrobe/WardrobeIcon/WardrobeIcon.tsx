@@ -1,7 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styles from './WardrobeIcon.module.scss';
-
-// import profileIconPlaceholder from '../../../assets/icons/profile-icon-placeholder.svg';
 import wardrobeIcon from '../../../assets/images/start-room/wardrobe-bg.svg';
 import { SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { WardrobeTabs } from '../WardrobeTabs';
@@ -16,53 +14,64 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
   const sceneRef = useRef<HTMLDivElement | null>(null);
 
   const gameRef = useRef<Phaser.Game | null>(null);
-  const spineSceneRef = useRef<SpineScene | null>(null);
+  const spineSceneRef = useRef<any | null>(null);
 
+  const [size, setSize] = useState([0, 0]);
   const { data: character, isLoading } = useGetCharacterQuery();
+
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   class SpineScene extends WardrobeSpineScene {
     create() {
-      const width = this.sys.game.config.width as number;
-      const center = width / 2;
-      if (!this.add.spine) return;
-      this.spineObject = this.add.spine(center, center, 'data', 'atlas');
-      this.spineObject.scale = 0.15;
+      console.log('SpineScene');
+      this.createPerson();
       spineSceneRef.current = this;
-  
       this.changeSkin(character);
     }
   }
 
   useEffect(() => {
     if (!sceneRef.current || isLoading) return;
-
     const width = sceneRef.current.offsetWidth;
-    const config: Phaser.Types.Core.GameConfig = {
-      type: Phaser.AUTO,
-      width: width,
-      height: sceneRef.current.offsetHeight,
-      scene: [SpineScene],
-      transparent: true,
-      plugins: {
-        scene: [{ key: 'player1', plugin: SpinePlugin, mapping: 'spine' }],
-      },
-      parent: 'player1',
+
+    const createAnimation = () => {
+      console.log('useEffect');
+      const config: Phaser.Types.Core.GameConfig = {
+        type: Phaser.AUTO,
+        width: width,
+        height: sceneRef.current!.offsetHeight,
+        scene: [SpineScene],
+        transparent: true,
+        plugins: {
+          scene: [{ key: 'SpinePlugin', plugin: SpinePlugin, mapping: 'spine' }],
+        },
+        parent: 'player1',
+      };
+
+      gameRef.current = new Phaser.Game(config);
     };
 
-    gameRef.current = new Phaser.Game(config);
+    createAnimation();
 
     return () => {
       if (gameRef.current) {
         gameRef.current.destroy(true);
         gameRef.current = null;
+        spineSceneRef.current = null;
       }
     };
-  }, [isLoading]);
+  }, [isLoading, size]);
 
   const handleMakeHappy = (updatedCharacter: ICharacterResponse) => {
     if (spineSceneRef.current) {
       spineSceneRef.current.changeSkin(updatedCharacter);
-      spineSceneRef.current.makeHappy();
     }
   };
 
