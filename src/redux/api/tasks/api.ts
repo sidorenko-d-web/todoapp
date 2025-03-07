@@ -1,25 +1,84 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import { GetTasksResponse, UpdateTaskRequest, UpdateTaskResponse, GetTaskQuestionsResponse, GetDailyRewardResponse, GetTaskQuestionsErrorResponse, TaskBoost } from './dto';
+import { GetTasksResponse, UpdateTaskRequest, UpdateTaskResponse, GetTaskQuestionsResponse, GetDailyRewardResponse, GetTaskQuestionsErrorResponse, TaskBoost, TaskCategory } from './dto';
+
+export type GetTasksParams = {
+  title?: string;
+  stages?: number;
+  is_completed?: boolean;
+  category?: TaskCategory;
+  ids?: string[];
+  is_assigned?: boolean;
+  offset?: number;
+  limit?: number;
+  is_actual?: boolean;
+}
+
+export type GetQuizRewardResponse = {
+  points: string;
+}
 
 export const tasksApi = createApi({
   reducerPath: 'tasksApi',
   baseQuery: baseQueryReauth,
   tagTypes: ['Tasks'],
   endpoints: builder => ({
-    getTasks: builder.query<GetTasksResponse, void | { is_actual?: boolean }>({
-      query: (params) => ({
-        url: '/assignments',
-        method: 'GET',
-        params: params ? { is_actual: params.is_actual } : undefined,
-      }),
+    getTasks: builder.query<GetTasksResponse, GetTasksParams | void>({
+      query: (params) => {
+        if (!params) return { url: '/assignments', method: 'GET' };
+        
+        const queryParams: Record<string, string> = {};
+        
+        if (typeof params.is_actual === 'boolean') {
+          queryParams.is_actual = params.is_actual.toString();
+        }
+        if (typeof params.is_assigned === 'boolean') {
+          queryParams.is_assigned = params.is_assigned.toString();
+        }
+        if (params.category) {
+          queryParams.category = params.category;
+        }
+        if (typeof params.stages === 'number') {
+          queryParams.stages = params.stages.toString();
+        }
+        if (typeof params.is_completed === 'boolean') {
+          queryParams.is_completed = params.is_completed.toString();
+        }
+        if (params.title) {
+          queryParams.title = params.title;
+        }
+        if (params.ids?.length) {
+          queryParams.ids = params.ids.join(',');
+        }
+        if (typeof params.offset === 'number') {
+          queryParams.offset = params.offset.toString();
+        }
+        if (typeof params.limit === 'number') {
+          queryParams.limit = params.limit.toString();
+        }
+
+        return {
+          url: '/assignments',
+          method: 'GET',
+          params: queryParams
+        };
+      },
       providesTags: ['Tasks']
     }),
-    getTaskQuestions: builder.query<GetTaskQuestionsResponse | GetTaskQuestionsErrorResponse, string>({
+    getQuizReward: builder.mutation<GetQuizRewardResponse, string>({
       query: (assignmentId) => ({
-        url: `/assignments/daily/questions/${assignmentId}`,
-        method: 'GET',
-      })
+        url: `/assignments/quiz/reward/${assignmentId}`,
+        method: 'GET'
+      }),
+      async onQueryStarted(assignmentId, { queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          // Сохраняем награду в localStorage
+          localStorage.setItem(`quiz_reward_${assignmentId}`, JSON.stringify(data));
+        } catch (error) {
+          console.error('Failed to get quiz reward:', error);
+        }
+      },
     }),
     updateTask: builder.mutation<UpdateTaskResponse, { id: string; data: UpdateTaskRequest }>({
       query: ({ id, data }) => ({
@@ -48,10 +107,10 @@ export const tasksApi = createApi({
 
 export const {
   useGetTasksQuery,
-  useGetTaskQuestionsQuery,
   useUpdateTaskMutation,
   useGetDailyRewardQuery,
   useGetBoostQuery,
+  useGetQuizRewardMutation
 } = tasksApi;
 
 
