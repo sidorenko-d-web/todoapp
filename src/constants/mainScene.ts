@@ -71,6 +71,7 @@ export const baseItems = [
   { name: 'table', slot: 2, width: 140, height: 140, x: -6, y: 455, z: 3 },
   { name: 'window', slot: 5, width: 110, height: 110, x: -125, y: 260, z: 0 },
 ];
+// const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
 
 export const itemsBaseUrl = 'https://storage.yandexcloud.net/miniapp-v2-dev/';
 interface contextProps {
@@ -116,7 +117,6 @@ export class SpineSceneBase extends Phaser.Scene {
 
   //helpers for scene creation
   createPerson({ center }: Pick<contextProps, 'center'>, isWorking: boolean) {
-    console.log('creation')
     if(!this.add.spine) throw new Error('add.spine')
     this.person = this.add.spine(center - 40, 385, 'personJson', 'personAtlas');
     this.person.scale = 0.07;
@@ -171,7 +171,6 @@ export class SpineSceneBase extends Phaser.Scene {
   }
 
   setCurrentLoopedAnimation(isWorking: Boolean) {
-    console.log('isWorking', isWorking);
     if (isWorking) this.setWorking();
     else this.setIdle();
   }
@@ -197,6 +196,7 @@ const createLink = (itemString: string, type: 'json' | 'atlas' | 'base') => {
   if (type === 'atlas') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
   if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
   return (string);
+  // return proxyImageUrl(string);
 };
 
 export enum PersonAnimations {

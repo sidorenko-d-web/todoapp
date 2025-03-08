@@ -19,7 +19,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
   const [size, setSize] = useState([0, 0]);
   const { data: character, isLoading } = useGetCharacterQuery();
 
-  const personScale = 0.15
+  const personScale = 0.15;
 
   useLayoutEffect(() => {
     function updateSize() {
@@ -36,7 +36,6 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
 
     class SpineScene extends WardrobeSpineScene {
       create() {
-        console.log('SpineScene');
         try {
           this.createPerson(personScale);
         } catch (error: any) {
@@ -51,7 +50,6 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
     }
 
     const createAnimation = () => {
-      console.log('useEffect');
       const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
         width: width,
@@ -80,7 +78,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
 
   const handleMakeHappy = (updatedCharacter: ICharacterResponse) => {
     if (spineSceneRef.current) {
-      spineSceneRef.current.changeSkin(updatedCharacter);
+      spineSceneRef.current.changeSkin(personScale, updatedCharacter);
     }
   };
 
