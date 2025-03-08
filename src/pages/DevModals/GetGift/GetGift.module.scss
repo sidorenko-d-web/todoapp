@@ -45,6 +45,8 @@
   width: 100%;
   max-width: 100%;
   overflow: hidden;
+  padding: 0 5px;
+  box-sizing: border-box;
 }
 
 .gift {
@@ -75,14 +77,15 @@
   color: var.$color-text-semi-transparent;
   text-align: center;
   margin-bottom: 30px;
-  width: 100vw;
+  width: 100%;
+  max-width: 100%;
   padding: 0 20px;
   white-space: normal;
   overflow-wrap: break-word;
+  word-break: break-word;
   hyphens: auto;
   font-size: 14px;
   box-sizing: border-box;
-  
 }
 
 .statsContainer {

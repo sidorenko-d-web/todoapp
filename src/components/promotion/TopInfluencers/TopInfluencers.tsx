@@ -6,13 +6,14 @@ import { InfluencerRatingSteps, MODALS, useInfluencerRatingSteps } from '../../.
 import { TopUsers } from '../Modal';
 import { useModal } from '../../../hooks';
 import classNames from 'classnames';
-import { useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUserQuery } from '../../../redux';
+import { RootState, useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUserQuery } from '../../../redux';
 import { BindingConfirmationModal, BindingModal, BindingSuccessModal, TrackedButton } from '../../';
 
 import s from './TopInfluencers.module.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../helpers';
+import { useSelector } from 'react-redux';
 
 export const TopInfluencers = () => {
   const { t, i18n } = useTranslation('promotion');
@@ -26,7 +27,7 @@ export const TopInfluencers = () => {
   const topProfiles = data?.profiles || [];
 
   const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
-
+  const { inputType } = useSelector((state: RootState) => state.confirmation);
   const { data: userData } = useGetUserQuery();
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export const TopInfluencers = () => {
               </div>
             </div>
             <div className={s.progressBar}>
-              <span className={s.progress} style={{ width: '15%' }}></span>
+              <span className={s.progress} style={{ width: `${userData?.role_id === 0 ? '0%' : userData?.role_id === 1 ? '50%' : '100%'}` }}></span>
             </div>
             <p className={s.textInfo}>
               {isInfluencersLocked
@@ -92,7 +93,7 @@ export const TopInfluencers = () => {
                 binding={INFLUENCER_RATING_STEPS[influencersUnlockingStep].binding}
                 onNext={() => {
                   closeModal(MODALS.BINDING);
-                  openModal(MODALS.BINDING_CONFIRMATION);
+                  openModal(inputType === 'phone' ? MODALS.BINDING_SUCCESS : MODALS.BINDING_CONFIRMATION);
                 }}
               />
               <BindingConfirmationModal
