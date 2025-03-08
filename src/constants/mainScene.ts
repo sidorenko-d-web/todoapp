@@ -92,8 +92,8 @@ export class SpineSceneBase extends Phaser.Scene {
 
   //helpers for scene loading
   loadPerson() {
-    this.load.spineJson('personJson', createLink('pers_izometria', 'json'));
-    this.load.spineAtlas('personAtlas', createLink('pers_izometria', 'atlas'));
+    this.load.spineJson('personJson', createLink('pers_izometria', 'json1'));
+    this.load.spineAtlas('personAtlas', createLink('pers_izometria', 'atlas1'));
   }
 
   loadAnimatedItem(item: IShopItem) {
@@ -190,11 +190,13 @@ export class SpineSceneBase extends Phaser.Scene {
   }
 }
 
-const createLink = (itemString: string, type: 'json' | 'atlas' | 'base') => {
+const createLink = (itemString: string, type: 'json' | 'atlas' |'json1' | 'atlas1' | 'base') => {
   let string: string = '';
-  if (type === 'json') string = new URL(itemsBaseUrl + itemString + '1.json').href;
-  if (type === 'atlas') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
-  if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
+  if (type === 'json') string = new URL(itemsBaseUrl + itemString + '.json').href;
+  else if (type === 'atlas') string = new URL(itemsBaseUrl + itemString + 'atlas.txt').href;
+  else if (type === 'json1') string = new URL(itemsBaseUrl + itemString + '.json1').href;
+  else if (type === 'atlas1') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
+  else if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
   return (string);
   // return proxyImageUrl(string);
 };
