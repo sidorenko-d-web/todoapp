@@ -33,7 +33,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../shared';
 import { setPoints } from '../../../redux';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
-import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfileStats.ts';
+
 interface Props {
   disabled?: boolean;
   isUpgradeEnabled?: boolean;
@@ -132,7 +132,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
   const handleBuyItem = async (itemPoints: string) => {
 
-    if(current && current?.points < itemPoints) return
+    if(current && +current?.points < +itemPoints) return
 
     try {
       setIsUpdateLoading(true);
