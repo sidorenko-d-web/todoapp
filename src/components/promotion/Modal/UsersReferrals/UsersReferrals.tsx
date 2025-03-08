@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import BottomModal from '../../../shared/BottomModal/BottomModal';
 
 import s from './UserReferrals.module.scss';
 import subscribersIcon from '../../../../assets/icons/subscribers.png';
 
 import { ReferralCard } from '../../ReferralCard/ReferralCard';
-import { useGetCurrentUsersReferralsQuery } from '../../../../redux';
+import {
+  useGetCurrentUsersReferralsQuery,
+  useGetUserProfileInfoByIdQuery,
+  UserProfileInfoResponseDTO,
+} from '../../../../redux';
 import { formatAbbreviation } from '../../../../helpers';
 import { useTranslation } from 'react-i18next';
 
@@ -19,7 +23,7 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const { data, isLoading, error } = useGetCurrentUsersReferralsQuery();
-
+  const [profileIds, setProfileIds] = useState<string[]>([]);
   /*const data = {
     referrals: [
       {
@@ -204,17 +208,42 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
       },
     ],
   };*/
+  useEffect(() => {
+    const ids = data.referrals.map(referral => referral.character_data.profile_id);
+    setProfileIds(ids);
+  }, []);
+  const [profilesData, setProfilesData] = useState<UserProfileInfoResponseDTO[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
+  const { data: data1 } = useGetUserProfileInfoByIdQuery(profileIds[currentIndex], { skip: currentIndex === 0 });
+
+  useEffect(() => {
+    if (data1) {
+      setProfilesData(prevData => [...prevData, data1]);
+    }
+
+    if (currentIndex < profileIds.length - 1) {
+      setCurrentIndex(prevIndex => prevIndex + 1);
+    }
+  }, [data, currentIndex, profileIds]);
+
+  const totalSubscribers = profilesData.reduce((sum, profile) => sum + profile.subscribers, 0);
+  const subscribersForSecondLevel = profilesData.reduce(
+    (sum, profile) => sum + profile.subscribers_for_second_level_referrals,
+    0,
+  );
   return (
     <BottomModal modalId={modalId} title={`${t('p32')}`} onClose={onClose}>
       <div className={s.badgesWrp} style={{ justifyContent: 'center' }}>
         <span className={s.badge}>
-          <span>+{formatAbbreviation(120, 'number', { locale: locale })}</span>
+          <span>+{formatAbbreviation(totalSubscribers, 'number', { locale: locale })}</span>
           <img src={subscribersIcon} className={s.icon} alt="Подписчики"></img>
           <span className={s.level}>1{t('p4')}.</span>
         </span>
         <span className={s.badge}>
-          <span className={s.value}>+{formatAbbreviation(40, 'number', { locale: locale })}</span>
+          <span className={s.value}>
+            +{formatAbbreviation(subscribersForSecondLevel, 'number', { locale: locale })}
+          </span>
           <img src={subscribersIcon} className={s.icon} alt="Подписчики"></img>
           <span className={s.level}>2{t('p4')}.</span>
         </span>
@@ -230,6 +259,7 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
             <ReferralCard
               key={index}
               id_referral={referral.id}
+              profile_id={referral.character_data.profile_id}
               position={index + 1}
               name={referral.username}
               reminded_time={referral.reminded_at}

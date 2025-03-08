@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import peeps from '../../../assets/icons/peeps.svg';
 import piggy from '../../../assets/icons/piggy.svg';
 import subscribersIcon from '../../../assets/icons/subscribers.png';
@@ -8,7 +9,11 @@ import { MODALS } from '../../../constants';
 import { InviteFriend, UserReferrals } from '../Modal';
 
 import { ReferralCard } from '../ReferralCard/ReferralCard';
-import { useGetCurrentUsersReferralsQuery } from '../../../redux';
+import {
+  useGetCurrentUsersReferralsQuery,
+  useGetUserProfileInfoByIdQuery,
+  UserProfileInfoResponseDTO,
+} from '../../../redux';
 import { formatAbbreviation } from '../../../helpers';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +23,7 @@ export const IncreaseIncome = () => {
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
   const { data, isLoading, error } = useGetCurrentUsersReferralsQuery();
+  const [profileIds, setProfileIds] = useState<string[]>([]);
 
   // const data = {
   //   referrals: [
@@ -207,7 +213,31 @@ export const IncreaseIncome = () => {
   const referrals = data?.referrals || [];
   const visibleReferrals = referrals.slice(0, 3);
   const hiddenReferralsCount = referrals.length - 3;
+  useEffect(() => {
+    const ids = visibleReferrals.map(referral => referral.character_data.profile_id);
+    setProfileIds(ids);
+  }, []);
 
+  const [profilesData, setProfilesData] = useState<UserProfileInfoResponseDTO[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const { data: data1 } = useGetUserProfileInfoByIdQuery(profileIds[currentIndex], { skip: currentIndex === 0 });
+
+  useEffect(() => {
+    if (data1) {
+      setProfilesData(prevData => [...prevData, data1]);
+    }
+
+    if (currentIndex < profileIds.length - 1) {
+      setCurrentIndex(prevIndex => prevIndex + 1);
+    }
+  }, [data, currentIndex, profileIds]);
+
+  const totalSubscribers = profilesData.reduce((sum, profile) => sum + profile.subscribers, 0);
+  const subscribersForSecondLevel = profilesData.reduce(
+    (sum, profile) => sum + profile.subscribers_for_second_level_referrals,
+    0,
+  );
   return (
     <>
       <h2 className={s.headerIncrease}>
@@ -224,14 +254,18 @@ export const IncreaseIncome = () => {
             <ul className={s.subscribers}>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +{formatAbbreviation(120, 'number', { locale: locale })}{' '}
+                  +
+                  {formatAbbreviation(totalSubscribers, 'number', {
+                    locale: locale,
+                  })}{' '}
                   <img src={subscribersIcon} alt="Подписчики" />
                 </span>
                 <span className={classNames(s.level, s.text)}>1{t('p4')}.</span>
               </li>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +{formatAbbreviation(40, 'number', { locale: locale })} <img src={subscribersIcon} alt="Подписчики" />
+                  +{formatAbbreviation(subscribersForSecondLevel, 'number', { locale: locale })}{' '}
+                  <img src={subscribersIcon} alt="Подписчики" />
                 </span>
                 <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
               </li>
@@ -254,6 +288,7 @@ export const IncreaseIncome = () => {
                     name={referral.username}
                     reminded_time={referral.reminded_at}
                     id_referral={referral.id}
+                    profile_id={referral.character_data.profile_id}
                     total_invited={referral.total_invited}
                     streak={referral.push_line_data.in_streak_days}
                     days_missed={referral.push_line_data.failed_days_ago}
@@ -300,3 +335,10 @@ export const IncreaseIncome = () => {
     </>
   );
 };
+/*function useQueries(arg0: { queryKey: string[]; queryFn: () => any }[]) {
+  throw new Error('Function not implemented.');
+}
+
+function fetchUserProfile(profile_id: never): any {
+  throw new Error('Function not implemented.');
+}*/

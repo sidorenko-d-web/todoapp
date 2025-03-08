@@ -3,6 +3,7 @@ import { getCurrentFooterItem, isGuideShown } from "../../utils";
 import { GUIDE_ITEMS } from "../../constants";
 
 interface GuideState {
+  subscribeGuideShown: boolean;
   getCoinsGuideShown: boolean;
   getShopStatsGlowing: boolean;
   buyItemButtonGlowing: boolean;
@@ -24,6 +25,7 @@ interface GuideState {
 }
 
 const initialState: GuideState = {
+  subscribeGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED),
   getCoinsGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN),
   getShopStatsGlowing: !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN),
   buyItemButtonGlowing: isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) 
@@ -47,6 +49,9 @@ const guideSlice = createSlice({
   name: "guide",
   initialState,
   reducers: {
+    setSubscribeGuideShown: (state, action: PayloadAction<boolean>) => {
+      state.getCoinsGuideShown = action.payload;
+    },
     setGetCoinsGuideShown: (state, action: PayloadAction<boolean>) => {
       state.getCoinsGuideShown = action.payload;
     },
@@ -91,7 +96,7 @@ const guideSlice = createSlice({
   },
 });
 
-export const { setGetCoinsGuideShown, 
+export const { setGetCoinsGuideShown, setSubscribeGuideShown,
     setShopStatsGlowing, 
     setBuyItemButtonGlowing,
     setCreateIntegrationButtonGlowing, 

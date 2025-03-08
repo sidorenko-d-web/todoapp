@@ -7,6 +7,7 @@ import ChestBlueIcon from '@icons/chest-blue.svg';
 import ChestPurpleIcon from '@icons/chest-purple.svg';
 import ChestRedIcon from '@icons/chest-red.svg';
 import ListIcon from '@icons/list.svg';
+import ListDisableIcon from '@icons/list-disable.svg';
 import {
   IShopItem,
   RoomItemsSlots,
@@ -24,7 +25,7 @@ import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
 import { localStorageConsts, MODALS, SOUNDS, svgHeadersString } from '../../../constants';
-import { useModal } from '../../../hooks';
+import { useModal, useTonConnect } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import useSound from 'use-sound';
@@ -32,6 +33,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../shared';
 import { setPoints } from '../../../redux';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
+
 interface Props {
   disabled?: boolean;
   isUpgradeEnabled?: boolean;
@@ -63,6 +65,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   } else if (item.level >= 100 && item.level <= 150) {
     s25Key = 's25_150';
   }
+  const {walletAddress, connectWallet} = useTonConnect();
+  const [idDisabled] = useState(true);
   const { t, i18n } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const dispatch = useDispatch();
@@ -84,6 +88,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const [removeItem, { isLoading: isRemoveItemLoading }] = useRemoveItemFromRoomMutation();
   const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
   const { openModal } = useModal();
+
+  const { data: current } = useGetCurrentUserProfileInfoQuery(undefined, {
+    pollingInterval: 10000, // 10 сек
+  });
 
   const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
 
@@ -122,11 +130,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     prevLvl.current = item.level;
   }, [item.level]);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  const handleBuyItem = async (itemPoints: string) => {
 
-  const handleBuyItem = async () => {
+    if(current && +current?.points < +itemPoints) return
+
     try {
       setIsUpdateLoading(true);
       const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
@@ -182,6 +189,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 
+  const handleUsdtPayment = async () => {
+    if (!walletAddress) {
+      connectWallet();
+      return;
+    }
+    openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })
+  }
 
   const levelCap =
     item.level < 10
@@ -416,7 +430,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         </div>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
-          <Button onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}>
+          <Button onClick={handleUsdtPayment}>
             {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', {
               locale: locale,
             })}
@@ -428,7 +442,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 : item.item_rarity === 'green' && styles.upgradeItemRed,
             )}
             disabled={item.level === 50 || isLoading || isItemsLoading}
-            onClick={handleBuyItem}
+            onClick={() => handleBuyItem(data?.items[0].price_internal)}
           >
             {isLoading || isUpdateLoading ? (
               <p>loading</p>
@@ -443,13 +457,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           </Button>
 
           <Button
-            disabled={false}
+            disabled={idDisabled}
             onClick={() => {
               console.log('object');
               removeItem({ items_to_remove: [{ id: item.id }] });
             }}
           >
-            <img src={ListIcon} alt="Tasks" />
+            <img src={idDisabled ? ListDisableIcon : ListIcon} alt="Tasks" />
           </Button>
         </div>
       ) : (

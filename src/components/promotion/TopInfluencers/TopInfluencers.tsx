@@ -19,7 +19,7 @@ export const TopInfluencers = () => {
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
   const INFLUENCER_RATING_STEPS = useInfluencerRatingSteps();
-  const [ isInfluencersLocked, setIsInfluencersLocked ] = useState(false);
+  const [ isInfluencersLocked, setIsInfluencersLocked ] = useState(true);
   const [ influencersUnlockingStep, setInfluencersUnlockingStep ] = useState<keyof InfluencerRatingSteps>('email');
 
   const { data } = useGetTopProfilesQuery();
