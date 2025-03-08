@@ -13,7 +13,12 @@ import { InputMask } from '@react-input/mask';
 import { useTranslation } from 'react-i18next';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, useSendEmailConfirmationCodeMutation } from '../../../redux';
+import {
+  RootState,
+  setInputType,
+  useSendEmailConfirmationCodeMutation,
+  useSendPhoneConfirmationCodeMutation,
+} from '../../../redux';
 import { setInputValue } from '../../../redux/slices/confirmation';
 
 
@@ -39,6 +44,7 @@ export const
     const { inputType } = useSelector((state: RootState) => state.confirmation);
 
     const [sendCode] = useSendEmailConfirmationCodeMutation();
+    const [sendPhone] = useSendPhoneConfirmationCodeMutation();
 
     const isValid = value && binding.inputRegex.test(value);
 
@@ -47,7 +53,13 @@ export const
         if (inputType === 'email') {
           await sendCode({ email: value.trim() }).unwrap();
           dispatch(setInputValue(value.trim()));
-
+          dispatch(setInputType('phone'));
+          setValue('');
+          onNext();
+        }
+        if (inputType === 'phone') {
+          await sendPhone({ phone: value});
+          dispatch(setInputValue(value.trim()));
           setValue('');
           onNext();
         }
