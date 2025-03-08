@@ -25,7 +25,7 @@ import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
 import { localStorageConsts, MODALS, SOUNDS, svgHeadersString } from '../../../constants';
-import { useModal } from '../../../hooks';
+import { useModal, useTonConnect } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import useSound from 'use-sound';
@@ -65,6 +65,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   } else if (item.level >= 100 && item.level <= 150) {
     s25Key = 's25_150';
   }
+  const {walletAddress, connectWallet} = useTonConnect();
   const [idDisabled] = useState(true);
   const { t, i18n } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
@@ -129,13 +130,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     prevLvl.current = item.level;
   }, [item.level]);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  const handleBuyItem = async (itemPoints: string) => {
 
-  const handleBuyItem = async (item: any) => {
-
-    if(current && current?.points < item) return
+    if(current && current?.points < itemPoints) return
 
     try {
       setIsUpdateLoading(true);
@@ -192,6 +189,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 
+  const handleUsdtPayment = async () => {
+    if (!walletAddress) {
+      connectWallet();
+      return;
+    }
+    openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })
+  }
 
   const levelCap =
     item.level < 10
@@ -426,7 +430,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         </div>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
-          <Button onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })}>
+          <Button onClick={handleUsdtPayment}>
             {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', {
               locale: locale,
             })}

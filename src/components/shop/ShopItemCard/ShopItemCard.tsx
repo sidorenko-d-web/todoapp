@@ -60,8 +60,12 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const {walletAddress, connectWallet} = useTonConnect()
   const { startTransaction, failTransaction, completeTransaction } = useTransactionNotification();
   const handleUsdtPayment = async () => {
+    if (!walletAddress) {
+      connectWallet();
+      return;
+    }
+
     openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })
-    if (!walletAddress) connectWallet()
 
     try {
       setError('');
