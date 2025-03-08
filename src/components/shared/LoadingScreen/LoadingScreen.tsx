@@ -16,11 +16,13 @@ interface LoadingScreenProps {
 
 export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingScreenProps) => {
   const [showAnimation, setShowAnimation] = useState(false);
+  const [showProgressBar, setShowProgressBar] = useState(false);
   const [progress, setProgress] = useState(0);
   const [speedMultiplier, setSpeedMultiplier] = useState(1);
   const [forceLoadingTimePassed, setForceLoadingTimePassed] = useState(false);
   const [playAccelerateSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
   const loadingScreenBarRef = useRef<LoadingScreenBarRef>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   //TODO убрать когда надо будет отображать гайды
   useEffect(() => {
@@ -75,7 +77,14 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
     }
   }, [showAnimation]);
 
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  useEffect(() => {
+    // Показываем прогресс бар после 2 секунд воспроизведения видео
+    const videoTimeout = setTimeout(() => {
+      setShowProgressBar(true);
+    }, 1500);
+
+    return () => clearTimeout(videoTimeout);
+  }, []);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -92,10 +101,19 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
     <div className={styles.root} onClick={handleAccelerate}>
       <div />
       <div className={styles.clickableArea}></div>
-      {showAnimation ? (
-        // <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
-        <></>
-      ) : (
+      <video 
+        ref={videoRef} 
+        className={styles.coin} 
+        src={loadingVid} 
+        autoPlay 
+        muted 
+        loop 
+        playsInline 
+        preload="auto" 
+        width={410} 
+        height={420} 
+      />
+      {showProgressBar && !showAnimation && (
         <LoadingScreenBar 
           ref={loadingScreenBarRef}
           speedMultiplier={speedMultiplier} 
@@ -104,8 +122,10 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
           isAuthComplete={isAuthComplete} 
         />
       )}
-      <video ref={videoRef} className={styles.coin} 
-        src={loadingVid} autoPlay muted loop playsInline preload="auto" width={410} height={420} />
+      {showAnimation && (
+        // <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
+        <></>
+      )}
     </div>
   );
 };
