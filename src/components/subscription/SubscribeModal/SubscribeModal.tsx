@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import coinIcon from '../../../assets/icons/coin.png';
-import { useBuySubscriptionMutation } from '../../../redux';
+import { useBuySubscriptionMutation, useGetCurrentUserProfileInfoQuery } from '../../../redux';
 
 import s from './SubscribeModal.module.scss';
 import { getSubscriptionPurchased, isGuideShown, setSubscriptionPurchased } from '../../../utils';
@@ -25,12 +25,17 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
                                                         }: SubscribeModalProps) => {
   const { t } = useTranslation('guide');
   const [ buySubscription ] = useBuySubscriptionMutation();
+  const { data: current } = useGetCurrentUserProfileInfoQuery(undefined, {
+    pollingInterval: 10000, // 10 сек
+  });
 
   const buyBtnGlowing = getSubscriptionPurchased();
 
   const { openModal } = useModal();
 
   const handleBuySubscription = () => {
+    if(current && current?.points < "15") return
+
     setSubscriptionPurchased();
     buySubscription().unwrap().then(() => onSuccess());
     if(!isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) {
@@ -61,7 +66,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
         <div className={s.buttons}>
           <Button className={s.button} disabled>{formatAbbreviation(1.99, 'currency')}</Button>
           <Button className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`} onClick={handleBuySubscription}>
-              {formatAbbreviation(15000000)} <img src={coinIcon} height={14} width={14} alt={'Coin'} /></Button>
+              {formatAbbreviation(15)} <img src={coinIcon} height={14} width={14} alt={'Coin'} /></Button>
           <Button className={s.button + ' ' + s.gray}><img src={list} height={16} width={16} alt={'list'} /></Button>
         </div>
       </div>

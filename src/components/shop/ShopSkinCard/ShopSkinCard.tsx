@@ -97,8 +97,8 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
                 </>
               )}
             </Button>
-            <Button className={styles.listButton}>
-              <img src={ListIcon} alt="list icon" />
+            <Button className={styles.listButton} disabled={true}>
+              <img src={ListIcon} alt="list icon" />dfsd
             </Button>
           </>
         ) : (
