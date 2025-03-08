@@ -23,10 +23,9 @@ export const characterApi = createApi({
       invalidatesTags: ['character'],
     }),
     getCharacterById: builder.query<ICharacterResponse, { id: string }>({
-      query: data => ({
-        url: `/room/remove`,
+      query: ({ id }) => ({
+        url: `/characters/${id}`,
         method: 'GET',
-        body: data,
       }),
       providesTags: ['character'],
     }),

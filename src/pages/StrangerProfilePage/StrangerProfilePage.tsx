@@ -11,14 +11,14 @@ import { formatAbbreviation } from '../../helpers';
 import { useGetPushLineQuery } from '../../redux/api/pushLine/api';
 import s from './StrangerProfilePage.module.scss';
 import { Button } from '../../components/shared';
-import { Loader } from '../../components';
+import { Loader, Room } from '../../components';
 
 export const StrangerProfilePage = () => {
   const { openModal, closeModal } = useModal();
   const { profileId } = useParams();
   const { data: profile, isLoading: isUserLoading } = useGetUserProfileInfoByIdQuery(profileId || '');
   const { data, isLoading: isPushLineLoading } = useGetPushLineQuery();
-  
+
   if (!profile || !profileId) return <Loader />;
 
   const frozen = data?.week_information.filter(
@@ -44,10 +44,9 @@ export const StrangerProfilePage = () => {
         day.is_notified_at_night),
   ).length;
 
-  const isLoading = (
-    isUserLoading ||
-    isPushLineLoading
-  );
+  const isLoading = isUserLoading || isPushLineLoading;
+
+  console.log(profile)
 
   if (isLoading) return <Loader />;
 
@@ -92,6 +91,7 @@ export const StrangerProfilePage = () => {
           {/*}*/}
         </Button>
       </div>
+      <Room mode="stranger" strangerId={profile.id}/>
 
       <StrangerProfileModal
         profileId={profileId}

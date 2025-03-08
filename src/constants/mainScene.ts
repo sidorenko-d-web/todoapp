@@ -106,7 +106,8 @@ export class SpineSceneBase extends Phaser.Scene {
   loadSvgItem(item: IShopItem, { equipped_items }: Pick<contextProps, 'equipped_items'>) {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const { width, height } = itemsInSlots[slot];
-    this.load.svg('item' + item.id, (item.image_url!), { width, height });
+    // this.load.svg('item' + item.id, proxyImageUrl(item.image_url!), { width, height });
+    this.load.svg('item' + item.id, item.image_url!, { width, height });
   }
 
   loadBaseItems() {
@@ -194,7 +195,7 @@ const createLink = (itemString: string, type: 'json' | 'atlas' |'json1' | 'atlas
   let string: string = '';
   if (type === 'json') string = new URL(itemsBaseUrl + itemString + '.json').href;
   else if (type === 'atlas') string = new URL(itemsBaseUrl + itemString + 'atlas.txt').href;
-  else if (type === 'json1') string = new URL(itemsBaseUrl + itemString + '.json1').href;
+  else if (type === 'json1') string = new URL(itemsBaseUrl + itemString + '1.json').href;
   else if (type === 'atlas1') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
   else if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
   return (string);

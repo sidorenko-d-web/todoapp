@@ -1,12 +1,14 @@
 import { svgHeadersString } from '../../../../constants';
-import { RoomItemsSlots, useGetEquipedQuery } from '../../../../redux';
+import { IEquipedRoomResponse, RoomItemsSlots } from '../../../../redux';
 import styles from './Partials.module.scss';
 
-export const Floor = () => {
-  const { data } = useGetEquipedQuery();
+interface props {
+  room: IEquipedRoomResponse | undefined;
+}
 
-  const floor = data?.items.find(
-    item => item.id === data.equipped_items.find(_item => _item.slot === RoomItemsSlots.floor.slot)?.id,
+export const Floor = ({ room }: props) => {
+  const floor = room?.items.find(
+    item => item.id === room.equipped_items.find(_item => _item.slot === RoomItemsSlots.floor.slot)?.id,
   );
 
   return (
