@@ -59,11 +59,14 @@ export const MainPage: FC = () => {
         reduxDispatch(setIntegrationReadyForPublishing(false));
         reduxDispatch(setLastIntegrationId(''));
       }
+
+      if(data?.integrations[0].status === 'published' && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+        reduxDispatch(setLastIntegrationId(data.integrations[0].id));
+      }
     });
   }, []);
 
-  const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
-
+  const subscribeGuideShown = useSelector((state: RootState) => state.guide.subscribeGuideShown);
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
   const initialState = {
@@ -101,52 +104,57 @@ export const MainPage: FC = () => {
     }
   }, [creatingIntegrationModalState.isOpen]);
 
-  // useEffect(() => {
-  //   reduxDispatch(setActiveFooterItemId(2));
+  useEffect(() => {
+    reduxDispatch(setActiveFooterItemId(2));
 
-  //   if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
-  //     && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED) && !purchasingSubscriptionModalState.isOpen) {
-  //     openModal(MODALS.SUBSCRIBE);
-  //   }
+    if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED) && !purchasingSubscriptionModalState.isOpen) {
+      openModal(MODALS.SUBSCRIBE);
+    }
 
-  //   // if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
-  //   //   && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
-  //   //   navigate(AppRoute.Shop);
-  //   // }
+    if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+      navigate(AppRoute.Shop);
+    }
 
-  //   if (
-  //     isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
-  //     !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-  //     !getSubscriptionPurchased()
-  //   ) {
-  //     openModal(MODALS.SUBSCRIBE);
-  //   }
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+      !getSubscriptionPurchased()
+    ) {
+      openModal(MODALS.SUBSCRIBE);
+    }
 
-  //   if (
-  //     isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) &&
-  //     !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-  //     !creatingIntegrationModalState.isOpen
-  //   ) {
-  //     openModal(MODALS.CREATING_INTEGRATION);
-  //   }
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+      !creatingIntegrationModalState.isOpen
+    ) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
 
-  //   if (
-  //     isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-  //     !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
-  //     !creatingIntegrationModalState.isOpen
-  //   ) {
-  //     openModal(MODALS.CREATING_INTEGRATION);
-  //   }
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
+      !creatingIntegrationModalState.isOpen
+    ) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
 
-  //   // if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
-  //   //   && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
-  //   //   navigate(AppRoute.Shop);
-  //   // }
+    if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
+      navigate(AppRoute.Shop);
+    }
 
-  //   // if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
-  //   //   navigate(AppRoute.ShopInventory);
-  //   // }
-  // }, []);
+    if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+      navigate(AppRoute.ShopInventory);
+    }
+
+    if(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) 
+      && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+        navigate(AppRoute.Integration.replace(':integrationId', integrationId));
+    }
+  }, []);
 
   const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
@@ -160,12 +168,14 @@ export const MainPage: FC = () => {
   }, []);
 
   useEffect(() => {
-    const lastOpenedDate = localStorage.getItem('lastOpenedDate');
-    const currentDate = new Date().toLocaleDateString();
+    if (isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
+      const lastOpenedDate = localStorage.getItem('lastOpenedDate');
+      const currentDate = new Date().toLocaleDateString();
 
-    if (lastOpenedDate !== currentDate) {
-      openModal(MODALS.DAYS_IN_A_ROW);
-      localStorage.setItem('lastOpenedDate', currentDate);
+      if (lastOpenedDate !== currentDate) {
+        openModal(MODALS.DAYS_IN_A_ROW);
+        localStorage.setItem('lastOpenedDate', currentDate);
+      }
     }
   }, []);
 
@@ -206,7 +216,7 @@ export const MainPage: FC = () => {
             openModal(MODALS.SUBSCRIBE);
           }}
           top="50%"
-          zIndex={1500}
+          zIndex={12500}
           description={
             <>
               {t('g11')}
@@ -218,29 +228,9 @@ export const MainPage: FC = () => {
         />
       )}
 
-      {guideVisibility.secondGuideShown &&
-        !guideVisibility.subscribeModalOpened &&
-        purchasingSubscriptionModalState.isOpen && (
-          <SubscrieGuide
-            onClose={() => {
-              closeModal(MODALS.SUBSCRIBE);
-              handleGuideClose(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED);
-            }}
-            top="65%"
-            zIndex={1500}
-            description={
-              <>
-                {t('g14')} <span style={{ color: '#2F80ED' }}>{t('g15')}</span>
-                <br />
-                <br />
-                {t('g16')}
-              </>
-            }
-          />
-        )}
-
       {!purchasingSubscriptionModalState.isOpen &&
-        guideVisibility.subscribeModalOpened &&
+        subscribeGuideShown &&
+        guideVisibility.secondGuideShown &&
         !guideVisibility.getCoinsGuideShown && (
           <GetCoinsGuide
             onClose={() => {
@@ -287,16 +277,14 @@ export const MainPage: FC = () => {
           />
         )}
 
-      {showAccelerateGuide &&
-        !creatingIntegrationModalState.isOpen &&
-        !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED) && (
-          <AccelerateIntegtrationGuide
-            onClose={() => {
-              setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
-              reduxDispatch(setAccelerateIntegrationGuideClosed(true));
-            }}
-          />
-        )}
+      {(integrationCurrentlyCreating && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) && (
+        <AccelerateIntegtrationGuide
+          onClose={() => {
+            setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+            reduxDispatch(setAccelerateIntegrationGuideClosed(true));
+          }}
+        />
+      )}
 
       {!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN) &&
         isPublishedModalClosed && (

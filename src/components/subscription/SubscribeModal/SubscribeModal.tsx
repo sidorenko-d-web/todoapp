@@ -1,16 +1,18 @@
 import { FC } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import coinIcon from '../../../assets/icons/coin.png';
-import { useBuySubscriptionMutation } from '../../../redux';
+import { RootState, setSubscribeGuideShown, useBuySubscriptionMutation } from '../../../redux';
 
 import s from './SubscribeModal.module.scss';
-import { getSubscriptionPurchased, isGuideShown, setSubscriptionPurchased } from '../../../utils';
+import { getSubscriptionPurchased, isGuideShown, setGuideShown, setSubscriptionPurchased } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { Button, CentralModal } from '../../shared';
 import { GUIDE_ITEMS, MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import { useTranslation } from 'react-i18next';
 import list from '../../../assets/icons/list.svg';
+import { SubscrieGuide } from '../../guide';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface SubscribeModalProps {
   modalId: string;
@@ -28,7 +30,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
 
   const buyBtnGlowing = getSubscriptionPurchased();
 
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
 
   const handleBuySubscription = () => {
     setSubscriptionPurchased();
@@ -37,6 +39,10 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
       openModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
     }
   };
+
+  const dispatch = useDispatch();
+  const showGuide = useSelector((state: RootState) => !state.guide.subscribeGuideShown);
+
 
   return (
     <CentralModal modalId={modalId} title={`+ 5 ${t('g74')}`} onClose={onClose} titleIcon={integrationWhiteIcon}>
@@ -65,6 +71,24 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
           <Button className={s.button + ' ' + s.gray}><img src={list} height={16} width={16} alt={'list'} /></Button>
         </div>
       </div>
+
+      {showGuide && <SubscrieGuide
+            onClose={() => {
+              closeModal(MODALS.SUBSCRIBE);
+              dispatch(setSubscribeGuideShown(true));
+              setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED);
+            }}
+            top="65%"
+            zIndex={1500}
+            description={
+              <>
+                {t('g14')} <span style={{ color: '#2F80ED' }}>{t('g15')}</span>
+                <br />
+                <br />
+                {t('g16')}
+              </>
+            }
+          />}
     </CentralModal>
   );
 };
