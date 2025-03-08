@@ -66,6 +66,10 @@ button {
   color: inherit;
 
   cursor: pointer;
+
+  &:disabled {
+    background: var.$color-button-inactive !important;
+  }
 }
 
 p,

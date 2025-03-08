@@ -20,6 +20,7 @@ interface ReferralCardProps {
   days_missed: number;
   id_referral?: number;
   reminded_time?: string;
+  profile_id?: string;
 }
 
 export const ReferralCard: React.FC<ReferralCardProps> = ({
@@ -30,10 +31,11 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
   streak,
   days_missed,
   reminded_time,
+  profile_id,
 }) => {
   const { t, i18n } = useTranslation('promotion');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { data } = useGetUserProfileInfoByIdQuery(String(id_referral));
+  const { data } = useGetUserProfileInfoByIdQuery(String(profile_id));
   const [markPushReminderSent] = useMarkPushReminderSentMutation();
 
   const handleSendMessage = async () => {
