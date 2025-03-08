@@ -50,7 +50,7 @@ const guideSlice = createSlice({
   initialState,
   reducers: {
     setSubscribeGuideShown: (state, action: PayloadAction<boolean>) => {
-      state.getCoinsGuideShown = action.payload;
+      state.subscribeGuideShown = action.payload;
     },
     setGetCoinsGuideShown: (state, action: PayloadAction<boolean>) => {
       state.getCoinsGuideShown = action.payload;

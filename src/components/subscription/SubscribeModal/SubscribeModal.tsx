@@ -97,7 +97,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
         </div>
       </div>
 
-      {(!guideShown || !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) && <SubscrieGuide
+      {!guideShown && <SubscrieGuide
             onClose={() => {
               dispatch(setSubscribeGuideShown(true));
               setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
