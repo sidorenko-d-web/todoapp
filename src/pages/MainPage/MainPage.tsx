@@ -92,7 +92,7 @@ export const MainPage: FC = () => {
         }
       })
     });
-  }, [, data]);
+  }, [data]);
 
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
