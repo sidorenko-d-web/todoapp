@@ -4,7 +4,6 @@ import { useGetShopSkinsQuery } from '../../redux';
 import { svgHeadersString } from '../../constants';
 
 export default function DevModals() {
-  const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
 
   const gameRef = useRef<Phaser.Game | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
@@ -25,8 +24,8 @@ export default function DevModals() {
         const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/лампа_base.json`).href;
         const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/лампа_baseatlas.txt`).href;
 
-        this.load.spineJson('json', proxyImageUrl(jsonUrl));
-        this.load.spineAtlas('atlas', proxyImageUrl(atlasUrl));
+        this.load.spineJson('json', (jsonUrl));
+        this.load.spineAtlas('atlas', (atlasUrl));
       }
 
       create() {

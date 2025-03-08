@@ -2,22 +2,30 @@ import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './TaskCompletedModal.module.scss';
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
-import subscribers from '../../../assets/icons/subscribers.png';
+import subscribers_img from '../../../assets/icons/subscribers.png';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import confetti from '../../../assets/animations/confetti.json';
 import { MODALS, SOUNDS } from '../../../constants';
 import { CentralModal } from '../../../components/shared';
+import { useTranslation } from 'react-i18next';
 
-export default function TaskCompletedModal() {
+interface TaskCompletedModalProps {
+  income: number;
+  subscribers: number;
+  passiveIncome: number;
+}
+
+export default function TaskCompletedModal({ income, subscribers, passiveIncome }: TaskCompletedModalProps) {
   const { closeModal } = useModal();
+  const { t } = useTranslation('quests');
 
   useAutoPlaySound(MODALS.TASK_COMPLETED, SOUNDS.rewardHuge);
   return (
     <CentralModal
       onClose={() => closeModal(MODALS.TASK_COMPLETED)}
       modalId={MODALS.TASK_COMPLETED}
-      title={'Задание выполнено!'}
+      title={t('q44')}
     >
       <div className={styles.background}>
         <Lottie animationData={confetti} loop={false} className={styles.reward} />
@@ -33,8 +41,8 @@ export default function TaskCompletedModal() {
               />
             </div>
             <div className={styles.content}>
-              <p>+100</p>
-              <img src={coin} />
+              <p>+{income}</p>
+              <img src={coin} alt={t('q38')} />
             </div>
           </div>
           <div className={styles.item}>
@@ -46,8 +54,8 @@ export default function TaskCompletedModal() {
               />
             </div>
             <div className={styles.content}>
-              <p>+150</p>
-              <img src={subscribers} />
+              <p>+{subscribers}</p>
+              <img src={subscribers_img} alt={t('q36')} />
             </div>
           </div>
           <div className={styles.item}>
@@ -59,20 +67,19 @@ export default function TaskCompletedModal() {
               />
             </div>
             <div className={styles.content}>
-              <p>+5</p>
-              <img src={coin} />
-              <p>/сек.</p>
+              <p>+{passiveIncome}</p>
+              <img src={coin} alt={t('q38')} />
+              <p>/{t('q9')}</p>
             </div>
           </div>
         </div>
         <div className={styles.bottom}>
           <p>
-            Поздравляем! За выполнение задания вы <br></br>получаете дополнительные
-            бонусы!
+            {t('q53')}
           </p>
         </div>
       </div>
-      <Button variant={'blue'}>Забрать</Button>
+      <Button variant={'blue'}>{t('q33')}</Button>
     </CentralModal>
   );
 }

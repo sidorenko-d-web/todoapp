@@ -79,7 +79,6 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
 
   class SpineScene extends WardrobeSpineScene {
     create() {
-      console.log('SpineScene');
       try {
         this.createPerson(personScale);
       } catch (error: any) {
@@ -145,7 +144,6 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
     if (skin.wear_location === 'legs') {
       categorizedSkins.lower_body.push(skin);
     } else if (skin.wear_location in categorizedSkins) {
-      skin.wear_location === 'skin_color' && console.log('object');
       categorizedSkins[skin.wear_location as keyof CategorizedSkins].push(skin);
     }
   });

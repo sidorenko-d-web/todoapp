@@ -71,6 +71,7 @@ export const baseItems = [
   { name: 'table', slot: 2, width: 140, height: 140, x: -6, y: 455, z: 3 },
   { name: 'window', slot: 5, width: 110, height: 110, x: -125, y: 260, z: 0 },
 ];
+// const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
 
 export const itemsBaseUrl = 'https://storage.yandexcloud.net/miniapp-v2-dev/';
 interface contextProps {
@@ -105,7 +106,7 @@ export class SpineSceneBase extends Phaser.Scene {
   loadSvgItem(item: IShopItem, { equipped_items }: Pick<contextProps, 'equipped_items'>) {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const { width, height } = itemsInSlots[slot];
-    this.load.svg('item' + item.id, proxyImageUrl(item.image_url!), { width, height });
+    this.load.svg('item' + item.id, (item.image_url!), { width, height });
   }
 
   loadBaseItems() {
@@ -116,7 +117,6 @@ export class SpineSceneBase extends Phaser.Scene {
 
   //helpers for scene creation
   createPerson({ center }: Pick<contextProps, 'center'>, isWorking: boolean) {
-    console.log('creation')
     if(!this.add.spine) throw new Error('add.spine')
     this.person = this.add.spine(center - 40, 385, 'personJson', 'personAtlas');
     this.person.scale = 0.07;
@@ -171,7 +171,6 @@ export class SpineSceneBase extends Phaser.Scene {
   }
 
   setCurrentLoopedAnimation(isWorking: Boolean) {
-    console.log('isWorking', isWorking);
     if (isWorking) this.setWorking();
     else this.setIdle();
   }
@@ -191,14 +190,13 @@ export class SpineSceneBase extends Phaser.Scene {
   }
 }
 
-const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
-
 const createLink = (itemString: string, type: 'json' | 'atlas' | 'base') => {
   let string: string = '';
   if (type === 'json') string = new URL(itemsBaseUrl + itemString + '1.json').href;
   if (type === 'atlas') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
   if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
-  return proxyImageUrl(string);
+  return (string);
+  // return proxyImageUrl(string);
 };
 
 export enum PersonAnimations {

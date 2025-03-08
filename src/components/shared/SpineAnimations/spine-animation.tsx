@@ -6,7 +6,6 @@ interface Props {
   item?: IShopItem;
 }
 
-const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
 
 const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/постер_base.json`).href;
 const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/постер_baseatlas.txt`).href;
@@ -25,8 +24,8 @@ const SpineAnimation: FC<Props> = ({ item }) => {
       }
 
       preload() {
-        this.load.spineJson('data', proxyImageUrl(jsonUrl));
-        this.load.spineAtlas('atlas', proxyImageUrl(atlasUrl));
+        this.load.spineJson('data', (jsonUrl));
+        this.load.spineAtlas('atlas', (atlasUrl));
       }
 
       create() {

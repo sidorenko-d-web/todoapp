@@ -8,7 +8,8 @@ import checkIcon from '../../../../assets/icons/checkmark-in-the-circle.svg';
 import bookIcon from '../../../../assets/icons/book.svg';
 import coinBlueIcon from '../../../../assets/icons/coin-blue-human.svg';
 import { ProgressBarTasks } from '../../ProgressBarTasks';
-import chestIcon from '../../../../assets/icons/chest-purple.svg';
+import chestIconPurple from '../../../../assets/icons/chest-purple.svg';
+import chestIconRed from '../../../../assets/icons/chest-red.svg';
 import { useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
 import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../../helpers';
@@ -29,6 +30,9 @@ interface ModalTopTasksProps {
     };
     completed_stages: number;
     external_link: string;
+    external_link_eng?: string;
+    stages_description?: Record<number, { ENG: string; RUS: string }>;
+    description_eng?: string;
   };
 }
 
@@ -52,8 +56,10 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
     Array(task.stages).fill(false).map((_, index) => index < task.completed_stages)
   );
   const [channelLink, setChannelLink] = useState('');
+  const [channelLink2, setChannelLink2] = useState('');
   const progress = (completedSteps.filter(step => step).length / task.stages) * 100;
   const [updateTask] = useUpdateTaskMutation();
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     setCurrentStepIndex(task.completed_stages);
@@ -104,7 +110,8 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
   };
 
   const handleOpenGuide = () => {
-    window.open(task.external_link, '_blank');
+    const link = locale === 'en' ? task.external_link_eng || task.external_link : task.external_link;
+    window.open(link, '_blank');
   };
 
   const getStepTitle = () => {
@@ -112,7 +119,16 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
   };
 
   const getStepDescription = () => {
-    return task.description;
+    if (task.stages_description && task.stages_description[currentStepIndex + 1]) {
+      return locale === 'en' 
+        ? task.stages_description[currentStepIndex + 1].ENG 
+        : task.stages_description[currentStepIndex + 1].RUS;
+    }
+    return locale === 'en' ? task.description_eng : task.description;
+  };
+
+  const getChestIcon = () => {
+    return currentStepIndex === 3 ? chestIconRed : chestIconPurple;
   };
 
   return (
@@ -150,9 +166,23 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
             totalSteps={task.stages}
             progress={progress}
             progressReward={t('q10')}
-            progressRewardIcon={chestIcon}
+            progressRewardIcon={getChestIcon()}
+            color={currentStepIndex === 3 ? '#E84949' : '#9747FF'}
           />
         </div>
+
+        {hasError && (
+          <div className={s.errorWrapper}>
+            <div className={s.errorMessage}>
+              <span className={s.errorTitle}>
+                {t('Задание не прошло проверку!')}
+              </span>
+              <span className={s.errorDescription}>
+                {t('Данный этап был выполнен некорректно. Подробно изучите нашу статью по выполнению данного задания и повторите попытку еще раз!')}
+              </span>
+            </div>
+          </div>
+        )}
 
         <div className={s.question}>
           <span className={s.linkLabel}>{t('q28')}</span>
@@ -175,11 +205,38 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
             </div>
           </div>
           <h3 className={s.questionText}>{getStepDescription()}</h3>
+
+          {currentStepIndex === 3 && (
+            <>
+              <span className={s.linkLabel} style={{ marginTop: '20px' }}>{t('q52')}</span>
+              <div className={s.options}>
+                <div className={s.option}>
+                  <input
+                    type="text"
+                    className={s.channelInput}
+                    value={channelLink2}
+                    onChange={(e) => setChannelLink2(e.target.value)}
+                    placeholder={"..."}
+                  />
+                  <div className={s.selectWrapper}>
+                    <img
+                      src={completedSteps[currentStepIndex] ? checkIcon : dotsIcon}
+                      className={s.icon}
+                      alt=""
+                    />
+                  </div>
+                </div>
+              </div>
+              <h3 className={s.questionText2}>{getStepDescription()}</h3>
+            </>
+          )}
         </div>
 
         <div className={s.buttons}>
           <button 
-            className={s.answerButton}
+            className={classNames(s.answerButton, {
+              [s.stage4]: currentStepIndex === 3
+            })}
             onClick={handleOpenGuide}
           >
             {t('q30')}

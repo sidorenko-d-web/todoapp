@@ -8,8 +8,9 @@ import { useUpdateTaskMutation } from '../../../redux/api/tasks';
 import { useTranslation } from 'react-i18next';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants';
+import TaskCompletedModal from '../../../pages/DevModals/TaskCompletedModal/TaskCompletedModal';
 
-const TELEGRAM_CHANNEL_URL = 'https://t.me/apusherTestCh';
+const TELEGRAM_CHANNEL_URL = 'https://t.me/tgnewss_vf';
 
 type SocialTasksProps = {
   tasks: Task[];
@@ -21,10 +22,12 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
   const [updateTask] = useUpdateTaskMutation();
   const { openModal } = useModal();
   const [pendingTaskId, setPendingTaskId] = useState<string | null>(null);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   const handleTaskClick = async (task: Task) => {
     if (task.is_completed && !task.is_reward_given) {
-      openModal(MODALS.GET_GIFT);
+      setSelectedTask(task);
+      openModal(MODALS.TASK_COMPLETED);
       return;
     }
 
@@ -36,7 +39,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
 
         const linkToOpen = task.title.toLowerCase().includes('telegram')
           ? (task.external_link || TELEGRAM_CHANNEL_URL)
-          : (task.external_link || 'https://instagram.com');
+          : (task.external_link);
         window.open(linkToOpen, '_blank');
 
         // Ждем 30 секунд
@@ -53,6 +56,10 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
         localStorage.removeItem('pendingTaskId');
         localStorage.removeItem('pendingTaskStartTime');
         setPendingTaskId(null);
+        
+        // Открываем модальное окно после успешного выполнения задания
+        setSelectedTask(task);
+        openModal(MODALS.TASK_COMPLETED);
       }
     } catch (error) {
       console.error('Error updating task:', error);
@@ -149,6 +156,13 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
           />
         ))}
       </div>
+      {selectedTask && (
+        <TaskCompletedModal 
+          income={Number(selectedTask.boost.views)}
+          subscribers={selectedTask.boost.subscribers}
+          passiveIncome={Number(selectedTask.boost.income_per_second)}
+        />
+      )}
     </section>
   );
 };

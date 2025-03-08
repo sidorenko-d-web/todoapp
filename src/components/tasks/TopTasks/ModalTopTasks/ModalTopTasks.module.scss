@@ -79,6 +79,15 @@
   letter-spacing: -0.7px;
 }
 
+.questionText2 {
+  align-self: stretch;
+  color: #505B78;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 130%;
+  letter-spacing: -0.7px;
+}
 
 .options {
   display: flex;
@@ -175,6 +184,11 @@
   color: var.$color-text;
   border: 1px solid var(---, #7A2BC3);
   background: #9747FF;
+
+  &.stage4 {
+    border: 1px solid #C93232;
+    background: #E84949;
+  }
 }
 
 .nextButton {
@@ -207,4 +221,47 @@
   font-size: 14px;
   padding: 0;
   margin-left: 8px;
+
+  &::placeholder {
+
+  }
 }
+
+.errorWrapper {
+  padding-bottom: 20px;
+
+  .errorMessage {
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
+    align-self: stretch;
+    border-radius: 8px;
+    background: rgba(31, 35, 46, 0.95);
+  }
+
+  .errorTitle {
+    color: #E84949;
+    text-align: left;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 100%;
+    letter-spacing: -0.8px;
+    width: 100%;
+  }
+
+  .errorDescription {
+    color: #AFB9D4;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 130%;
+    letter-spacing: -0.7px;
+  }
+}
+
