@@ -3,7 +3,7 @@ export type SendEmailConfirmationCodeDTO = {
 }
 
 export type SendPhoneConfirmationCodeDTO = {
-    phone: string;
+    phone_number: string;
 }
 
 export type ConfrirmEmailDTO = {
