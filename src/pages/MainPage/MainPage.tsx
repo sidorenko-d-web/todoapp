@@ -58,8 +58,7 @@ export const MainPage: FC = () => {
       if(item.name.toLowerCase().trim() === 'печатная машинка') {
         Object.values(GUIDE_ITEMS).forEach(category => {
           Object.values(category).forEach(value => {
-            if(value !== GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN
-              && value !== GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN
+            if(value !== GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN
               && value !== GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN
               && value !== GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW
             ) {
