@@ -5,7 +5,7 @@ import loadingVid from '../../../assets/gif/loading.mp4';
 // import { coinsAnim } from '../../../assets/animations';
 import { LoadingScreenBar, LoadingScreenBarRef } from '../../loadingScreen/LoadingScreenBar/LoadingScreenBar';
 import useSound from 'use-sound';
-import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
+import { SOUNDS } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
 
@@ -24,14 +24,13 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   const loadingScreenBarRef = useRef<LoadingScreenBarRef>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  //TODO убрать когда надо будет отображать гайды
-  useEffect(() => {
-    Object.values(GUIDE_ITEMS).forEach(category => {
-      Object.values(category).forEach(value => {
-        localStorage.setItem(value, '1');
-      });
-    });
-  }, []);
+  // useEffect(() => {
+  //   Object.values(GUIDE_ITEMS).forEach(category => {
+  //     Object.values(category).forEach(value => {
+  //       localStorage.setItem(value, '1');
+  //     });
+  //   });
+  // }, []);
 
   useEffect(() => {
     const minLoadingTimeout = setTimeout(() => {
