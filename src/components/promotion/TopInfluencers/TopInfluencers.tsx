@@ -6,14 +6,20 @@ import { InfluencerRatingSteps, MODALS, useInfluencerRatingSteps } from '../../.
 import { TopUsers } from '../Modal';
 import { useModal } from '../../../hooks';
 import classNames from 'classnames';
-import { RootState, useGetCurrentUserProfileInfoQuery, useGetTopProfilesQuery, useGetUserQuery } from '../../../redux';
+import {
+  RootState,
+  setInputType,
+  useGetCurrentUserProfileInfoQuery,
+  useGetTopProfilesQuery,
+  useGetUserQuery,
+} from '../../../redux';
 import { BindingConfirmationModal, BindingModal, BindingSuccessModal, TrackedButton } from '../../';
 
 import s from './TopInfluencers.module.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../helpers';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const TopInfluencers = () => {
   const { t, i18n } = useTranslation('promotion');
@@ -22,7 +28,7 @@ export const TopInfluencers = () => {
   const INFLUENCER_RATING_STEPS = useInfluencerRatingSteps();
   const [ isInfluencersLocked, setIsInfluencersLocked ] = useState(true);
   const [ influencersUnlockingStep, setInfluencersUnlockingStep ] = useState<keyof InfluencerRatingSteps>('email');
-
+  const dispatch = useDispatch();
   const { data } = useGetTopProfilesQuery();
   const topProfiles = data?.profiles || [];
 
@@ -31,8 +37,13 @@ export const TopInfluencers = () => {
   const { data: userData } = useGetUserQuery();
 
   useEffect(() => {
+    if(userData?.is_email_verified && userData?.is_phone_verified) {
+      setIsInfluencersLocked(false);
+    }
+
     if (userData?.is_email_verified) {
       setInfluencersUnlockingStep('phone');
+      dispatch(setInputType('phone'));
     }
   }, [ userData?.is_email_verified ]);
   const userPosition = userProfileData && topProfiles

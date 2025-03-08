@@ -6,5 +6,6 @@ export type GetUserDTO = {
     role_id: number,
     id: number,
     is_invited: boolean,
-    is_email_verified: false
+    is_email_verified: false,
+    is_phone_verified: false,
 }
