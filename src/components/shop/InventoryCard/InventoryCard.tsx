@@ -7,6 +7,7 @@ import ChestBlueIcon from '@icons/chest-blue.svg';
 import ChestPurpleIcon from '@icons/chest-purple.svg';
 import ChestRedIcon from '@icons/chest-red.svg';
 import ListIcon from '@icons/list.svg';
+import ListDisableIcon from '@icons/list-disable.svg';
 import {
   IShopItem,
   RoomItemsSlots,
@@ -32,6 +33,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../shared';
 import { setPoints } from '../../../redux';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
+import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfileStats.ts';
 interface Props {
   disabled?: boolean;
   isUpgradeEnabled?: boolean;
@@ -63,6 +65,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   } else if (item.level >= 100 && item.level <= 150) {
     s25Key = 's25_150';
   }
+  const [idDisabled] = useState(true);
   const { t, i18n } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const dispatch = useDispatch();
@@ -84,6 +87,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const [removeItem, { isLoading: isRemoveItemLoading }] = useRemoveItemFromRoomMutation();
   const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
   const { openModal } = useModal();
+
+  const { data: current } = useGetCurrentUserProfileInfoQuery(undefined, {
+    pollingInterval: 10000, // 10 сек
+  });
 
   const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
 
@@ -126,7 +133,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     console.log(data);
   }, [data]);
 
-  const handleBuyItem = async () => {
+  const handleBuyItem = async (item: any) => {
+
+    if(current && current?.points < item) return
+
     try {
       setIsUpdateLoading(true);
       const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
@@ -428,7 +438,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 : item.item_rarity === 'green' && styles.upgradeItemRed,
             )}
             disabled={item.level === 50 || isLoading || isItemsLoading}
-            onClick={handleBuyItem}
+            onClick={() => handleBuyItem(data?.items[0].price_internal)}
           >
             {isLoading || isUpdateLoading ? (
               <p>loading</p>
@@ -443,13 +453,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           </Button>
 
           <Button
-            disabled={false}
+            disabled={idDisabled}
             onClick={() => {
               console.log('object');
               removeItem({ items_to_remove: [{ id: item.id }] });
             }}
           >
-            <img src={ListIcon} alt="Tasks" />
+            <img src={idDisabled ? ListDisableIcon : ListIcon} alt="Tasks" />
           </Button>
         </div>
       ) : (
