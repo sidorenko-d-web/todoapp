@@ -87,7 +87,7 @@ const Layout = () => {
           <LanguageSelectionModal />
           {/*<AudioBg />*/}
         </main>
-        {/* <Footer /> */}
+        <Footer />
       </div>
     </>
   );
