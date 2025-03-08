@@ -56,10 +56,15 @@ export const MainPage: FC = () => {
   useEffect(() => {
     itemsData?.items.forEach(item => {
       if(item.name.toLowerCase().trim() === 'печатная машинка') {
-        console.log('asdsadasaaaxxx')
         Object.values(GUIDE_ITEMS).forEach(category => {
           Object.values(category).forEach(value => {
-            localStorage.setItem(value, '1');
+            if(value !== GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN
+              && value !== GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN
+              && value !== GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN
+              && value !== GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW
+            ) {
+              localStorage.setItem(value, '1');
+            }
           });
         });
       }
@@ -80,12 +85,8 @@ export const MainPage: FC = () => {
 
       data?.integrations.forEach((integration) => {
         if(integration.status === 'published' && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
-          //reduxDispatch(setLastIntegrationId(data.integrations[0].id));
           if(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) 
             && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
-              setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-              handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-              setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
               reduxDispatch(setFooterActive(true));
               navigate(`/integrations/${integration.id}`);
           }
