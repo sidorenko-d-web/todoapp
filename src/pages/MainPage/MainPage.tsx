@@ -1,7 +1,6 @@
-import { FC, useEffect, useReducer, useState } from 'react';
+import { FC, useEffect, useReducer } from 'react';
 import {
   AccelerateIntegtrationGuide,
-  CreatingIntegrationGuide,
   FinishTutorialGuide,
   GetCoinsGuide,
   InitialGuide,
@@ -57,18 +56,16 @@ export const MainPage: FC = () => {
   useEffect(() => {
     itemsData?.items.forEach(item => {
       if(item.name.toLowerCase().trim() === 'печатная машинка') {
-        useEffect(() => {
-          Object.values(GUIDE_ITEMS).forEach(category => {
-            Object.values(category).forEach(value => {
-              localStorage.setItem(value, '1');
-            });
+        console.log('asdsadasaaaxxx')
+        Object.values(GUIDE_ITEMS).forEach(category => {
+          Object.values(category).forEach(value => {
+            localStorage.setItem(value, '1');
           });
-        }, []);
+        });
       }
     })
   }, [itemsData]);
 
-  const [publishedIntegrationId, setPublishedIntegrationId] = useState('');
 
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
   useEffect(() => {
@@ -84,15 +81,12 @@ export const MainPage: FC = () => {
       data?.integrations.forEach((integration) => {
         if(integration.status === 'published' && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
           //reduxDispatch(setLastIntegrationId(data.integrations[0].id));
-          setPublishedIntegrationId(integration.id);
-          console.log('PUBLISHED INTEGRATION FOUND: ' + integration.id)
           if(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) 
             && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
               setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
               handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
               setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
               reduxDispatch(setFooterActive(true));
-              console.log('publishedIntegrationId: ' + 'adsdasda'+publishedIntegrationId)
               navigate(`/integrations/${integration.id}`);
           }
         }
