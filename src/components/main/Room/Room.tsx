@@ -19,7 +19,7 @@ export const Room = ({ mode, strangerId }: props) => {
   const { data: strangerRoom } = useGetEquipedByIdQuery({ id: strangerId! }, { skip: mode === 'me' && !strangerId });
   const strangerCharacter = useGetCharacterByIdQuery({ id: strangerId! }, { skip: mode === 'me' && !strangerId });
 
-  const equippedAchivement = room?.achievements?.[0];
+  const equippedAchivement = (room ?? strangerRoom)?.achievements?.[0];
   let achivementType;
   if (equippedAchivement) {
     achivementType = getAchivementType(equippedAchivement.name, equippedAchivement.level);
