@@ -22,6 +22,7 @@ import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../uti
 import {
   setAccelerateIntegrationGuideClosed,
   setActiveFooterItemId,
+  setFooterActive,
   setGetCoinsGuideShown,
   setIntegrationReadyForPublishing,
   setLastIntegrationId,
@@ -51,21 +52,23 @@ export const MainPage: FC = () => {
   const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
   
   
-  // const {data: itemsData} = useGetInventoryItemsQuery();
+  const {data: itemsData} = useGetInventoryItemsQuery();
 
-  // useEffect(() => {
-  //   itemsData?.items.forEach(item => {
-  //     if(item.name.toLowerCase().trim() === 'печатная машинка') {
-  //       useEffect(() => {
-  //         Object.values(GUIDE_ITEMS).forEach(category => {
-  //           Object.values(category).forEach(value => {
-  //             localStorage.setItem(value, '1');
-  //           });
-  //         });
-  //       }, []);
-  //     }
-  //   })
-  // }, [itemsData]);
+  useEffect(() => {
+    itemsData?.items.forEach(item => {
+      if(item.name.toLowerCase().trim() === 'печатная машинка') {
+        useEffect(() => {
+          Object.values(GUIDE_ITEMS).forEach(category => {
+            Object.values(category).forEach(value => {
+              localStorage.setItem(value, '1');
+            });
+          });
+        }, []);
+      }
+    })
+  }, [itemsData]);
+
+  const [publishedIntegrationId, setPublishedIntegrationId] = useState('');
 
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
   useEffect(() => {
@@ -78,13 +81,25 @@ export const MainPage: FC = () => {
         reduxDispatch(setLastIntegrationId(''));
       }
 
-      if(data?.integrations[0].status === 'published' && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
-        reduxDispatch(setLastIntegrationId(data.integrations[0].id));
-      }
+      data?.integrations.forEach((integration) => {
+        if(integration.status === 'published' && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+          //reduxDispatch(setLastIntegrationId(data.integrations[0].id));
+          setPublishedIntegrationId(integration.id);
+          console.log('PUBLISHED INTEGRATION FOUND: ' + integration.id)
+          if(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) 
+            && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+              setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+              reduxDispatch(setFooterActive(true));
+              console.log('publishedIntegrationId: ' + 'adsdasda'+publishedIntegrationId)
+              navigate(`/integrations/${integration.id}`);
+          }
+        }
+      })
     });
-  }, []);
+  }, [, data]);
 
-  const subscribeGuideShown = useSelector((state: RootState) => state.guide.subscribeGuideShown);
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
   const initialState = {
@@ -168,10 +183,7 @@ export const MainPage: FC = () => {
       navigate(AppRoute.ShopInventory);
     }
 
-    if(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) 
-      && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
-        navigate(AppRoute.Integration.replace(':integrationId', integrationId));
-    }
+    
   }, []);
 
   const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
@@ -254,42 +266,6 @@ export const MainPage: FC = () => {
               handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
               openModal(MODALS.SUBSCRIBE);
             }}
-          />
-        )}
-
-      {(creatingIntegrationModalState.isOpen && !guideVisibility.createIntegrationFirstGuideShown )&& (
-        <CreatingIntegrationGuide
-          onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)}
-          buttonText={t('g17')}
-          description={
-            <>
-              {t('g18')} <span style={{ color: '#2F80ED' }}>{t('g19')}</span>
-              <br />
-              <br />
-              {t('g20')}
-            </>
-          }
-          align="left"
-          top="69%"
-        />
-      )}
-
-      {creatingIntegrationModalState.isOpen &&
-        guideVisibility.createIntegrationFirstGuideShown &&
-        !guideVisibility.createIntegrationSecondGuideShown && (
-          <CreatingIntegrationGuide
-            onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)}
-            buttonText={t('g21')}
-            description={
-              <>
-                {t('g22')} <span style={{ color: '#2F80ED' }}>{t('g23')} </span>
-                <br />
-                <br />
-                {t('g24')}
-              </>
-            }
-            align="right"
-            top="66%"
           />
         )}
 
