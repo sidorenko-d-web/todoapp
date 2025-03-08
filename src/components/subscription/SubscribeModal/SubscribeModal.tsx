@@ -53,6 +53,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
       .unwrap()
       .then(() => onSuccess())
       .catch((error) => {
+        console.log('error: ', error);
         setErrorMessage(t(t('g80')));
         setIsShow(true);
         setTimeout(() => setIsShow(false), 3000);
@@ -64,8 +65,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
   };
 
   const dispatch = useDispatch();
-  const showGuide = useSelector((state: RootState) => !state.guide.subscribeGuideShown);
-
+  const guideShown = useSelector((state: RootState) => state.guide.subscribeGuideShown);
 
   return (
     <CentralModal modalId={modalId} title={`+ 5 ${t('g74')}`} onClose={onClose} titleIcon={integrationWhiteIcon}>
@@ -97,11 +97,11 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
         </div>
       </div>
 
-      {showGuide && <SubscrieGuide
+      {(!guideShown || !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) && <SubscrieGuide
             onClose={() => {
-              closeModal(MODALS.SUBSCRIBE);
               dispatch(setSubscribeGuideShown(true));
-              setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED);
+              setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+              closeModal(MODALS.SUBSCRIBE);
             }}
             top="65%"
             zIndex={1500}

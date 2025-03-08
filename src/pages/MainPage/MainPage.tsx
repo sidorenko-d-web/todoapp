@@ -1,4 +1,4 @@
-import { FC, useEffect, useReducer } from 'react';
+import { FC, useEffect, useReducer, useState } from 'react';
 import {
   AccelerateIntegtrationGuide,
   CreatingIntegrationGuide,
@@ -25,6 +25,7 @@ import {
   setGetCoinsGuideShown,
   setIntegrationReadyForPublishing,
   setLastIntegrationId,
+  useGetInventoryItemsQuery,
 } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -48,6 +49,23 @@ export const MainPage: FC = () => {
   const reduxDispatch = useDispatch();
 
   const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
+  
+  
+  // const {data: itemsData} = useGetInventoryItemsQuery();
+
+  // useEffect(() => {
+  //   itemsData?.items.forEach(item => {
+  //     if(item.name.toLowerCase().trim() === 'печатная машинка') {
+  //       useEffect(() => {
+  //         Object.values(GUIDE_ITEMS).forEach(category => {
+  //           Object.values(category).forEach(value => {
+  //             localStorage.setItem(value, '1');
+  //           });
+  //         });
+  //       }, []);
+  //     }
+  //   })
+  // }, [itemsData]);
 
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
   useEffect(() => {
@@ -72,7 +90,7 @@ export const MainPage: FC = () => {
   const initialState = {
     firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
     secondGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN),
-    subscribeModalOpened: isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED),
+    subscribeModalOpened: isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN),
     getCoinsGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN),
     createIntegrationFirstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN),
     createIntegrationSecondGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN),
@@ -108,7 +126,7 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(2));
 
     if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
-      && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED) && !purchasingSubscriptionModalState.isOpen) {
+      && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && !purchasingSubscriptionModalState.isOpen) {
       openModal(MODALS.SUBSCRIBE);
     }
 
@@ -209,7 +227,7 @@ export const MainPage: FC = () => {
         <InitialGuide onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)} />
       )}
 
-      {!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown && (
+      {(!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown) && (
         <SubscrieGuide
           onClose={() => {
             handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
@@ -228,20 +246,18 @@ export const MainPage: FC = () => {
         />
       )}
 
-      {!purchasingSubscriptionModalState.isOpen &&
-        subscribeGuideShown &&
-        guideVisibility.secondGuideShown &&
-        !guideVisibility.getCoinsGuideShown && (
+      {(!isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) && isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) && (
           <GetCoinsGuide
             onClose={() => {
               reduxDispatch(setGetCoinsGuideShown(true));
+              setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
               handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
               openModal(MODALS.SUBSCRIBE);
             }}
           />
         )}
 
-      {creatingIntegrationModalState.isOpen && !guideVisibility.createIntegrationFirstGuideShown && (
+      {(creatingIntegrationModalState.isOpen && !guideVisibility.createIntegrationFirstGuideShown )&& (
         <CreatingIntegrationGuide
           onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)}
           buttonText={t('g17')}
