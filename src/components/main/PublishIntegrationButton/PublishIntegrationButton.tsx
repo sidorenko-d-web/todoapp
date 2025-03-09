@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants/modals.ts';
-import { RootState, useClaimRewardForIntegrationMutation, useGetAllIntegrationsQuery, useGetIntegrationQuery, useGetIntegrationsQuery, useGetInventoryAchievementsQuery, useGetTreeInfoQuery, usePublishIntegrationMutation } from '../../../redux';
+import { RootState, useClaimRewardForIntegrationMutation, useGetAllIntegrationsQuery, useGetIntegrationQuery, useGetIntegrationsQuery, usePublishIntegrationMutation } from '../../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
 import {
@@ -119,7 +119,7 @@ export const PublishIntegrationButton: React.FC = () => {
 
   // Watch for first modal closing to open the second modal
   useEffect(() => {
-    if (!isRewardModalOpen && shouldOpenCongratsModal && !isCongratsModalOpen) {
+    if (!isRewardModalOpen && shouldOpenCongratsModal && !isCongratsModalOpen && canShowIntegrationReward) {
       openCongratsModal();
     }
   }, [isRewardModalOpen, shouldOpenCongratsModal, isCongratsModalOpen]);

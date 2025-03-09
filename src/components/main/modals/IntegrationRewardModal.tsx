@@ -40,12 +40,12 @@ export const IntegrationRewardModal = () => {
         console.log(equipped_items);
         try {
           if (equipped_items.achievements.length > 0) {
-            const res1 = await removeAchivement({ achievements_to_remove: [{ id: equipped_items?.achievements?.[0].id }] });
+            await removeAchivement({ achievements_to_remove: [{ id: equipped_items?.achievements?.[0].id }] });
           }
 
           let achievementId = achievementsData?.achievements[0]?.id;
           if (achievementId) {
-            const res = await addAchivement({ equipped_achievements: [{ id: achievementId, slot: 100 }] });
+            await addAchivement({ equipped_achievements: [{ id: achievementId, slot: 100 }] });
           } else {
             console.error("Achievement ID is undefined");
           }
