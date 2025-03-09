@@ -1,21 +1,24 @@
 import { Skin, SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { useRef, useEffect, useLayoutEffect, useState } from 'react';
 import {
+  IEquipedRoomResponse,
   IShopItem,
   TypeWearLocation,
   selectIsNeedToPlayHappy,
   selectIsWorking,
   setNeedToPlayHappy,
-  useGetEquipedQuery,
 } from '../../../../redux';
 import { SpineSceneBase, animated } from '../../../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { ICharacterResponse, useGetCharacterQuery } from '../../../../redux/api/character';
+import { ICharacterResponse } from '../../../../redux/api/character';
 
-export const AnimationScene = () => {
-  const { data: room } = useGetEquipedQuery();
-  const { data: character, isLoading } = useGetCharacterQuery();
+interface props {
+  room: IEquipedRoomResponse | undefined;
+  character?: {data?: ICharacterResponse, isLoading: boolean}
+}
 
+export const AnimationScene = ({ room, character }: props) => {
+  console.log(character)
   const gameRef = useRef<Phaser.Game | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const spineSceneRef = useRef<SpineSceneBase | null>(null);
@@ -37,7 +40,7 @@ export const AnimationScene = () => {
   }, []);
 
   useEffect(() => {
-    if (!sceneRef.current || isLoading) return;
+    if (!sceneRef.current || character?.isLoading) return;
 
     const width = sceneRef.current.offsetWidth;
     const contextProps = { equipped_items: room?.equipped_items, center: width / 2 };
@@ -89,15 +92,17 @@ export const AnimationScene = () => {
       changeSkin(updatedCharacter?: ICharacterResponse) {
         if (!this.person) return;
         const allSkins = this.person.skeleton.data.skins;
+        console.log(allSkins)
+        const face = allSkins.find(item => item.name.includes(getSkin('face') ?? 'лицо 1'))!;
         const headSkin = allSkins.find(item => item.name.includes(getSkin('head') ?? 'голова 18'))!;
         const bottomSkin = allSkins.find(item => item.name.includes(getSkin('legs') ?? 'штаны базовые'))!;
-        const upSkin = allSkins.find(item => item.name.includes(getSkin('upper_body') ?? 'футболка базовая'))!;
-        const face = allSkins.find(item => item.name.includes(getSkin('face') ?? 'лицо 1'))!;
         const skinColor = allSkins.find(item => item.name.includes(getSkin('skin_color') ?? 'кожа базовая'))!;
+        const upSkin = allSkins.find(item => item.name.includes(getSkin('upper_body') ?? 'футболка_базовая'))!;
 
         const skin = new Skin('created');
         skin.name = face.name.split('/')[1];
         skin.addSkin(bottomSkin);
+        console.log(character)
         skin.addSkin(upSkin);
         skin.addSkin(headSkin);
         skin.addSkin(face);
@@ -106,7 +111,7 @@ export const AnimationScene = () => {
         this.person.skeleton.setSkin(skin);
 
         function getSkin(wear_location: TypeWearLocation) {
-          return (updatedCharacter ?? character)?.skins
+          return (updatedCharacter ?? character?.data)?.skins
             .find(item => item.wear_location === wear_location)
             ?.name.toLowerCase();
         }
@@ -140,7 +145,7 @@ export const AnimationScene = () => {
         spineSceneRef.current = null;
       }
     };
-  }, [sceneRef, size, isLoading]);
+  }, [sceneRef, size, character?.isLoading]);
 
   useEffect(() => {
     if (!spineSceneRef.current) return;

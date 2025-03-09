@@ -20,6 +20,13 @@ export const roomApi = createApi({
       }),
       providesTags: ['room'],
     }),
+    getEquipedById: builder.query<IEquipedRoomResponse, { id: string }>({
+      query: ({ id }) => ({
+        url: `/room/${id}`,
+        method: 'GET',
+      }),
+      providesTags: ['room'],
+    }),
     addItemToRoom: builder.mutation<IEquipedRoomResponse, IEquipItemRequest>({
       query: data => ({
         url: `/room/add`,
@@ -44,4 +51,5 @@ export const {
   useAddItemToRoomMutation,
   useRemoveItemFromRoomMutation,
   useGetEquipedQuery,
+  useGetEquipedByIdQuery,
 } = roomApi;

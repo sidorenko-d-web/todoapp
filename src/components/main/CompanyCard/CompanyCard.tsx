@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { CompanyResponseDTO, useGetAllIntegrationsQuery, useGetIntegrationsQuery } from '../../../redux';
+import { CompanyResponseDTO, useGetIntegrationsQuery } from '../../../redux';
 import lightningIcon from '../../../assets/icons/lightning.svg';
 import starBlueIcon from '../../../assets/icons/star-blue.svg';
 import starDarkGrayIcon from '../../../assets/icons/star-dark-gray.svg';

@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import { GetTasksResponse, UpdateTaskRequest, UpdateTaskResponse, GetTaskQuestionsResponse, GetDailyRewardResponse, GetTaskQuestionsErrorResponse, TaskBoost, TaskCategory } from './dto';
+import { GetTasksResponse, UpdateTaskRequest, UpdateTaskResponse, GetDailyRewardResponse, TaskBoost, TaskCategory } from './dto';
 
 export type GetTasksParams = {
   title?: string;
