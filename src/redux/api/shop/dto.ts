@@ -71,6 +71,7 @@ export interface IAchievementBoost {
 export interface IAchievement {
   id: string;
   name: string;
+  name_eng: string;
   company_name: string;
   total_integrations: number;
   level: number;

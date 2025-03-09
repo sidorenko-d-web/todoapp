@@ -7,6 +7,7 @@ import { IAchievement, useGetEquipedQuery } from '../../../redux';
 
 interface RewardItem {
   name: string;
+  name_eng: string;
   stars: number;
   medal: 'gold' | 'silver' | 'bronze';
   isActive: boolean;
@@ -32,6 +33,7 @@ const RewardsList: React.FC = () => {
 
         return {
           name: achievement.name,
+          name_eng: achievement.name_eng,
           stars: achievement.level,
           medal,
           isActive: achievement.id === roomData?.achievements?.[0]?.id,
