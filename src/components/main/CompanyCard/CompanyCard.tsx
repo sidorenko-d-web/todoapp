@@ -7,7 +7,7 @@ import integrationBlueIcon from '../../../assets/icons/integration-blue.svg';
 import { getCompanyLogo } from '../../../utils/getCompanyLogo';
 import s from './CompanyCard.module.scss';
 import { isGuideShown } from '../../../utils';
-import { GUIDE_ITEMS } from '../../../constants';
+import { GUIDE_ITEMS, starsThresholds } from '../../../constants';
 import { Button } from '../../shared';
 
 
@@ -31,29 +31,23 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
     return 0;
   };
 
-  const thresholds = {
-    firstStar: 4,
-    secondStar: 10,
-    thirdStar: 18
-  };
-
   const getProgressBarPercentage = (count: number = 0) => {
     // Calculate which progress segment we're in
-    if (count >= thresholds.thirdStar) {
+    if (count >= starsThresholds.thirdStar) {
       return 100;
-    } else if (count >= thresholds.secondStar) {
+    } else if (count >= starsThresholds.secondStar) {
       // Progress between second and third star (10-17)
-      const progressInSegment = count - thresholds.secondStar;
-      const segmentSize = thresholds.thirdStar - thresholds.secondStar;
+      const progressInSegment = count - starsThresholds.secondStar;
+      const segmentSize = starsThresholds.thirdStar - starsThresholds.secondStar;
       return (progressInSegment / segmentSize) * 100;
-    } else if (count >= thresholds.firstStar) {
+    } else if (count >= starsThresholds.firstStar) {
       // Progress between first and second star (4-9)
-      const progressInSegment = count - thresholds.firstStar;
-      const segmentSize = thresholds.secondStar - thresholds.firstStar;
+      const progressInSegment = count - starsThresholds.firstStar;
+      const segmentSize = starsThresholds.secondStar - starsThresholds.firstStar;
       return (progressInSegment / segmentSize) * 100;
     } else {
       // Progress towards first star (0-3)
-      return (count / thresholds.firstStar) * 100;
+      return (count / starsThresholds.firstStar) * 100;
     }
   };
 
@@ -93,7 +87,7 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
         <div className={s.stars}>
             {[...Array(3)].map((_, index) => (
               <img
-                className={integrationCount >= thresholds.thirdStar ? s.starsMax : ''}
+                className={integrationCount >= starsThresholds.thirdStar ? s.starsMax : ''}
                 key={index}
                 src={index < blueStarCount ? starBlueIcon : starDarkGrayIcon}
                 alt=""
@@ -101,7 +95,7 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
             ))}
         </div>
 
-        {integrationCount < thresholds.thirdStar && (
+        {integrationCount < starsThresholds.thirdStar && (
           <div className={s.progressBar}>
             <div
               className={s.progressBarInner}

@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import lightningIcon from '../../../assets/icons/lightning.svg';
 import {
@@ -49,7 +49,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   ] as const;
 
   const [selectedOption, setSelectedOption] = useState<(typeof contentOptions)[number]['value']>('text');
-
+  const [selectedCompanyId, setSelectedCompanyId] = useState("")
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
   const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
   const { data: profile, isLoading: isProfileLoading } = useGetCurrentUserProfileInfoQuery();
@@ -65,6 +65,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   };
 
   const submitCreation = (companyId: string) => {
+    setSelectedCompanyId(companyId);
     if (!selectedOption || !companyId) return;
 
     createIntegration({
@@ -75,8 +76,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       .then((data) => {
         dispatch(setIntegrationCreated(true));
         dispatch(setLastIntegrationId(data.id));
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         onClose();
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         dispatch(integrationsApi.util.invalidateTags(['Integrations']));
         dispatch(profileApi.util.invalidateTags(['Me']));
       });
@@ -126,7 +127,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
               </span>
             ))}
           </div>
-          {uniqueCompany && (
+          {uniqueCompany && !noItemsMessage && (
             <SpecialIntegration
               integration={uniqueCompany}
             />
@@ -139,14 +140,15 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           {!noItemsMessage ? (
             <div className={s.companies}>
               {companies?.map((company) =>
-                  company.growth_tree_stage !== 100 && (
-                    <CompanyCard
-                      key={company.id}
-                      company={company}
-                      disabled={hasCreatingIntegration}
-                      onClick={() => submitCreation(company.id)}
-                    />
-                  ),
+                company.growth_tree_stage !== 100 && (
+                  <CompanyCard
+                    key={company.id}
+                    company={company}
+                    selected={selectedCompanyId === company.id}
+                    disabled={hasCreatingIntegration}
+                    onClick={() => submitCreation(company.id)}
+                  />
+                ),
               )}
             </div>
           ) : (
@@ -165,11 +167,11 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             }}
             className={`${s.button} 
             ${buttonGlowing ? s.glowingBtn : ''} `}
-          onClick={goToShop}
-        >
-          {t('i21')}
-        </TrackedButton> }                             
-      </div>
+            onClick={goToShop}
+          >
+            {t('i21')}
+          </TrackedButton>}
+        </div>
       }
     </ExpandableBottomModal>
   );
