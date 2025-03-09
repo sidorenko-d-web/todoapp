@@ -17,7 +17,7 @@ import { AppRoute, MODALS } from '../../constants';
 import { useModal } from '../../hooks';
 
 import { GUIDE_ITEMS } from '../../constants';
-import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../utils';
+import { isGuideShown, setGuideShown } from '../../utils';
 
 import {
   setAccelerateIntegrationGuideClosed,
@@ -94,7 +94,6 @@ export const MainPage: FC = () => {
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
 
-
   useEffect(() => {
     if (creatingIntegrationModalState.isOpen) {
       closeModal(MODALS.SUBSCRIBE);
@@ -169,12 +168,8 @@ export const MainPage: FC = () => {
     }
   }, []);
 
-  const isLoading = (
-    isAllIntegrationsLoading ||
-    isCurrentUserProfileInfoLoading ||
-    isIntegrationsLoading ||
-    isRoomLoading
-  );
+  const isLoading =
+    isAllIntegrationsLoading || isCurrentUserProfileInfoLoading || isIntegrationsLoading || isRoomLoading;
 
   if (isLoading) return <Loader />;
 
@@ -182,16 +177,26 @@ export const MainPage: FC = () => {
     if (integrationCurrentlyCreating) {
       reduxDispatch(incrementAcceleration());
     }
-  }
+  };
 
   return (
     <main className={s.page} onClick={accelerateIntegration}>
       <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
-      {integrationCurrentlyCreating && <div
-        style={{ position: 'absolute', top: '0', zIndex: '15000', height: '70%', width: '100%', backgroundColor: 'transparent' }}
-        onClick={accelerateIntegration} />}
+      {integrationCurrentlyCreating && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '0',
+            zIndex: '15000',
+            height: '70%',
+            width: '100%',
+            backgroundColor: 'transparent',
+          }}
+          onClick={accelerateIntegration}
+        />
+      )}
 
-      <Room />
+      <Room mode="me" />
 
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
@@ -298,16 +303,15 @@ export const MainPage: FC = () => {
           />
         )}
 
-      {!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN) &&
-        isPublishedModalClosed && (
-          <IntegrationCreatedGuide
-            onClose={() => {
-              setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-              handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-              navigate(AppRoute.Integration.replace(':integrationId', integrationId));
-            }}
-          />
-        )}
+      {!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN) && isPublishedModalClosed && (
+        <IntegrationCreatedGuide
+          onClose={() => {
+            setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+            handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+            navigate(AppRoute.Integration.replace(':integrationId', integrationId));
+          }}
+        />
+      )}
 
       {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (

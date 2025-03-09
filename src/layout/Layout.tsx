@@ -3,7 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import styles from './Layout.module.scss';
 import { Header } from '../components/Header/';
 import { useEffect, useState } from 'react';
-import { localStorageConsts, MODALS } from '../constants';
+import { AppRoute, localStorageConsts, MODALS } from '../constants';
 import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
 import { useModal, useScrollManager } from '../hooks';
 import { getOS } from '../utils';
@@ -11,6 +11,7 @@ import { getOS } from '../utils';
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
 import Lottie from 'lottie-react';
 import { lampTable } from '../assets/animations';
+import clsx from 'clsx';
 
 const Layout = () => {
   const location = useLocation();
@@ -21,24 +22,27 @@ const Layout = () => {
 
   const showHeader = !location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/);
 
-  const needsReducedMargin = [
-    '/',
-    '/progressTree',
-    location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/)
-  ].includes(location.pathname);
+  const needsReducedMargin = ['/', '/progressTree', location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/)].includes(
+    location.pathname,
+  );
 
   const showRoadmapBg = location.pathname === '/progressTree';
 
   useEffect(() => {
-    const isNeedToOpenChest = localStorage.getItem(
-      localStorageConsts.IS_NEED_TO_OPEN_CHEST,
-    );
+    const isNeedToOpenChest = localStorage.getItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
   }, []);
 
-  const contentClassName = `${styles.content} ${showHeader ? styles.withHeader : ''
-    } ${needsReducedMargin ? styles.reducedMargin : ''} ${platform ? styles[platform] : ''
-    }`;
+  const isRoom = location.pathname === AppRoute.Main || location.pathname.includes(AppRoute.Profile);
+
+  console.log(location)
+
+  const contentClassName = clsx(
+    styles.content,
+    showHeader && styles.withHeader,
+    needsReducedMargin && styles.reducedMargin,
+    isRoom && styles.room,
+  );
 
   useEffect(() => {
     if (showRoadmapBg && contentRef.current) {
@@ -50,33 +54,23 @@ const Layout = () => {
         setBgOffset(newOffset);
       };
 
-      contentRef.current.addEventListener("scroll", handleScroll);
+      contentRef.current.addEventListener('scroll', handleScroll);
       return () => {
-        contentRef.current?.removeEventListener("scroll", handleScroll);
+        contentRef.current?.removeEventListener('scroll', handleScroll);
       };
     }
   }, [showRoadmapBg, contentRef.current]);
 
   return (
     <>
-      <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''
-        }`}>
+      <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
       </div>
       <div className={styles.wrp}>
         {showRoadmapBg && (
           <>
-            <img
-              src={roadmapBg}
-              className={styles.bg_image}
-              style={{ transform: `translateY(-${bgOffset}px)` }}
-            />
-            <Lottie
-              animationData={lampTable}
-              loop
-              autoplay
-              style={{ position: 'fixed', bottom: '20px' }}
-            />
+            <img src={roadmapBg} className={styles.bg_image} style={{ transform: `translateY(-${bgOffset}px)` }} />
+            <Lottie animationData={lampTable} loop autoplay style={{ position: 'fixed', bottom: '20px' }} />
           </>
         )}
         {showHeader && <Header />}

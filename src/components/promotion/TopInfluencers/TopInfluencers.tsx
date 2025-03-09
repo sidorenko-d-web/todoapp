@@ -52,6 +52,12 @@ export const TopInfluencers = () => {
 
   const position = userPosition !== -1 ? userPosition + 1 : topProfiles.length!;
 
+  const progressBar = userData?.is_email_verified
+    ? '50%'
+    : userData?.is_phone_verified && userData?.is_superuser
+      ? '100%'
+      : '0%';
+
   return (
     <>
       <h2 className={s.headerInfluencers}>
@@ -74,7 +80,7 @@ export const TopInfluencers = () => {
               </div>
             </div>
             <div className={s.progressBar}>
-              <span className={s.progress} style={{ width: `${userData?.role_id === 0 ? '0%' : userData?.role_id === 1 ? '50%' : '100%'}` }}></span>
+              <span className={s.progress} style={{ width: `${progressBar}` }}></span>
             </div>
             <p className={s.textInfo}>
               {isInfluencersLocked

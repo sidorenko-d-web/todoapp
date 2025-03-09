@@ -10,7 +10,7 @@ import coinBlueIcon from '../../../../assets/icons/coin-blue-human.svg';
 import { ProgressBarTasks } from '../../ProgressBarTasks';
 import chestIconPurple from '../../../../assets/icons/chest-purple.svg';
 import chestIconRed from '../../../../assets/icons/chest-red.svg';
-import { useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
+import { useUpdateTaskMutation } from '../../../../redux/api/tasks';
 import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../../helpers';
 
@@ -59,7 +59,7 @@ export const ModalTopTasks: FC<ModalTopTasksProps> = ({
   const [channelLink2, setChannelLink2] = useState('');
   const progress = (completedSteps.filter(step => step).length / task.stages) * 100;
   const [updateTask] = useUpdateTaskMutation();
-  const [hasError, setHasError] = useState(false);
+  const [hasError] = useState(false);
 
   useEffect(() => {
     setCurrentStepIndex(task.completed_stages);

@@ -1,10 +1,9 @@
 import React from 'react';
 import styles from './RewardsList.module.scss';
 import Reward from './Reward/Reward';
-import { useGetInventoryAchievementsQuery } from '../../../redux/api/inventory/api';
+import { useGetInventoryAchievementsQuery } from '../../../redux';
 import { useTranslation } from 'react-i18next';
 import { IAchievement, useGetEquipedQuery } from '../../../redux';
-import { getAchivementType } from '../../../helpers';
 
 interface RewardItem {
   name: string;

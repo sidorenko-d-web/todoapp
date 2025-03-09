@@ -12,8 +12,8 @@ import bookIcon from '../../../../assets/icons/book.svg';
 import CrossRedIcon from '../../../../assets/icons/cross-red-in-circle.svg';
 import { formatAbbreviation } from '../../../../helpers';
 import { Button } from '../../../shared';
-import { Task, TaskBoost, Question } from '../../../../redux/api/tasks/dto';
-import { useUpdateTaskMutation } from '../../../../redux/api/tasks/api';
+import { Task } from '../../../../redux/api/tasks';
+import { useUpdateTaskMutation } from '../../../../redux/api/tasks';
 import { useTranslation } from 'react-i18next';
 
 interface ModalDailyTasksProps {
