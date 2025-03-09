@@ -12,6 +12,11 @@ export interface IShopItem {
   image_url: string;
   item_premium_level: TypeItemQuality;
   is_bought: boolean;
+  chest: {
+    id: string,
+    chest_name: string,
+    chest_name_eng: string,
+  }
 }
 
 export interface IShopItemsResponse {

@@ -4,8 +4,7 @@ import { ProfileInfo, ProfileStats, ProfileStatsMini, StreakCard } from '../../p
 import goldMedal from '../../../assets/icons/medal-gold.svg';
 import silverMedal from '../../../assets/icons/medal-silver.svg';
 import bronzeMedal from '../../../assets/icons/medal-bronze.svg';
-import { useGetUserProfileInfoByIdQuery } from '../../../redux';
-import { useGetPushLineQuery } from '../../../redux';
+import { useGetPushLineQuery, useGetUserProfileInfoByIdQuery } from '../../../redux';
 import s from './StrangerProfileModal.module.scss';
 import { useTranslation } from 'react-i18next';
 
@@ -20,7 +19,8 @@ export const StrangerProfileModal: FC<StrangerProfileModalProps> = ({
   onClose,
   profileId,
 }) => {
-  const { t } = useTranslation('profile');
+  const { t,i18n } = useTranslation('profile');
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: profile } = useGetUserProfileInfoByIdQuery(profileId);
   const { data } = useGetPushLineQuery();
   const streaks = data?.week_information.filter(
@@ -77,7 +77,9 @@ export const StrangerProfileModal: FC<StrangerProfileModalProps> = ({
           position={position}
           nonEditable
         />
-        <StreakCard streakDays={daysInARow ?? 0} onlyStreak />
+        <StreakCard streakDays={daysInARow ?? 0} onlyStreak
+                    chest={locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}
+                    status={locale === 'ru' ? data?.push_line_profile_status.status_name : data?.push_line_profile_status.status_name_eng} />
         <ProfileStats
           earned={profile.total_earned}
           views={profile.total_views}

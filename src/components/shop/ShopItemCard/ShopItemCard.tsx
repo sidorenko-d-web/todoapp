@@ -103,7 +103,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
         <div className={styles.title}>
           <div className={styles.headline}>
             <h3>
-              {item.name}
+              {locale === 'ru' ? item.name : item.name_eng}
             </h3>
           </div>
           <p
@@ -167,7 +167,6 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
             ) : (
               <>
                 {formatAbbreviation(item.price_internal, 'number', { locale: locale })} <img src={CoinIcon} alt="" />
-
               </>
             )}
           </Button>

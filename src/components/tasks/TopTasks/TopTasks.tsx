@@ -23,7 +23,8 @@ type TopTasksProps = {
 };
 
 export const TopTasks: FC<TopTasksProps> = ({ task }) => {
-  const { t } = useTranslation('quests');
+  const { t, i18n } = useTranslation('quests');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
   const [claimChestReward] = useClaimChestRewardMutation();
 

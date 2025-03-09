@@ -322,7 +322,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               </p>
               {
                 <div className={styles.goal}>
-                  <p>{t(s25Key)}</p>
+                  <p>{locale === 'ru' ? item.chest.chest_name : item.chest.chest_name_eng}</p>
                   <img
                     src={
                       item.level < 50

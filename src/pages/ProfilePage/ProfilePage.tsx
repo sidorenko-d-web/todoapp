@@ -19,7 +19,8 @@ import { Loader } from '../../components';
 import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
 
 export const ProfilePage: React.FC = () => {
-  const { t } = useTranslation('profile');
+  const { t,i18n } = useTranslation('profile');
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
 
@@ -180,6 +181,8 @@ export const ProfilePage: React.FC = () => {
               streakDays={streaks !== undefined ? streaks : 0}
               frozenDays={frozen !== undefined ? frozen : 0}
               days={weekData}
+              status={locale === 'ru' ? data?.push_line_profile_status.status_name : data?.push_line_profile_status.status_name_eng}
+              chest={locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}
               weekData={data?.week_information}
             />
           </div>
