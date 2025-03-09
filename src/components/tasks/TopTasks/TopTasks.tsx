@@ -115,7 +115,7 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
           progress={progress}
           totalSteps={taskState.totalSteps}
           currentStep={taskState.currentStep}
-          progressReward={t('q10')}
+          progressReward={locale === 'ru' ? task.chest?.chest_name : task.chest?.chest_name_eng}
           progressRewardIcon={getChestIcon()}
           onClick={handleOpenTopTasks}
           disabled={task.is_reward_given}
