@@ -1,4 +1,4 @@
-import { RoomItemsSlots, useGetEquipedQuery } from '../../../../redux';
+import { IEquipedRoomResponse, RoomItemsSlots } from '../../../../redux';
 import styles from './Partials.module.scss';
 import greenWallUp from '../../../../assets/images/walls/green-wall-up.svg';
 import greenWallDown from '../../../../assets/images/walls/green-wall-down.svg';
@@ -9,11 +9,15 @@ import blueWall from '../../../../assets/images/walls/blue-wall.svg';
 import yellowWall from '../../../../assets/images/walls/yellow wall62.svg';
 import clsx from 'clsx';
 
-export const Walls = () => {
-  const { data } = useGetEquipedQuery();
 
-  const equipedWall = data?.items.find(
-    item => item.id === data.equipped_items.find(_item => _item.slot === RoomItemsSlots.wall.slot)?.id,
+interface props {
+  room: IEquipedRoomResponse | undefined;
+}
+
+export const Walls = ({ room }: props) => {
+
+  const equipedWall = room?.items.find(
+    item => item.id === room.equipped_items.find(_item => _item.slot === RoomItemsSlots.wall.slot)?.id,
   );
 
   const redWalls = {
