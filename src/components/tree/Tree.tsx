@@ -3,6 +3,7 @@ import s from './Tree.module.scss';
 import classNames from 'classnames';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
+import shop from '../../assets/icons/colored-shop.svg';
 import {
   Boost,
   useGetCurrentUserProfileInfoQuery,
@@ -16,7 +17,6 @@ import giftBlue from '../../assets/icons/gift.svg';
 import giftPurple from '../../assets/icons/gift-purple.svg';
 import giftRed from '../../assets/icons/gift-red.svg';
 
-
 import spinnerPurple from '../../assets/icons/purple-glow.svg';
 import spinnerBlue from '../../assets/icons/blue-glow.svg';
 import spinnerRed from '../../assets/icons/red-glow.svg';
@@ -28,6 +28,14 @@ import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import GetGift from '../../pages/DevModals/GetGift/GetGift';
 
+type ShopUpgrades = {
+  [key: string]: { icon: string };
+}
+
+const shopUpgrades: ShopUpgrades = {
+  150: { icon: s.arrowsPurple },
+  300: { icon:  s.arrowsRed },
+};
 
 export const Tree = () => {
   const { openModal } = useModal();
@@ -69,10 +77,10 @@ export const Tree = () => {
       <div className={s.progressBarContainer}>
         <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300}px` }}>
           {treeData?.growth_tree_stages.map((stage, index) => {
-            // const isRewardAvailable = stage.achievement.is_available;
-            const isRewardAvailable = true;
-            // const isRewardClaimed = stage.achievement.is_unlocked;
-            const isRewardClaimed = true;
+            const isRewardAvailable = stage.achievement.is_available;
+            // const isRewardAvailable = true;
+            const isRewardClaimed = stage.achievement.is_unlocked;
+            // const isRewardClaimed = true;
             const showReward = stage.achievement.boost.subscribers > 0; // Не показываем первый элемент, тк награды в нем нулевые
 
             const isActive = userProfileData && stage.id <= userProfileData.growth_tree_stage_id;
@@ -154,6 +162,26 @@ export const Tree = () => {
                           {(isRewardAvailable && !isRewardClaimed) || isRewardClaimed && <div
                             className={`${s.giftStatus} ${s.notTaken}`}
                           />}
+                        </div>
+                      )}
+
+                      {/* Блок с улучшением магазина */}
+                      {Object.keys(shopUpgrades).includes(stage.stage_number.toString()) && (
+                        <div className={s.imgPrize}>
+                          {!isRewardClaimed && (
+                            <>
+                              <div className={s.blickAnimation}>
+                                <LazyLottie animationData={giftBlick} />
+                              </div>
+                              <div className={classNames({ [s.blur]: !isActive })} />
+                            </>
+                          )}
+
+                          <img src={shop} height={20} width={20} alt="reward" />
+
+                          <div
+                            className={`${s.giftStatus} ${shopUpgrades[stage.stage_number].icon}`}
+                          />
                         </div>
                       )}
                     </div>

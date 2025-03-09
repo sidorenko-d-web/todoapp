@@ -14,3 +14,4 @@ export * from './imageSvgString';
 export * from './localStorage';
 export * from './influencersUnlockingSteps';
 export * from './mainScene';
+export * from './integrationStarsThresholds'

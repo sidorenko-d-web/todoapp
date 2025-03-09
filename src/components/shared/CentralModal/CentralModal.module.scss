@@ -44,13 +44,8 @@
   margin-bottom: 5px;
 
   & > img {
-    width: 14px;
-    height: 14px;
-
-    @media (min-width: var.$breakpoint-md) {
-      width: 16px;
-      height: 16px;
-    }
+    width: 18px;
+    height: 18px;
   }
 }
 

@@ -51,7 +51,7 @@ export const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
           <div className={classNames({ [s.disabled]: disabled })}>
             <header className={classNames(s.header, headerStyles)}>
               <h2 className={s.title}>{title}{titleIcon &&
-                <img src={titleIcon} alt={'title'} />}</h2>
+                <img src={titleIcon} alt={'title'} width={18} height={18} />}</h2>
               <Button className={s.closeBtn} onClick={onClose}>
                 <img src={closeIcon} alt={'Close'} />
               </Button>
