@@ -86,7 +86,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   margin-bottom: 74px;
 
   &.room {
-    margin-top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top));
+    margin-top: 0
   }
 
   // iOS specific adjustments
