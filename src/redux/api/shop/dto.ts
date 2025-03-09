@@ -86,4 +86,15 @@ export interface IAchievementsResponse {
 }
 export interface IAchievementsRequest {
   is_unlocked?: boolean;
+  ids?: string[]
+  name?: string
+  total_integrations?: string
+  level?: string
+  company_name?: string
+  is_precious_drop?: boolean
+  is_growth_tree_achievement?: boolean
+  order_by?: string
+  asc?: boolean
+  offset?: number
+  limit?: number
 }

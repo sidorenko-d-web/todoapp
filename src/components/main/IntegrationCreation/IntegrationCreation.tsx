@@ -27,10 +27,10 @@ export const IntegrationCreation = () => {
   const handleIntegrationCreation = () => {
     if (!profile) return;
 
-    // if (profile?.subscription_integrations_left <= 0) {
-    //   openModal(MODALS.SUBSCRIBE);
-    //   return;
-    // }
+    if (profile?.subscription_integrations_left <= 0) {
+      openModal(MODALS.SUBSCRIBE);
+      return;
+    }
 
     openModal(MODALS.CREATING_INTEGRATION);
   };
