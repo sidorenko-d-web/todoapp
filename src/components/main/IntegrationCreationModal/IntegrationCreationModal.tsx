@@ -218,8 +218,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                 {tGuide('g24')}
               </>
             }
-            align="right"
-            top="14%"
+            align="left"
+            top="22%"
           />}
     </ExpandableBottomModal>
   );
