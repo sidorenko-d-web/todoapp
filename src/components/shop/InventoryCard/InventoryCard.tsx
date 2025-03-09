@@ -29,9 +29,8 @@ import { useModal, useTonConnect } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import useSound from 'use-sound';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button } from '../../shared';
-import { setPoints } from '../../../redux';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 
 interface Props {
@@ -69,7 +68,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const [idDisabled] = useState(true);
   const { t, i18n } = useTranslation('shop');
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
-  const dispatch = useDispatch();
   const { data, isLoading: isItemsLoading } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
@@ -81,7 +79,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     item_rarity: item.item_rarity,
   });
 
-  console.log('items for images: ', itemsForImages);
 
   const { refetch } = useGetCurrentUserProfileInfoQuery();
   const [equipItem, { isLoading: isEquipItemLoading }] = useAddItemToRoomMutation();
@@ -142,7 +139,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         playLvlSound();
         refetch();
         refetchEquipped();
-        dispatch(setPoints((prevPoints: number) => prevPoints + 1));
         if (item.level === 49) {
           if (item.item_premium_level === 'pro') {
             openModal(MODALS.UPGRADED_SHOP, {
@@ -459,7 +455,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           <Button
             disabled={idDisabled}
             onClick={() => {
-              console.log('object');
               removeItem({ items_to_remove: [{ id: item.id }] });
             }}
           >

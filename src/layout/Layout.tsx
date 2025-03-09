@@ -33,9 +33,9 @@ const Layout = () => {
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
   }, []);
 
-  const isRoom = location.pathname === AppRoute.Main || location.pathname.includes(AppRoute.Profile);
-
-  console.log(location)
+  const isRoom =
+    location.pathname === AppRoute.Main ||
+    (location.pathname.includes(AppRoute.Profile) && location.pathname.split('/')?.[2]);
 
   const contentClassName = clsx(
     styles.content,
@@ -70,7 +70,7 @@ const Layout = () => {
         {showRoadmapBg && (
           <>
             <img src={roadmapBg} className={styles.bg_image} style={{ transform: `translateY(-${bgOffset}px)` }} />
-            <Lottie animationData={lampTable} loop autoplay style={{ position: 'fixed', bottom: '20px' }} />
+            <Lottie animationData={lampTable} loop autoplay style={{ position: 'fixed', bottom: '23px' }} />
           </>
         )}
         {showHeader && <Header />}

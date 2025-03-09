@@ -20,7 +20,6 @@ import { treeReducer } from './slices/tree.ts';
 import confirmationReducer from './slices/confirmation.ts';
 
 import guideReducer from './slices/guideSlice.ts';
-import { pointsReducer } from './slices/point.ts';
 import { confirmationsApi } from './api/confirmations/api.ts';
 import { characterApi } from './api/character/api.ts';
 import accelerationReducer from './slices/integrationAcceleration.ts';
@@ -30,7 +29,6 @@ const appReducer = combineReducers({
   guide: guideReducer,
   treeSlice: treeReducer,
   audioSlice: audioReducer,
-  pointSlice: pointsReducer,
   confirmation: confirmationReducer,
   acceleration: accelerationReducer,
   animationStateSlice: animationStateReducer,
