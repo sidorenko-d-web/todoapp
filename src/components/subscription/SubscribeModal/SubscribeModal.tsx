@@ -48,7 +48,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
     buySubscription()
       .unwrap()
       .then(() => onSuccess())
-      .catch((error) => {
+      .catch(() => {
         setErrorMessage(t(t('g80')));
         setIsShow(true);
         setTimeout(() => setIsShow(false), 3000);

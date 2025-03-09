@@ -209,8 +209,10 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
     ],
   };*/
   useEffect(() => {
-    const ids = data.referrals.map(referral => referral.character_data.profile_id);
-    setProfileIds(ids);
+    const ids = data?.referrals.map(referral => referral.character_data.profile_id);
+    if (ids){
+      setProfileIds(ids);
+    }
   }, []);
   const [profilesData, setProfilesData] = useState<UserProfileInfoResponseDTO[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);

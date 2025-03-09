@@ -135,7 +135,7 @@ export const ProfilePage: React.FC = () => {
 
   if (isLoading) {
     return <Loader />
-  };
+  }
 
   return (
     <>

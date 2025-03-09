@@ -1,10 +1,8 @@
 import { FC } from 'react';
-import { ShopItemCard } from '../ShopItemCard/ShopItemCard';
+import { ShopItemCard } from '../ShopItemCard';
 import styles from './ItemsTab.module.scss';
 import { IShopItem } from '../../../redux';
 import { InventoryCard } from '../InventoryCard';
-import { isGuideShown } from '../../../utils';
-import { GUIDE_ITEMS } from '../../../constants';
 
 interface props {
   shopCategory: {
@@ -16,7 +14,6 @@ interface props {
 }
 
 export const ItemsTab: FC<props> = ({ inventoryItems, shopItems }) => {
-  const foundItem = shopItems?.find(item => item.name.toLowerCase().trim() === 'печатная машинка');
 
   return (
     <div className={styles.cardsWrapper}>

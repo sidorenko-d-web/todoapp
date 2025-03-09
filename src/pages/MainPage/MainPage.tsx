@@ -17,7 +17,7 @@ import { AppRoute, MODALS } from '../../constants';
 import { useModal } from '../../hooks';
 
 import { GUIDE_ITEMS } from '../../constants';
-import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../utils';
+import { isGuideShown, setGuideShown } from '../../utils';
 
 import {
   setAccelerateIntegrationGuideClosed,
