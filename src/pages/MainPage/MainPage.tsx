@@ -272,8 +272,8 @@ export const MainPage: FC = () => {
         />
       )}
 
-      {!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN) &&
-        isPublishedModalClosed && (
+      {(!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN) &&
+        isPublishedModalClosed) && (
           <IntegrationCreatedGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
