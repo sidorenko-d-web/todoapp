@@ -1,5 +1,3 @@
-import { useTranslation } from 'react-i18next';
-
 export interface RoomItemSlot {
   slot: number;
   name: string[];
@@ -30,92 +28,91 @@ interface RoomItemsSlots {
 }
 
 export const useRoomItemsSlots = (): RoomItemsSlots => {
-  const { t } = useTranslation('roomItems');
 
   return {
     wall: {
       slot: 0,
-      name: t('wall', { returnObjects: true }) as string[],
+      name: ['Бетонные стены', 'Стены', 'Обои'],
     },
     floor: {
       slot: 1,
-      name: t('floor', { returnObjects: true }) as string[],
+      name: ['Пол', 'Ламинат', 'Плитка'],
     },
     desc: {
       slot: 2,
-      name: t('desc', { returnObjects: true }) as string[],
+      name: ['Столик', 'Стол', 'Стол массив'],
     },
     chair: {
       slot: 3,
-      name: t('chair', { returnObjects: true }) as string[],
+      name: ['Стул', 'Компьютерный стул', 'Игровое кресло'],
     },
     sofa: {
       slot: 4,
-      name: t('sofa', { returnObjects: true }) as string[],
+      name: ['Диванчик', 'Диван', 'Диван дизайнерский'],
     },
     window: {
       slot: 5,
-      name: t('window', { returnObjects: true }) as string[],
+      name: ['Деревянное окно', 'Окно', 'Двойное окно'],
     },
     poster: {
       slot: 6,
-      name: t('poster', { returnObjects: true }) as string[],
+      name: ['Постер', 'Постеры в деревянной рамке', 'Картина LED'],
     },
     lens: {
       slot: 7,
-      name: t('lens', { returnObjects: true }) as string[],
+      name: ['Объектив', 'Объектив широкоугольный', 'Объектив профессиональный'],
     },
     note: {
       slot: 8,
-      name: t('note', { returnObjects: true }) as string[],
+      name: ['Тетрадь', 'Блокнот', 'Планшет'],
     },
     lightPortable: {
       slot: 9,
-      name: t('lightPortable', { returnObjects: true }) as string[],
+      name: ['Свет портативный', 'Осветитель', 'Осветитель студийный'],
     },
     carpet: {
       slot: 10,
-      name: t('carpet', { returnObjects: true }) as string[],
+      name: ['Коврик', 'Палас', 'Ковер'],
     },
     camera: {
       slot: 11,
-      name: t('camera', { returnObjects: true }) as string[],
+      name: ['Камера любительская', 'Камера профессиональная', 'Кинокамера'],
     },
     stand: {
       slot: 12,
-      name: t('stand', { returnObjects: true }) as string[],
+      name: ['Штатив', 'Штатив регулируемый', 'Штатив карбоновый'],
     },
     lightDesc: {
       slot: 13,
-      name: t('lightDesc', { returnObjects: true }) as string[],
+      name: ['Лампа настольная', 'Лампа кольцевая', 'Свет студийный'],
     },
     mic: {
       slot: 14,
-      name: t('mic', { returnObjects: true }) as string[],
+      name: ['Микрофон петличный', 'Конденсаторный микрофон', 'Микрофон беспроводной'],
     },
     photograph: {
       slot: 15,
-      name: t('photograph', { returnObjects: true }) as string[],
+      name: ['Мыльница', 'Фотоаппарат', 'Фотоаппарат зеркальный'],
     },
     pc: {
       slot: 16,
-      name: t('pc', { returnObjects: true }) as string[],
+      name: ['Печатная машинка', 'ПК', 'Ноутбук'],
     },
     pen: {
       slot: 17,
-      name: t('pen', { returnObjects: true }) as string[],
+      name: ['Карандаш', 'Ручка', 'Стилус'],
     },
     lamp: {
       slot: 18,
-      name: t('lamp', { returnObjects: true }) as string[],
+      name: ['Лампа', 'Лампа умная', 'Лампа дизайнейрская'],
     },
     ottoman: {
       slot: 19,
-      name: t('ottoman', { returnObjects: true }) as string[],
+      name: ['Пуф', 'Пуф мешок', 'Кресло'],
     },
     plant: {
       slot: 20,
-      name: t('plant', { returnObjects: true }) as string[],
+      name: ['Кактус', 'Фикус', 'Монстера'],
     },
   };
 };

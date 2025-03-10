@@ -12,7 +12,7 @@ export type LoaderProps = {
 
 export const Loader = ({ className, noMargin }: LoaderProps) => {
   const [ dots, setDots ] = useState('');
-  const { t } = useTranslation('quests');
+  const { t } = useTranslation('shop');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -37,7 +37,7 @@ export const Loader = ({ className, noMargin }: LoaderProps) => {
         className={s.hand}
       />
       <span className={s.loading}>
-        <span className={s.text}>{t('q16')}</span>
+        <span className={s.text}>{t('s60')}</span>
         <span className={s.dots}>{dots}</span>
       </span>
     </div>

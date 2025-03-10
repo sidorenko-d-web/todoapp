@@ -81,8 +81,10 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
       setTimeout(() => setIsShow(false), 3000);
       return;
     }
+    const currentPoints = Number(current?.points);
+    const pointIntegration = Number(point_integration);
 
-    if (current && current?.points < point_integration) {
+    if (current && currentPoints < pointIntegration) {
       setErrorMessage(t('g81'));
       setIsShow(true);
       setTimeout(() => setIsShow(false), 3000);

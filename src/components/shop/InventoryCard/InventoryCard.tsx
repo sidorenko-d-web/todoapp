@@ -31,7 +31,7 @@ import useSound from 'use-sound';
 import { useSelector } from 'react-redux';
 import { Button } from '../../shared';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
-import { RoomItemSlot, useRoomItemsSlots } from '../../../../translate/items/items.ts';
+import { useRoomItemsSlots } from '../../../../translate/items/items.ts';
 
 interface Props {
   disabled?: boolean;
@@ -182,9 +182,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     }
   };
 
-  const slot = Object.values(RoomItemsSlots).find((_item: RoomItemSlot) =>
-    Array.isArray(_item.name) && _item.name.find((__item: string) => item.name.includes(__item)),
-  )?.slot;
+  const slot = Object.values(RoomItemsSlots).find(_item => _item.name.find((__item: string) => item.name.includes(__item)))?.slot;
   const isEquipped = equipedItems?.equipped_items.find(_item => _item.id === item.id);
 
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
