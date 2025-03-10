@@ -49,6 +49,7 @@
 $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top));
 
 .wrp {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,15 +57,15 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   margin: 0 auto;
   overflow: hidden;
   //padding: 0 15px;
-  
+
   .bg_image {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100vw;
-    height: auto;
-    z-index: -1;
+    z-index: -10;
     transition: transform 0.1s ease-out;
+    object-fit: cover;
   }
 }
 
