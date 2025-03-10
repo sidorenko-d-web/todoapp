@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../helpers';
 import { setIsPublishedModalClosed, setNeedToPlayHappy } from '../../../redux';
 import { setGuideShown } from '../../../utils';
+import { useEffect } from 'react';
 
 export default function RewardForIntegrationModal() {
   const { t, i18n } = useTranslation('integrations');
@@ -29,6 +30,10 @@ export default function RewardForIntegrationModal() {
   const dispatch = useDispatch();
 
   useAutoPlaySound(MODALS.INTEGRATION_REWARD, SOUNDS.rewardHuge);
+
+  useEffect(() => {
+    setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
+  }, []);
 
   return (
     <CentralModal

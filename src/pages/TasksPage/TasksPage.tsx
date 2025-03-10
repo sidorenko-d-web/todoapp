@@ -24,6 +24,13 @@ export const TasksPage: FC = () => {
     offset: 0,
     limit: 100,
   });
+  const {data: dataDaily, isLoading: isDailyLoading} = useGetTasksQuery({
+    is_assigned: true,
+    category: 'quiz',
+    offset: 0,
+    limit: 100,
+  });
+
   const { data: boostData, isLoading: isBoostLoading } = useGetBoostQuery();
 
   useEffect(() => {
@@ -32,13 +39,14 @@ export const TasksPage: FC = () => {
 
 
   const dailyTask = useMemo(() => {
+
     if (!data?.assignments) return null;
     console.log('data', data);
-    const dailyTasks = data.assignments.filter(task => task.category === 'quiz');
+    const dailyTasks = dataDaily?.assignments;
     console.log('dailyTasks', dailyTasks);
     // Модифицируем задание с учетом языка
-    if (dailyTasks[0]) {
-      const task = dailyTasks[0];
+    if (dailyTasks && dailyTasks[dailyTasks.length - 1]) {
+      const task = dailyTasks[dailyTasks.length - 1];
 
       return {
         ...task,
@@ -87,7 +95,8 @@ export const TasksPage: FC = () => {
 
   const isLoading = (
     isTasksLoading ||
-    isBoostLoading
+    isBoostLoading ||
+    isDailyLoading
   );
 
   if (isLoading) return <Loader />;

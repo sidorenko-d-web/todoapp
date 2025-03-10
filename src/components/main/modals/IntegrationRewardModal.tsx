@@ -3,9 +3,9 @@ import { CentralModal } from "../../shared"
 import styles from './IntegrationRewardModal.module.scss'
 import starBlueIcon from '../../../assets/icons/star-blue.svg';
 import starDarkGrayIcon from '../../../assets/icons/star-dark-gray.svg';
-import medalBronze from "../../../assets/Icons/medal-bronze.svg"
-import medalGold from "../../../assets/Icons/medal-gold.svg"
-import medalSilver from "../../../assets/Icons/medal-silver.svg"
+import medalBronze from "../../../assets/icons/medal-bronze.svg"
+import medalGold from "../../../assets/icons/medal-gold.svg"
+import medalSilver from "../../../assets/icons/medal-silver.svg"
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import Lottie from "lottie-react";
 import { useModal } from "../../../hooks";

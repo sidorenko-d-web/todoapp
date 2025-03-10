@@ -1,6 +1,6 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
-import lightningIcon from '../../../assets/icons/lightning.svg';
+// import lightningIcon from '../../../assets/icons/lightning.svg';
 import {
   integrationsApi,
   profileApi,
@@ -16,7 +16,7 @@ import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
 import {
   integrationCreatingModalButtonGlowing,
-  integrationCreatingModalLightningsGlowing,
+  //integrationCreatingModalLightningsGlowing,
   integrationCreatingModalTabsGlowing,
   isGuideShown,
   setGuideShown,
@@ -93,13 +93,20 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     return null;
   })();
 
-  const lightningsGlowing = integrationCreatingModalLightningsGlowing();
+  //const lightningsGlowing = integrationCreatingModalLightningsGlowing();
 
   const tabsGlowing = integrationCreatingModalTabsGlowing();
 
   const buttonGlowing = integrationCreatingModalButtonGlowing();
 
   const [firstGuideClosed, setFirstGuideClosed] = useState(false);
+
+  useEffect(() => {
+    if(isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) {
+      setFirstGuideClosed(true);
+    }
+  }, []);
+
 
   return (
     // <ExpandableBottomModal
@@ -131,7 +138,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           }
         }}
       headerStyles={s.headerStyles}
-      modalStyles={s.modalStyles}
       titleIcon={integrationWhiteIcon}
     >
 
@@ -139,11 +145,11 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         ? <Loader noMargin />
         : <div className={s.content}>
           <div className={s.skinsWrapper}>
-            {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
+            {/* {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
               <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`}>
                 <img src={lightningIcon} alt="Lightning" width={20} height={20} />
               </div>
-            ))}
+            ))} */}
           </div>
 
           <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
@@ -236,7 +242,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       {(firstGuideClosed && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)) && <CreatingIntegrationGuide
         onClose={() => {
           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-          onClose;
+          onClose();
           navigate(AppRoute.Shop);
         }}
         buttonText={tGuide('g21')}

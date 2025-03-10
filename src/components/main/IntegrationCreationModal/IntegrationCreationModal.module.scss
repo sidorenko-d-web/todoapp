@@ -1,16 +1,15 @@
 @use '../../../assets/styles/index.scss' as var;
 
-
-.modalStyles {
-  height: 85vh;
-  margin-top: 50px;
-}
-
 .content {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
+
+  max-height: 70vh; 
+  // overflow-y: auto; 
+  scrollbar-width: thin;
+
 
   @media (min-width: var.$breakpoint-md) {
     gap: 20px;
