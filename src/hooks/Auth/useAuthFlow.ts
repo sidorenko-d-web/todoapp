@@ -74,15 +74,15 @@ export const useAuthFlow = () => {
   // };
 
   // Запрос fullscreen для Telegram WebApp
-  useEffect(() => {
-    if (
-      window.Telegram &&
-      window.Telegram.WebApp &&
-      typeof window.Telegram.WebApp.requestFullscreen === 'function'
-    ) {
-      window.Telegram.WebApp.requestFullscreen();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     window.Telegram &&
+  //     window.Telegram.WebApp &&
+  //     typeof window.Telegram.WebApp.requestFullscreen === 'function'
+  //   ) {
+  //     window.Telegram.WebApp.requestFullscreen();
+  //   }
+  // }, []);
 
   useEffect(() => {
     const initAuthFlow = async () => {
@@ -97,18 +97,18 @@ export const useAuthFlow = () => {
         const accessToken = localStorage.getItem('access_token');
         const refreshToken = localStorage.getItem('refresh_token');
 
-        if (!accessToken || !refreshToken) {
-          // Если токенов нет, переходим на шаг invite_code
-          saveCurrentStep('invite_code');
-          return; // Прерываем выполнение, чтобы не переходить к другим шагам
-        }
-
         if (hasCompletedSetup) {
           saveCurrentStep('completed');
         } else if (savedStep && savedStep !== 'loading') {
           saveCurrentStep(savedStep);
         } else {
           saveCurrentStep('language');
+        }
+
+        if (!accessToken || !refreshToken) {
+          // Если токенов нет, переходим на шаг invite_code
+          saveCurrentStep('invite_code');
+          return; // Прерываем выполнение, чтобы не переходить к другим шагам
         }
         setRequireInviteCode(false);
       } catch (err: any) {

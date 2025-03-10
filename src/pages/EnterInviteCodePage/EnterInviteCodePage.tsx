@@ -49,7 +49,6 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onCont
 
       console.log("Referral Id: ", referral_id)
       console.log("Referral Code: ", Number.parseInt(inputValue))
-      console.log(inputValue)
       await sendReferralCode({
         referral_id,
         referral_code: Number.parseInt(inputValue)
