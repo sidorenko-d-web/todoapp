@@ -15,6 +15,7 @@ export const Footer = () => {
 
   const currentFooterItemId = useSelector((state: RootState) => state.guide.activeFooterItemId);
 
+  const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
   useEffect(() => {
     setActiveButton((currentFooterItemId >= 0 && currentFooterItemId <= 4) ? currentFooterItemId : -1);
@@ -26,11 +27,9 @@ export const Footer = () => {
     } 
   })
   const handleFooterItemClick = (id: number, redirectTo: string) => {
-    //TODO разкоментировать когда нужно будет вставить гайды
-
-    // if(footerActive) {
+    if(footerActive) {
       navigate(redirectTo);
-    // }
+    }
 
     setActiveButton((currentFooterItemId >= 0 && currentFooterItemId <= 4) ? currentFooterItemId : id)
   };

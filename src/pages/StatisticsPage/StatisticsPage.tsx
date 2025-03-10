@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './StatisticsPage.module.scss';
 import views from '../../assets/icons/views.png';
-import subscribers from '../../assets/icons/subscribers.svg';
+import subscribersIcon from '../../assets/icons/subscribers.svg';
 import logo from '../../assets/icons/dot.png';
 import back from '../../assets/icons/arrow-back.svg';
 import StatisticsCard from '../../components/statistics/statisticsCard/StatisticsCard';
@@ -13,6 +13,7 @@ import { Button } from '../../components/shared';
 import { useTranslation } from 'react-i18next';
 import { Loader } from '../../components';
 import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
+import { usePushLineStatus } from '../../hooks/usePushLineStatus.ts';
 
 const StatisticsPage: FC = () => {
   const { t, i18n } = useTranslation('statistics');
@@ -38,6 +39,11 @@ const StatisticsPage: FC = () => {
 
   if (isLoading) return <Loader />;
 
+  const {in_streak} = usePushLineStatus()
+  const points = in_streak? displayedPoints : userProfileData?.points || "0"
+  const subscribers = in_streak? displayedSubscribers : userProfileData?.subscribers || 0
+  const totalViews = in_streak? displayedTotalViews : userProfileData?.total_views || 0
+
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
@@ -49,16 +55,16 @@ const StatisticsPage: FC = () => {
           <div className={styles.scores}>
             <div className={styles.topScores}>
               <div className={styles.scoresItem}>
-                <p>{formatAbbreviation(displayedTotalViews || 0, 'number', { locale: locale })}</p>
+                <p>{formatAbbreviation(totalViews, 'number', { locale: locale })}</p>
                 <img src={views} height={18} width={18} alt="views" />
               </div>
               <div className={styles.scoresItem}>
-                <p>{formatAbbreviation(displayedSubscribers || 0, 'number', { locale: locale })}</p>
-                <img src={subscribers} alt="subscribers" />
+                <p>{formatAbbreviation(subscribers, 'number', { locale: locale })}</p>
+                <img src={subscribersIcon} alt="subscribers" />
               </div>
             </div>
             <div className={styles.scoresItem}>
-              <p>+ {formatAbbreviation(displayedPoints || 0, 'number', { locale: locale })}</p>
+              <p>+ {formatAbbreviation(points, 'number', { locale: locale })}</p>
               <img src={coin} height={18} width={18} alt="" />
             </div>
           </div>

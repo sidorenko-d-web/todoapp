@@ -42,7 +42,20 @@ export const useAuthFlow = () => {
   };
 
   const handleInviteCodeContinue = async () => {
-    saveCurrentStep('skin');
+    try {
+      const authResponse = await performSignIn(signIn);
+      localStorage.setItem('access_token', authResponse.access_token);
+      localStorage.setItem('refresh_token', authResponse.refresh_token);
+      saveCurrentStep('skin'); // Переходим к выбору скина после успешной авторизации
+    } catch (err: any) {
+      console.error('Ошибка при авторизации:', err);
+      // Если ошибка 401 или 403 – остаемся на шаге invite_code
+      if (err?.status === 401 || err?.status === 403) {
+        alert('Неверный invite-код. Попробуйте снова.');
+      } else {
+        alert('Произошла ошибка. Попробуйте позже.');
+      }
+    }
   };
 
   const handleSkinContinue = () => {
@@ -78,11 +91,17 @@ export const useAuthFlow = () => {
 
       try {
         const hasCompletedSetup = savedStep === 'completed';
-        const authResponse = await performSignIn(signIn);
-
-        localStorage.setItem('access_token', authResponse.access_token);
-        localStorage.setItem('refresh_token', authResponse.refresh_token);
         await minLoadingTime;
+
+        // Проверяем наличие токенов
+        const accessToken = localStorage.getItem('access_token');
+        const refreshToken = localStorage.getItem('refresh_token');
+
+        if (!accessToken || !refreshToken) {
+          // Если токенов нет, переходим на шаг invite_code
+          saveCurrentStep('invite_code');
+          return; // Прерываем выполнение, чтобы не переходить к другим шагам
+        }
 
         if (hasCompletedSetup) {
           saveCurrentStep('completed');
@@ -94,23 +113,16 @@ export const useAuthFlow = () => {
         setRequireInviteCode(false);
       } catch (err: any) {
         await minLoadingTime;
-        console.error('Ошибка при авторизации:', err);
-
-        // Если ошибка 401 или 403 – требуем ввод invite_code
-        if (err?.status === 401 || err?.status === 403) {
-          setRequireInviteCode(true);
-          saveCurrentStep('invite_code');
-        } else {
-          setRequireInviteCode(false);
-          saveCurrentStep('language');
-        }
+        console.error('Ошибка при инициализации:', err);
+        setRequireInviteCode(false);
+        saveCurrentStep('language');
       } finally {
         setIsInitializing(false);
       }
     };
 
     initAuthFlow();
-  }, [signIn]);
+  }, []);
 
   return {
     currentStep,

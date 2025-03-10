@@ -1,12 +1,12 @@
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
-import { MODALS } from '../../../constants';
+import { GUIDE_ITEMS, MODALS } from '../../../constants';
 import { profileApi, RootState, useGetCurrentUserProfileInfoQuery, useGetIntegrationsQuery } from '../../../redux';
 import { IntegrationCreationCard, IntegrationCreationModal } from '../';
 import { SubscribeModal, SuccessfullySubscribedModal, TrackedButton } from '../../';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { isIntegrationCreationButtonGlowing } from '../../../utils/guide-functions.ts';
+import { isIntegrationCreationButtonGlowing, setGuideShown } from '../../../utils/guide-functions.ts';
 
 import s from './IntegrationCreation.module.scss';
 import { useTranslation } from 'react-i18next';
@@ -89,6 +89,7 @@ export const IntegrationCreation = () => {
       <SubscribeModal
         modalId={MODALS.SUBSCRIBE}
         onClose={() => {
+          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
           closeModal(MODALS.SUBSCRIBE);
         }}
         onSuccess={handleSuccessfullySubscribed}

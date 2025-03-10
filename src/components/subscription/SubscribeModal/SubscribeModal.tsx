@@ -1,16 +1,19 @@
 import { FC, useState, useEffect } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import coinIcon from '../../../assets/icons/coin.png';
-import { useBuySubscriptionMutation, useGetCurrentUserProfileInfoQuery } from '../../../redux';
+import { RootState, setSubscribeGuideShown, useBuySubscriptionMutation } from '../../../redux';
+import { useGetCurrentUserProfileInfoQuery } from '../../../redux';
 
 import s from './SubscribeModal.module.scss';
-import { getSubscriptionPurchased, isGuideShown, setSubscriptionPurchased } from '../../../utils';
+import { getSubscriptionPurchased, isGuideShown, setGuideShown, setSubscriptionPurchased } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { Button, CentralModal } from '../../shared';
 import { GUIDE_ITEMS, MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import { useTranslation } from 'react-i18next';
 import list from '../../../assets/icons/list.svg';
+import { SubscrieGuide } from '../../guide';
+import { useDispatch, useSelector } from 'react-redux';
 import ListDisableIcon from '@icons/list-disable.svg';
 import DisableCoin from '@icons/disableCoin.svg';
 
@@ -37,7 +40,8 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
   });
 
   const buyBtnGlowing = getSubscriptionPurchased();
-  const { openModal } = useModal();
+
+  const { openModal, closeModal } = useModal();
 
   useEffect(() => {
     const lastPurchaseTime = localStorage.getItem('lastPurchaseTime');
@@ -98,6 +102,8 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
     }
   };
 
+  const dispatch = useDispatch();
+  const guideShown = useSelector((state: RootState) => state.guide.subscribeGuideShown);
   const formatTime = (milliseconds: number) => {
     const hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
@@ -140,6 +146,24 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
           </Button>
         </div>
       </div>
+
+      {!guideShown && <SubscrieGuide
+            onClose={() => {
+              dispatch(setSubscribeGuideShown(true));
+              setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+              closeModal(MODALS.SUBSCRIBE);
+            }}
+            top="65%"
+            zIndex={1500}
+            description={
+              <>
+                {t('g14')} <span style={{ color: '#2F80ED' }}>{t('g15')}</span>
+                <br />
+                <br />
+                {t('g16')}
+              </>
+            }
+          />}
     </CentralModal>
   );
 };

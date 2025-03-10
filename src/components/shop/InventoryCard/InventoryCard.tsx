@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useState, useEffect, useRef } from 'react';
 import styles from './InventoryCard.module.scss';
 import clsx from 'clsx';
 //@ts-ignore
@@ -66,7 +66,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   }
 
   console.log('s25Key:', s25Key);
-// return s25Key;
+  // return s25Key;
 
   const { walletAddress, connectWallet } = useTonConnect();
   const [idDisabled] = useState(true);
@@ -84,8 +84,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   });
 
   const { refetch } = useGetCurrentUserProfileInfoQuery();
-  const [equipItem, { isLoading: isEquipItemLoading }] = useAddItemToRoomMutation();
-  const [removeItem, { isLoading: isRemoveItemLoading }] = useRemoveItemFromRoomMutation();
+  const [equipItem] = useAddItemToRoomMutation();
+  const [removeItem] = useRemoveItemFromRoomMutation();
   const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
   const { openModal } = useModal();
 
@@ -96,6 +96,39 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
 
   const prevLvl = useRef<number | null>(null);
+
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    const lastTriggeredLevel = Number(localStorage.getItem('lastTriggeredLevel')) || 0;
+    const lvlGiftFromStorage = localStorage.getItem('lvlGift');
+
+    if (prevLvl.current === null) {
+      prevLvl.current = item.level;
+      return;
+    }
+
+    if (lvlGiftFromStorage && lvlGiftFromStorage.includes(String(item.level))) {
+      openModal(MODALS.GET_GIFT);
+      localStorage.setItem('lastTriggeredLevel', String(item.level));
+    }
+
+    if (
+      (item.level === 50 || item.level === 100 || item.level === 150) &&
+      item.level !== lastTriggeredLevel &&
+      item.level !== prevLvl.current
+    ) {
+      openModal(MODALS.TASK_CHEST);
+      localStorage.setItem('lastTriggeredLevel', String(item.level));
+    }
+
+    prevLvl.current = item.level;
+  }, [item.level]);
 
   const handleBuyItem = async (itemPoints: string) => {
     if (current && +current?.points < +itemPoints) return;
@@ -133,34 +166,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       setIsUpdateLoading(false);
     }
   };
-
-  useEffect(() => {
-    const lastTriggeredLevel = Number(localStorage.getItem('lastTriggeredLevel')) || 0;
-    const lvlGiftFromStorage = localStorage.getItem('lvlGift');
-
-    if (prevLvl.current === null || prevLvl.current === item.level) {
-      prevLvl.current = item.level;
-      return;
-    }
-
-    if (
-      lvlGiftFromStorage?.includes(item.level as any) &&
-      item.level !== lastTriggeredLevel &&
-      item.level != prevLvl.current
-    ) {
-      openModal(MODALS.GET_GIFT);
-      localStorage.setItem('lastTriggeredLevel', String(item.level));
-    } else if (
-      [50, 100, 150].includes(item.level) &&
-      item.level !== lastTriggeredLevel &&
-      item.level !== prevLvl.current
-    ) {
-      openModal(MODALS.TASK_CHEST);
-      localStorage.setItem('lastTriggeredLevel', String(item.level));
-    }
-
-    prevLvl.current = item.level;
-  }, [item.level]);
 
   const handleEquipItem = async () => {
     if (!slot && slot !== 0)
@@ -225,7 +230,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
   return (
     <div className={styles.storeCard}>
-      {<GetGift giftColor={localStorage.getItem('giftName') ?? undefined} />}
+      {<GetGift giftColor={localStorage.getItem('giftName') ?? ''} />}
       <div className={styles.header}>
         <div
           className={clsx(
@@ -406,17 +411,19 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           </div>
         ))}
 
-      {isUpdateLoading || !data?.items || equipedItems === undefined ? (
-        <p style={{ color: '#fff', fontSize: 16, padding: '16px 0', textAlign: 'center' }}>Loading</p>
-      ) : isBlocked ? (
+      {isBlocked ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>{t('s26')}</p>
           <img src={LockIcon} alt="" />
         </div>
       ) : !isEquipped ? (
-        <Button onClick={handleEquipItem} className={styles.disabledActions}>
-          {isEquipItemLoading || isRemoveItemLoading ? <p>loading</p> : <p>{t('s28')}</p>}
+        <Button
+          onClick={handleEquipItem}
+          className={styles.disabledActions}
+          disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
+        >
+          {<p>{t('s28')}</p>}
         </Button>
       ) : item.level === 50 ? (
         <div className={styles.disabledUpgradeActions}>
@@ -426,7 +433,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         </div>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
-          <Button onClick={handleUsdtPayment}>
+          <Button
+            onClick={handleUsdtPayment}
+            disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
+          >
             {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', {
               locale: locale,
             })}
@@ -437,19 +447,15 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 ? styles.upgradeItemPurple
                 : item.item_rarity === 'green' && styles.upgradeItemRed,
             )}
-            disabled={item.level === 50 || isLoading || isItemsLoading}
-            onClick={() => handleBuyItem(data?.items[0].price_internal)}
+            disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
+            onClick={() => handleBuyItem(data?.items[0].price_internal ?? '')}
           >
-            {isLoading || isUpdateLoading ? (
-              <p>loading</p>
-            ) : (
-              <>
-                {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {
-                  locale: locale,
-                })}{' '}
-                <img src={CoinIcon} alt="" />
-              </>
-            )}
+            <>
+              {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {
+                locale: locale,
+              })}{' '}
+              <img src={CoinIcon} alt="" />
+            </>
           </Button>
 
           <Button
