@@ -49,10 +49,29 @@ export const BindingModal = ({
   const getCountryCode = (phoneNumber: string) => {
     const asYouType = new AsYouType();
     asYouType.input(phoneNumber);
-    return asYouType.getCountry();
+    return asYouType.getCountry() || 'RU'; // По умолчанию Россия, если страна не определена
   };
 
-  // Валидация номера телефона
+  // Генерация маски на основе страны
+  const getPhoneMask = (phoneNumber: string) => {
+    // Если номер слишком короткий, используем маску для кода страны
+    if (phoneNumber.length <= 2) return '+9'; // Маска для кода страны
+
+    // Определяем страну по введенному коду
+    const countryCode = getCountryCode(phoneNumber);
+
+    // Если страна не определена, используем маску для кода страны
+    if (!countryCode) return '+9';
+
+    // Генерируем маску на основе страны
+    const asYouType = new AsYouType(countryCode);
+    asYouType.input(phoneNumber);
+    const mask = asYouType.getTemplate();
+
+    // Если маска не определена, используем маску для кода страны
+    return mask || '+9';
+  };
+
   const isValid = inputType === 'phone' ? isValidPhoneNumber(value, getCountryCode(value)) : value.trim() !== '';
 
   const handleNext = async () => {
@@ -108,7 +127,7 @@ export const BindingModal = ({
             <div className={s.inputWrapper}>
               {inputType === 'phone' ? (
                 <InputMask
-                  mask="+7 (999) 999-99-99"
+                  mask={getPhoneMask(value)} // Динамическая маска
                   value={value}
                   onChange={(e: any) => {
                     setValue(e.target.value);
