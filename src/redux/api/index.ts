@@ -12,3 +12,4 @@ export * from './room'
 export * from './pushLine'
 export * from './confirmations';
 export * from './chests';
+export * from './character';

@@ -32,7 +32,7 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ wardrobe, handleChan
   const [updateCharacter] = useUpdateCharacterMutation();
 
   if (isLoading || !inventorySkinsData) {
-    return <p>Loading skins...</p>;
+    return <p>{t('w8')}</p>;
   }
 
   const categorizedSkins: CategorizedSkins = {

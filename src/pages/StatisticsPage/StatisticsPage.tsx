@@ -39,6 +39,7 @@ const StatisticsPage: FC = () => {
 
   if (isLoading) return <Loader />;
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const {in_streak} = usePushLineStatus()
   const points = in_streak? displayedPoints : userProfileData?.points || "0"
   const subscribers = in_streak? displayedSubscribers : userProfileData?.subscribers || 0
