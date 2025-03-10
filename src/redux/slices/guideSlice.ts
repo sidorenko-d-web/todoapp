@@ -93,6 +93,7 @@ const guideSlice = createSlice({
         state.activeFooterItemId = action.payload;
       }
     },
+    resetGuideState: () => initialState,
   },
 });
 
@@ -104,5 +105,5 @@ export const { setGetCoinsGuideShown, setSubscribeGuideShown,
     setIsPublishedModalClosed, setIntegrationReadyForPublishing, 
     setElevateIntegrationStats, 
     setItemBought, setLastIntegrationId,
-    setFooterActive, setActiveFooterItemId} = guideSlice.actions;
+    setFooterActive, setActiveFooterItemId, resetGuideState} = guideSlice.actions;
 export default guideSlice.reducer;
