@@ -25,7 +25,8 @@ interface Props {
 }
 
 export default function DaysInARowModal({ onClose }: Props) {
-  const { t } = useTranslation('profile');
+  const { t,i18n } = useTranslation('profile');
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal } = useModal();
   const { data } = useGetPushLineQuery();
   const [dayNumbers, setDayNumbers] = useState<number[]>([]);
@@ -96,14 +97,6 @@ export default function DaysInARowModal({ onClose }: Props) {
   } else if (streakCount >= 60) {
     p14Key = 'p14_120';
   }
-  let p15Key = '';
-  if (streakCount < 30) {
-    p15Key = 'p15_30';
-  } else if (streakCount < 60) {
-    p15Key = 'p15_60';
-  } else if (streakCount >= 60) {
-    p15Key = 'p15_120';
-  }
 
   return (
     <BottomModal
@@ -157,7 +150,7 @@ export default function DaysInARowModal({ onClose }: Props) {
           {streakCount + 1}/{t(p14Key)}
         </p>
         <div className={styles.chest}>
-          <p>{t(p15Key)}</p>
+          <p>{locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}</p>
           <img
             src={
               streakCount < 30

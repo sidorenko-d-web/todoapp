@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const SkinTab: FC<Props> = ({ mode }) => {
-  const { t } = useTranslation('shop');
+  const { t,i18n } = useTranslation('shop');
   const { data: shop } = useGetShopSkinsQuery();
 
   const { data: inventory } = useGetInventorySkinsQuery();
