@@ -21,7 +21,6 @@ export const TasksPage: FC = () => {
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const { data, error, isLoading: isTasksLoading } = useGetTasksQuery({
-    is_assigned: true,
     offset: 0,
     limit: 100,
   });
@@ -38,8 +37,8 @@ export const TasksPage: FC = () => {
     const dailyTasks = data.assignments.filter(task => task.category === 'quiz');
     console.log('dailyTasks', dailyTasks);
     // Модифицируем задание с учетом языка
-    if (dailyTasks[dailyTasks.length - 1]) {
-      const task = dailyTasks[dailyTasks.length - 1];
+    if (dailyTasks[0]) {
+      const task = dailyTasks[0];
 
       return {
         ...task,
