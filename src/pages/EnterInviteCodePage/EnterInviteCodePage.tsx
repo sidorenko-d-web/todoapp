@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './EnterInviteCodePage.module.scss';
 
 import lock from '../../assets/icons/lock-gray.svg';
@@ -29,10 +29,28 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onCont
   const [isSentCode, setIsSentCode] = useState(false)
   const [isFocus, setIsFocus] = useState(false)
   const [errorMessage, setErrorMessage] = useState('');
+  const [touched, setTouched] = useState(false);
   const [sendReferralCode, { isLoading }] = useSendReferralCodeMutation();
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [initialHeight, setInitialHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerHeight > initialHeight && document.activeElement === inputRef.current) {
+        inputRef.current?.blur();
+      }
+      setInitialHeight(window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [initialHeight]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+
+    if (!touched) setTouched(true);
 
     if (/^\d*$/.test(value)) {
       setInputValue(value);
@@ -67,7 +85,6 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onCont
           break;
         case 'UserAlreadyIsReferral':
           setIsSentCode(true)
-          // If user is already a referral, we can still continue
           setTimeout(() => {
             onContinue();
           }, 500);
@@ -92,12 +109,13 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onCont
         <label>{t('r1')}</label>
         <div className={styles.inputWrapper}>
           <input
+            ref={inputRef}
             type="text"
             value={inputValue}
             onChange={handleInputChange}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
-            className={`${styles.input} ${!isValid ? styles.invalid : ''}`}
+            className={`${styles.input} ${(touched && !isValid) ? styles.invalid : ''}`}
             placeholder="..."
           />
           <img
@@ -113,7 +131,7 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onCont
       </div>
 
       {errorMessage && (
-        <p className={styles.description}>{errorMessage}</p>
+        <p className={styles.descriptionError}>{errorMessage}</p>
       )}
 
       <Button className={classNames(styles.nextBtn, {[styles.validInput]: isValid}, {[styles.btnFocus]: isFocus})} onClick={handleSubmit}>
