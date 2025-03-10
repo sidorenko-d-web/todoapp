@@ -16,6 +16,7 @@ import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileS
 import { usePushLineStatus } from '../../hooks/usePushLineStatus.ts';
 
 const StatisticsPage: FC = () => {
+  // Все хуки вызываются на верхнем уровне
   const { t, i18n } = useTranslation('statistics');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const navigate = useNavigate();
@@ -33,17 +34,19 @@ const StatisticsPage: FC = () => {
     baseTotalEarned: userProfileData?.total_earned || "0",
     futureStatistics: userProfileData?.future_statistics,
     lastUpdatedAt: userProfileData?.updated_at
-  })
+  });
+
+  const { in_streak } = usePushLineStatus(); // Хук вызывается на верхнем уровне
 
   const isLoading = isAllIntegrationsLoading || isUserLoading;
 
-  if (isLoading) return <Loader />;
+  // Условная логика использования данных
+  const points = in_streak ? displayedPoints : userProfileData?.points || "0";
+  const subscribers = in_streak ? displayedSubscribers : userProfileData?.subscribers || 0;
+  const totalViews = in_streak ? displayedTotalViews : userProfileData?.total_views || 0;
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const {in_streak} = usePushLineStatus()
-  const points = in_streak? displayedPoints : userProfileData?.points || "0"
-  const subscribers = in_streak? displayedSubscribers : userProfileData?.subscribers || 0
-  const totalViews = in_streak? displayedTotalViews : userProfileData?.total_views || 0
+  // Условный рендеринг после всех хуков
+  if (isLoading) return <Loader />;
 
   return (
     <div className={styles.wrapper}>

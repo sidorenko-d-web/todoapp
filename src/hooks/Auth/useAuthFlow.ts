@@ -91,10 +91,6 @@ export const useAuthFlow = () => {
     const initAuthFlow = async () => {
       const minLoadingTime = new Promise((resolve) => setTimeout(resolve, 3500));
       const savedStep = localStorage.getItem('currentSetupStep') as AuthStep;
-
-      const authResponse = await performSignIn(signIn);
-      localStorage.setItem('access_token', authResponse.access_token);
-      localStorage.setItem('refresh_token', authResponse.refresh_token);
       
       try {
         const hasCompletedSetup = savedStep === 'completed';

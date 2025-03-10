@@ -1,5 +1,3 @@
-import { useTranslation } from 'react-i18next';
-
 export interface RoomItemSlot {
   slot: number;
   name: string[];
@@ -30,7 +28,6 @@ interface RoomItemsSlots {
 }
 
 export const useRoomItemsSlots = (): RoomItemsSlots => {
-  const { t } = useTranslation('roomItems');
 
   return {
     wall: {
