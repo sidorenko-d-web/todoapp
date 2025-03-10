@@ -81,7 +81,7 @@ $translateY: -15vh;
 .floorWrapper {
   @extend .item;
   transform: translateX(-58.15%);
-  top: 310px;
+  top: 410px;
   background: 'red';
 }
 
@@ -124,7 +124,7 @@ $translateY: -15vh;
 
 .treshinaLeft {
   @extend .item;
-  top: 29px;
+  top: 129px;
   transform: translateX(-150%);
 }
 .treshinaRight {
@@ -135,7 +135,7 @@ $translateY: -15vh;
 .shelf {
   @extend .item;
   width: 145px;
-  height: 78px;
+  height: 278px;
   top: 190px;
   transform: translateX(-12%);
 }
@@ -143,7 +143,7 @@ $translateY: -15vh;
 .reward {
   @extend .item;
   display: block;
-  top: 175px;
+  top: 275px;
   transform: scaleX(-1) translateX(-130%);
   z-index: 1000;
   width: 80px;

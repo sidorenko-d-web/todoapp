@@ -119,7 +119,7 @@ export class SpineSceneBase extends Phaser.Scene {
   //helpers for scene creation
   createPerson({ center }: Pick<contextProps, 'center'>, isWorking: boolean) {
     if(!this.add.spine) throw new Error('add.spine')
-    this.person = this.add.spine(center - 40, 387, 'personJson', 'personAtlas');
+    this.person = this.add.spine(center - 40, 487, 'personJson', 'personAtlas');
     this.person.scale = 0.07;
     this.person.setDepth(3);
     this.person.animationState.data.defaultMix = 0.1;
@@ -139,10 +139,10 @@ export class SpineSceneBase extends Phaser.Scene {
     //changing position for camera if there is stand in the room
     if (slot === 11 && equipped_items?.find(item => item.slot === 12)) {
       this.objects?.push(
-        this.add.spine(center + animatedItem.x + 65, animatedItem.y + 17, 'json' + item.id, 'atlas' + item.id),
+        this.add.spine(center + animatedItem.x + 65, animatedItem.y + 17 + 100, 'json' + item.id, 'atlas' + item.id),
       );
     } else {
-      this.objects?.push(this.add.spine(center + animatedItem.x, animatedItem.y, 'json' + item.id, 'atlas' + item.id));
+      this.objects?.push(this.add.spine(center + animatedItem.x, animatedItem.y + 100, 'json' + item.id, 'atlas' + item.id));
     }
 
     this.objects[i].scale = animatedItem.width / this.spine.getSkeletonData('json' + item.id, 'atlas' + item.id).width;
@@ -156,7 +156,7 @@ export class SpineSceneBase extends Phaser.Scene {
   createSVGItem(item: IShopItem, i: number, { equipped_items, center }: contextProps) {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const _item = itemsInSlots[slot];
-    this.objects?.push(this.add.image(center + _item.x, _item.y, 'item' + item.id));
+    this.objects?.push(this.add.image(center + _item.x, _item.y  + 100, 'item' + item.id));
     this.objects[i]?.setDepth(_item.z);
   }
 
@@ -164,7 +164,7 @@ export class SpineSceneBase extends Phaser.Scene {
     const slots = equipped_items?.map(item => item.slot);
     baseItems.forEach(item => {
       if (!slots?.includes(item.slot)) {
-        const added = this.add.image(center + item.x, item.y, item.name);
+        const added = this.add.image(center + item.x, item.y + 100, item.name);
         added.setDepth(item.z);
         this.objects?.push(added);
       }
@@ -198,7 +198,7 @@ const createLink = (itemString: string, type: 'json' | 'atlas' |'json1' | 'atlas
   else if (type === 'json1') string = new URL(itemsBaseUrl + itemString + '1.json').href;
   else if (type === 'atlas1') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
   else if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
-  return (string);
+  return (string)
   // return proxyImageUrl(string);
 };
 
