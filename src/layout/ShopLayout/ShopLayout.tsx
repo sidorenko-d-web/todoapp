@@ -1,13 +1,4 @@
-import {
-  type Dispatch,
-  type FC,
-  PropsWithChildren,
-  type SetStateAction,
-  useEffect,
-  useReducer,
-  useState,
-  useMemo,
-} from 'react';
+import { type FC, PropsWithChildren, useEffect, useReducer, useState, useMemo } from 'react';
 import styles from './ShopLayout.module.scss';
 import {
   RootState,
