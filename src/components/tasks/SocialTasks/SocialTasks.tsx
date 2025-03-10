@@ -125,6 +125,8 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
     }
   }, []);
 
+  const visibleTasks = tasks.filter(task => !task.is_completed);
+
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
@@ -132,7 +134,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
         <span className={s.count}>{completedTasks}/{tasks.length}</span>
       </div>
       <div className={s.tasksList}>
-        {tasks.map(task => (
+        {visibleTasks.map(task => (
           <TaskCard
             key={task.id}
             title={task.title}
