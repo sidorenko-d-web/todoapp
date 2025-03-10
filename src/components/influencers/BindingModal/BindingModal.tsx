@@ -5,14 +5,10 @@ import clan from '../../../assets/icons/clan-red.svg';
 import dots from '../../../assets/icons/dots.svg';
 import { RewardsCards } from '..';
 import clsx from 'clsx';
-import { isValidPhoneNumber, parsePhoneNumberFromString, AsYouType } from 'libphonenumber-js';
-import InputMask from 'react-input-mask';
-
 import s from './BindingModal.module.scss';
 import ss from '../shared.module.scss';
 import { Button, CentralModal } from '../../shared';
 import { useTranslation } from 'react-i18next';
-
 import { useDispatch, useSelector } from 'react-redux';
 import {
   RootState,
@@ -45,34 +41,10 @@ export const BindingModal = ({
   const [sendCode] = useSendEmailConfirmationCodeMutation();
   const [sendPhone] = useSendPhoneConfirmationCodeMutation();
 
-  // Определяем страну по введенному коду
-  const getCountryCode = (phoneNumber: string) => {
-    const asYouType = new AsYouType();
-    asYouType.input(phoneNumber);
-    return asYouType.getCountry() || 'RU'; // По умолчанию Россия, если страна не определена
-  };
+  // Регулярное выражение для проверки телефонных номеров
+  const phoneRegex = /^(\s*)?(\+)?(?!(\d)([- _():=+]?\3){9,})([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
 
-  // Генерация маски на основе страны
-  const getPhoneMask = (phoneNumber: string) => {
-    // Если номер слишком короткий, используем маску для кода страны
-    if (phoneNumber.length <= 2) return '+9'; // Маска для кода страны
-
-    // Определяем страну по введенному коду
-    const countryCode = getCountryCode(phoneNumber);
-
-    // Если страна не определена, используем маску для кода страны
-    if (!countryCode) return '+9';
-
-    // Генерируем маску на основе страны
-    const asYouType = new AsYouType(countryCode);
-    asYouType.input(phoneNumber);
-    const mask = asYouType.getTemplate();
-
-    // Если маска не определена, используем маску для кода страны
-    return mask || '+9';
-  };
-
-  const isValid = inputType === 'phone' ? isValidPhoneNumber(value, getCountryCode(value)) : value.trim() !== '';
+  const isValid = inputType === 'phone' ? phoneRegex.test(value) : value.trim() !== '';
 
   const handleNext = async () => {
     try {
@@ -84,10 +56,9 @@ export const BindingModal = ({
         onNext();
       }
       if (inputType === 'phone') {
-        const phoneNumber = parsePhoneNumberFromString(value, getCountryCode(value));
-        if (phoneNumber && phoneNumber.isValid()) {
-          await sendPhone({ phone_number: phoneNumber.format('E.164') });
-          dispatch(setInputValue(phoneNumber.format('E.164')));
+        if (phoneRegex.test(value)) {
+          await sendPhone({ phone_number: value.trim() });
+          dispatch(setInputValue(value.trim()));
           setValue('');
           onNext();
         } else {
@@ -125,29 +96,16 @@ export const BindingModal = ({
           <div className={s.inputGroup}>
             <label>{binding.inputLabel}</label>
             <div className={s.inputWrapper}>
-              {inputType === 'phone' ? (
-                <InputMask
-                  mask={getPhoneMask(value)} // Динамическая маска
-                  value={value}
-                  onChange={(e: any) => {
-                    setValue(e.target.value);
-                    setError('');
-                  }}
-                  className={`${s.input} ${!isValid ? s.invalid : ''}`}
-                  placeholder={binding.placeholder}
-                />
-              ) : (
-                <input
-                  type="text"
-                  value={value}
-                  onChange={(e) => {
-                    setValue(e.target.value);
-                    setError('');
-                  }}
-                  className={`${s.input} ${!isValid ? s.invalid : ''}`}
-                  placeholder={binding.placeholder}
-                />
-              )}
+              <input
+                type="text"
+                value={value}
+                onChange={(e) => {
+                  setValue(e.target.value);
+                  setError('');
+                }}
+                className={`${s.input} ${!isValid ? s.invalid : ''}`}
+                placeholder={binding.placeholder}
+              />
               <img className={s.statusIcon} src={!isValid ? dots : tick} />
             </div>
           </div>

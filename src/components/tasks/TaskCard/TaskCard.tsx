@@ -13,9 +13,9 @@ import { ProgressBarTasks } from '../ProgressBarTasks';
 import classNames from 'classnames';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
-// import Lottie from 'lottie-react';
-// import blueLightAnimation from '../../../assets/animations/blueLight.json';
-// import purpleLightAnimation from '../../../assets/animations/purpleLight.json';
+import Lottie from 'lottie-react';
+import blueLightAnimation from '../../../assets/animations/blueLight.json';
+import purpleLightAnimation from '../../../assets/animations/purpleLight.json';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -112,13 +112,13 @@ export const TaskCard: React.FC<TasksCardProps> = ({
     }
   };
 
-  // let animationLight;
+  let animationLight;
   
-  // if (isTopTask) {
-  //   animationLight = <Lottie animationData={purpleLightAnimation} loop={true} className={s.lightAnimation} />;
-  // } else if (isDailyTask || isSocialTask) {
-  //   animationLight = <Lottie animationData={blueLightAnimation} loop={true} className={s.lightAnimation} />;
-  // }
+  if (isTopTask) {
+    animationLight = <Lottie animationData={purpleLightAnimation} loop={true} className={s.lightAnimation} />;
+  } else if (isDailyTask || isSocialTask) {
+    animationLight = <Lottie animationData={blueLightAnimation} loop={true} className={s.lightAnimation} />;
+  }
 
   return (
     <div className={classNames(s.card, {
@@ -132,7 +132,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
     })}>
       {isCompleted && (
         <div className={s.animationWrapper}>
-          {/* {animationLight} */}
+           {animationLight}
         </div>
       )}
       
