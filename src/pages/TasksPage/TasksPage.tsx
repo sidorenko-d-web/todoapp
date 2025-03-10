@@ -3,7 +3,7 @@ import subscribersIcon from '../../assets/icons/subscribers.png';
 import coinIcon from '../../assets/icons/coin.png';
 
 import s from './TasksPage.module.scss';
-import { DailyTasks, Loader, SocialTasks, TopTasks } from '../../components';
+import { DailyTasks, Loader, SocialTasks } from '../../components';
 import { formatAbbreviation } from '../../helpers';
 import { useGetTasksQuery } from '../../redux/api/tasks';
 import { useGetBoostQuery } from '../../redux/api/tasks';
@@ -50,19 +50,19 @@ export const TasksPage: FC = () => {
     return null;
   }, [data, locale]);
 
-  const topTask = useMemo(() => {
-    if (!data?.assignments) return null;
-    const task = data.assignments.find(task => task.category === 'create_channel');
-    if (task) {
-      return {
-        ...task,
-        title: locale === 'en' ? task.title_eng : task.title,
-        description: locale === 'en' ? task.description_eng : task.description,
-        external_link: locale === 'en' ? task.external_link_eng || task.external_link : task.external_link,
-      };
-    }
-    return null;
-  }, [data, locale]);
+  // const topTask = useMemo(() => {
+  //   if (!data?.assignments) return null;
+  //   const task = data.assignments.find(task => task.category === 'create_channel');
+  //   if (task) {
+  //     return {
+  //       ...task,
+  //       title: locale === 'en' ? task.title_eng : task.title,
+  //       description: locale === 'en' ? task.description_eng : task.description,
+  //       external_link: locale === 'en' ? task.external_link_eng || task.external_link : task.external_link,
+  //     };
+  //   }
+  //   return null;
+  // }, [data, locale]);
 
   const socialTasks = useMemo(() => {
     if (!data?.assignments) return [];
