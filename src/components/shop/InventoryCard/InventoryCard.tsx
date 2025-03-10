@@ -433,7 +433,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           <p>{t('s27')}</p>
           <img src={LockIcon} alt="" />
         </div>
-      ) : isUpgradeEnabled && profile.growth_tree_stage_id > item.level + 1 ? (
+      ) : isUpgradeEnabled && profile && profile.growth_tree_stage_id > item.level + 1 ? (
         <div className={styles.actions}>
           <Button
             onClick={handleUsdtPayment}
@@ -450,7 +450,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 : item.item_rarity === 'green' && styles.upgradeItemRed,
             )}
             disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
-            onClick={() => handleBuyItem(data?.items[0].price_internal)}
+            onClick={() => handleBuyItem(data?.items[0].price_internal ?? '')}
           >
             <>
               {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {
@@ -474,7 +474,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>
-            {t('s18')} {profile.growth_tree_stage_id + 1}
+            {t('s18')} {profile && profile.growth_tree_stage_id + 1}
           </p>
           <img src={LockIcon} alt="" />
         </div>
