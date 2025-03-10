@@ -1,4 +1,4 @@
-import { IEquipedRoomResponse, RoomItemsSlots } from '../../../../redux';
+import { IEquipedRoomResponse } from '../../../../redux';
 import styles from './Partials.module.scss';
 import greenWallUp from '../../../../assets/images/walls/green-wall-up.svg';
 import greenWallDown from '../../../../assets/images/walls/green-wall-down.svg';
@@ -8,6 +8,7 @@ import blueRedWall from '../../../../assets/images/walls/blue-red-wall.svg';
 import blueWall from '../../../../assets/images/walls/blue-wall.svg';
 import yellowWall from '../../../../assets/images/walls/yellow wall62.svg';
 import clsx from 'clsx';
+import { useRoomItemsSlots } from '../../../../../translate/items/items.ts';
 
 
 interface props {
@@ -15,7 +16,7 @@ interface props {
 }
 
 export const Walls = ({ room }: props) => {
-
+  const RoomItemsSlots = useRoomItemsSlots();
   const equipedWall = room?.items.find(
     item => item.id === room.equipped_items.find(_item => _item.slot === RoomItemsSlots.wall.slot)?.id,
   );

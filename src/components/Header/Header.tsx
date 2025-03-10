@@ -4,7 +4,7 @@ import AvatarIcon from '../../assets/icons/person.svg';
 import FireIcon from '../../assets/icons/avatar-fire.svg';
 import SubscribersIcon from '../../assets/icons/subscribers.png';
 import { RootState, setLastActiveStage, useGetCurrentUserProfileInfoQuery, useGetTreeInfoQuery } from '../../redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AppRoute, MODALS } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
@@ -14,6 +14,7 @@ import { TrackedLink } from '../withTracking';
 import { getOS } from '../../utils';
 import { useModal, usePushLineStatus } from '../../hooks';
 import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
+import classNames from 'classnames';
 
 export const Header = () => {
   const { data, isLoading, refetch } = useGetCurrentUserProfileInfoQuery(undefined, {
@@ -29,6 +30,7 @@ export const Header = () => {
     futureStatistics: data?.future_statistics,
     lastUpdatedAt: data?.updated_at
   })
+  const location = useLocation().pathname;
 
   const {in_streak} = usePushLineStatus()
 
@@ -83,8 +85,12 @@ export const Header = () => {
   const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
 
   return (
-    <header className={`${styles.header} ${platform ? styles[platform] : ''}`}>
-      {isLoading &&
+    <header className={classNames(
+      styles.header,
+      { [styles.headerNot]: location === '/' || location === '/progressTree' },
+      platform ? styles[platform] : ''
+    )}>
+      {isLoading ? <p>Loading...</p> :
         <div className={styles.lowerHeader}>
           <div className={styles.levelWrapper}>
             <div className={styles.avatarWrapper} onClick={handleNavigateToProfile}>
