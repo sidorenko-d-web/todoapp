@@ -157,7 +157,7 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
             <div
               id={'player1'}
               ref={sceneRef}
-              style={{ position: 'absolute', top: 72, borderRadius: 8, overflow: 'hidden', width: 280, height: 280 }}
+              style={{ position: 'absolute', top: 0, borderRadius: 8, overflow: 'hidden', width: 280, height: 280 }}
             />
           </div>
           <div className={styles.bodyPartsContainer}>
