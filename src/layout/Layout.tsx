@@ -5,7 +5,7 @@ import { Header } from '../components/Header/';
 import { useEffect, useState } from 'react';
 import { AppRoute, localStorageConsts, MODALS } from '../constants';
 import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
-import { useModal, useScrollManager } from '../hooks';
+import { AudioBg, useModal, useScrollManager } from '../hooks';
 import { getOS } from '../utils';
 
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
@@ -79,7 +79,7 @@ const Layout = () => {
           <SettingsModal />
           <WalletConnectionModal />
           <LanguageSelectionModal />
-          {/*<AudioBg />*/}
+          <AudioBg />
         </main>
         <Footer />
       </div>
