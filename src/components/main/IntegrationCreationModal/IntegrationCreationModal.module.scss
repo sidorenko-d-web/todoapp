@@ -128,6 +128,39 @@
   }
 }
 
+.stickyButtonContainer {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  background: #141319;
+
+  .createButton {
+    display: flex;
+    padding: 14px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    align-self: stretch;
+    border-radius: 8px;
+    border: 1px solid #2064C0;
+    background: #2F80ED;
+
+    color: var.$color-white;
+    text-align: center;
+    font-family: var.$font-default;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+  }
+}
+
 .glowing {
   box-shadow: 2px 3px 40px var.$color-primary;
   border: 2px solid var.$color-primary;

@@ -12,7 +12,7 @@ import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { TrackedLink } from '../withTracking';
 import { getOS } from '../../utils';
-import { useModal } from '../../hooks';
+import { useModal, usePushLineStatus } from '../../hooks';
 import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
 
 export const Header = () => {
@@ -20,7 +20,7 @@ export const Header = () => {
     pollingInterval: 10000, // 10 сек
   });
 
-  const {points, subscribers} = useIncrementingProfileStats({
+  const {points: displayedPoints, subscribers: displayedSubscribers} = useIncrementingProfileStats({
     profileId: data?.id || "",
     basePoints: data?.points || "0",
     baseSubscribers: data?.subscribers || 0,
@@ -29,6 +29,11 @@ export const Header = () => {
     futureStatistics: data?.future_statistics,
     lastUpdatedAt: data?.updated_at
   })
+
+  const {in_streak} = usePushLineStatus()
+
+  const points = in_streak ? displayedPoints : data?.points
+  const subscribers = in_streak ? displayedSubscribers : data?.subscribers
 
   const { data: treeData } = useGetTreeInfoQuery(undefined, {
     pollingInterval: 10000, // 10 сек
