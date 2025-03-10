@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useState } from 'react';
 import styles from './InventoryCard.module.scss';
 import clsx from 'clsx';
 //@ts-ignore
@@ -84,8 +84,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   });
 
   const { refetch } = useGetCurrentUserProfileInfoQuery();
-  const [equipItem, { isLoading: isEquipItemLoading }] = useAddItemToRoomMutation();
-  const [removeItem, { isLoading: isRemoveItemLoading }] = useRemoveItemFromRoomMutation();
+  const [equipItem] = useAddItemToRoomMutation();
+  const [removeItem] = useRemoveItemFromRoomMutation();
   const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
   const { openModal } = useModal();
 
@@ -94,8 +94,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   });
 
   const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
-
-  const prevLvl = useRef<number | null>(null);
 
   const handleBuyItem = async (itemPoints: string) => {
     if (current && +current?.points < +itemPoints) return;
@@ -197,7 +195,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
   return (
     <div className={styles.storeCard}>
-      {<GetGift giftColor={localStorage.getItem('giftName') ?? undefined} />}
+      {<GetGift giftColor={localStorage.getItem('giftName') ?? ''} />}
       <div className={styles.header}>
         <div
           className={clsx(
@@ -415,7 +413,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 : item.item_rarity === 'green' && styles.upgradeItemRed,
             )}
             disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
-            onClick={() => handleBuyItem(data?.items[0].price_internal)}
+            onClick={() => handleBuyItem(data?.items[0].price_internal ?? '')}
           >
             <>
               {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {

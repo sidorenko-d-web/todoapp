@@ -11,8 +11,7 @@ import { formatAbbreviation } from '../../../helpers';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
 import { useIncrementingIntegrationStats } from '../../../hooks/useIncrementingIntegrationStats.ts';
-import { useGetPushLineQuery } from '../../../redux/index.ts';
-import { usePushLineStatus } from '../../../hooks/usePushLineStatus.ts';
+import { usePushLineStatus } from '../../../hooks';
 
 interface IntegrationStatsMiniProps {
   views: number;
