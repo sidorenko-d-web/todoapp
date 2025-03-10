@@ -131,7 +131,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           }
         }}
       headerStyles={s.headerStyles}
-      modalStyles={s.modalStyles}
       titleIcon={integrationWhiteIcon}
     >
 
@@ -139,11 +138,11 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         ? <Loader noMargin />
         : <div className={s.content}>
           <div className={s.skinsWrapper}>
-            {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
+            {/* {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
               <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`}>
                 <img src={lightningIcon} alt="Lightning" width={20} height={20} />
               </div>
-            ))}
+            ))} */}
           </div>
 
           <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>

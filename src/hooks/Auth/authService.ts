@@ -1,7 +1,7 @@
 // import WebApp from '@twa-dev/sdk';
 
 export const performSignIn = async (signIn: Function) => {
-  const init_data = window.Telegram.WebApp.initData;
+  // const init_data = window.Telegram.WebApp.initData;
   // const init_data = window.Telegram.WebApp.initDataUnsafe
   // const init_data = WebApp.initData;
 
@@ -21,6 +21,6 @@ export const performSignIn = async (signIn: Function) => {
   // const init_data = 'query_id%3DAAHghBdLAAAAAOCEF0szYRvU%26user%3D%257B%2522id%2522%253A1259832544%252C%2522first_name%2522%253A%2522%25D0%259C%25D0%25B0%25D1%2580%25D0%25B3%25D0%25BE%25F0%259F%258D%2591%2522%252C%2522last_name%2522%253A%2522%255B%25D0%259D%25D0%2595%2520%25D0%2591%25D0%2595%25D0%25A1%25D0%259F%25D0%259E%25D0%259A%25D0%259E%25D0%2598%25D0%25A2%25D0%25AC%255D%2522%252C%2522username%2522%253A%2522Margonesex%2522%252C%2522language_code%2522%253A%2522ru%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FFKxsxrnykyLu0kA2__5ZVmOF-zIxlsp8Cu8H-IFsmUk.svg%2522%257D%26auth_date%3D1741031727%26signature%3DD7ZrfpixtIE6JRPggPsrCVeZZ7f0hvwq4Qhmkg9a4Xnkgp33UFfhUm7MfDw8T6S_phwyl0otUHySWpbZtJiwAA%26hash%3D626b181635b66cd7977d5f841d26bba24b8d18316069b63d5c46965b1df10e85&tgWebAppVersion=8.0&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22bottom_bar_bg_color%22%3A%22%233e464c%22%2C%22link_color%22%3A%22%23007aff%22%2C%22button_color%22%3A%22%23007aff%22%2C%22hint_color%22%3A%22%23ffffff%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22section_bg_color%22%3A%22%23282828%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22header_bg_color%22%3A%22%231c1c1c%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22destructive_text_color%22%3A%22%23ff453a%22%2C%22section_separator_color%22%3A%22%233d3d3d%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%2C%22bg_color%22%3A%22%23282828%22%7D'
 
   // Кирилл А 6547551264
-  // const init_data = 'user=%7B%22id%22%3A6547551264%2C%22first_name%22%3A%22Marketer%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Marketer7%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FZXmZsLRfqSwjww-KJ6vKAk7MdaJgauVvTBeAA_9wyR69odwqAQOCVE4Lm46UHmKn.svg%22%7D&chat_instance=4040856596542184382&chat_type=sender&auth_date=1741269520&signature=eU1vOtEhxllf_mk7FcVG5_gsp3XhrZ-fBI13i79RTMSZBcglh3vU2qrBsE2GlvkoW5deO7gbJl8oLAAMc9kcDg&hash=17eb62baf6c53c9d26e5f22ce267c8e89b00cfb086b4ecab1edc3f5ed27cab8d'
+  const init_data = 'user=%7B%22id%22%3A6547551264%2C%22first_name%22%3A%22Marketer%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Marketer7%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FZXmZsLRfqSwjww-KJ6vKAk7MdaJgauVvTBeAA_9wyR69odwqAQOCVE4Lm46UHmKn.svg%22%7D&chat_instance=4040856596542184382&chat_type=sender&auth_date=1741269520&signature=eU1vOtEhxllf_mk7FcVG5_gsp3XhrZ-fBI13i79RTMSZBcglh3vU2qrBsE2GlvkoW5deO7gbJl8oLAAMc9kcDg&hash=17eb62baf6c53c9d26e5f22ce267c8e89b00cfb086b4ecab1edc3f5ed27cab8d'
   return signIn({ init_data }).unwrap();
 };
