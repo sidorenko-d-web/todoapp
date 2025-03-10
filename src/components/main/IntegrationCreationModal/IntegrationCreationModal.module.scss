@@ -1,5 +1,11 @@
 @use '../../../assets/styles/index.scss' as var;
 
+
+.modalStyles {
+  height: 85vh;
+  margin-top: 50px;
+}
+
 .content {
   display: flex;
   flex-direction: column;
@@ -135,7 +141,7 @@
   display: flex;
   width: 100%;
   padding-top: 20px;
-  padding-bottom: 16px;
+  // padding-bottom: 16px;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
