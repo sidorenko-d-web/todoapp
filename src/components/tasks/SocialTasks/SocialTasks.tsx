@@ -43,7 +43,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
         window.open(linkToOpen, '_blank');
 
         // Ждем 30 секунд
-        await new Promise(resolve => setTimeout(resolve, 30000));
+        await new Promise(resolve => setTimeout(resolve, 5000));
 
         await updateTask({
           id: task.id,
