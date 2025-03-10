@@ -27,18 +27,23 @@ interface StreakCardProps {
   days?: { day: number; type: DayType }[];
   onlyStreak?: boolean;
   streakDays: number;
+  status: string | undefined;
+  chest: string | undefined;
   frozenDays?: number;
   weekData?: WeekData[];
 }
 
 export const StreakCard: React.FC<StreakCardProps> = ({
   days,
-  onlyStreak,
-  streakDays,
+                                                        onlyStreak, streakDays, status, chest,
   frozenDays,
   weekData,
 }) => {
   const { t } = useTranslation('profile');
+
+  console.log('week:', days, weekData);
+  console.log('streak', onlyStreak, streakDays);
+  console.log('frozenDays:', frozenDays);
 
   const calculateLevel = () => {
     let maxStreak = 0;
@@ -63,14 +68,6 @@ export const StreakCard: React.FC<StreakCardProps> = ({
   } else if (streakDays >= 60) {
     p14Key = 'p14_120';
   }
-  let p15Key = '';
-  if (streakDays < 30) {
-    p15Key = 'p15_30';
-  } else if (streakDays < 60) {
-    p15Key = 'p15_60';
-  } else if (streakDays >= 60) {
-    p15Key = 'p15_120';
-  }
 
   return (
     <div className={styles.wrp}>
@@ -85,7 +82,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
                 : styles.badgeRed
             }
           >
-            {t('p12')}
+            {status}
           </span>
 
           <div className={styles.title}>
@@ -130,7 +127,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
                 {streakDays + 1}/{t(p14Key)}
               </span>
               <span className={styles.reward}>
-                {t(p15Key)}
+                {chest}
                 <div className={styles.chestImgContainer}>
                   <img
                     src={

@@ -20,14 +20,19 @@ import { getAchivementType } from '../../../../helpers';
 
 interface RewardProps {
   name: string;
+  name_eng: string;
   stars: number;
   medal: 'gold' | 'silver' | 'bronze';
   isActive: boolean;
   id: string;
 }
 
-const Reward: React.FC<RewardProps> = ({ name, stars, medal, isActive, id }) => {
-  const { t } = useTranslation('profile');
+const Reward: React.FC<RewardProps> = ({ name,name_eng, stars, medal, isActive, id }) => {
+  const { t,i18n, } = useTranslation('profile');
+  const locale = ['ru', 'en'].includes(i18n.language)
+    ? (i18n.language as 'ru' | 'en')
+    : 'ru';
+
   const { data: equipped_items } = useGetEquipedQuery();
 
   const { refetch } = useGetInventoryAchievementsQuery();
@@ -70,7 +75,7 @@ const Reward: React.FC<RewardProps> = ({ name, stars, medal, isActive, id }) => 
           />
         </div>
         <div className={styles.info}>
-          <span className={styles.name}>{name}</span>
+          <span className={styles.name}>{locale === 'ru' ? name : name_eng}</span>
           <div className={styles.stars}>
             {Array.from({ length: 3 }, (_, i) => (
               <img key={i} src={i < stars ? starBlue : starGray} className={styles.star} alt={'Star'} />

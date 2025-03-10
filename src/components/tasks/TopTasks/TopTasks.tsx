@@ -23,7 +23,8 @@ type TopTasksProps = {
 };
 
 export const TopTasks: FC<TopTasksProps> = ({ task }) => {
-  const { t } = useTranslation('quests');
+  const { t, i18n } = useTranslation('quests');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
   const [claimChestReward] = useClaimChestRewardMutation();
 
@@ -114,7 +115,7 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
           progress={progress}
           totalSteps={taskState.totalSteps}
           currentStep={taskState.currentStep}
-          progressReward={t('q10')}
+          progressReward={locale === 'ru' ? task.chest?.chest_name : task.chest?.chest_name_eng}
           progressRewardIcon={getChestIcon()}
           onClick={handleOpenTopTasks}
           disabled={task.is_reward_given}

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styles from './ShopSkinCard.module.scss';
 import clsx from 'clsx';
 import { shopApi, useBuySkinMutation } from '../../../redux';
@@ -15,6 +15,8 @@ import { MODALS, svgHeadersString } from '../../../constants';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
+import ListDisableIcon from '../../../assets/icons/list-disable.svg';
+
 
 interface Props {
   item: IShopSkin;
@@ -23,6 +25,7 @@ interface Props {
 
 export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
   const { t, i18n } = useTranslation('shop');
+  const [idDisabled] = useState(true);
   const [buySkin, { isLoading }] = useBuySkinMutation();
   const { openModal } = useModal();
 
@@ -49,7 +52,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>
-            <h3>{item.name}</h3>
+            <h3>{locale === 'ru' ? item.name : item.name_eng}</h3>
             <div className={styles.icons}>
               {item.wear_location === 'head' ? (
                 <img src={HeadIcon} className={styles.personIcon} />
@@ -93,8 +96,8 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
                 </>
               )}
             </Button>
-            <Button className={styles.listButton} disabled={true}>
-              <img src={ListIcon} alt="list icon" />dfsd
+            <Button className={styles.listButton} disabled={idDisabled}>
+              <img src={idDisabled ? ListDisableIcon : ListIcon} alt="list icon" />
             </Button>
           </>
         ) : (
