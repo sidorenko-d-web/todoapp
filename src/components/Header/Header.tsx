@@ -84,7 +84,7 @@ export const Header = () => {
 
   return (
     <header className={`${styles.header} ${platform ? styles[platform] : ''}`}>
-      {isLoading ? <p>Loading...</p> :
+      {isLoading &&
         <div className={styles.lowerHeader}>
           <div className={styles.levelWrapper}>
             <div className={styles.avatarWrapper} onClick={handleNavigateToProfile}>
@@ -131,5 +131,3 @@ export const Header = () => {
     </header>
   );
 };
-
-export default Header;
