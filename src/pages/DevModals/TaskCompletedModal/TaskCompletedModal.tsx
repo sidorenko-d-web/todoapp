@@ -79,7 +79,7 @@ export default function TaskCompletedModal({ income, subscribers, passiveIncome 
           </p>
         </div>
       </div>
-      <Button variant={'blue'}>{t('q33')}</Button>
+      <Button variant={'blue'} onClick={() => closeModal(MODALS.TASK_COMPLETED)}>{t('q33')}</Button>
     </CentralModal>
   );
 }
