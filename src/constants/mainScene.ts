@@ -71,7 +71,7 @@ export const baseItems = [
   { name: 'table', slot: 2, width: 140, height: 140, x: -6, y: 455, z: 3 },
   { name: 'window', slot: 5, width: 110, height: 110, x: -125, y: 260, z: 0 },
 ];
-const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
+// const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
 
 export const itemsBaseUrl = 'https://storage.yandexcloud.net/miniapp-v2-dev/';
 interface contextProps {
@@ -106,8 +106,8 @@ export class SpineSceneBase extends Phaser.Scene {
   loadSvgItem(item: IShopItem, { equipped_items }: Pick<contextProps, 'equipped_items'>) {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const { width, height } = itemsInSlots[slot];
-    this.load.svg('item' + item.id, proxyImageUrl(item.image_url!), { width, height });
-    // this.load.svg('item' + item.id, item.image_url!, { width, height });
+    // this.load.svg('item' + item.id, proxyImageUrl(item.image_url!), { width, height });
+    this.load.svg('item' + item.id, item.image_url!, { width, height });
   }
 
   loadBaseItems() {
@@ -198,8 +198,8 @@ const createLink = (itemString: string, type: 'json' | 'atlas' |'json1' | 'atlas
   else if (type === 'json1') string = new URL(itemsBaseUrl + itemString + '1.json').href;
   else if (type === 'atlas1') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
   else if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
-  // return (string)
-  return proxyImageUrl(string);
+  return (string)
+  // return proxyImageUrl(string);
 };
 
 export enum PersonAnimations {
