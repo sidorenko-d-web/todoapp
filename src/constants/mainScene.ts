@@ -119,7 +119,7 @@ export class SpineSceneBase extends Phaser.Scene {
   //helpers for scene creation
   createPerson({ center }: Pick<contextProps, 'center'>, isWorking: boolean) {
     if(!this.add.spine) throw new Error('add.spine')
-    this.person = this.add.spine(center - 40, 385, 'personJson', 'personAtlas');
+    this.person = this.add.spine(center - 40, 387, 'personJson', 'personAtlas');
     this.person.scale = 0.07;
     this.person.setDepth(3);
     this.person.animationState.data.defaultMix = 0.1;
