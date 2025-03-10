@@ -65,6 +65,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   } else if (item.level >= 100 && item.level <= 150) {
     s25Key = 's25_150';
   }
+
+  console.log('s25Key:', s25Key);
+// return s25Key;
+
   const { walletAddress, connectWallet } = useTonConnect();
   const [idDisabled] = useState(true);
   const { t, i18n } = useTranslation('shop');

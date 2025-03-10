@@ -5,7 +5,7 @@ import { IShopItem } from '../../../../redux';
 import Button from '../partials/Button';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
-import { ShopIcon } from '../../../../assets/Icons/shop';
+import { ShopIcon } from '../../../../assets/icons/shop';
 import Lottie from 'lottie-react';
 import { purpleLight, redLight } from '../../../../assets/animations';
 import { CentralModal } from '../../../shared';

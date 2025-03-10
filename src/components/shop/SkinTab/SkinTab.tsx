@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ShopSkinCard } from '../ShopSkinCard/ShopSkinCard';
+import { ShopSkinCard } from '../ShopSkinCard';
 import styles from './SkinTab.module.scss';
 import { useGetShopSkinsQuery, useGetInventorySkinsQuery } from '../../../redux';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const SkinTab: FC<Props> = ({ mode }) => {
-  const { t,i18n } = useTranslation('shop');
+  const { t } = useTranslation('shop');
   const { data: shop } = useGetShopSkinsQuery();
 
   const { data: inventory } = useGetInventorySkinsQuery();
