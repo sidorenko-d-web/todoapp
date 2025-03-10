@@ -76,7 +76,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
     
     if (savedTaskId && startTime) {
       const elapsedTime = Date.now() - Number(startTime);
-      const remainingTime = Math.max(30000 - elapsedTime, 0);
+      const remainingTime = Math.max(5000 - elapsedTime, 0);
 
       setPendingTaskId(savedTaskId);
 
