@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect, useRef } from 'react';
 import styles from './InventoryCard.module.scss';
 import clsx from 'clsx';
 //@ts-ignore
@@ -67,7 +67,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const RoomItemsSlots = useRoomItemsSlots();
 
   console.log('s25Key:', s25Key);
-// return s25Key;
+  // return s25Key;
 
   const { walletAddress, connectWallet } = useTonConnect();
   const [idDisabled] = useState(true);
@@ -95,6 +95,41 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   });
 
   const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
+
+  const prevLvl = useRef<number | null>(null);
+
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    const lastTriggeredLevel = Number(localStorage.getItem('lastTriggeredLevel')) || 0;
+    const lvlGiftFromStorage = localStorage.getItem('lvlGift');
+
+    if (prevLvl.current === null) {
+      prevLvl.current = item.level;
+      return;
+    }
+
+    if (lvlGiftFromStorage && lvlGiftFromStorage.includes(String(item.level))) {
+      openModal(MODALS.GET_GIFT);
+      localStorage.setItem('lastTriggeredLevel', String(item.level));
+    }
+
+    if (
+      (item.level === 50 || item.level === 100 || item.level === 150) &&
+      item.level !== lastTriggeredLevel &&
+      item.level !== prevLvl.current
+    ) {
+      openModal(MODALS.TASK_CHEST);
+      localStorage.setItem('lastTriggeredLevel', String(item.level));
+    }
+
+    prevLvl.current = item.level;
+  }, [item.level]);
 
   const handleBuyItem = async (itemPoints: string) => {
     if (current && +current?.points < +itemPoints) return;

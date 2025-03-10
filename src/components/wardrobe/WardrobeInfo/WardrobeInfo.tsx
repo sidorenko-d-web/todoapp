@@ -4,18 +4,16 @@ import { Link } from 'react-router-dom';
 
 import skinPlaceholder from '../../../assets/icons/skin-placeholder.svg';
 import statusInactive from '../../../assets/icons/status-inactive.svg';
-import { useGetInventorySkinsQuery } from '../../../redux/api/inventory/api';
+import { useGetInventorySkinsQuery } from '../../../redux';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 
 export const WardrobeInfo: React.FC = () => {
   const { t } = useTranslation('wardrobe');
-  const { data, isLoading, error } = useGetInventorySkinsQuery();
+  const { data, error } = useGetInventorySkinsQuery();
 
   return (
     <>
-      {isLoading && <p>Loading...</p>}
-
       {error && <p>Error loading profile data</p>}
 
       {data && (
