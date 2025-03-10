@@ -147,7 +147,7 @@ export default function DaysInARowModal({ onClose }: Props) {
 
       <div className={styles.progressTitle}>
         <p>
-          {streakCount + 1}/{t(p14Key)}
+          {streakCount}/{t(p14Key)}
         </p>
         <div className={styles.chest}>
           <p>{locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}</p>
