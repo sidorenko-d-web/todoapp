@@ -246,18 +246,20 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
           />
         )}
 
-      {!guideVisibility.upgradeItemsGuideShown &&
-        isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) &&
-        mode === 'inventory' && (
+      {(isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+        isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)
+        && !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN)
+        ) &&
+        mode === 'shop' && (
           <UpgradeItemsGuide
             onClose={() => {
+              setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
               handleGuideClose(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
             }}
           />
         )}
 
-      {guideVisibility.upgradeItemsGuideShown &&
-        !guideVisibility.treeLevelGuideShown &&
+      {isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) &&
         mode === 'inventory' && (
           <TreeLevelGuide

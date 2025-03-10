@@ -47,17 +47,18 @@ export const Header = () => {
 
   const { getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
-  
+
   useEffect(() => {
     //needed to re-render header when gift modal closes to update the coin number
-    if(isOpen) {
+    if (isOpen) {
       refetch().then(() => {
-        console.log('update '+ data?.points);
+        console.log('update ' + data?.points);
 
       });
     }
   }, [isOpen]);
 
+  const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
   const userSubscribers = data?.subscribers || 0;
   let lastActiveStageNumber = 0;
@@ -74,7 +75,9 @@ export const Header = () => {
   }, [lastActiveStageNumber, dispatch]);
 
   const handleNavigateToProfile = () => {
-    navigate(AppRoute.Profile);
+    if (footerActive) {
+      navigate(AppRoute.Profile);
+    }
   };
 
   const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
@@ -97,14 +100,22 @@ export const Header = () => {
               </div>
 
               <div className={styles.levelInfo}>
-                <TrackedLink
-                  trackingData={{
-                    eventType: 'button',
-                    eventPlace: 'В дерево роста - Хедер',
-                  }}
-                  to={AppRoute.ProgressTree} className={styles.levelNumber}>
-                  {lastActiveStage}
-                </TrackedLink>
+                {footerActive ? (
+                  <TrackedLink
+                    trackingData={{
+                      eventType: 'button',
+                      eventPlace: 'В дерево роста - Хедер',
+                    }}
+                    to={AppRoute.ProgressTree}
+                    className={styles.levelNumber}
+                  >
+                    {lastActiveStage}
+                  </TrackedLink>
+                ) : (
+                  <span className={styles.levelNumber}>
+                    {lastActiveStage}
+                  </span>
+                )}
                 <progress max={10} value={6} className={styles.levelProgressBar}></progress>
               </div>
             </div>

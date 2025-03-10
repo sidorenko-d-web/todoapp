@@ -26,7 +26,7 @@ export const TreeLevelGuide: React.FC<TreeLevelGuideProps> = ({onClose}) => {
     return (
         
         <Guide align="left"
-            zIndex={110}
+            zIndex={15000}
             top={'50%'}
             description={
                 <>
