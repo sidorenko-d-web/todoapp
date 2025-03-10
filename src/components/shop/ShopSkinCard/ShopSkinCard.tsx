@@ -1,8 +1,13 @@
 import { FC, useState } from 'react';
 import styles from './ShopSkinCard.module.scss';
 import clsx from 'clsx';
-import { shopApi, useBuySkinMutation } from '../../../redux';
-import { IShopSkin } from '../../../redux';
+import {
+  shopApi,
+  IShopSkin,
+  useBuySkinMutation,
+  useGetCharacterQuery,
+  useUpdateCharacterMutation,
+} from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import HeadIcon from '../../../assets/icons/head_icon.svg';
 import FaceIcon from '../../../assets/icons/face_icon.svg';
@@ -17,7 +22,6 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 import ListDisableIcon from '../../../assets/icons/list-disable.svg';
 
-
 interface Props {
   item: IShopSkin;
   mode: 'shop' | 'inventory';
@@ -26,7 +30,11 @@ interface Props {
 export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
   const { t, i18n } = useTranslation('shop');
   const [idDisabled] = useState(true);
-  const [buySkin, { isLoading }] = useBuySkinMutation();
+
+  const [buySkin, { isLoading: isBuyLoading }] = useBuySkinMutation();
+  const [updateCharacter, { isLoading: isUpdateLoading }] = useUpdateCharacterMutation();
+
+  const { data: characterData, isLoading: isCharacterLoading } = useGetCharacterQuery();
   const { openModal } = useModal();
 
   const handleBuySkin = async () => {
@@ -43,6 +51,34 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
   };
 
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+
+  const handleSelectSkin = async (item: IShopSkin) => {
+    if (!characterData) return;
+    const prevSkins = {
+      head: characterData?.skins.find(_item => _item.wear_location === 'head')?.id,
+      face: characterData?.skins.find(_item => _item.wear_location === 'face')?.id,
+      legs: characterData?.skins.find(_item => _item.wear_location === 'legs')?.id,
+      skin_color: characterData?.skins.find(_item => _item.wear_location === 'skin_color')?.id,
+      upper_body: characterData?.skins.find(_item => _item.wear_location === 'upper_body')?.id,
+      entire_body: characterData?.skins.find(_item => _item.wear_location === 'entire_body')?.id,
+    };
+    prevSkins[item.wear_location] = item.id;
+    const body = {
+      head_skin_id: prevSkins.head,
+      face_skin_id: prevSkins.face,
+      upper_body_skin_id: prevSkins.upper_body,
+      legs_skin_id: prevSkins.legs,
+      skin_color_id: prevSkins.skin_color,
+      gender: characterData.gender,
+    };
+    try {
+      await updateCharacter(body);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const isLoading = isUpdateLoading || isCharacterLoading || isBuyLoading;
 
   return (
     <div className={styles.storeCard}>
@@ -89,7 +125,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
             </Button>
             <Button className={styles.priceButton} onClick={handleBuySkin}>
               {isLoading ? (
-                <p>Loading</p>
+                <p>{t('s59')}</p>
               ) : (
                 <>
                   {formatAbbreviation(item.price_internal, 'number', { locale: locale })} <img src={CoinIcon} />
@@ -100,18 +136,26 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
               <img src={idDisabled ? ListDisableIcon : ListIcon} alt="list icon" />
             </Button>
           </>
+        ) : characterData?.skins.map(item => item.id).includes(item.id) ? (
+          <Button disabled className={styles.buttonInventory}>
+            {isLoading ? (
+              <p>{t('s59')}</p>
+            ) : (
+              <>
+                <p>{t('s39-1')}</p>
+              </>
+            )}
+          </Button>
         ) : (
-          <>
-            <Button className={styles.buttonInventory}>
-              {isLoading ? (
-                <p>Loading</p>
-              ) : (
-                <>
-                  <p>{t('s39')}</p>
-                </>
-              )}
-            </Button>
-          </>
+          <Button onClick={() => handleSelectSkin(item)} className={styles.buttonInventory}>
+            {isLoading ? (
+              <p>{t('s59')}</p>
+            ) : (
+              <>
+                <p>{t('s39')}</p>
+              </>
+            )}
+          </Button>
         )}
       </div>
     </div>
