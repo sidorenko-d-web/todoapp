@@ -54,6 +54,8 @@
       align-items: center;
 
       user-select: none;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
       color: var.$color-text-semi-transparent;
       text-overflow: ellipsis;
       font-size: 12px;
