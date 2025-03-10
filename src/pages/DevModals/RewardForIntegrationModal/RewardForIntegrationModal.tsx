@@ -1,4 +1,4 @@
-import { MODALS, SOUNDS } from '../../../constants';
+import { GUIDE_ITEMS, MODALS, SOUNDS } from '../../../constants';
 import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './RewardForIntegrationModal.module.scss';
 import Button from '../partials/Button';
@@ -17,6 +17,7 @@ import { CentralModal } from '../../../components/shared';
 import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../helpers';
 import { setIsPublishedModalClosed, setNeedToPlayHappy } from '../../../redux';
+import { setGuideShown } from '../../../utils';
 
 export default function RewardForIntegrationModal() {
   const { t, i18n } = useTranslation('integrations');
@@ -32,6 +33,7 @@ export default function RewardForIntegrationModal() {
   return (
     <CentralModal
       onClose={() => {
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
         dispatch(setIsPublishedModalClosed(true));
         dispatch(setNeedToPlayHappy(true));
         closeModal(MODALS.INTEGRATION_REWARD);

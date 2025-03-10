@@ -12,7 +12,7 @@ import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { TrackedLink } from '../withTracking';
 import { getOS } from '../../utils';
-import { useModal } from '../../hooks';
+import { useModal, usePushLineStatus } from '../../hooks';
 import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
 
 export const Header = () => {
@@ -20,7 +20,7 @@ export const Header = () => {
     pollingInterval: 10000, // 10 сек
   });
 
-  const {totalEarned, subscribers} = useIncrementingProfileStats({
+  const {points: displayedPoints, subscribers: displayedSubscribers} = useIncrementingProfileStats({
     profileId: data?.id || "",
     basePoints: data?.points || "0",
     baseSubscribers: data?.subscribers || 0,
@@ -29,6 +29,11 @@ export const Header = () => {
     futureStatistics: data?.future_statistics,
     lastUpdatedAt: data?.updated_at
   })
+
+  const {in_streak} = usePushLineStatus()
+
+  const points = in_streak ? displayedPoints : data?.points
+  const subscribers = in_streak ? displayedSubscribers : data?.subscribers
 
   const { data: treeData } = useGetTreeInfoQuery(undefined, {
     pollingInterval: 10000, // 10 сек
@@ -42,17 +47,18 @@ export const Header = () => {
 
   const { getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
-  
+
   useEffect(() => {
     //needed to re-render header when gift modal closes to update the coin number
-    if(isOpen) {
+    if (isOpen) {
       refetch().then(() => {
-        console.log('update '+ data?.points);
+        console.log('update ' + data?.points);
 
       });
     }
   }, [isOpen]);
 
+  const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
   const userSubscribers = data?.subscribers || 0;
   let lastActiveStageNumber = 0;
@@ -69,14 +75,16 @@ export const Header = () => {
   }, [lastActiveStageNumber, dispatch]);
 
   const handleNavigateToProfile = () => {
-    navigate(AppRoute.Profile);
+    if (footerActive) {
+      navigate(AppRoute.Profile);
+    }
   };
 
   const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
 
   return (
     <header className={`${styles.header} ${platform ? styles[platform] : ''}`}>
-      {isLoading ? <p>Loading...</p> :
+      {isLoading &&
         <div className={styles.lowerHeader}>
           <div className={styles.levelWrapper}>
             <div className={styles.avatarWrapper} onClick={handleNavigateToProfile}>
@@ -92,14 +100,22 @@ export const Header = () => {
               </div>
 
               <div className={styles.levelInfo}>
-                <TrackedLink
-                  trackingData={{
-                    eventType: 'button',
-                    eventPlace: 'В дерево роста - Хедер',
-                  }}
-                  to={AppRoute.ProgressTree} className={styles.levelNumber}>
-                  {lastActiveStage}
-                </TrackedLink>
+                {footerActive ? (
+                  <TrackedLink
+                    trackingData={{
+                      eventType: 'button',
+                      eventPlace: 'В дерево роста - Хедер',
+                    }}
+                    to={AppRoute.ProgressTree}
+                    className={styles.levelNumber}
+                  >
+                    {lastActiveStage}
+                  </TrackedLink>
+                ) : (
+                  <span className={styles.levelNumber}>
+                    {lastActiveStage}
+                  </span>
+                )}
                 <progress max={10} value={6} className={styles.levelProgressBar}></progress>
               </div>
             </div>
@@ -107,7 +123,7 @@ export const Header = () => {
 
           <div className={styles.coinsWrapper}>
             <p
-              className={styles.coins}>{formatAbbreviation(showCoins ? (totalEarned || 0) : '0', 'number', { locale: locale })}</p>
+              className={styles.coins}>{formatAbbreviation(showCoins ? (points || 0) : '0', 'number', { locale: locale })}</p>
             <img className={styles.coinIcon} src={CoinIcon} alt="CoinIcon" />
           </div>
         </div>
@@ -115,5 +131,3 @@ export const Header = () => {
     </header>
   );
 };
-
-export default Header;

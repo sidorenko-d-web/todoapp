@@ -22,7 +22,7 @@ export const UpgradeItemsGuide: React.FC<UpgradeItemsGuideProps> = ({onClose}) =
     return (
         
         <Guide align="left"
-            zIndex={110}
+            zIndex={15000}
             top={'55%'}
             description={
                 <>

@@ -18,13 +18,15 @@ import {
   integrationCreatingModalButtonGlowing,
   integrationCreatingModalLightningsGlowing,
   integrationCreatingModalTabsGlowing,
+  isGuideShown,
   setGuideShown,
 } from '../../../utils/guide-functions.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
-import { Loader, TrackedButton } from '../../';
+import { CreatingIntegrationGuide, Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
-import { ExpandableBottomModal } from '../../shared/';
+import { CentralModal } from '../../shared/';
+import { AppRoute } from '../../../constants/appRoute.ts';
 
 
 interface CreatingIntegrationModalProps {
@@ -39,6 +41,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   hasCreatingIntegration,
 }) => {
   const { t } = useTranslation('integrations');
+  const { t: tGuide } = useTranslation('guide');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -49,7 +52,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   ] as const;
 
   const [selectedOption, setSelectedOption] = useState<(typeof contentOptions)[number]['value']>('text');
-
+  const [selectedCompanyId, setSelectedCompanyId] = useState("")
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
   const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
   const { data: profile, isLoading: isProfileLoading } = useGetCurrentUserProfileInfoQuery();
@@ -64,22 +67,22 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     navigate('/shop');
   };
 
-  const submitCreation = (companyId: string) => {
-    if (!selectedOption || !companyId) return;
-
+  const submitCreation = () => {
+    if (!selectedOption || !selectedCompanyId) return;
     createIntegration({
       content_type: selectedOption,
-      campaign_id: companyId,
+      campaign_id: selectedCompanyId,
     })
       .unwrap()
       .then((data) => {
         dispatch(setIntegrationCreated(true));
         dispatch(setLastIntegrationId(data.id));
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         onClose();
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         dispatch(integrationsApi.util.invalidateTags(['Integrations']));
         dispatch(profileApi.util.invalidateTags(['Me']));
       });
+    setSelectedCompanyId("");
   };
 
   const noItemsMessage = (() => {
@@ -96,14 +99,42 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   const buttonGlowing = integrationCreatingModalButtonGlowing();
 
+  const [firstGuideClosed, setFirstGuideClosed] = useState(false);
+
   return (
-    <ExpandableBottomModal
-      modalId={modalId}
+    // <ExpandableBottomModal
+    //   modalId={modalId}
+    //   title={t('i11')}
+    //   onClose={
+    //     () => {
+    //       onClose();
+    //       if(!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+    //        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+    //        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+    //        navigate(AppRoute.Shop); 
+    //       }
+    //     }
+    //   }
+    //   titleIcon={integrationWhiteIcon}
+    //   overlayOpacity={0.7}
+    // >
+    <CentralModal
       title={t('i11')}
-      onClose={onClose}
+      modalId={modalId}
+      onClose={
+        () => {
+          onClose();
+          if (!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+            setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+            navigate(AppRoute.Shop);
+          }
+        }}
+      headerStyles={s.headerStyles}
+      modalStyles={s.modalStyles}
       titleIcon={integrationWhiteIcon}
-      overlayOpacity={0.7}
     >
+
       {isProfileLoading || isCompaniesLoading
         ? <Loader noMargin />
         : <div className={s.content}>
@@ -126,7 +157,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
               </span>
             ))}
           </div>
-          {uniqueCompany && (
+          {uniqueCompany && !noItemsMessage && (
             <SpecialIntegration
               integration={uniqueCompany}
             />
@@ -139,14 +170,15 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           {!noItemsMessage ? (
             <div className={s.companies}>
               {companies?.map((company) =>
-                  company.growth_tree_stage !== 100 && (
-                    <CompanyCard
-                      key={company.id}
-                      company={company}
-                      disabled={hasCreatingIntegration}
-                      onClick={() => submitCreation(company.id)}
-                    />
-                  ),
+                company.growth_tree_stage !== 100 && (
+                  <CompanyCard
+                    key={company.id}
+                    company={company}
+                    selected={selectedCompanyId === company.id}
+                    disabled={hasCreatingIntegration}
+                    onClick={() => setSelectedCompanyId(company.id)}
+                  />
+                ),
               )}
             </div>
           ) : (
@@ -165,12 +197,61 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             }}
             className={`${s.button} 
             ${buttonGlowing ? s.glowingBtn : ''} `}
-          onClick={goToShop}
-        >
-          {t('i21')}
-        </TrackedButton> }                             
-      </div>
+            onClick={goToShop}
+          >
+            {t('i21')}
+          </TrackedButton>}
+
+          {selectedCompanyId && !noItemsMessage && !hasCreatingIntegration && (
+            <div className={s.stickyButtonContainer}>
+              <button
+                className={s.createButton}
+                onClick={submitCreation}
+              >
+                {t('i31')}
+              </button>
+            </div>
+          )}
+
+        </div>
       }
-    </ExpandableBottomModal>
+
+      {(!firstGuideClosed && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) && <CreatingIntegrationGuide
+        onClose={() => {
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+          setFirstGuideClosed(true);
+        }}
+        buttonText={tGuide('g17')}
+        description={
+          <>
+            {tGuide('g18')} <span style={{ color: '#2F80ED' }}>{tGuide('g19')}</span>
+            <br />
+            <br />
+            {tGuide('g20')}
+          </>
+        }
+        align="left"
+        top="9%"
+      />}
+      {(firstGuideClosed && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)) && <CreatingIntegrationGuide
+        onClose={() => {
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+          onClose;
+          navigate(AppRoute.Shop);
+        }}
+        buttonText={tGuide('g21')}
+        description={
+          <>
+            {tGuide('g22')} <span style={{ color: '#2F80ED' }}>{tGuide('g23')} </span>
+            <br />
+            <br />
+            {tGuide('g24')}
+          </>
+        }
+        align="left"
+        top="22%"
+      />}
+    {/* </ExpandableBottomModal> */}
+    </CentralModal>
   );
 };

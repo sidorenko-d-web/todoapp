@@ -35,7 +35,7 @@
   "g34": "REAL MONEY",
   "g35": "Good luck!",
   "g36": "Complete the tutorial",
-  "g37": "Awesome! Now you have",
+  "g37": "Awesome! Now you have ",
   "g38": "subscription",
   "g39": "and",
   "g40": "typewriter",
@@ -79,5 +79,10 @@
   "g78": "Subscription completed!",
   "g79": "Congratulations! Your subscription is complete. You can now make 5 integrations!",
   "g80": "Integration can only be purchased once per day",
-  "g81": "You don't have enough funds"
+  "g81": "You don't have enough funds",
+  "g82": "Subscription ended",
+  "g83": "Renew in",
+  "g84": "min.",
+  "g85": "h.",
+  "g86": "You have already purchased a subscription today. Come back tomorrow to buy more."
 }

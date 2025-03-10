@@ -1,4 +1,4 @@
-import { type Dispatch, type FC, PropsWithChildren, type SetStateAction, useEffect, useReducer, useState } from 'react';
+import { type FC, PropsWithChildren, useEffect, useReducer, useState, useMemo } from 'react';
 import styles from './ShopLayout.module.scss';
 import {
   RootState,
@@ -27,8 +27,8 @@ import { setActiveFooterItemId, setBuyItemButtonGlowing, setShopStatsGlowing } f
 type TypeTab<T> = { title: string; value: T };
 
 interface Props {
-  onItemCategoryChange: Dispatch<SetStateAction<TypeTab<TypeItemCategory> | undefined>>;
-  onItemQualityChange: Dispatch<SetStateAction<TypeTab<TypeItemRarity> | undefined>>;
+  onItemCategoryChange: (category: TypeTab<TypeItemCategory>) => void;
+  onItemQualityChange: (category: TypeTab<TypeItemRarity>) => void;
   mode: 'shop' | 'inventory';
 }
 
@@ -68,22 +68,31 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const navigate = useNavigate();
 
-  const itemsInTabs = itemsInTab(shop?.items, inventory?.items, mode === 'inventory');
-  const tabs = [];
-  itemsInTabs?.red?.length && itemsInTabs?.red?.length > 0 && tabs.push(shopItemRarity[0]);
-  itemsInTabs?.yellow?.length && itemsInTabs?.yellow?.length > 0 && tabs.push(shopItemRarity[1]);
-  itemsInTabs?.green?.length && itemsInTabs?.green?.length > 0 && tabs.push(shopItemRarity[2]);
+  const itemsInTabs = useMemo(() => itemsInTab(shop?.items, inventory?.items, mode === 'inventory'), []);
 
-  const inventoryTabs = [];
-  isSuccess &&
-    inventory?.items.find(item => item.item_rarity === 'red' && item.item_category === shopCategory.value) &&
-    inventoryTabs.push(shopItemRarity[0]);
-  isSuccess &&
-    inventory?.items.find(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value) &&
-    inventoryTabs.push(shopItemRarity[1]);
-  isSuccess &&
-    inventory?.items.find(item => item.item_rarity === 'green' && item.item_category === shopCategory.value) &&
-    inventoryTabs.push(shopItemRarity[2]);
+  const tabs = useMemo(() => {
+    const _tabs = [];
+    itemsInTabs?.red?.length && itemsInTabs?.red?.length > 0 && _tabs.push(shopItemRarity[0]);
+    itemsInTabs?.yellow?.length && itemsInTabs?.yellow?.length > 0 && _tabs.push(shopItemRarity[1]);
+    itemsInTabs?.green?.length && itemsInTabs?.green?.length > 0 && _tabs.push(shopItemRarity[2]);
+
+    return _tabs;
+  }, []);
+
+  const inventoryTabs = useMemo(() => {
+    const _inventoryTabs = [];
+    isSuccess &&
+      inventory?.items.find(item => item.item_rarity === 'red' && item.item_category === shopCategory.value) &&
+      _inventoryTabs.push(shopItemRarity[0]);
+    isSuccess &&
+      inventory?.items.find(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value) &&
+      _inventoryTabs.push(shopItemRarity[1]);
+    isSuccess &&
+      inventory?.items.find(item => item.item_rarity === 'green' && item.item_category === shopCategory.value) &&
+      _inventoryTabs.push(shopItemRarity[2]);
+
+    return _inventoryTabs;
+  }, []);
 
   const handleShop = () => {
     setItemsQuality(shopItemRarity[0]);
@@ -132,7 +141,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const isTabsNotEmpty = [...(itemsInTabs.green ?? []), ...(itemsInTabs.yellow ?? [])].length > 0;
 
-  console.log(itemsInTabs);
+  // console.log(itemsInTabs, 1);
 
   return (
     <>
@@ -237,18 +246,20 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
           />
         )}
 
-      {!guideVisibility.upgradeItemsGuideShown &&
-        isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) &&
-        mode === 'inventory' && (
+      {(isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+        isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)
+        && !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN)
+        ) &&
+        mode === 'shop' && (
           <UpgradeItemsGuide
             onClose={() => {
+              setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
               handleGuideClose(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
             }}
           />
         )}
 
-      {guideVisibility.upgradeItemsGuideShown &&
-        !guideVisibility.treeLevelGuideShown &&
+      {isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) &&
         mode === 'inventory' && (
           <TreeLevelGuide

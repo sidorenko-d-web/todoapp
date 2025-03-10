@@ -1,4 +1,3 @@
-// useIncrementingProfileStats.ts
 import { useState, useEffect } from 'react';
 import { profileStatsIncrementer } from '../services/profileStatsIncrementerService';
 import { FutureStatistics } from '../redux/api/profile/dto'

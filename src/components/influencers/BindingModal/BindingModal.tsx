@@ -5,6 +5,8 @@ import clan from '../../../assets/icons/clan-red.svg';
 import dots from '../../../assets/icons/dots.svg';
 import { RewardsCards } from '..';
 import clsx from 'clsx';
+import { isValidPhoneNumber, parsePhoneNumberFromString, AsYouType } from 'libphonenumber-js';
+import InputMask from 'react-input-mask';
 
 import s from './BindingModal.module.scss';
 import ss from '../shared.module.scss';
@@ -43,9 +45,34 @@ export const BindingModal = ({
   const [sendCode] = useSendEmailConfirmationCodeMutation();
   const [sendPhone] = useSendPhoneConfirmationCodeMutation();
 
-  const phoneRegex = /^\+?[0-9\s\-()]{7,}$/;
+  // Определяем страну по введенному коду
+  const getCountryCode = (phoneNumber: string) => {
+    const asYouType = new AsYouType();
+    asYouType.input(phoneNumber);
+    return asYouType.getCountry() || 'RU'; // По умолчанию Россия, если страна не определена
+  };
 
-  const isValid = inputType === 'phone' ? phoneRegex.test(value.trim()) : value.trim() !== '';
+  // Генерация маски на основе страны
+  const getPhoneMask = (phoneNumber: string) => {
+    // Если номер слишком короткий, используем маску для кода страны
+    if (phoneNumber.length <= 2) return '+9'; // Маска для кода страны
+
+    // Определяем страну по введенному коду
+    const countryCode = getCountryCode(phoneNumber);
+
+    // Если страна не определена, используем маску для кода страны
+    if (!countryCode) return '+9';
+
+    // Генерируем маску на основе страны
+    const asYouType = new AsYouType(countryCode);
+    asYouType.input(phoneNumber);
+    const mask = asYouType.getTemplate();
+
+    // Если маска не определена, используем маску для кода страны
+    return mask || '+9';
+  };
+
+  const isValid = inputType === 'phone' ? isValidPhoneNumber(value, getCountryCode(value)) : value.trim() !== '';
 
   const handleNext = async () => {
     try {
@@ -57,10 +84,15 @@ export const BindingModal = ({
         onNext();
       }
       if (inputType === 'phone') {
-        await sendPhone({ phone_number: value.trim() });
-        dispatch(setInputValue(value.trim()));
-        setValue('');
-        onNext();
+        const phoneNumber = parsePhoneNumberFromString(value, getCountryCode(value));
+        if (phoneNumber && phoneNumber.isValid()) {
+          await sendPhone({ phone_number: phoneNumber.format('E.164') });
+          dispatch(setInputValue(phoneNumber.format('E.164')));
+          setValue('');
+          onNext();
+        } else {
+          setError('Неверный формат номера телефона');
+        }
       }
     } catch (err) {
       const error = err as { status: number };
@@ -93,16 +125,29 @@ export const BindingModal = ({
           <div className={s.inputGroup}>
             <label>{binding.inputLabel}</label>
             <div className={s.inputWrapper}>
-              <input
-                type="text"
-                value={value}
-                onChange={(e) => {
-                  setValue(e.target.value);
-                  setError('');
-                }}
-                className={`${s.input} ${!isValid ? s.invalid : ''}`}
-                placeholder={binding.placeholder}
-              />
+              {inputType === 'phone' ? (
+                <InputMask
+                  mask={getPhoneMask(value)} // Динамическая маска
+                  value={value}
+                  onChange={(e: any) => {
+                    setValue(e.target.value);
+                    setError('');
+                  }}
+                  className={`${s.input} ${!isValid ? s.invalid : ''}`}
+                  placeholder={binding.placeholder}
+                />
+              ) : (
+                <input
+                  type="text"
+                  value={value}
+                  onChange={(e) => {
+                    setValue(e.target.value);
+                    setError('');
+                  }}
+                  className={`${s.input} ${!isValid ? s.invalid : ''}`}
+                  placeholder={binding.placeholder}
+                />
+              )}
               <img className={s.statusIcon} src={!isValid ? dots : tick} />
             </div>
           </div>

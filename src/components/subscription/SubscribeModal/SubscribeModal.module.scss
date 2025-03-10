@@ -46,7 +46,7 @@
     }
 
     .description {
-      margin-top: 20px;
+      margin-top: 10px;
       color: var.$color-text-semi-transparent;
       font-weight: 500;
       font-size: 14px;
@@ -97,6 +97,16 @@
       }
     }
   }
+}
+
+.time {
+  color: #2F80ED4D;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 130%;
+  letter-spacing: -5%;
+  text-align: center;
+  margin-top: 20px;
 }
 
 .errorModal {

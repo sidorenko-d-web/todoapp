@@ -11,7 +11,7 @@ import {
 } from '../../redux';
 import RewardsList from '../../components/profile/RewardsCard/RewardsList';
 import { getWeekData } from '../../utils';
-import { useModal } from '../../hooks';
+import { useModal, usePushLineStatus } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 import { useGetPushLineQuery } from '../../redux';
@@ -19,7 +19,8 @@ import { Loader } from '../../components';
 import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
 
 export const ProfilePage: React.FC = () => {
-  const { t } = useTranslation('profile');
+  const { t,i18n } = useTranslation('profile');
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
 
@@ -133,6 +134,11 @@ export const ProfilePage: React.FC = () => {
     lastUpdatedAt: userProfileData?.updated_at,
   });
 
+  const {in_streak} = usePushLineStatus()
+  const subscribers = in_streak ? displayedSubscribers : userProfileData?.subscribers ?? 0
+  const totalViews = in_streak ? displayedTotalViews : userProfileData?.total_views ?? 0
+  const totalEarned = in_streak ? displayedTotalEarned : userProfileData?.total_earned ?? ""
+
   if (isLoading) {
     return <Loader />
   }
@@ -152,10 +158,10 @@ export const ProfilePage: React.FC = () => {
             <h1 className={styles.pageTitle}>{t('p1')}</h1>
 
             <ProfileStatsMini
-              subscribers={displayedSubscribers}
+              subscribers={subscribers}
               position={position}
               daysInARow={streaks !== undefined ? streaks : 0}
-              totalViews={displayedTotalViews}
+              totalViews={totalViews}
             />
           </div>
 
@@ -180,6 +186,8 @@ export const ProfilePage: React.FC = () => {
               streakDays={streaks !== undefined ? streaks : 0}
               frozenDays={frozen !== undefined ? frozen : 0}
               days={weekData}
+              status={locale === 'ru' ? data?.push_line_profile_status.status_name : data?.push_line_profile_status.status_name_eng}
+              chest={locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}
               weekData={data?.week_information}
             />
           </div>
@@ -187,8 +195,8 @@ export const ProfilePage: React.FC = () => {
           <div>
             <p className={styles.statsTitle}>{t('p4')}</p>
             <ProfileStats
-              earned={displayedTotalEarned}
-              views={displayedTotalViews}
+              earned={totalEarned}
+              views={totalViews}
               favoriteCompany={'Favourite company'}
               comments={userProfileData.comments_answered_correctly}
               rewards={userProfileData.achievements_collected}

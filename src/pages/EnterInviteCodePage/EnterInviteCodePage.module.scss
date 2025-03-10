@@ -2,11 +2,12 @@
 
 .root {
     display: flex;
-    min-height: 100vh;
+    min-height: 85vh;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     background-color: var.$color-bg;
-    padding: 100px 30px 60px 30px;
+    padding: 0 30px 60px 30px;
 
 
     .inputGroup {
@@ -37,7 +38,7 @@
         }
 
         .invalid {
-            border-color: var.$color-red !important;
+            border-color: var.$color-red;
         }
 
         .statusIcon {
@@ -64,7 +65,7 @@
         }
     }
 
-    .description {
+    .description, .descriptionError {
         position: absolute;
         width: 100%;
         text-align: center;
@@ -72,6 +73,10 @@
         color: var.$color-text-semi-transparent;
         padding-top: 30px;
         white-space: normal;
+    }
+
+    .descriptionError {
+        margin-bottom: 100px;
     }
 
     .enterCodeText, .textFocus {
@@ -110,5 +115,9 @@
     .btnFocus {
         bottom: 60px;
     }
+
+    //.nextBtn, .btnFocus, .textFocus, .enterCodeText {
+    //    transition: bottom 0.1s ease;
+    //}
 
 }

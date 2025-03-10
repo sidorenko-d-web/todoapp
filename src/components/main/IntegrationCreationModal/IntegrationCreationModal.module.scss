@@ -1,5 +1,11 @@
 @use '../../../assets/styles/index.scss' as var;
 
+
+.modalStyles {
+  height: 85vh;
+  margin-top: 50px;
+}
+
 .content {
   display: flex;
   flex-direction: column;
@@ -54,6 +60,8 @@
       align-items: center;
 
       user-select: none;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
       color: var.$color-text-semi-transparent;
       text-overflow: ellipsis;
       font-size: 12px;
@@ -123,6 +131,38 @@
       opacity: 0.5;
       pointer-events: none;
     }
+  }
+}
+
+.stickyButtonContainer {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  width: 100%;
+  padding-top: 20px;
+  // padding-bottom: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+
+  .createButton {
+    display: flex;
+    padding: 14px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    align-self: stretch;
+    border-radius: 8px;
+    border: 1px solid #2064C0;
+    background: #2F80ED;
+
+    color: var.$color-white;
+    text-align: center;
+    font-family: var.$font-default;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
   }
 }
 

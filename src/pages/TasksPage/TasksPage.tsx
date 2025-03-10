@@ -3,7 +3,7 @@ import subscribersIcon from '../../assets/icons/subscribers.png';
 import coinIcon from '../../assets/icons/coin.png';
 
 import s from './TasksPage.module.scss';
-import { DailyTasks, Loader, SocialTasks, TopTasks } from '../../components';
+import { DailyTasks, Loader, SocialTasks } from '../../components';
 import { formatAbbreviation } from '../../helpers';
 import { useGetTasksQuery } from '../../redux/api/tasks';
 import { useGetBoostQuery } from '../../redux/api/tasks';
@@ -21,7 +21,6 @@ export const TasksPage: FC = () => {
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const { data, error, isLoading: isTasksLoading } = useGetTasksQuery({
-    is_assigned: true,
     offset: 0,
     limit: 100,
   });
@@ -37,10 +36,10 @@ export const TasksPage: FC = () => {
     console.log('data', data);
     const dailyTasks = data.assignments.filter(task => task.category === 'quiz');
     console.log('dailyTasks', dailyTasks);
-    
     // Модифицируем задание с учетом языка
-    if (dailyTasks[dailyTasks.length - 1]) {
-      const task = dailyTasks[dailyTasks.length - 1];
+    if (dailyTasks[0]) {
+      const task = dailyTasks[0];
+
       return {
         ...task,
         title: locale === 'en' ? task.title_eng : task.title,
@@ -51,19 +50,19 @@ export const TasksPage: FC = () => {
     return null;
   }, [data, locale]);
 
-  const topTask = useMemo(() => {
-    if (!data?.assignments) return null;
-    const task = data.assignments.find(task => task.category === 'create_channel');
-    if (task) {
-      return {
-        ...task,
-        title: locale === 'en' ? task.title_eng : task.title,
-        description: locale === 'en' ? task.description_eng : task.description,
-        external_link: locale === 'en' ? task.external_link_eng || task.external_link : task.external_link,
-      };
-    }
-    return null;
-  }, [data, locale]);
+  // const topTask = useMemo(() => {
+  //   if (!data?.assignments) return null;
+  //   const task = data.assignments.find(task => task.category === 'create_channel');
+  //   if (task) {
+  //     return {
+  //       ...task,
+  //       title: locale === 'en' ? task.title_eng : task.title,
+  //       description: locale === 'en' ? task.description_eng : task.description,
+  //       external_link: locale === 'en' ? task.external_link_eng || task.external_link : task.external_link,
+  //     };
+  //   }
+  //   return null;
+  // }, [data, locale]);
 
   const socialTasks = useMemo(() => {
     if (!data?.assignments) return [];
@@ -118,7 +117,7 @@ export const TasksPage: FC = () => {
       </section>
 
       {dailyTask && <DailyTasks task={dailyTask} />}
-      {topTask && <TopTasks task={topTask} />}
+      {/*{topTask && <TopTasks task={topTask} />}*/}
       {socialTasks.length > 0 && <SocialTasks tasks={socialTasks} />}
       <GetGift />
     </main>

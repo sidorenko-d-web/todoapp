@@ -81,7 +81,7 @@ $translateY: -15vh;
 .floorWrapper {
   @extend .item;
   transform: translateX(-58.15%);
-  top: 310px;
+  top: 360px;
   background: 'red';
 }
 
@@ -120,11 +120,11 @@ $translateY: -15vh;
     height: 10%;
     transform: skew(0deg) rotate(0);
   }
-}
+}          
 
 .treshinaLeft {
   @extend .item;
-  top: 29px;
+  top: 79px;
   transform: translateX(-150%);
 }
 .treshinaRight {
@@ -135,15 +135,15 @@ $translateY: -15vh;
 .shelf {
   @extend .item;
   width: 145px;
-  height: 78px;
-  top: 190px;
+  height: 278px;
+  top: 140px;
   transform: translateX(-12%);
 }
 
 .reward {
   @extend .item;
   display: block;
-  top: 175px;
+  top: 225px;
   transform: scaleX(-1) translateX(-130%);
   z-index: 1000;
   width: 80px;

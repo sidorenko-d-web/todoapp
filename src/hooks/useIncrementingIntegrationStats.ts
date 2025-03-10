@@ -1,4 +1,3 @@
-// useIncrementingIntegrationStats.ts
 import { useState, useEffect } from 'react';
 import { integrationStatsIncrementer } from '../services';
 

@@ -16,8 +16,6 @@ import { isGuideShown, setGuideShown } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
-import { useDispatch } from 'react-redux';
-import { setPoints } from '../../../redux/slices/point.ts';
 
 interface Props {
   disabled?: boolean;
@@ -27,7 +25,6 @@ interface Props {
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [buyItem, { isLoading }] = useBuyItemMutation();
   const { data } = useGetCurrentUserProfileInfoQuery();
-  const dispatch = useDispatch();
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
   const [error, setError] = useState('');
@@ -44,7 +41,6 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const handleBuyItem = async () => {
     setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
     try {
-      dispatch(setPoints((prevPoints: number) => prevPoints + 1));
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
       if (!res.error) {
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
@@ -103,7 +99,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
         <div className={styles.title}>
           <div className={styles.headline}>
             <h3>
-              {item.name}
+              {locale === 'ru' ? item.name : item.name_eng}
             </h3>
           </div>
           <p
@@ -167,7 +163,6 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
             ) : (
               <>
                 {formatAbbreviation(item.price_internal, 'number', { locale: locale })} <img src={CoinIcon} alt="" />
-
               </>
             )}
           </Button>

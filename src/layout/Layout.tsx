@@ -3,13 +3,14 @@ import { Outlet, useLocation } from 'react-router-dom';
 import styles from './Layout.module.scss';
 import { Header } from '../components/Header/';
 import { useEffect, useState } from 'react';
-import { localStorageConsts, MODALS } from '../constants';
+import { AppRoute, localStorageConsts, MODALS } from '../constants';
 import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
-import { useModal, useScrollManager } from '../hooks';
+import { AudioBg, useModal, useScrollManager } from '../hooks';
 import { getOS } from '../utils';
 import Lottie from 'lottie-react';
 import { lampTable } from '../assets/animations';
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
+import clsx from 'clsx';
 
 const Layout = () => {
   const location = useLocation();
@@ -29,15 +30,20 @@ const Layout = () => {
   const showRoadmapBg = location.pathname === '/progressTree';
 
   useEffect(() => {
-    const isNeedToOpenChest = localStorage.getItem(
-      localStorageConsts.IS_NEED_TO_OPEN_CHEST,
-    );
+    const isNeedToOpenChest = localStorage.getItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
   }, []);
 
-  const contentClassName = `${styles.content} ${showHeader ? styles.withHeader : ''
-  } ${needsReducedMargin ? styles.reducedMargin : ''} ${platform ? styles[platform] : ''
-  }`;
+  const isRoom =
+    location.pathname === AppRoute.Main ||
+    (location.pathname.includes(AppRoute.Profile) && location.pathname.split('/')?.[2]);
+
+  const contentClassName = clsx(
+    styles.content,
+    showHeader && styles.withHeader,
+    needsReducedMargin && styles.reducedMargin,
+    isRoom && styles.room,
+  );
 
   useEffect(() => {
     if (showRoadmapBg && contentRef.current) {
@@ -58,8 +64,7 @@ const Layout = () => {
 
   return (
     <>
-      <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''
-      }`}>
+      <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
       </div>
       <div className={styles.wrp}>
@@ -74,7 +79,7 @@ const Layout = () => {
               animationData={lampTable}
               loop
               autoplay
-              style={{ position: 'fixed', bottom: '20px' }}
+              style={{ position: 'fixed', bottom: '23px' }}
             />
           </>
         )}
@@ -84,7 +89,7 @@ const Layout = () => {
           <SettingsModal />
           <WalletConnectionModal />
           <LanguageSelectionModal />
-          {/*<AudioBg />*/}
+          <AudioBg />
         </main>
         <Footer />
       </div>

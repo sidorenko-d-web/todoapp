@@ -1,12 +1,12 @@
 import { FC, useEffect, useReducer } from 'react';
 import {
   AccelerateIntegtrationGuide,
-  CreatingIntegrationGuide,
   FinishTutorialGuide,
   GetCoinsGuide,
   InitialGuide,
   IntegrationCreatedGuide,
   IntegrationCreation,
+  IntegrationRewardModal,
   Loader,
   PublishIntegrationButton,
   Room,
@@ -17,14 +17,16 @@ import { AppRoute, MODALS } from '../../constants';
 import { useModal } from '../../hooks';
 
 import { GUIDE_ITEMS } from '../../constants';
-import { isGuideShown, setGuideShown } from '../../utils';
+import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../utils';
 
 import {
   setAccelerateIntegrationGuideClosed,
   setActiveFooterItemId,
+  setFooterActive,
   setGetCoinsGuideShown,
   setIntegrationReadyForPublishing,
   setLastIntegrationId,
+  useGetInventoryItemsQuery,
 } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -46,8 +48,28 @@ export const MainPage: FC = () => {
   const { getModalState, openModal, closeModal } = useModal();
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
-
   const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
+  
+  
+  const {data: itemsData} = useGetInventoryItemsQuery();
+
+  useEffect(() => {
+    itemsData?.items.forEach(item => {
+      if(item.name.toLowerCase().trim() === 'печатная машинка') {
+        Object.values(GUIDE_ITEMS).forEach(category => {
+          Object.values(category).forEach(value => {
+            if(value !== GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN
+              && value !== GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN
+              && value !== GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW
+            ) {
+              localStorage.setItem(value, '1');
+            }
+          });
+        });
+      }
+    })
+  }, [itemsData]);
+
 
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
   useEffect(() => {
@@ -59,17 +81,27 @@ export const MainPage: FC = () => {
         reduxDispatch(setIntegrationReadyForPublishing(false));
         reduxDispatch(setLastIntegrationId(''));
       }
-    });
-  }, []);
 
-  const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
+      data?.integrations.forEach((integration) => {
+        if(integration.status === 'published' && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+          if(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED) 
+            && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+              reduxDispatch(setFooterActive(true));
+              navigate(`/integrations/${integration.id}`);
+          }
+        }
+      })
+    });
+  }, [data]);
+  // const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
+  // const showAccelerateGuide = localStorage.getItem('integrationCreated') === 'true';
 
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
   const initialState = {
     firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
     secondGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN),
-    subscribeModalOpened: isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED),
+    subscribeModalOpened: isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN),
     getCoinsGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN),
     createIntegrationFirstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN),
     createIntegrationSecondGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN),
@@ -100,52 +132,54 @@ export const MainPage: FC = () => {
     }
   }, [creatingIntegrationModalState.isOpen]);
 
-  // useEffect(() => {
-  //   reduxDispatch(setActiveFooterItemId(2));
+  useEffect(() => {
+    reduxDispatch(setActiveFooterItemId(2));
 
-  //   if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
-  //     && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED) && !purchasingSubscriptionModalState.isOpen) {
-  //     openModal(MODALS.SUBSCRIBE);
-  //   }
+    if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && !purchasingSubscriptionModalState.isOpen) {
+      openModal(MODALS.SUBSCRIBE);
+    }
 
-  //   // if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
-  //   //   && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
-  //   //   navigate(AppRoute.Shop);
-  //   // }
+    if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+      navigate(AppRoute.Shop);
+    }
 
-  //   if (
-  //     isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
-  //     !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-  //     !getSubscriptionPurchased()
-  //   ) {
-  //     openModal(MODALS.SUBSCRIBE);
-  //   }
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+      !getSubscriptionPurchased()
+    ) {
+      openModal(MODALS.SUBSCRIBE);
+    }
 
-  //   if (
-  //     isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) &&
-  //     !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-  //     !creatingIntegrationModalState.isOpen
-  //   ) {
-  //     openModal(MODALS.CREATING_INTEGRATION);
-  //   }
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+      !creatingIntegrationModalState.isOpen
+    ) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
 
-  //   if (
-  //     isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-  //     !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
-  //     !creatingIntegrationModalState.isOpen
-  //   ) {
-  //     openModal(MODALS.CREATING_INTEGRATION);
-  //   }
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
+      !creatingIntegrationModalState.isOpen
+    ) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
 
-  //   // if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
-  //   //   && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
-  //   //   navigate(AppRoute.Shop);
-  //   // }
+    if (isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+      && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) {
+      navigate(AppRoute.Shop);
+    }
 
-  //   // if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
-  //   //   navigate(AppRoute.ShopInventory);
-  //   // }
-  // }, []);
+    if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+      navigate(AppRoute.ShopInventory);
+    }
+
+    
+  }, []);
 
   const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
@@ -159,12 +193,14 @@ export const MainPage: FC = () => {
   }, []);
 
   useEffect(() => {
-    const lastOpenedDate = localStorage.getItem('lastOpenedDate');
-    const currentDate = new Date().toLocaleDateString();
+    if (isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
+      const lastOpenedDate = localStorage.getItem('lastOpenedDate');
+      const currentDate = new Date().toLocaleDateString();
 
-    if (lastOpenedDate !== currentDate) {
-      openModal(MODALS.DAYS_IN_A_ROW);
-      localStorage.setItem('lastOpenedDate', currentDate);
+      if (lastOpenedDate !== currentDate) {
+        openModal(MODALS.DAYS_IN_A_ROW);
+        localStorage.setItem('lastOpenedDate', currentDate);
+      }
     }
   }, []);
 
@@ -204,14 +240,14 @@ export const MainPage: FC = () => {
         <InitialGuide onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)} />
       )}
 
-      {!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown && (
+      {(!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown) && (
         <SubscrieGuide
           onClose={() => {
             handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
             openModal(MODALS.SUBSCRIBE);
           }}
           top="50%"
-          zIndex={1500}
+          zIndex={12500}
           description={
             <>
               {t('g11')}
@@ -223,95 +259,36 @@ export const MainPage: FC = () => {
         />
       )}
 
-      {guideVisibility.secondGuideShown &&
-        !guideVisibility.subscribeModalOpened &&
-        purchasingSubscriptionModalState.isOpen && (
-          <SubscrieGuide
-            onClose={() => {
-              closeModal(MODALS.SUBSCRIBE);
-              handleGuideClose(GUIDE_ITEMS.mainPage.SUBSCRIBE_MODAL_OPENED);
-            }}
-            top="65%"
-            zIndex={1500}
-            description={
-              <>
-                {t('g14')} <span style={{ color: '#2F80ED' }}>{t('g15')}</span>
-                <br />
-                <br />
-                {t('g16')}
-              </>
-            }
-          />
-        )}
-
-      {!purchasingSubscriptionModalState.isOpen &&
-        guideVisibility.subscribeModalOpened &&
-        !guideVisibility.getCoinsGuideShown && (
+      {(!isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) && isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) && (
           <GetCoinsGuide
             onClose={() => {
               reduxDispatch(setGetCoinsGuideShown(true));
+              setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
               handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
               openModal(MODALS.SUBSCRIBE);
             }}
           />
         )}
 
-      {creatingIntegrationModalState.isOpen && !guideVisibility.createIntegrationFirstGuideShown && (
-        <CreatingIntegrationGuide
-          onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)}
-          buttonText={t('g17')}
-          description={
-            <>
-              {t('g18')} <span style={{ color: '#2F80ED' }}>{t('g19')}</span>
-              <br />
-              <br />
-              {t('g20')}
-            </>
-          }
-          align="left"
-          top="69%"
-        />
-      )}
-
-      {creatingIntegrationModalState.isOpen &&
-        guideVisibility.createIntegrationFirstGuideShown &&
-        !guideVisibility.createIntegrationSecondGuideShown && (
-          <CreatingIntegrationGuide
-            onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)}
-            buttonText={t('g21')}
-            description={
-              <>
-                {t('g22')} <span style={{ color: '#2F80ED' }}>{t('g23')} </span>
-                <br />
-                <br />
-                {t('g24')}
-              </>
-            }
-            align="right"
-            top="66%"
-          />
-        )}
-
-      {showAccelerateGuide &&
-        !creatingIntegrationModalState.isOpen &&
-        !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED) && (
-          <AccelerateIntegtrationGuide
-            onClose={() => {
-              setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
-              reduxDispatch(setAccelerateIntegrationGuideClosed(true));
-            }}
-          />
-        )}
-
-      {!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN) && isPublishedModalClosed && (
-        <IntegrationCreatedGuide
+      {(integrationCurrentlyCreating && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) && (
+        <AccelerateIntegtrationGuide
           onClose={() => {
-            setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-            handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-            navigate(AppRoute.Integration.replace(':integrationId', integrationId));
+            setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+            reduxDispatch(setAccelerateIntegrationGuideClosed(true));
           }}
         />
       )}
+
+      {(!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN) &&
+        isPublishedModalClosed) && (
+          <IntegrationCreatedGuide
+            onClose={() => {
+              setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              navigate(AppRoute.Integration.replace(':integrationId', integrationId));
+            }}
+          />
+        )}
 
       {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (
@@ -321,6 +298,8 @@ export const MainPage: FC = () => {
         )}
 
       <RewardForIntegrationModal />
+      {/* Награда с указанием медали и количества интеграций с определенной компанией */}
+      <IntegrationRewardModal /> 
     </main>
   );
 };

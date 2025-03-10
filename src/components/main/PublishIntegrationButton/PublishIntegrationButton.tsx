@@ -2,21 +2,23 @@ import React, { useState } from 'react';
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants/modals.ts';
-import { RootState, useClaimRewardForIntegrationMutation, useGetAllIntegrationsQuery, usePublishIntegrationMutation } from '../../../redux';
+import { RootState, useClaimRewardForIntegrationMutation, useGetAllIntegrationsQuery, useGetIntegrationQuery, useGetIntegrationsQuery, usePublishIntegrationMutation } from '../../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
 import {
   setCreateIntegrationButtonGlowing,
   setIntegrationReadyForPublishing,
 } from '../../../redux/slices/guideSlice.ts';
-import { setGuideShown } from '../../../utils/index.ts';
+import { getCompanyStars, getIntegrationRewardImageUrl, setGuideShown } from '../../../utils/index.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { useTranslation } from 'react-i18next';
+import { starsThresholds } from '../../../constants/integrationStarsThresholds.ts';
 
 export const PublishIntegrationButton: React.FC = () => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
-  const { openModal } = useModal();
+  const { openModal} = useModal();
+  const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed)
 
   const [publishIntegration] = usePublishIntegrationMutation();
   const [claimRewardForIntegration] = useClaimRewardForIntegrationMutation();
@@ -26,8 +28,43 @@ export const PublishIntegrationButton: React.FC = () => {
 
   const lastIntId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
+  const { data: integrationData } = useGetIntegrationQuery(lastIntId, {
+    pollingInterval: 1000
+  });
+  const { data: companyData } = useGetIntegrationsQuery({ company_name: integrationData?.campaign.company_name }, {
+    pollingInterval: 1000
+  })
+
+  const imageUrl = getIntegrationRewardImageUrl(
+    integrationData?.campaign.company_name ?? "", 
+    getCompanyStars(companyData?.count ?? 0)
+  )
+
+  const openCongratsModal = () => {
+    console.log('Opening second modal: INTEGRATION_REWARD_CONGRATULATIONS');
+    openModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS, {
+      companyName: integrationData?.campaign.company_name,
+      integrationsCount: companyData?.count,
+      image_url: imageUrl
+    });
+  };
+  
+  const canShowIntegrationReward = function() {
+    if (companyData?.count === starsThresholds.firstStar) {
+      return true;
+    }
+    if (companyData?.count === starsThresholds.secondStar) {
+      return true;
+    }
+    if (companyData?.count === starsThresholds.thirdStar) {
+      return true;
+    }
+    return false;
+  }()
+
   const handlePublish = async () => {
     if (isPublishing) return;
+
     setIsPublishing(true);
 
     setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
@@ -54,27 +91,44 @@ export const PublishIntegrationButton: React.FC = () => {
 
         if (!rewardRes.error) {
           const { company_name, image_url } = publishRes.data.campaign;
-          const {  base_income, base_views, base_subscribers } = publishRes.data;
+          const { base_income, base_views, base_subscribers } = publishRes.data;
   
-          console.log('OPENING MODALL')
+          console.log('Opening first modal: INTEGRATION_REWARD');
           openModal(MODALS.INTEGRATION_REWARD, { 
             company_name, 
             image_url, 
             base_income, 
             base_views, 
-            base_subscribers 
+            base_subscribers
           });
+          console.error("Data for integration congrats: ", 
+            integrationData?.campaign.company_name,
+            companyData?.count,
+            getIntegrationRewardImageUrl(
+              integrationData?.campaign.company_name ?? "", 
+              getCompanyStars(companyData?.count ?? 0)
+            ),
+            "Can open modal: ", canShowIntegrationReward
+          )
+
         } else {
           console.error('Failed to claim reward:', rewardRes.error);
+          // If reward claim fails, open congratulations modal directly
+          if (canShowIntegrationReward && isPublishedModalClosed) {
+            openCongratsModal()
+          }
         }
       }
     } catch (error) {
       console.error('Failed to publish integration:', error);
     } finally {
+      if (canShowIntegrationReward && isPublishedModalClosed) {
+        openCongratsModal()
+      }
       setIsPublishing(false);
     }
   };
-
+    
   return (
     <section className={s.integrationsControls} onClick={handlePublish}>
       <button className={`${s.button}`} disabled={isPublishing}>

@@ -42,6 +42,7 @@ export const BackToMainPageGuide: React.FC<BackToMainPageGuideProps> = ({ onClos
                     {t('g41')}
                 </>
             }
+            zIndex={15000}
             top={'50%'}
             onClose={handleClose}
         >

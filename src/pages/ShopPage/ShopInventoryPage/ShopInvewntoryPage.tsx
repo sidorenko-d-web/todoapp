@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { ShopLayout } from '../../../layout/ShopLayout/ShopLayout';
 import {
-  IShopItem,
   TypeItemCategory,
   TypeItemRarity,
   useGetCurrentUserBoostQuery,
@@ -42,14 +41,19 @@ export const ShopInventoryPage = () => {
     },
     { skip: !shopCategory?.value },
   );
-  const [items, setItems] = useState<IShopItem[]>();
-  const [itemsForBuy, setItemsForBuy] = useState<IShopItem[]>();
 
-  useEffect(() => {
-    if (inventory && shop && shopCategory) {
-      const filteredInventory = inventory.items.filter(item => item.item_category === shopCategory.value);
+  const { isLoading: isBoostLoading } = useGetCurrentUserBoostQuery();
+  const { isLoading: isEquipedLoading } = useGetEquipedQuery();
 
-      const _items = filteredInventory.filter((item, _, arr) => {
+  const isLoading = isBoostLoading || isEquipedLoading || isShopLoading || isInventoryLoading;
+
+  const items = useMemo(() => {
+    if (!inventory || !shop || !shopCategory) return [];
+
+    const filteredInventory = inventory.items.filter(item => item.item_category === shopCategory.value);
+
+    return filteredInventory
+      .filter((item, _, arr) => {
         if (item.item_premium_level === 'base') {
           return !arr.find(
             _item =>
@@ -65,35 +69,45 @@ export const ShopInventoryPage = () => {
         } else {
           return true;
         }
-      });
+      })
+      .reverse();
+  }, [inventory, shop, shopCategory]);
 
-      const filteredShop = shop.items.filter(item => item.item_category === shopCategory.value);
+  const itemsForBuy = useMemo(() => {
+    if (!inventory || !shop || !shopCategory) return [];
 
-      const _itemsForBuy = filteredShop
-        .filter(item => !filteredInventory.find(_item => compareItems(item, _item)))
-        .filter(item =>
-          filteredInventory.find(
-            _item =>
-              _item.level === 50 &&
-              ((item.item_premium_level === 'advanced' && _item.item_premium_level === 'base') ||
-                (item.item_premium_level === 'pro' && _item.item_premium_level === 'advanced')) &&
-              _item.name === item.name,
-          ),
-        );
-      setItems(_items?.reverse());
-      setItemsForBuy(_itemsForBuy);
-    }
-  }, [inventory]);
+    const filteredInventory = inventory.items.filter(item => item.item_category === shopCategory.value);
+    const filteredShop = shop.items.filter(item => item.item_category === shopCategory.value);
 
-  const { isLoading: isBoostLoading } = useGetCurrentUserBoostQuery();
-  const { isLoading: isEquipedLoading } = useGetEquipedQuery();
+    return filteredShop
+      .filter(item => !filteredInventory.find(_item => compareItems(item, _item)))
+      .filter(item =>
+        filteredInventory.find(
+          _item =>
+            _item.level === 50 &&
+            ((item.item_premium_level === 'advanced' && _item.item_premium_level === 'base') ||
+              (item.item_premium_level === 'pro' && _item.item_premium_level === 'advanced')) &&
+            _item.name === item.name,
+        ),
+      );
+  }, [inventory, shop, shopCategory]);
 
-  const isLoading = isBoostLoading;
+  const handleItemCategoryChange = useCallback((category: TypeTab<TypeItemCategory>) => {
+    setShopCategory(category);
+  }, []);
+
+  const handleItemQualityChange = useCallback((quality: TypeTab<TypeItemRarity>) => {
+    setItemsQuality(quality);
+  }, []);
 
   if (isLoading) return <Loader />;
-
+  console.log('object1');
   return (
-    <ShopLayout mode="inventory" onItemCategoryChange={setShopCategory} onItemQualityChange={setItemsQuality}>
+    <ShopLayout
+      mode="inventory"
+      onItemCategoryChange={handleItemCategoryChange}
+      onItemQualityChange={handleItemQualityChange}
+    >
       {isShopLoading || isEquipedLoading ? (
         <Loader className={styles.itemsLoader} />
       ) : !isInventoryLoading && !isSuccess && shopCategory?.title !== 'Вы' ? (
