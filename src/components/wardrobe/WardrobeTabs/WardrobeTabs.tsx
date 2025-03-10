@@ -81,7 +81,10 @@ export const WardrobeTabs: React.FC<WardrobeTabsProps> = ({ wardrobe, handleChan
       gender: character.gender,
     };
     try {
-      handleChangeSkin((await updateCharacter(body)).data);
+      const res = await updateCharacter(body);
+      if (res.data) {
+        handleChangeSkin(res.data);
+      }
     } catch (error) {
       console.log(error);
     }
