@@ -52,7 +52,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
+  height: calc(100vh - 17px);
   margin: 0 auto;
   overflow: hidden;
   //padding: 0 15px;
@@ -61,7 +61,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: auto;
     z-index: -1;
     transition: transform 0.1s ease-out;
@@ -82,11 +82,11 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   z-index: 1;
 
   // Margin from upper telegram mini apps buttons (close, settings, menu, etc.). For both platforms
-  margin-top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) + 50px);
+  padding-top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) + 50px);
   margin-bottom: 74px;
 
   &.room {
-    margin-top: 0
+    padding-top: 0
   }
 
   // iOS specific adjustments
@@ -98,7 +98,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
       margin-bottom: calc(var(--tg-content-safe-area-inset-bottom) + 90px);
 
       &.reducedMargin {
-        margin-top: max(var(--tg-content-safe-area-inset-top), 20px);
+        padding-top: max(var(--tg-content-safe-area-inset-top), 20px);
       }
     }
   }
