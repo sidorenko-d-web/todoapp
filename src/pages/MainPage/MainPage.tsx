@@ -68,6 +68,10 @@ export const MainPage: FC = () => {
           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
 
+          setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
+          setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+
           reduxDispatch(resetGuideState());
         }
       })
@@ -308,11 +312,7 @@ export const MainPage: FC = () => {
         />
       )}
 
-      {(!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN) &&
-        !getModalState(MODALS.INTEGRATION_REWARD_CONGRATULATIONS).isOpen 
-        && isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)
-        && isGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED)
-        && isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)) && (
+      {(isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) && (
           <IntegrationCreatedGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
