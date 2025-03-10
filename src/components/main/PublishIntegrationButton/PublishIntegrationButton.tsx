@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants/modals.ts';
@@ -17,16 +17,14 @@ import { starsThresholds } from '../../../constants/integrationStarsThresholds.t
 export const PublishIntegrationButton: React.FC = () => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
-  const { openModal, getModalState } = useModal();
-  const { isOpen: isRewardModalOpen } = getModalState(MODALS.INTEGRATION_REWARD);
-  const { isOpen: isCongratsModalOpen } = getModalState(MODALS.INTEGRATION_REWARD_CONGRATULATIONS);
+  const { openModal} = useModal();
+  const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed)
 
   const [publishIntegration] = usePublishIntegrationMutation();
   const [claimRewardForIntegration] = useClaimRewardForIntegrationMutation();
 
   const { data, refetch } = useGetAllIntegrationsQuery();
   const [isPublishing, setIsPublishing] = useState(false);
-  const [shouldOpenCongratsModal, setShouldOpenCongratsModal] = useState(false);
 
   const lastIntId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
@@ -36,6 +34,20 @@ export const PublishIntegrationButton: React.FC = () => {
   const { data: companyData } = useGetIntegrationsQuery({ company_name: integrationData?.campaign.company_name }, {
     pollingInterval: 1000
   })
+
+  const imageUrl = getIntegrationRewardImageUrl(
+    integrationData?.campaign.company_name ?? "", 
+    getCompanyStars(companyData?.count ?? 0)
+  )
+
+  const openCongratsModal = () => {
+    console.log('Opening second modal: INTEGRATION_REWARD_CONGRATULATIONS');
+    openModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS, {
+      companyName: integrationData?.campaign.company_name,
+      integrationsCount: companyData?.count,
+      image_url: imageUrl
+    });
+  };
   
   const canShowIntegrationReward = function() {
     if (companyData?.count === starsThresholds.firstStar) {
@@ -54,7 +66,6 @@ export const PublishIntegrationButton: React.FC = () => {
     if (isPublishing) return;
 
     setIsPublishing(true);
-    setShouldOpenCongratsModal(true);
 
     setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
@@ -88,41 +99,35 @@ export const PublishIntegrationButton: React.FC = () => {
             image_url, 
             base_income, 
             base_views, 
-            base_subscribers 
+            base_subscribers
           });
+          console.error("Data for integration congrats: ", 
+            integrationData?.campaign.company_name,
+            companyData?.count,
+            getIntegrationRewardImageUrl(
+              integrationData?.campaign.company_name ?? "", 
+              getCompanyStars(companyData?.count ?? 0)
+            ),
+            "Can open modal: ", canShowIntegrationReward
+          )
+
         } else {
           console.error('Failed to claim reward:', rewardRes.error);
           // If reward claim fails, open congratulations modal directly
-          openCongratsModal();
+          if (canShowIntegrationReward && isPublishedModalClosed) {
+            openCongratsModal()
+          }
         }
       }
     } catch (error) {
       console.error('Failed to publish integration:', error);
-      setShouldOpenCongratsModal(false);
     } finally {
+      if (canShowIntegrationReward && isPublishedModalClosed) {
+        openCongratsModal()
+      }
       setIsPublishing(false);
     }
   };
-
-  const openCongratsModal = () => {
-    console.log('Opening second modal: INTEGRATION_REWARD_CONGRATULATIONS');
-    openModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS, {
-      companyName: integrationData?.campaign.company_name,
-      integrationsCount: companyData?.count,
-      image_url: getIntegrationRewardImageUrl(
-        integrationData?.campaign.company_name ?? "", 
-        getCompanyStars(companyData?.count ?? 0)
-      )
-    });
-    setShouldOpenCongratsModal(false);
-  };
-
-  // Watch for first modal closing to open the second modal
-  useEffect(() => {
-    if (!isRewardModalOpen && shouldOpenCongratsModal && !isCongratsModalOpen && canShowIntegrationReward) {
-      openCongratsModal();
-    }
-  }, [isRewardModalOpen, shouldOpenCongratsModal, isCongratsModalOpen]);
     
   return (
     <section className={s.integrationsControls} onClick={handlePublish}>
