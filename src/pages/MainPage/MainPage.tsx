@@ -310,7 +310,8 @@ export const MainPage: FC = () => {
 
       {(!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN) &&
         !getModalState(MODALS.INTEGRATION_REWARD_CONGRATULATIONS).isOpen 
-        && isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) && (
+        && isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)
+        && isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)) && (
           <IntegrationCreatedGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
