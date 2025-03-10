@@ -27,6 +27,7 @@ import {
   setGetCoinsGuideShown,
   setIntegrationReadyForPublishing,
   setLastIntegrationId,
+  setSubscribeGuideShown,
   useGetInventoryItemsQuery,
 } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
@@ -110,7 +111,7 @@ export const MainPage: FC = () => {
       }
 
       data?.integrations.forEach((integration) => {
-        if (integration.status === 'published' && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+        if (integration.status === 'published') {
           if (isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)
             && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
             reduxDispatch(setFooterActive(true));
@@ -272,6 +273,7 @@ export const MainPage: FC = () => {
           onClose={() => {
             handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
             openModal(MODALS.SUBSCRIBE);
+            reduxDispatch(setSubscribeGuideShown(false));
           }}
           top="50%"
           zIndex={12500}
@@ -307,7 +309,8 @@ export const MainPage: FC = () => {
       )}
 
       {(!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN) &&
-        isPublishedModalClosed) && (
+        !getModalState(MODALS.INTEGRATION_REWARD_CONGRATULATIONS).isOpen 
+        && isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) && (
           <IntegrationCreatedGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
