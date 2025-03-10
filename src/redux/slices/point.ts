@@ -9,10 +9,10 @@ const pointSlice = createSlice({
   initialState,
   reducers: {
     setPoints(state, action) {
-      state.points = action.payload;
+      state.points = ++action.payload;
     },
   },
 });
 
-export const { setPoints  } = pointSlice.actions;
+export const { setPoints } = pointSlice.actions;
 export const pointsReducer = pointSlice.reducer;
