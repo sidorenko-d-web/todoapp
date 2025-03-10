@@ -43,7 +43,7 @@ export const IntegrationRewardModal = () => {
             await removeAchivement({ achievements_to_remove: [{ id: equipped_items?.achievements?.[0].id }] });
           }
 
-          let achievementId = achievementsData?.achievements[0]?.id;
+          let achievementId = achievementsData?.achievements[achievementsData.count - 1]?.id;
           if (achievementId) {
             await addAchivement({ equipped_achievements: [{ id: achievementId, slot: 100 }] });
           } else {
@@ -67,17 +67,14 @@ export const IntegrationRewardModal = () => {
         return i18n.language === 'ru' ? 'бронзовую медаль' : 'bronze medal';
     }
 
-    const onClose = () => {
-        closeModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS);
-    }
-
     const ruText = `Поздравляем! Вы получили награду и ${getMedalTypeText()} за ${args?.integrationsCount ?? 0} интеграций с компанией ${args?.companyName ?? ""}!`
     const enText = `Congratulations! You received a reward and ${getMedalTypeText()} for ${args?.integrationsCount ?? 0} integrations with company ${args?.companyName ?? ""}!`
+
     return (
         <CentralModal
             title={t('i33')}
             modalId={MODALS.INTEGRATION_REWARD_CONGRATULATIONS}
-            onClose={onClose}
+            onClose={() => closeModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS)}
             headerStyles={styles.headerStyles}
         >
             <div className={styles.wrapper}>

@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
-import lightningIcon from '../../../assets/icons/lightning.svg';
+// import lightningIcon from '../../../assets/icons/lightning.svg';
 import {
   integrationsApi,
   profileApi,
@@ -16,7 +16,7 @@ import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
 import {
   integrationCreatingModalButtonGlowing,
-  integrationCreatingModalLightningsGlowing,
+  //integrationCreatingModalLightningsGlowing,
   integrationCreatingModalTabsGlowing,
   isGuideShown,
   setGuideShown,
@@ -25,7 +25,7 @@ import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
 import { CreatingIntegrationGuide, Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
-import { ExpandableBottomModal } from '../../shared/';
+import { CentralModal } from '../../shared/';
 import { AppRoute } from '../../../constants/appRoute.ts';
 
 
@@ -93,7 +93,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     return null;
   })();
 
-  const lightningsGlowing = integrationCreatingModalLightningsGlowing();
+  //const lightningsGlowing = integrationCreatingModalLightningsGlowing();
 
   const tabsGlowing = integrationCreatingModalTabsGlowing();
 
@@ -109,31 +109,47 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
 
   return (
-    <ExpandableBottomModal
-      modalId={modalId}
+    // <ExpandableBottomModal
+    //   modalId={modalId}
+    //   title={t('i11')}
+    //   onClose={
+    //     () => {
+    //       onClose();
+    //       if(!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+    //        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+    //        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+    //        navigate(AppRoute.Shop); 
+    //       }
+    //     }
+    //   }
+    //   titleIcon={integrationWhiteIcon}
+    //   overlayOpacity={0.7}
+    // >
+    <CentralModal
       title={t('i11')}
+      modalId={modalId}
       onClose={
         () => {
           onClose();
-          if(!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
-           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
-           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-           navigate(AppRoute.Shop); 
+          if (!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+            setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+            navigate(AppRoute.Shop);
           }
-        }
-      }
+        }}
+      headerStyles={s.headerStyles}
       titleIcon={integrationWhiteIcon}
-      overlayOpacity={0.7}
     >
+
       {isProfileLoading || isCompaniesLoading
         ? <Loader noMargin />
         : <div className={s.content}>
           <div className={s.skinsWrapper}>
-            {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
+            {/* {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
               <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`}>
                 <img src={lightningIcon} alt="Lightning" width={20} height={20} />
               </div>
-            ))}
+            ))} */}
           </div>
 
           <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
@@ -207,40 +223,41 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       }
 
       {(!firstGuideClosed && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) && <CreatingIntegrationGuide
-                onClose={() => {
-                  setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
-                  setFirstGuideClosed(true);
-                }}
-                buttonText={tGuide('g17')}
-                description={
-                  <>
-                    {tGuide('g18')} <span style={{ color: '#2F80ED' }}>{tGuide('g19')}</span>
-                    <br />
-                    <br />
-                    {tGuide('g20')}
-                  </>
-                }
-                align="left"
-                top="29%"
-              />}
+        onClose={() => {
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+          setFirstGuideClosed(true);
+        }}
+        buttonText={tGuide('g17')}
+        description={
+          <>
+            {tGuide('g18')} <span style={{ color: '#2F80ED' }}>{tGuide('g19')}</span>
+            <br />
+            <br />
+            {tGuide('g20')}
+          </>
+        }
+        align="left"
+        top="9%"
+      />}
       {(firstGuideClosed && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)) && <CreatingIntegrationGuide
-            onClose={() => {
-              setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-              onClose();
-              navigate(AppRoute.Shop);
-            }}
-            buttonText={tGuide('g21')}
-            description={
-              <>
-                {tGuide('g22')} <span style={{ color: '#2F80ED' }}>{tGuide('g23')} </span>
-                <br />
-                <br />
-                {tGuide('g24')}
-              </>
-            }
-            align="left"
-            top="1%"
-          />}
-    </ExpandableBottomModal>
+        onClose={() => {
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+          onClose();
+          navigate(AppRoute.Shop);
+        }}
+        buttonText={tGuide('g21')}
+        description={
+          <>
+            {tGuide('g22')} <span style={{ color: '#2F80ED' }}>{tGuide('g23')} </span>
+            <br />
+            <br />
+            {tGuide('g24')}
+          </>
+        }
+        align="left"
+        top="22%"
+      />}
+    {/* </ExpandableBottomModal> */}
+    </CentralModal>
   );
 };

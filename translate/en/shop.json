@@ -11,7 +11,7 @@
   "s10": "left",
   "s11": "tgs",
   "s12": "int",
-  "s13": "seс",
+  "s13": "min",
   "s14": "Economy",
   "s15": "Premium",
   "s16": "Lux",
@@ -40,11 +40,12 @@
   "s37": "There are no new items here yet. Unlock new items with a new level\nTrees!",
   "s38": "There are no purchased items here yet. Buy a new item from the store.",
   "s39": "Put on",
+  "s39-1": "Equipped",
   "s40": "Chest opened!",
   "s41": "Congratulations! You received additional subscribers, freeze and item improvement!",
   "s42": "Collect",
   "s43": "New item!",
-  "s44": "/sec",
+  "s44": "/min",
   "s45": "Congratulations! Got a new look for",
   "s46": "Indicators increased, received",
   "s47": "Open chest!",
@@ -58,5 +59,6 @@
   "s55": "Premium",
   "s56": "Lux",
   "s57": "in the store with cooler items!",
-  "s58": "Open store"
+  "s58": "Open store",
+  "s59": "Loading..."
 }
