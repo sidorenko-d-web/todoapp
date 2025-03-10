@@ -33,13 +33,18 @@
     .icon {
       aspect-ratio: 1 / 1;
       width: 66px;
-      min-width: 66px;
-      min-height: 66px;
+      // min-width: 66px;
+      // min-height: 66px;
     }
 
     .iconSocial {
       aspect-ratio: 1 / 1;
-      width: 60px;
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      mix-blend-mode: normal;
+
+      width: 120px;
+      height: 120px;
     }
 
     .info {
