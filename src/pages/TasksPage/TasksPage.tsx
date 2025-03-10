@@ -117,7 +117,7 @@ export const TasksPage: FC = () => {
       </section>
 
       {dailyTask && <DailyTasks task={dailyTask} />}
-      {topTask && <TopTasks task={topTask} />}
+      {/*{topTask && <TopTasks task={topTask} />}*/}
       {socialTasks.length > 0 && <SocialTasks tasks={socialTasks} />}
       <GetGift />
     </main>
