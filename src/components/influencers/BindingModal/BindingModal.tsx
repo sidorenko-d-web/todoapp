@@ -5,7 +5,7 @@ import clan from '../../../assets/icons/clan-red.svg';
 import dots from '../../../assets/icons/dots.svg';
 import { RewardsCards } from '..';
 import clsx from 'clsx';
-import { isValidPhoneNumber, parsePhoneNumberFromString } from 'libphonenumber-js';
+import { isValidPhoneNumber, parsePhoneNumberFromString, AsYouType } from 'libphonenumber-js';
 import InputMask from 'react-input-mask';
 
 import s from './BindingModal.module.scss';
@@ -45,7 +45,15 @@ export const BindingModal = ({
   const [sendCode] = useSendEmailConfirmationCodeMutation();
   const [sendPhone] = useSendPhoneConfirmationCodeMutation();
 
-  const isValid = inputType === 'phone' ? isValidPhoneNumber(value, 'RU') : value.trim() !== '';
+  // Определяем страну по введенному коду
+  const getCountryCode = (phoneNumber: string) => {
+    const asYouType = new AsYouType();
+    asYouType.input(phoneNumber);
+    return asYouType.getCountry();
+  };
+
+  // Валидация номера телефона
+  const isValid = inputType === 'phone' ? isValidPhoneNumber(value, getCountryCode(value)) : value.trim() !== '';
 
   const handleNext = async () => {
     try {
@@ -57,7 +65,7 @@ export const BindingModal = ({
         onNext();
       }
       if (inputType === 'phone') {
-        const phoneNumber = parsePhoneNumberFromString(value, 'RU');
+        const phoneNumber = parsePhoneNumberFromString(value, getCountryCode(value));
         if (phoneNumber && phoneNumber.isValid()) {
           await sendPhone({ phone_number: phoneNumber.format('E.164') });
           dispatch(setInputValue(phoneNumber.format('E.164')));
