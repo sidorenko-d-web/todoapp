@@ -6,9 +6,8 @@ import s from './BindingConfirmationModal.module.scss';
 import ss from '../shared.module.scss';
 import { Button, CentralModal } from '../../shared';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState, useConfirmEmailMutation } from '../../../redux';
-import { setInputType } from '../../../redux/slices/confirmation';
 
 type BindingConfirmationModalProps = {
   modalId: string;
@@ -28,8 +27,8 @@ export const BindingConfirmationModal = ({
   const [error, setError] = useState('');
   const isValid = value && value.length === 6;
 
-  const dispatch = useDispatch();
-  const { inputValue, inputType } = useSelector((state: RootState) => state.confirmation);
+
+  const { inputValue } = useSelector((state: RootState) => state.confirmation);
 
 
   const [confirmEmail] = useConfirmEmailMutation();
@@ -51,10 +50,9 @@ export const BindingConfirmationModal = ({
     if (!isValid) return;
 
     try {
-      if (inputType === 'email') {
+      console.log('email');
         await confirmEmail({ email: inputValue, confirmation_code: value }).unwrap();
-        dispatch(setInputType('phone'));
-      }
+      // dispatch(setInputType('phone'));
       setValue('');
       onNext();
     } catch (err) {
