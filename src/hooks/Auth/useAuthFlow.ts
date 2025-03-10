@@ -42,7 +42,20 @@ export const useAuthFlow = () => {
   };
 
   const handleInviteCodeContinue = async () => {
-    saveCurrentStep('skin');
+    try {
+      const authResponse = await performSignIn(signIn);
+      localStorage.setItem('access_token', authResponse.access_token);
+      localStorage.setItem('refresh_token', authResponse.refresh_token);
+      saveCurrentStep('skin');
+    } catch (err: any) {
+      console.error('Ошибка при авторизации:', err);
+      // Если ошибка 401 или 403 – остаемся на шаге invite_code
+      if (err?.status === 401 || err?.status === 403) {
+        alert('Неверный invite-код. Попробуйте снова.');
+      } else {
+        alert('Произошла ошибка. Попробуйте позже.');
+      }
+    }
   };
 
   const handleSkinContinue = () => {
@@ -61,15 +74,15 @@ export const useAuthFlow = () => {
   // };
 
   // Запрос fullscreen для Telegram WebApp
-  useEffect(() => {
-    if (
-      window.Telegram &&
-      window.Telegram.WebApp &&
-      typeof window.Telegram.WebApp.requestFullscreen === 'function'
-    ) {
-      window.Telegram.WebApp.requestFullscreen();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     window.Telegram &&
+  //     window.Telegram.WebApp &&
+  //     typeof window.Telegram.WebApp.requestFullscreen === 'function'
+  //   ) {
+  //     window.Telegram.WebApp.requestFullscreen();
+  //   }
+  // }, []);
 
   useEffect(() => {
     const initAuthFlow = async () => {
@@ -78,10 +91,7 @@ export const useAuthFlow = () => {
 
       try {
         const hasCompletedSetup = savedStep === 'completed';
-        const authResponse = await performSignIn(signIn);
 
-        localStorage.setItem('access_token', authResponse.access_token);
-        localStorage.setItem('refresh_token', authResponse.refresh_token);
         await minLoadingTime;
 
         if (hasCompletedSetup) {
