@@ -83,7 +83,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     item_rarity: item.item_rarity,
   });
 
-  const { refetch } = useGetCurrentUserProfileInfoQuery();
+  const { data: profile, refetch } = useGetCurrentUserProfileInfoQuery();
   const [equipItem] = useAddItemToRoomMutation();
   const [removeItem] = useRemoveItemFromRoomMutation();
   const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
@@ -113,17 +113,15 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       return;
     }
 
-    if (lvlGiftFromStorage && lvlGiftFromStorage.includes(String(item.level))) {
-      openModal(MODALS.GET_GIFT);
-      localStorage.setItem('lastTriggeredLevel', String(item.level));
-    }
-
     if (
       (item.level === 50 || item.level === 100 || item.level === 150) &&
       item.level !== lastTriggeredLevel &&
       item.level !== prevLvl.current
     ) {
       openModal(MODALS.TASK_CHEST);
+      localStorage.setItem('lastTriggeredLevel', String(item.level));
+    } else if (lvlGiftFromStorage && lvlGiftFromStorage.includes(String(item.level))) {
+      openModal(MODALS.GET_GIFT);
       localStorage.setItem('lastTriggeredLevel', String(item.level));
     }
 
@@ -431,7 +429,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           <p>{t('s27')}</p>
           <img src={LockIcon} alt="" />
         </div>
-      ) : isUpgradeEnabled ? (
+      ) : isUpgradeEnabled && profile.growth_tree_stage_id > item.level + 1 ? (
         <div className={styles.actions}>
           <Button
             onClick={handleUsdtPayment}
@@ -448,7 +446,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 : item.item_rarity === 'green' && styles.upgradeItemRed,
             )}
             disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
-            onClick={() => handleBuyItem(data?.items[0].price_internal ?? '')}
+            onClick={() => handleBuyItem(data?.items[0].price_internal)}
           >
             <>
               {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {
@@ -461,6 +459,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           <Button
             disabled={idDisabled}
             onClick={() => {
+              console.log('object');
               removeItem({ items_to_remove: [{ id: item.id }] });
             }}
           >
@@ -470,7 +469,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       ) : (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
-          <p>{t('s18')} 7</p>
+          <p>
+            {t('s18')} {profile.growth_tree_stage_id + 1}
+          </p>
           <img src={LockIcon} alt="" />
         </div>
       )}
