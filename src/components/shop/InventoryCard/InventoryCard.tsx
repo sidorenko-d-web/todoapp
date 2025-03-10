@@ -134,34 +134,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     }
   };
 
-  useEffect(() => {
-    const lastTriggeredLevel = Number(localStorage.getItem('lastTriggeredLevel')) || 0;
-    const lvlGiftFromStorage = localStorage.getItem('lvlGift');
-
-    if (prevLvl.current === null || prevLvl.current === item.level) {
-      prevLvl.current = item.level;
-      return;
-    }
-
-    if (
-      lvlGiftFromStorage?.includes(item.level as any) &&
-      item.level !== lastTriggeredLevel &&
-      item.level != prevLvl.current
-    ) {
-      openModal(MODALS.GET_GIFT);
-      localStorage.setItem('lastTriggeredLevel', String(item.level));
-    } else if (
-      [50, 100, 150].includes(item.level) &&
-      item.level !== lastTriggeredLevel &&
-      item.level !== prevLvl.current
-    ) {
-      openModal(MODALS.TASK_CHEST);
-      localStorage.setItem('lastTriggeredLevel', String(item.level));
-    }
-
-    prevLvl.current = item.level;
-  }, [item.level]);
-
   const handleEquipItem = async () => {
     if (!slot && slot !== 0)
       throw new Error('error while getting slot for item, check names in "redux/api/room/dto.ts - RoomItemsSlots"');
@@ -406,17 +378,19 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           </div>
         ))}
 
-      {isUpdateLoading || !data?.items || equipedItems === undefined ? (
-        <p style={{ color: '#fff', fontSize: 16, padding: '16px 0', textAlign: 'center' }}>Loading</p>
-      ) : isBlocked ? (
+      {isBlocked ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>{t('s26')}</p>
           <img src={LockIcon} alt="" />
         </div>
       ) : !isEquipped ? (
-        <Button onClick={handleEquipItem} className={styles.disabledActions}>
-          {isEquipItemLoading || isRemoveItemLoading ? <p>loading</p> : <p>{t('s28')}</p>}
+        <Button
+          onClick={handleEquipItem}
+          className={styles.disabledActions}
+          disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
+        >
+          {<p>{t('s28')}</p>}
         </Button>
       ) : item.level === 50 ? (
         <div className={styles.disabledUpgradeActions}>
@@ -426,7 +400,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         </div>
       ) : isUpgradeEnabled ? (
         <div className={styles.actions}>
-          <Button onClick={handleUsdtPayment}>
+          <Button
+            onClick={handleUsdtPayment}
+            disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
+          >
             {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', {
               locale: locale,
             })}
@@ -437,19 +414,15 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 ? styles.upgradeItemPurple
                 : item.item_rarity === 'green' && styles.upgradeItemRed,
             )}
-            disabled={item.level === 50 || isLoading || isItemsLoading}
+            disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
             onClick={() => handleBuyItem(data?.items[0].price_internal)}
           >
-            {isLoading || isUpdateLoading ? (
-              <p>loading</p>
-            ) : (
-              <>
-                {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {
-                  locale: locale,
-                })}{' '}
-                <img src={CoinIcon} alt="" />
-              </>
-            )}
+            <>
+              {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {
+                locale: locale,
+              })}{' '}
+              <img src={CoinIcon} alt="" />
+            </>
           </Button>
 
           <Button
