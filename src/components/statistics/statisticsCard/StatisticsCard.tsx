@@ -7,6 +7,7 @@ import integrations from '../../../assets/icons/integrations.svg';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { useIncrementingIntegrationStats } from '../../../hooks/useIncrementingIntegrationStats.ts';
+import { usePushLineStatus } from '../../../hooks/usePushLineStatus.ts';
 
 interface Props {
   id: string;
@@ -43,6 +44,12 @@ const StatisticsCard: FC<Props> = ({
     futureStatistics,
     lastUpdatedAt
   });
+
+  const {in_streak} = usePushLineStatus()
+
+  const views = in_streak ? displayedViews : initialViews;
+  const income = in_streak ? displayedIncome : points;
+  
   return (
     <>
       <div className={styles.statisticsCard} onClick={onClick} style={{ cursor: 'pointer' }}>
@@ -61,11 +68,11 @@ const StatisticsCard: FC<Props> = ({
           </div>
           <div className={styles.scores}>
             <div className={styles.item}>
-              <p>{formatAbbreviation(displayedViews, 'number', {locale: locale})}</p>
+              <p>{formatAbbreviation(views, 'number', {locale: locale})}</p>
               <img src={view} alt="" width={18} height={18}/>
             </div>
             <div className={styles.item}>
-              <p>{formatAbbreviation(displayedIncome, 'number', {locale: locale})}</p>
+              <p>{formatAbbreviation(income, 'number', {locale: locale})}</p>
               <img src={CoinIcon} alt="" width={18} height={18}/>
             </div>
           </div>

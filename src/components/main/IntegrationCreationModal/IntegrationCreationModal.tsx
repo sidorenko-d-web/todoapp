@@ -64,13 +64,11 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     navigate('/shop');
   };
 
-  const submitCreation = (companyId: string) => {
-    setSelectedCompanyId(companyId);
-    if (!selectedOption || !companyId) return;
-
+  const submitCreation = () => {
+    if (!selectedOption || !selectedCompanyId) return;
     createIntegration({
       content_type: selectedOption,
-      campaign_id: companyId,
+      campaign_id: selectedCompanyId,
     })
       .unwrap()
       .then((data) => {
@@ -81,6 +79,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         dispatch(integrationsApi.util.invalidateTags(['Integrations']));
         dispatch(profileApi.util.invalidateTags(['Me']));
       });
+    setSelectedCompanyId("");
   };
 
   const noItemsMessage = (() => {
@@ -146,7 +145,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                     company={company}
                     selected={selectedCompanyId === company.id}
                     disabled={hasCreatingIntegration}
-                    onClick={() => submitCreation(company.id)}
+                    onClick={() => setSelectedCompanyId(company.id)}
                   />
                 ),
               )}
@@ -171,6 +170,18 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           >
             {t('i21')}
           </TrackedButton>}
+
+          {selectedCompanyId && !noItemsMessage && !hasCreatingIntegration && (
+            <div className={s.stickyButtonContainer}>
+              <button
+                className={s.createButton}
+                onClick={submitCreation}
+              >
+                {t('i31')}
+              </button>
+            </div>
+          )}
+
         </div>
       }
     </ExpandableBottomModal>
