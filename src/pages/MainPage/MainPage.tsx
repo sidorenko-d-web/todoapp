@@ -56,47 +56,48 @@ export const MainPage: FC = () => {
 
   const { data: itemsData } = useGetInventoryItemsQuery();
 
-  useEffect(() => {
-    if (localStorage.getItem('shopGuideChecked') !== '1') {
-      itemsData?.items.forEach(item => {
-        if (item.name.toLowerCase().trim() === 'печатная машинка') {
-          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
-          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
+  // useEffect(() => {
+  //   if (localStorage.getItem('shopGuideChecked') !== '1') {
+  //     itemsData?.items.forEach(item => {
+  //       if (item.name.toLowerCase().trim() === 'печатная машинка') {
+  //         setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
 
-          reduxDispatch(resetGuideState());
-        }
-      })
-      localStorage.setItem('shopGuideChecked', '1');
-    }
-  }, [itemsData]);
+  //         reduxDispatch(resetGuideState());
+  //       }
+  //     })
+  //     localStorage.setItem('shopGuideChecked', '1');
+  //   }
+  // }, [itemsData]);
 
 
-  useEffect(() => {
-    if (localStorage.getItem('integrationGuideChecked') !== '1') {
-      if (typeof data?.count !== 'undefined' && data?.count > 0) {
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
+  // useEffect(() => {
+  //   if (localStorage.getItem('integrationGuideChecked') !== '1') {
+  //     if (typeof data?.count !== 'undefined' && data?.count > 0) {
+  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
+  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED);
+  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN);
+  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
+  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
+  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED);
 
-        setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
-        reduxDispatch(setFooterActive(true));
-        reduxDispatch(setActiveFooterItemId(2));
-        reduxDispatch(resetGuideState());
-      }
-      localStorage.setItem('integrationGuideChecked', '1');
-    }
-  }, [data]);
+  //       setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+  //       reduxDispatch(setFooterActive(true));
+  //       reduxDispatch(setActiveFooterItemId(2));
+  //       reduxDispatch(resetGuideState());
+  //     }
+  //     localStorage.setItem('integrationGuideChecked', '1');
+  //   }
+  // }, [data]);
 
 
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
@@ -111,7 +112,7 @@ export const MainPage: FC = () => {
       }
 
       if(data?.integrations[0].status === 'published') {
-        if (isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)
+        if (isGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED)
           && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) 
           && !getModalState(MODALS.INTEGRATION_REWARD_CONGRATULATIONS).isOpen) {
           reduxDispatch(setFooterActive(true));
@@ -311,6 +312,7 @@ export const MainPage: FC = () => {
       {(!isGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN) &&
         !getModalState(MODALS.INTEGRATION_REWARD_CONGRATULATIONS).isOpen 
         && isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)
+        && isGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED)
         && isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)) && (
           <IntegrationCreatedGuide
             onClose={() => {
