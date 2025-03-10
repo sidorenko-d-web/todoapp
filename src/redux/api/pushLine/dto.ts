@@ -1,5 +1,5 @@
 export type PushLineDTO = {
-  status: string;
+  current_status: string;
   in_streak_days: number;
   next_reward: string;
   days_for_next_reward: number;
