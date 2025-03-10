@@ -15,7 +15,6 @@ export const useAuthFlow = () => {
   );
   const [isInitializing, setIsInitializing] = useState(true);
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
-  const [requireInviteCode, setRequireInviteCode] = useState(false);
  // const { closeModal, openModal } = useModal();
 
   const saveCurrentStep = (step: AuthStep) => {
@@ -34,11 +33,15 @@ export const useAuthFlow = () => {
 
   // После выбора языка переходим либо к вводу invite_code, либо сразу к выбору скина
   const handleLanguageContinue = async () => {
-    if (requireInviteCode) {
+    const accessToken = localStorage.getItem('access_token');
+    const refreshToken = localStorage.getItem('refresh_token');
+
+    if (!accessToken || !refreshToken) {
       saveCurrentStep('invite_code');
-    } else {
-      saveCurrentStep('skin');
+      return;
     }
+
+    saveCurrentStep('skin');
   };
 
   const handleInviteCodeContinue = async () => {
@@ -46,7 +49,7 @@ export const useAuthFlow = () => {
       const authResponse = await performSignIn(signIn);
       localStorage.setItem('access_token', authResponse.access_token);
       localStorage.setItem('refresh_token', authResponse.refresh_token);
-      saveCurrentStep('skin'); // Переходим к выбору скина после успешной авторизации
+      saveCurrentStep('skin');
     } catch (err: any) {
       console.error('Ошибка при авторизации:', err);
       // Если ошибка 401 или 403 – остаемся на шаге invite_code
@@ -93,16 +96,6 @@ export const useAuthFlow = () => {
         const hasCompletedSetup = savedStep === 'completed';
         await minLoadingTime;
 
-        // Проверяем наличие токенов
-        const accessToken = localStorage.getItem('access_token');
-        const refreshToken = localStorage.getItem('refresh_token');
-
-        if (!accessToken || !refreshToken) {
-          // Если токенов нет, переходим на шаг invite_code
-          saveCurrentStep('invite_code');
-          return; // Прерываем выполнение, чтобы не переходить к другим шагам
-        }
-
         if (hasCompletedSetup) {
           saveCurrentStep('completed');
         } else if (savedStep && savedStep !== 'loading') {
@@ -110,11 +103,10 @@ export const useAuthFlow = () => {
         } else {
           saveCurrentStep('language');
         }
-        setRequireInviteCode(false);
+
       } catch (err: any) {
         await minLoadingTime;
         console.error('Ошибка при инициализации:', err);
-        setRequireInviteCode(false);
         saveCurrentStep('language');
       } finally {
         setIsInitializing(false);

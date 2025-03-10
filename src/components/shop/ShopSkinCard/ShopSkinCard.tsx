@@ -125,7 +125,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
             </Button>
             <Button className={styles.priceButton} onClick={handleBuySkin}>
               {isLoading ? (
-                <p>Loading</p>
+                <p>{t('s59')}</p>
               ) : (
                 <>
                   {formatAbbreviation(item.price_internal, 'number', { locale: locale })} <img src={CoinIcon} />
@@ -139,7 +139,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
         ) : characterData?.skins.map(item => item.id).includes(item.id) ? (
           <Button disabled className={styles.buttonInventory}>
             {isLoading ? (
-              <p>Loading</p>
+              <p>{t('s59')}</p>
             ) : (
               <>
                 <p>{t('s39-1')}</p>
@@ -149,7 +149,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
         ) : (
           <Button onClick={() => handleSelectSkin(item)} className={styles.buttonInventory}>
             {isLoading ? (
-              <p>Loading</p>
+              <p>{t('s59')}</p>
             ) : (
               <>
                 <p>{t('s39')}</p>
