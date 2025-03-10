@@ -226,7 +226,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       {(firstGuideClosed && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)) && <CreatingIntegrationGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-              onClose;
+              onClose();
               navigate(AppRoute.Shop);
             }}
             buttonText={tGuide('g21')}

@@ -110,15 +110,15 @@ export const MainPage: FC = () => {
         reduxDispatch(setLastIntegrationId(''));
       }
 
-      data?.integrations.forEach((integration) => {
-        if (integration.status === 'published') {
-          if (isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)
-            && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
-            reduxDispatch(setFooterActive(true));
-            navigate(`/integrations/${integration.id}`);
-          }
+      if(data?.integrations[0].status === 'published') {
+        if (isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)
+          && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) 
+          && !getModalState(MODALS.INTEGRATION_REWARD_CONGRATULATIONS).isOpen) {
+          reduxDispatch(setFooterActive(true));
+          navigate(`/integrations/${data?.integrations[0].id}`);
         }
-      })
+      }
+
     });
   }, [data]);
   // const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
