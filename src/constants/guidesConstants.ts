@@ -27,10 +27,6 @@ export const GUIDE_ITEMS = {
         GO_TO_INTEGRATION_GUIDE_SHOWN: 'goToIntegrationGuideShown'
     },
 
-    integration: {
-        INTEGRATION_INITIAL_GUIDE_SHOWN: 'integrationInitialGuideShown'
-    },
-
     integrationPage: {
         INTEGRATION_PAGE_GUIDE_SHOWN: 'integrationPageGuideShown',
     },
