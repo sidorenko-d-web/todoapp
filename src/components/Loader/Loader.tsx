@@ -3,6 +3,7 @@ import s from './Loader.module.scss';
 import Lottie from 'lottie-react';
 import { coinLoadingAnimation } from '../../assets/animations';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 export type LoaderProps = {
   className?: string
@@ -11,6 +12,7 @@ export type LoaderProps = {
 
 export const Loader = ({ className, noMargin }: LoaderProps) => {
   const [ dots, setDots ] = useState('');
+  const { t } = useTranslation('quests');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -35,7 +37,7 @@ export const Loader = ({ className, noMargin }: LoaderProps) => {
         className={s.hand}
       />
       <span className={s.loading}>
-        <span className={s.text}>Загрузка</span>
+        <span className={s.text}>{t('q16')}</span>
         <span className={s.dots}>{dots}</span>
       </span>
     </div>
