@@ -1,6 +1,7 @@
 @use '../../assets/styles/index.scss' as var;
 
 .container {
+  margin-top: 250px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -147,6 +148,14 @@
 
     &.notTaken {
       background-image: url('../../assets/icons/gift-ready.svg');
+    }
+
+    &.arrowsPurple {
+      background-image: url('../../assets/icons/arrows-up-purple.svg');
+    }
+
+    &.arrowsRed {
+      background-image: url('../../assets/icons/arrows-up-red.svg');
     }
   }
 }

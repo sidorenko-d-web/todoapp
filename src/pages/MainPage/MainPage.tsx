@@ -6,6 +6,7 @@ import {
   InitialGuide,
   IntegrationCreatedGuide,
   IntegrationCreation,
+  IntegrationRewardModal,
   Loader,
   PublishIntegrationButton,
   Room,
@@ -93,6 +94,8 @@ export const MainPage: FC = () => {
       })
     });
   }, [data]);
+  // const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
+  // const showAccelerateGuide = localStorage.getItem('integrationCreated') === 'true';
 
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
@@ -296,6 +299,8 @@ export const MainPage: FC = () => {
         )}
 
       <RewardForIntegrationModal />
+      {/* Награда с указанием медали и количества интеграций с определенной компанией */}
+      <IntegrationRewardModal /> 
     </main>
   );
 };

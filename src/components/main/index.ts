@@ -5,3 +5,4 @@ export * from './CompanyCard'
 export * from './PublishIntegrationButton';
 export * from './SpecialIntegration'
 export * from './Room'
+export * from './modals'

@@ -20,6 +20,7 @@ export type ChestRewardRange = {
 export type Chest = {
   id: string;
   chest_name: string;
+  chest_name_eng: string,
   reward_range: ChestRewardRange;
   days_in_streak_list: number[];
   chest_image_url: string;

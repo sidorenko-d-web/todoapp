@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ShopSkinCard } from '../ShopSkinCard/ShopSkinCard';
+import { ShopSkinCard } from '../ShopSkinCard';
 import styles from './SkinTab.module.scss';
 import { useGetShopSkinsQuery, useGetInventorySkinsQuery } from '../../../redux';
 import { useTranslation } from 'react-i18next';

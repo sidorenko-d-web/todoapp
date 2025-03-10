@@ -20,7 +20,7 @@ export const Header = () => {
     pollingInterval: 10000, // 10 сек
   });
 
-  const { totalEarned, subscribers } = useIncrementingProfileStats({
+  const {points, subscribers} = useIncrementingProfileStats({
     profileId: data?.id || "",
     basePoints: data?.points || "0",
     baseSubscribers: data?.subscribers || 0,
@@ -118,7 +118,7 @@ export const Header = () => {
 
           <div className={styles.coinsWrapper}>
             <p
-              className={styles.coins}>{formatAbbreviation(showCoins ? (totalEarned || 0) : '0', 'number', { locale: locale })}</p>
+              className={styles.coins}>{formatAbbreviation(showCoins ? (points || 0) : '0', 'number', { locale: locale })}</p>
             <img className={styles.coinIcon} src={CoinIcon} alt="CoinIcon" />
           </div>
         </div>

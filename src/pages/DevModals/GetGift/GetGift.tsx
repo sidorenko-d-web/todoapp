@@ -18,11 +18,11 @@ import { Boost } from '../../../redux';
 import { formatAbbreviation } from '../../../helpers';
 
 interface Props {
-  lvl?: number;
+  giftColor?: string;
   boost?: Boost | null;
 }
 
-export default function GetGift({ lvl, boost }: Props) {
+export default function GetGift({ giftColor, boost }: Props) {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
 
@@ -30,21 +30,21 @@ export default function GetGift({ lvl, boost }: Props) {
 
   let giftImage;
 
-  if (lvl == null || (lvl >= 0 && lvl < 50)) {
+  if (giftColor == null || giftColor === 'Синий подарок') {
     giftImage = <img src={gift} className={styles.gift} />;
-  } else if (lvl >= 50 && lvl < 100) {
+  } else if (giftColor === 'Пурпурный подарок') {
     giftImage = <img src={giftPurple} className={styles.gift} />;
-  } else if (lvl >= 100 && lvl < 150) {
+  } else if (giftColor === 'Красный подарок') {
     giftImage = <img src={giftRed} className={styles.gift} />;
   }
 
   let giftLight;
 
-  if (lvl == null || (lvl >= 0 && lvl < 50)) {
+  if (giftColor == null || giftColor === 'Синий подарок') {
     giftLight = <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />;
-  } else if (lvl >= 50 && lvl < 100) {
+  } else if (giftColor === 'Пурпурный подарок') {
     giftLight = <Lottie animationData={purpleLightAnimation} loop={true} className={styles.light} />;
-  } else if (lvl >= 100 && lvl < 150) {
+  } else if (giftColor === 'Красный подарок') {
     giftLight = <Lottie animationData={redLightAnimation} loop={true} className={styles.light} />;
   }
 
@@ -60,7 +60,9 @@ export default function GetGift({ lvl, boost }: Props) {
         {giftImage}
         <div className={styles.statsContainer}>
           <div className={styles.stat}>
-            {boost?.income_per_second && <span className={styles.statValue}>+{formatAbbreviation(boost?.income_per_second)}</span>}
+            {boost?.income_per_second && (
+              <span className={styles.statValue}>+{formatAbbreviation(boost?.income_per_second)}</span>
+            )}
             <div className={styles.statBox}>
               <span>x{formatAbbreviation(boost?.x_income_per_second || 0)}</span>
               <img src={coin} />
@@ -93,10 +95,12 @@ export default function GetGift({ lvl, boost }: Props) {
             <p>+{formatAbbreviation(boost?.points || 0)}</p>
             <img src={coin} />
           </div>
-          {boost?.additional_integrations_for_subscription && <div className={styles.item}>
-            <p>+{formatAbbreviation(boost?.additional_integrations_for_subscription)}</p>
-            <img src={integration} />
-          </div>}
+          {boost?.additional_integrations_for_subscription && (
+            <div className={styles.item}>
+              <p>+{formatAbbreviation(boost?.additional_integrations_for_subscription)}</p>
+              <img src={integration} />
+            </div>
+          )}
           {/*<div className={styles.item}>*/}
           {/*  <p>+1</p>*/}
           {/*  <img src={snowflake} />*/}
@@ -105,7 +109,13 @@ export default function GetGift({ lvl, boost }: Props) {
         <p className={styles.desc}>Поздравляем! Вы улучшли основные показатели и получили дополнительные бонусы!</p>
       </div>
       <Button
-        variant={lvl == null || (lvl >= 0 && lvl < 50) ? 'blue' : lvl >= 50 && lvl < 100 ? 'purple' : 'red'}
+        variant={
+          giftColor == null || giftColor === 'Синий подарок'
+            ? 'blue'
+            : giftColor === 'Пурпурный подарок'
+            ? 'purple'
+            : 'red'
+        }
         onClick={() => closeModal(MODALS.GET_GIFT)}
       >
         Забрать
