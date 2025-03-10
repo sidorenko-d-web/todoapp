@@ -2,6 +2,11 @@ import { FC, useState, useEffect } from 'react';
 import { TaskCard } from '../';
 import telegramIcon from '../../../assets/icons/telegram.png';
 import instagramIcon from '../../../assets/icons/instagram.png';
+import discordIcon from '../../../assets/icons/discord.png';
+import tiktokIcon from '../../../assets/icons/tiktok.png';
+import twitterIcon from '../../../assets/icons/twitter.png';
+import vkIcon from '../../../assets/icons/vk.png';
+import youtubeIcon from '../../../assets/icons/youtube.png';
 import s from '../styles.module.scss';
 import { Task } from '../../../redux/api/tasks';
 import { useUpdateTaskMutation } from '../../../redux/api/tasks';
@@ -14,6 +19,18 @@ const TELEGRAM_CHANNEL_URL = 'https://t.me/tgnewss_vf';
 
 type SocialTasksProps = {
   tasks: Task[];
+};
+
+const getTaskIcon = (title: string): string => {
+  const lowerTitle = title.toLowerCase();
+  if (lowerTitle.includes('telegram')) return telegramIcon;
+  if (lowerTitle.includes('instagram')) return instagramIcon;
+  if (lowerTitle.includes('discord')) return discordIcon;
+  if (lowerTitle.includes('tiktok')) return tiktokIcon;
+  if (lowerTitle.includes('twitter') || lowerTitle.includes('x')) return twitterIcon;
+  if (lowerTitle.includes('vk')) return vkIcon;
+  if (lowerTitle.includes('youtube')) return youtubeIcon;
+  return telegramIcon; // default fallback
 };
 
 export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
@@ -137,7 +154,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
             key={task.id}
             title={task.title}
             description={task.description}
-            icon={task.title.toLowerCase().includes('telegram') ? telegramIcon : instagramIcon}
+            icon={getTaskIcon(task.title)}
             income={Number(task.boost.views)}
             subscribers={task.boost.subscribers}
             passiveIncome={Number(task.boost.income_per_second)}
