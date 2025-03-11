@@ -62,6 +62,17 @@ const Layout = () => {
     }
   }, [ showRoadmapBg, contentRef.current ]);
 
+  const [isBgLoaded, setIsBgLoaded] = useState(false);
+
+  useEffect(() => {
+    if (showRoadmapBg) {
+      const img = new Image();
+      img.src = roadmapBg;
+      img.onload = () => setIsBgLoaded(true);
+    }
+  }, [showRoadmapBg]);
+
+
   return (
     <>
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
@@ -85,7 +96,7 @@ const Layout = () => {
         )}
         {showHeader && <Header />}
         <main className={contentClassName} ref={contentRef}>
-          <Outlet />
+          <Outlet context={{ isBgLoaded }} />
           <SettingsModal />
           <WalletConnectionModal />
           <LanguageSelectionModal />
