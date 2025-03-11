@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import BottomModal from '../../../components/shared/BottomModal/BottomModal';
 import Lottie from 'lottie-react';
 import { MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
@@ -16,7 +15,7 @@ import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import redLightAnimation from '../../../assets/animations/redLight.json';
 import purpleLightAnimation from '../../../assets/animations/purpleLight.json';
 import { useTranslation } from 'react-i18next';
-import { ProgressLine } from '../../../components/shared';
+import { CentralModal, ProgressLine } from '../../../components/shared';
 import { StreakDay } from '../../../components/profile/ProfileStreak/StreakCard/StreakDay';
 
 interface Props {
@@ -25,15 +24,18 @@ interface Props {
 }
 
 export default function DaysInARowModal({ onClose }: Props) {
-  const { t,i18n } = useTranslation('profile');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const { t, i18n } = useTranslation('profile');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal } = useModal();
   const { data } = useGetPushLineQuery();
   const [dayNumbers, setDayNumbers] = useState<number[]>([]);
   const [frozenDays, setFrozenDays] = useState<number[]>([]);
   const [streakDays, setStreakDays] = useState<number[]>([]);
+  console.log('adsdsa')
 
   useEffect(() => {
+  console.log('adsdsa')
+
     const today = new Date();
     const dayOfWeek = today.getDay();
     const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
@@ -51,6 +53,7 @@ export default function DaysInARowModal({ onClose }: Props) {
     const frozen: number[] = [];
     const streak: number[] = [];
 
+    console.log('data changed')
     data?.week_information?.forEach((day) => {
       const dayDate = new Date(day.creation_date).getDate();
       const hasNotification =
@@ -99,7 +102,7 @@ export default function DaysInARowModal({ onClose }: Props) {
   }
 
   return (
-    <BottomModal
+    <CentralModal
       modalId={MODALS.DAYS_IN_A_ROW}
       title={`${streakCount === 0 ? 0 : streakCount} ${t('p21')}`}
       onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)}
@@ -176,6 +179,6 @@ export default function DaysInARowModal({ onClose }: Props) {
       >
         {t('p22')}
       </Button>
-    </BottomModal>
+    </CentralModal>
   );
 }
