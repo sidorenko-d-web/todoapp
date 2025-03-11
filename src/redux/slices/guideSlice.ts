@@ -93,7 +93,28 @@ const guideSlice = createSlice({
         state.activeFooterItemId = action.payload;
       }
     },
-    resetGuideState: () => initialState,
+    resetGuideState: (state) => {
+      Object.assign(state, {
+        subscribeGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN),
+        getCoinsGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN),
+        getShopStatsGlowing: !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN),
+        buyItemButtonGlowing: isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) 
+          && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE),
+        createIntegrationButtonGlowing: isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
+          !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED),
+        itemBought: false,
+        integrationCreated: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED) 
+          && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN),
+        integrationReadyForPublishing: false,
+        accelerateIntegrationGuideClosed: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN)
+          && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED),
+        isPublishedModalClosed: false,
+        elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
+        lastIntegrationId: "",
+        footerActive: isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
+        activeFooterItemId: getCurrentFooterItem()
+      });
+    }
   },
 });
 

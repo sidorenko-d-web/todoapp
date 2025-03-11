@@ -108,9 +108,10 @@ export const MainPage: FC = () => {
         setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
 
+        reduxDispatch(resetGuideState());
+        
         reduxDispatch(setFooterActive(true));
         reduxDispatch(setActiveFooterItemId(2));
-        reduxDispatch(resetGuideState());
       }
     }
   }, [data, isInventoryDataLoading]);
