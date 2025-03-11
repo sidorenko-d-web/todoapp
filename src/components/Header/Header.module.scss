@@ -35,7 +35,7 @@ $header-border: 1px solid $color-header-border-dark;
   // Paddings for each platform
   &.ios {
     //padding: calc(var(--tg-content-safe-area-inset-top) + 60px) 10px 0;
-    top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) + 10px);
+    top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) - 35px);
     left: calc(var(--tg-content-safe-area-inset-left) + 10px);
     right: calc(var(--tg-content-safe-area-inset-right) + 10px);
   }
