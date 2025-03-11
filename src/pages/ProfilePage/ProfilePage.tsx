@@ -55,10 +55,6 @@ export const ProfilePage: React.FC = () => {
     day => day.push_line_data?.status === 'passed'
   ).length;
 
-  console.log( data?.week_information.filter(
-    day =>
-      day.push_line_data?.status === 'passed'
-  ))
 
   useEffect(() => {
     if (!sessionStorage.getItem('daysInARowModalShown')) {
@@ -114,31 +110,30 @@ export const ProfilePage: React.FC = () => {
     isAwardsLoading
   );
 
-  const {
-    // points: displayedPoints,
-    subscribers: displayedSubscribers,
-    totalViews: displayedTotalViews,
-    totalEarned: displayedTotalEarned
-  } = useIncrementingProfileStats({
-    profileId: userProfileData?.id || '',
-    basePoints: userProfileData?.points || '0',
-    baseSubscribers: userProfileData?.subscribers || 0,
-    baseTotalViews: userProfileData?.total_views || 0,
-    baseTotalEarned: userProfileData?.total_earned || '0',
-    futureStatistics: userProfileData?.future_statistics,
-    lastUpdatedAt: userProfileData?.updated_at,
-  });
+  // const {
+  //   // points: displayedPoints,
+  //   subscribers: displayedSubscribers,
+  //   totalViews: displayedTotalViews,
+  //   totalEarned: displayedTotalEarned
+  // } = useIncrementingProfileStats({
+  //   profileId: userProfileData?.id || '',
+  //   basePoints: userProfileData?.points || '0',
+  //   baseSubscribers: userProfileData?.subscribers || 0,
+  //   baseTotalViews: userProfileData?.total_views || 0,
+  //   baseTotalEarned: userProfileData?.total_earned || '0',
+  //   futureStatistics: userProfileData?.future_statistics,
+  //   lastUpdatedAt: userProfileData?.updated_at,
+  // });
 
-  const {in_streak} = usePushLineStatus()
-  const subscribers = in_streak ? displayedSubscribers : userProfileData?.subscribers ?? 0
-  const totalViews = in_streak ? displayedTotalViews : userProfileData?.total_views ?? 0
-  const totalEarned = in_streak ? displayedTotalEarned : userProfileData?.total_earned ?? ""
+  // const subscribers = in_streak ? displayedSubscribers : userProfileData?.subscribers ?? 0
+  // const totalViews = in_streak ? displayedTotalViews : userProfileData?.total_views ?? 0
+  // const totalEarned = in_streak ? displayedTotalEarned : userProfileData?.total_earned ?? ""
 
   if (isLoading) {
     return <Loader />
   }
 
-  console.log(streaks)
+  console.log('streaks')
 
   return (
     <>
@@ -147,7 +142,7 @@ export const ProfilePage: React.FC = () => {
 
       {(isUserLoading || isTopProfilesLoading) && <p>{t('p3')}</p>}
 
-      {(userError || topProfilesError) && <p>{t('p17')}</p>}
+      {(userError || topProfilesError) && <p>{t('p17')}</p>} 
 
       {userProfileData && topProfilesData && (
         <div className={styles.wrp}>
@@ -155,10 +150,8 @@ export const ProfilePage: React.FC = () => {
             <h1 className={styles.pageTitle}>{t('p1')}</h1>
 
             <ProfileStatsMini
-              subscribers={subscribers}
               position={position}
               daysInARow={streaks !== undefined ? streaks : 0}
-              totalViews={totalViews}
             />
           </div>
 
@@ -192,8 +185,6 @@ export const ProfilePage: React.FC = () => {
           <div>
             <p className={styles.statsTitle}>{t('p4')}</p>
             <ProfileStats
-              earned={totalEarned}
-              views={totalViews}
               favoriteCompany={'Favourite company'}
               comments={userProfileData.comments_answered_correctly}
               rewards={userProfileData.achievements_collected}

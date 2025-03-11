@@ -44,10 +44,6 @@ export const StreakCard: React.FC<StreakCardProps> = ({
 }) => {
   const { t } = useTranslation('profile');
 
-  console.log('week:', days, weekData);
-  console.log('streak', onlyStreak, streakDays);
-  console.log('frozenDays:', frozenDays);
-
   const calculateLevel = () => {
     let maxStreak = 0;
 

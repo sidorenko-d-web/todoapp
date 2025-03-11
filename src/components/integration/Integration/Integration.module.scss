@@ -2,11 +2,12 @@
 
 .integration {
     width: 100%;
-    min-height: 195px;
+    max-height: 200px;
     background-color: var.$footer-bg;
     border: 1px solid var.$color-dark-gray-stroke;
     border-radius: 12px;
-
+    overflow: hidden;
+    padding-top: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
