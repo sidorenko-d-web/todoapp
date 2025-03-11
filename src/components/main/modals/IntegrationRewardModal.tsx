@@ -9,8 +9,10 @@ import medalSilver from "../../../assets/icons/medal-silver.svg"
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import Lottie from "lottie-react";
 import { useModal } from "../../../hooks";
-import { starsThresholds, MODALS } from "../../../constants";
-import { useAddItemToRoomMutation, useGetEquipedQuery, useGetInventoryAchievementsQuery, useRemoveItemFromRoomMutation } from "../../../redux";
+import { starsThresholds, MODALS, GUIDE_ITEMS } from "../../../constants";
+import { setIsPublishedModalClosed, useAddItemToRoomMutation, useGetEquipedQuery, useGetInventoryAchievementsQuery, useRemoveItemFromRoomMutation } from "../../../redux";
+import { useDispatch } from "react-redux";
+import { setGuideShown } from "../../../utils";
 
 export const IntegrationRewardModal = () => {
     const { getModalState, closeModal } = useModal()
@@ -21,7 +23,8 @@ export const IntegrationRewardModal = () => {
     const [addAchivement] = useAddItemToRoomMutation();
     const [removeAchivement] = useRemoveItemFromRoomMutation();
 
-
+    const dispatch = useDispatch();
+    
     const stars = function () {
         if ((args?.integrationsCount ?? 0) === 18) return 3;
         if ((args?.integrationsCount ?? 0) === 10) return 2;
@@ -74,7 +77,11 @@ export const IntegrationRewardModal = () => {
         <CentralModal
             title={t('i33')}
             modalId={MODALS.INTEGRATION_REWARD_CONGRATULATIONS}
-            onClose={() => closeModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS)}
+            onClose={() => {
+                setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
+                dispatch(setIsPublishedModalClosed(true));
+                closeModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS)
+            }}
             headerStyles={styles.headerStyles}
         >
             <div className={styles.wrapper}>
