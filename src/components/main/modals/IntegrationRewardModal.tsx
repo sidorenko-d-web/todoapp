@@ -78,6 +78,7 @@ export const IntegrationRewardModal = () => {
             title={t('i33')}
             modalId={MODALS.INTEGRATION_REWARD_CONGRATULATIONS}
             onClose={() => {
+                console.log('abcdefg')
                 setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
                 dispatch(setIsPublishedModalClosed(true));
                 closeModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS)

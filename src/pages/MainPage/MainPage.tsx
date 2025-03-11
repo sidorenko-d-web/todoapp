@@ -114,7 +114,7 @@ export const MainPage: FC = () => {
         reduxDispatch(setActiveFooterItemId(2));
       } else {
         if (data?.integrations[0].status === 'published'
-            && !getModalState(MODALS.INTEGRATION_REWARD_CONGRATULATIONS).isOpen
+            && !getModalState(MODALS.INTEGRATION_REWARD).isOpen
             && localStorage.getItem('integrationCreatedGuideOpen') !== '1') {
 
           setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);

@@ -38,6 +38,7 @@ export default function RewardForIntegrationModal() {
   return (
     <CentralModal
       onClose={() => {
+        console.log('abcdefg')
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
         dispatch(setIsPublishedModalClosed(true));
         dispatch(setNeedToPlayHappy(true));
