@@ -1,7 +1,14 @@
 import { FC, useState, useEffect } from 'react';
 import { TaskCard } from '../';
-import telegramIcon from '../../../assets/icons/telegram.png';
-import instagramIcon from '../../../assets/icons/instagram.png';
+import telegramIcon from '../../../assets/icons/telegram.svg';
+import instagramIcon from '../../../assets/icons/instagram.svg';
+import discordIcon from '../../../assets/icons/discord.svg';
+import tiktokIcon from '../../../assets/icons/tiktok.svg';
+import twitterIcon from '../../../assets/icons/twitter.svg';
+import vkIcon from '../../../assets/icons/vk.svg';
+import youtubeIcon from '../../../assets/icons/youtube.svg';
+
+
 import s from '../styles.module.scss';
 import { Task } from '../../../redux/api/tasks';
 import { useUpdateTaskMutation } from '../../../redux/api/tasks';
@@ -14,6 +21,18 @@ const TELEGRAM_CHANNEL_URL = 'https://t.me/tgnewss_vf';
 
 type SocialTasksProps = {
   tasks: Task[];
+};
+
+const getTaskIcon = (title: string): string => {
+  const lowerTitle = title.toLowerCase();
+  if (lowerTitle.includes('telegram')) return telegramIcon;
+  if (lowerTitle.includes('instagram')) return instagramIcon;
+  if (lowerTitle.includes('discord')) return discordIcon;
+  if (lowerTitle.includes('tiktok')) return tiktokIcon;
+  if (lowerTitle.includes('twitter') || lowerTitle.includes('x')) return twitterIcon;
+  if (lowerTitle.includes('vk')) return vkIcon;
+  if (lowerTitle.includes('youtube')) return youtubeIcon;
+  return telegramIcon; // default fallback
 };
 
 export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
@@ -139,7 +158,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
             key={task.id}
             title={task.title}
             description={task.description}
-            icon={task.title.toLowerCase().includes('telegram') ? telegramIcon : instagramIcon}
+            icon={getTaskIcon(task.title)}
             income={Number(task.boost.views)}
             subscribers={task.boost.subscribers}
             passiveIncome={Number(task.boost.income_per_second)}
