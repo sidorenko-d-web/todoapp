@@ -1,17 +1,10 @@
 import { FC, useState, useEffect } from 'react';
 import { TaskCard } from '../';
-// import telegramIcon from '../../../assets/icons/telegram.png';
-// import instagramIcon from '../../../assets/icons/instagram.png';
-// import discordIcon from '../../../assets/icons/discord.png';
-// import tiktokIcon from '../../../assets/icons/tiktok.png';
-// import twitterIcon from '../../../assets/icons/twitter.png';
-// import vkIcon from '../../../assets/icons/vk.png';
-// import youtubeIcon from '../../../assets/icons/youtube.png';
 import telegramIcon from '../../../assets/icons/telegram.svg';
 import instagramIcon from '../../../assets/icons/instagram.svg';
 import discordIcon from '../../../assets/icons/discord.svg';
 import tiktokIcon from '../../../assets/icons/tiktok.svg';
-import twitterIcon from '../../../assets/icons/twitterx.svg';
+import twitterIcon from '../../../assets/icons/twitter.svg';
 import vkIcon from '../../../assets/icons/vk.svg';
 import youtubeIcon from '../../../assets/icons/youtube.svg';
 

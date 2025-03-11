@@ -89,6 +89,7 @@ export const useAuthFlow = () => {
       const minLoadingTime = new Promise((resolve) => setTimeout(resolve, 3500));
       const savedStep = localStorage.getItem('currentSetupStep') as AuthStep;
 
+
       try {
 
         const authResponse = await performSignIn(signIn);

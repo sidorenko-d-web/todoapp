@@ -78,8 +78,8 @@ export function AuthInit({ children }: AuthInitProps) {
           // referral_id={window.Telegram.WebApp.initDataUnsafe.user.id}
           // referral_id={563486774}
           // referral_id={1259832544}
-          //  referral_id={1301940582}
-          referral_id={6547551264}
+           referral_id={1301940582}
+          // referral_id={6547551264}
           // referral_id={1488618801}
         />
       );
