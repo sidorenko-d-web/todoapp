@@ -72,6 +72,8 @@ export default function DaysInARowModal({ onClose }: Props) {
     const todayDate = new Date().toISOString().split('T')[0];
 
     if (modalShownToday !== todayDate) {
+      // console.log('creating date: ', data?.week_information[0].creation_date);
+      // console.log('today date: ', todayDate);
       const isTodayPassed = data?.week_information?.some(
         (entry) => entry.creation_date === todayDate && entry.push_line_data?.status === 'passed'
       );
