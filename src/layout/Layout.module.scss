@@ -3,11 +3,10 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
 .vhsEffect {
   position: relative;
   overflow: hidden;
-  filter: contrast(1.5) brightness(1.1) saturate(1.4) blur(0.5px); /* Sharper effect */
-  animation: vhsJitter 0.2s infinite alternate; /* Shorter time for sharper jitter */
+  filter: contrast(1.2) brightness(1.1) saturate(1.1) blur(0.25px);
+  animation: vhsJitter 0.5s infinite alternate; 
 }
 
-/* 🟥🟩🟦 Chromatic Aberration */
 .vhsEffect::before {
   content: "";
   position: absolute;
@@ -18,21 +17,10 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   pointer-events: none;
   background: transparent;
   mix-blend-mode: screen;
-  animation: chromaticShift 0.1s infinite alternate; /* Faster and sharper shifting */
 }
 
-@keyframes chromaticShift {
-  0% {
-    text-shadow: 2px 0 red, -2px 0 blue;
-    transform: translateX(-2px); /* More dramatic shift */
-  }
-  100% {
-    text-shadow: -2px 0 red, 2px 0 blue;
-    transform: translateX(2px); /* More dramatic shift */
-  }
-}
 
-/* 📼 VHS Scanline Effect */
+
 .lines {
   position: fixed;
   left: 0;
@@ -41,9 +29,9 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   height: 100vh;
   pointer-events: none;
   z-index: 300;
-  opacity: 0.6;
+  opacity: 0.45;
   will-change: opacity;
-  animation: opacity 1s linear infinite;
+  animation: opacity 3s linear infinite;
 }
 
 .lines:before {
@@ -54,10 +42,10 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   right: 0;
   bottom: 0;
   pointer-events: none;
-  background: linear-gradient(to bottom, transparent 48%, rgba(0, 0, 0, 0.5) 50%);
-  background-size: 100% 6px; /* Sharper and more frequent lines */
+  background: linear-gradient(to bottom, transparent 48%, rgba(0, 0, 0, 0.3) 30%); /* Softer scanlines */
+  background-size: 100% 7.5px; /* Larger space between scanlines */
   will-change: background, background-size;
-  animation: scanlines 0.3s linear infinite;
+  animation: scanlines 0.6s linear infinite;
 }
 
 @keyframes scanlines {
@@ -96,13 +84,12 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   }
 }
 
-/* 🎥 VHS Jitter Effect */
 @keyframes vhsJitter {
   0% {
     transform: translateX(0) translateY(0);
   }
   25% {
-    transform: translateX(-2px) translateY(2px); /* Larger jitter */
+    transform: translateX(-2px) translateY(2px); 
   }
   50% {
     transform: translateX(2px) translateY(-2px);
@@ -119,7 +106,6 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   animation: vhsJitter 0.5s infinite alternate;
 }
 
-/* 🟢 Interlacing (CRT TV Refresh Lines) */
 .interlace {
   position: fixed;
   top: 0;
@@ -129,9 +115,9 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   pointer-events: none;
   z-index: 500;
   mix-blend-mode: overlay;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 50%, transparent 50%);
-  background-size: 100% 2px; /* Sharper and more frequent lines */
-  animation: interlaceAnim 0.05s infinite linear; /* Faster and sharper interlacing */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 50%, transparent 50%);
+  background-size: 100% 3.5px;
+  animation: interlaceAnim 0.6s infinite linear;
 }
 
 @keyframes interlaceAnim {
@@ -139,48 +125,40 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
     background-position: 0 0;
   }
   to {
-    background-position: 0 -5px; /* Sharper movement */
+    background-position: 0 -30px; /* Sharper movement */
   }
 }
 
-/* 🔁 Horizontal Desync (Glitch Jump) */
 @keyframes glitchSlide {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  30% {
-    transform: translateX(4px); /* Sharper glitch effect */
-  }
-  50% {
-    transform: translateX(-3px); /* Sharp back-and-forth movement */
-  } 
-  70% {
-    transform: translateX(4px);
-  }
+  0%,
   100% {
     transform: translateX(0);
+  }
+  49% {
+    transform: translateX(1px); /* Softer glitch movement */
+  }
+  50% {
+    transform: translateX(1px);
   }
 }
 
 .glitch {
-  animation: glitchSlide 0.1s infinite alternate; /* Faster, more intense glitch */
+  animation: glitchSlide 0.5s infinite alternate; /* Slower glitch effect */
 }
 
-/* 🧳 Tape Warp Effect */
 @keyframes tapeWarp {
   0% {
     transform: perspective(100px) rotateX(0deg);
   }
   50% {
-    transform: perspective(100px) rotateX(2deg);
+    transform: perspective(100px) rotateX(1deg); /* Smaller warp effect */
   }
   100% {
     transform: perspective(100px) rotateX(0deg);
   }
 }
-
 .vhsWarp {
-  animation: tapeWarp 1s infinite alternate ease-in-out;
+  animation: tapeWarp 2s infinite alternate ease-in-out; /* Slower warp animation */
 }
 
 /* 📸 Frame Drop Effect */
@@ -189,7 +167,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
     opacity: 1;
   }
   98%, 99% {
-    opacity: 0.5; /* Sharper drop to near complete transparency */
+    opacity: 0.6;
   }
   100% {
     opacity: 1;
@@ -197,7 +175,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
 }
 
 .frameDrop {
-  animation: frameDrop 8s infinite; /* Faster cycle */
+  animation: frameDrop 10s infinite; /* Faster cycle */
 }
 
 .wrp {
