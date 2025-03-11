@@ -1,4 +1,4 @@
-import { FC, useEffect, useReducer, useState } from 'react';
+import { FC, useEffect, useReducer } from 'react';
 import {
   AccelerateIntegtrationGuide,
   FinishTutorialGuide,
@@ -119,7 +119,9 @@ export const MainPage: FC = () => {
         reduxDispatch(setFooterActive(true));
         reduxDispatch(setActiveFooterItemId(2));
       } else {
-        if (data?.integrations[0].status == 'published') {
+        if (data?.integrations[0].status === 'published' 
+          && !getModalState(MODALS.INTEGRATION_REWARD_CONGRATULATIONS).isOpen
+          && localStorage.getItem('integrationCreatedGuideOpen') !== '1') {
           console.log('not creating, setting guides')
           setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
@@ -157,24 +159,27 @@ export const MainPage: FC = () => {
   
     console.log('today: ', today);
   
-    if (modalShownToday !== today) {
+    if (modalShownToday) {
       const isTodayPassed = pushLineData?.week_information.some(
         (entry) => entry.creation_date === today && entry.push_line_data?.status === 'passed'
       );
   
       console.log('is today passed: ', isTodayPassed);
   
-      if (isTodayPassed) {
+      if (!isTodayPassed) {
+        console.log('!isTodayPassed')
         openModal(MODALS.DAYS_IN_A_ROW);
         localStorage.setItem('modalShownToday', today);
       } else {
+        console.log('isTodayPassed')
+        openModal(MODALS.DAYS_IN_A_ROW);
         console.log('No passed status for today or modal already shown today');
       }
     }
   }, [pushLineData, pushLineDataLoading, openModal]);
 
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
-  
+
   useEffect(() => {
     refetch().then(() => {
       if (data?.integrations[0].status === 'created') {
@@ -297,7 +302,8 @@ export const MainPage: FC = () => {
 
 
   const isLoading =
-    isAllIntegrationsLoading || isCurrentUserProfileInfoLoading || isIntegrationsLoading || isRoomLoading || isInventoryDataLoading;
+    isAllIntegrationsLoading
+     || isCurrentUserProfileInfoLoading || isIntegrationsLoading || isRoomLoading || isInventoryDataLoading || pushLineDataLoading;
 
   if (isLoading) return <Loader />;
 
