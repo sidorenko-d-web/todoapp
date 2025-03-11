@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Lottie from 'lottie-react';
-import { MODALS } from '../../../constants';
+import { GUIDE_ITEMS, MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import FireBlue from '../../../assets/icons/fire-blue.svg';
 import FireRed from '../../../assets/icons/fire-red.svg';
@@ -17,6 +17,7 @@ import purpleLightAnimation from '../../../assets/animations/purpleLight.json';
 import { useTranslation } from 'react-i18next';
 import { CentralModal, ProgressLine } from '../../../components/shared';
 import { StreakDay } from '../../../components/profile/ProfileStreak/StreakCard/StreakDay';
+import { isGuideShown } from '../../../utils';
 
 interface Props {
   days?: number;
@@ -71,9 +72,7 @@ export default function DaysInARowModal({ onClose }: Props) {
     const modalShownToday = localStorage.getItem('modalShownToday');
     const todayDate = new Date().toISOString().split('T')[0];
 
-    if (modalShownToday !== todayDate) {
-      // console.log('creating date: ', data?.week_information[0].creation_date);
-      // console.log('today date: ', todayDate);
+    if (modalShownToday !== todayDate && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
       const isTodayPassed = data?.week_information?.some(
         (entry) => entry.creation_date === todayDate && entry.push_line_data?.status === 'passed'
       );
