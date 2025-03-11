@@ -87,7 +87,7 @@ export const MainPage: FC = () => {
 
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
-      if(data?.count > 1) {
+      if (data?.count > 1) {
         setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED);
@@ -113,9 +113,10 @@ export const MainPage: FC = () => {
         reduxDispatch(setFooterActive(true));
         reduxDispatch(setActiveFooterItemId(2));
       } else {
-        if (data?.integrations[0].status === 'published' 
-          && !getModalState(MODALS.INTEGRATION_REWARD_CONGRATULATIONS).isOpen
-          && localStorage.getItem('integrationCreatedGuideOpen') !== '1') {
+        if (data?.integrations[0].status === 'published'
+            && !getModalState(MODALS.INTEGRATION_REWARD_CONGRATULATIONS).isOpen
+            && localStorage.getItem('integrationCreatedGuideOpen') !== '1') {
+
           setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
           setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED);
@@ -125,19 +126,19 @@ export const MainPage: FC = () => {
           setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
           setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
           setGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED);
-  
+
           setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
-  
+
           setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
-  
+
           setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
-  
+
           setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
-  
-  
+
+
           reduxDispatch(resetGuideState());
-  
+
           reduxDispatch(setFooterActive(true));
           reduxDispatch(setActiveFooterItemId(2));
         }
@@ -270,7 +271,7 @@ export const MainPage: FC = () => {
 
   const isLoading =
     isAllIntegrationsLoading
-     || isCurrentUserProfileInfoLoading || isIntegrationsLoading || isRoomLoading || isInventoryDataLoading;
+    || isCurrentUserProfileInfoLoading || isIntegrationsLoading || isRoomLoading || isInventoryDataLoading;
 
   if (isLoading) return <Loader />;
 
