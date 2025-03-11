@@ -48,6 +48,198 @@
 
 $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top));
 
+.vhsEffect {
+  position: relative;
+  overflow: hidden;
+  filter: contrast(1.2) brightness(0.9) saturate(1.3) blur(0.3px);
+  animation: vhsJitter 0.1s infinite alternate;
+}
+
+/* 🟥🟩🟦 Chromatic Aberration */
+.vhsEffect::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: transparent;
+  mix-blend-mode: screen;
+  animation: chromaticShift 0.15s infinite alternate;
+}
+
+@keyframes chromaticShift {
+  0% {
+    text-shadow: 2px 0 red, -2px 0 blue;
+    transform: translateX(-1px);
+  }
+  100% {
+    text-shadow: -2px 0 red, 2px 0 blue;
+    transform: translateX(1px);
+  }
+}
+
+/* 📼 VHS Scanline Effect */
+.lines {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 300;
+  opacity: 0.6;
+  will-change: opacity;
+  animation: opacity 3s linear infinite;
+}
+
+.lines:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 48%, rgba(0, 0, 0, 0.4) 30%);
+  background-size: 100% 7px;
+  will-change: background, background-size;
+  animation: scanlines 2.5s linear infinite;
+}
+
+@keyframes scanlines {
+  0% {
+    background-position: top;
+  }
+  100% {
+    background-position: bottom;
+  }
+}
+
+/* ⚡ Static Noise Effect */
+.noise {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  animation: staticNoise 0.3s steps(2) infinite;
+}
+
+@keyframes staticNoise {
+  0% {
+    opacity: 0.05;
+  }
+  100% {
+    opacity: 0.1;
+  }
+}
+
+/* 📼 Jitter Effect */
+@keyframes vhsJitter {
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(-1px);
+  }
+}
+
+@keyframes frameJump {
+  0%,
+  97% {
+    transform: translateY(0);
+  }
+  98% {
+    transform: translateY(-1px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+
+/* 🟢 Interlacing (CRT TV Refresh Lines) */
+.interlace {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 500;
+  mix-blend-mode: overlay;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 50%, transparent 50%);
+  background-size: 100% 3px;
+  animation: interlaceAnim 0.08s infinite linear;
+}
+
+@keyframes interlaceAnim {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 -20px;
+  }
+}
+
+/* 🔁 Horizontal Desync (Glitch Jump) */
+@keyframes glitchSlide {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  49% {
+    transform: translateX(1.5px);
+  }
+  50% {
+    transform: translateX(-1.5px);
+  }
+}
+
+.glitch {
+  animation: glitchSlide 0.05s infinite alternate;
+}
+
+@keyframes tapeWarp {
+  0% {
+    transform: perspective(100px) rotateX(0deg);
+  }
+  50% {
+    transform: perspective(100px) rotateX(2deg);
+  }
+  100% {
+    transform: perspective(100px) rotateX(0deg);
+  }
+}
+
+.vhsWarp {
+  animation: tapeWarp 1s infinite alternate ease-in-out;
+}
+
+@keyframes frameDrop {
+  0%,
+  97% {
+    opacity: 1;
+  }
+  98% {
+    opacity: 0.5;
+  }
+  99% {
+    opacity: 1;
+  }
+}
+
+.frameDrop {
+  animation: frameDrop 8s infinite;
+}
+
+
+
+
 .wrp {
   position: relative;
   display: flex;

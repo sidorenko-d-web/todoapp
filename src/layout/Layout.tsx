@@ -74,7 +74,10 @@ const Layout = () => {
 
 
   return (
-    <>
+    <div className={`${styles.vhsEffect} ${styles.glitch} ${styles.vhsWarp} ${styles.frameDrop}`}>
+      <div className={styles.interlace}></div>
+      <div className={styles.lines}></div>
+      <div className={styles.noise}></div>
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
       </div>
@@ -104,7 +107,7 @@ const Layout = () => {
         </main>
         <Footer />
       </div>
-    </>
+    </div>
   );
 };
 
