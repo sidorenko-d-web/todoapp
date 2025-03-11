@@ -51,19 +51,17 @@ export const ProfilePage: React.FC = () => {
 
   const [, setIsModalShown] = useState(false);
   const frozen = data?.week_information.filter(
-    day => day.status === 'unspecified',
+    day => day.push_line_data?.status === 'unspecified'
   ).length;
 
   const streaks = data?.week_information.filter(
-    day =>
-      day.status === 'passed' &&
-      (day.is_notified_at_morning ||
-        day.is_notified_at_afternoon ||
-        day.is_notified_at_evening ||
-        day.is_notified_at_late_evening ||
-        day.is_notified_at_late_night ||
-        day.is_notified_at_night),
+    day => day.push_line_data?.status === 'passed'
   ).length;
+
+  console.log( data?.week_information.filter(
+    day =>
+      day.push_line_data?.status === 'passed'
+  ))
 
   useEffect(() => {
     if (!sessionStorage.getItem('daysInARowModalShown')) {
@@ -102,12 +100,12 @@ export const ProfilePage: React.FC = () => {
   const weekInformation = data?.week_information || [];
 
   const streakDays = weekInformation
-    .filter(day => day.status === 'passed')
-    .map(day => new Date(day.date).getDate());
+    .filter(day => day.push_line_data?.status === 'passed')
+    .map(day => new Date(day.creation_date).getDate());
 
   const freezeDays = weekInformation
-    .filter(day => day.status === 'frozen')
-    .map(day => new Date(day.date).getDate());
+    .filter(day => day.push_line_data?.status === 'frozen')
+    .map(day => new Date(day.creation_date).getDate());
 
   const weekData = getWeekData(streakDays, freezeDays);
 
@@ -142,6 +140,8 @@ export const ProfilePage: React.FC = () => {
   if (isLoading) {
     return <Loader />
   }
+
+  console.log(streaks)
 
   return (
     <>

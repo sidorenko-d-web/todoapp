@@ -20,13 +20,13 @@ import {
   integrationCreatingModalTabsGlowing,
   isGuideShown,
   setGuideShown,
-} from '../../../utils/guide-functions.ts';
-import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
-import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
+} from '../../../utils';
+import { GUIDE_ITEMS } from '../../../constants';
+import { setIntegrationCreated, setLastIntegrationId } from '../../../redux';
 import { CreatingIntegrationGuide, Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
 import { CentralModal } from '../../shared/';
-import { AppRoute } from '../../../constants/appRoute.ts';
+import { AppRoute } from '../../../constants';
 
 
 interface CreatingIntegrationModalProps {
@@ -55,7 +55,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const [selectedCompanyId, setSelectedCompanyId] = useState("")
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
   const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
-  const { data: profile, isLoading: isProfileLoading } = useGetCurrentUserProfileInfoQuery();
+  const { isLoading: isProfileLoading } = useGetCurrentUserProfileInfoQuery();
   const { data, isLoading: isCompaniesLoading } = useGetCompaniesQuery();
   const companies = data?.campaigns;
 

@@ -52,18 +52,18 @@ export default function DaysInARowModal({ onClose }: Props) {
     const streak: number[] = [];
 
     data?.week_information?.forEach((day) => {
-      const dayDate = new Date(day.date).getDate();
+      const dayDate = new Date(day.creation_date).getDate();
       const hasNotification =
-        day.is_notified_at_morning ||
-        day.is_notified_at_afternoon ||
-        day.is_notified_at_evening ||
-        day.is_notified_at_late_evening ||
-        day.is_notified_at_late_night ||
-        day.is_notified_at_night;
+        day.push_line_data?.is_notified_at_morning ||
+        day.push_line_data?.is_notified_at_afternoon ||
+        day.push_line_data?.is_notified_at_evening ||
+        day.push_line_data?.is_notified_at_late_evening ||
+        day.push_line_data?.is_notified_at_late_night ||
+        day.push_line_data?.is_notified_at_night;
 
-      if (day.status === 'passed') {
+      if (day.push_line_data?.status === 'passed') {
         streak.push(dayDate);
-      } else if (day.status === 'unspecified' && hasNotification) {
+      } else if (day.push_line_data?.status === 'unspecified' && hasNotification) {
         frozen.push(dayDate);
       }
     });
