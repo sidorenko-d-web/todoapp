@@ -23,11 +23,10 @@
     align-items: center;
     gap: 8px;
     overflow-y: auto;
-    max-height: 60vh; // Set a max height for scrolling
+    max-height: 60vh;
     scrollbar-width: thin;
-    padding-right: 8px; // Add some padding for the scrollbar
-    
-    // For webkit browsers like Chrome and Safari
+    padding: 0px 5px;
+
     &::-webkit-scrollbar {
       width: 6px;
     }
