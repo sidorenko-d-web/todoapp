@@ -36,3 +36,7 @@ export type UpdateProfileRequestDTO = {
   blog_name: string;
   username: string;
 };
+
+export type BuySubscriptionRequestDTO = {
+  payment_method: 'internal_wallet' | 'usdt' | string
+}
