@@ -23,26 +23,12 @@ export const StrangerProfilePage = () => {
 
   const frozen = data?.week_information.filter(
     day =>
-      day.push_line_data?.status === 'passed' &&
-      !day.push_line_data?.is_notified_at_morning &&
-      !day.push_line_data?.is_notified_at_afternoon &&
-      !day.push_line_data?.is_notified_at_evening &&
-      !day.push_line_data?.is_notified_at_late_evening &&
-      !day.push_line_data?.is_notified_at_late_night &&
-      !day.push_line_data?.is_notified_at_night,
-  ).length;
+      day.push_line_data?.status === 'passed').length;
 
   const streaks = data?.week_information.filter(
     day =>
       day &&
-      (day.push_line_data?.status === 'unspecified' || day.push_line_data?.status === 'passed') &&
-      (day.push_line_data?.is_notified_at_morning ||
-        day.push_line_data?.is_notified_at_afternoon ||
-        day.push_line_data?.is_notified_at_evening ||
-        day.push_line_data?.is_notified_at_late_evening ||
-        day.push_line_data?.is_notified_at_late_night ||
-        day.push_line_data?.is_notified_at_night),
-  ).length;
+      (day.push_line_data?.status === 'unspecified' || day.push_line_data?.status === 'passed')).length;
 
   const isLoading = isUserLoading || isPushLineLoading;
 

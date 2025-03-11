@@ -72,7 +72,7 @@ export default function DaysInARowModal({ onClose }: Props) {
     setStreakDays(streak);
   }, [data]);
 
-  const streakCount = streakDays.length + 1;
+  const streakCount = streakDays.length;
 
   const calculateLevel = () => {
     let maxStreak = 0;
