@@ -50,9 +50,6 @@ export const ProfilePage: React.FC = () => {
   } = useGetTopProfilesQuery();
 
   const [, setIsModalShown] = useState(false);
-  const frozen = data?.week_information.filter(
-    day => day.push_line_data?.status === 'unspecified'
-  ).length;
 
   const streaks = data?.week_information.filter(
     day => day.push_line_data?.status === 'passed'
@@ -184,7 +181,7 @@ export const ProfilePage: React.FC = () => {
             />
             <StreakCard
               streakDays={streaks !== undefined ? streaks : 0}
-              frozenDays={frozen !== undefined ? frozen : 0}
+              frozenDays={userProfileData.available_freezes}
               days={weekData}
               status={locale === 'ru' ? data?.push_line_profile_status.status_name : data?.push_line_profile_status.status_name_eng}
               chest={locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}
