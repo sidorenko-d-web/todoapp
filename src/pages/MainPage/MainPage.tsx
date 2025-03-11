@@ -60,11 +60,8 @@ export const MainPage: FC = () => {
 
 
   useEffect(() => {
-    console.log('asdasdasds')
     itemsData?.items.forEach(item => {
-      console.log('item name: ' + item.name)
       if (item.name.toLowerCase().trim() === 'печатная машинка') {
-        console.log('typewriter found')
 
         handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
         handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
@@ -119,7 +116,6 @@ export const MainPage: FC = () => {
         if (data?.integrations[0].status === 'published' 
           && !getModalState(MODALS.INTEGRATION_REWARD_CONGRATULATIONS).isOpen
           && localStorage.getItem('integrationCreatedGuideOpen') !== '1') {
-          console.log('not creating, setting guides')
           setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
           setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED);

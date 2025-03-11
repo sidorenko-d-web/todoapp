@@ -27,14 +27,12 @@ export default function DaysInARowModal({ onClose }: Props) {
   const { t, i18n } = useTranslation('profile');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal } = useModal();
-  const { data } = useGetPushLineQuery();
+  const { data, isLoading } = useGetPushLineQuery();
   const [dayNumbers, setDayNumbers] = useState<number[]>([]);
   const [frozenDays, setFrozenDays] = useState<number[]>([]);
   const [streakDays, setStreakDays] = useState<number[]>([]);
-  console.log('adsdsa')
 
   useEffect(() => {
-    console.log('adsdsa')
 
     const today = new Date();
     const dayOfWeek = today.getDay();
@@ -54,7 +52,6 @@ export default function DaysInARowModal({ onClose }: Props) {
     const frozen: number[] = [];
     const streak: number[] = [];
 
-    console.log('data changed')
     data?.week_information?.forEach((day) => {
       const dayDate = new Date(day.creation_date).getDate();
       const hasNotification =
@@ -90,7 +87,7 @@ export default function DaysInARowModal({ onClose }: Props) {
 
     setFrozenDays(frozen);
     setStreakDays(streak);
-  }, [data]);
+  }, [data, isLoading]);
 
   const streakCount = streakDays.length + 1;
 
