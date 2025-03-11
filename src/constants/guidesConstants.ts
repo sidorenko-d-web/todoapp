@@ -21,6 +21,7 @@ export const GUIDE_ITEMS = {
         INTEGRATION_ACCELERATION_GUIDE_SHOWN: 'integrationAccelerationGuideShown',
         INITIAL_INTEGRATION_DURATION_SET: 'initialIntegrationDurationSet',
         INTEGRATION_ACCELERATED: 'integrationAccelerated',
+        PUBLISHED_MODAL_OPENED: 'publishedModalOpened',
         INTEGRATION_ACCELERATED_GUIDE_CLOSED: 'integrationAcceleratedGuideClosed',
         INTEGRATION_PUBLISHED_MODAL_CLOSED: 'integrationPublishedModalClosed',
         INTEGRATION_PUBLISHED: 'integrationPublished',

@@ -62,7 +62,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
         window.open(linkToOpen, '_blank');
 
         // Ждем 30 секунд
-        await new Promise(resolve => setTimeout(resolve, 30000));
+        await new Promise(resolve => setTimeout(resolve, 5000));
 
         await updateTask({
           id: task.id,
@@ -95,7 +95,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
     
     if (savedTaskId && startTime) {
       const elapsedTime = Date.now() - Number(startTime);
-      const remainingTime = Math.max(30000 - elapsedTime, 0);
+      const remainingTime = Math.max(5000 - elapsedTime, 0);
 
       setPendingTaskId(savedTaskId);
 
@@ -144,6 +144,8 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
     }
   }, []);
 
+  const visibleTasks = tasks.filter(task => !task.is_completed);
+
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
@@ -151,7 +153,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
         <span className={s.count}>{completedTasks}/{tasks.length}</span>
       </div>
       <div className={s.tasksList}>
-        {tasks.map(task => (
+        {visibleTasks.map(task => (
           <TaskCard
             key={task.id}
             title={task.title}

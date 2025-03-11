@@ -159,7 +159,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
             )}
           >
             {isLoading ? (
-              <p>Загрузка...</p>
+              <p>{t('s59')}</p>
             ) : (
               <>
                 {formatAbbreviation(item.price_internal, 'number', { locale: locale })} <img src={CoinIcon} alt="" />

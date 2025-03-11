@@ -50,20 +50,15 @@ export const ProfilePage: React.FC = () => {
   } = useGetTopProfilesQuery();
 
   const [, setIsModalShown] = useState(false);
-  const frozen = data?.week_information.filter(
-    day => day.status === 'unspecified',
-  ).length;
 
   const streaks = data?.week_information.filter(
-    day =>
-      day.status === 'passed' &&
-      (day.is_notified_at_morning ||
-        day.is_notified_at_afternoon ||
-        day.is_notified_at_evening ||
-        day.is_notified_at_late_evening ||
-        day.is_notified_at_late_night ||
-        day.is_notified_at_night),
+    day => day.push_line_data?.status === 'passed'
   ).length;
+
+  console.log( data?.week_information.filter(
+    day =>
+      day.push_line_data?.status === 'passed'
+  ))
 
   useEffect(() => {
     if (!sessionStorage.getItem('daysInARowModalShown')) {
@@ -102,12 +97,12 @@ export const ProfilePage: React.FC = () => {
   const weekInformation = data?.week_information || [];
 
   const streakDays = weekInformation
-    .filter(day => day.status === 'passed')
-    .map(day => new Date(day.date).getDate());
+    .filter(day => day.push_line_data?.status === 'passed')
+    .map(day => new Date(day.creation_date).getDate());
 
   const freezeDays = weekInformation
-    .filter(day => day.status === 'frozen')
-    .map(day => new Date(day.date).getDate());
+    .filter(day => day.push_line_data?.status === 'frozen')
+    .map(day => new Date(day.creation_date).getDate());
 
   const weekData = getWeekData(streakDays, freezeDays);
 
@@ -142,6 +137,8 @@ export const ProfilePage: React.FC = () => {
   if (isLoading) {
     return <Loader />
   }
+
+  console.log(streaks)
 
   return (
     <>
@@ -184,7 +181,7 @@ export const ProfilePage: React.FC = () => {
             />
             <StreakCard
               streakDays={streaks !== undefined ? streaks : 0}
-              frozenDays={frozen !== undefined ? frozen : 0}
+              frozenDays={userProfileData.available_freezes}
               days={weekData}
               status={locale === 'ru' ? data?.push_line_profile_status.status_name : data?.push_line_profile_status.status_name_eng}
               chest={locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}

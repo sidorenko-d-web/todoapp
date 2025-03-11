@@ -8,7 +8,7 @@ import infoIcon from '../../assets/icons/info.svg';
 import { useParams } from 'react-router-dom';
 import { useGetUserProfileInfoByIdQuery } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
-import { useGetPushLineQuery } from '../../redux/api/pushLine/api';
+import { useGetPushLineQuery } from '../../redux';
 import s from './StrangerProfilePage.module.scss';
 import { Button } from '../../components/shared';
 import { Loader, Room } from '../../components';
@@ -23,26 +23,12 @@ export const StrangerProfilePage = () => {
 
   const frozen = data?.week_information.filter(
     day =>
-      day.status === 'passed' &&
-      !day.is_notified_at_morning &&
-      !day.is_notified_at_afternoon &&
-      !day.is_notified_at_evening &&
-      !day.is_notified_at_late_evening &&
-      !day.is_notified_at_late_night &&
-      !day.is_notified_at_night,
-  ).length;
+      day.push_line_data?.status === 'passed').length;
 
   const streaks = data?.week_information.filter(
     day =>
       day &&
-      (day.status === 'unspecified' || day.status === 'passed') &&
-      (day.is_notified_at_morning ||
-        day.is_notified_at_afternoon ||
-        day.is_notified_at_evening ||
-        day.is_notified_at_late_evening ||
-        day.is_notified_at_late_night ||
-        day.is_notified_at_night),
-  ).length;
+      (day.push_line_data?.status === 'unspecified' || day.push_line_data?.status === 'passed')).length;
 
   const isLoading = isUserLoading || isPushLineLoading;
 

@@ -3,14 +3,16 @@ import { CentralModal } from "../../shared"
 import styles from './IntegrationRewardModal.module.scss'
 import starBlueIcon from '../../../assets/icons/star-blue.svg';
 import starDarkGrayIcon from '../../../assets/icons/star-dark-gray.svg';
-import medalBronze from "../../../assets/Icons/medal-bronze.svg"
-import medalGold from "../../../assets/Icons/medal-gold.svg"
-import medalSilver from "../../../assets/Icons/medal-silver.svg"
+import medalBronze from "../../../assets/icons/medal-bronze.svg"
+import medalGold from "../../../assets/icons/medal-gold.svg"
+import medalSilver from "../../../assets/icons/medal-silver.svg"
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import Lottie from "lottie-react";
 import { useModal } from "../../../hooks";
-import { starsThresholds, MODALS } from "../../../constants";
-import { useAddItemToRoomMutation, useGetEquipedQuery, useGetInventoryAchievementsQuery, useRemoveItemFromRoomMutation } from "../../../redux";
+import { starsThresholds, MODALS, GUIDE_ITEMS } from "../../../constants";
+import { setIsPublishedModalClosed, useAddItemToRoomMutation, useGetEquipedQuery, useGetInventoryAchievementsQuery, useRemoveItemFromRoomMutation } from "../../../redux";
+import { useDispatch } from "react-redux";
+import { setGuideShown } from "../../../utils";
 
 export const IntegrationRewardModal = () => {
     const { getModalState, closeModal } = useModal()
@@ -21,7 +23,8 @@ export const IntegrationRewardModal = () => {
     const [addAchivement] = useAddItemToRoomMutation();
     const [removeAchivement] = useRemoveItemFromRoomMutation();
 
-
+    const dispatch = useDispatch();
+    
     const stars = function () {
         if ((args?.integrationsCount ?? 0) === 18) return 3;
         if ((args?.integrationsCount ?? 0) === 10) return 2;
@@ -43,7 +46,7 @@ export const IntegrationRewardModal = () => {
             await removeAchivement({ achievements_to_remove: [{ id: equipped_items?.achievements?.[0].id }] });
           }
 
-          let achievementId = achievementsData?.achievements[0]?.id;
+          let achievementId = achievementsData?.achievements[achievementsData.count - 1]?.id;
           if (achievementId) {
             await addAchivement({ equipped_achievements: [{ id: achievementId, slot: 100 }] });
           } else {
@@ -67,17 +70,19 @@ export const IntegrationRewardModal = () => {
         return i18n.language === 'ru' ? 'бронзовую медаль' : 'bronze medal';
     }
 
-    const onClose = () => {
-        closeModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS);
-    }
-
     const ruText = `Поздравляем! Вы получили награду и ${getMedalTypeText()} за ${args?.integrationsCount ?? 0} интеграций с компанией ${args?.companyName ?? ""}!`
     const enText = `Congratulations! You received a reward and ${getMedalTypeText()} for ${args?.integrationsCount ?? 0} integrations with company ${args?.companyName ?? ""}!`
+
     return (
         <CentralModal
             title={t('i33')}
             modalId={MODALS.INTEGRATION_REWARD_CONGRATULATIONS}
-            onClose={onClose}
+            onClose={() => {
+                console.log('abcdefg')
+                setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
+                dispatch(setIsPublishedModalClosed(true));
+                closeModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS)
+            }}
             headerStyles={styles.headerStyles}
         >
             <div className={styles.wrapper}>

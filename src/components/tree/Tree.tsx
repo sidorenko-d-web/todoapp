@@ -27,6 +27,8 @@ import LazyLottie from './LazyLottie';
 import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import GetGift from '../../pages/DevModals/GetGift/GetGift';
+import { Loader } from '../Loader';
+import { useOutletContext } from 'react-router-dom';
 
 type ShopUpgrades = {
   [key: string]: { icon: string };
@@ -34,7 +36,7 @@ type ShopUpgrades = {
 
 const shopUpgrades: ShopUpgrades = {
   150: { icon: s.arrowsPurple },
-  300: { icon:  s.arrowsRed },
+  300: { icon: s.arrowsRed },
 };
 
 export const Tree = () => {
@@ -45,6 +47,7 @@ export const Tree = () => {
   const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
   const lastActiveLevelRef = useRef<HTMLDivElement | null>(null);
   const [ currentBoost, setCurrentBoost ] = useState<Boost | null>(null);
+  const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
 
   const [ unlockAchievement ] = useUnlockAchievementMutation();
 
@@ -57,8 +60,8 @@ export const Tree = () => {
     }
   }, []);
 
-  if (!treeData) {
-    return null;
+  if (!treeData || !isBgLoaded) {
+    return <Loader />;
   }
 
   const handleUnlock = async (id: string, boost: Boost) => {

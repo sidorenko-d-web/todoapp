@@ -23,6 +23,8 @@ interface SubscribeModalProps {
   onSuccess: () => void;
 }
 
+const point_integration = '150'
+
 export const SubscribeModal: FC<SubscribeModalProps> = ({
                                                           modalId,
                                                           onClose,
@@ -79,8 +81,10 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
       setTimeout(() => setIsShow(false), 3000);
       return;
     }
+    const currentPoints = Number(current?.points);
+    const pointIntegration = Number(point_integration);
 
-    if (current && current?.points < '15') {
+    if (current && currentPoints < pointIntegration) {
       setErrorMessage(t('g81'));
       setIsShow(true);
       setTimeout(() => setIsShow(false), 3000);
@@ -139,7 +143,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
           <Button className={s.button} disabled={idDisabled || !!isSubscriptionPurchased}>{formatAbbreviation(1.99, 'currency')}</Button>
           <Button className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`} disabled={!!isSubscriptionPurchased}
                   onClick={handleBuySubscription}>
-            {formatAbbreviation(15)} <img src={isSubscriptionPurchased ? DisableCoin : coinIcon} height={14} width={14} alt={'Coin'} />
+            {formatAbbreviation(point_integration)} <img src={isSubscriptionPurchased ? DisableCoin : coinIcon} height={14} width={14} alt={'Coin'} />
           </Button>
           <Button className={s.button + ' ' + s.gray} disabled={idDisabled || !!isSubscriptionPurchased}>
             <img src={idDisabled ? ListDisableIcon : list} height={16} width={16} alt={'list'} />

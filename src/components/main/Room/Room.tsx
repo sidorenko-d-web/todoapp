@@ -1,4 +1,4 @@
-import { RoomItemsSlots, useGetEquipedByIdQuery, useGetEquipedQuery } from '../../../redux';
+import { useGetEquipedByIdQuery, useGetEquipedQuery } from '../../../redux';
 import { AnimationScene, Floor, Walls } from './partials';
 import styles from './partials/Partials.module.scss';
 import TreshinaRight from '../../../assets/images/start-room/treshina-right.svg';
@@ -6,6 +6,7 @@ import TreshinaLeft from '../../../assets/images/start-room/treshina-left.svg';
 import Shelf from '../../../assets/images/start-room/shelf.svg';
 import { getAchivementType } from '../../../helpers';
 import { useGetCharacterByIdQuery, useGetCharacterQuery } from '../../../redux/api/character';
+import { useRoomItemsSlots } from '../../../../translate/items/items.ts';
 
 interface props {
   mode: 'me' | 'stranger';
@@ -18,7 +19,7 @@ export const Room = ({ mode, strangerId }: props) => {
 
   const { data: strangerRoom } = useGetEquipedByIdQuery({ id: strangerId! }, { skip: mode === 'me' && !strangerId });
   const strangerCharacter = useGetCharacterByIdQuery({ id: strangerId! }, { skip: mode === 'me' && !strangerId });
-
+  const RoomItemsSlots = useRoomItemsSlots();
   const equippedAchivement = (room ?? strangerRoom)?.achievements?.[0];
   let achivementType;
   if (equippedAchivement) {

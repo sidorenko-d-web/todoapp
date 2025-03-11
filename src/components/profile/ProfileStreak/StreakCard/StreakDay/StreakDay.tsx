@@ -20,7 +20,10 @@ interface StreakDayProps {
   dayNumber: number;
   type: DayType;
   weekIndex: number;
-  weekData: WeekData[];
+  weekData?: {
+    creation_date: string;
+    push_line_data: WeekData;
+  }[]
   streakDays: number;
 }
 
@@ -42,25 +45,23 @@ export const StreakDay: React.FC<StreakDayProps> = ({
     setCurrentWeekdayIndex(today.getDay() === 0 ? 6 : today.getDay() - 1);
   }, []);
 
-  const currentDayInfo = weekData.find(day => {
-    return new Date(day.date).getDate() === dayNumber;
+  const currentDayInfo = weekData?.find(day => {
+    return new Date(day.creation_date).getDate() === dayNumber;
   });
 
+
+
   const isStreakDay =
-    currentDayInfo &&
-    currentDayInfo.status === 'passed' &&
-    (currentDayInfo.is_notified_at_morning ||
-      currentDayInfo.is_notified_at_afternoon ||
-      currentDayInfo.is_notified_at_evening ||
-      currentDayInfo.is_notified_at_late_evening ||
-      currentDayInfo.is_notified_at_late_night ||
-      currentDayInfo.is_notified_at_night);
+    currentDayInfo?.push_line_data.status === 'passed';
   const isFailedDay =
-    currentDayInfo && currentDayInfo.status === 'unspecified' && !isStreakDay;
+    currentDayInfo && currentDayInfo.push_line_data.status === 'unspecified' && !isStreakDay;
 
   const weekdaysRu = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
   const weekdaysEn = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
   const isCurrentDay = currentDay === dayNumber;
+
+  console.log(currentDayInfo);
+
   const getIcon = () => {
     if (isFailedDay) return <img src={freezeIcon} alt="Frozen Day" />;
     if (isStreakDay) return <img src={fireIcon} alt="Streak Day" />;

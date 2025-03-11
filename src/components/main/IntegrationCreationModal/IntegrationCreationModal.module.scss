@@ -6,8 +6,40 @@
   align-items: center;
   gap: 20px;
 
+  max-height: 65vh;
+  overflow-y: auto; 
+  scrollbar-width: thin;
+  position: relative;
+
+
   @media (min-width: var.$breakpoint-md) {
     gap: 20px;
+  }
+
+  .scrollableContent {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    overflow-y: auto;
+    max-height: 60vh; // Set a max height for scrolling
+    scrollbar-width: thin;
+    padding-right: 8px; // Add some padding for the scrollbar
+    
+    // For webkit browsers like Chrome and Safari
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
   }
 
   .skinsWrapper {
@@ -30,7 +62,7 @@
   }
 
   .tabs {
-    width: 100%;
+    // width: 100%;
     display: grid;
     padding: 3px;
     grid-template-columns: repeat(3, 1fr);
@@ -133,12 +165,12 @@
   bottom: 0;
   z-index: 100;
   display: flex;
+  padding-top: 12px;
   width: 100%;
-  padding-top: 20px;
-  padding-bottom: 16px;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+  background: #141319;
 
   .createButton {
     display: flex;
@@ -157,6 +189,21 @@
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
+
+    &.disabledButton {
+      cursor: not-allowed;
+      display: flex;
+      padding: 14px;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      align-self: stretch;
+      border-radius: 8px;
+      background: #24252C;
+      border: 1px solid #24252C;
+
+      color: #373A43;
+    }
   }
 }
 
