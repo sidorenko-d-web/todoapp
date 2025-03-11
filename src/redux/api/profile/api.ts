@@ -14,6 +14,12 @@ export const profileApi = createApi({
         method: 'GET',
       }),
     }),
+    getCurrentUserProfileInfoForPolling: builder.query<UserProfileInfoResponseDTO, void>({
+      query: () => ({
+        url: `/profiles/me`,
+        method: 'GET',
+      }),
+    }),
     getTopProfiles: builder.query<TopProfilesResponseDTO, void>({
       query: () => ({
         url: `/profiles/top`,
@@ -51,4 +57,5 @@ export const {
   useUpdateCurrentUserProfileMutation,
   useBuySubscriptionMutation,
   useGetUserProfileInfoByIdQuery,
+  useGetCurrentUserProfileInfoForPollingQuery
 } = profileApi;

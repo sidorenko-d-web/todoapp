@@ -60,7 +60,7 @@ export const StreakDay: React.FC<StreakDayProps> = ({
   const weekdaysEn = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
   const isCurrentDay = currentDay === dayNumber;
 
-  console.log(currentDayInfo);
+  console.log('currentDayInfo');
 
   const getIcon = () => {
     if (isFailedDay) return <img src={freezeIcon} alt="Frozen Day" />;
