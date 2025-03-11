@@ -26,21 +26,20 @@ interface Props {
 export default function DaysInARowModal({ onClose }: Props) {
   const { t, i18n } = useTranslation('profile');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { closeModal } = useModal();
+  const { closeModal, openModal } = useModal();
   const { data, isLoading } = useGetPushLineQuery();
   const [dayNumbers, setDayNumbers] = useState<number[]>([]);
   const [frozenDays, setFrozenDays] = useState<number[]>([]);
   const [streakDays, setStreakDays] = useState<number[]>([]);
 
-  useEffect(() => {
 
+  useEffect(() => {
     const today = new Date();
     const dayOfWeek = today.getDay();
     const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
     const monday = new Date(today);
     monday.setDate(today.getDate() - daysSinceMonday);
 
-    const { openModal } = useModal();
     const newDays = Array.from({ length: 7 }, (_, i) => {
       const date = new Date(monday);
       date.setDate(monday.getDate() + i);
@@ -69,21 +68,19 @@ export default function DaysInARowModal({ onClose }: Props) {
       }
     });
 
-    useEffect(() => {
-      const modalShownToday = localStorage.getItem('modalShownToday');
-      const today = new Date().toISOString().split('T')[0];
+    const modalShownToday = localStorage.getItem('modalShownToday');
+    const todayDate = new Date().toISOString().split('T')[0];
 
-      if (modalShownToday !== today) {
-        const isTodayPassed = data?.week_information?.some(
-          (entry) => entry.creation_date === today && entry.push_line_data?.status === 'passed'
-        );
+    if (modalShownToday !== todayDate) {
+      const isTodayPassed = data?.week_information?.some(
+        (entry) => entry.creation_date === todayDate && entry.push_line_data?.status === 'passed'
+      );
 
-        if (isTodayPassed) {
-          openModal(MODALS.DAYS_IN_A_ROW);
-          localStorage.setItem('modalShownToday', today);
-        }
+      if (isTodayPassed) {
+        openModal(MODALS.DAYS_IN_A_ROW);
+        localStorage.setItem('modalShownToday', todayDate);
       }
-    }, [data, openModal]);
+    }
 
     setFrozenDays(frozen);
     setStreakDays(streak);
@@ -163,11 +160,11 @@ export default function DaysInARowModal({ onClose }: Props) {
       </div>
 
       <div className={styles.progressTitle}>
-        <p>
+        <span>
           {streakCount}/{t(p14Key)}
-        </p>
+        </span>
         <div className={styles.chest}>
-          <p>{locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}</p>
+          <span>{locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}</span>
           <img
             src={
               streakCount < 30
