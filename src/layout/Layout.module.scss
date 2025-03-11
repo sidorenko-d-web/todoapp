@@ -1,58 +1,10 @@
-//.wrp {
-//  display: flex;
-//  flex-direction: column;
-//  align-items: center;
-//  height: 100vh;
-//  margin: 0 auto;
-//  overflow: hidden;
-//}
-//
-//
-//.content {
-//  display: flex;
-//  flex-direction: column;
-//  width: 100%;
-//  max-width: 1728px;
-//
-//  height: calc(var(--tg-viewport-stable-height) - 20px);
-//  //height: calc(100vh - 140px);
-//
-//  padding: 20px 15px;
-//  //padding: calc(var(--tg-safe-area-inset-top) + 80px) 15px 20px;
-//  overflow-y: auto;
-//  overflow-x: hidden;
-//  overscroll-behavior: contain;
-//  scroll-behavior: smooth;
-//
-//
-//  &.withHeader {
-//    //margin-top: 70px;
-//    margin-top: calc(var(--tg-content-safe-area-inset-top) + 50px);
-//    padding-top: calc(var(--tg-content-safe-area-inset-top) + 40px);
-//    margin-bottom: calc(var(--tg-content-safe-area-inset-bottom) + 90px);
-//
-//    &.reducedMargin {
-//      margin-top: var(--tg-content-safe-area-inset-top);
-//    }
-//  }
-//}
-//
-//
-//
-//.settingsIcon {
-//  position: fixed;
-//  top: calc(var(--tg-safe-area-inset-top) + 6px);
-//  right: calc(var(--tg-safe-area-inset-right) + 95px);
-//  z-index: 50;
-//}
-
 $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top));
 
 .vhsEffect {
   position: relative;
   overflow: hidden;
-  filter: contrast(1.2) brightness(0.9) saturate(1.3) blur(0.3px);
-  animation: vhsJitter 0.1s infinite alternate;
+  filter: contrast(1.5) brightness(1.1) saturate(1.4) blur(0.5px); /* Sharper effect */
+  animation: vhsJitter 0.2s infinite alternate; /* Shorter time for sharper jitter */
 }
 
 /* 🟥🟩🟦 Chromatic Aberration */
@@ -66,17 +18,17 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   pointer-events: none;
   background: transparent;
   mix-blend-mode: screen;
-  animation: chromaticShift 0.15s infinite alternate;
+  animation: chromaticShift 0.1s infinite alternate; /* Faster and sharper shifting */
 }
 
 @keyframes chromaticShift {
   0% {
     text-shadow: 2px 0 red, -2px 0 blue;
-    transform: translateX(-1px);
+    transform: translateX(-2px); /* More dramatic shift */
   }
   100% {
     text-shadow: -2px 0 red, 2px 0 blue;
-    transform: translateX(1px);
+    transform: translateX(2px); /* More dramatic shift */
   }
 }
 
@@ -91,7 +43,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   z-index: 300;
   opacity: 0.6;
   will-change: opacity;
-  animation: opacity 3s linear infinite;
+  animation: opacity 1s linear infinite;
 }
 
 .lines:before {
@@ -102,18 +54,24 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   right: 0;
   bottom: 0;
   pointer-events: none;
-  background: linear-gradient(to bottom, transparent 48%, rgba(0, 0, 0, 0.4) 30%);
-  background-size: 100% 7px;
+  background: linear-gradient(to bottom, transparent 48%, rgba(0, 0, 0, 0.5) 50%);
+  background-size: 100% 6px; /* Sharper and more frequent lines */
   will-change: background, background-size;
-  animation: scanlines 2.5s linear infinite;
+  animation: scanlines 0.3s linear infinite;
 }
 
 @keyframes scanlines {
   0% {
     background-position: top;
+    opacity: 0.8;
+  }
+  50% {
+    background-position: center;
+    opacity: 0.5;
   }
   100% {
     background-position: bottom;
+    opacity: 0.8;
   }
 }
 
@@ -126,7 +84,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   height: 100vh;
   opacity: 0.07;
   mix-blend-mode: overlay;
-  animation: staticNoise 0.3s steps(2) infinite;
+  animation: staticNoise 0.1s steps(2) infinite;
 }
 
 @keyframes staticNoise {
@@ -138,29 +96,28 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   }
 }
 
-/* 📼 Jitter Effect */
+/* 🎥 VHS Jitter Effect */
 @keyframes vhsJitter {
   0% {
-    transform: translateX(0px);
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(-2px) translateY(2px); /* Larger jitter */
+  }
+  50% {
+    transform: translateX(2px) translateY(-2px);
+  }
+  75% {
+    transform: translateX(-2px) translateY(2px);
   }
   100% {
-    transform: translateX(-1px);
+    transform: translateX(0) translateY(0);
   }
 }
 
-@keyframes frameJump {
-  0%,
-  97% {
-    transform: translateY(0);
-  }
-  98% {
-    transform: translateY(-1px);
-  }
-  100% {
-    transform: translateY(0);
-  }
+.vhsEffect {
+  animation: vhsJitter 0.5s infinite alternate;
 }
-
 
 /* 🟢 Interlacing (CRT TV Refresh Lines) */
 .interlace {
@@ -172,9 +129,9 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   pointer-events: none;
   z-index: 500;
   mix-blend-mode: overlay;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 50%, transparent 50%);
-  background-size: 100% 3px;
-  animation: interlaceAnim 0.08s infinite linear;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 50%, transparent 50%);
+  background-size: 100% 2px; /* Sharper and more frequent lines */
+  animation: interlaceAnim 0.05s infinite linear; /* Faster and sharper interlacing */
 }
 
 @keyframes interlaceAnim {
@@ -182,28 +139,34 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
     background-position: 0 0;
   }
   to {
-    background-position: 0 -20px;
+    background-position: 0 -5px; /* Sharper movement */
   }
 }
 
 /* 🔁 Horizontal Desync (Glitch Jump) */
 @keyframes glitchSlide {
-  0%,
-  100% {
+  0%, 100% {
     transform: translateX(0);
   }
-  49% {
-    transform: translateX(1.5px);
+  30% {
+    transform: translateX(4px); /* Sharper glitch effect */
   }
   50% {
-    transform: translateX(-1.5px);
+    transform: translateX(-3px); /* Sharp back-and-forth movement */
+  } 
+  70% {
+    transform: translateX(4px);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
 
 .glitch {
-  animation: glitchSlide 0.05s infinite alternate;
+  animation: glitchSlide 0.1s infinite alternate; /* Faster, more intense glitch */
 }
 
+/* 🧳 Tape Warp Effect */
 @keyframes tapeWarp {
   0% {
     transform: perspective(100px) rotateX(0deg);
@@ -220,25 +183,22 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   animation: tapeWarp 1s infinite alternate ease-in-out;
 }
 
+/* 📸 Frame Drop Effect */
 @keyframes frameDrop {
-  0%,
-  97% {
+  0%, 97% {
     opacity: 1;
   }
-  98% {
-    opacity: 0.5;
+  98%, 99% {
+    opacity: 0.5; /* Sharper drop to near complete transparency */
   }
-  99% {
+  100% {
     opacity: 1;
   }
 }
 
 .frameDrop {
-  animation: frameDrop 8s infinite;
+  animation: frameDrop 8s infinite; /* Faster cycle */
 }
-
-
-
 
 .wrp {
   position: relative;
@@ -248,7 +208,6 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   height: calc(100vh - 17px);
   margin: 0 auto;
   overflow: hidden;
-  //padding: 0 15px;
 
   .bg_image {
     position: absolute;
@@ -275,20 +234,17 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   position: relative;
   z-index: 1;
 
-  // Margin from upper telegram mini apps buttons (close, settings, menu, etc.). For both platforms
   padding-top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) + 50px);
   margin-bottom: 74px;
 
   &.room {
-    padding-top: 0
+    padding-top: 0;
   }
 
-  // iOS specific adjustments
   &.ios {
     -webkit-overflow-scrolling: touch;
 
     &.withHeader {
-      //padding-top: calc($header-position - 10px); // padding from header
       margin-bottom: calc(var(--tg-content-safe-area-inset-bottom) + 90px);
 
       &.reducedMargin {
@@ -297,12 +253,10 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
     }
   }
 
-  // Android specific adjustments
   &.android {
     scrollbar-width: none;
 
     &.withHeader {
-      //padding-top: calc($header-position + 10px); // padding from header
       padding-top: calc(var(--tg-content-safe-area-inset-top) - 90px);
       margin-bottom: calc(var(--tg-content-safe-area-inset-bottom) + 90px);
 
@@ -336,3 +290,4 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
     margin-top: 0;
   }
 }
+

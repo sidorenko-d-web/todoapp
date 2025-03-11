@@ -74,7 +74,7 @@ const Layout = () => {
 
 
   return (
-    <div className={`${styles.vhsEffect} ${styles.glitch} ${styles.vhsWarp} ${styles.frameDrop}`}>
+    <div className={`${styles.vhsEffect} ${styles.vhsWarp} ${styles.glitch} ${styles.frameDrop}`}>
       <div className={styles.interlace}></div>
       <div className={styles.lines}></div>
       <div className={styles.noise}></div>
