@@ -26,13 +26,13 @@ export const StrangerProfileModal: FC<StrangerProfileModalProps> = ({
   const streaks = data?.week_information.filter(
     day =>
       day &&
-      (day.status === 'unspecified' || day.status === 'passed') &&
-      (day.is_notified_at_morning ||
-        day.is_notified_at_afternoon ||
-        day.is_notified_at_evening ||
-        day.is_notified_at_late_evening ||
-        day.is_notified_at_late_night ||
-        day.is_notified_at_night),
+      (day.push_line_data?.status === 'unspecified' || day.push_line_data?.status === 'passed') &&
+      (day.push_line_data?.is_notified_at_morning ||
+        day.push_line_data?.is_notified_at_afternoon ||
+        day.push_line_data?.is_notified_at_evening ||
+        day.push_line_data?.is_notified_at_late_evening ||
+        day.push_line_data?.is_notified_at_late_night ||
+        day.push_line_data?.is_notified_at_night),
   ).length;
   const { position, subscribers, daysInARow } = {
     position: 12,
