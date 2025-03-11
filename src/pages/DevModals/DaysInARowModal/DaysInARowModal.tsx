@@ -34,7 +34,7 @@ export default function DaysInARowModal({ onClose }: Props) {
   console.log('adsdsa')
 
   useEffect(() => {
-  console.log('adsdsa')
+    console.log('adsdsa')
 
     const today = new Date();
     const dayOfWeek = today.getDay();
@@ -42,6 +42,7 @@ export default function DaysInARowModal({ onClose }: Props) {
     const monday = new Date(today);
     monday.setDate(today.getDate() - daysSinceMonday);
 
+    const { openModal } = useModal();
     const newDays = Array.from({ length: 7 }, (_, i) => {
       const date = new Date(monday);
       date.setDate(monday.getDate() + i);
@@ -70,6 +71,22 @@ export default function DaysInARowModal({ onClose }: Props) {
         frozen.push(dayDate);
       }
     });
+
+    useEffect(() => {
+      const modalShownToday = localStorage.getItem('modalShownToday');
+      const today = new Date().toISOString().split('T')[0];
+
+      if (modalShownToday !== today) {
+        const isTodayPassed = data?.week_information?.some(
+          (entry) => entry.creation_date === today && entry.push_line_data?.status === 'passed'
+        );
+
+        if (isTodayPassed) {
+          openModal(MODALS.DAYS_IN_A_ROW);
+          localStorage.setItem('modalShownToday', today);
+        }
+      }
+    }, [data, openModal]);
 
     setFrozenDays(frozen);
     setStreakDays(streak);

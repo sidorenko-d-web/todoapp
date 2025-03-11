@@ -30,7 +30,6 @@ import {
   setLastIntegrationId,
   setSubscribeGuideShown,
   useGetInventoryItemsQuery,
-  useGetPushLineQuery,
 } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -56,8 +55,6 @@ export const MainPage: FC = () => {
 
 
   const { data: itemsData, isLoading: isInventoryDataLoading } = useGetInventoryItemsQuery();
-
-  const { data: pushLineData, isLoading: pushLineDataLoading } = useGetPushLineQuery();
 
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
@@ -151,32 +148,6 @@ export const MainPage: FC = () => {
       }
     }
   }, [data, isInventoryDataLoading]);
-
-
-  useEffect(() => {
-    const modalShownToday = localStorage.getItem('modalShownToday');
-    const today = new Date().toISOString().split('T')[0];
-  
-    console.log('today: ', today);
-  
-    if (modalShownToday) {
-      const isTodayPassed = pushLineData?.week_information.some(
-        (entry) => entry.creation_date === today && entry.push_line_data?.status === 'passed'
-      );
-  
-      console.log('is today passed: ', isTodayPassed);
-  
-      if (!isTodayPassed) {
-        console.log('!isTodayPassed')
-        openModal(MODALS.DAYS_IN_A_ROW);
-        localStorage.setItem('modalShownToday', today);
-      } else {
-        console.log('isTodayPassed')
-        openModal(MODALS.DAYS_IN_A_ROW);
-        console.log('No passed status for today or modal already shown today');
-      }
-    }
-  }, [pushLineData, pushLineDataLoading, openModal]);
 
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
@@ -303,7 +274,7 @@ export const MainPage: FC = () => {
 
   const isLoading =
     isAllIntegrationsLoading
-     || isCurrentUserProfileInfoLoading || isIntegrationsLoading || isRoomLoading || isInventoryDataLoading || pushLineDataLoading;
+     || isCurrentUserProfileInfoLoading || isIntegrationsLoading || isRoomLoading || isInventoryDataLoading;
 
   if (isLoading) return <Loader />;
 
