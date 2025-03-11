@@ -12,6 +12,7 @@ export type UserProfileInfoResponseDTO = {
   total_views: number;
   future_statistics: FutureStatistics;
   comments_answered_correctly: number;
+  available_freezes: number;
   achievements_collected: number;
   is_vip: boolean;
   updated_at: string;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from './IntegrationCreatedGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
@@ -12,7 +12,12 @@ export const IntegrationCreatedGuide: React.FC<IntegrationCreatedGuideProps> = (
   const { t } = useTranslation('guide');
   const [isOpen, setIsOpen] = useState(true);
 
+    useEffect(() => {
+      localStorage.setItem('integrationCreatedGuideOpen', '1');
+    }, []);
+
     const handleClose = () => {
+        localStorage.setItem('integrationCreatedGuideOpen', '0');
         onClose();
         setIsOpen(false);
     };
@@ -33,7 +38,7 @@ export const IntegrationCreatedGuide: React.FC<IntegrationCreatedGuideProps> = (
                   {t('g6')}
                 </>
             }
-            onClose={onClose}>
+            onClose={handleClose}>
             <button className={styles.nextBtn} onClick={handleClose}>{t('g7')}</button>
             <img src={img1} className={styles.gifImage} height={146} width={140}/>
         </Guide>

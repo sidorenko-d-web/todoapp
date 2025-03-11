@@ -19,6 +19,7 @@ import { useModal } from '../../hooks';
 import { GUIDE_ITEMS } from '../../constants';
 import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../utils';
 
+
 import {
   resetGuideState,
   setAccelerateIntegrationGuideClosed,
@@ -55,12 +56,12 @@ export const MainPage: FC = () => {
 
   const { data: itemsData, isLoading: isInventoryDataLoading } = useGetInventoryItemsQuery();
 
+  const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+
+
   useEffect(() => {
-    console.log('asdasdasds')
     itemsData?.items.forEach(item => {
-      console.log('item name: ' + item.name) 
       if (item.name.toLowerCase().trim() === 'печатная машинка') {
-        console.log('typewriter found')
 
         handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
         handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
@@ -86,8 +87,7 @@ export const MainPage: FC = () => {
 
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
-      if (data?.integrations[0].status !== 'creating') {
-        console.log('not creating, setting guides')
+      if (data?.count > 1) {
         setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED);
@@ -109,15 +109,45 @@ export const MainPage: FC = () => {
 
 
         reduxDispatch(resetGuideState());
-        
+
         reduxDispatch(setFooterActive(true));
         reduxDispatch(setActiveFooterItemId(2));
+      } else {
+        if (data?.integrations[0].status === 'published'
+            && !getModalState(MODALS.INTEGRATION_REWARD).isOpen
+            && localStorage.getItem('integrationCreatedGuideOpen') !== '1') {
+
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED);
+
+          setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+
+          setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
+
+          setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
+
+          setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
+
+
+          reduxDispatch(resetGuideState());
+
+          reduxDispatch(setFooterActive(true));
+          reduxDispatch(setActiveFooterItemId(2));
+        }
       }
     }
   }, [data, isInventoryDataLoading]);
 
-
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
+
   useEffect(() => {
     refetch().then(() => {
       if (data?.integrations[0].status === 'created') {
@@ -142,7 +172,7 @@ export const MainPage: FC = () => {
   // const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
   // const showAccelerateGuide = localStorage.getItem('integrationCreated') === 'true';
 
-  const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+
 
   const initialState = {
     firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
@@ -238,20 +268,10 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(2));
   }, []);
 
-  useEffect(() => {
-    if (isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
-      const lastOpenedDate = localStorage.getItem('lastOpenedDate');
-      const currentDate = new Date().toLocaleDateString();
-
-      if (lastOpenedDate !== currentDate) {
-        openModal(MODALS.DAYS_IN_A_ROW);
-        localStorage.setItem('lastOpenedDate', currentDate);
-      }
-    }
-  }, []);
 
   const isLoading =
-    isAllIntegrationsLoading || isCurrentUserProfileInfoLoading || isIntegrationsLoading || isRoomLoading || isInventoryDataLoading;
+    isAllIntegrationsLoading
+    || isCurrentUserProfileInfoLoading || isIntegrationsLoading || isRoomLoading || isInventoryDataLoading;
 
   if (isLoading) return <Loader />;
 
