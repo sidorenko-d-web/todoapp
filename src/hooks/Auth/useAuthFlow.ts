@@ -24,6 +24,14 @@ export const useAuthFlow = () => {
     setCurrentStep(step);
   };
 
+  const updateTokens = (authResponse: { access_token: string; refresh_token: string }) => {
+    if (authResponse?.access_token && authResponse?.refresh_token) {
+      localStorage.setItem('access_token', authResponse.access_token);
+      localStorage.setItem('refresh_token', authResponse.refresh_token);
+    }
+  };
+
+
   // Выбор языка
   const handleLanguageSelect = async (language: string) => {
     setSelectedLanguage(language);
@@ -31,24 +39,27 @@ export const useAuthFlow = () => {
     await i18n.changeLanguage(language);
   };
 
-  // После выбора языка переходим либо к вводу invite_code, либо сразу к выбору скина
   const handleLanguageContinue = async () => {
-    const accessToken = localStorage.getItem('access_token');
-    const refreshToken = localStorage.getItem('refresh_token');
-
-    if (!accessToken || !refreshToken) {
-      saveCurrentStep('invite_code');
-      return;
+    try {
+      // Обновляем токены
+      const authResponse = await performSignIn(signIn);
+      updateTokens(authResponse);
+      saveCurrentStep('skin');
+    } catch (err: any) {
+      console.error('Ошибка при обновлении токена:', err);
+      // Если ошибка 401 или 403 – перенаправляем на ввод invite-кода
+      if (err?.status === 401 || err?.status === 403) {
+        saveCurrentStep('invite_code');
+      } else {
+        alert('Произошла ошибка. Попробуйте позже.');
+      }
     }
-
-    saveCurrentStep('skin');
   };
 
   const handleInviteCodeContinue = async () => {
     try {
       const authResponse = await performSignIn(signIn);
-      localStorage.setItem('access_token', authResponse.access_token);
-      localStorage.setItem('refresh_token', authResponse.refresh_token);
+      updateTokens(authResponse);
       saveCurrentStep('skin');
     } catch (err: any) {
       console.error('Ошибка при авторизации:', err);
@@ -93,19 +104,29 @@ export const useAuthFlow = () => {
       const savedStep = localStorage.getItem('currentSetupStep') as AuthStep;
       
       try {
-        const hasCompletedSetup = savedStep === 'completed';
         await minLoadingTime;
 
-        if (hasCompletedSetup) {
-          saveCurrentStep('completed');
+        if (savedStep === 'completed') {
+          // Обновляем токены для пользователя, у которого сохранён completed
+          try {
+            const authResponse = await performSignIn(signIn);
+            updateTokens(authResponse);
+            saveCurrentStep('completed');
+          } catch (err: any) {
+            console.error('Ошибка при обновлении токена для пользователя completed:', err);
+            // Если ошибка 401 или 403 – перенаправляем на invite_code
+            if (err?.status === 401 || err?.status === 403) {
+              saveCurrentStep('invite_code');
+            } else {
+              saveCurrentStep('completed');
+            }
+          }
         } else if (savedStep && savedStep !== 'loading') {
           saveCurrentStep(savedStep);
         } else {
           saveCurrentStep('language');
         }
-
       } catch (err: any) {
-        await minLoadingTime;
         console.error('Ошибка при инициализации:', err);
         saveCurrentStep('language');
       } finally {
