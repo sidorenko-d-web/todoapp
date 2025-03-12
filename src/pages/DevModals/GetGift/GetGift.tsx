@@ -14,9 +14,10 @@ import giftRed from '../../../assets/icons/gift-red.svg';
 import giftPurple from '../../../assets/icons/gift-purple.svg';
 import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
-import { Boost } from '../../../redux';
+import { Boost, useGetCurrentUserProfileInfoQuery } from '../../../redux';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
+import freezeIcon from '../../../assets/icons/streak-freeze.svg';
 interface Props {
   giftColor?: string;
   boost?: Boost | null;
@@ -26,6 +27,7 @@ export default function GetGift({ giftColor, boost }: Props) {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
   const { t, i18n } = useTranslation('gift');
+  const { data: profile } = useGetCurrentUserProfileInfoQuery();
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   if (!isOpen) return null;
 
@@ -61,17 +63,7 @@ export default function GetGift({ giftColor, boost }: Props) {
         {giftImage}
         <div className={styles.statsContainer}>
           <div className={styles.stat}>
-            {boost?.income_per_second && (
-              <span className={styles.statValue}>+{formatAbbreviation(boost?.income_per_second)}</span>
-            )}
-            <div className={styles.statBox}>
-              <span>x{formatAbbreviation(boost?.x_income_per_second || 0)}</span>
-              <img src={coin} />
-              <span className={styles.extra}>/сек.</span>
-            </div>
-          </div>
-          <div className={styles.stat}>
-            {/*<span className={styles.statValue}>+10</span>*/}
+            <span className={styles.statValue}>+10</span>
             <div className={styles.statBox}>
               <span>+{String(formatAbbreviation(boost?.subscribers_for_first_level_referrals || 0))}</span>
               <img src={subscribers} />
@@ -79,11 +71,21 @@ export default function GetGift({ giftColor, boost }: Props) {
             </div>
           </div>
           <div className={styles.stat}>
-            {/*<span className={styles.statValue}>+5</span>*/}
+            <span className={styles.statValue}>+5</span>
             <div className={styles.statBox}>
               <span>+{formatAbbreviation(boost?.subscribers_for_second_level_referrals || 0)}</span>
               <img src={subscribers} />
               <span className={styles.extra}>2 ур.</span>
+            </div>
+          </div>
+          <div className={styles.stat}>
+            <span className={styles.statValue}>+{boost?.additional_integrations_for_subscription}</span>
+            <div className={styles.statBox}>
+              <p>
+                {profile.subscription_integrations_left} / {5 + boost?.additional_integrations_for_subscription}
+              </p>
+              <img src={integration} />
+              <span className={styles.extra}>макс.</span>
             </div>
           </div>
         </div>
@@ -102,6 +104,10 @@ export default function GetGift({ giftColor, boost }: Props) {
               <img src={integration} />
             </div>
           )}
+          <div className={styles.item}>
+            <p>+1</p>
+            <img src={freezeIcon} />
+          </div>
           {/*<div className={styles.item}>*/}
           {/*  <p>+1</p>*/}
           {/*  <img src={snowflake} />*/}
@@ -119,7 +125,7 @@ export default function GetGift({ giftColor, boost }: Props) {
         }
         onClick={() => closeModal(MODALS.GET_GIFT)}
       >
-        Забрать
+        {t('g3')}
       </Button>
     </CentralModal>
   );
