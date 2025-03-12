@@ -13,6 +13,7 @@ export type CompaniesResponseDTO = {
 
 export type CompaniesQueryRequestDTO = {
   company_name?: string;
+  content_type?: string
   asc?: boolean;
   offset?: number;
   limit?: number;
