@@ -47,23 +47,6 @@ export const AnimationScene = ({ room, character }: props) => {
     const contextProps = { equipped_items: room?.equipped_items, center: width / 2 };
 
     class SpineScene extends SpineSceneBase {
-      // preload() {
-      //   if (!(sceneRef.current && gameRef.current)) return;
-      //
-      //   this.loadPerson();
-      //
-      //   //devided loading items of animated and static
-      //   room?.items.forEach(item => {
-      //     if (findAnimatedItem(item)) {
-      //       this.loadAnimatedItem(item);
-      //     } else {
-      //       this.loadSvgItem(item, contextProps);
-      //     }
-      //   });
-      //
-      //   this.loadBaseItems();
-      // }
-
       create() {
         try {
           this.createPerson(contextProps, isWorking);
