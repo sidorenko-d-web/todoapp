@@ -8,6 +8,7 @@ import useSound from 'use-sound';
 import { SOUNDS } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
+import WhiteNoiseCanvas from '../../WhiteNoise/WhiteNoise';
 
 interface LoadingScreenProps {
   onAnimationComplete: () => void;
@@ -97,34 +98,37 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   }, []);
 
   return (
-    <div className={styles.root} onClick={handleAccelerate}>
-      <div />
-      <div className={styles.clickableArea}></div>
-      <video 
-        ref={videoRef} 
-        className={styles.coin} 
-        src={loadingVid} 
-        autoPlay 
-        muted 
-        loop 
-        playsInline 
-        preload="auto" 
-        width={410} 
-        height={420} 
-      />
-      {showProgressBar && !showAnimation && (
-        <LoadingScreenBar 
-          ref={loadingScreenBarRef}
-          speedMultiplier={speedMultiplier} 
-          progress={progress} 
-          setProgress={setProgress} 
-          isAuthComplete={isAuthComplete} 
+    <>
+      <WhiteNoiseCanvas/>
+      <div className={styles.root} onClick={handleAccelerate}>
+        <div />
+        <div className={styles.clickableArea}></div>
+        <video
+          ref={videoRef}
+          className={styles.coin}
+          src={loadingVid}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          width={410}
+          height={420}
         />
-      )}
-      {showAnimation && (
-        // <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
-        <></>
-      )}
-    </div>
+        {showProgressBar && !showAnimation && (
+          <LoadingScreenBar
+            ref={loadingScreenBarRef}
+            speedMultiplier={speedMultiplier}
+            progress={progress}
+            setProgress={setProgress}
+            isAuthComplete={isAuthComplete}
+          />
+        )}
+        {showAnimation && (
+          // <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
+          <></>
+        )}
+      </div>
+    </>
   );
 };

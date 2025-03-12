@@ -11,12 +11,13 @@ import Lottie from 'lottie-react';
 import { lampTable } from '../assets/animations';
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
 import clsx from 'clsx';
+import WhiteNoiseCanvas from '../components/WhiteNoise/WhiteNoise';
 
 const Layout = () => {
   const location = useLocation();
   const platform = getOS();
   const { openModal } = useModal();
-  const [ bgOffset, setBgOffset ] = useState(0);
+  const [bgOffset, setBgOffset] = useState(0);
   const contentRef = useScrollManager();
 
   const showHeader = !location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/);
@@ -60,7 +61,7 @@ const Layout = () => {
         contentRef.current?.removeEventListener('scroll', handleScroll);
       };
     }
-  }, [ showRoadmapBg, contentRef.current ]);
+  }, [showRoadmapBg, contentRef.current]);
 
   const [isBgLoaded, setIsBgLoaded] = useState(false);
 
@@ -73,8 +74,11 @@ const Layout = () => {
   }, [showRoadmapBg]);
 
 
+
   return (
     <>
+      <WhiteNoiseCanvas/>
+
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
       </div>
