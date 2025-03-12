@@ -47,6 +47,23 @@ export const AnimationScene = ({ room, character }: props) => {
     const contextProps = { equipped_items: room?.equipped_items, center: width / 2 };
 
     class SpineScene extends SpineSceneBase {
+      preload() {
+        if (!(sceneRef.current && gameRef.current)) return;
+
+        this.loadPerson();
+
+        //devided loading items of animated and static
+        room?.items.forEach(item => {
+          if (findAnimatedItem(item)) {
+            this.loadAnimatedItem(item);
+          } else {
+            this.loadSvgItem(item, contextProps);
+          }
+        });
+
+        this.loadBaseItems();
+      }
+
       create() {
         try {
           this.createPerson(contextProps, isWorking);
@@ -56,26 +73,20 @@ export const AnimationScene = ({ room, character }: props) => {
             setSize(prev => [prev[0] + 1, prev[1]]);
           }
         }
-
-        console.time('all')
         //devided creating items of animated and static
         room?.items.forEach(async (item, i) => {
-          console.time('find')
           const animatedItem = findAnimatedItem(item);
-          console.timeEnd('find')
           if (animatedItem) {
             this.createAnimatedItem(item, i, animatedItem, contextProps);
           } else {
             this.createSVGItem(item, i, contextProps);
           }
         });
-        console.timeEnd('all')
 
         this.createBaseItems(contextProps);
 
         spineSceneRef.current = this;
         setIsLoaded(true);
-        console.info('done');
         dispatch(setAnimationSceneLoaded(true))
         this.changeSkin();
       }
@@ -93,7 +104,6 @@ export const AnimationScene = ({ room, character }: props) => {
         const skin = new Skin('created');
         skin.name = face.name.split('/')[1];
         skin.addSkin(bottomSkin);
-        console.log(character)
         skin.addSkin(upSkin);
         skin.addSkin(headSkin);
         skin.addSkin(face);
