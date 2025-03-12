@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 interface Props {
   giftColor?: string;
-  boost?: Boost | null;
+  boost?: Boost | null | undefined;
 }
 
 export default function GetGift({ giftColor, boost }: Props) {
@@ -32,21 +32,21 @@ export default function GetGift({ giftColor, boost }: Props) {
 
   let giftImage;
 
-  if (giftColor == null || giftColor === 'Синий подарок') {
+  if (giftColor == null || giftColor === t('q54')) {
     giftImage = <img src={gift} className={styles.gift} />;
-  } else if (giftColor === 'Пурпурный подарок') {
+  } else if (giftColor === t('q55')) {
     giftImage = <img src={giftPurple} className={styles.gift} />;
-  } else if (giftColor === 'Красный подарок') {
+  } else if (giftColor === t('q56')) {
     giftImage = <img src={giftRed} className={styles.gift} />;
   }
 
   let giftLight;
 
-  if (giftColor == null || giftColor === 'Синий подарок') {
+  if (giftColor == null || giftColor === t('q54')) {
     giftLight = <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />;
-  } else if (giftColor === 'Пурпурный подарок') {
+  } else if (giftColor === t('q55')) {
     giftLight = <Lottie animationData={purpleLightAnimation} loop={true} className={styles.light} />;
-  } else if (giftColor === 'Красный подарок') {
+  } else if (giftColor === t('q56')) {
     giftLight = <Lottie animationData={redLightAnimation} loop={true} className={styles.light} />;
   }
 
@@ -68,7 +68,7 @@ export default function GetGift({ giftColor, boost }: Props) {
             <div className={styles.statBox}>
               <span>x{formatAbbreviation(boost?.x_income_per_second || 0)}</span>
               <img src={coin} />
-              <span className={styles.extra}>/сек.</span>
+              <span className={styles.extra}>/ {t('q9_1')}</span>
             </div>
           </div>
           <div className={styles.stat}>
@@ -76,7 +76,7 @@ export default function GetGift({ giftColor, boost }: Props) {
             <div className={styles.statBox}>
               <span>+{formatAbbreviation(boost?.subscribers_for_first_level_referrals || 0)}</span>
               <img src={subscribers} />
-              <span className={styles.extra}>1 ур.</span>
+              <span className={styles.extra}>1 {t('q9_2')}</span>
             </div>
           </div>
           <div className={styles.stat}>
@@ -84,7 +84,7 @@ export default function GetGift({ giftColor, boost }: Props) {
             <div className={styles.statBox}>
               <span>+{formatAbbreviation(boost?.subscribers_for_second_level_referrals || 0)}</span>
               <img src={subscribers} />
-              <span className={styles.extra}>2 ур.</span>
+              <span className={styles.extra}>2 {t('q9_2')}</span>
             </div>
           </div>
         </div>

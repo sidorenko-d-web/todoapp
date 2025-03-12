@@ -10,12 +10,10 @@ export const useAuthFlow = () => {
   const { i18n } = useTranslation();
   const [signIn] = useSignInMutation();
   const [currentStep, setCurrentStep] = useState<AuthStep>('loading');
-  const [selectedLanguage, setSelectedLanguage] = useState(
-    () => localStorage.getItem('selectedLanguage') || 'en'
-  );
+  const [selectedLanguage, setSelectedLanguage] = useState(() => localStorage.getItem('selectedLanguage') || 'en');
   const [isInitializing, setIsInitializing] = useState(true);
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
- // const { closeModal, openModal } = useModal();
+  // const { closeModal, openModal } = useModal();
 
   const saveCurrentStep = (step: AuthStep) => {
     if (step !== 'loading') {
@@ -30,7 +28,6 @@ export const useAuthFlow = () => {
       localStorage.setItem('refresh_token', authResponse.refresh_token);
     }
   };
-
 
   // Выбор языка
   const handleLanguageSelect = async (language: string) => {
@@ -88,21 +85,21 @@ export const useAuthFlow = () => {
   // };
 
   // Запрос fullscreen для Telegram WebApp
-  useEffect(() => {
-    if (
-      window.Telegram &&
-      window.Telegram.WebApp &&
-      typeof window.Telegram.WebApp.requestFullscreen === 'function'
-    ) {
-      window.Telegram.WebApp.requestFullscreen();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     window.Telegram &&
+  //     window.Telegram.WebApp &&
+  //     typeof window.Telegram.WebApp.requestFullscreen === 'function'
+  //   ) {
+  //     window.Telegram.WebApp.requestFullscreen();
+  //   }
+  // }, []);
 
   useEffect(() => {
     const initAuthFlow = async () => {
-      const minLoadingTime = new Promise((resolve) => setTimeout(resolve, 3500));
+      const minLoadingTime = new Promise(resolve => setTimeout(resolve, 3500));
       const savedStep = localStorage.getItem('currentSetupStep') as AuthStep;
-      
+
       try {
         await minLoadingTime;
 
