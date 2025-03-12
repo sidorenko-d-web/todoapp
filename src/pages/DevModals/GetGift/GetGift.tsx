@@ -108,7 +108,7 @@ export default function GetGift({ giftColor, boost }: Props) {
           {/*  <img src={snowflake} />*/}
           {/*</div>*/}
         </div>
-        <p className={styles.desc}>{t('g2')}</p>
+        <p className={styles.desc}>{t('q57')}</p>
       </div>
       <Button
         variant={giftColor == null || giftColor === t('q54') ? 'blue' : giftColor === t('q55') ? 'purple' : 'red'}
