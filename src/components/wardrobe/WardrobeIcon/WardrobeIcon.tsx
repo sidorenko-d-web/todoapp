@@ -5,6 +5,7 @@ import { SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { WardrobeTabs } from '../WardrobeTabs';
 import { ICharacterResponse, useGetCharacterQuery } from '../../../redux/api/character';
 import { WardrobeSpineScene } from '../../../constants/wardrobeAnimation';
+import { Loader } from '../../Loader';
 
 interface WardrobeIconProps {
   imageUrl?: string;
@@ -16,6 +17,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
   const gameRef = useRef<Phaser.Game | null>(null);
   const spineSceneRef = useRef<any | null>(null);
 
+  const [isLoaded, setIsLoaded] = useState(false);
   const [size, setSize] = useState([0, 0]);
   const { data: character, isLoading } = useGetCharacterQuery();
 
@@ -46,6 +48,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
         }
         spineSceneRef.current = this;
         this.changeSkin(personScale, character);
+        setIsLoaded(true)
       }
     }
 
@@ -91,6 +94,11 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
           ref={sceneRef}
           style={{ position: 'absolute', top: 0, borderRadius: 8, overflow: 'hidden', width: '100%', height: '100%' }}
         />
+        {!isLoaded && (
+          <div className={styles.loader}>
+            <Loader />
+          </div>
+        )}
       </div>
       <WardrobeTabs wardrobe={true} handleChangeSkin={handleMakeHappy} />
     </>

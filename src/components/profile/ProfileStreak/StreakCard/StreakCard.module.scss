@@ -34,7 +34,11 @@
       width: 90px;
       height: auto;
 
-      img{
+      &.stranger {
+        width: 75px;
+      }
+
+      img {
         width: 40px;
         height: auto;
       }
@@ -43,6 +47,8 @@
     .daysInARowWrp {
       display: flex;
       flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
       gap: 10px;
 
       .daysInARow {
@@ -55,6 +61,10 @@
         font-weight: 600;
         line-height: 110%;
         letter-spacing: -1.2px;
+
+        &.stranger {
+          text-wrap: nowrap;
+        }
       }
 
       .badge {

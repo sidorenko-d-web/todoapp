@@ -32,7 +32,7 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
   const [updateCharacter] = useUpdateCharacterMutation();
   const personScale = 0.13;
   const [size, setSize] = useState([0, 0]);
-
+  const [isLoaded, setIsLoaded] = useState(false);
   useLayoutEffect(() => {
     function updateSize() {
       setSize([window.innerWidth, window.innerHeight]);
@@ -89,6 +89,7 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
       }
       spineSceneRef.current = this;
       this.changeSkin(personScale, character);
+      setIsLoaded(true)
     }
   }
 
@@ -99,7 +100,7 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
   };
 
   useEffect(() => {
-    if (!sceneRef.current || isLoading) return;
+    if (!sceneRef.current || isLoading) return; 
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
       width: 280,
@@ -159,6 +160,11 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
               ref={sceneRef}
               style={{ position: 'absolute', top: 0, borderRadius: 8, overflow: 'hidden', width: 280, height: 280 }}
             />
+            {!isLoaded && (
+              <div className={styles.loader}>
+                <p>Loading</p>
+              </div>
+            )}
           </div>
           <div className={styles.bodyPartsContainer}>
             {categories.map(({ name, key }) => (

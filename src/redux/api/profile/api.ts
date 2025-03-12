@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
 import {
   BuySubscriptionRequestDTO,
+  ITopProfilesInfoRequest,
   TopProfilesResponseDTO,
   UpdateProfileRequestDTO,
   UserProfileInfoResponseDTO,
@@ -19,10 +20,11 @@ export const profileApi = createApi({
         method: 'GET',
       }),
     }),
-    getTopProfiles: builder.query<TopProfilesResponseDTO, void>({
-      query: () => ({
+    getTopProfiles: builder.query<TopProfilesResponseDTO, ITopProfilesInfoRequest>({
+      query: (params) => ({
         url: `/profiles/top`,
         method: 'GET',
+        params
       }),
     }),
     updateCurrentUserProfile: builder.mutation<UserProfileInfoResponseDTO, UpdateProfileRequestDTO>({

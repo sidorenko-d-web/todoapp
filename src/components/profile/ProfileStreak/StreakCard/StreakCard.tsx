@@ -11,6 +11,7 @@ import { ProgressLine } from '../../../shared';
 import { DayType } from '../../../../types';
 import { StreakDay } from './StreakDay';
 import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
 
 interface WeekData {
   date: string;
@@ -33,14 +34,19 @@ interface StreakCardProps {
   weekData?: {
     creation_date: string;
     push_line_data: WeekData;
-  }[]
+  }[];
+  strangerId?: string;
 }
 
 export const StreakCard: React.FC<StreakCardProps> = ({
   days,
-                                                        onlyStreak, streakDays, status, chest,
+  onlyStreak,
+  streakDays,
+  status,
+  chest,
   frozenDays,
   weekData,
+  strangerId,
 }) => {
   const { t } = useTranslation('profile');
 
@@ -72,23 +78,15 @@ export const StreakCard: React.FC<StreakCardProps> = ({
     <div className={styles.wrp}>
       <div className={styles.header}>
         <div className={styles.daysInARowWrp}>
-          <span
-            className={
-              streakDays < 30
-                ? styles.badge
-                : streakDays < 60
-                ? styles.badgePurple
-                : styles.badgeRed
-            }
-          >
+          <span className={streakDays < 30 ? styles.badge : streakDays < 60 ? styles.badgePurple : styles.badgeRed}>
             {status}
           </span>
 
           <div className={styles.title}>
-            <span className={styles.daysInARow}>
-              {streakDays} {t('p13').replace("в ", "в\u00A0")}
+            <span className={clsx(styles.daysInARow, strangerId && styles.stranger)}>
+              {streakDays} {t('p13').replace('в ', 'в\u00A0')} 
             </span>
-            {!onlyStreak && (
+            {!strangerId && !onlyStreak && (
               <div className={styles.freezeCount}>
                 <span>{frozenDays}</span>
                 <img src={snowflake} alt="Freeze Icon" />
@@ -96,14 +94,12 @@ export const StreakCard: React.FC<StreakCardProps> = ({
             )}
           </div>
         </div>
-        <div className={styles.fire}>
-          <img
-            src={streakDays < 30 ? FireBlue : streakDays < 60 ? FirePurple : FireRed}
-          />
+        <div className={clsx(styles.fire, styles.stranger)}>
+          <img src={streakDays < 30 ? FireBlue : streakDays < 60 ? FirePurple : FireRed} />
         </div>
       </div>
 
-      {!onlyStreak && (
+      {!strangerId && !onlyStreak && (
         <>
           {days && (
             <div className={styles.streakDays}>
@@ -129,13 +125,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
                 {chest}
                 <div className={styles.chestImgContainer}>
                   <img
-                    src={
-                      streakDays < 30
-                        ? ChestBlue
-                        : streakDays < 60
-                        ? ChestPurple
-                        : chestIcon
-                    }
+                    src={streakDays < 30 ? ChestBlue : streakDays < 60 ? ChestPurple : chestIcon}
                     className={styles.chestImg}
                     alt="Chest Icon"
                   />

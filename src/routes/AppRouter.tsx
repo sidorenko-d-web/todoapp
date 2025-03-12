@@ -10,6 +10,7 @@ import {
   ProgressTreePage,
   PromotionPage,
   StrangerProfilePage,
+  StrangerRoomPage,
   TasksPage,
   WardrobePage,
 } from '../pages';
@@ -36,6 +37,7 @@ function AppRouter(): JSX.Element | null {
           <Route path={AppRoute.Tasks} element={<TasksPage />} />
           <Route path={AppRoute.Profile} element={<ProfilePage />} />
           <Route path={AppRoute.StrangerProfile} element={<StrangerProfilePage />} />
+          <Route path={AppRoute.StrangerProfileRoom} element={<StrangerRoomPage />} />
           <Route path={AppRoute.Promotion} element={<PromotionPage />} />
           <Route path={AppRoute.ShopInventory} element={<ShopInventoryPage />} />
           <Route path={'dev-modals'} element={<DevModals />} />

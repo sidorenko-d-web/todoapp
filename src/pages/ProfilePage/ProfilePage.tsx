@@ -46,7 +46,7 @@ export const ProfilePage: React.FC = () => {
     data: topProfilesData,
     error: topProfilesError,
     isLoading: isTopProfilesLoading,
-  } = useGetTopProfilesQuery();
+  } = useGetTopProfilesQuery({});
 
   const [ , setIsModalShown ] = useState(false);
 
