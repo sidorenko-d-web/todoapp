@@ -10,7 +10,7 @@ import { useGetBoostQuery } from '../../redux/api/tasks';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setActiveFooterItemId } from '../../redux';
-import GetGift from '../DevModals/GetGift/GetGift';
+import GetGiftDaily from '../DevModals/GetGiftDaily/GetGiftDaily';
 
 
 export const TasksPage: FC = () => {
@@ -128,7 +128,7 @@ export const TasksPage: FC = () => {
       {dailyTask && <DailyTasks task={dailyTask} />}
       {/*{topTask && <TopTasks task={topTask} />}*/}
       {socialTasks.length > 0 && <SocialTasks tasks={socialTasks} />}
-      <GetGift />
+      <GetGiftDaily />
     </main>
   );
 };

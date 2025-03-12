@@ -7,11 +7,10 @@ import s from '../styles.module.scss';
 import { ModalDailyTasks } from './ModalDailyTasks';
 import { useTranslation } from 'react-i18next';
 import { MODALS } from '../../../constants';
-import GetGift from '../../../pages/DevModals/GetGift/GetGift';
+import GetGiftDaily from '../../../pages/DevModals/GetGiftDaily/GetGiftDaily';
 import { useGetAssignmentRewardMutation } from '../../../redux/api/tasks';
 import { useGetTreeInfoQuery } from '../../../redux/api/tree/api';
 import { useGetProfileMeQuery } from '../../../redux/api/profile/api';
-import { Boost } from '../../../redux/api/tree/dto';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -26,7 +25,6 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
   const { data: treeData } = useGetTreeInfoQuery();
   const { data: profile } = useGetProfileMeQuery();
-  const [testPoints, setTestPoints] = useState<string>('100');
 
   useEffect(() => {
     setQuestionStates(Array(task.stages).fill('closed').map((state, index) =>
@@ -38,15 +36,25 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
     return questionStates.filter(state => state === 'solved').length;
   }, [questionStates]);
 
+
+  const isCompleted = task.is_completed || questionStates.every(state => state === 'solved');
+
+  const stage = treeData?.growth_tree_stages?.find((item, index) => index === profile?.growth_tree_stage_id);
+  
   const handleOpenDailyTasks = async () => {
     if (task.is_completed && !task.is_reward_given) {
       try {
-        await getAssignmentReward({
+        const reward = await getAssignmentReward({
           category: task.category,
           assignmentId: task.id
         }).unwrap();
-
-        openModal(MODALS.GET_GIFT);
+        console.log(reward);
+        if (reward) {
+          openModal(MODALS.GET_GIFT_DAILY, {
+            points: reward.points,
+            boost: stage?.achievement?.boost
+          });
+        }
         return;
       } catch (error) {
         console.error('Error getting assignment reward:', error);
@@ -63,16 +71,6 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
     setQuestionStates(states);
   };
 
-  const isCompleted = task.is_completed || questionStates.every(state => state === 'solved');
-
-  const stage = treeData?.growth_tree_stages?.find((item, index) => index === profile?.growth_tree_stage_id);
-
-  const handleOpenGetGiftModal = () => {
-    openModal(MODALS.GET_GIFT, {
-      points: stage?.achievement?.boost?.points || '0',
-      boost: stage?.achievement?.boost
-    });
-  };
 
   console.error(stage);
   return (
@@ -80,13 +78,6 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
       <div className={s.sectionHeader}>
         <h2 className={s.sectionTitle}>{t('q2')}</h2>
         <span className={s.count}>{completedCount}/3</span>
-        <button 
-          onClick={handleOpenGetGiftModal}
-          className={s.testButton}
-          style={{ marginLeft: '10px', padding: '5px 10px' }}
-        >
-          Тест GetGift
-        </button>
       </div>
       <div className={s.tasksList}>
         <TaskCard
@@ -113,7 +104,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
         taskId={task.id}
         task={task}
       />
-      <GetGift boost={stage?.achievement?.boost} />
+      <GetGiftDaily boost={stage?.achievement?.boost} />
     </section>
   );
 };

@@ -1,6 +1,6 @@
 import { MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
-import styles from './GetGift.module.scss';
+import styles from './GetGiftDaily.module.scss';
 import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
 import integration from '../../../assets/icons/integration-white.svg';
@@ -20,38 +20,51 @@ import { useTranslation } from 'react-i18next';
 
 interface Props {
   giftColor?: string;
-  boost?: Boost | null | undefined;
+  boost?: Boost | null;
 }
 
-export default function GetGift({ giftColor, boost }: Props) {
+export default function GetGiftDaily({ giftColor, boost }: Props) {
   const { closeModal, getModalState } = useModal();
-  const { isOpen } = getModalState(MODALS.GET_GIFT);
-  const { t } = useTranslation('quests');
+  const { isOpen, args } = getModalState<{
+    points: number;
+    boost: Boost;
+  }>(MODALS.GET_GIFT_DAILY);
+  const incomePerSecond = args?.boost?.income_per_second;
+  const xIncomePerSecond = args?.boost?.x_income_per_second;
+  const subscribersForFirstLevelReferrals = args?.boost?.subscribers_for_first_level_referrals;
+  const subscribersForSecondLevelReferrals = args?.boost?.subscribers_for_second_level_referrals;
+  const subscribersBoost = args?.boost?.subscribers;
+  const pointsBoost = args?.points;
+  const additionalIntegrationsForSubscription = args?.boost?.additional_integrations_for_subscription;
+  
+  const { t } = useTranslation('gift');
 
   if (!isOpen) return null;
 
   let giftImage;
 
-  if (giftColor == null || giftColor === t('q54')) {
+  if (giftColor == null || giftColor === 'Синий подарок') {
     giftImage = <img src={gift} className={styles.gift} />;
-  } else if (giftColor === t('q55')) {
+  } else if (giftColor === 'Пурпурный подарок') {
     giftImage = <img src={giftPurple} className={styles.gift} />;
-  } else if (giftColor === t('q56')) {
+  } else if (giftColor === 'Красный подарок') {
     giftImage = <img src={giftRed} className={styles.gift} />;
   }
 
   let giftLight;
 
-  if (giftColor == null || giftColor === t('q54')) {
+  if (giftColor == null || giftColor === 'Синий подарок') {
     giftLight = <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />;
-  } else if (giftColor === t('q55')) {
+  } else if (giftColor === 'Пурпурный подарок') {
     giftLight = <Lottie animationData={purpleLightAnimation} loop={true} className={styles.light} />;
-  } else if (giftColor === t('q56')) {
+  } else if (giftColor === 'Красный подарок') {
     giftLight = <Lottie animationData={redLightAnimation} loop={true} className={styles.light} />;
   }
 
+  console.log(args);
+
   return (
-    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={t('q59')}>
+    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT_DAILY)} modalId={MODALS.GET_GIFT_DAILY} title={t('g1')}>
       <div className={styles.background}>
         <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
@@ -62,44 +75,42 @@ export default function GetGift({ giftColor, boost }: Props) {
         {giftImage}
         <div className={styles.statsContainer}>
           <div className={styles.stat}>
-            {boost?.income_per_second && (
-              <span className={styles.statValue}>+{formatAbbreviation(boost?.income_per_second)}</span>
+            {incomePerSecond && (
+              <span className={styles.statValue}>+{formatAbbreviation(incomePerSecond)}</span>
             )}
             <div className={styles.statBox}>
-              <span>x{formatAbbreviation(boost?.x_income_per_second || 0)}</span>
+              <span>x{formatAbbreviation(xIncomePerSecond || 0)}</span>
               <img src={coin} />
-              <span className={styles.extra}>/ {t('q9_1')}</span>
+              <span className={styles.extra}>/сек.</span>
             </div>
           </div>
           <div className={styles.stat}>
-            {/*<span className={styles.statValue}>+10</span>*/}
             <div className={styles.statBox}>
-              <span>+{formatAbbreviation(boost?.subscribers_for_first_level_referrals || 0)}</span>
+              <span>+{formatAbbreviation(subscribersForFirstLevelReferrals || 0)}</span>
               <img src={subscribers} />
-              <span className={styles.extra}>1 {t('q9_2')}</span>
+              <span className={styles.extra}>1 ур.</span>
             </div>
           </div>
           <div className={styles.stat}>
-            {/*<span className={styles.statValue}>+5</span>*/}
             <div className={styles.statBox}>
-              <span>+{formatAbbreviation(boost?.subscribers_for_second_level_referrals || 0)}</span>
+              <span>+{formatAbbreviation(subscribersForSecondLevelReferrals || 0)}</span>
               <img src={subscribers} />
-              <span className={styles.extra}>2 {t('q9_2')}</span>
+              <span className={styles.extra}>2 ур.</span>
             </div>
           </div>
         </div>
         <div className={styles.items}>
           <div className={styles.item}>
-            <p>+{formatAbbreviation(boost?.subscribers || 0)}</p>
+            <p>+{formatAbbreviation(subscribersBoost || 0)}</p>
             <img src={subscribers} />
           </div>
           <div className={styles.item}>
-            <p>+{formatAbbreviation(boost?.points || 0)}</p>
+            <p>+{formatAbbreviation(pointsBoost || 0)}</p>
             <img src={coin} />
           </div>
-          {boost?.additional_integrations_for_subscription && (
+          {additionalIntegrationsForSubscription && (
             <div className={styles.item}>
-              <p>+{formatAbbreviation(boost?.additional_integrations_for_subscription)}</p>
+              <p>+{formatAbbreviation(additionalIntegrationsForSubscription || 0)}</p>
               <img src={integration} />
             </div>
           )}
@@ -108,13 +119,19 @@ export default function GetGift({ giftColor, boost }: Props) {
           {/*  <img src={snowflake} />*/}
           {/*</div>*/}
         </div>
-        <p className={styles.desc}>{t('q57')}</p>
+        <p className={styles.desc}>{t('g2')}</p>
       </div>
       <Button
-        variant={giftColor == null || giftColor === t('q54') ? 'blue' : giftColor === t('q55') ? 'purple' : 'red'}
-        onClick={() => closeModal(MODALS.GET_GIFT)}
+        variant={
+          giftColor == null || giftColor === 'Синий подарок'
+            ? 'blue'
+            : giftColor === 'Пурпурный подарок'
+              ? 'purple'
+              : 'red'
+        }
+        onClick={() => closeModal(MODALS.GET_GIFT_DAILY)}
       >
-        {t('q58')}
+        {t('g3')}
       </Button>
     </CentralModal>
   );
