@@ -11,7 +11,7 @@ import youtubeIcon from '../../../assets/icons/youtube.svg';
 
 import s from '../styles.module.scss';
 import { Task } from '../../../redux/api/tasks';
-import { useUpdateTaskMutation } from '../../../redux/api/tasks';
+import { useUpdateTaskMutation, useGetAssignmentRewardMutation } from '../../../redux/api/tasks';
 import { useTranslation } from 'react-i18next';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants';
@@ -39,15 +39,32 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
   const { t } = useTranslation('quests');
   const completedTasks = tasks.filter(task => task.is_completed).length;
   const [updateTask] = useUpdateTaskMutation();
+  const [getAssignmentReward] = useGetAssignmentRewardMutation();
   const { openModal } = useModal();
   const [pendingTaskId, setPendingTaskId] = useState<string | null>(null);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   const handleTaskClick = async (task: Task) => {
     if (task.is_completed && !task.is_reward_given) {
-      setSelectedTask(task);
-      openModal(MODALS.TASK_COMPLETED);
-      return;
+      try {
+        const result = await getAssignmentReward({
+          category: task.category,
+          assignmentId: task.id
+        }).unwrap();
+        
+        setSelectedTask({
+          ...task,
+          boost: {
+            income_per_second: result.income_per_second,
+            subscribers: result.subscribers,
+            views: result.views
+          }
+        });
+        openModal(MODALS.TASK_COMPLETED);
+        return;
+      } catch (error) {
+        console.error('Error getting assignment reward:', error);
+      }
     }
 
     try {
@@ -61,8 +78,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
           : (task.external_link);
         window.open(linkToOpen, '_blank');
 
-        // Ждем 30 секунд
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 15000));
 
         await updateTask({
           id: task.id,
@@ -75,10 +91,6 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
         localStorage.removeItem('pendingTaskId');
         localStorage.removeItem('pendingTaskStartTime');
         setPendingTaskId(null);
-        
-        // Открываем модальное окно после успешного выполнения задания
-        setSelectedTask(task);
-        openModal(MODALS.TASK_COMPLETED);
       }
     } catch (error) {
       console.error('Error updating task:', error);
@@ -95,7 +107,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
     
     if (savedTaskId && startTime) {
       const elapsedTime = Date.now() - Number(startTime);
-      const remainingTime = Math.max(5000 - elapsedTime, 0);
+      const remainingTime = Math.max(15000 - elapsedTime, 0);
 
       setPendingTaskId(savedTaskId);
 
@@ -144,7 +156,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
     }
   }, []);
 
-  const visibleTasks = tasks.filter(task => !task.is_completed);
+  const visibleTasks = tasks.filter(task => !task.is_completed || (task.is_completed && !task.is_reward_given));
 
   return (
     <section className={s.section}>

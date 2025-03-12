@@ -15,6 +15,9 @@ export type GetTasksParams = {
 }
 
 export type GetQuizRewardResponse = {
+  income_per_second: string;
+  subscribers: number;
+  views: number;
   points: string;
 }
 
@@ -65,21 +68,7 @@ export const tasksApi = createApi({
       },
       providesTags: ['Tasks']
     }),
-    getQuizReward: builder.mutation<GetQuizRewardResponse, string>({
-      query: (assignmentId) => ({
-        url: `/assignments/quiz/reward/${assignmentId}`,
-        method: 'GET'
-      }),
-      async onQueryStarted(assignmentId, { queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          // Сохраняем награду в localStorage
-          localStorage.setItem(`quiz_reward_${assignmentId}`, JSON.stringify(data));
-        } catch (error) {
-          console.error('Failed to get quiz reward:', error);
-        }
-      },
-    }),
+    
     updateTask: builder.mutation<UpdateTaskResponse, { id: string; data: UpdateTaskRequest }>({
       query: ({ id, data }) => ({
         url: `/assignments/${id}`,
@@ -102,6 +91,13 @@ export const tasksApi = createApi({
       }),
       providesTags: ['Tasks']
     }),
+    getAssignmentReward: builder.mutation<GetQuizRewardResponse, { category: TaskCategory; assignmentId: string }>({
+      query: ({ category, assignmentId }) => ({
+        url: `/assignments/reward/${category}/${assignmentId}`,
+        method: 'GET'
+      }),
+      invalidatesTags: ['Tasks']
+    }),
   }),
 });
 
@@ -110,7 +106,7 @@ export const {
   useUpdateTaskMutation,
   useGetDailyRewardQuery,
   useGetBoostQuery,
-  useGetQuizRewardMutation
+  useGetAssignmentRewardMutation
 } = tasksApi;
 
 

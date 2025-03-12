@@ -8,7 +8,7 @@ import { ModalDailyTasks } from './ModalDailyTasks';
 import { useTranslation } from 'react-i18next';
 import { MODALS } from '../../../constants/modals';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
-import { useGetQuizRewardMutation } from '../../../redux/api/tasks/api';
+import { useGetAssignmentRewardMutation } from '../../../redux/api/tasks/api';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -19,17 +19,8 @@ type DailyTasksProps = {
 export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const { t } = useTranslation('quests');
   const { openModal, closeModal } = useModal();
-  const [getQuizReward] = useGetQuizRewardMutation();
+  const [getAssignmentReward] = useGetAssignmentRewardMutation();
   const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
-  const [quizPoints, setQuizPoints] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Пытаемся получить сохраненную награду при монтировании
-    const savedPoints = localStorage.getItem(`quiz_reward_${task.id}`);
-    if (savedPoints) {
-      setQuizPoints(savedPoints);
-    }
-  }, [task.id]);
 
   useEffect(() => {
     setQuestionStates(Array(task.stages).fill('closed').map((state, index) =>
@@ -44,25 +35,15 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const handleOpenDailyTasks = async () => {
     if (task.is_completed && !task.is_reward_given) {
       try {
-        if (quizPoints) {
-          // Используем сохраненные points
-          openModal(MODALS.GET_GIFT, { 
-            points: quizPoints,
-            boost: task.boost
-          });
-        } else {
-          // Получаем новые points
-          const result = await getQuizReward(task.id).unwrap();
-          localStorage.setItem(`quiz_reward_${task.id}`, result.points);
-          setQuizPoints(result.points);
-          openModal(MODALS.GET_GIFT, { 
-            points: result.points,
-            boost: task.boost
-          });
-        }
+        await getAssignmentReward({
+          category: task.category,
+          assignmentId: task.id
+        }).unwrap();
+        
+        openModal(MODALS.GET_GIFT);
         return;
       } catch (error) {
-        console.error('Error getting quiz reward:', error);
+        console.error('Error getting assignment reward:', error);
       }
     }
     openModal(MODALS.DAILY_TASKS);
