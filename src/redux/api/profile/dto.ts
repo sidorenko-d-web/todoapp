@@ -1,4 +1,4 @@
-import { IAchievement } from "../shop";
+import { IAchievement } from '../shop';
 
 export type UserProfileInfoResponseDTO = {
   blog_name: string;
@@ -22,16 +22,15 @@ export type UserProfileInfoResponseDTO = {
   updated_at: string;
   email?: string;
   phone_number?: string;
-  achievements: IAchievement[]
-  days_in_streak: number
-}
+  achievements: IAchievement[];
+};
 
 export type FutureStatistics = {
   points: string;
   subscribers: number;
   total_views: number;
   total_earned: string;
-}
+};
 
 export type TopProfilesResponseDTO = {
   count: number;
@@ -47,5 +46,5 @@ export type UpdateProfileRequestDTO = {
 };
 
 export type BuySubscriptionRequestDTO = {
-  payment_method: 'internal_wallet' | 'usdt' | string
-}
+  payment_method: 'internal_wallet' | 'usdt' | string;
+};

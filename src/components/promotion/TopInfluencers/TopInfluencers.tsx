@@ -6,13 +6,7 @@ import { InfluencerRatingSteps, MODALS, useInfluencerRatingSteps } from '../../.
 import { TopUsers } from '../Modal';
 import { useModal } from '../../../hooks';
 import classNames from 'classnames';
-import {
-  RootState,
-  setInputType,
-  useGetProfileMeQuery,
-  useGetTopProfilesQuery,
-  useGetUserQuery,
-} from '../../../redux';
+import { RootState, setInputType, useGetProfileMeQuery, useGetTopProfilesQuery, useGetUserQuery } from '../../../redux';
 import { BindingConfirmationModal, BindingModal, BindingSuccessModal, TrackedButton } from '../../';
 
 import s from './TopInfluencers.module.scss';
@@ -23,13 +17,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 export const TopInfluencers = () => {
   const { t, i18n } = useTranslation('promotion');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
   const INFLUENCER_RATING_STEPS = useInfluencerRatingSteps();
-  const [ isInfluencersLocked, setIsInfluencersLocked ] = useState(true);
-  const [ influencersUnlockingStep, setInfluencersUnlockingStep ] = useState<keyof InfluencerRatingSteps>('email');
+  const [isInfluencersLocked, setIsInfluencersLocked] = useState(true);
+  const [influencersUnlockingStep, setInfluencersUnlockingStep] = useState<keyof InfluencerRatingSteps>('email');
   const dispatch = useDispatch();
-  const { data } = useGetTopProfilesQuery();
+  const { data } = useGetTopProfilesQuery({});
   const topProfiles = data?.profiles || [];
 
   const { data: userProfileData } = useGetProfileMeQuery();
@@ -37,7 +31,7 @@ export const TopInfluencers = () => {
   const { data: userData } = useGetUserQuery();
 
   useEffect(() => {
-    if(userData?.is_email_verified && userData?.is_phone_verified) {
+    if (userData?.is_email_verified && userData?.is_phone_verified) {
       setIsInfluencersLocked(false);
     }
 
@@ -45,10 +39,11 @@ export const TopInfluencers = () => {
       setInfluencersUnlockingStep('phone');
       dispatch(setInputType('phone'));
     }
-  }, [ userData?.is_email_verified ]);
-  const userPosition = userProfileData && topProfiles
-    ? topProfiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
-    : -1;
+  }, [userData?.is_email_verified]);
+  const userPosition =
+    userProfileData && topProfiles
+      ? topProfiles.findIndex((profile: { id: string }) => profile.id === userProfileData.id)
+      : -1;
 
   const position = userPosition !== -1 ? userPosition + 1 : topProfiles.length!;
 
@@ -63,7 +58,11 @@ export const TopInfluencers = () => {
       <h2 className={s.headerInfluencers}>
         <span className={s.textName}>{t('p8')}</span>
         <span className={s.badge}>
-          <span>{isInfluencersLocked ? `${t('p9')}` : `${t('p20')} ${formatAbbreviation(10000, 'number', { locale: locale })}`}</span>
+          <span>
+            {isInfluencersLocked
+              ? `${t('p9')}`
+              : `${t('p20')} ${formatAbbreviation(10000, 'number', { locale: locale })}`}
+          </span>
           <img src={isInfluencersLocked ? lock : cup} />
         </span>
       </h2>
@@ -83,9 +82,7 @@ export const TopInfluencers = () => {
               <span className={s.progress} style={{ width: `${progressBar}` }}></span>
             </div>
             <p className={s.textInfo}>
-              {isInfluencersLocked
-                ? `${t('p10')}`
-                : `${t('p21')}`}
+              {isInfluencersLocked ? `${t('p10')}` : `${t('p21')}`}
               <span className={s.textDay}> {t('p11')}</span>
             </p>
           </div>
@@ -102,8 +99,8 @@ export const TopInfluencers = () => {
 
           <TopUsers modalId={MODALS.TOP_USERS} onClose={() => closeModal(MODALS.TOP_USERS)} />
 
-          {
-            isInfluencersLocked && <>
+          {isInfluencersLocked && (
+            <>
               <BindingModal
                 modalId={MODALS.BINDING}
                 onClose={() => closeModal(MODALS.BINDING)}
@@ -141,7 +138,8 @@ export const TopInfluencers = () => {
                 }}
               />
             </>
-          }</div>
+          )}
+        </div>
       </section>
     </>
   );

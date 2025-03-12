@@ -15,7 +15,7 @@ type SliderProps = {
 };
 
 export const SliderSelect = ({ isInfluencersLocked }: SliderProps) => {
-  const { data } = useGetTopProfilesQuery(undefined, { skip: isInfluencersLocked });
+  const { data } = useGetTopProfilesQuery({}, { skip: isInfluencersLocked });
   const topProfiles = data?.profiles;
 
   if (!topProfiles && !isInfluencersLocked) return null;
@@ -56,12 +56,7 @@ export const SliderSelect = ({ isInfluencersLocked }: SliderProps) => {
       {!isInfluencersLocked &&
         topProfiles &&
         topProfiles.map((profile, index) => (
-          <Link
-            draggable={false}
-            to={`/profile/${profile.id}`}
-            key={profile.id}
-            className={s.cardWrapper}
-          >
+          <Link draggable={false} to={`/profile/${profile.id}`} key={profile.id} className={s.cardWrapper}>
             <div
               className={classNames(s.cardBlock, {
                 /*{ [s.vipCard]: profile.vip }*/
