@@ -9,8 +9,6 @@ import { useTranslation } from 'react-i18next';
 import { MODALS } from '../../../constants';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 import { useGetAssignmentRewardMutation } from '../../../redux/api/tasks/api';
-import { useGetProfileMeQuery } from '../../../redux';
-import { useGetAssignmentRewardMutation } from '../../../redux/api/tasks';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -23,7 +21,6 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const { openModal, closeModal } = useModal();
   const [getAssignmentReward] = useGetAssignmentRewardMutation();
   const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setQuestionStates(
@@ -32,13 +29,12 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
         .map((state, index) => (index === 0 ? 'current' : state)),
     );
   }, [task]);
-  console.log(task);
+
   const completedCount = useMemo(() => {
     return questionStates.filter(state => state === 'solved').length;
   }, [questionStates]);
 
   const handleOpenDailyTasks = async () => {
-    setIsLoading(true);
     if (task.is_completed && !task.is_reward_given) {
       try {
         await getAssignmentReward({
@@ -47,7 +43,6 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
         }).unwrap();
 
         openModal(MODALS.GET_GIFT);
-        setIsLoading(false);
         return;
       } catch (error) {
         console.error('Error getting assignment reward:', error);
@@ -97,7 +92,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
         taskId={task.id}
         task={task}
       />
-      <GetGift boost={task.boost} />
+      <GetGift />
     </section>
   );
 };
