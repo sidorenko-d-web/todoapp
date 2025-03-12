@@ -2,7 +2,7 @@ import { Footer } from '../components/Footer';
 import { Outlet, useLocation } from 'react-router-dom';
 import styles from './Layout.module.scss';
 import { Header } from '../components/Header/';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AppRoute, localStorageConsts, MODALS } from '../constants';
 import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
 import { AudioBg, useModal, useScrollManager } from '../hooks';
@@ -11,6 +11,7 @@ import Lottie from 'lottie-react';
 import { lampTable } from '../assets/animations';
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
 import clsx from 'clsx';
+import WhiteNoiseCanvas from '../components/WhiteNoise/WhiteNoise';
 
 const Layout = () => {
   const location = useLocation();
@@ -72,99 +73,11 @@ const Layout = () => {
     }
   }, [showRoadmapBg]);
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return; // Ensure canvas is not null
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return; // Ensure context is not null
-
-    let width: number = window.innerWidth;
-    let height: number = window.innerHeight;
-
-    // Function to update canvas dimensions
-    const updateDimension = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
-
-    // Function to set a pixel's color
-    const setPixel = (imageData: ImageData, x: number, y: number, r: number, g: number, b: number, a: number) => {
-      const index = (x + y * imageData.width) * 4;
-      imageData.data[index + 0] = r;
-      imageData.data[index + 1] = g;
-      imageData.data[index + 2] = b;
-      imageData.data[index + 3] = a;
-    };
-
-    // Function to draw white noise
-    const draw = () => {
-      const imageData = ctx.createImageData(width, height);
-      const length = Math.floor((width * height) / 1);
-
-      for (let i = 0; i < length; i++) {
-        const x = Math.floor(Math.random() * width);
-        const y = Math.floor(Math.random() * height);
-
-        // Black and white noise
-        const random = Math.random();
-        const color = random >= 0.5 ? 255 : 0;
-
-        setPixel(imageData, x, y, color, color, color, 255); // 255 = fully opaque
-      }
-
-      ctx.putImageData(imageData, 0, 0);
-    };
-
-    
-    // Animation loop
-    const animate = () => {
-      requestAnimationFrame(animate);
-      updateDimension();
-      draw();
-    };
-
-    // Start the animation
-    animate();
-
-    // Handle window resize
-    window.addEventListener('resize', updateDimension);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('resize', updateDimension);
-    };
-  }, []);
-
-
 
 
   return (
-    // <div className={`${styles.vhsEffect} ${styles.vhsWarp} ${styles.glitch} ${styles.frameDrop}`}>
-    //   <div className={styles.interlace}></div>
-    //   <div className={styles.lines}></div>
-    //   <div className={styles.noise}></div>
-
-    // </div>
-
     <>
-      {/* <div className={styles.whiteNoise}/> */}
-
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          opacity: '0.05',
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none', // Ensure clicks pass through
-          zIndex: 9999, // Ensure it's on top of everything
-        }}
-      />
+      <WhiteNoiseCanvas/>
 
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
