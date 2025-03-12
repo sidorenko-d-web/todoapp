@@ -116,7 +116,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
   
   if (isTopTask) {
     animationLight = <Lottie animationData={purpleLightAnimation} loop={true} className={s.lightAnimation} />;
-  } else if (isDailyTask || isSocialTask) {
+  } else if ((isDailyTask && buttonText !== t('q15')) || isSocialTask) {
     animationLight = <Lottie animationData={blueLightAnimation} loop={true} className={s.lightAnimation} />;
   }
 
