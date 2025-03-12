@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import BottomModal from '../../../components/shared/BottomModal/BottomModal';
 import Lottie from 'lottie-react';
-import { MODALS } from '../../../constants';
+import { GUIDE_ITEMS, MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import FireBlue from '../../../assets/icons/fire-blue.svg';
 import FireRed from '../../../assets/icons/fire-red.svg';
@@ -16,8 +15,9 @@ import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import redLightAnimation from '../../../assets/animations/redLight.json';
 import purpleLightAnimation from '../../../assets/animations/purpleLight.json';
 import { useTranslation } from 'react-i18next';
-import { ProgressLine } from '../../../components/shared';
+import { CentralModal, ProgressLine } from '../../../components/shared';
 import { StreakDay } from '../../../components/profile/ProfileStreak/StreakCard/StreakDay';
+import { isGuideShown } from '../../../utils';
 
 interface Props {
   days?: number;
@@ -25,13 +25,14 @@ interface Props {
 }
 
 export default function DaysInARowModal({ onClose }: Props) {
-  const { t,i18n } = useTranslation('profile');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { closeModal } = useModal();
-  const { data } = useGetPushLineQuery();
+  const { t, i18n } = useTranslation('profile');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const { closeModal, openModal } = useModal();
+  const { data, isLoading } = useGetPushLineQuery();
   const [dayNumbers, setDayNumbers] = useState<number[]>([]);
   const [frozenDays, setFrozenDays] = useState<number[]>([]);
   const [streakDays, setStreakDays] = useState<number[]>([]);
+
 
   useEffect(() => {
     const today = new Date();
@@ -68,11 +69,25 @@ export default function DaysInARowModal({ onClose }: Props) {
       }
     });
 
+    const modalShownToday = localStorage.getItem('modalShownToday');
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    if (modalShownToday !== todayDate && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
+      const isTodayPassed = data?.week_information?.some(
+        (entry) => entry.creation_date === todayDate && entry.push_line_data?.status === 'passed'
+      );
+
+      if (isTodayPassed) {
+        openModal(MODALS.DAYS_IN_A_ROW);
+        localStorage.setItem('modalShownToday', todayDate);
+      }
+    }
+
     setFrozenDays(frozen);
     setStreakDays(streak);
-  }, [data]);
+  }, [data, isLoading]);
 
-  const streakCount = streakDays.length + 1;
+  const streakCount = streakDays.length;
 
   const calculateLevel = () => {
     let maxStreak = 0;
@@ -99,7 +114,7 @@ export default function DaysInARowModal({ onClose }: Props) {
   }
 
   return (
-    <BottomModal
+    <CentralModal
       modalId={MODALS.DAYS_IN_A_ROW}
       title={`${streakCount === 0 ? 0 : streakCount} ${t('p21')}`}
       onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)}
@@ -146,11 +161,11 @@ export default function DaysInARowModal({ onClose }: Props) {
       </div>
 
       <div className={styles.progressTitle}>
-        <p>
+        <span>
           {streakCount}/{t(p14Key)}
-        </p>
+        </span>
         <div className={styles.chest}>
-          <p>{locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}</p>
+          <span>{locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}</span>
           <img
             src={
               streakCount < 30
@@ -176,6 +191,6 @@ export default function DaysInARowModal({ onClose }: Props) {
       >
         {t('p22')}
       </Button>
-    </BottomModal>
+    </CentralModal>
   );
 }

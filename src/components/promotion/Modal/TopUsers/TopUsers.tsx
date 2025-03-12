@@ -41,25 +41,12 @@ export const TopUsers: FC<InviteFriendProps> = ({
 
   const frozen = pushLine?.week_information.filter(
     day =>
-      day.push_line_data?.status === 'passed' &&
-      !day.push_line_data?.is_notified_at_morning &&
-      !day.push_line_data?.is_notified_at_afternoon &&
-      !day.push_line_data?.is_notified_at_evening &&
-      !day.push_line_data?.is_notified_at_late_evening &&
-      !day.push_line_data?.is_notified_at_late_night &&
-      !day.push_line_data?.is_notified_at_night,
-  ).length;
+      day.push_line_data?.status === 'passed').length;
 
   const streaks = pushLine?.week_information.filter(
     day =>
       day &&
-      (day.push_line_data?.status === 'unspecified' || day.push_line_data?.status === 'passed') &&
-      (day.push_line_data?.is_notified_at_morning ||
-        day.push_line_data?.is_notified_at_afternoon ||
-        day.push_line_data?.is_notified_at_evening ||
-        day.push_line_data?.is_notified_at_late_evening ||
-        day.push_line_data?.is_notified_at_late_night ||
-        day.push_line_data?.is_notified_at_night),
+      (day.push_line_data?.status === 'unspecified' || day.push_line_data?.status === 'passed'),
   ).length;
   // TODO: Раскомментировать когда на бэке будет vip данные
   return (
