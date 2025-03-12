@@ -4,6 +4,7 @@ export type UserProfileInfoResponseDTO = {
   points: string;
   total_earned: string;
   growth_tree_stage_id: number;
+  days_in_streak: number;
   subscribers_for_first_level_referrals: number;
   subscribers_for_second_level_referrals: number;
   id: string;

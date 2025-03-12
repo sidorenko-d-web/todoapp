@@ -70,7 +70,7 @@ export const TopUsers: FC<InviteFriendProps> = ({
                   <li className={s.number}>{formatAbbreviation(profile.growth_tree_stage_id ?? 0)}</li>
                   <li className={s.fireIcon}>
                     <img src={fire} alt="fire" width={14} height={14} />
-                    <span>{formatAbbreviation(0)}</span>
+                    <span>{formatAbbreviation(profile.days_in_streak)}</span>
                   </li>
                 </ul>
               </div>
