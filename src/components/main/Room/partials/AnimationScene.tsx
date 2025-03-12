@@ -14,13 +14,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ICharacterResponse } from '../../../../redux/api/character';
 
 interface props {
-  isLoaded: boolean;
   room: IEquipedRoomResponse | undefined;
   character?: { data?: ICharacterResponse; isLoading: boolean };
   setIsLoaded: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AnimationScene = ({ room, character, setIsLoaded, isLoaded }: props) => {
+export const AnimationScene = ({ room, character, setIsLoaded }: props) => {
   const gameRef = useRef<Phaser.Game | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const spineSceneRef = useRef<SpineSceneBase | null>(null);

@@ -69,14 +69,13 @@ export const Room = ({ mode, strangerId }: props) => {
   return (
     <div className={styles.room}>
       <AnimationScene
-        isLoaded={isLoaded}
         setIsLoaded={setIsLoaded}
         room={room ?? strangerRoom}
         character={mode === 'me' ? character : strangerCharacter}
       />
 
       {isLoading && <Loader className={styles.loader} />}
-      <Walls room={room ?? strangerRoom} isLoading={isLoading}/>
+      <Walls room={room ?? strangerRoom} isLoading={isLoading} />
 
       {!isLoading && (
         <>

@@ -45,7 +45,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
   const [size, setSize] = useState([0, 0]);
   const [isLoading, setLoading] = useState(true);
   const { data: character, isLoading: isCharacterLoading } = useGetCharacterQuery(undefined, { skip: !!strangerId });
-  const { data: strangerCharacter, isLoading: isStrangerCharacterLoading } = useGetCharacterByIdQuery(
+  const { data: strangerCharacter } = useGetCharacterByIdQuery(
     { id: strangerId! },
     { skip: !strangerId },
   );
