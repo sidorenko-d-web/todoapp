@@ -9,8 +9,6 @@ import { useTranslation } from 'react-i18next';
 import { MODALS } from '../../../constants';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 import { useGetAssignmentRewardMutation } from '../../../redux/api/tasks/api';
-import { useGetProfileMeQuery } from '../../../redux';
-import { useGetAssignmentRewardMutation } from '../../../redux/api/tasks';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -32,7 +30,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
         .map((state, index) => (index === 0 ? 'current' : state)),
     );
   }, [task]);
-  console.log(task);
+
   const completedCount = useMemo(() => {
     return questionStates.filter(state => state === 'solved').length;
   }, [questionStates]);
@@ -97,7 +95,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
         taskId={task.id}
         task={task}
       />
-      <GetGift boost={task.boost} />
+      <GetGift />
     </section>
   );
 };

@@ -26,7 +26,7 @@ interface Props {
 export default function GetGift({ giftColor, boost }: Props) {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
-  const { t } = useTranslation('gift');
+  const { t } = useTranslation('quests');
 
   if (!isOpen) return null;
 
@@ -51,7 +51,7 @@ export default function GetGift({ giftColor, boost }: Props) {
   }
 
   return (
-    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={t('g1')}>
+    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={t('q59')}>
       <div className={styles.background}>
         <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
@@ -111,16 +111,10 @@ export default function GetGift({ giftColor, boost }: Props) {
         <p className={styles.desc}>{t('g2')}</p>
       </div>
       <Button
-        variant={
-          giftColor == null || giftColor === 'Синий подарок'
-            ? 'blue'
-            : giftColor === 'Пурпурный подарок'
-              ? 'purple'
-              : 'red'
-        }
+        variant={giftColor == null || giftColor === t('q54') ? 'blue' : giftColor === t('q55') ? 'purple' : 'red'}
         onClick={() => closeModal(MODALS.GET_GIFT)}
       >
-        {t('g3')}
+        {t('q58')}
       </Button>
     </CentralModal>
   );
