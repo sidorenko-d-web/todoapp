@@ -7,7 +7,7 @@ interface initialState {
 }
 
 const initialState: initialState = {
-  volume: 0.0105,
+  volume: 0.5,
   track: 1,
   buttonVolume: 2.1,
 };

@@ -59,6 +59,19 @@ export interface IShopItemsRequest {
   is_bought?: boolean;
 }
 
+export interface IInventoryItemsRequest {
+  item_categories?: TypeItemCategory[];
+  limit?: number;
+  offset?: number;
+  asc?: boolean;
+  level?: number;
+  name?: string;
+  name_eng?: string;
+  item_rarity?: TypeItemRarity;
+  item_premium_level?: TypeItemQuality;
+  is_bought?: boolean;
+}
+
 export interface IBoosts {
   views: string;
   income_per_second: string;

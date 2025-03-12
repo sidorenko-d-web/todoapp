@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GetRewardChestModal from '../DevModals/GetRewardChestModal/GetRewardChestModal';
 import styles from './ProfilePage.module.scss';
-import { ProfileInfo, ProfileStats, ProfileStatsMini, StreakCard } from '../../components/profile';
+import { ProfileInfo, ProfileStats, ProfileStatsMini } from '../../components/profile';
 import {
   useClaimChestRewardMutation,
   useGetInventoryAchievementsQuery,
@@ -18,18 +18,18 @@ import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/Ch
 import { Loader } from '../../components';
 
 export const ProfilePage: React.FC = () => {
-  const { t,i18n } = useTranslation('profile');
+  const { t, i18n } = useTranslation('profile');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
 
-  const [claimChestReward] = useClaimChestRewardMutation();
+  const [ claimChestReward ] = useClaimChestRewardMutation();
 
   const {
     data: userProfileData,
     error: userError,
     isLoading: isUserLoading,
-    refetch: refetchCurrentProfile
+    refetch: refetchCurrentProfile,
   } = useGetProfileMeQuery();
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export const ProfilePage: React.FC = () => {
     }, 5 * 60 * 1000); // 5 minutes
 
     return () => clearInterval(refetchInterval);
-  }, [userProfileData, refetchCurrentProfile]);
+  }, [ userProfileData, refetchCurrentProfile ]);
 
 
   const {
@@ -48,10 +48,10 @@ export const ProfilePage: React.FC = () => {
     isLoading: isTopProfilesLoading,
   } = useGetTopProfilesQuery();
 
-  const [, setIsModalShown] = useState(false);
+  const [ , setIsModalShown ] = useState(false);
 
   const streaks = data?.week_information.filter(
-    day => day.push_line_data?.status === 'passed'
+    day => day.push_line_data?.status === 'passed',
   ).length;
 
 
@@ -61,7 +61,7 @@ export const ProfilePage: React.FC = () => {
       sessionStorage.setItem('daysInARowModalShown', 'true');
       setIsModalShown(true);
     }
-  }, [openModal]);
+  }, [ openModal ]);
 
   useEffect(() => {
     if (streaks === 30 || streaks === 60 || streaks === 120) {
@@ -76,7 +76,7 @@ export const ProfilePage: React.FC = () => {
         })
         .catch(err => console.error('Error claiming reward:', err));
     }
-  }, [streaks, claimChestReward, openModal]);
+  }, [ streaks, claimChestReward, openModal ]);
 
 
   const userPosition =
@@ -110,8 +110,10 @@ export const ProfilePage: React.FC = () => {
   );
 
   if (isLoading) {
-    return <Loader />
+    return <Loader />;
   }
+
+  console.log(location.pathname);
 
   return (
     <>
@@ -120,7 +122,7 @@ export const ProfilePage: React.FC = () => {
 
       {(isUserLoading || isTopProfilesLoading) && <p>{t('p3')}</p>}
 
-      {(userError || topProfilesError) && <p>{t('p17')}</p>} 
+      {(userError || topProfilesError) && <p>{t('p17')}</p>}
 
       {userProfileData && topProfilesData && (
         <div className={styles.wrp}>
@@ -150,14 +152,14 @@ export const ProfilePage: React.FC = () => {
               position={position}
               isVip={false}
             />
-            <StreakCard
-              streakDays={streaks !== undefined ? streaks : 0}
-              frozenDays={userProfileData.available_freezes}
-              days={weekData}
-              status={locale === 'ru' ? data?.push_line_profile_status.status_name : data?.push_line_profile_status.status_name_eng}
-              chest={locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}
-              weekData={data?.week_information}
-            />
+            {/*<StreakCard*/}
+            {/*  streakDays={streaks !== undefined ? streaks : 0}*/}
+            {/*  frozenDays={userProfileData.available_freezes}*/}
+            {/*  days={weekData}*/}
+            {/*  status={locale === 'ru' ? data?.push_line_profile_status.status_name : data?.push_line_profile_status.status_name_eng}*/}
+            {/*  chest={locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}*/}
+            {/*  weekData={data?.week_information}*/}
+            {/*/>*/}
           </div>
 
           <div>

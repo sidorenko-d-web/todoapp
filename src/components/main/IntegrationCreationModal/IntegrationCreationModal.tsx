@@ -69,10 +69,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   const submitCreation = () => {
     if (!selectedOption || !selectedCompanyId) return;
-    createIntegration({
-      content_type: selectedOption,
-      campaign_id: selectedCompanyId,
-    })
+    createIntegration(selectedCompanyId)
       .unwrap()
       .then((data) => {
         dispatch(setIntegrationCreated(true));

@@ -1,11 +1,11 @@
 import {
-  IShopSkinsResponse,
-  IShopItemsResponse,
-  IShopItemsRequest,
-  IAchievementsResponse,
-  shopApi,
-  IBuyItemRequest,
   IAchievementsRequest,
+  IAchievementsResponse,
+  IBuyItemRequest,
+  IInventoryItemsRequest,
+  IShopItemsResponse,
+  IShopSkinsResponse,
+  shopApi,
 } from '../shop';
 
 export const inventoryApi = shopApi.injectEndpoints({
@@ -18,7 +18,7 @@ export const inventoryApi = shopApi.injectEndpoints({
       providesTags: ['skins'],
     }),
 
-    getInventoryItems: builder.query<IShopItemsResponse, IShopItemsRequest | void>({
+    getInventoryItems: builder.query<IShopItemsResponse, IInventoryItemsRequest | void>({
       query: params => ({
         url: `/inventory/items`,
         method: 'GET',
