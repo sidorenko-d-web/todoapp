@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { MODALS } from '../../../constants/modals';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 import { useGetQuizRewardMutation } from '../../../redux/api/tasks/api';
+import { useGetTreeInfoQuery } from '../../../redux/api/tree/api';
+import { useGetCurrentUserProfileInfoQuery } from '../../../redux/api/profile/api';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -22,7 +24,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const [getQuizReward] = useGetQuizRewardMutation();
   const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
   const [quizPoints, setQuizPoints] = useState<string | null>(null);
-
+  const { data: treeData } = useGetTreeInfoQuery();
   useEffect(() => {
     // Пытаемся получить сохраненную награду при монтировании
     const savedPoints = localStorage.getItem(`quiz_reward_${task.id}`);
@@ -32,10 +34,15 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   }, [task.id]);
 
   useEffect(() => {
-    setQuestionStates(Array(task.stages).fill('closed').map((state, index) =>
-      index === 0 ? 'current' : state,
-    ));
+    setQuestionStates(
+      Array(task.stages)
+        .fill('closed')
+        .map((state, index) => (index === 0 ? 'current' : state)),
+    );
   }, [task]);
+
+  const { data: profile } = useGetCurrentUserProfileInfoQuery();
+  const stage = treeData.growth_tree_stages.find((item, index) => index === profile.growth_tree_stage_id);
 
   const completedCount = useMemo(() => {
     return questionStates.filter(state => state === 'solved').length;
@@ -46,18 +53,19 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
       try {
         if (quizPoints) {
           // Используем сохраненные points
-          openModal(MODALS.GET_GIFT, { 
+          openModal(MODALS.GET_GIFT, {
             points: quizPoints,
-            boost: task.boost
+            boost: task.boost,
           });
         } else {
           // Получаем новые points
           const result = await getQuizReward(task.id).unwrap();
+
           localStorage.setItem(`quiz_reward_${task.id}`, result.points);
           setQuizPoints(result.points);
-          openModal(MODALS.GET_GIFT, { 
+          openModal(MODALS.GET_GIFT, {
             points: result.points,
-            boost: task.boost
+            boost: task.boost,
           });
         }
         return;
@@ -109,7 +117,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
         taskId={task.id}
         task={task}
       />
-      <GetGift />
+      <GetGift boost={stage.achievement.boost} />
     </section>
   );
 };

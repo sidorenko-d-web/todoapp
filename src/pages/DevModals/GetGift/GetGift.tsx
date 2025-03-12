@@ -16,7 +16,7 @@ import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
 import { Boost } from '../../../redux';
 import { formatAbbreviation } from '../../../helpers';
-
+import { useTranslation } from 'react-i18next';
 interface Props {
   giftColor?: string;
   boost?: Boost | null;
@@ -25,7 +25,8 @@ interface Props {
 export default function GetGift({ giftColor, boost }: Props) {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
-
+  const { t, i18n } = useTranslation('gift');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   if (!isOpen) return null;
 
   let giftImage;
@@ -47,9 +48,9 @@ export default function GetGift({ giftColor, boost }: Props) {
   } else if (giftColor === 'Красный подарок') {
     giftLight = <Lottie animationData={redLightAnimation} loop={true} className={styles.light} />;
   }
-
+  if (!boost) return <div>Loading...</div>;
   return (
-    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={'Подарок открыт!'}>
+    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={t('g1')}>
       <div className={styles.background}>
         <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
@@ -72,7 +73,7 @@ export default function GetGift({ giftColor, boost }: Props) {
           <div className={styles.stat}>
             {/*<span className={styles.statValue}>+10</span>*/}
             <div className={styles.statBox}>
-              <span>+{formatAbbreviation(boost?.subscribers_for_first_level_referrals || 0)}</span>
+              <span>+{String(formatAbbreviation(boost?.subscribers_for_first_level_referrals || 0))}</span>
               <img src={subscribers} />
               <span className={styles.extra}>1 ур.</span>
             </div>
@@ -97,7 +98,7 @@ export default function GetGift({ giftColor, boost }: Props) {
           </div>
           {boost?.additional_integrations_for_subscription && (
             <div className={styles.item}>
-              <p>+{formatAbbreviation(boost?.additional_integrations_for_subscription)}</p>
+              <p>+{String(formatAbbreviation(boost?.additional_integrations_for_subscription))}</p>
               <img src={integration} />
             </div>
           )}
@@ -106,7 +107,7 @@ export default function GetGift({ giftColor, boost }: Props) {
           {/*  <img src={snowflake} />*/}
           {/*</div>*/}
         </div>
-        <p className={styles.desc}>Поздравляем! Вы улучшли основные показатели и получили дополнительные бонусы!</p>
+        <p className={styles.desc}>{t('g2')}</p>
       </div>
       <Button
         variant={
