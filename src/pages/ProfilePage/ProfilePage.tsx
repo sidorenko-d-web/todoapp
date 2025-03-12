@@ -11,12 +11,11 @@ import {
 } from '../../redux';
 import RewardsList from '../../components/profile/RewardsCard/RewardsList';
 import { getWeekData } from '../../utils';
-import { useModal, usePushLineStatus } from '../../hooks';
+import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 import { useGetPushLineQuery } from '../../redux';
 import { Loader } from '../../components';
-import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
 
 export const ProfilePage: React.FC = () => {
   const { t,i18n } = useTranslation('profile');
@@ -110,30 +109,9 @@ export const ProfilePage: React.FC = () => {
     isAwardsLoading
   );
 
-  // const {
-  //   // points: displayedPoints,
-  //   subscribers: displayedSubscribers,
-  //   totalViews: displayedTotalViews,
-  //   totalEarned: displayedTotalEarned
-  // } = useIncrementingProfileStats({
-  //   profileId: userProfileData?.id || '',
-  //   basePoints: userProfileData?.points || '0',
-  //   baseSubscribers: userProfileData?.subscribers || 0,
-  //   baseTotalViews: userProfileData?.total_views || 0,
-  //   baseTotalEarned: userProfileData?.total_earned || '0',
-  //   futureStatistics: userProfileData?.future_statistics,
-  //   lastUpdatedAt: userProfileData?.updated_at,
-  // });
-
-  // const subscribers = in_streak ? displayedSubscribers : userProfileData?.subscribers ?? 0
-  // const totalViews = in_streak ? displayedTotalViews : userProfileData?.total_views ?? 0
-  // const totalEarned = in_streak ? displayedTotalEarned : userProfileData?.total_earned ?? ""
-
   if (isLoading) {
     return <Loader />
   }
-
-  console.log('streaks')
 
   return (
     <>
