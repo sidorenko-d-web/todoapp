@@ -25,7 +25,11 @@ interface Props {
 
 export default function GetGift({ giftColor, boost }: Props) {
   const { closeModal, getModalState } = useModal();
-  const { isOpen } = getModalState(MODALS.GET_GIFT);
+  const { isOpen, args } = getModalState<{
+    points: number;
+    boost: Boost;
+  }>(MODALS.GET_GIFT);
+  
   const { t } = useTranslation('gift');
 
   if (!isOpen) return null;
@@ -50,6 +54,8 @@ export default function GetGift({ giftColor, boost }: Props) {
     giftLight = <Lottie animationData={redLightAnimation} loop={true} className={styles.light} />;
   }
 
+  console.log(args);
+
   return (
     <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={t('g1')}>
       <div className={styles.background}>
@@ -62,27 +68,25 @@ export default function GetGift({ giftColor, boost }: Props) {
         {giftImage}
         <div className={styles.statsContainer}>
           <div className={styles.stat}>
-            {boost?.income_per_second && (
-              <span className={styles.statValue}>+{formatAbbreviation(boost?.income_per_second)}</span>
+            {args?.boost?.income_per_second && (
+              <span className={styles.statValue}>+{formatAbbreviation(args?.boost?.income_per_second)}</span>
             )}
             <div className={styles.statBox}>
-              <span>x{formatAbbreviation(boost?.x_income_per_second || 0)}</span>
+              <span>x{formatAbbreviation(args?.boost?.x_income_per_second || 0)}</span>
               <img src={coin} />
               <span className={styles.extra}>/сек.</span>
             </div>
           </div>
           <div className={styles.stat}>
-            {/*<span className={styles.statValue}>+10</span>*/}
             <div className={styles.statBox}>
-              <span>+{formatAbbreviation(boost?.subscribers_for_first_level_referrals || 0)}</span>
+              <span>+{formatAbbreviation(args?.boost?.subscribers_for_first_level_referrals || 0)}</span>
               <img src={subscribers} />
               <span className={styles.extra}>1 ур.</span>
             </div>
           </div>
           <div className={styles.stat}>
-            {/*<span className={styles.statValue}>+5</span>*/}
             <div className={styles.statBox}>
-              <span>+{formatAbbreviation(boost?.subscribers_for_second_level_referrals || 0)}</span>
+              <span>+{formatAbbreviation(args?.boost?.subscribers_for_second_level_referrals || 0)}</span>
               <img src={subscribers} />
               <span className={styles.extra}>2 ур.</span>
             </div>
@@ -90,16 +94,16 @@ export default function GetGift({ giftColor, boost }: Props) {
         </div>
         <div className={styles.items}>
           <div className={styles.item}>
-            <p>+{formatAbbreviation(boost?.subscribers || 0)}</p>
+            <p>+{formatAbbreviation(args?.boost?.subscribers || 0)}</p>
             <img src={subscribers} />
           </div>
           <div className={styles.item}>
-            <p>+{formatAbbreviation(boost?.points || 0)}</p>
+            <p>+{formatAbbreviation(args?.boost?.points || args?.points || 0)}</p>
             <img src={coin} />
           </div>
-          {boost?.additional_integrations_for_subscription && (
+          {args?.boost?.additional_integrations_for_subscription && (
             <div className={styles.item}>
-              <p>+{formatAbbreviation(boost?.additional_integrations_for_subscription)}</p>
+              <p>+{formatAbbreviation(args?.boost?.additional_integrations_for_subscription)}</p>
               <img src={integration} />
             </div>
           )}

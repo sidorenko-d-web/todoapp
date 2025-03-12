@@ -9,6 +9,9 @@ import { useTranslation } from 'react-i18next';
 import { MODALS } from '../../../constants';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 import { useGetAssignmentRewardMutation } from '../../../redux/api/tasks';
+import { useGetTreeInfoQuery } from '../../../redux/api/tree/api';
+import { useGetProfileMeQuery } from '../../../redux/api/profile/api';
+import { Boost } from '../../../redux/api/tree/dto';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -21,6 +24,9 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const { openModal, closeModal } = useModal();
   const [getAssignmentReward] = useGetAssignmentRewardMutation();
   const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
+  const { data: treeData } = useGetTreeInfoQuery();
+  const { data: profile } = useGetProfileMeQuery();
+  const [testPoints, setTestPoints] = useState<string>('100');
 
   useEffect(() => {
     setQuestionStates(Array(task.stages).fill('closed').map((state, index) =>
@@ -59,11 +65,28 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
 
   const isCompleted = task.is_completed || questionStates.every(state => state === 'solved');
 
+  const stage = treeData?.growth_tree_stages?.find((item, index) => index === profile?.growth_tree_stage_id);
+
+  const handleOpenGetGiftModal = () => {
+    openModal(MODALS.GET_GIFT, {
+      points: stage?.achievement?.boost?.points || '0',
+      boost: stage?.achievement?.boost
+    });
+  };
+
+  console.error(stage);
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
         <h2 className={s.sectionTitle}>{t('q2')}</h2>
         <span className={s.count}>{completedCount}/3</span>
+        <button 
+          onClick={handleOpenGetGiftModal}
+          className={s.testButton}
+          style={{ marginLeft: '10px', padding: '5px 10px' }}
+        >
+          Тест GetGift
+        </button>
       </div>
       <div className={s.tasksList}>
         <TaskCard
@@ -90,7 +113,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
         taskId={task.id}
         task={task}
       />
-      <GetGift />
+      <GetGift boost={stage?.achievement?.boost} />
     </section>
   );
 };
