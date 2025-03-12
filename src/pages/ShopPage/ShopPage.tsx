@@ -19,7 +19,7 @@ const StorePage: FC = () => {
 
   const dispatch = useDispatch();
 
-  const { 
+  const {
     data: shop,
     isLoading: isShopLoading,
     isFetching: isShopFetching,
@@ -60,7 +60,7 @@ const StorePage: FC = () => {
         <Loader className={styles.itemsLoader} />
       ) : !(isShopLoading || isShopFetching || isInventoryLoading || isInventoryFetching) &&
         (!shopCategory || !itemsRarity) ? (
-        <p style={{ color: '#fff' }}>Error occured while getting data</p>
+        <p style={{ color: '#282830' }}>{t('s61')}</p>
       ) : shopCategory?.title !== t('s6') ? (
         items?.length === 0 ? (
           <p className={styles.emptyText}>{t('s37')}</p>
