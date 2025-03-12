@@ -16,15 +16,10 @@ export type PushLineDTO = {
     chest_name: string,
     chest_name_eng: string
   },
+
   week_information: {
-    date: string;
-    status: string;
-    is_notified_at_morning: boolean;
-    is_notified_at_afternoon: boolean;
-    is_notified_at_evening: boolean;
-    is_notified_at_late_evening: boolean;
-    is_notified_at_night: boolean;
-    is_notified_at_late_night: boolean;
+    creation_date: string;
+    push_line_data: PushLineDateDTO
   }[];
 };
 

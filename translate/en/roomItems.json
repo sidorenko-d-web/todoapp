@@ -1,0 +1,107 @@
+{
+  "wall": [
+    "Concrete Walls",
+    "Walls",
+    "Wallpaper"
+  ],
+  "floor": [
+    "Floor",
+    "Laminate",
+    "Tiles"
+  ],
+  "desc": [
+    "Table",
+    "Desk",
+    "Solid Wood Table"
+  ],
+  "chair": [
+    "Chair",
+    "Computer Chair",
+    "Gaming Chair"
+  ],
+  "sofa": [
+    "Sofa",
+    "Couch",
+    "Designer Sofa"
+  ],
+  "window": [
+    "Wooden Window",
+    "Window",
+    "Double Window"
+  ],
+  "poster": [
+    "Poster",
+    "Posters in Wooden Frame",
+    "LED Painting"
+  ],
+  "lens": [
+    "Lens",
+    "Wide-Angle Lens",
+    "Professional Lens"
+  ],
+  "note": [
+    "Notebook",
+    "Notepad",
+    "Tablet"
+  ],
+  "lightPortable": [
+    "Portable Light",
+    "Lighting",
+    "Studio Lighting"
+  ],
+  "carpet": [
+    "Rug",
+    "Carpet",
+    "Persian Carpet"
+  ],
+  "camera": [
+    "Amateur Camera",
+    "Professional Camera",
+    "Cinema Camera"
+  ],
+  "stand": [
+    "Tripod",
+    "Adjustable Tripod",
+    "Carbon Tripod"
+  ],
+  "lightDesc": [
+    "Desk Lamp",
+    "Ring Light",
+    "Studio Light"
+  ],
+  "mic": [
+    "Lapel Microphone",
+    "Condenser Microphone",
+    "Wireless Microphone"
+  ],
+  "photograph": [
+    "Point-and-Shoot Camera",
+    "Camera",
+    "DSLR Camera"
+  ],
+  "pc": [
+    "Typewriter",
+    "PC",
+    "Laptop"
+  ],
+  "pen": [
+    "Pencil",
+    "Pen",
+    "Stylus"
+  ],
+  "lamp": [
+    "Lamp",
+    "Smart Lamp",
+    "Designer Lamp"
+  ],
+  "ottoman": [
+    "Pouf",
+    "Bean Bag",
+    "Armchair"
+  ],
+  "plant": [
+    "Cactus",
+    "Ficus",
+    "Monstera"
+  ]
+}

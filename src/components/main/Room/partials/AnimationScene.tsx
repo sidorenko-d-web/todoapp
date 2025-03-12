@@ -1,14 +1,15 @@
 import { Skin, SpinePlugin } from '@esotericsoftware/spine-phaser';
-import { useRef, useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   IEquipedRoomResponse,
   IShopItem,
-  TypeWearLocation,
   selectIsNeedToPlayHappy,
   selectIsWorking,
+  setAnimationSceneLoaded,
   setNeedToPlayHappy,
+  TypeWearLocation,
 } from '../../../../redux';
-import { SpineSceneBase, animated } from '../../../../constants';
+import { animated, SpineSceneBase } from '../../../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { ICharacterResponse } from '../../../../redux/api/character';
 
@@ -72,7 +73,6 @@ export const AnimationScene = ({ room, character }: props) => {
             setSize(prev => [prev[0] + 1, prev[1]]);
           }
         }
-
         //devided creating items of animated and static
         room?.items.forEach(async (item, i) => {
           const animatedItem = findAnimatedItem(item);
@@ -82,10 +82,12 @@ export const AnimationScene = ({ room, character }: props) => {
             this.createSVGItem(item, i, contextProps);
           }
         });
+
         this.createBaseItems(contextProps);
 
         spineSceneRef.current = this;
         setIsLoaded(true);
+        dispatch(setAnimationSceneLoaded(true))
         this.changeSkin();
       }
 
@@ -102,7 +104,6 @@ export const AnimationScene = ({ room, character }: props) => {
         const skin = new Skin('created');
         skin.name = face.name.split('/')[1];
         skin.addSkin(bottomSkin);
-        console.log(character)
         skin.addSkin(upSkin);
         skin.addSkin(headSkin);
         skin.addSkin(face);

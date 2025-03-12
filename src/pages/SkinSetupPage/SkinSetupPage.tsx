@@ -150,39 +150,44 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
 
   return (
     <div className={styles.root}>
-      <div className={styles.avatarSection}>
-        <div className={styles.avatarPreview}>
-          <img src={wardrobeBg} alt="bg" />
-          <div
-            id={'player1'}
-            ref={sceneRef}
-            style={{ position: 'absolute', top: 72, borderRadius: 8, overflow: 'hidden', width: 280, height: 280 }}
-          />
+      <div className={styles.skinControls}>
+        <div className={styles.avatarSection}>
+          <div className={styles.avatarPreview}>
+            <img src={wardrobeBg} alt="bg" />
+            <div
+              id={'player1'}
+              ref={sceneRef}
+              style={{ position: 'absolute', top: 0, borderRadius: 8, overflow: 'hidden', width: 280, height: 280 }}
+            />
+          </div>
+          <div className={styles.bodyPartsContainer}>
+            {categories.map(({ name, key }) => (
+              <Button
+                key={key}
+                className={`${styles.tab} ${activeTab === key ? styles.activeTab : ''} ${
+                  key === 'entire_body' && activeTab !== key ? styles.vipTab : ''
+                }`}
+                onClick={() => setActiveTab(key)}
+              >
+                {name}
+              </Button>
+            ))}
+          </div>
         </div>
-        <div className={styles.bodyPartsContainer}>
-          {categories.map(({ name, key }) => (
+        <div className={styles.skinOptionsGrid}>
+          {categorizedSkins[activeTab as keyof CategorizedSkins]?.map(skin => (
             <Button
-              key={key}
-              className={`${styles.tab} ${activeTab === key ? styles.activeTab : ''} ${
-                key === 'entire_body' && activeTab !== key ? styles.vipTab : ''
-              }`}
-              onClick={() => setActiveTab(key)}
+              key={skin.id}
+              onClick={() => handleSelectSkin(skin)}
+              className={clsx(
+                styles.option,
+                character?.skins.map(item => item.id).includes(skin.id) && styles.selected,
+              )}
             >
-              {name}
+              <img src={skin.image_url + svgHeadersString || skinPlaceholder} />
             </Button>
           ))}
         </div>
-      </div>
-      <div className={styles.skinOptionsGrid}>
-        {categorizedSkins[activeTab as keyof CategorizedSkins]?.map(skin => (
-          <Button
-            key={skin.id}
-            onClick={() => handleSelectSkin(skin)}
-            className={clsx(styles.option, character?.skins.map(item => item.id).includes(skin.id) && styles.selected)}
-          >
-            <img src={skin.image_url + svgHeadersString || skinPlaceholder} />
-          </Button>
-        ))}
       </div>
       <Button className={styles.continueButton} onClick={onContinue}>
         {t('w7')}

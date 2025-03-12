@@ -8,11 +8,7 @@ import close from '../../../../assets/icons/close-dark.svg';
 import chest from '../../../../assets/icons/chest-purple.svg';
 import classNames from 'classnames';
 import BottomModal from '../../../shared/BottomModal/BottomModal.tsx';
-import { useGetPushLineQuery } from '../../../../redux/api/pushLine/api';
-import {
-  useGetCurrentUserProfileInfoQuery,
-  useGetTopProfilesQuery,
-} from '../../../../redux/index.ts';
+import { useGetProfileMeQuery, useGetPushLineQuery, useGetTopProfilesQuery } from '../../../../redux';
 import { Link } from 'react-router-dom';
 import { formatAbbreviation } from '../../../../helpers';
 
@@ -28,8 +24,7 @@ export const TopUsers: FC<InviteFriendProps> = ({
   const { data } = useGetTopProfilesQuery();
   const topProfiles = data?.profiles || [];
   const { data: pushLine } = useGetPushLineQuery();
-  const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
-  const { data: me } = useGetCurrentUserProfileInfoQuery();
+  const { data: userProfileData } = useGetProfileMeQuery();
 
   const userPosition =
     userProfileData && topProfiles
@@ -41,25 +36,12 @@ export const TopUsers: FC<InviteFriendProps> = ({
 
   const frozen = pushLine?.week_information.filter(
     day =>
-      day.status === 'passed' &&
-      !day.is_notified_at_morning &&
-      !day.is_notified_at_afternoon &&
-      !day.is_notified_at_evening &&
-      !day.is_notified_at_late_evening &&
-      !day.is_notified_at_late_night &&
-      !day.is_notified_at_night,
-  ).length;
+      day.push_line_data?.status === 'passed').length;
 
   const streaks = pushLine?.week_information.filter(
     day =>
       day &&
-      (day.status === 'unspecified' || day.status === 'passed') &&
-      (day.is_notified_at_morning ||
-        day.is_notified_at_afternoon ||
-        day.is_notified_at_evening ||
-        day.is_notified_at_late_evening ||
-        day.is_notified_at_late_night ||
-        day.is_notified_at_night),
+      (day.push_line_data?.status === 'unspecified' || day.push_line_data?.status === 'passed'),
   ).length;
   // TODO: Раскомментировать когда на бэке будет vip данные
   return (
@@ -84,7 +66,7 @@ export const TopUsers: FC<InviteFriendProps> = ({
           <Link
             to={`/profile/${profile.id}`}
             key={profile.id}
-            className={classNames(s.listUser, me && me.id === profile.id && s.active)}
+            className={classNames(s.listUser, userProfileData && userProfileData.id === profile.id && s.active)}
           >
             <div className={classNames(s.cardBlock)}>
               <div className={s.card}>

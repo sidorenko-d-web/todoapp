@@ -81,7 +81,7 @@ $translateY: -15vh;
 .floorWrapper {
   @extend .item;
   transform: translateX(-58.15%);
-  top: 310px;
+  top: 360px;
   background: 'red';
 }
 
@@ -124,7 +124,7 @@ $translateY: -15vh;
 
 .treshinaLeft {
   @extend .item;
-  top: 29px;
+  top: 79px;
   transform: translateX(-150%);
 }
 .treshinaRight {
@@ -135,17 +135,46 @@ $translateY: -15vh;
 .shelf {
   @extend .item;
   width: 145px;
-  height: 78px;
-  top: 190px;
+  height: 278px;
+  top: 140px;
   transform: translateX(-12%);
 }
 
 .reward {
   @extend .item;
   display: block;
-  top: 175px;
+  top: 225px;
   transform: scaleX(-1) translateX(-130%);
   z-index: 1000;
   width: 80px;
   height: 80px;
+}
+
+.coin { 
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 50%;
+  transform: translateX(-20px);
+  z-index: 10000000;
+  animation: coin 1.15s forwards ease-in-out;
+}
+
+@keyframes coin {
+  0% {
+    opacity: 0;
+    top: 450px;
+  }
+  40% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0;
+    top: 400px;
+  }
+
+  100%{
+    opacity: 0;
+    top: 400px;
+  }
 }

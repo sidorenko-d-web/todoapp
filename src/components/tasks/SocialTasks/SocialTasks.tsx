@@ -1,10 +1,17 @@
 import { FC, useState, useEffect } from 'react';
 import { TaskCard } from '../';
-import telegramIcon from '../../../assets/icons/telegram.png';
-import instagramIcon from '../../../assets/icons/instagram.png';
+import telegramIcon from '../../../assets/icons/telegram.svg';
+import instagramIcon from '../../../assets/icons/instagram.svg';
+import discordIcon from '../../../assets/icons/discord.svg';
+import tiktokIcon from '../../../assets/icons/tiktok.svg';
+import twitterIcon from '../../../assets/icons/twitter.svg';
+import vkIcon from '../../../assets/icons/vk.svg';
+import youtubeIcon from '../../../assets/icons/youtube.svg';
+
+
 import s from '../styles.module.scss';
 import { Task } from '../../../redux/api/tasks';
-import { useUpdateTaskMutation } from '../../../redux/api/tasks';
+import { useUpdateTaskMutation, useGetAssignmentRewardMutation } from '../../../redux/api/tasks';
 import { useTranslation } from 'react-i18next';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants';
@@ -16,19 +23,48 @@ type SocialTasksProps = {
   tasks: Task[];
 };
 
+const getTaskIcon = (title: string): string => {
+  const lowerTitle = title.toLowerCase();
+  if (lowerTitle.includes('telegram')) return telegramIcon;
+  if (lowerTitle.includes('instagram')) return instagramIcon;
+  if (lowerTitle.includes('discord')) return discordIcon;
+  if (lowerTitle.includes('tiktok')) return tiktokIcon;
+  if (lowerTitle.includes('twitter') || lowerTitle.includes('x')) return twitterIcon;
+  if (lowerTitle.includes('vk')) return vkIcon;
+  if (lowerTitle.includes('youtube')) return youtubeIcon;
+  return telegramIcon; // default fallback
+};
+
 export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
   const { t } = useTranslation('quests');
   const completedTasks = tasks.filter(task => task.is_completed).length;
   const [updateTask] = useUpdateTaskMutation();
+  const [getAssignmentReward] = useGetAssignmentRewardMutation();
   const { openModal } = useModal();
   const [pendingTaskId, setPendingTaskId] = useState<string | null>(null);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   const handleTaskClick = async (task: Task) => {
     if (task.is_completed && !task.is_reward_given) {
-      setSelectedTask(task);
-      openModal(MODALS.TASK_COMPLETED);
-      return;
+      try {
+        const result = await getAssignmentReward({
+          category: task.category,
+          assignmentId: task.id
+        }).unwrap();
+        
+        setSelectedTask({
+          ...task,
+          boost: {
+            income_per_second: result.income_per_second,
+            subscribers: result.subscribers,
+            views: result.views
+          }
+        });
+        openModal(MODALS.TASK_COMPLETED);
+        return;
+      } catch (error) {
+        console.error('Error getting assignment reward:', error);
+      }
     }
 
     try {
@@ -42,8 +78,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
           : (task.external_link);
         window.open(linkToOpen, '_blank');
 
-        // Ждем 30 секунд
-        await new Promise(resolve => setTimeout(resolve, 30000));
+        await new Promise(resolve => setTimeout(resolve, 15000));
 
         await updateTask({
           id: task.id,
@@ -56,10 +91,6 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
         localStorage.removeItem('pendingTaskId');
         localStorage.removeItem('pendingTaskStartTime');
         setPendingTaskId(null);
-        
-        // Открываем модальное окно после успешного выполнения задания
-        setSelectedTask(task);
-        openModal(MODALS.TASK_COMPLETED);
       }
     } catch (error) {
       console.error('Error updating task:', error);
@@ -76,7 +107,7 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
     
     if (savedTaskId && startTime) {
       const elapsedTime = Date.now() - Number(startTime);
-      const remainingTime = Math.max(30000 - elapsedTime, 0);
+      const remainingTime = Math.max(15000 - elapsedTime, 0);
 
       setPendingTaskId(savedTaskId);
 
@@ -125,6 +156,8 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
     }
   }, []);
 
+  const visibleTasks = tasks.filter(task => !task.is_completed || (task.is_completed && !task.is_reward_given));
+
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
@@ -132,12 +165,12 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
         <span className={s.count}>{completedTasks}/{tasks.length}</span>
       </div>
       <div className={s.tasksList}>
-        {tasks.map(task => (
+        {visibleTasks.map(task => (
           <TaskCard
             key={task.id}
             title={task.title}
             description={task.description}
-            icon={task.title.toLowerCase().includes('telegram') ? telegramIcon : instagramIcon}
+            icon={getTaskIcon(task.title)}
             income={Number(task.boost.views)}
             subscribers={task.boost.subscribers}
             passiveIncome={Number(task.boost.income_per_second)}

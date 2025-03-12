@@ -18,7 +18,8 @@ import { useTranslation } from 'react-i18next';
 
 export const NewItemModal: React.FC = () => {
   const { closeModal, getModalState } = useModal();
-  const { t } = useTranslation('shop');
+  const { t, i18n } = useTranslation('shop');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const state = getModalState<{ item: IShopItem; mode: 'skin' | 'item' }>(
     MODALS.NEW_ITEM,
@@ -83,7 +84,7 @@ export const NewItemModal: React.FC = () => {
           <p>
             {t('s48')}{' '}
             <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>
-              {state.args?.item.name}!
+              {locale === 'ru' ? state.args?.item.name :state.args?.item.name_eng}!
             </span>{' '}
             {t('s49')}
           </p>
@@ -91,7 +92,7 @@ export const NewItemModal: React.FC = () => {
           <p>
             {t('s50')}{' '}
             <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>
-              {state.args?.item.name}!
+              {locale === 'ru' ? state.args?.item.name :state.args?.item.name_eng}!
             </span>{' '}
             {t('s51')}
           </p>

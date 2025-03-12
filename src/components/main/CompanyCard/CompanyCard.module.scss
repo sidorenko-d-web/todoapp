@@ -15,6 +15,7 @@
   justify-content: center;
   align-items: center;
 
+
   @media (min-width: var.$breakpoint-md) {
     height: 137px;
   }
@@ -126,6 +127,7 @@
 
 .selected {
   outline: 2px solid var.$color-primary;
+  transition: outline 0.05s ease;
 }
 
 .disabled {

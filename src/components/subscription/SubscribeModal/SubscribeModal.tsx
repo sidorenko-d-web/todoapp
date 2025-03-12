@@ -1,15 +1,14 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import coinIcon from '../../../assets/icons/coin.png';
-import { RootState, setSubscribeGuideShown, useBuySubscriptionMutation } from '../../../redux';
-import { useGetCurrentUserProfileInfoQuery } from '../../../redux';
+import { RootState, setSubscribeGuideShown, useBuySubscriptionMutation, useGetProfileMeQuery } from '../../../redux';
 
 import s from './SubscribeModal.module.scss';
 import { getSubscriptionPurchased, isGuideShown, setGuideShown, setSubscriptionPurchased } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { Button, CentralModal } from '../../shared';
-import { GUIDE_ITEMS, MODALS } from '../../../constants';
-import { useModal } from '../../../hooks';
+import { GUIDE_ITEMS, MODALS, PROFILE_ME_POLLING_INTERVAL } from '../../../constants';
+import { useModal, useSendTransaction, useTonConnect, useUsdtTransactions } from '../../../hooks';
 import { useTranslation } from 'react-i18next';
 import list from '../../../assets/icons/list.svg';
 import { SubscrieGuide } from '../../guide';
@@ -23,11 +22,13 @@ interface SubscribeModalProps {
   onSuccess: () => void;
 }
 
+const point_integration = '150'
+
 export const SubscribeModal: FC<SubscribeModalProps> = ({
-                                                          modalId,
-                                                          onClose,
-                                                          onSuccess,
-                                                        }: SubscribeModalProps) => {
+  modalId,
+  onClose,
+  onSuccess,
+}: SubscribeModalProps) => {
   const { t } = useTranslation('guide');
   const [idDisabled] = useState(true);
   const [isShow, setIsShow] = useState(false);
@@ -35,8 +36,8 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
   const [isSubscriptionPurchased, setIsSubscriptionPurchased] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [buySubscription] = useBuySubscriptionMutation();
-  const { data: current } = useGetCurrentUserProfileInfoQuery(undefined, {
-    pollingInterval: 10000, // 10 сек
+  const { data: current } = useGetProfileMeQuery(undefined, {
+    pollingInterval: PROFILE_ME_POLLING_INTERVAL
   });
 
   const buyBtnGlowing = getSubscriptionPurchased();
@@ -72,15 +73,52 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
     }
   }, [timeLeft]);
 
-  const handleBuySubscription = () => {
+  // USDT buy subscription
+  const { sendUSDT } = useSendTransaction();
+  const usdtTransactions = useUsdtTransactions();
+  const [currentTrxId, setCurrentTrxId] = useState("")
+  // for transactions
+  const { walletAddress, connectWallet } = useTonConnect()
+
+  const handleUsdtPayment = async () => {
+    if (!walletAddress) {
+      connectWallet();
+    }
+    try {
+      const trxId = await sendUSDT(1.99);
+      // @ts-expect-error
+      setCurrentTrxId(trxId);
+    } catch (error) {
+      console.log("Error while sending USDT transaction", error)
+    }
+  };
+
+  useEffect(() => {
+    const latestTransaction = usdtTransactions[0];
+    console.error("Transactions", latestTransaction)
+    console.warn("trx id: ", currentTrxId)
+
+    if (!latestTransaction || latestTransaction.orderId !== currentTrxId) return;
+
+    if (latestTransaction.status === 'succeeded') {
+      handleBuySubscription('usdt')
+      setCurrentTrxId("")
+    } else {
+      setErrorMessage("Transaction failed")
+    }
+  }, [currentTrxId, usdtTransactions, ]);
+
+  const handleBuySubscription = (paymentMethod: string) => {
     if (isSubscriptionPurchased) {
       setErrorMessage(t('g82'));
       setIsShow(true);
       setTimeout(() => setIsShow(false), 3000);
       return;
     }
+    const currentPoints = Number(current?.points);
+    const pointIntegration = Number(point_integration);
 
-    if (current && current?.points < '15') {
+    if (current && currentPoints < pointIntegration) {
       setErrorMessage(t('g81'));
       setIsShow(true);
       setTimeout(() => setIsShow(false), 3000);
@@ -88,7 +126,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
     }
 
     setSubscriptionPurchased();
-    buySubscription()
+    buySubscription({ payment_method: paymentMethod })
       .unwrap()
       .then(() => {
         localStorage.setItem('lastPurchaseTime', Date.now().toString());
@@ -120,7 +158,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
             <div className={s.progressInfo}>
               <span>{t('g76')}</span>
               <span className={s.progressIcon}>0/5 <img src={integrationWhiteIcon} height={18} width={18}
-                                                        alt={'Integration'} /></span>
+                alt={'Integration'} /></span>
             </div>
             <div className={s.progressBar}>
               <div className={s.progressBarInner} style={{ width: `0%` }} />
@@ -136,10 +174,17 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
           </span>
         </div>
         <div className={s.buttons}>
-          <Button className={s.button} disabled={idDisabled || !!isSubscriptionPurchased}>{formatAbbreviation(1.99, 'currency')}</Button>
+          <Button
+            className={s.button}
+            disabled={idDisabled || !!isSubscriptionPurchased}
+            onClick={handleUsdtPayment}
+          >
+            {formatAbbreviation(1.99, 'currency')}
+          </Button>
+
           <Button className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`} disabled={!!isSubscriptionPurchased}
-                  onClick={handleBuySubscription}>
-            {formatAbbreviation(15)} <img src={isSubscriptionPurchased ? DisableCoin : coinIcon} height={14} width={14} alt={'Coin'} />
+            onClick={() => handleBuySubscription("internal_wallet")}>
+            {formatAbbreviation(point_integration)} <img src={isSubscriptionPurchased ? DisableCoin : coinIcon} height={14} width={14} alt={'Coin'} />
           </Button>
           <Button className={s.button + ' ' + s.gray} disabled={idDisabled || !!isSubscriptionPurchased}>
             <img src={idDisabled ? ListDisableIcon : list} height={16} width={16} alt={'list'} />
@@ -148,22 +193,22 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
       </div>
 
       {!guideShown && <SubscrieGuide
-            onClose={() => {
-              dispatch(setSubscribeGuideShown(true));
-              setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
-              closeModal(MODALS.SUBSCRIBE);
-            }}
-            top="65%"
-            zIndex={1500}
-            description={
-              <>
-                {t('g14')} <span style={{ color: '#2F80ED' }}>{t('g15')}</span>
-                <br />
-                <br />
-                {t('g16')}
-              </>
-            }
-          />}
+        onClose={() => {
+          dispatch(setSubscribeGuideShown(true));
+          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+          closeModal(MODALS.SUBSCRIBE);
+        }}
+        top="65%"
+        zIndex={1500}
+        description={
+          <>
+            {t('g14')} <span style={{ color: '#2F80ED' }}>{t('g15')}</span>
+            <br />
+            <br />
+            {t('g16')}
+          </>
+        }
+      />}
     </CentralModal>
   );
 };

@@ -1,0 +1,3 @@
+export const PROFILE_ME_POLLING_INTERVAL = 1000 * 30; // 30 сек
+export const TREE_POLLING_INTERVAL = 1000 * 30; // 30 сек
+export const INVENTORY_ACHIEVEMENTS_POLLING_INTERVAL = 1000 * 60; // 60 сек

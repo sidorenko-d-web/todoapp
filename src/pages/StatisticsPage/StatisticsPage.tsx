@@ -7,7 +7,7 @@ import logo from '../../assets/icons/dot.png';
 import back from '../../assets/icons/arrow-back.svg';
 import StatisticsCard from '../../components/statistics/statisticsCard/StatisticsCard';
 import coin from '../../assets/icons/coin.png';
-import { useGetAllIntegrationsQuery, useGetCurrentUserProfileInfoQuery } from '../../redux';
+import { useGetAllIntegrationsQuery, useGetProfileMeQuery } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
 import { Button } from '../../components/shared';
 import { useTranslation } from 'react-i18next';
@@ -16,11 +16,12 @@ import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileS
 import { usePushLineStatus } from '../../hooks/usePushLineStatus.ts';
 
 const StatisticsPage: FC = () => {
+  // Все хуки вызываются на верхнем уровне
   const { t, i18n } = useTranslation('statistics');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const navigate = useNavigate();
   const { data: statisticData, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
-  const { data: userProfileData, isLoading: isUserLoading } = useGetCurrentUserProfileInfoQuery();
+  const { data: userProfileData, isLoading: isUserLoading } = useGetProfileMeQuery();
   const {
     points: displayedPoints,
     subscribers: displayedSubscribers,
@@ -33,16 +34,19 @@ const StatisticsPage: FC = () => {
     baseTotalEarned: userProfileData?.total_earned || "0",
     futureStatistics: userProfileData?.future_statistics,
     lastUpdatedAt: userProfileData?.updated_at
-  })
+  });
+
+  const { in_streak } = usePushLineStatus(); // Хук вызывается на верхнем уровне
 
   const isLoading = isAllIntegrationsLoading || isUserLoading;
 
-  if (isLoading) return <Loader />;
+  // Условная логика использования данных
+  const points = in_streak ? displayedPoints : userProfileData?.points || "0";
+  const subscribers = in_streak ? displayedSubscribers : userProfileData?.subscribers || 0;
+  const totalViews = in_streak ? displayedTotalViews : userProfileData?.total_views || 0;
 
-  const {in_streak} = usePushLineStatus()
-  const points = in_streak? displayedPoints : userProfileData?.points || "0"
-  const subscribers = in_streak? displayedSubscribers : userProfileData?.subscribers || 0
-  const totalViews = in_streak? displayedTotalViews : userProfileData?.total_views || 0
+  // Условный рендеринг после всех хуков
+  if (isLoading) return <Loader />;
 
   return (
     <div className={styles.wrapper}>

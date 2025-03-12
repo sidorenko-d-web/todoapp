@@ -1,12 +1,14 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import lightningIcon from '../../../assets/icons/lightning.svg';
 import {
   integrationsApi,
   profileApi,
+  setIntegrationCreated,
+  setLastIntegrationId,
   useCreateIntegrationMutation,
   useGetCompaniesQuery,
-  useGetCurrentUserProfileInfoQuery,
+  useGetProfileMeQuery,
 } from '../../../redux';
 import { CompanyCard, SpecialIntegration } from '../';
 import { useDispatch } from 'react-redux';
@@ -20,13 +22,11 @@ import {
   integrationCreatingModalTabsGlowing,
   isGuideShown,
   setGuideShown,
-} from '../../../utils/guide-functions.ts';
-import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
-import { setIntegrationCreated, setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
+} from '../../../utils';
+import { AppRoute, GUIDE_ITEMS } from '../../../constants';
 import { CreatingIntegrationGuide, Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
-import { ExpandableBottomModal } from '../../shared/';
-import { AppRoute } from '../../../constants/appRoute.ts';
+import { CentralModal } from '../../shared/';
 
 
 interface CreatingIntegrationModalProps {
@@ -55,7 +55,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const [selectedCompanyId, setSelectedCompanyId] = useState("")
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
   const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
-  const { data: profile, isLoading: isProfileLoading } = useGetCurrentUserProfileInfoQuery();
+  const { data: profile, isLoading: isProfileLoading } = useGetProfileMeQuery();
   const { data, isLoading: isCompaniesLoading } = useGetCompaniesQuery();
   const companies = data?.campaigns;
 
@@ -101,23 +101,46 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   const [firstGuideClosed, setFirstGuideClosed] = useState(false);
 
+  useEffect(() => {
+    if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) {
+      setFirstGuideClosed(true);
+    }
+  }, []);
+
+
   return (
-    <ExpandableBottomModal
-      modalId={modalId}
+    // <ExpandableBottomModal
+    //   modalId={modalId}
+    //   title={t('i11')}
+    //   onClose={
+    //     () => {
+    //       onClose();
+    //       if(!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+    //        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+    //        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+    //        navigate(AppRoute.Shop); 
+    //       }
+    //     }
+    //   }
+    //   titleIcon={integrationWhiteIcon}
+    //   overlayOpacity={0.7}
+    // >
+    <CentralModal
       title={t('i11')}
+      modalId={modalId}
       onClose={
         () => {
           onClose();
-          if(!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
-           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
-           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-           navigate(AppRoute.Shop); 
+          if (!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
+            setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+            navigate(AppRoute.Shop);
           }
-        }
-      }
+        }}
+      headerStyles={s.headerStyles}
       titleIcon={integrationWhiteIcon}
-      overlayOpacity={0.7}
     >
+
       {isProfileLoading || isCompaniesLoading
         ? <Loader noMargin />
         : <div className={s.content}>
@@ -140,100 +163,116 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
               </span>
             ))}
           </div>
-          {uniqueCompany && !noItemsMessage && (
-            <SpecialIntegration
-              integration={uniqueCompany}
-            />
-          )}
 
-          {!noItemsMessage && hasCreatingIntegration && (
-            <span className={s.message}>{t('i20')}</span>
-          )}
+          <div className={s.scrollableContent}>
+            {uniqueCompany && !noItemsMessage && (
+              <SpecialIntegration
+                integration={uniqueCompany}
+              />
+            )}
 
-          {!noItemsMessage ? (
-            <div className={s.companies}>
-              {companies?.map((company) =>
-                company.growth_tree_stage !== 100 && (
-                  <CompanyCard
-                    key={company.id}
-                    company={company}
-                    selected={selectedCompanyId === company.id}
-                    disabled={hasCreatingIntegration}
-                    onClick={() => setSelectedCompanyId(company.id)}
-                  />
-                ),
-              )}
-            </div>
-          ) : (
-            <span className={s.message}>{noItemsMessage}</span>
-          )}
+            {!noItemsMessage && hasCreatingIntegration && (
+              <span className={s.message}>{t('i20')}</span>
+            )}
 
-          {
-            // @ts-expect-error No error types yet
-            isError && <span className={s.errorMessage}>{error?.data?.detail}</span>
-          }
+            {!noItemsMessage ? (
+              <div className={s.companies}>
+                {companies?.map((company) =>
+                  company.growth_tree_stage !== 100 && (
+                    <CompanyCard
+                      key={company.id}
+                      company={company}
+                      selected={selectedCompanyId === company.id}
+                      disabled={hasCreatingIntegration}
+                      // onClick={() => setSelectedCompanyId(company.id)}
+                      onClick={() => {
+                        // Toggle selection: If already selected, deselect it, otherwise select it
+                        if (selectedCompanyId === company.id) {
+                          setSelectedCompanyId("");
+                        } else {
+                          setSelectedCompanyId(company.id);
+                        }
+                      }}
+                    />
+                  ),
+                )}
+              </div>
+            ) : (
+              <span className={s.message}>{noItemsMessage}</span>
+            )}
 
-          {noItemsMessage && <TrackedButton
-            trackingData={{
-              eventType: 'button',
-              eventPlace: 'В магазин - Главный экран - Окно создание интеграции',
-            }}
-            className={`${s.button} 
+            {
+              // @ts-expect-error No error types yet
+              isError && <span className={s.errorMessage}>{error?.data?.detail}</span>
+            }
+
+            {noItemsMessage && <TrackedButton
+              trackingData={{
+                eventType: 'button',
+                eventPlace: 'В магазин - Главный экран - Окно создание интеграции',
+              }}
+              className={`${s.button} 
             ${buttonGlowing ? s.glowingBtn : ''} `}
-            onClick={goToShop}
-          >
-            {t('i21')}
-          </TrackedButton>}
+              onClick={goToShop}
+            >
+              {t('i21')}
+            </TrackedButton>}
 
-          {selectedCompanyId && !noItemsMessage && !hasCreatingIntegration && (
-            <div className={s.stickyButtonContainer}>
-              <button
-                className={s.createButton}
-                onClick={submitCreation}
-              >
-                {t('i31')}
-              </button>
-            </div>
-          )}
+            {!noItemsMessage && !hasCreatingIntegration && (
+              <div className={s.stickyButtonContainer}>
+                <button
+                  className={`${s.createButton} ${!selectedCompanyId ? s.disabledButton : ''}`}
+                  onClick={submitCreation}
+                  disabled={!selectedCompanyId}
 
+                >
+                  {t('i31')}
+                </button>
+              </div>
+            )}
+
+          </div>
         </div>
       }
 
       {(!firstGuideClosed && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) && <CreatingIntegrationGuide
-                onClose={() => {
-                  setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
-                  setFirstGuideClosed(true);
-                }}
-                buttonText={tGuide('g17')}
-                description={
-                  <>
-                    {tGuide('g18')} <span style={{ color: '#2F80ED' }}>{tGuide('g19')}</span>
-                    <br />
-                    <br />
-                    {tGuide('g20')}
-                  </>
-                }
-                align="left"
-                top="9%"
-              />}
+        onClose={() => {
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+          setFirstGuideClosed(true);
+        }}
+        buttonText={tGuide('g17')}
+        description={
+          <>
+            {tGuide('g18')} <span style={{ color: '#2F80ED' }}>{tGuide('g19')}</span>
+            <br />
+            <br />
+            {tGuide('g20')}
+          </>
+        }
+        align="left"
+        top="9%"
+      />}
       {(firstGuideClosed && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)) && <CreatingIntegrationGuide
-            onClose={() => {
-              setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-              onClose;
-              navigate(AppRoute.Shop);
-            }}
-            buttonText={tGuide('g21')}
-            description={
-              <>
-                {tGuide('g22')} <span style={{ color: '#2F80ED' }}>{tGuide('g23')} </span>
-                <br />
-                <br />
-                {tGuide('g24')}
-              </>
-            }
-            align="left"
-            top="22%"
-          />}
-    </ExpandableBottomModal>
+        onClose={() => {
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+          onClose();
+          navigate(AppRoute.Shop);
+        }}
+        buttonText={tGuide('g21')}
+        description={
+          <>
+            {tGuide('g22')} <span style={{ color: '#2F80ED' }}>{tGuide('g23')} </span>
+            <br />
+            <br />
+            {tGuide('g24')}
+          </>
+        }
+        align="left"
+        top="22%"
+      />}
+
+
+      {/* </ExpandableBottomModal> */}
+    </CentralModal>
   );
 };

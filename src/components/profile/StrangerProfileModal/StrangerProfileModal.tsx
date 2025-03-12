@@ -26,17 +26,10 @@ export const StrangerProfileModal: FC<StrangerProfileModalProps> = ({
   const streaks = data?.week_information.filter(
     day =>
       day &&
-      (day.status === 'unspecified' || day.status === 'passed') &&
-      (day.is_notified_at_morning ||
-        day.is_notified_at_afternoon ||
-        day.is_notified_at_evening ||
-        day.is_notified_at_late_evening ||
-        day.is_notified_at_late_night ||
-        day.is_notified_at_night),
+      (day.push_line_data?.status === 'unspecified' || day.push_line_data?.status === 'passed'),
   ).length;
-  const { position, subscribers, daysInARow } = {
+  const { position, daysInARow } = {
     position: 12,
-    subscribers: 223567,
     daysInARow: streaks,
   };
 
@@ -66,9 +59,7 @@ export const StrangerProfileModal: FC<StrangerProfileModalProps> = ({
         <ProfileStatsMini
           onlyBadges
           position={position}
-          subscribers={subscribers}
           daysInARow={daysInARow ?? 0}
-          totalViews={profile.total_views}
         />
         <ProfileInfo
           nickname={profile.username}
@@ -81,8 +72,6 @@ export const StrangerProfileModal: FC<StrangerProfileModalProps> = ({
                     chest={locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}
                     status={locale === 'ru' ? data?.push_line_profile_status.status_name : data?.push_line_profile_status.status_name_eng} />
         <ProfileStats
-          earned={profile.total_earned}
-          views={profile.total_views}
           favoriteCompany={'Favourite company'}
           comments={profile.comments_answered_correctly}
           rewards={profile.achievements_collected}

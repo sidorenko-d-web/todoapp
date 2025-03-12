@@ -1,7 +1,7 @@
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { GUIDE_ITEMS, MODALS } from '../../../constants';
-import { profileApi, RootState, useGetCurrentUserProfileInfoQuery, useGetIntegrationsQuery } from '../../../redux';
+import { profileApi, RootState, useGetIntegrationsQuery, useGetProfileMeQuery } from '../../../redux';
 import { IntegrationCreationCard, IntegrationCreationModal } from '../';
 import { SubscribeModal, SuccessfullySubscribedModal, TrackedButton } from '../../';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,8 +14,9 @@ import { useTranslation } from 'react-i18next';
 export const IntegrationCreation = () => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
+  const integrationCreating = useSelector((state: RootState) => state.acceleration.integrationCreating)
 
-  const { data: profile } = useGetCurrentUserProfileInfoQuery();
+  const { data: profile } = useGetProfileMeQuery();
   const { data: integrations, error: integrationsError } = useGetIntegrationsQuery(
     { status: 'creating' },
     {
@@ -50,30 +51,31 @@ export const IntegrationCreation = () => {
 
   return (
     <section className={s.integrationsControls}>
-      <TrackedButton
-        trackingData={{
-          eventType: 'button',
-          eventPlace: 'Создать интеграцию - Главный экран'
-        }}
-        className={`${s.button} ${
-          isButtonGlowing || createIntegrationButtonGlowing ? s.glowing : ''
-        }`}
-        disabled={!profile}
-        onClick={handleIntegrationCreation}
-      >
-        {t('i9')}
-        <span className={s.buttonBadge}>
-          {profile?.subscription_integrations_left || 0}/5{' '}
-          <img src={integrationIcon} height={12} width={12} alt="integration" />
-        </span>
-      </TrackedButton>
+      {!integrationCreating &&
+        <TrackedButton
+          trackingData={{
+            eventType: 'button',
+            eventPlace: 'Создать интеграцию - Главный экран'
+          }}
+          className={`${s.button} ${isButtonGlowing || createIntegrationButtonGlowing ? s.glowing : ''
+            }`}
+          disabled={!profile}
+          onClick={handleIntegrationCreation}
+        >
+          {t('i9')}
+          <span className={s.buttonBadge}>
+            {profile?.subscription_integrations_left || 0}/5{' '}
+            <img src={integrationIcon} height={12} width={12} alt="integration" />
+          </span>
+        </TrackedButton>
+      }
       {
         // @ts-expect-error ts(2339)
         integrationsError?.status === 404
           ? null
           : integrations?.integrations && (
-              <IntegrationCreationCard integration={integrations?.integrations[0]} />
-            )
+            <IntegrationCreationCard integration={integrations?.integrations[0]} />
+          )
       }
 
       <IntegrationCreationModal
