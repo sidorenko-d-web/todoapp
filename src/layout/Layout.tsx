@@ -5,12 +5,13 @@ import { Header } from '../components/Header/';
 import { useEffect, useState } from 'react';
 import { AppRoute, localStorageConsts, MODALS } from '../constants';
 import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
-import { AudioBg, useModal, useScrollManager } from '../hooks';
+import { useModal, useScrollManager } from '../hooks';
 import { getOS } from '../utils';
 import Lottie from 'lottie-react';
 import { lampTable } from '../assets/animations';
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
 import clsx from 'clsx';
+import WhiteNoiseCanvas from '../components/WhiteNoise/WhiteNoise';
 
 const Layout = () => {
   const location = useLocation();
@@ -72,6 +73,8 @@ const Layout = () => {
 
   return (
     <>
+      <WhiteNoiseCanvas/>
+
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
       </div>
@@ -88,7 +91,7 @@ const Layout = () => {
           <SettingsModal />
           <WalletConnectionModal />
           <LanguageSelectionModal />
-          <AudioBg />
+          {/* <AudioBg /> */}
         </main>
         <Footer />
       </div>

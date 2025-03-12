@@ -62,33 +62,33 @@ type ProgressTaskProps = {
 type TasksCardProps = BaseTaskProps & (DefaultTaskProps | ProgressTaskProps);
 
 export const TaskCard: React.FC<TasksCardProps> = ({
-                                                     id,
-                                                     title,
-                                                     description,
-                                                     icon,
-                                                     type = 'default',
-                                                     showProgressBar,
-                                                     income,
-                                                     subscribers,
-                                                     passiveIncome,
-                                                     currentStep,
-                                                     totalSteps,
-                                                     progress,
-                                                     progressReward,
-                                                     progressRewardIcon,
-                                                     buttonText,
-                                                     buttonType = 'primary',
-                                                     isLoading,
-                                                     disabled,
-                                                     onClick,
-                                                     questionStates = [ 'closed', 'closed', 'closed' ],
-                                                     isCompleted,
-                                                     isRewardGiven,
-                                                     isTopTask,
-                                                     errorText,
-                                                     isDailyTask,
-                                                     isSocialTask,
-                                                   }) => {
+  id,
+  title,
+  description,
+  icon,
+  type = 'default',
+  showProgressBar,
+  income,
+  subscribers,
+  passiveIncome,
+  currentStep,
+  totalSteps,
+  progress,
+  progressReward,
+  progressRewardIcon,
+  buttonText,
+  buttonType = 'primary',
+  isLoading,
+  disabled,
+  onClick,
+  questionStates = ['closed', 'closed', 'closed'],
+  isCompleted,
+  isRewardGiven,
+  isTopTask,
+  errorText,
+  isDailyTask,
+  isSocialTask,
+}) => {
   const { t, i18n } = useTranslation('quests');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
@@ -98,7 +98,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
 
   // Функция для получения иконки на основе состояния
   const getIconByState = (state: QuestionState) => {
-    if(isRewardGiven) {
+    if (isRewardGiven) {
       return checkIcon;
     }
 
@@ -113,7 +113,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
   };
 
   let animationLight;
-  
+
   if (isTopTask) {
     animationLight = <Lottie animationData={purpleLightAnimation} loop={true} className={s.lightAnimation} />;
   } else if ((isDailyTask && buttonText !== t('q15')) || isSocialTask) {
@@ -121,23 +121,21 @@ export const TaskCard: React.FC<TasksCardProps> = ({
   }
 
   return (
-    <div className={classNames(s.card, {
-      [s.completed]: isCompleted,
-      [s.topTask]: isTopTask,
-      [s.dailyTask]: isDailyTask,
-      [s.socialTask]: isSocialTask,
-      [s.ru]: locale === 'ru',
-      [s.en]: locale === 'en',
-      [s.rewardGiven]: isRewardGiven
-    })}>
-      {isCompleted && (
-        <div className={s.animationWrapper}>
-           {animationLight}
-        </div>
-      )}
-      
+    <div
+      className={classNames(s.card, {
+        [s.completed]: isCompleted,
+        [s.topTask]: isTopTask,
+        [s.dailyTask]: isDailyTask,
+        [s.socialTask]: isSocialTask,
+        [s.ru]: locale === 'ru',
+        [s.en]: locale === 'en',
+        [s.rewardGiven]: isRewardGiven,
+      })}
+    >
+      {isCompleted && <div className={s.animationWrapper}>{animationLight}</div>}
+
       <section className={s.header}>
-        {icon && <img className={classNames(s.icon, {[s.iconSocial]: isSocialTask})} src={icon} alt="icon" />}
+        {icon && <img className={classNames(s.icon, { [s.iconSocial]: isSocialTask })} src={icon} alt="icon" />}
         <div className={s.info}>
           <h2 className={s.title}>{title}</h2>
           <p className={s.description}>{description}</p>
@@ -165,13 +163,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
         <section className={s.progressTypeSection}>
           <div className={s.progressTypeSteps}>
             {questionStates.map((state, index) => (
-              <img
-                key={index}
-                src={getIconByState(state)}
-                height={18}
-                width={18}
-                alt={`step-${state}`}
-              />
+              <img key={index} src={getIconByState(state)} height={18} width={18} alt={`step-${state}`} />
             ))}
           </div>
           <div className={s.progressTypeReward}>
@@ -195,11 +187,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
         />
       )}
 
-      {errorText && (
-        <div className={s.errorText}>
-          {defaultErrorText}
-        </div>
-      )}
+      {errorText && <div className={s.errorText}>{defaultErrorText}</div>}
 
       <section className={s.buttons}>
         {/* {isCompleted && <div className={s.images}>{animationLight}</div>} */}
@@ -211,7 +199,7 @@ export const TaskCard: React.FC<TasksCardProps> = ({
           className={`${s.button} ${s[buttonType]} ${isLoading ? s.loading : ''}`}
           disabled={disabled || isLoading}
           onClick={() => {
-            localStorage.setItem('taskId', ''+ id);
+            localStorage.setItem('taskId', '' + id);
             onClick?.();
           }}
         >

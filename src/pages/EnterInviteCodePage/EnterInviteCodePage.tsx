@@ -10,6 +10,7 @@ import { Button } from '../../components/shared';
 import { useSendReferralCodeMutation } from '../../redux';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import WhiteNoiseCanvas from '../../components/WhiteNoise/WhiteNoise';
 
 interface EnterInviteCodePageProps {
   referral_id: number;
@@ -22,7 +23,7 @@ interface ReferralErrorResponse {
 }
 
 export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ referral_id }) => {
-  const {t} = useTranslation('referral')
+  const { t } = useTranslation('referral')
   const [inputValue, setInputValue] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [isSentCode, setIsSentCode] = useState(false)
@@ -96,42 +97,45 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ referr
   };
 
   return (
-    <div className={styles.root}>
-      <img src={isSentCode ? lockOpen : lock} className={styles.lock} width={120} height={120} />
+    <>
+      <WhiteNoiseCanvas/>
+      <div className={styles.root}>
+        <img src={isSentCode ? lockOpen : lock} className={styles.lock} width={120} height={120} />
 
-      <div className={styles.inputGroup}>
-        <label>{t('r1')}</label>
-        <div className={styles.inputWrapper}>
-          <input
-            ref={inputRef}
-            type="text"
-            value={inputValue}
-            onChange={handleInputChange}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
-            className={`${styles.input} ${(touched && !isValid) ? styles.invalid : ''}`}
-            placeholder="..."
-          />
-          <img
-            className={styles.statusIcon}
-            src={isValid ? tick : dots}
-            alt="status"
-          />
+        <div className={styles.inputGroup}>
+          <label>{t('r1')}</label>
+          <div className={styles.inputWrapper}>
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              onFocus={() => setIsFocus(true)}
+              onBlur={() => setIsFocus(false)}
+              className={`${styles.input} ${(touched && !isValid) ? styles.invalid : ''}`}
+              placeholder="..."
+            />
+            <img
+              className={styles.statusIcon}
+              src={isValid ? tick : dots}
+              alt="status"
+            />
+          </div>
+
+          <p className={styles.description}>
+            {t('r2')}
+          </p>
         </div>
 
-        <p className={styles.description}>
-          {t('r2')}
-        </p>
+        {errorMessage && (
+          <p className={styles.descriptionError}>{errorMessage}</p>
+        )}
+
+        <Button className={classNames(styles.nextBtn, { [styles.validInput]: isValid }, { [styles.btnFocus]: isFocus })} onClick={handleSubmit}>
+          {isLoading ? t("r5") : t("r4")}
+        </Button>
+        <p className={classNames(styles.enterCodeText, { [styles.textFocus]: isFocus })}>{t('r3')}</p>
       </div>
-
-      {errorMessage && (
-        <p className={styles.descriptionError}>{errorMessage}</p>
-      )}
-
-      <Button className={classNames(styles.nextBtn, {[styles.validInput]: isValid}, {[styles.btnFocus]: isFocus})} onClick={handleSubmit}>
-        {isLoading ? t("r5") : t("r4")}
-      </Button>
-      <p className={classNames(styles.enterCodeText, {[styles.textFocus]: isFocus})}>{t('r3')}</p>
-    </div>
+    </>
   );
 };

@@ -4,7 +4,7 @@
   width: 100%;
   display: flex;
   gap: 10px;
-  height: 118px;
+  height: 157px;
 
   .avatar {
     display: flex;
@@ -207,5 +207,25 @@
         }
       }
     }
+  }
+}
+
+.button {
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  color: var.$color-text;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  border: 1px solid var.$color-border-primary;
+  background-color: var.$color-primary;
+
+  @media (min-width: var.$breakpoint-md) {
+    padding: 14px;
+    font-size: 16px;
   }
 }

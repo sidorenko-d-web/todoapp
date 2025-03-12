@@ -16,40 +16,42 @@ import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
 import { Boost } from '../../../redux';
 import { formatAbbreviation } from '../../../helpers';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   giftColor?: string;
-  boost?: Boost | null;
+  boost?: Boost | null | undefined;
 }
 
 export default function GetGift({ giftColor, boost }: Props) {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
+  const { t } = useTranslation('gift');
 
   if (!isOpen) return null;
 
   let giftImage;
 
-  if (giftColor == null || giftColor === 'Синий подарок') {
+  if (giftColor == null || giftColor === t('q54')) {
     giftImage = <img src={gift} className={styles.gift} />;
-  } else if (giftColor === 'Пурпурный подарок') {
+  } else if (giftColor === t('q55')) {
     giftImage = <img src={giftPurple} className={styles.gift} />;
-  } else if (giftColor === 'Красный подарок') {
+  } else if (giftColor === t('q56')) {
     giftImage = <img src={giftRed} className={styles.gift} />;
   }
 
   let giftLight;
 
-  if (giftColor == null || giftColor === 'Синий подарок') {
+  if (giftColor == null || giftColor === t('q54')) {
     giftLight = <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />;
-  } else if (giftColor === 'Пурпурный подарок') {
+  } else if (giftColor === t('q55')) {
     giftLight = <Lottie animationData={purpleLightAnimation} loop={true} className={styles.light} />;
-  } else if (giftColor === 'Красный подарок') {
+  } else if (giftColor === t('q56')) {
     giftLight = <Lottie animationData={redLightAnimation} loop={true} className={styles.light} />;
   }
 
   return (
-    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={'Подарок открыт!'}>
+    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={t('g1')}>
       <div className={styles.background}>
         <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
@@ -66,7 +68,7 @@ export default function GetGift({ giftColor, boost }: Props) {
             <div className={styles.statBox}>
               <span>x{formatAbbreviation(boost?.x_income_per_second || 0)}</span>
               <img src={coin} />
-              <span className={styles.extra}>/сек.</span>
+              <span className={styles.extra}>/ {t('q9_1')}</span>
             </div>
           </div>
           <div className={styles.stat}>
@@ -74,7 +76,7 @@ export default function GetGift({ giftColor, boost }: Props) {
             <div className={styles.statBox}>
               <span>+{formatAbbreviation(boost?.subscribers_for_first_level_referrals || 0)}</span>
               <img src={subscribers} />
-              <span className={styles.extra}>1 ур.</span>
+              <span className={styles.extra}>1 {t('q9_2')}</span>
             </div>
           </div>
           <div className={styles.stat}>
@@ -82,7 +84,7 @@ export default function GetGift({ giftColor, boost }: Props) {
             <div className={styles.statBox}>
               <span>+{formatAbbreviation(boost?.subscribers_for_second_level_referrals || 0)}</span>
               <img src={subscribers} />
-              <span className={styles.extra}>2 ур.</span>
+              <span className={styles.extra}>2 {t('q9_2')}</span>
             </div>
           </div>
         </div>
@@ -106,19 +108,19 @@ export default function GetGift({ giftColor, boost }: Props) {
           {/*  <img src={snowflake} />*/}
           {/*</div>*/}
         </div>
-        <p className={styles.desc}>Поздравляем! Вы улучшли основные показатели и получили дополнительные бонусы!</p>
+        <p className={styles.desc}>{t('g2')}</p>
       </div>
       <Button
         variant={
           giftColor == null || giftColor === 'Синий подарок'
             ? 'blue'
             : giftColor === 'Пурпурный подарок'
-            ? 'purple'
-            : 'red'
+              ? 'purple'
+              : 'red'
         }
         onClick={() => closeModal(MODALS.GET_GIFT)}
       >
-        Забрать
+        {t('g3')}
       </Button>
     </CentralModal>
   );

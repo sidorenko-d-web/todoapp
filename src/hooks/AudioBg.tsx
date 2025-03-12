@@ -19,7 +19,7 @@ export const AudioBg = () => {
   };
 
   useEffect(() => {
-    if (!audioRef.current) return;
+    if (!audioRef.current || audioRef.current.src) return;
     audioRef.current.volume = volume;
     audioRef.current.src = track === 1 ? bgAudio1 : track === 2 ? bgAudio2 : bgAudio3;
   }, [volume, track]);
@@ -32,10 +32,8 @@ export const AudioBg = () => {
   }, []);
 
   return (
-    <iframe src={bgAudio1} allow="autoplay" id="audio" style={{ display: 'none' }}>
-      <audio ref={audioRef} id={'audio'} loop>
-        <source src={bgAudio1} type="audio/mp3" />
-      </audio>
+    <iframe id="audio" style={{ display: 'none' }}>
+      <audio autoPlay ref={audioRef} id={'audio'} loop />
     </iframe>
   );
 };

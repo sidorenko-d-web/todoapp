@@ -1,56 +1,47 @@
 import styles from './Footer.module.scss';
 import { footerItems } from '../../constants';
-import { useState , useEffect} from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux';
 import { TrackedButton } from '..';
 
 export const Footer = () => {
-  const [ activeButton, setActiveButton ] = useState<number | null>(null);
   const navigate = useNavigate();
-  
   const location = useLocation();
-  const path  = location.pathname;
-
-  const currentFooterItemId = useSelector((state: RootState) => state.guide.activeFooterItemId);
-
+  const [activeButton, setActiveButton] = useState<number>(-1);
   const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
   useEffect(() => {
-    setActiveButton((currentFooterItemId >= 0 && currentFooterItemId <= 4) ? currentFooterItemId : -1);
-  }, [currentFooterItemId]);
-
-  useEffect(() => {
-    if(path === '/progressTree' || path === '/profile' || path === '/wardrobe') {
+    if (location.pathname === '/progressTree' || location.pathname === '/wardrobe') {
       setActiveButton(-1);
-    } 
-  })
-  const handleFooterItemClick = (id: number, redirectTo: string) => {
-    if(footerActive) {
-      navigate(redirectTo);
     }
+  }, [location.pathname]);
 
-    setActiveButton((currentFooterItemId >= 0 && currentFooterItemId <= 4) ? currentFooterItemId : id)
+  const handleFooterItemClick = (id: number, redirectTo: string) => {
+    if (footerActive) navigate(redirectTo);
+    setActiveButton(id);
   };
 
-  
   return (
     <div className={styles.footerItems}>
-      {footerItems.map((item) => (
-        <TrackedButton
-          trackingData={{
-            eventType: 'button',
-            eventPlace: `${item.title} - Футер`,
-          }}
-          key={item.id}
-          className={`${styles.footerItem} ${activeButton === item.id ? styles.active : ''}`}
-          onClick={() => handleFooterItemClick(item.id, item.redirectTo)}
-        >
-          <img src={item.icon} width={22} height={22} />
-        </TrackedButton>
-      ))}
+      {footerItems.map((item) => {
+        const isActive = activeButton === item.id;
+
+        return (
+          <TrackedButton
+            trackingData={{
+              eventType: 'button',
+              eventPlace: 'footer'
+            }}
+            key={item.id}
+            className={`${styles.footerItem} ${isActive ? styles.active : ''}`}
+            onClick={() => handleFooterItemClick(item.id, item.redirectTo)}
+          >
+            <img src={item.icon} width={22} height={22} />
+          </TrackedButton>
+        );
+      })}
     </div>
   );
 };
-

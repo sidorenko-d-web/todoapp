@@ -12,19 +12,21 @@ import { useDispatch } from 'react-redux';
 import { setActiveFooterItemId } from '../../redux';
 import GetGift from '../DevModals/GetGift/GetGift';
 
-
 export const TasksPage: FC = () => {
   const dispatch = useDispatch();
-
 
   const { t, i18n } = useTranslation('quests');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const { data, error, isLoading: isTasksLoading } = useGetTasksQuery({
+  const {
+    data,
+    error,
+    isLoading: isTasksLoading,
+  } = useGetTasksQuery({
     offset: 0,
     limit: 100,
   });
-  const {data: dataDaily, isLoading: isDailyLoading} = useGetTasksQuery({
+  const { data: dataDaily, isLoading: isDailyLoading } = useGetTasksQuery({
     is_assigned: true,
     category: 'quiz',
     offset: 0,
@@ -37,9 +39,7 @@ export const TasksPage: FC = () => {
     dispatch(setActiveFooterItemId(4));
   }, []);
 
-
   const dailyTask = useMemo(() => {
-
     if (!data?.assignments) return null;
     console.log('data', data);
     const dailyTasks = dataDaily?.assignments;
@@ -93,11 +93,7 @@ export const TasksPage: FC = () => {
     }
   }, [boostData, error]);
 
-  const isLoading = (
-    isTasksLoading ||
-    isBoostLoading ||
-    isDailyLoading
-  );
+  const isLoading = isTasksLoading || isBoostLoading || isDailyLoading;
 
   if (isLoading) return <Loader />;
 
@@ -120,7 +116,8 @@ export const TasksPage: FC = () => {
           </span>
           <span className={s.badge}>
             +{formatAbbreviation(Number(boostData?.income_per_second) || 0, 'number', { locale: locale })}
-            <img src={coinIcon} height={18} width={18} alt={'income'} />/сек.
+            <img src={coinIcon} height={18} width={18} alt={'income'} />
+            /сек.
           </span>
         </div>
       </section>

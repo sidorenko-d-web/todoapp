@@ -54,8 +54,9 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
 
   useLayoutEffect(() => {
     function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
+      setSize([ window.innerWidth, window.innerHeight ]);
     }
+
     window.addEventListener('resize', updateSize);
     updateSize();
     return () => window.removeEventListener('resize', updateSize);
@@ -65,6 +66,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
     if (!sceneRef.current || isCharacterLoading) return;
 
     setLoading(true);
+;
     class SpineScene extends WardrobeSpineScene {
       create() {
         try {
@@ -73,7 +75,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         } catch (error: any) {
           if (error.message === 'add.spine') {
             console.log('avoid error');
-            setSize(prev => [prev[0] + 1, prev[1]]);
+            setSize(prev => [ prev[0] + 1, prev[1] ]);
           }
         }
         spineSceneRef.current = this;
@@ -87,10 +89,10 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         type: Phaser.AUTO,
         width: 118,
         height: 118,
-        scene: [SpineScene],
+        scene: [ SpineScene ],
         transparent: true,
         plugins: {
-          scene: [{ key: 'SpinePlugin', plugin: SpinePlugin, mapping: 'spine' }],
+          scene: [ { key: 'SpinePlugin', plugin: SpinePlugin, mapping: 'spine' } ],
         },
         parent: 'player',
       };
@@ -107,7 +109,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         spineSceneRef.current = null;
       }
     };
-  }, [isCharacterLoading, size]);
+  }, [ isCharacterLoading, size ]);
 
   return (
     <div className={styles.wrp}>
@@ -175,6 +177,15 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
           </div>
           <ProgressLine level={subscriptionIntegrationsLeft} color="blue" />
         </div>
+
+        <TrackedLink
+          className={styles.button}
+          trackingData={{
+            eventType: 'button',
+            eventPlace: 'В дерево роста - Профиль',
+          }}
+          to={AppRoute.ProgressTree}
+        >{t('p23')}</TrackedLink>
       </div>
     </div>
   );
