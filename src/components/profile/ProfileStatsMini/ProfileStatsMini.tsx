@@ -39,7 +39,6 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
     // points: displayedPoints,
     subscribers: displayedSubscribers,
     totalViews: displayedTotalViews,
-    totalEarned: displayedTotalEarned
   } = useIncrementingProfileStats({
     profileId: userProfileData?.id || '',
     basePoints: userProfileData?.points || '0',
