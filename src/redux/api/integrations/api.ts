@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
 import {
-  CreateIntegrationRequestDTO,
   IntegrationResponseDTO,
   IntegrationsQueryRequestDTO,
   IntegrationsResponseDTO,
@@ -20,11 +19,10 @@ export const integrationsApi = createApi({
         method: 'GET',
       }),
     }),
-    createIntegration: builder.mutation<IntegrationResponseDTO, CreateIntegrationRequestDTO>({
-      query: params => ({
-        url: '/integrations',
+    createIntegration: builder.mutation<IntegrationResponseDTO, string>({
+      query: (campaign_id) => ({
+        url: `/integrations?campaign_id=${campaign_id}`,
         method: 'POST',
-        params: params,
       }),
     }),
     postCommentIntegrations: builder.mutation<boolean, { commentId: string; isHate: boolean }>({

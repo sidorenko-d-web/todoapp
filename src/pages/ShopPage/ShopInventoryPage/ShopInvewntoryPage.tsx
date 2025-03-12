@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ShopLayout } from '../../../layout/ShopLayout/ShopLayout';
 import {
   TypeItemCategory,
@@ -27,7 +27,7 @@ export const ShopInventoryPage = () => {
     isLoading: isInventoryLoading,
   } = useGetInventoryItemsQuery(
     {
-      item_category: shopCategory?.value,
+      item_categories: shopCategory ? [shopCategory.value] : [],
       item_rarity: itemsQuality?.value as TypeItemRarity,
     },
     { skip: !shopCategory?.value },

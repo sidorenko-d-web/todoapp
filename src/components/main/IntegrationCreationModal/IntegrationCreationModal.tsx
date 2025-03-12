@@ -56,7 +56,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
   const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
   const {
-    // data: profile, 
+    // data: profile,
     isLoading: isProfileLoading } = useGetProfileMeQuery();
 
   const { data, isLoading: isCompaniesLoading } = useGetCompaniesQuery({
@@ -65,8 +65,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const companies = data?.campaigns;
 
   // const uniqueCompany = companies?.find(company => company.is_unique === true) || null;
-  const uniqueCompany = useMemo(() => 
-    companies?.find(company => company.is_unique === true) || null, 
+  const uniqueCompany = useMemo(() =>
+    companies?.find(company => company.is_unique === true) || null,
     [companies]
   );
 
@@ -78,9 +78,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   const submitCreation = () => {
     if (!selectedOption || !selectedCompanyId) return;
-    createIntegration({
-      campaign_id: selectedCompanyId,
-    })
+    createIntegration(selectedCompanyId)
       .unwrap()
       .then((data) => {
         dispatch(setIntegrationCreated(true));
