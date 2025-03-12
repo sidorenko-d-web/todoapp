@@ -8,14 +8,14 @@ import { useTranslation } from 'react-i18next';
 import { CompanyResponseDTO, useCreateIntegrationMutation, useGetProfileMeQuery } from '../../../redux';
 
 interface SpecialIntegrationProps {
-  integration: CompanyResponseDTO;
+  company: CompanyResponseDTO;
 }
 
-export const SpecialIntegration = ({ integration }: SpecialIntegrationProps) => {
+export const SpecialIntegration = ({ company }: SpecialIntegrationProps) => {
   const { t } = useTranslation('integrations');
   const [createIntegration, { isError }] = useCreateIntegrationMutation();
   const {data: profileData, isError: isProfileError} = useGetProfileMeQuery()
-  const isLocked = (profileData?.growth_tree_stage_id ?? 0) < integration.growth_tree_stage;
+  const isLocked = (profileData?.growth_tree_stage_id ?? 0) < company.growth_tree_stage;
   return (
     <div className={styles.wrapper}>
       <div className={styles.mainInfo}>
@@ -39,19 +39,18 @@ export const SpecialIntegration = ({ integration }: SpecialIntegrationProps) => 
         </div>
 
         <div className={styles.iconWrp}>
-          <img src={integration.image_url} />
+          <img src={company.image_url} />
         </div>
 
       </div>
 
       <div className={styles.secondaryInfo}>
-        <span className={styles.title}> {integration.company_name} </span>
+        <span className={styles.title}> {company.company_name} </span>
 
         <button
           className={classname(styles.button, { [styles.locked]: isLocked || isError || isProfileError })}
           onClick={() => createIntegration({
-            campaign_id: integration.id,
-            content_type: 'text',
+            campaign_id: company.id,
           })}
         >
           {

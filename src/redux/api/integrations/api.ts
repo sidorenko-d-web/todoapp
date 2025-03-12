@@ -21,10 +21,10 @@ export const integrationsApi = createApi({
       }),
     }),
     createIntegration: builder.mutation<IntegrationResponseDTO, CreateIntegrationRequestDTO>({
-      query: body => ({
+      query: params => ({
         url: '/integrations',
         method: 'POST',
-        body,
+        params: params,
       }),
     }),
     postCommentIntegrations: builder.mutation<boolean, { commentId: string; isHate: boolean }>({

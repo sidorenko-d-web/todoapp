@@ -26,7 +26,7 @@ interface Props {
 export default function GetGift({ giftColor, boost }: Props) {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
-  const { t } = useTranslation('quests');
+  const { t } = useTranslation('gift');
 
   if (!isOpen) return null;
 
@@ -51,7 +51,7 @@ export default function GetGift({ giftColor, boost }: Props) {
   }
 
   return (
-    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={t('q59')}>
+    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={t('g1')}>
       <div className={styles.background}>
         <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
@@ -108,13 +108,19 @@ export default function GetGift({ giftColor, boost }: Props) {
           {/*  <img src={snowflake} />*/}
           {/*</div>*/}
         </div>
-        <p className={styles.desc}>{t('q57')}</p>
+        <p className={styles.desc}>{t('g2')}</p>
       </div>
       <Button
-        variant={giftColor == null || giftColor === t('q54') ? 'blue' : giftColor === t('q55') ? 'purple' : 'red'}
+        variant={
+          giftColor == null || giftColor === 'Синий подарок'
+            ? 'blue'
+            : giftColor === 'Пурпурный подарок'
+              ? 'purple'
+              : 'red'
+        }
         onClick={() => closeModal(MODALS.GET_GIFT)}
       >
-        {t('q58')}
+        {t('g3')}
       </Button>
     </CentralModal>
   );

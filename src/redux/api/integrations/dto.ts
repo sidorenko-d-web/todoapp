@@ -57,7 +57,6 @@ export type UnansweredIntegrationCommentDTO = {
 
 export type CreateIntegrationRequestDTO = {
   campaign_id: string;
-  content_type: string;
 };
 
 export type CreateIntegrationCommentDTO = {

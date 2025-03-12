@@ -1,6 +1,6 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
-import lightningIcon from '../../../assets/icons/lightning.svg';
+// import lightningIcon from '../../../assets/icons/lightning.svg';
 import {
   integrationsApi,
   profileApi,
@@ -18,7 +18,7 @@ import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
 import {
   integrationCreatingModalButtonGlowing,
-  integrationCreatingModalLightningsGlowing,
+  // integrationCreatingModalLightningsGlowing,
   integrationCreatingModalTabsGlowing,
   isGuideShown,
   setGuideShown,
@@ -55,11 +55,20 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const [selectedCompanyId, setSelectedCompanyId] = useState("")
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
   const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
-  const { data: profile, isLoading: isProfileLoading } = useGetProfileMeQuery();
-  const { data, isLoading: isCompaniesLoading } = useGetCompaniesQuery();
+  const {
+    // data: profile, 
+    isLoading: isProfileLoading } = useGetProfileMeQuery();
+
+  const { data, isLoading: isCompaniesLoading } = useGetCompaniesQuery({
+    content_type: selectedOption
+  });
   const companies = data?.campaigns;
 
-  const uniqueCompany = companies?.find(company => company.is_unique === true) || null;
+  // const uniqueCompany = companies?.find(company => company.is_unique === true) || null;
+  const uniqueCompany = useMemo(() => 
+    companies?.find(company => company.is_unique === true) || null, 
+    [companies]
+  );
 
   const goToShop = () => {
     setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
@@ -70,7 +79,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const submitCreation = () => {
     if (!selectedOption || !selectedCompanyId) return;
     createIntegration({
-      content_type: selectedOption,
       campaign_id: selectedCompanyId,
     })
       .unwrap()
@@ -93,7 +101,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     return null;
   })();
 
-  const lightningsGlowing = integrationCreatingModalLightningsGlowing();
+  // const lightningsGlowing = integrationCreatingModalLightningsGlowing();
 
   const tabsGlowing = integrationCreatingModalTabsGlowing();
 
@@ -144,13 +152,13 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       {isProfileLoading || isCompaniesLoading
         ? <Loader noMargin />
         : <div className={s.content}>
-          <div className={s.skinsWrapper}>
+          {/* <div className={s.skinsWrapper}>
             {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
               <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`}>
                 <img src={lightningIcon} alt="Lightning" width={20} height={20} />
               </div>
             ))}
-          </div>
+          </div> */}
 
           <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
             {contentOptions.map((option, index) => (
@@ -167,7 +175,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           <div className={s.scrollableContent}>
             {uniqueCompany && !noItemsMessage && (
               <SpecialIntegration
-                integration={uniqueCompany}
+                company={uniqueCompany}
               />
             )}
 

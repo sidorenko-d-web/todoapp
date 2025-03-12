@@ -2,14 +2,15 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { TaskCard } from '../';
 import giftIcon from '../../../assets/icons/gift.svg';
 import { useModal } from '../../../hooks';
-import { Task } from '../../../redux/api/tasks/dto';
+import { Task } from '../../../redux/api/tasks';
 import s from '../styles.module.scss';
 import { ModalDailyTasks } from './ModalDailyTasks';
 import { useTranslation } from 'react-i18next';
-import { MODALS } from '../../../constants/modals';
+import { MODALS } from '../../../constants';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 import { useGetAssignmentRewardMutation } from '../../../redux/api/tasks/api';
 import { useGetProfileMeQuery } from '../../../redux';
+import { useGetAssignmentRewardMutation } from '../../../redux/api/tasks';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
