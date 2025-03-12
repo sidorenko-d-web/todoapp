@@ -20,13 +20,11 @@ const Layout = () => {
   const [bgOffset, setBgOffset] = useState(0);
   const contentRef = useScrollManager();
 
-  const showHeader = !location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/);
+  const showHeader = !(location.pathname.includes('profile') && !!location.pathname.split('/')?.[2]);
 
-  const needsReducedMargin = [
-    '/',
-    '/progressTree',
-    location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/),
-  ].includes(location.pathname);
+  const needsReducedMargin = ['/', '/progressTree', location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/)].includes(
+    location.pathname,
+  );
 
   const showRoadmapBg = location.pathname === '/progressTree';
 
@@ -73,8 +71,6 @@ const Layout = () => {
     }
   }, [showRoadmapBg]);
 
-
-
   return (
     <>
       <WhiteNoiseCanvas/>
@@ -85,17 +81,8 @@ const Layout = () => {
       <div className={styles.wrp}>
         {showRoadmapBg && (
           <>
-            <img
-              src={roadmapBg}
-              className={styles.bg_image}
-              style={{ transform: `translateY(-${bgOffset}%)` }}
-            />
-            <Lottie
-              animationData={lampTable}
-              loop
-              autoplay
-              style={{ position: 'fixed', bottom: '23px' }}
-            />
+            <img src={roadmapBg} className={styles.bg_image} style={{ transform: `translateY(-${bgOffset}%)` }} />
+            <Lottie animationData={lampTable} loop autoplay style={{ position: 'fixed', bottom: '23px' }} />
           </>
         )}
         {showHeader && <Header />}

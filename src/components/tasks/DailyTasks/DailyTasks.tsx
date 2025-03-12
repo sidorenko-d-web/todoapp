@@ -27,9 +27,11 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const { data: profile } = useGetProfileMeQuery();
 
   useEffect(() => {
-    setQuestionStates(Array(task.stages).fill('closed').map((state, index) =>
-      index === 0 ? 'current' : state,
-    ));
+    setQuestionStates(
+      Array(task.stages)
+        .fill('closed')
+        .map((state, index) => (index === 0 ? 'current' : state)),
+    );
   }, [task]);
 
   const completedCount = useMemo(() => {
@@ -40,13 +42,13 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const isCompleted = task.is_completed || questionStates.every(state => state === 'solved');
 
   const stage = treeData?.growth_tree_stages?.find((item, index) => index === profile?.growth_tree_stage_id);
-  
+
   const handleOpenDailyTasks = async () => {
     if (task.is_completed && !task.is_reward_given) {
       try {
         const reward = await getAssignmentReward({
           category: task.category,
-          assignmentId: task.id
+          assignmentId: task.id,
         }).unwrap();
         console.log(reward);
         if (reward) {
@@ -72,7 +74,6 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   };
 
 
-  console.error(stage);
   return (
     <section className={s.section}>
       <div className={s.sectionHeader}>
@@ -87,7 +88,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
           type="progress"
           icon={giftIcon}
           buttonText={isCompleted && !task.is_reward_given ? t('q33') : isCompleted ? t('q15') : t('q5')}
-          disabled={task.is_reward_given}
+          disabled={!task.is_reward_given}
           onClick={handleOpenDailyTasks}
           questionStates={questionStates}
           boost={task.boost}

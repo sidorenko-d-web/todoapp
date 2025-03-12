@@ -1,4 +1,4 @@
-import { RootState, useGetEquipedByIdQuery, useGetEquipedQuery, useGetProfileMeQuery } from '../../../redux';
+import { useGetEquipedByIdQuery, useGetEquipedQuery, useGetProfileMeQuery } from '../../../redux';
 import { AnimationScene, Floor, Walls } from './partials';
 import styles from './partials/Partials.module.scss';
 import TreshinaRight from '../../../assets/images/start-room/treshina-right.svg';
@@ -10,7 +10,6 @@ import { useGetCharacterByIdQuery, useGetCharacterQuery } from '../../../redux/a
 import { useRoomItemsSlots } from '../../../../translate/items/items.ts';
 import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfileStats.ts';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Loader } from '../../index.ts';
 import { PROFILE_ME_POLLING_INTERVAL } from '../../../constants';
 
@@ -20,11 +19,13 @@ interface props {
 }
 
 export const Room = ({ mode, strangerId }: props) => {
-  const { data: room } = useGetEquipedQuery(undefined, { skip: mode === 'stranger' });
+  const { data: room, isLoading: isRoomLoading } = useGetEquipedQuery(undefined, { skip: mode === 'stranger' });
   const character = useGetCharacterQuery(undefined, { skip: mode === 'stranger' });
   const { data } = useGetProfileMeQuery(undefined, {
     pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
+
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const { points: displayedPoints } = useIncrementingProfileStats({
     profileId: data?.id || '',
@@ -36,7 +37,10 @@ export const Room = ({ mode, strangerId }: props) => {
     lastUpdatedAt: data?.updated_at,
   });
 
-  const { data: strangerRoom } = useGetEquipedByIdQuery({ id: strangerId! }, { skip: mode === 'me' && !strangerId });
+  const { data: strangerRoom, isLoading: isStrangerLoading } = useGetEquipedByIdQuery(
+    { id: strangerId! },
+    { skip: mode === 'me' && !strangerId },
+  );
   const strangerCharacter = useGetCharacterByIdQuery({ id: strangerId! }, { skip: mode === 'me' && !strangerId });
   const RoomItemsSlots = useRoomItemsSlots();
   const equippedAchivement = (room ?? strangerRoom)?.achievements?.[0];
@@ -47,43 +51,44 @@ export const Room = ({ mode, strangerId }: props) => {
 
   const isDefaultWall = !(room ?? strangerRoom)?.equipped_items.find(item => item.slot === RoomItemsSlots.wall.slot);
 
-  const [ didIncreased, setDidIncreased ] = useState(false);
+  const [didIncreased, setDidIncreased] = useState(false);
   const playCoin = () => {
-    if (didIncreased) return;
-    console.log('first');
+    if (didIncreased && isLoaded) return;
     setDidIncreased(true);
     setTimeout(() => {
-
       setDidIncreased(false);
     }, 1150);
   };
 
   useEffect(() => {
     playCoin();
-  }, [ displayedPoints ]);
+  }, [displayedPoints]);
 
-  const isAnimationSceneLoaded = useSelector((state: RootState) => state.mainSlice.isAnimationSceneLoaded);
+  const isLoading = !isLoaded || isStrangerLoading || isRoomLoading;
 
   return (
     <div className={styles.room}>
-      <AnimationScene room={room ?? strangerRoom} character={mode === 'me' ? character : strangerCharacter} />
+      <AnimationScene
+        setIsLoaded={setIsLoaded}
+        room={room ?? strangerRoom}
+        character={mode === 'me' ? character : strangerCharacter}
+      />
 
-      <Walls room={room ?? strangerRoom} />
+      {isLoading && <Loader className={styles.loader} />}
+      <Walls room={room ?? strangerRoom} isLoading={isLoading} />
 
-      {!isAnimationSceneLoaded && <Loader />}
-
-      {
-        isAnimationSceneLoaded && <>
+      {!isLoading && (
+        <>
           {isDefaultWall && <img className={styles.treshinaLeft} src={TreshinaLeft} alt="trishimna-right" />}
           {isDefaultWall && <img className={styles.treshinaRight} src={TreshinaRight} alt="treshina-left" />}
 
           <img className={styles.shelf} src={Shelf} alt="shelf" />
-          {didIncreased && <img className={styles.coin} src={CoinIcon} alt="shelf" />}
+          {didIncreased && !strangerRoom && <img className={styles.coin} src={CoinIcon} alt="shelf" />}
 
           {achivementType && <img className={styles.reward} src={achivementType?.image} alt="reward" />}
           <Floor room={room ?? strangerRoom} />
         </>
-      }
+      )}
     </div>
   );
 };

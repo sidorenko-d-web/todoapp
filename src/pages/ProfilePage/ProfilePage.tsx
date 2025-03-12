@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GetRewardChestModal from '../DevModals/GetRewardChestModal/GetRewardChestModal';
 import styles from './ProfilePage.module.scss';
-import { ProfileInfo, ProfileStats, ProfileStatsMini } from '../../components/profile';
+import { ProfileInfo, ProfileStats, ProfileStatsMini, StreakCard } from '../../components/profile';
 import {
   useClaimChestRewardMutation,
   useGetInventoryAchievementsQuery,
@@ -46,7 +46,7 @@ export const ProfilePage: React.FC = () => {
     data: topProfilesData,
     error: topProfilesError,
     isLoading: isTopProfilesLoading,
-  } = useGetTopProfilesQuery();
+  } = useGetTopProfilesQuery({});
 
   const [ , setIsModalShown ] = useState(false);
 
@@ -152,14 +152,14 @@ export const ProfilePage: React.FC = () => {
               position={position}
               isVip={false}
             />
-            {/*<StreakCard*/}
-            {/*  streakDays={streaks !== undefined ? streaks : 0}*/}
-            {/*  frozenDays={userProfileData.available_freezes}*/}
-            {/*  days={weekData}*/}
-            {/*  status={locale === 'ru' ? data?.push_line_profile_status.status_name : data?.push_line_profile_status.status_name_eng}*/}
-            {/*  chest={locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}*/}
-            {/*  weekData={data?.week_information}*/}
-            {/*/>*/}
+            <StreakCard
+              streakDays={streaks !== undefined ? streaks : 0}
+              frozenDays={userProfileData.available_freezes}
+              days={weekData}
+              status={locale === 'ru' ? data?.push_line_profile_status.status_name : data?.push_line_profile_status.status_name_eng}
+              chest={locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}
+              weekData={data?.week_information}
+            />
           </div>
 
           <div>

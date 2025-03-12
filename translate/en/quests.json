@@ -8,6 +8,8 @@
   "q7": "Create your channel!",
   "q8": "Create your channel in Telegram after reading our article.",
   "q9": "min.",
+  "q9_1": "sec.",
+  "q9_2": "lvl.",
   "q10": "Precious chest",
   "q11": "Continue execution",
   "q12": "Subscriptions to social networks",
@@ -51,5 +53,11 @@
   "q50": "Social networks",
   "q51": "Checking",
   "q52": "Link to the publication",
-  "q53": "Congratulations! You receive additional bonuses for completing the task!"
+  "q53": "Congratulations! You receive additional bonuses for completing the task!",
+  "q54": "Blue Gift",
+  "q55": "Purple Gift",
+  "q56": "Red Gift",
+  "q57": "Congratulations! You have improved your main stats and received additional bonuses!",
+  "q58": "Collect",
+  "q59": "The gift is opened!"
 }

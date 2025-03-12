@@ -11,53 +11,46 @@ import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { TrackedButton } from '../..';
 import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfileStats';
-import { useGetProfileMeQuery } from '../../../redux';
+import { useGetProfileMeQuery, useGetUserProfileInfoByIdQuery } from '../../../redux';
 import { usePushLineStatus } from '../../../hooks';
+import clsx from 'clsx';
 
 interface ProfileStatsMiniProps {
   daysInARow: number;
   position: number;
   onlyBadges?: boolean;
+  strangerId?: string;
 }
 
-export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
-  daysInARow,
-  position,
-  onlyBadges,
-}) => {
+export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({ daysInARow, position, onlyBadges, strangerId }) => {
   const { i18n } = useTranslation('shop');
-  const locale = ['ru', 'en'].includes(i18n.language)
-    ? (i18n.language as 'ru' | 'en')
-    : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
+  const { data: userProfileData } = useGetProfileMeQuery(undefined, { skip: !!strangerId });
+  const { data: strangerProfileData } = useGetUserProfileInfoByIdQuery(strangerId!, { skip: !strangerId });
 
   const {
-    data: userProfileData
-  } = useGetProfileMeQuery();
-
-     const {
     // points: displayedPoints,
     subscribers: displayedSubscribers,
     totalViews: displayedTotalViews,
   } = useIncrementingProfileStats({
-    profileId: userProfileData?.id || '',
-    basePoints: userProfileData?.points || '0',
-    baseSubscribers: userProfileData?.subscribers || 0,
-    baseTotalViews: userProfileData?.total_views || 0,
-    baseTotalEarned: userProfileData?.total_earned || '0',
-    futureStatistics: userProfileData?.future_statistics,
-    lastUpdatedAt: userProfileData?.updated_at,
+    profileId: (userProfileData ?? strangerProfileData)?.id || '',
+    basePoints: (userProfileData ?? strangerProfileData)?.points || '0',
+    baseSubscribers: (userProfileData ?? strangerProfileData)?.subscribers || 0,
+    baseTotalViews: (userProfileData ?? strangerProfileData)?.total_views || 0,
+    baseTotalEarned: (userProfileData ?? strangerProfileData)?.total_earned || '0',
+    futureStatistics: (userProfileData ?? strangerProfileData)?.future_statistics,
+    lastUpdatedAt: (userProfileData ?? strangerProfileData)?.updated_at,
   });
 
+  const { in_streak } = usePushLineStatus();
 
-  const {in_streak} = usePushLineStatus()
-
-  const subscribers = in_streak ? displayedSubscribers : userProfileData?.subscribers ?? 0
-  const totalViews = in_streak ? displayedTotalViews : userProfileData?.total_views ?? 0
+  const subscribers = in_streak ? displayedSubscribers : (userProfileData ?? strangerProfileData)?.subscribers ?? 0;
+  const totalViews = in_streak ? displayedTotalViews : (userProfileData ?? strangerProfileData)?.total_views ?? 0;
 
   return (
-    <div className={styles.wrp + ' ' + (onlyBadges ? styles.justifyCenter : '')}>
-      {!onlyBadges && <div className={styles.toCenterStats} />}
+    <div className={clsx(styles.wrp, (strangerId || onlyBadges) && styles.justifyCenter)}>
+      {!strangerId && !onlyBadges && <div className={styles.toCenterStats} />}
 
       <div className={styles.statsWrp}>
         <div className={styles.statWrp}>
@@ -66,16 +59,12 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
         </div>
 
         <div className={styles.statWrp}>
-          <span className={styles.stat}>
-            {formatAbbreviation(subscribers, 'number', { locale: locale })}
-          </span>
+          <span className={styles.stat}>{formatAbbreviation(subscribers, 'number', { locale: locale })}</span>
           <img src={subscriberIcon} />
         </div>
 
         <div className={styles.statWrp}>
-          <span className={styles.stat}>
-            {formatAbbreviation(totalViews, 'number', { locale: locale })}
-          </span>
+          <span className={styles.stat}>{formatAbbreviation(totalViews, 'number', { locale: locale })}</span>
           <img src={viewsIcon} />
         </div>
 
@@ -85,14 +74,14 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
         </div>
       </div>
 
-      {!onlyBadges && (
+      {!strangerId && !onlyBadges && (
         <Link to={'../wardrobe'}>
           <TrackedButton
             trackingData={{
               eventType: 'button',
               eventPlace: 'В гардероб - Профиль',
             }}
-            className={styles.wardrobeButton}
+            className={clsx(styles.wardrobeButton)}
           />
         </Link>
       )}

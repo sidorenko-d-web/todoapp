@@ -49,9 +49,7 @@ export const SpecialIntegration = ({ company }: SpecialIntegrationProps) => {
 
         <button
           className={classname(styles.button, { [styles.locked]: isLocked || isError || isProfileError })}
-          onClick={() => createIntegration({
-            campaign_id: company.id,
-          })}
+          onClick={() => createIntegration(company.id)}
         >
           {
             isError || isProfileError ? (

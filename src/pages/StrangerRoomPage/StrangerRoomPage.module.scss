@@ -1,0 +1,11 @@
+@use '../../assets/styles/index' as var;
+
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: hidden;
+  background-color: var.$color-bg;
+  color: var.$color-text;
+}

@@ -1,14 +1,19 @@
 import { FC, useEffect, useState } from 'react';
 import { ShopLayout } from '../../layout/ShopLayout/ShopLayout';
 import { ItemsTab, Loader, NewItemModal, SkinTab } from '../../components';
-import { useGetShopItemsQuery } from '../../redux';
-import { IShopItem, TypeItemCategory, TypeItemRarity, useGetCurrentUserBoostQuery } from '../../redux';
-import { useGetInventoryItemsQuery } from '../../redux';
+import {
+  IShopItem,
+  setActiveFooterItemId,
+  TypeItemCategory,
+  TypeItemRarity,
+  useGetCurrentUserBoostQuery,
+  useGetInventoryItemsQuery,
+  useGetShopItemsQuery,
+} from '../../redux';
 import styles from './ShopPage.module.scss';
 import { itemsInTab } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { setActiveFooterItemId } from '../../redux';
 
 type TypeTab<T> = { title: string; value: T };
 
@@ -19,7 +24,7 @@ const StorePage: FC = () => {
 
   const dispatch = useDispatch();
 
-  const { 
+  const {
     data: shop,
     isLoading: isShopLoading,
     isFetching: isShopFetching,
@@ -35,7 +40,7 @@ const StorePage: FC = () => {
     isLoading: isInventoryLoading,
     isFetching: isInventoryFetching,
   } = useGetInventoryItemsQuery({
-    item_category: shopCategory?.value as TypeItemCategory,
+    item_categories: shopCategory ? [shopCategory.value as TypeItemCategory] : [],
   });
 
   const [items, setItems] = useState<IShopItem[]>();
@@ -60,7 +65,7 @@ const StorePage: FC = () => {
         <Loader className={styles.itemsLoader} />
       ) : !(isShopLoading || isShopFetching || isInventoryLoading || isInventoryFetching) &&
         (!shopCategory || !itemsRarity) ? (
-        <p style={{ color: '#fff' }}>Error occured while getting data</p>
+        <p style={{ color: '#282830' }}>{t('s61')}</p>
       ) : shopCategory?.title !== t('s6') ? (
         items?.length === 0 ? (
           <p className={styles.emptyText}>{t('s37')}</p>
