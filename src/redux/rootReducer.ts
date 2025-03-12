@@ -1,18 +1,18 @@
 import { Action, combineReducers } from 'redux';
-import { animationStateReducer, audioReducer, authReducer } from './slices';
+import { animationStateReducer, audioReducer, authReducer, mainReducer } from './slices';
 import {
   authApi,
+  chestApi,
   companiesApi,
   integrationsApi,
   profileApi,
+  pushLineApi,
   referralsApi,
   roomApi,
   shopApi,
   trackingApi,
   treeApi,
   usersApi,
-  pushLineApi,
-  chestApi
 } from './api';
 
 import { tasksApi } from './api/tasks';
@@ -28,6 +28,7 @@ const appReducer = combineReducers({
   auth: authReducer,
   guide: guideReducer,
   treeSlice: treeReducer,
+  mainSlice: mainReducer,
   audioSlice: audioReducer,
   confirmation: confirmationReducer,
   acceleration: accelerationReducer,

@@ -20,6 +20,18 @@
   border-top: none;
 }
 
+.progressBarAdditional {
+  position: absolute;
+  width: 30px;
+  height: 230px;
+  border: 2px solid var.$color-dark-gray-stroke;
+  background: var.$color-gray;
+  border-bottom: none;
+  border-top: none;
+  bottom: 0;
+  left: 50%;
+}
+
 .progressFill {
   position: absolute;
   bottom: 0;
