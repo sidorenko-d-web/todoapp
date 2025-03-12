@@ -1,7 +1,7 @@
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { GUIDE_ITEMS, MODALS } from '../../../constants';
-import { profileApi, RootState, useGetCurrentUserProfileInfoQuery, useGetIntegrationsQuery } from '../../../redux';
+import { profileApi, RootState, useGetIntegrationsQuery, useGetProfileMeQuery } from '../../../redux';
 import { IntegrationCreationCard, IntegrationCreationModal } from '../';
 import { SubscribeModal, SuccessfullySubscribedModal, TrackedButton } from '../../';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,7 +16,7 @@ export const IntegrationCreation = () => {
   const dispatch = useDispatch();
   const integrationCreating = useSelector((state: RootState) => state.acceleration.integrationCreating)
 
-  const { data: profile } = useGetCurrentUserProfileInfoQuery();
+  const { data: profile } = useGetProfileMeQuery();
   const { data: integrations, error: integrationsError } = useGetIntegrationsQuery(
     { status: 'creating' },
     {

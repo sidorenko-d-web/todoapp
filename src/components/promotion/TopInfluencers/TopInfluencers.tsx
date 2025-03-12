@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import {
   RootState,
   setInputType,
-  useGetCurrentUserProfileInfoQuery,
+  useGetProfileMeQuery,
   useGetTopProfilesQuery,
   useGetUserQuery,
 } from '../../../redux';
@@ -32,7 +32,7 @@ export const TopInfluencers = () => {
   const { data } = useGetTopProfilesQuery();
   const topProfiles = data?.profiles || [];
 
-  const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
+  const { data: userProfileData } = useGetProfileMeQuery();
   const { inputType } = useSelector((state: RootState) => state.confirmation);
   const { data: userData } = useGetUserQuery();
 

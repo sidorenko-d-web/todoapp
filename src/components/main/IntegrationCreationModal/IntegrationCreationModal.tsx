@@ -4,9 +4,11 @@ import lightningIcon from '../../../assets/icons/lightning.svg';
 import {
   integrationsApi,
   profileApi,
+  setIntegrationCreated,
+  setLastIntegrationId,
   useCreateIntegrationMutation,
   useGetCompaniesQuery,
-  useGetCurrentUserProfileInfoQuery,
+  useGetProfileMeQuery,
 } from '../../../redux';
 import { CompanyCard, SpecialIntegration } from '../';
 import { useDispatch } from 'react-redux';
@@ -21,12 +23,10 @@ import {
   isGuideShown,
   setGuideShown,
 } from '../../../utils';
-import { GUIDE_ITEMS } from '../../../constants';
-import { setIntegrationCreated, setLastIntegrationId } from '../../../redux';
+import { AppRoute, GUIDE_ITEMS } from '../../../constants';
 import { CreatingIntegrationGuide, Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
 import { CentralModal } from '../../shared/';
-import { AppRoute } from '../../../constants';
 
 
 interface CreatingIntegrationModalProps {
@@ -55,7 +55,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   const [selectedCompanyId, setSelectedCompanyId] = useState("")
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
   const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
-  const { data: profile, isLoading: isProfileLoading } = useGetCurrentUserProfileInfoQuery();
+  const { data: profile, isLoading: isProfileLoading } = useGetProfileMeQuery();
   const { data, isLoading: isCompaniesLoading } = useGetCompaniesQuery();
   const companies = data?.campaigns;
 

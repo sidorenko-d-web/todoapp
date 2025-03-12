@@ -1,20 +1,19 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import { BuySubscriptionRequestDTO, TopProfilesResponseDTO, UpdateProfileRequestDTO, UserProfileInfoResponseDTO } from './dto';
+import {
+  BuySubscriptionRequestDTO,
+  TopProfilesResponseDTO,
+  UpdateProfileRequestDTO,
+  UserProfileInfoResponseDTO,
+} from './dto';
 
 export const profileApi = createApi({
   reducerPath: 'profileApi',
   baseQuery: baseQueryReauth,
   tagTypes: [ 'Me' ],
   endpoints: builder => ({
-    getCurrentUserProfileInfo: builder.query<UserProfileInfoResponseDTO, void>({
+    getProfileMe: builder.query<UserProfileInfoResponseDTO, void>({
       providesTags: [ 'Me' ],
-      query: () => ({
-        url: `/profiles/me`,
-        method: 'GET',
-      }),
-    }),
-    getCurrentUserProfileInfoForPolling: builder.query<UserProfileInfoResponseDTO, void>({
       query: () => ({
         url: `/profiles/me`,
         method: 'GET',
@@ -40,7 +39,7 @@ export const profileApi = createApi({
       query: (payment_method) => ({
         url: '/profiles/buy-subscription',
         method: 'POST',
-        params: payment_method
+        params: payment_method,
       }),
     }),
     getUserProfileInfoById: builder.query<UserProfileInfoResponseDTO, string>({
@@ -51,12 +50,10 @@ export const profileApi = createApi({
     }),
   }),
 });
-
 export const {
-  useGetCurrentUserProfileInfoQuery,
+  useGetProfileMeQuery,
   useGetTopProfilesQuery,
   useUpdateCurrentUserProfileMutation,
   useBuySubscriptionMutation,
   useGetUserProfileInfoByIdQuery,
-  useGetCurrentUserProfileInfoForPollingQuery
 } = profileApi;

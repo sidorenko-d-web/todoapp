@@ -5,11 +5,7 @@ import lockIcon from '../../../assets/icons/lock_icon.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
 import classname from 'classnames';
 import { useTranslation } from 'react-i18next';
-import {
-  CompanyResponseDTO,
-  useCreateIntegrationMutation,
-  useGetCurrentUserProfileInfoQuery,
-} from '../../../redux';
+import { CompanyResponseDTO, useCreateIntegrationMutation, useGetProfileMeQuery } from '../../../redux';
 
 interface SpecialIntegrationProps {
   integration: CompanyResponseDTO;
@@ -18,7 +14,7 @@ interface SpecialIntegrationProps {
 export const SpecialIntegration = ({ integration }: SpecialIntegrationProps) => {
   const { t } = useTranslation('integrations');
   const [createIntegration, { isError }] = useCreateIntegrationMutation();
-  const {data: profileData, isError: isProfileError} = useGetCurrentUserProfileInfoQuery()
+  const {data: profileData, isError: isProfileError} = useGetProfileMeQuery()
   const isLocked = (profileData?.growth_tree_stage_id ?? 0) < integration.growth_tree_stage;
   return (
     <div className={styles.wrapper}>

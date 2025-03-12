@@ -4,9 +4,9 @@ import StreakAlarm from '../../assets/icons/streak-alarm.svg';
 import FireBlue from '../../assets/icons/fire-blue.svg';
 import FireGray from '../../assets/icons/fire-gray.svg';
 import SubscribersIcon from '../../assets/icons/subscribers.png';
-import { RootState, setLastActiveStage, useGetCurrentUserProfileInfoForPollingQuery, useGetTreeInfoForPollingQuery } from '../../redux';
+import { RootState, setLastActiveStage, useGetProfileMeQuery, useGetTreeInfoQuery } from '../../redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AppRoute, MODALS } from '../../constants';
+import { AppRoute, MODALS, PROFILE_ME_POLLING_INTERVAL, TREE_POLLING_INTERVAL } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { formatAbbreviation } from '../../helpers';
@@ -18,8 +18,8 @@ import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileS
 import classNames from 'classnames';
 
 export const Header = () => {
-  const { data, isLoading, refetch } = useGetCurrentUserProfileInfoForPollingQuery(undefined, {
-    pollingInterval: 10000, // 10 сек
+  const { data, isLoading, refetch } = useGetProfileMeQuery(undefined, {
+    pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
 
   const { points: displayedPoints, subscribers: displayedSubscribers } = useIncrementingProfileStats({
@@ -38,14 +38,14 @@ export const Header = () => {
   const points = in_streak ? displayedPoints : data?.points;
   const subscribers = in_streak ? displayedSubscribers : data?.subscribers;
 
-  const { data: treeData } = useGetTreeInfoForPollingQuery(undefined, {
-    pollingInterval: 10000, // 10 сек
+  const { data: treeData } = useGetTreeInfoQuery(undefined, {
+    pollingInterval: TREE_POLLING_INTERVAL,
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
   const { i18n } = useTranslation('profile');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const platform = getOS();
 
   const { getModalState } = useModal();
@@ -58,7 +58,7 @@ export const Header = () => {
         console.log('update ' + data?.points);
       });
     }
-  }, [isOpen]);
+  }, [ isOpen ]);
 
   const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
@@ -74,7 +74,7 @@ export const Header = () => {
     if (lastActiveStageNumber) {
       dispatch(setLastActiveStage(lastActiveStageNumber));
     }
-  }, [lastActiveStageNumber, dispatch]);
+  }, [ lastActiveStageNumber, dispatch ]);
 
   const handleNavigateToProfile = () => {
     if (footerActive) {

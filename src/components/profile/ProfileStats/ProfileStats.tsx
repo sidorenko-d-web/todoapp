@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../helpers';
 import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfileStats';
 import { usePushLineStatus } from '../../../hooks';
-import { useGetCurrentUserProfileInfoQuery } from '../../../redux';
+import { useGetProfileMeQuery } from '../../../redux';
 
 interface ProfileStatsProps {
   favoriteCompany: string;
@@ -16,7 +16,7 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ favoriteCompany, com
   const { t, i18n } = useTranslation('profile');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
+  const { data: userProfileData } = useGetProfileMeQuery();
 
   const { in_streak } = usePushLineStatus();
 

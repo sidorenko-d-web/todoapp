@@ -11,7 +11,7 @@ import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { TrackedButton } from '../..';
 import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfileStats';
-import { useGetCurrentUserProfileInfoQuery } from '../../../redux';
+import { useGetProfileMeQuery } from '../../../redux';
 import { usePushLineStatus } from '../../../hooks';
 
 interface ProfileStatsMiniProps {
@@ -33,7 +33,7 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({
 
   const {
     data: userProfileData
-  } = useGetCurrentUserProfileInfoQuery();
+  } = useGetProfileMeQuery();
 
      const {
     // points: displayedPoints,

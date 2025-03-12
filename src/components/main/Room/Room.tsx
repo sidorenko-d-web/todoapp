@@ -1,9 +1,4 @@
-import {
-  RootState,
-  useGetCurrentUserProfileInfoForPollingQuery,
-  useGetEquipedByIdQuery,
-  useGetEquipedQuery,
-} from '../../../redux';
+import { RootState, useGetEquipedByIdQuery, useGetEquipedQuery, useGetProfileMeQuery } from '../../../redux';
 import { AnimationScene, Floor, Walls } from './partials';
 import styles from './partials/Partials.module.scss';
 import TreshinaRight from '../../../assets/images/start-room/treshina-right.svg';
@@ -17,6 +12,7 @@ import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfi
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '../../index.ts';
+import { PROFILE_ME_POLLING_INTERVAL } from '../../../constants';
 
 interface props {
   mode: 'me' | 'stranger';
@@ -26,8 +22,8 @@ interface props {
 export const Room = ({ mode, strangerId }: props) => {
   const { data: room } = useGetEquipedQuery(undefined, { skip: mode === 'stranger' });
   const character = useGetCharacterQuery(undefined, { skip: mode === 'stranger' });
-  const { data } = useGetCurrentUserProfileInfoForPollingQuery(undefined, {
-    pollingInterval: 10000, // 10 сек
+  const { data } = useGetProfileMeQuery(undefined, {
+    pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
 
   const { points: displayedPoints } = useIncrementingProfileStats({
