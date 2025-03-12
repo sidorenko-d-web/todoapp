@@ -21,7 +21,6 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const { openModal, closeModal } = useModal();
   const [getAssignmentReward] = useGetAssignmentRewardMutation();
   const [questionStates, setQuestionStates] = useState<QuestionState[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setQuestionStates(
@@ -36,7 +35,6 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   }, [questionStates]);
 
   const handleOpenDailyTasks = async () => {
-    setIsLoading(true);
     if (task.is_completed && !task.is_reward_given) {
       try {
         await getAssignmentReward({
@@ -45,7 +43,6 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
         }).unwrap();
 
         openModal(MODALS.GET_GIFT);
-        setIsLoading(false);
         return;
       } catch (error) {
         console.error('Error getting assignment reward:', error);
