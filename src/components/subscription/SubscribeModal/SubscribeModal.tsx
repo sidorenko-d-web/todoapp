@@ -1,14 +1,13 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import coinIcon from '../../../assets/icons/coin.png';
-import { RootState, setSubscribeGuideShown, useBuySubscriptionMutation } from '../../../redux';
-import { useGetCurrentUserProfileInfoQuery } from '../../../redux';
+import { RootState, setSubscribeGuideShown, useBuySubscriptionMutation, useGetProfileMeQuery } from '../../../redux';
 
 import s from './SubscribeModal.module.scss';
 import { getSubscriptionPurchased, isGuideShown, setGuideShown, setSubscriptionPurchased } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { Button, CentralModal } from '../../shared';
-import { GUIDE_ITEMS, MODALS } from '../../../constants';
+import { GUIDE_ITEMS, MODALS, PROFILE_ME_POLLING_INTERVAL } from '../../../constants';
 import { useModal, useSendTransaction, useTonConnect, useUsdtTransactions } from '../../../hooks';
 import { useTranslation } from 'react-i18next';
 import list from '../../../assets/icons/list.svg';
@@ -37,8 +36,8 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
   const [isSubscriptionPurchased, setIsSubscriptionPurchased] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [buySubscription] = useBuySubscriptionMutation();
-  const { data: current } = useGetCurrentUserProfileInfoQuery(undefined, {
-    pollingInterval: 10000, // 10 сек
+  const { data: current } = useGetProfileMeQuery(undefined, {
+    pollingInterval: PROFILE_ME_POLLING_INTERVAL
   });
 
   const buyBtnGlowing = getSubscriptionPurchased();

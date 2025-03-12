@@ -4,12 +4,7 @@ import classNames from 'classnames';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
 import shop from '../../assets/icons/colored-shop.svg';
-import {
-  Boost,
-  useGetCurrentUserProfileInfoQuery,
-  useGetTreeInfoQuery,
-  useUnlockAchievementMutation,
-} from '../../redux';
+import { Boost, useGetProfileMeQuery, useGetTreeInfoQuery, useUnlockAchievementMutation } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 
@@ -44,7 +39,7 @@ export const Tree = () => {
   const { t, i18n } = useTranslation('tree');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData, refetch } = useGetTreeInfoQuery();
-  const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
+  const { data: userProfileData } = useGetProfileMeQuery();
   const lastActiveLevelRef = useRef<HTMLDivElement | null>(null);
   const [ currentBoost, setCurrentBoost ] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();

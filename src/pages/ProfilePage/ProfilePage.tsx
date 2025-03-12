@@ -5,8 +5,9 @@ import styles from './ProfilePage.module.scss';
 import { ProfileInfo, ProfileStats, ProfileStatsMini, StreakCard } from '../../components/profile';
 import {
   useClaimChestRewardMutation,
-  useGetCurrentUserProfileInfoQuery,
   useGetInventoryAchievementsQuery,
+  useGetProfileMeQuery,
+  useGetPushLineQuery,
   useGetTopProfilesQuery,
 } from '../../redux';
 import RewardsList from '../../components/profile/RewardsCard/RewardsList';
@@ -14,7 +15,6 @@ import { getWeekData } from '../../utils';
 import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
-import { useGetPushLineQuery } from '../../redux';
 import { Loader } from '../../components';
 
 export const ProfilePage: React.FC = () => {
@@ -30,7 +30,7 @@ export const ProfilePage: React.FC = () => {
     error: userError,
     isLoading: isUserLoading,
     refetch: refetchCurrentProfile
-  } = useGetCurrentUserProfileInfoQuery();
+  } = useGetProfileMeQuery();
 
   useEffect(() => {
     if (!userProfileData) return;

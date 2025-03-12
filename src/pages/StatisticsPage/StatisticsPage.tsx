@@ -7,7 +7,7 @@ import logo from '../../assets/icons/dot.png';
 import back from '../../assets/icons/arrow-back.svg';
 import StatisticsCard from '../../components/statistics/statisticsCard/StatisticsCard';
 import coin from '../../assets/icons/coin.png';
-import { useGetAllIntegrationsQuery, useGetCurrentUserProfileInfoQuery } from '../../redux';
+import { useGetAllIntegrationsQuery, useGetProfileMeQuery } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
 import { Button } from '../../components/shared';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +21,7 @@ const StatisticsPage: FC = () => {
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const navigate = useNavigate();
   const { data: statisticData, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
-  const { data: userProfileData, isLoading: isUserLoading } = useGetCurrentUserProfileInfoQuery();
+  const { data: userProfileData, isLoading: isUserLoading } = useGetProfileMeQuery();
   const {
     points: displayedPoints,
     subscribers: displayedSubscribers,

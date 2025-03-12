@@ -5,8 +5,8 @@ import { DevelopmentPlan, IncreaseIncome, Loader, TopInfluencers } from '../../c
 import s from './PromotionPage.module.scss';
 import {
   setActiveFooterItemId,
-  useGetCurrentUserProfileInfoQuery,
   useGetCurrentUsersReferralsQuery,
+  useGetProfileMeQuery,
   useGetTopProfilesQuery,
   useGetUserQuery,
   useGetUsersCountQuery,
@@ -20,7 +20,7 @@ export const PromotionPage: React.FC = () => {
 
   const { t, i18n } = useTranslation('promotion');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { data: userProfileData, error: userError, isLoading: isCurrentUserProfileLoading } = useGetCurrentUserProfileInfoQuery();
+  const { data: userProfileData, error: userError, isLoading: isCurrentUserProfileLoading } = useGetProfileMeQuery();
 
   const { data: topProfilesData, error: topProfilesError, isLoading: isTopProfilesLoading } = useGetTopProfilesQuery();
   const { data: usersCountData, isLoading: isUsersCountLoading } = useGetUsersCountQuery();
