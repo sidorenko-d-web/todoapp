@@ -3,7 +3,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
 .vhsEffect {
   position: relative;
   overflow: hidden;
-  filter: contrast(1.2) brightness(1.1) saturate(1.1) blur(0.25px);
+  filter: contrast(1.03) brightness(1.15) saturate(1.18) blur(0.25px);
   animation: vhsJitter 0.5s infinite alternate; 
 }
 
