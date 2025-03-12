@@ -4,6 +4,7 @@ export type CompanyResponseDTO = {
   id: string;
   is_unique: boolean;
   growth_tree_stage: number;
+  content_type: string[];
 }
 
 export type CompaniesResponseDTO = {

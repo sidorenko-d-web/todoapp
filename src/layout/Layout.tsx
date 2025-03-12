@@ -5,7 +5,7 @@ import { Header } from '../components/Header/';
 import { useEffect, useState } from 'react';
 import { AppRoute, localStorageConsts, MODALS } from '../constants';
 import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
-import { AudioBg, useModal, useScrollManager } from '../hooks';
+import { useModal, useScrollManager } from '../hooks';
 import { getOS } from '../utils';
 import Lottie from 'lottie-react';
 import { lampTable } from '../assets/animations';

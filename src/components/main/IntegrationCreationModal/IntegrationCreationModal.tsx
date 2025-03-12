@@ -175,7 +175,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           <div className={s.scrollableContent}>
             {uniqueCompany && !noItemsMessage && (
               <SpecialIntegration
-                integration={uniqueCompany}
+                company={uniqueCompany}
               />
             )}
 
