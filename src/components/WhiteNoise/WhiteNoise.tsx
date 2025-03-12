@@ -10,8 +10,8 @@ const WhiteNoiseCanvas: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return; 
 
-    let width: number = window.innerWidth;
-    let height: number = window.innerHeight;
+    let width: number = window.innerWidth * 0.5;
+    let height: number = window.innerHeight * 0.5;
 
     const updateDimension = () => {
       width = canvas.width = window.innerWidth;
@@ -34,7 +34,7 @@ const WhiteNoiseCanvas: React.FC = () => {
         const x = Math.floor(Math.random() * width);
         const y = Math.floor(Math.random() * height);
 
-        const gray = Math.floor(Math.random() * 32);
+        const gray = Math.floor(Math.random() * 5);
         setPixel(imageData, x, y, gray, gray, gray, 255); 
       }
 
