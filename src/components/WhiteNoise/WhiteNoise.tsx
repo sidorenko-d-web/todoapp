@@ -74,7 +74,7 @@ const WhiteNoiseCanvas: React.FC = () => {
         height: '100%',
         pointerEvents: 'none', 
         zIndex: 20000,
-        opacity: 0.1,
+        opacity: 0.12,
       }}
     />
   );
