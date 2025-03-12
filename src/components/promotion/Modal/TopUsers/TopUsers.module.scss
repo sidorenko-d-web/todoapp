@@ -147,6 +147,19 @@
   overflow: hidden;
 }
 
+.avatarPosition {
+  color: var.$color-grayish-white;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: -0.8px;
+  text-transform: uppercase;
+
+  &.purple {
+    color: var.$color-purple;
+  }
+}
+
 .card img,
 .cardBox img {
   max-width: 100%;

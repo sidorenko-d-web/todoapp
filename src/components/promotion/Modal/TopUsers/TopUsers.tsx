@@ -3,14 +3,14 @@ import cup from '../../../../assets/icons/cup.svg';
 import clanRed from '../../../../assets/icons/clanRed.svg';
 import s from './TopUsers.module.scss';
 import fire from '../../../../assets/icons/fire.svg';
-import user from '../../../../assets/icons/user.svg';
 import close from '../../../../assets/icons/close-dark.svg';
 import chest from '../../../../assets/icons/chest-purple.svg';
 import classNames from 'classnames';
 import BottomModal from '../../../shared/BottomModal/BottomModal.tsx';
-import { useGetProfileMeQuery, useGetPushLineQuery, useGetTopProfilesQuery } from '../../../../redux';
+import { useGetProfileMeQuery, useGetTopProfilesQuery } from '../../../../redux';
 import { Link } from 'react-router-dom';
 import { formatAbbreviation } from '../../../../helpers';
+import clsx from 'clsx';
 
 interface InviteFriendProps {
   modalId: string;
@@ -18,32 +18,21 @@ interface InviteFriendProps {
 }
 
 export const TopUsers: FC<InviteFriendProps> = ({
-  modalId,
-  onClose,
-}: InviteFriendProps) => {
+                                                  modalId,
+                                                  onClose,
+                                                }: InviteFriendProps) => {
   const { data } = useGetTopProfilesQuery();
   const topProfiles = data?.profiles || [];
-  const { data: pushLine } = useGetPushLineQuery();
   const { data: userProfileData } = useGetProfileMeQuery();
 
   const userPosition =
     userProfileData && topProfiles
       ? topProfiles.findIndex(
-          (profile: { id: string }) => profile.id === userProfileData.id,
-        )
+        (profile: { id: string }) => profile.id === userProfileData.id,
+      )
       : -1;
   const position = userPosition !== -1 ? userPosition + 1 : topProfiles.length!;
 
-  const frozen = pushLine?.week_information.filter(
-    day =>
-      day.push_line_data?.status === 'passed').length;
-
-  const streaks = pushLine?.week_information.filter(
-    day =>
-      day &&
-      (day.push_line_data?.status === 'unspecified' || day.push_line_data?.status === 'passed'),
-  ).length;
-  // TODO: Раскомментировать когда на бэке будет vip данные
   return (
     <BottomModal
       modalId={modalId}
@@ -70,17 +59,18 @@ export const TopUsers: FC<InviteFriendProps> = ({
           >
             <div className={classNames(s.cardBlock)}>
               <div className={s.card}>
-                <img src={user} alt="user" width={27} height={36} />
+                {/*<img src={user} alt="user" width={27} height={36} />*/}
+                <span className={clsx(s.avatarPosition, index + 1 <= 100 ? s.purple : '')}>#{index + 1}</span>
               </div>
             </div>
             <div className={s.userBlock}>
               <div className={s.userInfo}>
                 <h3 className={s.text}>{profile.username}</h3>
                 <ul className={classNames(s.ulBlock, s.infoRang)}>
-                  <li className={s.number}>{formatAbbreviation(frozen ?? 0)}</li>
+                  <li className={s.number}>{formatAbbreviation(profile.growth_tree_stage_id ?? 0)}</li>
                   <li className={s.fireIcon}>
                     <img src={fire} alt="fire" width={14} height={14} />
-                    <span>{formatAbbreviation(streaks ?? 0)}</span>
+                    <span>{formatAbbreviation(0)}</span>
                   </li>
                 </ul>
               </div>
