@@ -16,6 +16,7 @@ import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
 import { Boost } from '../../../redux';
 import { formatAbbreviation } from '../../../helpers';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   giftColor?: string;
@@ -25,6 +26,7 @@ interface Props {
 export default function GetGift({ giftColor, boost }: Props) {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
+  const { t } = useTranslation('gift');
 
   if (!isOpen) return null;
 
@@ -49,7 +51,7 @@ export default function GetGift({ giftColor, boost }: Props) {
   }
 
   return (
-    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={'Подарок открыт!'}>
+    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={t('g1')}>
       <div className={styles.background}>
         <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
@@ -106,19 +108,19 @@ export default function GetGift({ giftColor, boost }: Props) {
           {/*  <img src={snowflake} />*/}
           {/*</div>*/}
         </div>
-        <p className={styles.desc}>Поздравляем! Вы улучшли основные показатели и получили дополнительные бонусы!</p>
+        <p className={styles.desc}>{t('g2')}</p>
       </div>
       <Button
         variant={
           giftColor == null || giftColor === 'Синий подарок'
             ? 'blue'
             : giftColor === 'Пурпурный подарок'
-            ? 'purple'
-            : 'red'
+              ? 'purple'
+              : 'red'
         }
         onClick={() => closeModal(MODALS.GET_GIFT)}
       >
-        Забрать
+        {t('g3')}
       </Button>
     </CentralModal>
   );
