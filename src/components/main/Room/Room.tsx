@@ -82,7 +82,6 @@ export const Room = ({ mode, strangerId }: props) => {
 
           {achivementType && <img className={styles.reward} src={achivementType?.image} alt="reward" />}
           <Floor room={room ?? strangerRoom} />
-          <button onClick={playCoin} style={{ position: 'absolute', bottom: 0, zIndex: 10000000 }}>Ghjbuhfnm</button>
         </>
       }
     </div>
