@@ -5,8 +5,11 @@
   display: flex;
   justify-content: space-between;
 
+
+
   &.justifyCenter {
     justify-content: center;
+    margin-top: 20px;
   }
 
   .toCenterStats {
@@ -65,7 +68,6 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: 60%;
-
 
     @media (min-width: var.$breakpoint-md) {
       width: 44px;

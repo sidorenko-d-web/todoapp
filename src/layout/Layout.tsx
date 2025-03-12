@@ -16,16 +16,14 @@ const Layout = () => {
   const location = useLocation();
   const platform = getOS();
   const { openModal } = useModal();
-  const [ bgOffset, setBgOffset ] = useState(0);
+  const [bgOffset, setBgOffset] = useState(0);
   const contentRef = useScrollManager();
 
-  const showHeader = !location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/);
+  const showHeader = !(location.pathname.includes('profile') && !!location.pathname.split('/')?.[2]);
 
-  const needsReducedMargin = [
-    '/',
-    '/progressTree',
-    location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/),
-  ].includes(location.pathname);
+  const needsReducedMargin = ['/', '/progressTree', location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/)].includes(
+    location.pathname,
+  );
 
   const showRoadmapBg = location.pathname === '/progressTree';
 
@@ -60,7 +58,7 @@ const Layout = () => {
         contentRef.current?.removeEventListener('scroll', handleScroll);
       };
     }
-  }, [ showRoadmapBg, contentRef.current ]);
+  }, [showRoadmapBg, contentRef.current]);
 
   const [isBgLoaded, setIsBgLoaded] = useState(false);
 
@@ -72,7 +70,6 @@ const Layout = () => {
     }
   }, [showRoadmapBg]);
 
-
   return (
     <>
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
@@ -81,17 +78,8 @@ const Layout = () => {
       <div className={styles.wrp}>
         {showRoadmapBg && (
           <>
-            <img
-              src={roadmapBg}
-              className={styles.bg_image}
-              style={{ transform: `translateY(-${bgOffset}%)` }}
-            />
-            <Lottie
-              animationData={lampTable}
-              loop
-              autoplay
-              style={{ position: 'fixed', bottom: '23px' }}
-            />
+            <img src={roadmapBg} className={styles.bg_image} style={{ transform: `translateY(-${bgOffset}%)` }} />
+            <Lottie animationData={lampTable} loop autoplay style={{ position: 'fixed', bottom: '23px' }} />
           </>
         )}
         {showHeader && <Header />}

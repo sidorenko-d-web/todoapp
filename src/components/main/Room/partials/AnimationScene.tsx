@@ -1,5 +1,5 @@
 import { Skin, SpinePlugin } from '@esotericsoftware/spine-phaser';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   IEquipedRoomResponse,
   IShopItem,
@@ -14,18 +14,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ICharacterResponse } from '../../../../redux/api/character';
 
 interface props {
+  isLoaded: boolean;
   room: IEquipedRoomResponse | undefined;
-  character?: {data?: ICharacterResponse, isLoading: boolean}
+  character?: { data?: ICharacterResponse; isLoading: boolean };
+  setIsLoaded: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AnimationScene = ({ room, character }: props) => {
-  console.log(character)
+export const AnimationScene = ({ room, character, setIsLoaded, isLoaded }: props) => {
   const gameRef = useRef<Phaser.Game | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const spineSceneRef = useRef<SpineSceneBase | null>(null);
 
   const [size, setSize] = useState([0, 0]);
-  const [isLoaded, setIsLoaded] = useState(false);
   const isWorking = useSelector(selectIsWorking);
   const isNeedToPlayHappy = useSelector(selectIsNeedToPlayHappy);
 
@@ -41,8 +41,9 @@ export const AnimationScene = ({ room, character }: props) => {
   }, []);
 
   useEffect(() => {
-    if (!sceneRef.current || character?.isLoading) return;
+    dispatch(setAnimationSceneLoaded(false));
 
+    if (!sceneRef.current || character?.isLoading) return;
     const width = sceneRef.current.offsetWidth;
     const contextProps = { equipped_items: room?.equipped_items, center: width / 2 };
 
@@ -86,15 +87,15 @@ export const AnimationScene = ({ room, character }: props) => {
         this.createBaseItems(contextProps);
 
         spineSceneRef.current = this;
-        setIsLoaded(true);
-        dispatch(setAnimationSceneLoaded(true))
         this.changeSkin();
+        setIsLoaded(true);
+        dispatch(setAnimationSceneLoaded(true));
       }
 
       changeSkin(updatedCharacter?: ICharacterResponse) {
         if (!this.person) return;
         const allSkins = this.person.skeleton.data.skins;
-        console.log(allSkins)
+        console.log(allSkins);
         const face = allSkins.find(item => item.name.includes(getSkin('face') ?? 'лицо 1'))!;
         const headSkin = allSkins.find(item => item.name.includes(getSkin('head') ?? 'голова 18'))!;
         const bottomSkin = allSkins.find(item => item.name.includes(getSkin('legs') ?? 'штаны базовые'))!;
@@ -151,7 +152,7 @@ export const AnimationScene = ({ room, character }: props) => {
   useEffect(() => {
     if (!spineSceneRef.current) return;
     spineSceneRef.current?.setCurrentLoopedAnimation(isWorking);
-  }, [isWorking, spineSceneRef.current, isLoaded, size]);
+  }, [isWorking, spineSceneRef.current, size]);
 
   useEffect(() => {
     if (!spineSceneRef.current) return;
@@ -162,7 +163,7 @@ export const AnimationScene = ({ room, character }: props) => {
         if (isNeedToPlayHappy) spineSceneRef.current?.setIdle();
       }, 4000);
     }
-  }, [isNeedToPlayHappy, spineSceneRef.current, isLoaded]);
+  }, [isNeedToPlayHappy, spineSceneRef.current]);
 
   return (
     <>

@@ -5,6 +5,7 @@ export enum AppRoute {
   Tasks = '/tasks',
   Profile = '/profile',
   StrangerProfile = '/profile/:profileId',
+  StrangerProfileRoom = '/profile/:profileId/room',
   Shop = '/shop',
   ShopInventory = '/shop/inventory',
   Promotion = '/promotion',

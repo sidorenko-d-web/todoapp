@@ -11,7 +11,7 @@ import subscriptionLeveIcon from '../../../assets/icons/subscription-level.svg';
 import { ProgressLine } from '../../shared';
 import { AppRoute } from '../../../constants';
 import { useSelector } from 'react-redux';
-import { RootState, useGetCharacterQuery } from '../../../redux';
+import { RootState, useGetCharacterByIdQuery, useGetCharacterQuery } from '../../../redux';
 import { useTranslation } from 'react-i18next';
 import { Loader, TrackedLink } from '../..';
 import { SpinePlugin } from '@esotericsoftware/spine-phaser';
@@ -24,6 +24,7 @@ interface ProfileInfoProps {
   position: number;
   isVip?: boolean;
   nonEditable?: boolean;
+  strangerId?: string;
 }
 
 export const ProfileInfo: React.FC<ProfileInfoProps> = ({
@@ -31,6 +32,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
   subscriptionIntegrationsLeft,
   position,
   isVip,
+  strangerId,
 }) => {
   const { t } = useTranslation('profile');
   const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
@@ -42,7 +44,11 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
 
   const [size, setSize] = useState([0, 0]);
   const [isLoading, setLoading] = useState(true);
-  const { data: character, isLoading: isCharacterLoading } = useGetCharacterQuery();
+  const { data: character, isLoading: isCharacterLoading } = useGetCharacterQuery(undefined, { skip: !!strangerId });
+  const { data: strangerCharacter, isLoading: isStrangerCharacterLoading } = useGetCharacterByIdQuery(
+    { id: strangerId! },
+    { skip: !strangerId },
+  );
 
   const personScale = 0.065;
 
@@ -58,11 +64,11 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
   useEffect(() => {
     if (!sceneRef.current || isCharacterLoading) return;
 
-    setLoading(true)
+    setLoading(true);
     class SpineScene extends WardrobeSpineScene {
       create() {
         try {
-          setLoading(false)
+          setLoading(false);
           this.createPerson(personScale);
         } catch (error: any) {
           if (error.message === 'add.spine') {
@@ -71,7 +77,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
           }
         }
         spineSceneRef.current = this;
-        this.changeSkin(personScale, character);
+        this.changeSkin(personScale, character ?? strangerCharacter);
         this.spineObject?.setY(118 / 2 + 15);
       }
     }
@@ -87,7 +93,6 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
           scene: [{ key: 'SpinePlugin', plugin: SpinePlugin, mapping: 'spine' }],
         },
         parent: 'player',
-        
       };
 
       gameRef.current = new Phaser.Game(config);
@@ -114,7 +119,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
           </div>
 
           <div className={styles.imagePlaceholder}>
-           {isLoading && <Loader className={styles.loader} noMargin/>}
+            {isLoading && <Loader className={styles.loader} noMargin />}
             <div className={styles.perosnScene} ref={sceneRef} id="player"></div>
           </div>
           {isVip ? (
@@ -174,4 +179,3 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
     </div>
   );
 };
-

@@ -5,5 +5,6 @@ export * from './TasksPage';
 export * from './PromotionPage';
 export * from './ProfilePage';
 export * from './WardrobePage';
+export * from './StrangerRoomPage';
 export * from './StrangerProfilePage';
 export * from './ProgressTreePage';
