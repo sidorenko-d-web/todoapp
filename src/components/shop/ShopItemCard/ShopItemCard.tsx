@@ -1,9 +1,8 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
-import { useGetCurrentUserProfileInfoQuery } from '../../../redux';
-import { IShopItem, RootState } from '../../../redux';
+import { IShopItem, RootState, useGetProfileMeQuery } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
@@ -24,7 +23,7 @@ interface Props {
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [buyItem, { isLoading }] = useBuyItemMutation();
-  const { data } = useGetCurrentUserProfileInfoQuery();
+  const { data } = useGetProfileMeQuery();
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
   const [error, setError] = useState('');

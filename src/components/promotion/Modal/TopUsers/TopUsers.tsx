@@ -8,11 +8,7 @@ import close from '../../../../assets/icons/close-dark.svg';
 import chest from '../../../../assets/icons/chest-purple.svg';
 import classNames from 'classnames';
 import BottomModal from '../../../shared/BottomModal/BottomModal.tsx';
-import { useGetPushLineQuery } from '../../../../redux';
-import {
-  useGetCurrentUserProfileInfoQuery,
-  useGetTopProfilesQuery,
-} from '../../../../redux';
+import { useGetProfileMeQuery, useGetPushLineQuery, useGetTopProfilesQuery } from '../../../../redux';
 import { Link } from 'react-router-dom';
 import { formatAbbreviation } from '../../../../helpers';
 
@@ -28,8 +24,7 @@ export const TopUsers: FC<InviteFriendProps> = ({
   const { data } = useGetTopProfilesQuery();
   const topProfiles = data?.profiles || [];
   const { data: pushLine } = useGetPushLineQuery();
-  const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
-  const { data: me } = useGetCurrentUserProfileInfoQuery();
+  const { data: userProfileData } = useGetProfileMeQuery();
 
   const userPosition =
     userProfileData && topProfiles
@@ -71,7 +66,7 @@ export const TopUsers: FC<InviteFriendProps> = ({
           <Link
             to={`/profile/${profile.id}`}
             key={profile.id}
-            className={classNames(s.listUser, me && me.id === profile.id && s.active)}
+            className={classNames(s.listUser, userProfileData && userProfileData.id === profile.id && s.active)}
           >
             <div className={classNames(s.cardBlock)}>
               <div className={s.card}>

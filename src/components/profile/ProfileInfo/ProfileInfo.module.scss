@@ -14,8 +14,8 @@
     border: 2px solid var.$color-dark-gray-stroke;
     border-radius: 12px;
     background-color: var.$footer-bg;
-
-    padding: 2px;
+    
+ 
 
 
     &.vip {
@@ -31,13 +31,14 @@
       align-items: center;
       min-width: 118px;
       height: 100%;
+      flex: 1;
       justify-content: space-between;
       border-radius: 12px;
       background-color: var.$footer-bg;
+      overflow: hidden;
 
-      .imagePlaceholder {
-        width: 22.5px;
-        height: 30px;
+      .loader{
+        height: 118px;
       }
     }
 
@@ -48,6 +49,7 @@
       align-items: center;
       gap: 2px;
       margin-top: 2px;
+      flex: 2;
 
       &.vip {
         margin-top: 4px;

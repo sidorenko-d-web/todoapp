@@ -13,15 +13,14 @@ import {
   SubscrieGuide,
 } from '../../components';
 import s from './MainPage.module.scss';
-import { AppRoute, MODALS } from '../../constants';
+import { AppRoute, GUIDE_ITEMS, MODALS } from '../../constants';
 import { useModal } from '../../hooks';
-
-import { GUIDE_ITEMS } from '../../constants';
 import { getSubscriptionPurchased, isGuideShown, setGuideShown } from '../../utils';
 
 
 import {
   resetGuideState,
+  RootState,
   setAccelerateIntegrationGuideClosed,
   setActiveFooterItemId,
   setFooterActive,
@@ -29,16 +28,13 @@ import {
   setIntegrationReadyForPublishing,
   setLastIntegrationId,
   setSubscribeGuideShown,
-  useGetInventoryItemsQuery,
-} from '../../redux';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  RootState,
   useGetAllIntegrationsQuery,
-  useGetCurrentUserProfileInfoQuery,
   useGetEquipedQuery,
   useGetIntegrationsQuery,
+  useGetInventoryItemsQuery,
+  useGetProfileMeQuery,
 } from '../../redux';
+import { useDispatch, useSelector } from 'react-redux';
 import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/RewardForIntegrationModal.tsx';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -260,7 +256,7 @@ export const MainPage: FC = () => {
   const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
-  const { isLoading: isCurrentUserProfileInfoLoading } = useGetCurrentUserProfileInfoQuery();
+  const { isLoading: isCurrentUserProfileInfoLoading } = useGetProfileMeQuery();
   const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
   const { isLoading: isRoomLoading } = useGetEquipedQuery();
 

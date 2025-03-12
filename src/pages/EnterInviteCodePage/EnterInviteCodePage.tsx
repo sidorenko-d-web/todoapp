@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
 interface EnterInviteCodePageProps {
-  onContinue: () => void;
   referral_id: number;
 }
 
@@ -22,7 +21,7 @@ interface ReferralErrorResponse {
   type: 'ReferrerNotFound' | 'UserAlreadyIsReferral' | 'UserNotFoundInBotDatabaseException' | 'UnknownError';
 }
 
-export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onContinue, referral_id }) => {
+export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ referral_id }) => {
   const {t} = useTranslation('referral')
   const [inputValue, setInputValue] = useState('');
   const [isValid, setIsValid] = useState(false);
@@ -72,7 +71,6 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onCont
         referral_code: Number.parseInt(inputValue)
       }).unwrap()
       setIsSentCode(true)
-      onContinue();
     } catch (error) {
       const err = error as ReferralErrorResponse;
       console.error('Referral code error:', err)
@@ -84,9 +82,6 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ onCont
           break;
         case 'UserAlreadyIsReferral':
           setIsSentCode(true)
-          setTimeout(() => {
-            onContinue();
-          }, 500);
           break;
         case 'UserNotFoundInBotDatabaseException':
           setErrorMessage(err.message);

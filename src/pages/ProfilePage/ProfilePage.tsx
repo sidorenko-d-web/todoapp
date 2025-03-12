@@ -5,18 +5,17 @@ import styles from './ProfilePage.module.scss';
 import { ProfileInfo, ProfileStats, ProfileStatsMini, StreakCard } from '../../components/profile';
 import {
   useClaimChestRewardMutation,
-  useGetCurrentUserProfileInfoQuery,
   useGetInventoryAchievementsQuery,
+  useGetProfileMeQuery,
+  useGetPushLineQuery,
   useGetTopProfilesQuery,
 } from '../../redux';
 import RewardsList from '../../components/profile/RewardsCard/RewardsList';
 import { getWeekData } from '../../utils';
-import { useModal, usePushLineStatus } from '../../hooks';
+import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
-import { useGetPushLineQuery } from '../../redux';
 import { Loader } from '../../components';
-import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
 
 export const ProfilePage: React.FC = () => {
   const { t,i18n } = useTranslation('profile');
@@ -31,7 +30,7 @@ export const ProfilePage: React.FC = () => {
     error: userError,
     isLoading: isUserLoading,
     refetch: refetchCurrentProfile
-  } = useGetCurrentUserProfileInfoQuery();
+  } = useGetProfileMeQuery();
 
   useEffect(() => {
     if (!userProfileData) return;
@@ -50,18 +49,11 @@ export const ProfilePage: React.FC = () => {
   } = useGetTopProfilesQuery();
 
   const [, setIsModalShown] = useState(false);
-  const frozen = data?.week_information.filter(
-    day => day.push_line_data?.status === 'unspecified'
-  ).length;
 
   const streaks = data?.week_information.filter(
     day => day.push_line_data?.status === 'passed'
   ).length;
 
-  console.log( data?.week_information.filter(
-    day =>
-      day.push_line_data?.status === 'passed'
-  ))
 
   useEffect(() => {
     if (!sessionStorage.getItem('daysInARowModalShown')) {
@@ -117,31 +109,9 @@ export const ProfilePage: React.FC = () => {
     isAwardsLoading
   );
 
-  const {
-    // points: displayedPoints,
-    subscribers: displayedSubscribers,
-    totalViews: displayedTotalViews,
-    totalEarned: displayedTotalEarned
-  } = useIncrementingProfileStats({
-    profileId: userProfileData?.id || '',
-    basePoints: userProfileData?.points || '0',
-    baseSubscribers: userProfileData?.subscribers || 0,
-    baseTotalViews: userProfileData?.total_views || 0,
-    baseTotalEarned: userProfileData?.total_earned || '0',
-    futureStatistics: userProfileData?.future_statistics,
-    lastUpdatedAt: userProfileData?.updated_at,
-  });
-
-  const {in_streak} = usePushLineStatus()
-  const subscribers = in_streak ? displayedSubscribers : userProfileData?.subscribers ?? 0
-  const totalViews = in_streak ? displayedTotalViews : userProfileData?.total_views ?? 0
-  const totalEarned = in_streak ? displayedTotalEarned : userProfileData?.total_earned ?? ""
-
   if (isLoading) {
     return <Loader />
   }
-
-  console.log(streaks)
 
   return (
     <>
@@ -150,7 +120,7 @@ export const ProfilePage: React.FC = () => {
 
       {(isUserLoading || isTopProfilesLoading) && <p>{t('p3')}</p>}
 
-      {(userError || topProfilesError) && <p>{t('p17')}</p>}
+      {(userError || topProfilesError) && <p>{t('p17')}</p>} 
 
       {userProfileData && topProfilesData && (
         <div className={styles.wrp}>
@@ -158,10 +128,8 @@ export const ProfilePage: React.FC = () => {
             <h1 className={styles.pageTitle}>{t('p1')}</h1>
 
             <ProfileStatsMini
-              subscribers={subscribers}
               position={position}
               daysInARow={streaks !== undefined ? streaks : 0}
-              totalViews={totalViews}
             />
           </div>
 
@@ -184,7 +152,7 @@ export const ProfilePage: React.FC = () => {
             />
             <StreakCard
               streakDays={streaks !== undefined ? streaks : 0}
-              frozenDays={frozen !== undefined ? frozen : 0}
+              frozenDays={userProfileData.available_freezes}
               days={weekData}
               status={locale === 'ru' ? data?.push_line_profile_status.status_name : data?.push_line_profile_status.status_name_eng}
               chest={locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}
@@ -195,8 +163,6 @@ export const ProfilePage: React.FC = () => {
           <div>
             <p className={styles.statsTitle}>{t('p4')}</p>
             <ProfileStats
-              earned={totalEarned}
-              views={totalViews}
               favoriteCompany={'Favourite company'}
               comments={userProfileData.comments_answered_correctly}
               rewards={userProfileData.achievements_collected}

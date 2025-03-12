@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import styles from './ProfileInfo.module.scss';
 
-import profileImagePlaceholder from '../../../assets/icons/profile-icon-placeholder.svg';
+// import profileImagePlaceholder from '../../../assets/icons/profile-icon-placeholder.svg';
 import clanIcon from '../../../assets/icons/clan-red.svg';
 import vipIcon from '../../../assets/icons/vip.svg';
 
@@ -11,9 +11,11 @@ import subscriptionLeveIcon from '../../../assets/icons/subscription-level.svg';
 import { ProgressLine } from '../../shared';
 import { AppRoute } from '../../../constants';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux';
+import { RootState, useGetCharacterQuery } from '../../../redux';
 import { useTranslation } from 'react-i18next';
-import { TrackedLink } from '../..';
+import { Loader, TrackedLink } from '../..';
+import { SpinePlugin } from '@esotericsoftware/spine-phaser';
+import { WardrobeSpineScene } from '../../../constants/wardrobeAnimation';
 
 interface ProfileInfoProps {
   nickname: string;
@@ -25,15 +27,82 @@ interface ProfileInfoProps {
 }
 
 export const ProfileInfo: React.FC<ProfileInfoProps> = ({
-                                                          nickname,
-                                                          subscriptionIntegrationsLeft,
-                                                          position,
-                                                          isVip,
-                                                        }) => {
+  nickname,
+  subscriptionIntegrationsLeft,
+  position,
+  isVip,
+}) => {
   const { t } = useTranslation('profile');
-  const lastActiveStage = useSelector(
-    (state: RootState) => state.treeSlice.lastActiveStage,
-  );
+  const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
+
+  const sceneRef = useRef<HTMLDivElement | null>(null);
+
+  const gameRef = useRef<Phaser.Game | null>(null);
+  const spineSceneRef = useRef<any | null>(null);
+
+  const [size, setSize] = useState([0, 0]);
+  const [isLoading, setLoading] = useState(true);
+  const { data: character, isLoading: isCharacterLoading } = useGetCharacterQuery();
+
+  const personScale = 0.065;
+
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  useEffect(() => {
+    if (!sceneRef.current || isCharacterLoading) return;
+
+    setLoading(true)
+    class SpineScene extends WardrobeSpineScene {
+      create() {
+        try {
+          setLoading(false)
+          this.createPerson(personScale);
+        } catch (error: any) {
+          if (error.message === 'add.spine') {
+            console.log('avoid error');
+            setSize(prev => [prev[0] + 1, prev[1]]);
+          }
+        }
+        spineSceneRef.current = this;
+        this.changeSkin(personScale, character);
+        this.spineObject?.setY(118 / 2 + 15);
+      }
+    }
+
+    const createAnimation = () => {
+      const config: Phaser.Types.Core.GameConfig = {
+        type: Phaser.AUTO,
+        width: 118,
+        height: 118,
+        scene: [SpineScene],
+        transparent: true,
+        plugins: {
+          scene: [{ key: 'SpinePlugin', plugin: SpinePlugin, mapping: 'spine' }],
+        },
+        parent: 'player',
+        
+      };
+
+      gameRef.current = new Phaser.Game(config);
+    };
+
+    createAnimation();
+
+    return () => {
+      if (gameRef.current) {
+        gameRef.current.destroy(true);
+        gameRef.current = null;
+        spineSceneRef.current = null;
+      }
+    };
+  }, [isCharacterLoading, size]);
 
   return (
     <div className={styles.wrp}>
@@ -45,7 +114,8 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
           </div>
 
           <div className={styles.imagePlaceholder}>
-            <img src={profileImagePlaceholder} alt="" />
+           {isLoading && <Loader className={styles.loader} noMargin/>}
+            <div className={styles.perosnScene} ref={sceneRef} id="player"></div>
           </div>
           {isVip ? (
             <>
@@ -70,7 +140,10 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
               trackingData={{
                 eventType: 'button',
                 eventPlace: 'В дерево роста - Профиль',
-              }} to={AppRoute.ProgressTree} className={styles.subscribers}>
+              }}
+              to={AppRoute.ProgressTree}
+              className={styles.subscribers}
+            >
               {lastActiveStage}
             </TrackedLink>
             {/*{!nonEditable && (*/}
@@ -91,9 +164,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
             <span className={styles.subscriptionText}>{t('p2')}</span>
 
             <div className={styles.subscriptionLevelWrp}>
-              <span className={styles.subscriptionLevel}>
-                {subscriptionIntegrationsLeft}/5
-              </span>
+              <span className={styles.subscriptionLevel}>{subscriptionIntegrationsLeft}/5</span>
               <img src={subscriptionLeveIcon} alt="" />
             </div>
           </div>
@@ -103,3 +174,4 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
     </div>
   );
 };
+

@@ -5,7 +5,7 @@ import { GrowthTreeResponse } from './dto.ts';
 export const treeApi = createApi({
   reducerPath: 'tree',
   baseQuery: baseQueryReauth,
-  tagTypes: ['Tree'],
+  tagTypes: [ 'Tree' ],
   endpoints: builder => ({
     getTreeInfo: builder.query<GrowthTreeResponse, void>({
       query: () => ({
@@ -13,20 +13,20 @@ export const treeApi = createApi({
         method: 'GET',
         params: {
           limit: 450,
-        }
-      })
-    }), 
-    unlockAchievement: builder.mutation<string, {achievement_id: string}>({
+        },
+      }),
+    }),
+    unlockAchievement: builder.mutation<string, { achievement_id: string }>({
       query: ({ achievement_id }) => ({
         url: `/growth-tree/${achievement_id}`,
-        method: 'POST'
+        method: 'POST',
       }),
-      invalidatesTags: ['Tree']
-    })
-  })
-})
+      invalidatesTags: [ 'Tree' ],
+    }),
+  }),
+});
 
 export const {
   useGetTreeInfoQuery,
-  useUnlockAchievementMutation
-} = treeApi
+  useUnlockAchievementMutation,
+} = treeApi;

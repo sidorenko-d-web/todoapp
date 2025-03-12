@@ -120,7 +120,7 @@ $translateY: -15vh;
     height: 10%;
     transform: skew(0deg) rotate(0);
   }
-}          
+}
 
 .treshinaLeft {
   @extend .item;
@@ -148,4 +148,33 @@ $translateY: -15vh;
   z-index: 1000;
   width: 80px;
   height: 80px;
+}
+
+.coin { 
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 50%;
+  transform: translateX(-20px);
+  z-index: 10000000;
+  animation: coin 1.15s forwards ease-in-out;
+}
+
+@keyframes coin {
+  0% {
+    opacity: 0;
+    top: 450px;
+  }
+  40% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0;
+    top: 400px;
+  }
+
+  100%{
+    opacity: 0;
+    top: 400px;
+  }
 }

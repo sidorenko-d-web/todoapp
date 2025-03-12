@@ -4,12 +4,7 @@ import classNames from 'classnames';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
 import shop from '../../assets/icons/colored-shop.svg';
-import {
-  Boost,
-  useGetCurrentUserProfileInfoQuery,
-  useGetTreeInfoQuery,
-  useUnlockAchievementMutation,
-} from '../../redux';
+import { Boost, useGetProfileMeQuery, useGetTreeInfoQuery, useUnlockAchievementMutation } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 
@@ -44,7 +39,7 @@ export const Tree = () => {
   const { t, i18n } = useTranslation('tree');
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData, refetch } = useGetTreeInfoQuery();
-  const { data: userProfileData } = useGetCurrentUserProfileInfoQuery();
+  const { data: userProfileData } = useGetProfileMeQuery();
   const lastActiveLevelRef = useRef<HTMLDivElement | null>(null);
   const [ currentBoost, setCurrentBoost ] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
@@ -77,8 +72,10 @@ export const Tree = () => {
 
   return (
     <div className={s.container}>
+      <div className={s.progressBarAdditional} />
       <div className={s.progressBarContainer}>
-        <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300}px` }}>
+        <div className={s.progressBar}
+             style={{ height: `${(150 + (treeData.growth_tree_stages.length - 1) * 300)}px` }}>
           {treeData?.growth_tree_stages.map((stage, index) => {
             const isRewardAvailable = stage.achievement.is_available;
             // const isRewardAvailable = true;
@@ -112,7 +109,7 @@ export const Tree = () => {
                 {
                   isRewardAvailable && !isRewardClaimed && showReward &&
                   <Button className={s.takeRewardBtn}
-                          onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}>Забрать</Button>
+                          onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}>{t('t2')}</Button>
                 }
                 {showReward && (
                   <div

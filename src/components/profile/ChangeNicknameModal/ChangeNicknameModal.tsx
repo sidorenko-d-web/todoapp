@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import styles from './ChangingNicknameModal.module.scss';
 import cross from '../../../assets/icons/input-cross.svg';
 import tick from '../../../assets/icons/input-tick.svg';
-import { useGetCurrentUserProfileInfoQuery, useUpdateCurrentUserProfileMutation } from '../../../redux/index.ts';
+import { useGetProfileMeQuery, useUpdateCurrentUserProfileMutation } from '../../../redux/index.ts';
 import { Button, CentralModal } from '../../shared';
 
 
@@ -21,7 +21,7 @@ const ChangeNicknameModal: FC<ChangeNicknameModalProps> = ({ modalId, onClose, c
   const isValid = (text: string) => text.trim().length <= 26;
 
   const [ updateProfile, { isLoading } ] = useUpdateCurrentUserProfileMutation();
-  const { refetch: refetchProfile } = useGetCurrentUserProfileInfoQuery();
+  const { refetch: refetchProfile } = useGetProfileMeQuery();
 
   const trimmedNickname = nickname.trim();
   const trimmedBlogName = blogName.trim();
