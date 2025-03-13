@@ -1,4 +1,5 @@
 @use '../abstracts/variables' as var;
+@use "../abstracts/colors" as color;
 
 @mixin transition($args...) {
   transition-timing-function: ease-out;
@@ -77,4 +78,23 @@
   @media (min-width: var.$breakpoint-md) {
     font-size: $fz-md;
   }
+}
+
+
+
+@mixin striped-progress-bar() {
+    height: 100%;
+    background-color: color.$color-primary;
+    background-image: linear-gradient(
+      -60deg,
+      #2073de 33%,
+      transparent 33%,
+      transparent 66%,
+      #2073de 66%,
+      #2073de 100%,
+      transparent 100%,
+      transparent
+    );
+    background-size: 30px 30px;
+    animation: progressStripes 1.5s linear infinite;
 }
