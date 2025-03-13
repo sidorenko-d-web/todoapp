@@ -9,8 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { MODALS } from '../../../constants';
 import GetGiftDaily from '../../../pages/DevModals/GetGiftDaily/GetGiftDaily';
 import { useGetAssignmentRewardMutation } from '../../../redux/api/tasks';
-import { useGetTreeInfoQuery } from '../../../redux/api/tree/api';
-import { useGetProfileMeQuery } from '../../../redux/api/profile/api';
+import { useGetTreeInfoQuery } from '../../../redux';
+import { useGetProfileMeQuery } from '../../../redux';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -41,7 +41,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
 
   const isCompleted = task.is_completed || questionStates.every(state => state === 'solved');
 
-  const stage = treeData?.growth_tree_stages?.find((item, index) => index === profile?.growth_tree_stage_id);
+  const stage = treeData?.growth_tree_stages?.find((_item, index) => index === profile?.growth_tree_stage_id);
 
   const handleOpenDailyTasks = async () => {
     if (task.is_completed && !task.is_reward_given) {
