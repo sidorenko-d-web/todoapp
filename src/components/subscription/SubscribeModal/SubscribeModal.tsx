@@ -29,7 +29,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
   const [idDisabled] = useState(true);
   const [isShow, setIsShow] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [isSubscriptionPurchased] = useState(false);
+  const [isSubscriptionPurchased, setIsSubscriptionPurchased] = useState(false);
   const [nextSubscriptionAt, setNextSubscriptionAt] = useState<Date | null>(null);
   const [timeUntilAvailable, setTimeUntilAvailable] = useState<number | null>(null);
 
@@ -40,12 +40,14 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
 
   const buyBtnGlowing = getSubscriptionPurchased();
   const { openModal, closeModal } = useModal();
-
+  console.log(current?.next_subscription_at);
   // Установка nextSubscriptionAt
   useEffect(() => {
     if (current?.next_subscription_at) {
+      const currentDate = new Date();
       const nextSubscriptionDate = new Date(current.next_subscription_at);
       setNextSubscriptionAt(nextSubscriptionDate);
+      setIsSubscriptionPurchased(currentDate <= nextSubscriptionDate);
     }
   }, [current]);
 

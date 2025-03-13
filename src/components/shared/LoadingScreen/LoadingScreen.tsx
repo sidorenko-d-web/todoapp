@@ -12,6 +12,7 @@ import WhiteNoiseCanvas from '../../WhiteNoise/WhiteNoise';
 
 import qr from '../../../assets/icons/qr.png';
 
+
 interface LoadingScreenProps {
   onAnimationComplete: () => void;
   isAuthComplete: boolean;
@@ -35,20 +36,20 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   //   });
   // }, []);
 
-  const [isMobile, setIsMobile] = useState(0);
+  const [isMobile, setIsMobile] = useState(1);
 
-  useEffect(() => {
-    if (window.Telegram?.WebApp?.platform) {
-      const platform = window.Telegram.WebApp.platform.toLowerCase();
-      if (platform.includes('android') || platform.includes('ios')) {
-        setIsMobile(1);
-      } else {
-        setIsMobile(-1);
-      }
-    } else {
-      setIsMobile(-1);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.Telegram?.WebApp?.platform) {
+  //     const platform = window.Telegram.WebApp.platform.toLowerCase();
+  //     if (platform.includes('android') || platform.includes('ios')) {
+  //       setIsMobile(1);
+  //     } else {
+  //       setIsMobile(-1);
+  //     }
+  //   } else {
+  //     setIsMobile(-1);
+  //   }
+  // }, []);
 
   useEffect(() => {
     const minLoadingTimeout = setTimeout(() => {
@@ -121,37 +122,43 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   return (
     <>
       <WhiteNoiseCanvas />
-      {isMobile === 1 && (
-        <div className={styles.root} onClick={handleAccelerate}>
-          <div />
-          <div className={styles.clickableArea}></div>
-          <video
-            ref={videoRef}
-            className={styles.coin}
-            src={loadingVid}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            width={410}
-            height={420}
-          />
-          {showProgressBar && !showAnimation && (
-            <LoadingScreenBar
-              ref={loadingScreenBarRef}
-              speedMultiplier={speedMultiplier}
-              progress={progress}
-              setProgress={setProgress}
-              isAuthComplete={isAuthComplete}
-            />
-          )}
-          {showAnimation && (
-            // <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
-            <></>
-          )}
-        </div>
-      )}
+      {isMobile === 1 && <div className={styles.root} onClick={handleAccelerate}>
+        <div />
+        <div className={styles.clickableArea}></div>
+        <video
+          ref={videoRef}
+          className={styles.coin}
+          src={loadingVid}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          width={410}
+          height={420}
+        />
+
+
+        {showProgressBar && !showAnimation && (
+          <div className={styles.betaAndProgressBar}>
+            <span className={styles.beta}>
+              Beta
+            </span>
+              <LoadingScreenBar
+                ref={loadingScreenBarRef}
+                speedMultiplier={speedMultiplier}
+                progress={progress}
+                setProgress={setProgress}
+                isAuthComplete={isAuthComplete}
+              />
+          </div>
+        )}
+        {showAnimation && (
+          // <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
+          <></>
+        )}
+      </div>
+      }
 
       {isMobile === -1 && (
         <div className={styles.notMobile}>

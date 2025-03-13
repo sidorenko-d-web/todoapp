@@ -52,9 +52,9 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   ] as const;
 
   const [selectedOption, setSelectedOption] = useState<(typeof contentOptions)[number]['value']>('text');
-  const [selectedCompanyId, setSelectedCompanyId] = useState("")
+  const [selectedCompanyId, setSelectedCompanyId] = useState("");
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
-  const [createIntegration, { isError, error }] = useCreateIntegrationMutation();
+  const [createIntegration, { isError, error, isLoading }] = useCreateIntegrationMutation();
   const {
     // data: profile,
     isLoading: isProfileLoading } = useGetProfileMeQuery();
@@ -63,6 +63,17 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     content_type: selectedOption
   });
   const companies = data?.campaigns;
+
+  const loadingTexts = [
+    t("i35"),
+    t("i36"),
+    t("i37"),
+    t("i38"),
+    t("i39"),
+  ];
+  const [currentLoadingText, setCurrentLoadingText] = useState("");
+  // Flag to prevent multiple submissions
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // const uniqueCompany = companies?.find(company => company.is_unique === true) || null;
   const uniqueCompany = useMemo(() =>
@@ -77,7 +88,15 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   };
 
   const submitCreation = () => {
-    if (!selectedOption || !selectedCompanyId) return;
+    // If already submitting or no company selected, do nothing
+    if (isSubmitting || !selectedOption || !selectedCompanyId) return;
+
+    // Set submitting state to prevent multiple clicks
+    setIsSubmitting(true);
+
+    const randomIndex = Math.floor(Math.random() * loadingTexts.length);
+    setCurrentLoadingText(loadingTexts[randomIndex]);
+
     createIntegration(selectedCompanyId)
       .unwrap()
       .then((data) => {
@@ -87,7 +106,12 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         dispatch(integrationsApi.util.invalidateTags(['Integrations']));
         dispatch(profileApi.util.invalidateTags(['Me']));
+      })
+      .finally(() => {
+        // Reset submitting state if needed
+        setIsSubmitting(false);
       });
+
     setSelectedCompanyId("");
   };
 
@@ -115,22 +139,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
 
   return (
-    // <ExpandableBottomModal
-    //   modalId={modalId}
-    //   title={t('i11')}
-    //   onClose={
-    //     () => {
-    //       onClose();
-    //       if(!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
-    //        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
-    //        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-    //        navigate(AppRoute.Shop); 
-    //       }
-    //     }
-    //   }
-    //   titleIcon={integrationWhiteIcon}
-    //   overlayOpacity={0.7}
-    // >
     <CentralModal
       title={t('i11')}
       modalId={modalId}
@@ -150,14 +158,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       {isProfileLoading || isCompaniesLoading
         ? <Loader noMargin />
         : <div className={s.content}>
-          {/* <div className={s.skinsWrapper}>
-            {Array.from({ length: profile ? profile.subscription_integrations_left : 5 }).map((_, index) => (
-              <div key={index} className={`${s.skin} ${(lightningsGlowing && !tabsGlowing) ? s.glowing : ''}`}>
-                <img src={lightningIcon} alt="Lightning" width={20} height={20} />
-              </div>
-            ))}
-          </div> */}
-
           <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
             {contentOptions.map((option, index) => (
               <span
@@ -189,16 +189,9 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                       key={company.id}
                       company={company}
                       selected={selectedCompanyId === company.id}
-                      disabled={hasCreatingIntegration}
-                      // onClick={() => setSelectedCompanyId(company.id)}
-                      onClick={() => {
-                        // Toggle selection: If already selected, deselect it, otherwise select it
-                        if (selectedCompanyId === company.id) {
-                          setSelectedCompanyId("");
-                        } else {
-                          setSelectedCompanyId(company.id);
-                        }
-                      }}
+                      disabled={hasCreatingIntegration || isSubmitting || (selectedCompanyId !== "" && selectedCompanyId !== company.id)}
+                      onClick={() => setSelectedCompanyId(company.id)
+                      }
                     />
                   ),
                 )}
@@ -229,10 +222,12 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                 <button
                   className={`${s.createButton} ${!selectedCompanyId ? s.disabledButton : ''}`}
                   onClick={submitCreation}
-                  disabled={!selectedCompanyId}
-
+                  disabled={!selectedCompanyId || isSubmitting}
+                  style={{
+                    color: isLoading ? 'white' : ''
+                  }}
                 >
-                  {t('i31')}
+                  {isSubmitting ? currentLoadingText : t('i31')}
                 </button>
               </div>
             )}
@@ -277,8 +272,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         top="22%"
       />}
 
-
-      {/* </ExpandableBottomModal> */}
     </CentralModal>
   );
 };
