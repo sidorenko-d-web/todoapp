@@ -27,7 +27,7 @@ import { useOutletContext } from 'react-router-dom';
 
 type ShopUpgrades = {
   [key: string]: { icon: string };
-}
+};
 
 const shopUpgrades: ShopUpgrades = {
   150: { icon: s.arrowsPurple },
@@ -37,25 +37,28 @@ const shopUpgrades: ShopUpgrades = {
 export const Tree = () => {
   const { openModal } = useModal();
   const { t, i18n } = useTranslation('tree');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData, refetch } = useGetTreeInfoQuery();
   const { data: userProfileData } = useGetProfileMeQuery();
   const lastActiveLevelRef = useRef<HTMLDivElement | null>(null);
-  const [ currentBoost, setCurrentBoost ] = useState<Boost | null>(null);
+  const [currentBoost, setCurrentBoost] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
 
-  const [ unlockAchievement ] = useUnlockAchievementMutation();
+  const [unlockAchievement] = useUnlockAchievementMutation();
 
   useEffect(() => {
-    if (lastActiveLevelRef.current) {
-      lastActiveLevelRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
+    if (treeData && userProfileData && lastActiveLevelRef.current) {
+      // Добавляем небольшую задержку для плавной прокрутки
+      setTimeout(() => {
+        lastActiveLevelRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }, 100); // Задержка в 300 мс
     }
-  }, []);
+  }, [treeData, userProfileData]);
 
-  if (!treeData || !isBgLoaded) {
+  if (!treeData || !isBgLoaded || !userProfileData) {
     return <Loader />;
   }
 
@@ -74,20 +77,17 @@ export const Tree = () => {
     <div className={s.container}>
       <div className={s.progressBarAdditional} />
       <div className={s.progressBarContainer}>
-        <div className={s.progressBar}
-             style={{ height: `${(150 + (treeData.growth_tree_stages.length - 1) * 300)}px` }}>
+        <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300}px` }}>
           {treeData?.growth_tree_stages.map((stage, index) => {
             const isRewardAvailable = stage.achievement.is_available;
-            // const isRewardAvailable = true;
             const isRewardClaimed = stage.achievement.is_unlocked;
-            // const isRewardClaimed = true;
-            const showReward = stage.achievement.boost.subscribers > 0; // Не показываем первый элемент, тк награды в нем нулевые
+            const showReward = stage.achievement.boost.subscribers > 0;
 
             const isActive = userProfileData && stage.id <= userProfileData.growth_tree_stage_id;
             const bottomPosition = 150 + index * 300;
 
-            const giftColors = [ giftBlue, giftPurple, giftRed ];
-            const spinnerColors = [ spinnerBlue, spinnerPurple, spinnerRed ];
+            const giftColors = [giftBlue, giftPurple, giftRed];
+            const spinnerColors = [spinnerBlue, spinnerPurple, spinnerRed];
 
             const giftIcon = giftColors[index % giftColors.length];
             const spinnerIcon = spinnerColors[index % spinnerColors.length];
@@ -106,11 +106,14 @@ export const Tree = () => {
                   )}
                 </div>
 
-                {
-                  isRewardAvailable && !isRewardClaimed && showReward &&
-                  <Button className={s.takeRewardBtn}
-                          onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}>{t('t2')}</Button>
-                }
+                {isRewardAvailable && !isRewardClaimed && showReward && (
+                  <Button
+                    className={s.takeRewardBtn}
+                    onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}
+                  >
+                    {t('t2')}
+                  </Button>
+                )}
                 {showReward && (
                   <div
                     className={classNames(s.prize, {
@@ -133,15 +136,21 @@ export const Tree = () => {
 
                           <img src={giftIcon} height={20} width={20} alt="gift" />
 
-                          <div className={`${s.giftStatus} 
-                          ${(isRewardAvailable && !isRewardClaimed)
-                          || isRewardClaimed ? s.notTaken : ''}
-                          ${(!isRewardAvailable && !isRewardClaimed) ? s.notAchieved : ''}`} />
+                          <div
+                            className={`${s.giftStatus} 
+                          ${(isRewardAvailable && !isRewardClaimed) || isRewardClaimed ? s.notTaken : ''}
+                          ${!isRewardAvailable && !isRewardClaimed ? s.notAchieved : ''}`}
+                          />
 
-                          {isRewardAvailable && !isRewardClaimed &&
-                            <img className={s.imgPrizeActive} src={spinnerBlue} height={150} width={150}
-                                 alt="spinner" />
-                          }
+                          {isRewardAvailable && !isRewardClaimed && (
+                            <img
+                              className={s.imgPrizeActive}
+                              src={spinnerBlue}
+                              height={150}
+                              width={150}
+                              alt="spinner"
+                            />
+                          )}
                         </div>
                       )}
 
@@ -159,9 +168,8 @@ export const Tree = () => {
 
                           <img src={stage.achievement.image_url} height={20} width={20} alt="reward" />
 
-                          {(isRewardAvailable && !isRewardClaimed) || isRewardClaimed && <div
-                            className={`${s.giftStatus} ${s.notTaken}`}
-                          />}
+                          {(isRewardAvailable && !isRewardClaimed) ||
+                            (isRewardClaimed && <div className={`${s.giftStatus} ${s.notTaken}`} />)}
                         </div>
                       )}
 
@@ -179,21 +187,22 @@ export const Tree = () => {
 
                           <img src={shop} height={20} width={20} alt="reward" />
 
-                          <div
-                            className={`${s.giftStatus} ${shopUpgrades[stage.stage_number].icon}`}
-                          />
+                          <div className={`${s.giftStatus} ${shopUpgrades[stage.stage_number].icon}`} />
                         </div>
                       )}
                     </div>
 
                     {/* Блок с кол-вом подписчиков  */}
                     <div className={classNames(s.text, { [s.textActive]: isRewardAvailable })}>
+                      <span className={`${!isRewardAvailable && !isRewardClaimed ? s.inactive : ''}`}>
+                        {formatAbbreviation(stage.subscribers, 'number', { locale: locale })}{' '}
+                      </span>
                       <span
-                        className={`${(!isRewardAvailable && !isRewardClaimed) ? s.inactive : ''}`}>
-                        {formatAbbreviation(stage.subscribers, 'number', { locale: locale })} </span>
-                      <span
-                        className={`${(!isRewardAvailable && !isRewardClaimed) ? s.inactive : ''}`}
-                        style={{ whiteSpace: 'normal' }}>{t('t1')}</span>
+                        className={`${!isRewardAvailable && !isRewardClaimed ? s.inactive : ''}`}
+                        style={{ whiteSpace: 'normal' }}
+                      >
+                        {t('t1')}
+                      </span>
                     </div>
                   </div>
                 )}
