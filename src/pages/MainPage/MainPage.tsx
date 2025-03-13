@@ -54,6 +54,13 @@ export const MainPage: FC = () => {
 
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
+  useEffect(() => {
+    window.Telegram.WebApp.setHeaderColor('#55ff99'); // Непрозрачный при открытии экрана
+
+    return () => {
+      window.Telegram.WebApp.setHeaderColor('#112233'); // Возврат прозрачности при выходе
+    };
+  }, []);
 
   useEffect(() => {
     itemsData?.items.forEach(item => {

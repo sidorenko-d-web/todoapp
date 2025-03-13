@@ -212,20 +212,21 @@
 
 .button {
   display: flex;
-  padding: 10px;
+  padding: 0 10px;
   justify-content: center;
   align-items: center;
   border-radius: 8px;
   color: var.$color-text;
-
+  margin: 0 5px 5px 5px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 500; 
+  flex: 1;
 
   border: 1px solid var.$color-border-primary;
   background-color: var.$color-primary;
 
   @media (min-width: var.$breakpoint-md) {
-    padding: 14px;
+    padding: 0 14px;
     font-size: 16px;
   }
 }

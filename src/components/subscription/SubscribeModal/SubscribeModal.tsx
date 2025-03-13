@@ -29,7 +29,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
   const [idDisabled] = useState(true);
   const [isShow, setIsShow] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [isSubscriptionPurchased, setIsSubscriptionPurchased] = useState(false);
+  const [isSubscriptionPurchased] = useState(false);
   const [nextSubscriptionAt, setNextSubscriptionAt] = useState<Date | null>(null);
   const [timeUntilAvailable, setTimeUntilAvailable] = useState<number | null>(null);
 
@@ -166,19 +166,19 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
           <span className={s.description}>{isSubscriptionPurchased ? t('g86') : t('g75')}</span>
         </div>
         <div className={s.buttons}>
-          <Button className={s.button} disabled={idDisabled || !!isSubscriptionPurchased} onClick={handleUsdtPayment}>
+          <Button className={s.button} disabled={idDisabled || isSubscriptionPurchased} onClick={handleUsdtPayment}>
             {formatAbbreviation(1.99, 'currency')}
           </Button>
 
           <Button
             className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`}
-            disabled={!!isSubscriptionPurchased}
+            disabled={isSubscriptionPurchased}
             onClick={() => handleBuySubscription('internal_wallet')}
           >
             {formatAbbreviation(point_integration)}{' '}
             <img src={isSubscriptionPurchased ? DisableCoin : coinIcon} height={14} width={14} alt={'Coin'} />
           </Button>
-          <Button className={s.button + ' ' + s.gray} disabled={idDisabled || !!isSubscriptionPurchased}>
+          <Button className={s.button + ' ' + s.gray} disabled={idDisabled || isSubscriptionPurchased}>
             <img src={idDisabled ? ListDisableIcon : list} height={16} width={16} alt={'list'} />
           </Button>
         </div>

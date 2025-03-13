@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { CompanyResponseDTO, useGetIntegrationsQuery } from '../../../redux';
-import lightningIcon from '../../../assets/icons/lightning.svg';
+// import lightningIcon from '../../../assets/icons/lightning.svg';
 import starBlueIcon from '../../../assets/icons/star-blue.svg';
 import starDarkGrayIcon from '../../../assets/icons/star-dark-gray.svg';
 import integrationBlueIcon from '../../../assets/icons/integration-blue.svg';
@@ -69,9 +69,9 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
       onClick={() => onClick && !disabled && onClick(company.id)}
     >
       <header className={s.header}>
-        <div className={s.icon}>
+        {/* <div className={s.icon}>
           <img src={lightningIcon} alt="Lightning" />
-        </div>
+        </div> */}
         <img
           src={
             company.image_url ||

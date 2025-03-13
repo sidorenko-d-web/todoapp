@@ -23,7 +23,7 @@ interface Props {
   boost?: Boost | null;
 }
 
-export default function GetGiftDaily({ giftColor, boost }: Props) {
+export default function GetGiftDaily({ giftColor }: Props) {
   const { closeModal, getModalState } = useModal();
   const { isOpen, args } = getModalState<{
     points: number;

@@ -45,16 +45,13 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
   const [size, setSize] = useState([0, 0]);
   const [isLoading, setLoading] = useState(true);
   const { data: character, isLoading: isCharacterLoading } = useGetCharacterQuery(undefined, { skip: !!strangerId });
-  const { data: strangerCharacter } = useGetCharacterByIdQuery(
-    { id: strangerId! },
-    { skip: !strangerId },
-  );
+  const { data: strangerCharacter } = useGetCharacterByIdQuery({ id: strangerId! }, { skip: !strangerId });
 
-  const personScale = 0.065;
+  const personScale = 0.085;
 
   useLayoutEffect(() => {
     function updateSize() {
-      setSize([ window.innerWidth, window.innerHeight ]);
+      setSize([window.innerWidth, window.innerHeight]);
     }
 
     window.addEventListener('resize', updateSize);
@@ -66,7 +63,6 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
     if (!sceneRef.current || isCharacterLoading) return;
 
     setLoading(true);
-;
     class SpineScene extends WardrobeSpineScene {
       create() {
         try {
@@ -75,12 +71,12 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         } catch (error: any) {
           if (error.message === 'add.spine') {
             console.log('avoid error');
-            setSize(prev => [ prev[0] + 1, prev[1] ]);
+            setSize(prev => [prev[0] + 1, prev[1]]);
           }
         }
         spineSceneRef.current = this;
         this.changeSkin(personScale, character ?? strangerCharacter);
-        this.spineObject?.setY(118 / 2 + 15);
+        this.spineObject?.setY(118 / 2 + 35);
       }
     }
 
@@ -88,11 +84,11 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
       const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
         width: 118,
-        height: 118,
-        scene: [ SpineScene ],
+        height: 140,
+        scene: [SpineScene],
         transparent: true,
         plugins: {
-          scene: [ { key: 'SpinePlugin', plugin: SpinePlugin, mapping: 'spine' } ],
+          scene: [{ key: 'SpinePlugin', plugin: SpinePlugin, mapping: 'spine' }],
         },
         parent: 'player',
       };
@@ -109,7 +105,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         spineSceneRef.current = null;
       }
     };
-  }, [ isCharacterLoading, size ]);
+  }, [isCharacterLoading, size]);
 
   return (
     <div className={styles.wrp}>
@@ -121,7 +117,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
           </div>
 
           <div className={styles.imagePlaceholder}>
-            {isLoading && <Loader className={styles.loader} noMargin />}
+            {isLoading && <Loader className={styles.loader} noMargin noText transparent />}
             <div className={styles.perosnScene} ref={sceneRef} id="player"></div>
           </div>
           {isVip ? (
@@ -185,7 +181,9 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
             eventPlace: 'В дерево роста - Профиль',
           }}
           to={AppRoute.ProgressTree}
-        >{t('p23')}</TrackedLink>
+        >
+          {t('p23')}
+        </TrackedLink>
       </div>
     </div>
   );
