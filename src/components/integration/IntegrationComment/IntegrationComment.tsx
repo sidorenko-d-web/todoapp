@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 interface IntegrationCommentProps {
   author_username: string;
   comment_text: string;
+  comment_text_eng: string;
   id: string;
   progres: number;
   onVote: (isThumbsUp: boolean, id: string) => void;
@@ -23,6 +24,7 @@ interface IntegrationCommentProps {
 export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
                                                                         author_username,
                                                                         comment_text,
+                                                                        comment_text_eng,
                                                                         id,
                                                                         progres,
                                                                         onVote,
@@ -33,10 +35,10 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
   const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const elevateComment = useSelector((state: RootState) => state.guide.elevateIntegrationStats);
 
-  const [voteRightSound] = useSound(SOUNDS.rightAnswer, {
+  const [ voteRightSound ] = useSound(SOUNDS.rightAnswer, {
     volume: useSelector(selectButtonVolume) * 1.5,
   });
-  const [voteWrongSound] = useSound(SOUNDS.wrongAnswer, {
+  const [ voteWrongSound ] = useSound(SOUNDS.wrongAnswer, {
     volume: useSelector(selectButtonVolume) * 1.5,
   });
   const handleVoteRight = () => {
@@ -47,12 +49,18 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
     onVote(false, id);
     voteWrongSound();
   };
+
+  console.log(hateText);
+
   return (
     <div className={`${styles.wrp} ${elevateComment ? styles.elevated : ''}`}>
       {!finished ? (
         <div className={styles.usernameAndComment}>
           <p className={styles.username}>{author_username}:</p>
-          <p className={clsx(styles.positiveCommentText, { [styles.negativeCommentText]: hateText })}>{comment_text}</p>
+          <p className={clsx({
+            [styles.negativeCommentText]: hateText,
+            [styles.positiveCommentText]: !hateText,
+          })}>{locale === 'en' ? comment_text_eng : comment_text}</p>
         </div>
       ) : (
         <p className={styles.noComment}>{t('i8')}</p>
@@ -61,7 +69,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
         <div className={styles.amountAndRewardWrp}>
           <p className={styles.amount}>{progres}/5</p>
           <div className={styles.rewardWrp}>
-            <p className={styles.reward}>+{formatAbbreviation(100, 'number', {locale: locale})}</p>
+            <p className={styles.reward}>+{formatAbbreviation(100, 'number', { locale: locale })}</p>
             <img src={coinIcon} width={18} height={18} />
           </div>
         </div>
@@ -72,11 +80,11 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
         <div className={styles.thumbs}>
           <TrackedButton trackingData={{
             eventType: 'button',
-            eventPlace: 'Лайк - Интеграции - Комментарий'
+            eventPlace: 'Лайк - Интеграции - Комментарий',
           }} className={styles.thumbsUp} onClick={handleVoteRight} />
           <TrackedButton trackingData={{
             eventType: 'button',
-            eventPlace: 'Дизлайк - Интеграции - Комментарий'
+            eventPlace: 'Дизлайк - Интеграции - Комментарий',
           }} className={styles.thumbsDown} onClick={handleVoteWrong} />
         </div>
       )}

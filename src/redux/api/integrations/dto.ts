@@ -52,6 +52,7 @@ export type UnansweredIntegrationCommentDTO = {
   id: string;
   author_username: string;
   comment_text: string;
+  comment_text_eng: string;
   is_hate: boolean;
 };
 
