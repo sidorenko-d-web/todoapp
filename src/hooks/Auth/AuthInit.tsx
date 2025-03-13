@@ -25,6 +25,7 @@ export function AuthInit({ children }: AuthInitProps) {
     handleLanguageSelect,
     handleLanguageContinue,
     handleSkinContinue,
+    handleInviteCodeContinue,
     //handleModalClose
   } = useAuthFlow();
 
@@ -71,6 +72,7 @@ export function AuthInit({ children }: AuthInitProps) {
       console.log('object', 4);
       return (
         <EnterInviteCodePage
+          onContinue={handleInviteCodeContinue}
           // referral_id={WebApp.initDataUnsafe.user?.id ?? 0}
           referral_id={window.Telegram.WebApp.initDataUnsafe.user.id}
           // referral_id={563486774}

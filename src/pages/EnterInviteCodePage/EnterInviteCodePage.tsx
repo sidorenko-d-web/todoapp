@@ -14,6 +14,7 @@ import WhiteNoiseCanvas from '../../components/WhiteNoise/WhiteNoise';
 
 interface EnterInviteCodePageProps {
   referral_id: number;
+  onContinue: () => void;
 }
 
 interface ReferralErrorResponse {
@@ -22,12 +23,12 @@ interface ReferralErrorResponse {
   type: 'ReferrerNotFound' | 'UserAlreadyIsReferral' | 'UserNotFoundInBotDatabaseException' | 'UnknownError';
 }
 
-export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ referral_id }) => {
-  const { t } = useTranslation('referral')
+export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ referral_id, onContinue }) => {
+  const { t } = useTranslation('referral');
   const [inputValue, setInputValue] = useState('');
   const [isValid, setIsValid] = useState(false);
-  const [isSentCode, setIsSentCode] = useState(false)
-  const [isFocus, setIsFocus] = useState(false)
+  const [isSentCode, setIsSentCode] = useState(false);
+  const [isFocus, setIsFocus] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [touched, setTouched] = useState(false);
   const [sendReferralCode, { isLoading }] = useSendReferralCodeMutation();
@@ -54,7 +55,7 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ referr
 
     if (/^\d*$/.test(value)) {
       setInputValue(value);
-      setIsValid(true)
+      setIsValid(true);
     }
   };
 
@@ -64,41 +65,41 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ referr
     setErrorMessage('');
 
     try {
-
-      console.log("Referral Id: ", referral_id)
-      console.log("Referral Code: ", Number.parseInt(inputValue))
+      console.log('Referral Id: ', referral_id);
+      console.log('Referral Code: ', Number.parseInt(inputValue));
       await sendReferralCode({
         referral_id,
-        referral_code: Number.parseInt(inputValue)
-      }).unwrap()
-      setIsSentCode(true)
+        referral_code: Number.parseInt(inputValue),
+      }).unwrap();
+      setIsSentCode(true);
+      onContinue();
     } catch (error) {
       const err = error as ReferralErrorResponse;
-      console.error('Referral code error:', err)
+      console.error('Referral code error:', err);
 
       switch (err.type) {
         case 'ReferrerNotFound':
           setErrorMessage(err.message);
-          setIsValid(false)
+          setIsValid(false);
           break;
         case 'UserAlreadyIsReferral':
-          setIsSentCode(true)
+          setIsSentCode(true);
+          onContinue();
           break;
         case 'UserNotFoundInBotDatabaseException':
           setErrorMessage(err.message);
-          setIsValid(false)
+          setIsValid(false);
           break;
         default:
           setErrorMessage(err.message);
-          setIsValid(false)
+          setIsValid(false);
       }
-
     }
   };
 
   return (
     <>
-      <WhiteNoiseCanvas/>
+      <WhiteNoiseCanvas />
       <div className={styles.root}>
         <img src={isSentCode ? lockOpen : lock} className={styles.lock} width={120} height={120} />
 
@@ -112,27 +113,22 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ referr
               onChange={handleInputChange}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
-              className={`${styles.input} ${(touched && !isValid) ? styles.invalid : ''}`}
+              className={`${styles.input} ${touched && !isValid ? styles.invalid : ''}`}
               placeholder="..."
             />
-            <img
-              className={styles.statusIcon}
-              src={isValid ? tick : dots}
-              alt="status"
-            />
+            <img className={styles.statusIcon} src={isValid ? tick : dots} alt="status" />
           </div>
 
-          <p className={styles.description}>
-            {t('r2')}
-          </p>
+          <p className={styles.description}>{t('r2')}</p>
         </div>
 
-        {errorMessage && (
-          <p className={styles.descriptionError}>{errorMessage}</p>
-        )}
+        {errorMessage && <p className={styles.descriptionError}>{errorMessage}</p>}
 
-        <Button className={classNames(styles.nextBtn, { [styles.validInput]: isValid }, { [styles.btnFocus]: isFocus })} onClick={handleSubmit}>
-          {isLoading ? t("r5") : t("r4")}
+        <Button
+          className={classNames(styles.nextBtn, { [styles.validInput]: isValid }, { [styles.btnFocus]: isFocus })}
+          onClick={handleSubmit}
+        >
+          {isLoading ? t('r5') : t('r4')}
         </Button>
         <p className={classNames(styles.enterCodeText, { [styles.textFocus]: isFocus })}>{t('r3')}</p>
       </div>
