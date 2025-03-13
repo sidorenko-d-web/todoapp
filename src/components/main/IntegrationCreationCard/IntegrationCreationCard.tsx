@@ -26,34 +26,34 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   const { t } = useTranslation('integrations');
 
   const dispatch = useDispatch();
-  
+
   // Get stored values or use defaults from the integration
   const getSavedTimeLeft = () => {
     const savedIntegrationId = localStorage.getItem(INTEGRATION_ID_KEY);
     const savedTimeLeft = localStorage.getItem(TIME_LEFT_KEY);
-    
+
     // Only use saved time if it's for the same integration
     if (savedIntegrationId === integration.id && savedTimeLeft) {
       return parseInt(savedTimeLeft);
     }
     return integration.time_left;
   };
-  
+
   const getSavedInitialTimeLeft = () => {
     const savedIntegrationId = localStorage.getItem(INTEGRATION_ID_KEY);
     const savedInitialTimeLeft = localStorage.getItem(INITIAL_TIME_LEFT_KEY);
-    
+
     if (savedIntegrationId === integration.id && savedInitialTimeLeft) {
       return parseInt(savedInitialTimeLeft);
     }
     return integration.time_left;
   };
-  
+
   const [timeLeft, setTimeLeft] = useState(getSavedTimeLeft());
   const [initialTimeLeft] = useState(getSavedInitialTimeLeft());
   const [isExpired, setIsExpired] = useState(timeLeft <= 0);
   const [playAccelerateIntegrationSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
-  
+
   const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
     integrationId: integration.id,
     onSuccess: newTimeLeft => {
@@ -78,13 +78,13 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     localStorage.setItem(TIME_LEFT_KEY, timeLeft.toString());
   }, [timeLeft]);
 
-  const [ acceleration, setAcceleration ] = useState(0);
+  const [acceleration, setAcceleration] = useState(0);
   const reduxAcceleration = useSelector((state: RootState) => state.acceleration.acceleration);
 
   useEffect(() => {
-    if(acceleration != reduxAcceleration) {
+    if (acceleration != reduxAcceleration) {
       handleAccelerateClick();
-      setAcceleration(reduxAcceleration);
+      setAcceleration(reduxAcceleration + 200);
     }
   }, [reduxAcceleration]);
 
@@ -167,7 +167,6 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       }, 800);
     }
   };
-
 
   if (isExpired) {
     dispatch(setIntegrationReadyForPublishing(true));

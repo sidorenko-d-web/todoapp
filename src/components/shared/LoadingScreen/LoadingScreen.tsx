@@ -35,20 +35,20 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   //   });
   // }, []);
 
-  const [isMobile, setIsMobile] = useState(0);
+  const [isMobile, setIsMobile] = useState(1);
 
-  useEffect(() => {
-    if (window.Telegram?.WebApp?.platform) {
-      const platform = window.Telegram.WebApp.platform.toLowerCase();
-      if (platform.includes('android') || platform.includes('ios')) {
-        setIsMobile(1);
-      } else {
-        setIsMobile(-1);
-      }
-    } else {
-      setIsMobile(-1);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.Telegram?.WebApp?.platform) {
+  //     const platform = window.Telegram.WebApp.platform.toLowerCase();
+  //     if (platform.includes('android') || platform.includes('ios')) {
+  //       setIsMobile(1);
+  //     } else {
+  //       setIsMobile(-1);
+  //     }
+  //   } else {
+  //     setIsMobile(-1);
+  //   }
+  // }, []);
 
   useEffect(() => {
     const minLoadingTimeout = setTimeout(() => {
@@ -114,13 +114,10 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
     }
   }, []);
 
-<<<<<<< HEAD
-=======
   // useEffect(() => {
   //   localStorage.clear();
   // }, []);
 
->>>>>>> 4b384e9debd01f710b2f626fe703bbabc8a2b55b
   return (
     <>
       <WhiteNoiseCanvas />

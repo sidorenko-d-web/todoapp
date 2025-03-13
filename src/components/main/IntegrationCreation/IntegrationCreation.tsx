@@ -10,10 +10,8 @@ import { isIntegrationCreationButtonGlowing, setGuideShown } from '../../../util
 
 import s from './IntegrationCreation.module.scss';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
 
 export const IntegrationCreation = () => {
-  const [isSubscriptionAvailable, setIsSubscriptionAvailable] = useState(false);
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const integrationCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
@@ -27,22 +25,8 @@ export const IntegrationCreation = () => {
   );
   const { openModal, closeModal } = useModal();
 
-  useEffect(() => {
-    if (profile?.next_subscription_at) {
-      const currentDate = new Date();
-      const subscriptionAvailableDate = new Date(profile.next_subscription_at);
-
-      setIsSubscriptionAvailable(currentDate >= subscriptionAvailableDate);
-    }
-  }, [profile]);
-
   const handleIntegrationCreation = () => {
     if (!profile) return;
-
-    if (!isSubscriptionAvailable) {
-      openModal(MODALS.SUBSCRIBE);
-      return;
-    }
 
     if (profile?.subscription_integrations_left <= 0) {
       openModal(MODALS.SUBSCRIBE);
