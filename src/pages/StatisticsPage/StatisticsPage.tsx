@@ -27,13 +27,13 @@ const StatisticsPage: FC = () => {
     subscribers: displayedSubscribers,
     totalViews: displayedTotalViews,
   } = useIncrementingProfileStats({
-    profileId: userProfileData?.id || "",
-    basePoints: userProfileData?.points || "0",
+    profileId: userProfileData?.id || '',
+    basePoints: userProfileData?.points || '0',
     baseSubscribers: userProfileData?.subscribers || 0,
     baseTotalViews: userProfileData?.total_views || 0,
-    baseTotalEarned: userProfileData?.total_earned || "0",
+    baseTotalEarned: userProfileData?.total_earned || '0',
     futureStatistics: userProfileData?.future_statistics,
-    lastUpdatedAt: userProfileData?.updated_at
+    lastUpdatedAt: userProfileData?.updated_at,
   });
 
   const { in_streak } = usePushLineStatus(); // Хук вызывается на верхнем уровне
@@ -41,13 +41,13 @@ const StatisticsPage: FC = () => {
   const isLoading = isAllIntegrationsLoading || isUserLoading;
 
   // Условная логика использования данных
-  const points = in_streak ? displayedPoints : userProfileData?.points || "0";
+  const points = in_streak ? displayedPoints : userProfileData?.points || '0';
   const subscribers = in_streak ? displayedSubscribers : userProfileData?.subscribers || 0;
   const totalViews = in_streak ? displayedTotalViews : userProfileData?.total_views || 0;
 
   // Условный рендеринг после всех хуков
   if (isLoading) return <Loader />;
-
+  console.log(statisticData);
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
@@ -93,6 +93,7 @@ const StatisticsPage: FC = () => {
                 key={integration.id}
                 id={integration.id}
                 views={integration.views}
+                campaign={integration.campaign}
                 points={integration.income}
                 futureStatistics={integration.future_statistics}
                 lastUpdatedAt={integration.updated_at}

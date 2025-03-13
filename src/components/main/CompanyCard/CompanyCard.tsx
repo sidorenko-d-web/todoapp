@@ -10,7 +10,6 @@ import { isGuideShown } from '../../../utils';
 import { GUIDE_ITEMS, starsThresholds } from '../../../constants';
 import { Button } from '../../shared';
 
-
 interface CompanyCardProps {
   company: CompanyResponseDTO;
   selected?: boolean;
@@ -21,7 +20,7 @@ interface CompanyCardProps {
 const glowing = !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
 export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, disabled }) => {
-  const {data: integrationsData} = useGetIntegrationsQuery({company_name: company.company_name})
+  const { data: integrationsData } = useGetIntegrationsQuery({ company_name: company.company_name });
   const integrationCount = integrationsData?.count ?? 0;
 
   const getBlueStarCount = (count: number = 0) => {
@@ -54,7 +53,6 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
   const blueStarCount = getBlueStarCount(integrationCount);
   const progressPercentage = getProgressBarPercentage(integrationCount);
 
-
   return (
     <Button
       className={
@@ -73,11 +71,7 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
           <img src={lightningIcon} alt="Lightning" />
         </div> */}
         <img
-          src={
-            company.image_url ||
-            getCompanyLogo(company.company_name) ||
-            integrationBlueIcon
-          }
+          src={company.image_url || getCompanyLogo(company.company_name) || integrationBlueIcon}
           alt="Company Logo"
           className={s.companyIcon}
         />
@@ -85,25 +79,21 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
       <div className={s.content}>
         <h3 className={s.title}>{company.company_name}</h3>
         <div className={s.stars}>
-            {[...Array(3)].map((_, index) => (
-              <img
-                className={integrationCount >= starsThresholds.thirdStar ? s.starsMax : ''}
-                key={index}
-                src={index < blueStarCount ? starBlueIcon : starDarkGrayIcon}
-                alt=""
-              />
-            ))}
+          {[...Array(3)].map((_, index) => (
+            <img
+              className={integrationCount >= starsThresholds.thirdStar ? s.starsMax : ''}
+              key={index}
+              src={index < blueStarCount ? starBlueIcon : starDarkGrayIcon}
+              alt=""
+            />
+          ))}
         </div>
 
         {integrationCount < starsThresholds.thirdStar && (
           <div className={s.progressBar}>
-            <div
-              className={s.progressBarInner}
-              style={{ width: `${progressPercentage}%` }}
-            />
-        </div>
+            <div className={s.progressBarInner} style={{ width: `${progressPercentage}%` }} />
+          </div>
         )}
-
       </div>
     </Button>
   );
