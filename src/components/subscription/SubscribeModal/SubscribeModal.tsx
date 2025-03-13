@@ -57,7 +57,6 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
       const interval = setInterval(() => {
         const now = new Date();
         const timeDiff = nextSubscriptionAt.getTime() - now.getTime();
-
         if (timeDiff > 0) {
           setTimeUntilAvailable(timeDiff);
         } else {
@@ -65,17 +64,14 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
           clearInterval(interval);
         }
       }, 1000);
-
       return () => clearInterval(interval);
     }
   }, [nextSubscriptionAt]);
-
   // USDT buy subscription
   const { sendUSDT } = useSendTransaction();
   const usdtTransactions = useUsdtTransactions();
   const [currentTrxId, setCurrentTrxId] = useState('');
   const { walletAddress, connectWallet } = useTonConnect();
-
   const handleUsdtPayment = async () => {
     if (!walletAddress) {
       connectWallet();
@@ -88,14 +84,11 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
       console.log('Error while sending USDT transaction', error);
     }
   };
-
   useEffect(() => {
     const latestTransaction = usdtTransactions[0];
     console.error('Transactions', latestTransaction);
     console.warn('trx id: ', currentTrxId);
-
     if (!latestTransaction || latestTransaction.orderId !== currentTrxId) return;
-
     if (latestTransaction.status === 'succeeded') {
       handleBuySubscription('usdt');
       setCurrentTrxId('');
@@ -103,40 +96,32 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
       setErrorMessage('Transaction failed');
     }
   }, [currentTrxId, usdtTransactions]);
-
   const handleBuySubscription = (paymentMethod: string) => {
     const currentPoints = Number(current?.points);
     const pointIntegration = Number(point_integration);
-
     if (current && currentPoints < pointIntegration) {
       setErrorMessage(t('g81'));
       setIsShow(true);
       setTimeout(() => setIsShow(false), 3000);
       return;
     }
-
     setSubscriptionPurchased();
     buySubscription({ payment_method: paymentMethod })
       .unwrap()
       .then(() => {
         onSuccess();
       });
-
     if (!isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) {
       openModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
     }
   };
-
   const dispatch = useDispatch();
   const guideShown = useSelector((state: RootState) => state.guide.subscribeGuideShown);
-
   const formatTime = (milliseconds: number) => {
     const hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
-
     return `${hours} ${t('g85')} ${minutes} ${t('g84')}`;
   };
-
   return (
     <CentralModal
       modalId={modalId}
@@ -166,24 +151,22 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
           <span className={s.description}>{isSubscriptionPurchased ? t('g86') : t('g75')}</span>
         </div>
         <div className={s.buttons}>
-          <Button className={s.button} disabled={idDisabled || isSubscriptionPurchased} onClick={handleUsdtPayment}>
+          <Button className={s.button} disabled={idDisabled || !!isSubscriptionPurchased} onClick={handleUsdtPayment}>
             {formatAbbreviation(1.99, 'currency')}
           </Button>
-
           <Button
             className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`}
-            disabled={isSubscriptionPurchased}
+            disabled={!!isSubscriptionPurchased}
             onClick={() => handleBuySubscription('internal_wallet')}
           >
             {formatAbbreviation(point_integration)}{' '}
             <img src={isSubscriptionPurchased ? DisableCoin : coinIcon} height={14} width={14} alt={'Coin'} />
           </Button>
-          <Button className={s.button + ' ' + s.gray} disabled={idDisabled || isSubscriptionPurchased}>
+          <Button className={s.button + ' ' + s.gray} disabled={idDisabled || !!isSubscriptionPurchased}>
             <img src={idDisabled ? ListDisableIcon : list} height={16} width={16} alt={'list'} />
           </Button>
         </div>
       </div>
-
       {!guideShown && (
         <SubscrieGuide
           onClose={() => {

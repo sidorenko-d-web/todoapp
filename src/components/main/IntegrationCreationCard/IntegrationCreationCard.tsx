@@ -88,7 +88,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   useEffect(() => {
     if (acceleration != reduxAcceleration) {
       handleAccelerateClick();
-      setAcceleration(reduxAcceleration + 200);
+      setAcceleration(reduxAcceleration + 20);
     }
   }, [reduxAcceleration]);
 
