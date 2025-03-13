@@ -99,7 +99,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
     // Показываем прогресс бар после 2 секунд воспроизведения видео
     const videoTimeout = setTimeout(() => {
       setShowProgressBar(true);
-    }, 1500);
+    }, 3500);
 
     return () => clearTimeout(videoTimeout);
   }, [videoRef]);
