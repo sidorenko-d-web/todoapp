@@ -12,6 +12,8 @@ import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfi
 import { useEffect, useState } from 'react';
 import { Loader } from '../../index.ts';
 import { PROFILE_ME_POLLING_INTERVAL } from '../../../constants';
+import { useLocation } from 'react-router-dom';
+import clsx from 'clsx';
 
 interface props {
   mode: 'me' | 'stranger';
@@ -66,6 +68,8 @@ export const Room = ({ mode, strangerId }: props) => {
 
   const isLoading = !isLoaded || isStrangerLoading || isRoomLoading;
 
+  const isIntegrationPage = useLocation().pathname.includes('integrations')
+
   return (
     <div className={styles.room}>
       <AnimationScene
@@ -74,7 +78,7 @@ export const Room = ({ mode, strangerId }: props) => {
         character={mode === 'me' ? character : strangerCharacter}
       />
 
-      {isLoading && <Loader className={styles.loader} />}
+      {isLoading && <Loader className={clsx(styles.loader, isIntegrationPage && styles.upper)} />}
       <Walls room={room ?? strangerRoom} isLoading={isLoading} />
 
       {!isLoading && (
