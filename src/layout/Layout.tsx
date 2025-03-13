@@ -28,6 +28,10 @@ const Layout = () => {
 
   const showRoadmapBg = location.pathname === '/progressTree';
 
+  const showHeaderBG = !(['/', '/progressTree'].includes(
+    location.pathname,
+  ))
+
   useEffect(() => {
     const isNeedToOpenChest = localStorage.getItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
@@ -73,7 +77,9 @@ const Layout = () => {
 
   return (
     <>
-      <WhiteNoiseCanvas />
+      <WhiteNoiseCanvas/>
+
+      {showHeaderBG && <div className={styles.headerBG} />}
 
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
