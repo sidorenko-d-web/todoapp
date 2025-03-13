@@ -24,6 +24,7 @@ import { MODALS } from '../../constants';
 import GetGift from '../../pages/DevModals/GetGift/GetGift';
 import { Loader } from '../Loader';
 import { useOutletContext } from 'react-router-dom';
+import { useTreeProgress } from '../../hooks/useTreeProgress';
 
 type ShopUpgrades = {
   [key: string]: { icon: string };
@@ -37,15 +38,25 @@ const shopUpgrades: ShopUpgrades = {
 export const Tree = () => {
   const { openModal } = useModal();
   const { t, i18n } = useTranslation('tree');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData, refetch } = useGetTreeInfoQuery();
   const { data: userProfileData } = useGetProfileMeQuery();
   const lastActiveLevelRef = useRef<HTMLDivElement | null>(null);
-  const [ currentBoost, setCurrentBoost ] = useState<Boost | null>(null);
+  const [currentBoost, setCurrentBoost] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
 
-  const [ unlockAchievement ] = useUnlockAchievementMutation();
+  const userSubscribers = userProfileData?.subscribers || 0;
 
+  const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const [unlockAchievement] = useUnlockAchievementMutation();
+
+  const { progressPercent } = useTreeProgress({
+    treeData,
+    userSubscribers,
+  });
+
+  console.log('progress percent: ', progressPercent)
   useEffect(() => {
     if (lastActiveLevelRef.current) {
       lastActiveLevelRef.current.scrollIntoView({
@@ -53,7 +64,7 @@ export const Tree = () => {
         block: 'center',
       });
     }
-  }, []);
+  }, [progressPercent]);
 
   if (!treeData || !isBgLoaded) {
     return <Loader />;
@@ -75,7 +86,13 @@ export const Tree = () => {
       <div className={s.progressBarAdditional} />
       <div className={s.progressBarContainer}>
         <div className={s.progressBar}
-             style={{ height: `${(150 + (treeData.growth_tree_stages.length - 1) * 300)}px` }}>
+          style={{ height: `${(150 + (treeData.growth_tree_stages.length - 1) * 300)}px` }}>
+
+          <div
+            className={s.progressFill}
+            style={{ height: `${progressPercent}%` }}
+            ref={progressBarContainerRef}
+          />
           {treeData?.growth_tree_stages.map((stage, index) => {
             const isRewardAvailable = stage.achievement.is_available;
             // const isRewardAvailable = true;
@@ -86,8 +103,8 @@ export const Tree = () => {
             const isActive = userProfileData && stage.id <= userProfileData.growth_tree_stage_id;
             const bottomPosition = 150 + index * 300;
 
-            const giftColors = [ giftBlue, giftPurple, giftRed ];
-            const spinnerColors = [ spinnerBlue, spinnerPurple, spinnerRed ];
+            const giftColors = [giftBlue, giftPurple, giftRed];
+            const spinnerColors = [spinnerBlue, spinnerPurple, spinnerRed];
 
             const giftIcon = giftColors[index % giftColors.length];
             const spinnerIcon = spinnerColors[index % spinnerColors.length];
@@ -109,7 +126,7 @@ export const Tree = () => {
                 {
                   isRewardAvailable && !isRewardClaimed && showReward &&
                   <Button className={s.takeRewardBtn}
-                          onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}>{t('t2')}</Button>
+                    onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}>{t('t2')}</Button>
                 }
                 {showReward && (
                   <div
@@ -135,12 +152,12 @@ export const Tree = () => {
 
                           <div className={`${s.giftStatus} 
                           ${(isRewardAvailable && !isRewardClaimed)
-                          || isRewardClaimed ? s.notTaken : ''}
+                              || isRewardClaimed ? s.notTaken : ''}
                           ${(!isRewardAvailable && !isRewardClaimed) ? s.notAchieved : ''}`} />
 
                           {isRewardAvailable && !isRewardClaimed &&
                             <img className={s.imgPrizeActive} src={spinnerBlue} height={150} width={150}
-                                 alt="spinner" />
+                              alt="spinner" />
                           }
                         </div>
                       )}
