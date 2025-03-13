@@ -47,8 +47,6 @@ export const useAuthFlow = () => {
       // Если ошибка 401 или 403 – перенаправляем на ввод invite-кода
       if (err?.status === 401 || err?.status === 403) {
         saveCurrentStep('invite_code');
-      } else {
-        alert('Произошла ошибка. Попробуйте позже.');
       }
     }
   };
@@ -60,12 +58,6 @@ export const useAuthFlow = () => {
       saveCurrentStep('skin');
     } catch (err: any) {
       console.error('Ошибка при авторизации:', err);
-      // Если ошибка 401 или 403 – остаемся на шаге invite_code
-      if (err?.status === 401 || err?.status === 403) {
-        alert('Неверный invite-код. Попробуйте снова.');
-      } else {
-        alert('Произошла ошибка. Попробуйте позже.');
-      }
     }
   };
 
