@@ -84,7 +84,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
 
           <div className={styles.title}>
             <span className={clsx(styles.daysInARow, strangerId && styles.stranger)}>
-              {streakDays} {t('p13').replace('в ', 'в\u00A0')} 
+              {streakDays} {t('p13').replace('в ', 'в\u00A0')}
             </span>
             {!strangerId && !onlyStreak && (
               <div className={styles.freezeCount}>

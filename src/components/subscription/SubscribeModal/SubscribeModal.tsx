@@ -22,63 +22,57 @@ interface SubscribeModalProps {
   onSuccess: () => void;
 }
 
-const point_integration = '150'
+const point_integration = '150';
 
-export const SubscribeModal: FC<SubscribeModalProps> = ({
-  modalId,
-  onClose,
-  onSuccess,
-}: SubscribeModalProps) => {
+export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSuccess }: SubscribeModalProps) => {
   const { t } = useTranslation('guide');
   const [idDisabled] = useState(true);
   const [isShow, setIsShow] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubscriptionPurchased, setIsSubscriptionPurchased] = useState(false);
-  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [nextSubscriptionAt, setNextSubscriptionAt] = useState<Date | null>(null);
+  const [timeUntilAvailable, setTimeUntilAvailable] = useState<number | null>(null);
+
   const [buySubscription] = useBuySubscriptionMutation();
   const { data: current } = useGetProfileMeQuery(undefined, {
-    pollingInterval: PROFILE_ME_POLLING_INTERVAL
+    pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
 
   const buyBtnGlowing = getSubscriptionPurchased();
-
   const { openModal, closeModal } = useModal();
 
+  // Установка nextSubscriptionAt
   useEffect(() => {
-    const lastPurchaseTime = localStorage.getItem('lastPurchaseTime');
-    if (lastPurchaseTime) {
-      const timeDiff = Date.now() - parseInt(lastPurchaseTime, 10);
-      const daysLeft = 3 - Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-
-      if (daysLeft > 0) {
-        setIsSubscriptionPurchased(true);
-        setTimeLeft(daysLeft * 24 * 60 * 60 * 1000 - (Date.now() - parseInt(lastPurchaseTime, 10)));
-      } else {
-        localStorage.removeItem('lastPurchaseTime');
-      }
+    if (current?.next_subscription_at) {
+      const nextSubscriptionDate = new Date(current.next_subscription_at);
+      setNextSubscriptionAt(nextSubscriptionDate);
     }
-  }, []);
+  }, [current]);
 
+  // Отсчет времени до nextSubscriptionAt
   useEffect(() => {
-    if (timeLeft !== null && timeLeft > 0) {
-      const timer = setInterval(() => {
-        setTimeLeft(prevTime => prevTime !== null ? prevTime - 1000 : null);
+    if (nextSubscriptionAt) {
+      const interval = setInterval(() => {
+        const now = new Date();
+        const timeDiff = nextSubscriptionAt.getTime() - now.getTime();
+
+        if (timeDiff > 0) {
+          setTimeUntilAvailable(timeDiff);
+        } else {
+          setTimeUntilAvailable(null);
+          clearInterval(interval);
+        }
       }, 1000);
 
-      return () => clearInterval(timer);
-    } else if (timeLeft !== null && timeLeft <= 0) {
-      localStorage.removeItem('lastPurchaseTime');
-      setIsSubscriptionPurchased(false);
-      setTimeLeft(null);
+      return () => clearInterval(interval);
     }
-  }, [timeLeft]);
+  }, [nextSubscriptionAt]);
 
   // USDT buy subscription
   const { sendUSDT } = useSendTransaction();
   const usdtTransactions = useUsdtTransactions();
-  const [currentTrxId, setCurrentTrxId] = useState("")
-  // for transactions
-  const { walletAddress, connectWallet } = useTonConnect()
+  const [currentTrxId, setCurrentTrxId] = useState('');
+  const { walletAddress, connectWallet } = useTonConnect();
 
   const handleUsdtPayment = async () => {
     if (!walletAddress) {
@@ -89,32 +83,26 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
       // @ts-expect-error
       setCurrentTrxId(trxId);
     } catch (error) {
-      console.log("Error while sending USDT transaction", error)
+      console.log('Error while sending USDT transaction', error);
     }
   };
 
   useEffect(() => {
     const latestTransaction = usdtTransactions[0];
-    console.error("Transactions", latestTransaction)
-    console.warn("trx id: ", currentTrxId)
+    console.error('Transactions', latestTransaction);
+    console.warn('trx id: ', currentTrxId);
 
     if (!latestTransaction || latestTransaction.orderId !== currentTrxId) return;
 
     if (latestTransaction.status === 'succeeded') {
-      handleBuySubscription('usdt')
-      setCurrentTrxId("")
+      handleBuySubscription('usdt');
+      setCurrentTrxId('');
     } else {
-      setErrorMessage("Transaction failed")
+      setErrorMessage('Transaction failed');
     }
-  }, [currentTrxId, usdtTransactions, ]);
+  }, [currentTrxId, usdtTransactions]);
 
   const handleBuySubscription = (paymentMethod: string) => {
-    if (isSubscriptionPurchased) {
-      setErrorMessage(t('g82'));
-      setIsShow(true);
-      setTimeout(() => setIsShow(false), 3000);
-      return;
-    }
     const currentPoints = Number(current?.points);
     const pointIntegration = Number(point_integration);
 
@@ -129,9 +117,6 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
     buySubscription({ payment_method: paymentMethod })
       .unwrap()
       .then(() => {
-        localStorage.setItem('lastPurchaseTime', Date.now().toString());
-        setIsSubscriptionPurchased(true);
-        setTimeLeft(24 * 60 * 60 * 1000);
         onSuccess();
       });
 
@@ -142,6 +127,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
 
   const dispatch = useDispatch();
   const guideShown = useSelector((state: RootState) => state.guide.subscribeGuideShown);
+
   const formatTime = (milliseconds: number) => {
     const hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
@@ -150,41 +136,45 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
   };
 
   return (
-    <CentralModal modalId={modalId} title={`${isSubscriptionPurchased ? t('g82') : `+ 5 ${t('g74')}`}`} onClose={onClose} titleIcon={integrationWhiteIcon}>
+    <CentralModal
+      modalId={modalId}
+      title={`${isSubscriptionPurchased ? t('g82') : `+ 5 ${t('g74')}`}`}
+      onClose={onClose}
+      titleIcon={integrationWhiteIcon}
+    >
       {isShow && <div className={s.errorModal}>{errorMessage}</div>}
       <div className={s.content}>
         <div className={s.info}>
           <div className={s.progress}>
             <div className={s.progressInfo}>
               <span>{t('g76')}</span>
-              <span className={s.progressIcon}>0/5 <img src={integrationWhiteIcon} height={18} width={18}
-                alt={'Integration'} /></span>
+              <span className={s.progressIcon}>
+                0/5 <img src={integrationWhiteIcon} height={18} width={18} alt={'Integration'} />
+              </span>
             </div>
             <div className={s.progressBar}>
               <div className={s.progressBarInner} style={{ width: `0%` }} />
             </div>
           </div>
-          {isSubscriptionPurchased && timeLeft !== null && (
+          {timeUntilAvailable !== null && (
             <span className={s.time}>
-              {t('g83')} {formatTime(timeLeft)}
+              {t('g83')} {formatTime(timeUntilAvailable)}
             </span>
           )}
-          <span className={s.description}>
-            {isSubscriptionPurchased ? t('g86') : t('g75')}
-          </span>
+          <span className={s.description}>{isSubscriptionPurchased ? t('g86') : t('g75')}</span>
         </div>
         <div className={s.buttons}>
-          <Button
-            className={s.button}
-            disabled={idDisabled || !!isSubscriptionPurchased}
-            onClick={handleUsdtPayment}
-          >
+          <Button className={s.button} disabled={idDisabled || !!isSubscriptionPurchased} onClick={handleUsdtPayment}>
             {formatAbbreviation(1.99, 'currency')}
           </Button>
 
-          <Button className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`} disabled={!!isSubscriptionPurchased}
-            onClick={() => handleBuySubscription("internal_wallet")}>
-            {formatAbbreviation(point_integration)} <img src={isSubscriptionPurchased ? DisableCoin : coinIcon} height={14} width={14} alt={'Coin'} />
+          <Button
+            className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`}
+            disabled={!!isSubscriptionPurchased}
+            onClick={() => handleBuySubscription('internal_wallet')}
+          >
+            {formatAbbreviation(point_integration)}{' '}
+            <img src={isSubscriptionPurchased ? DisableCoin : coinIcon} height={14} width={14} alt={'Coin'} />
           </Button>
           <Button className={s.button + ' ' + s.gray} disabled={idDisabled || !!isSubscriptionPurchased}>
             <img src={idDisabled ? ListDisableIcon : list} height={16} width={16} alt={'list'} />
@@ -192,23 +182,25 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({
         </div>
       </div>
 
-      {!guideShown && <SubscrieGuide
-        onClose={() => {
-          dispatch(setSubscribeGuideShown(true));
-          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
-          closeModal(MODALS.SUBSCRIBE);
-        }}
-        top="65%"
-        zIndex={1500}
-        description={
-          <>
-            {t('g14')} <span style={{ color: '#2F80ED' }}>{t('g15')}</span>
-            <br />
-            <br />
-            {t('g16')}
-          </>
-        }
-      />}
+      {!guideShown && (
+        <SubscrieGuide
+          onClose={() => {
+            dispatch(setSubscribeGuideShown(true));
+            setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+            closeModal(MODALS.SUBSCRIBE);
+          }}
+          top="65%"
+          zIndex={1500}
+          description={
+            <>
+              {t('g14')} <span style={{ color: '#2F80ED' }}>{t('g15')}</span>
+              <br />
+              <br />
+              {t('g16')}
+            </>
+          }
+        />
+      )}
     </CentralModal>
   );
 };

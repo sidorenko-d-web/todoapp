@@ -7,7 +7,7 @@ interface ProgressLineProps {
 }
 
 export const ProgressLine: React.FC<ProgressLineProps> = ({ level, color }) => {
-  const progressWidth = `${Math.max((level / 5) * 100, 5)}%`;
+  const progressWidth = `${(level / 5) * 100}%`;
 
   return (
     <div className={styles.progressContainer}>

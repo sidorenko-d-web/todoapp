@@ -5,7 +5,7 @@ import { Header } from '../components/Header/';
 import { useEffect, useState } from 'react';
 import { AppRoute, localStorageConsts, MODALS } from '../constants';
 import { LanguageSelectionModal, Settings, SettingsModal, WalletConnectionModal } from '../components';
-import { useModal, useScrollManager } from '../hooks';
+import { AudioBg, useModal, useScrollManager } from '../hooks';
 import { getOS } from '../utils';
 import Lottie from 'lottie-react';
 import { lampTable } from '../assets/animations';
@@ -73,7 +73,7 @@ const Layout = () => {
 
   return (
     <>
-      <WhiteNoiseCanvas/>
+      <WhiteNoiseCanvas />
 
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
@@ -91,7 +91,7 @@ const Layout = () => {
           <SettingsModal />
           <WalletConnectionModal />
           <LanguageSelectionModal />
-          {/* <AudioBg /> */}
+          <AudioBg />
         </main>
         <Footer />
       </div>
