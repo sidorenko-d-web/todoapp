@@ -71,9 +71,9 @@ export const baseItems = [
   { name: 'table', slot: 2, width: 140, height: 140, x: -6, y: 455, z: 3 },
   { name: 'window', slot: 5, width: 110, height: 110, x: -125, y: 260, z: 0 },
 ];
-// const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
+// const proxyImageUrl = (url: string) => url.replace('https://miniapp-v2-prod.website.yandexcloud.net', '/api/miniapp-v2-dev');
 
-export const itemsBaseUrl = 'https://storage.yandexcloud.net/miniapp-v2-dev/';
+export const itemsBaseUrl = 'https://miniapp-v2-prod.website.yandexcloud.net/';
 interface contextProps {
   equipped_items?: IRoomItem[];
   center: number;

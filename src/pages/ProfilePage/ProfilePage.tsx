@@ -19,12 +19,13 @@ import { Loader } from '../../components';
 
 export const ProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation('profile');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal, openModal } = useModal();
   const { data } = useGetPushLineQuery();
 
-  const [ claimChestReward ] = useClaimChestRewardMutation();
+  const [claimChestReward] = useClaimChestRewardMutation();
 
+  const { data: awardsData, isLoading: awardsLoading } = useGetInventoryAchievementsQuery();
   const {
     data: userProfileData,
     error: userError,
@@ -39,8 +40,7 @@ export const ProfilePage: React.FC = () => {
     }, 5 * 60 * 1000); // 5 minutes
 
     return () => clearInterval(refetchInterval);
-  }, [ userProfileData, refetchCurrentProfile ]);
-
+  }, [userProfileData, refetchCurrentProfile]);
 
   const {
     data: topProfilesData,
@@ -48,12 +48,9 @@ export const ProfilePage: React.FC = () => {
     isLoading: isTopProfilesLoading,
   } = useGetTopProfilesQuery({});
 
-  const [ , setIsModalShown ] = useState(false);
+  const [, setIsModalShown] = useState(false);
 
-  const streaks = data?.week_information.filter(
-    day => day.push_line_data?.status === 'passed',
-  ).length;
-
+  const streaks = data?.week_information.filter(day => day.push_line_data?.status === 'passed').length;
 
   useEffect(() => {
     if (!sessionStorage.getItem('daysInARowModalShown')) {
@@ -61,11 +58,12 @@ export const ProfilePage: React.FC = () => {
       sessionStorage.setItem('daysInARowModalShown', 'true');
       setIsModalShown(true);
     }
-  }, [ openModal ]);
+  }, [openModal]);
 
   useEffect(() => {
     if (streaks === 30 || streaks === 60 || streaks === 120) {
-      claimChestReward({ chest_reward_reason: 'push_line' }).unwrap()
+      claimChestReward({ chest_reward_reason: 'push_line' })
+        .unwrap()
         .then(result => {
           console.log('Reward claimed:', result);
           openModal(MODALS.TASK_CHEST, {
@@ -76,18 +74,14 @@ export const ProfilePage: React.FC = () => {
         })
         .catch(err => console.error('Error claiming reward:', err));
     }
-  }, [ streaks, claimChestReward, openModal ]);
-
+  }, [streaks, claimChestReward, openModal]);
 
   const userPosition =
     userProfileData && topProfilesData?.profiles
-      ? topProfilesData.profiles.findIndex(
-        (profile: { id: string }) => profile.id === userProfileData.id,
-      )
+      ? topProfilesData.profiles.findIndex((profile: { id: string }) => profile.id === userProfileData.id)
       : -1;
 
-  const position =
-    userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length!;
+  const position = userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length!;
 
   const weekInformation = data?.week_information || [];
 
@@ -101,13 +95,8 @@ export const ProfilePage: React.FC = () => {
 
   const weekData = getWeekData(streakDays, freezeDays);
 
-  const { isLoading: isAwardsLoading } = useGetInventoryAchievementsQuery();
 
-  const isLoading = (
-    isUserLoading ||
-    isTopProfilesLoading ||
-    isAwardsLoading
-  );
+  const isLoading = isUserLoading || isTopProfilesLoading || awardsLoading ;
 
   if (isLoading) {
     return <Loader />;
@@ -117,7 +106,6 @@ export const ProfilePage: React.FC = () => {
 
   return (
     <>
-
       <GetRewardChestModal onClose={() => closeModal(MODALS.TASK_CHEST)} />
 
       {(isUserLoading || isTopProfilesLoading) && <p>{t('p3')}</p>}
@@ -129,10 +117,7 @@ export const ProfilePage: React.FC = () => {
           <div>
             <h1 className={styles.pageTitle}>{t('p1')}</h1>
 
-            <ProfileStatsMini
-              position={position}
-              daysInARow={streaks !== undefined ? streaks : 0}
-            />
+            <ProfileStatsMini position={position} daysInARow={streaks !== undefined ? streaks : 0} />
           </div>
 
           <ChangeNicknameModal
@@ -146,9 +131,7 @@ export const ProfilePage: React.FC = () => {
             <ProfileInfo
               nickname={userProfileData.username}
               blogName={userProfileData.blog_name}
-              subscriptionIntegrationsLeft={
-                userProfileData.subscription_integrations_left
-              }
+              subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left}
               position={position}
               isVip={false}
             />
@@ -156,7 +139,11 @@ export const ProfilePage: React.FC = () => {
               streakDays={streaks !== undefined ? streaks : 0}
               frozenDays={userProfileData.available_freezes}
               days={weekData}
-              status={locale === 'ru' ? data?.push_line_profile_status.status_name : data?.push_line_profile_status.status_name_eng}
+              status={
+                locale === 'ru'
+                  ? data?.push_line_profile_status.status_name
+                  : data?.push_line_profile_status.status_name_eng
+              }
               chest={locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}
               weekData={data?.week_information}
             />
@@ -171,10 +158,12 @@ export const ProfilePage: React.FC = () => {
             />
           </div>
 
-          <div>
-            <p className={styles.statsTitle}>{t('p5')}</p>
-            <RewardsList />
-          </div>
+          {awardsData && awardsData?.achievements.length > 0 && (
+            <div>
+              <p className={styles.statsTitle}>{t('p5')}</p>
+              <RewardsList />
+            </div>
+          )}
         </div>
       )}
     </>

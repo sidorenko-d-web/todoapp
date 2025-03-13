@@ -67,7 +67,7 @@ const Reward: React.FC<RewardProps> = ({ name,name_eng, stars, medal, isActive, 
     <div className={`${styles.reward} ${isActive ? styles.active : styles.inactive}`}>
       <div className={styles.left}>
         <div className={styles.rewardImage}>
-          <img src={medalIcons[medal]} alt={`${medal} medal`} className={styles.medal} />
+          {medal && <img src={medalIcons[medal]} alt={`${medal} medal`} className={styles.medal} />}
           <img
             src={itemType.image}
             alt={'Star'}

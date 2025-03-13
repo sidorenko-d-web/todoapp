@@ -164,14 +164,20 @@ export const StrangerProfilePage: React.FC = () => {
             comments={userProfileData.comments_answered_correctly}
             rewards={userProfileData.achievements_collected}
           />
-          <div className={styles.achivements}>
-            {topProfilesData.profiles?.[0]?.achievements.map(item => (
-              <div className={styles.rewardImage}>
-                <img src={medalIcons[item?.level]} alt={`${item?.level} medal`} className={styles.medal} />
-                <img src={item?.image_url} className={styles.image} alt={'Star'} />
-              </div>
-            ))}
-          </div>
+          {topProfilesData.profiles?.[0]?.achievements.length > 0 && (
+            <div className={styles.achivements}>
+              {topProfilesData.profiles?.[0]?.achievements.map(item => {
+                return (
+                  <div className={styles.rewardImage}>
+                    {item.level && (
+                      <img src={medalIcons[item?.level]} alt={`${item?.level} medal`} className={styles.medal} />
+                    )}
+                    <img src={item?.image_url} className={styles.image} alt={'Star'} />
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
     </>
