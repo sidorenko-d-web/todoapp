@@ -117,7 +117,7 @@ export const TasksPage: FC = () => {
           <span className={s.badge}>
             +{formatAbbreviation(Number(boostData?.income_per_second) || 0, 'number', { locale: locale })}
             <img src={coinIcon} height={18} width={18} alt={'income'} />
-            /сек.
+            /{t('q9')}
           </span>
         </div>
       </section>
