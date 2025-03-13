@@ -45,8 +45,8 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({ daysInARow, 
 
   const { in_streak } = usePushLineStatus();
 
-  const subscribers = in_streak ? displayedSubscribers : (userProfileData ?? strangerProfileData)?.subscribers ?? 0;
-  const totalViews = in_streak ? displayedTotalViews : (userProfileData ?? strangerProfileData)?.total_views ?? 0;
+  const subscribers = in_streak ? displayedSubscribers : ((userProfileData ?? strangerProfileData)?.subscribers ?? 0);
+  const totalViews = in_streak ? displayedTotalViews : ((userProfileData ?? strangerProfileData)?.total_views ?? 0);
 
   return (
     <div className={clsx(styles.wrp, (strangerId || onlyBadges) && styles.justifyCenter)}>
@@ -69,7 +69,7 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({ daysInARow, 
         </div>
 
         <div className={styles.statWrp}>
-          <p className={styles.stat}>{daysInARow + 1}</p>
+          <p className={styles.stat}>{daysInARow}</p>
           <img src={fireIcon} />
         </div>
       </div>

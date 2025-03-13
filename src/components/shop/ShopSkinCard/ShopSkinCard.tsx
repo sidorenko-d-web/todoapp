@@ -7,6 +7,7 @@ import {
   useBuySkinMutation,
   useGetCharacterQuery,
   useUpdateCharacterMutation,
+  useGetProfileMeQuery,
 } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import HeadIcon from '../../../assets/icons/head_icon.svg';
@@ -34,6 +35,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
   const [buySkin, { isLoading: isBuyLoading }] = useBuySkinMutation();
   const [updateCharacter, { isLoading: isUpdateLoading }] = useUpdateCharacterMutation();
 
+  const { refetch } = useGetProfileMeQuery(undefined, {});
   const { data: characterData, isLoading: isCharacterLoading } = useGetCharacterQuery();
   const { openModal } = useModal();
 
@@ -75,6 +77,8 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
       await updateCharacter(body);
     } catch (error) {
       console.log(error);
+    } finally {
+      refetch();
     }
   };
 

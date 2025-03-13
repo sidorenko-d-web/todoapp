@@ -23,16 +23,11 @@ interface StreakDayProps {
   weekData?: {
     creation_date: string;
     push_line_data: WeekData;
-  }[]
+  }[];
   streakDays: number;
 }
 
-export const StreakDay: React.FC<StreakDayProps> = ({
-  dayNumber,
-  weekIndex,
-  weekData,
-  streakDays,
-}) => {
+export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, weekIndex, weekData, streakDays }) => {
   const [lang, setLang] = useState<string | null>(null);
   const [currentDay, setCurrentDay] = useState<number | null>(null);
   const [currentWeekdayIndex, setCurrentWeekdayIndex] = useState<number | null>(null);
@@ -49,12 +44,8 @@ export const StreakDay: React.FC<StreakDayProps> = ({
     return new Date(day.creation_date).getDate() === dayNumber;
   });
 
-
-
-  const isStreakDay =
-    currentDayInfo?.push_line_data.status === 'passed';
-  const isFailedDay =
-    currentDayInfo && currentDayInfo.push_line_data.status === 'unspecified' && !isStreakDay;
+  const isStreakDay = currentDayInfo?.push_line_data?.status === 'passed';
+  const isFailedDay = currentDayInfo && currentDayInfo.push_line_data?.status === 'unspecified' && !isStreakDay;
 
   const weekdaysRu = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
   const weekdaysEn = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
@@ -73,9 +64,7 @@ export const StreakDay: React.FC<StreakDayProps> = ({
   return (
     <div>
       <div
-        className={`${styles.calendarDay} ${
-          currentDay === dayNumber ? styles.currentDay : ''
-        } ${
+        className={`${styles.calendarDay} ${currentDay === dayNumber ? styles.currentDay : ''} ${
           (currentDay === dayNumber || isStreakDay) &&
           (streakDays < 30 ? styles.blue : streakDays < 60 ? styles.purple : styles.red)
         } ${!isFailedDay && !isStreakDay ? styles.calendarDay : ''} ${isFailedDay && styles.failedDay}`}
@@ -83,11 +72,7 @@ export const StreakDay: React.FC<StreakDayProps> = ({
         {(isStreakDay || isFailedDay || isCurrentDay) && (
           <div
             className={`${styles['status-icon']} ${
-              streakDays < 30
-                ? styles.iconBlue
-                : streakDays < 60
-                ? styles.iconPurple
-                : styles.iconRed
+              streakDays < 30 ? styles.iconBlue : streakDays < 60 ? styles.iconPurple : styles.iconRed
             }`}
           >
             {getIcon()}
@@ -97,11 +82,7 @@ export const StreakDay: React.FC<StreakDayProps> = ({
       </div>
 
       {/* День недели */}
-      <p
-        className={`${styles.dayOfTheWeek} ${
-          currentWeekdayIndex === weekIndex ? styles.dayOfTheWeekActive : ''
-        }`}
-      >
+      <p className={`${styles.dayOfTheWeek} ${currentWeekdayIndex === weekIndex ? styles.dayOfTheWeekActive : ''}`}>
         {lang === 'en' ? weekdaysEn[weekIndex] : weekdaysRu[weekIndex]}
       </p>
     </div>

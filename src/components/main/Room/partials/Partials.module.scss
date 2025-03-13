@@ -151,7 +151,7 @@ $translateY: -15vh;
   height: 80px;
 }
 
-.coin { 
+.coin {
   position: absolute;
   width: 20px;
   height: 20px;
@@ -161,11 +161,14 @@ $translateY: -15vh;
   animation: coin 1.15s forwards ease-in-out;
 }
 
-.loader{
+.loader {
   position: absolute;
   z-index: 10000001;
-  top: -50px;
   background-color: transparent;
+
+  &.upper {
+    top: -50px;
+  }
 }
 
 @keyframes coin {
@@ -181,7 +184,7 @@ $translateY: -15vh;
     top: 400px;
   }
 
-  100%{
+  100% {
     opacity: 0;
     top: 400px;
   }
