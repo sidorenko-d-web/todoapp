@@ -39,7 +39,7 @@ export const InviteFriend: FC<InviteFriendProps> = ({
     const shareData = {
       title: `${t('p25')}`,
       text: `${t('p26')}`,
-      url: `https://t.me/wished_sentry_robot?start=${data?.id}`,
+      url: `https://t.me/apusher_bot?start=${data?.id}`,
     };
 
     if (navigator.share) {
@@ -80,12 +80,12 @@ export const InviteFriend: FC<InviteFriendProps> = ({
           <div className={s.blockInput}>
             <input
               type="text"
-              value={`https://t.me/wished_sentry_robot?start=${data?.id}`}
+              value={`https://t.me/apusher_bot?start=${data?.id}`}
               readOnly
               className={s.inputLink}
             />
             <Button
-              onClick={() => copyToClipboard(`https://t.me/wished_sentry_robot?start=${data?.id}`, setIsCopiedLink)}
+              onClick={() => copyToClipboard(`https://t.me/apusher_bot?start=${data?.id}`, setIsCopiedLink)}
               className={s.copyButton}
             >
                <img src={copy} height={14} width={14} alt="copy" />

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styles from './LoadingScreen.module.scss';
 import loadingVid from '../../../assets/gif/loading.mp4';
 // import Lottie from 'lottie-react';
@@ -11,7 +11,6 @@ import { selectVolume } from '../../../redux';
 import WhiteNoiseCanvas from '../../WhiteNoise/WhiteNoise';
 
 import qr from '../../../assets/icons/qr.png';
-
 
 interface LoadingScreenProps {
   onAnimationComplete: () => void;
@@ -36,20 +35,20 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   //   });
   // }, []);
 
-  const [isMobile, setIsMobile] = useState(1);
+  const [isMobile, setIsMobile] = useState(0);
 
-  // useEffect(() => {
-  //   if (window.Telegram?.WebApp?.platform) {
-  //     const platform = window.Telegram.WebApp.platform.toLowerCase();
-  //     if (platform.includes('android') || platform.includes('ios')) {
-  //       setIsMobile(1);
-  //     } else {
-  //       setIsMobile(-1);
-  //     }
-  //   } else {
-  //     setIsMobile(-1);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (window.Telegram?.WebApp?.platform) {
+      const platform = window.Telegram.WebApp.platform.toLowerCase();
+      if (platform.includes('android') || platform.includes('ios')) {
+        setIsMobile(1);
+      } else {
+        setIsMobile(-1);
+      }
+    } else {
+      setIsMobile(-1);
+    }
+  }, []);
 
   useEffect(() => {
     const minLoadingTimeout = setTimeout(() => {
@@ -95,14 +94,15 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
     }
   }, [showAnimation]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (!videoRef) return;
     // Показываем прогресс бар после 2 секунд воспроизведения видео
     const videoTimeout = setTimeout(() => {
       setShowProgressBar(true);
-    }, 1500);
+    }, 3500);
 
     return () => clearTimeout(videoTimeout);
-  }, []);
+  }, [videoRef]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -122,28 +122,26 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   return (
     <>
       <WhiteNoiseCanvas />
-      {isMobile === 1 && <div className={styles.root} onClick={handleAccelerate}>
-        <div />
-        <div className={styles.clickableArea}></div>
-        <video
-          ref={videoRef}
-          className={styles.coin}
-          src={loadingVid}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          width={410}
-          height={420}
-        />
+      {isMobile === 1 && (
+        <div className={styles.root} onClick={handleAccelerate}>
+          <div />
+          <div className={styles.clickableArea}></div>
+          <video
+            ref={videoRef}
+            className={styles.coin}
+            src={loadingVid}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            width={410}
+            height={420}
+          />
 
-
-        {showProgressBar && !showAnimation && (
-          <div className={styles.betaAndProgressBar}>
-            <span className={styles.beta}>
-              Beta
-            </span>
+          {showProgressBar && !showAnimation && (
+            <div className={styles.betaAndProgressBar}>
+              <span className={styles.beta}>Beta</span>
               <LoadingScreenBar
                 ref={loadingScreenBarRef}
                 speedMultiplier={speedMultiplier}
@@ -151,14 +149,14 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
                 setProgress={setProgress}
                 isAuthComplete={isAuthComplete}
               />
-          </div>
-        )}
-        {showAnimation && (
-          // <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
-          <></>
-        )}
-      </div>
-      }
+            </div>
+          )}
+          {showAnimation && (
+            // <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
+            <></>
+          )}
+        </div>
+      )}
 
       {isMobile === -1 && (
         <div className={styles.notMobile}>

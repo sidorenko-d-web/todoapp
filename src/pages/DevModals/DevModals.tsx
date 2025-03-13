@@ -21,8 +21,8 @@ export default function DevModals() {
       }
 
       preload() {
-        const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/лампа_base.json`).href;
-        const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-dev/лампа_baseatlas.txt`).href;
+        const jsonUrl = new URL(`https://miniapp.apusher.com/export/лампа_base.json`).href;
+        const atlasUrl = new URL(`https://miniapp.apusher.com/export/лампа_baseatlas.txt`).href;
 
         this.load.spineJson('json', (jsonUrl));
         this.load.spineAtlas('atlas', (atlasUrl));

@@ -246,8 +246,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           {/*  <SpineAnimation*/}
           {/*    name={item.name}*/}
           {/*    skin={item.item_premium_level}*/}
-          {/*    jsonUrl="https://storage.yandexcloud.net/miniapp-v2-dev/тетрадь-1.json"*/}
-          {/*    atlasUrl="https://storage.yandexcloud.net/miniapp-v2-dev/тетрадь-1atlas.txt"*/}
+          {/*    jsonUrl="https://storage.yandexcloud.net/miniapp-v2-prod/тетрадь-1.json"*/}
+          {/*    atlasUrl="https://storage.yandexcloud.net/miniapp-v2-prod/тетрадь-1atlas.txt"*/}
           {/*  />*/}
           {/*</div>*/}
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
