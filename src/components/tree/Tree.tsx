@@ -24,6 +24,7 @@ import { MODALS } from '../../constants';
 import GetGift from '../../pages/DevModals/GetGift/GetGift';
 import { Loader } from '../Loader';
 import { useOutletContext } from 'react-router-dom';
+import { useTreeProgress } from '../../hooks/useTreeProgress';
 
 type ShopUpgrades = {
   [key: string]: { icon: string };
@@ -44,8 +45,18 @@ export const Tree = () => {
   const [currentBoost, setCurrentBoost] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
 
+  const userSubscribers = userProfileData?.subscribers || 0;
+
+  const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
+
   const [unlockAchievement] = useUnlockAchievementMutation();
 
+  const { progressPercent } = useTreeProgress({
+    treeData,
+    userSubscribers,
+  });
+
+  console.log('progress percent: ', progressPercent);
   useEffect(() => {
     if (treeData && userProfileData && lastActiveLevelRef.current) {
       // Добавляем небольшую задержку для плавной прокрутки
@@ -56,7 +67,7 @@ export const Tree = () => {
         });
       }, 100); // Задержка в 100 мс
     }
-  }, [treeData, userProfileData]);
+  }, [progressPercent]);
 
   if (!treeData || !isBgLoaded || !userProfileData) {
     return <Loader />;
@@ -78,6 +89,7 @@ export const Tree = () => {
       <div className={s.progressBarAdditional} />
       <div className={s.progressBarContainer}>
         <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300}px` }}>
+          <div className={s.progressFill} style={{ height: `${progressPercent}%` }} ref={progressBarContainerRef} />
           {treeData?.growth_tree_stages.map((stage, index) => {
             const isRewardAvailable = stage.achievement.is_available;
             const isRewardClaimed = stage.achievement.is_unlocked;
