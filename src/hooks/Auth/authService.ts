@@ -1,7 +1,7 @@
 // import WebApp from '@twa-dev/sdk';
 
 export const performSignIn = async (signIn: Function) => {
-  // const init_data = window.Telegram.WebApp.initData;
+  const init_data = window.Telegram.WebApp.initData;
   // const init_data = window.Telegram.WebApp.initDataUnsafe
   // const init_data = WebApp.initData;
 
@@ -22,9 +22,9 @@ export const performSignIn = async (signIn: Function) => {
 
   // Кирилл А 6547551264
   // const init_data =
-    'user=%7B%22id%22%3A6547551264%2C%22first_name%22%3A%22Marketer%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Marketer7%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FZXmZsLRfqSwjww-KJ6vKAk7MdaJgauVvTBeAA_9wyR69odwqAQOCVE4Lm46UHmKn.svg%22%7D&chat_instance=4040856596542184382&chat_type=sender&auth_date=1741269520&signature=eU1vOtEhxllf_mk7FcVG5_gsp3XhrZ-fBI13i79RTMSZBcglh3vU2qrBsE2GlvkoW5deO7gbJl8oLAAMc9kcDg&hash=17eb62baf6c53c9d26e5f22ce267c8e89b00cfb086b4ecab1edc3f5ed27cab8d';
+  //   'user=%7B%22id%22%3A6547551264%2C%22first_name%22%3A%22Marketer%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Marketer7%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FZXmZsLRfqSwjww-KJ6vKAk7MdaJgauVvTBeAA_9wyR69odwqAQOCVE4Lm46UHmKn.svg%22%7D&chat_instance=4040856596542184382&chat_type=sender&auth_date=1741269520&signature=eU1vOtEhxllf_mk7FcVG5_gsp3XhrZ-fBI13i79RTMSZBcglh3vU2qrBsE2GlvkoW5deO7gbJl8oLAAMc9kcDg&hash=17eb62baf6c53c9d26e5f22ce267c8e89b00cfb086b4ecab1edc3f5ed27cab8d';
 
   // Еще акк для тестов 6983657401
-  const init_data = 'query_id=AAG5J0IgAwAAALknQiCiASHP&user=%7B%22id%22%3A6983657401%2C%22first_name%22%3A%22InnoSmoke%20%F0%9F%98%B6%E2%80%8D%F0%9F%8C%AB%EF%B8%8F%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22InnoSmokeAdmin%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FG6IL84jx2cu6pK5znAc4_zNQ5CGiot09A_OopubxolzjbRKMfYmY1sGiP59VL6Cl.svg%22%7D&auth_date=1741741025&signature=WW6o6BrJ3DNhab8frU8-XIc_otCfKD3xWhLVFKt0XBwSRv4J5pexx-fVRE3jzk560Ie5VW10XN9nmrKPp-3fAQ&hash=8ca00869d453dc6cedffd8a2cd527f2fb3dfe05aa5a28d3b14bb32fa129aa6db'
+  // const init_data = 'query_id=AAG5J0IgAwAAALknQiCiASHP&user=%7B%22id%22%3A6983657401%2C%22first_name%22%3A%22InnoSmoke%20%F0%9F%98%B6%E2%80%8D%F0%9F%8C%AB%EF%B8%8F%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22InnoSmokeAdmin%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FG6IL84jx2cu6pK5znAc4_zNQ5CGiot09A_OopubxolzjbRKMfYmY1sGiP59VL6Cl.svg%22%7D&auth_date=1741741025&signature=WW6o6BrJ3DNhab8frU8-XIc_otCfKD3xWhLVFKt0XBwSRv4J5pexx-fVRE3jzk560Ie5VW10XN9nmrKPp-3fAQ&hash=8ca00869d453dc6cedffd8a2cd527f2fb3dfe05aa5a28d3b14bb32fa129aa6db'
   return signIn({ init_data }).unwrap();
 };

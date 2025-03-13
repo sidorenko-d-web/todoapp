@@ -23,7 +23,7 @@ export const getAchivementType = (name: string, medal: 'gold' | 'silver' | 'bron
       };
       const itemName = name.split(' ');
       return {
-        image: `https://miniapp-v2-prod.website.yandexcloud.net/Награда -${
+        image: `https://storage.yandexcloud.net/miniapp-v2-prod/Награда -${
           imageNames[itemName[0] as keyof typeof imageNames]
         }.svg${svgHeadersString}`,
         type,
@@ -38,7 +38,7 @@ export const getAchivementType = (name: string, medal: 'gold' | 'silver' | 'bron
         level = medal === 'bronze' ? 1 : medal === 'silver' ? 2 : 3;
       }
       return {
-        image: `https://miniapp-v2-prod.website.yandexcloud.net/${
+        image: `https://storage.yandexcloud.net/miniapp-v2-prod/${
           _itemName[_itemName.length - 1]
         }-${level}.svg${svgHeadersString}`,
         type,

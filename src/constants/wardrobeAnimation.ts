@@ -1,10 +1,10 @@
 import { SpineGameObject, Skin } from '@esotericsoftware/spine-phaser';
 import { TypeWearLocation } from '../redux';
-import { ICharacterResponse } from '../redux/api/character';
-// const proxyImageUrl = (url: string) => url.replace('https://miniapp-v2-prod.website.yandexcloud.net', '/api/miniapp-v2-dev');
+import { ICharacterResponse } from '../redux';
+// const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
 
-const jsonUrl = new URL(`https://miniapp-v2-prod.website.yandexcloud.net/anfas_happy1.json`).href;
-const atlasUrl = new URL(`https://miniapp-v2-prod.website.yandexcloud.net/anfas_happyatlas1.txt`).href;
+const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-prod/anfas_happy.json`).href;
+const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-prod/anfas_happyatlas.txt`).href;
 
 export class WardrobeSpineScene extends Phaser.Scene {
   jsonUrl: string | undefined;

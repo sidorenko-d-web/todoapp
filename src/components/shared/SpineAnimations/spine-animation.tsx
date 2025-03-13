@@ -7,8 +7,8 @@ interface Props {
 }
 
 
-const jsonUrl = new URL(`https://miniapp-v2-prod.website.yandexcloud.net/постер_base.json`).href;
-const atlasUrl = new URL(`https://miniapp-v2-prod.website.yandexcloud.net/постер_baseatlas.txt`).href;
+const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-prod/постер_base.json`).href;
+const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-prod/постер_baseatlas.txt`).href;
 
 const SpineAnimation: FC<Props> = ({ item }) => {
   const gameRef = useRef<Phaser.Game | null>(null);
