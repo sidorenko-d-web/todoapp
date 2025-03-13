@@ -11,7 +11,6 @@ import Lottie from 'lottie-react';
 import { lampTable } from '../assets/animations';
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
 import clsx from 'clsx';
-import WhiteNoiseCanvas from '../components/WhiteNoise/WhiteNoise';
 
 const Layout = () => {
   const location = useLocation();
@@ -27,6 +26,10 @@ const Layout = () => {
   );
 
   const showRoadmapBg = location.pathname === '/progressTree';
+
+  const showHeaderBG = !(['/', '/progressTree'].includes(
+    location.pathname,
+  ))
 
   useEffect(() => {
     const isNeedToOpenChest = localStorage.getItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
@@ -73,7 +76,9 @@ const Layout = () => {
 
   return (
     <>
-      <WhiteNoiseCanvas/>
+      {/*<WhiteNoiseCanvas/>*/}
+
+      {showHeaderBG && <div className={styles.headerBG} />}
 
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />

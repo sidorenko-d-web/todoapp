@@ -18,12 +18,12 @@ $header-border: 1px solid $color-header-border-dark;
 .header {
   position: fixed;
   inset: 0 0 auto 0;
-  border-top: 85px solid var.$color-bg;
   border-radius: 20px 20px 0 0;
   z-index: 20;
   //padding: 0px 10px 0;
   //padding: calc(var(--tg-content-safe-area-inset-top) + 60px) 10px 0;
-  margin-top: calc(var(--tg-content-safe-area-inset-top) + -80px);
+  //margin-top: calc(var(--tg-content-safe-area-inset-top) + -80px);
+  margin: calc(var(--tg-content-safe-area-inset-top)) 0 0;
   //margin: 0;
 
   // Prevent user from scrolling while interacting with header
