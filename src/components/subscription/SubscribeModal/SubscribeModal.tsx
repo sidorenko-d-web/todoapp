@@ -29,7 +29,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
   const [idDisabled] = useState(true);
   const [isShow, setIsShow] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [isSubscriptionPurchased] = useState(false);
+  const [isSubscriptionPurchased, setIsSubscriptionPurchased] = useState(false);
   const [nextSubscriptionAt, setNextSubscriptionAt] = useState<Date | null>(null);
   const [timeUntilAvailable, setTimeUntilAvailable] = useState<number | null>(null);
 
