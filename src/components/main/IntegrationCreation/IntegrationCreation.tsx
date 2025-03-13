@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 export const IntegrationCreation = () => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
-  const integrationCreating = useSelector((state: RootState) => state.acceleration.integrationCreating)
+  const integrationCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
   const { data: profile } = useGetProfileMeQuery();
   const { data: integrations, error: integrationsError } = useGetIntegrationsQuery(
@@ -45,20 +45,17 @@ export const IntegrationCreation = () => {
 
   const isButtonGlowing = isIntegrationCreationButtonGlowing();
 
-  const createIntegrationButtonGlowing = useSelector(
-    (state: RootState) => state.guide.createIntegrationButtonGlowing,
-  );
+  const createIntegrationButtonGlowing = useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing);
 
   return (
     <section className={s.integrationsControls}>
-      {!integrationCreating &&
+      {!integrationCreating && (
         <TrackedButton
           trackingData={{
             eventType: 'button',
-            eventPlace: 'Создать интеграцию - Главный экран'
+            eventPlace: 'Создать интеграцию - Главный экран',
           }}
-          className={`${s.button} ${isButtonGlowing || createIntegrationButtonGlowing ? s.glowing : ''
-            }`}
+          className={`${s.button} ${isButtonGlowing || createIntegrationButtonGlowing ? s.glowing : ''}`}
           disabled={!profile}
           onClick={handleIntegrationCreation}
         >
@@ -68,14 +65,12 @@ export const IntegrationCreation = () => {
             <img src={integrationIcon} height={12} width={12} alt="integration" />
           </span>
         </TrackedButton>
-      }
+      )}
       {
         // @ts-expect-error ts(2339)
         integrationsError?.status === 404
           ? null
-          : integrations?.integrations && (
-            <IntegrationCreationCard integration={integrations?.integrations[0]} />
-          )
+          : integrations?.integrations && <IntegrationCreationCard integration={integrations?.integrations[0]} />
       }
 
       <IntegrationCreationModal
@@ -83,9 +78,7 @@ export const IntegrationCreation = () => {
         onClose={() => closeModal(MODALS.CREATING_INTEGRATION)}
         hasCreatingIntegration={
           // @ts-expect-error ts(2339)
-          integrationsError?.status !== 404 &&
-          integrations?.integrations &&
-          integrations?.integrations.length > 0
+          integrationsError?.status !== 404 && integrations?.integrations && integrations?.integrations.length > 0
         }
       />
       <SubscribeModal

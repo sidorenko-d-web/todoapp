@@ -54,7 +54,7 @@ export const Tree = () => {
           behavior: 'smooth',
           block: 'center',
         });
-      }, 100); // Задержка в 300 мс
+      }, 100); // Задержка в 100 мс
     }
   }, [treeData, userProfileData]);
 
