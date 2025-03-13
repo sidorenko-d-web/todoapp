@@ -14,7 +14,7 @@ export const ProgressLine: React.FC<ProgressLineProps> = ({ level, color }) => {
       {color === 'red' ? (
         <div className={styles.progressBarRed} style={{ width: progressWidth }} />
       ) : color === 'blue' ? (
-        <div className={styles.progressBarBlue} style={{ width: progressWidth }} />
+        <div className={styles.progressBarBlue} style={{ width: 0 }} />
       ) : (
         <div className={styles.progressBarPurple} style={{ width: progressWidth }} />
       )}
