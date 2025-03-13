@@ -18,15 +18,15 @@ import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
 import {
   integrationCreatingModalButtonGlowing,
-  // integrationCreatingModalLightningsGlowing,
   integrationCreatingModalTabsGlowing,
   isGuideShown,
   setGuideShown,
 } from '../../../utils';
-import { AppRoute, GUIDE_ITEMS } from '../../../constants';
+import { AppRoute, GUIDE_ITEMS, total_users } from '../../../constants';
 import { CreatingIntegrationGuide, Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
 import { CentralModal } from '../../shared/';
+import { getPlanStageByUsersCount } from '../../../helpers';
 
 
 interface CreatingIntegrationModalProps {
@@ -171,7 +171,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           </div>
 
           <div className={s.scrollableContent}>
-            {uniqueCompany && !noItemsMessage && (
+            {uniqueCompany && !noItemsMessage && getPlanStageByUsersCount(total_users) >= 5 && (
               <SpecialIntegration
                 company={uniqueCompany}
               />

@@ -4,13 +4,13 @@ import coinIcon from '../../assets/icons/coin.png';
 
 import s from './TasksPage.module.scss';
 import { DailyTasks, Loader, SocialTasks } from '../../components';
-import { formatAbbreviation } from '../../helpers';
-import { useGetTasksQuery } from '../../redux/api/tasks';
-import { useGetBoostQuery } from '../../redux/api/tasks';
+import { formatAbbreviation, getPlanStageByUsersCount } from '../../helpers';
+import { useGetBoostQuery, useGetTasksQuery } from '../../redux/api/tasks';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setActiveFooterItemId } from '../../redux';
 import GetGiftDaily from '../DevModals/GetGiftDaily/GetGiftDaily';
+import { total_users } from '../../constants';
 
 export const TasksPage: FC = () => {
   const dispatch = useDispatch();
@@ -100,7 +100,7 @@ export const TasksPage: FC = () => {
   if (error) {
     return <div>{t('q17')}</div>;
   }
-
+  console.log(getPlanStageByUsersCount(total_users));
   return (
     <main className={s.page}>
       <section className={s.topSection}>
@@ -122,7 +122,7 @@ export const TasksPage: FC = () => {
         </div>
       </section>
 
-      {dailyTask && <DailyTasks task={dailyTask} />}
+      {dailyTask && getPlanStageByUsersCount(total_users) >= 4 && <DailyTasks task={dailyTask} />}
       {/*{topTask && <TopTasks task={topTask} />}*/}
       {socialTasks.length > 0 && <SocialTasks tasks={socialTasks} />}
       <GetGiftDaily />

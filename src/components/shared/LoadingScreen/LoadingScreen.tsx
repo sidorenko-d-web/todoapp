@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './LoadingScreen.module.scss';
 import loadingVid from '../../../assets/gif/loading.mp4';
 // import Lottie from 'lottie-react';
@@ -36,7 +36,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   //   });
   // }, []);
 
-  const [isMobile, setIsMobile] = useState(0);
+  const [isMobile, setIsMobile] = useState(1);
 
   useEffect(() => {
     if (window.Telegram?.WebApp?.platform) {
@@ -44,10 +44,10 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
       if (platform.includes("android") || platform.includes("ios")) {
         setIsMobile(1);
       } else {
-        setIsMobile(-1);
+        // setIsMobile(-1);
       }
     } else {
-      setIsMobile(-1);
+      // setIsMobile(-1);
     }
   }, []);
 
