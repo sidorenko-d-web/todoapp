@@ -73,7 +73,7 @@ export const baseItems = [
 ];
 // const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-prod');
 
-export const itemsBaseUrl = 'https://storage.yandexcloud.net/miniapp-v2-prod/';
+export const itemsBaseUrl = 'https://miniapp.apusher.com/export/';
 interface contextProps {
   equipped_items?: IRoomItem[];
   center: number;

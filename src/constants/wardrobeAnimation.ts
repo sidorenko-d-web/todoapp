@@ -3,8 +3,8 @@ import { TypeWearLocation } from '../redux';
 import { ICharacterResponse } from '../redux';
 // const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
 
-const jsonUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-prod/anfas_happy.json`).href;
-const atlasUrl = new URL(`https://storage.yandexcloud.net/miniapp-v2-prod/anfas_happyatlas.txt`).href;
+const jsonUrl = new URL(`https://miniapp.apusher.com/export/anfas_happy.json`).href;
+const atlasUrl = new URL(`https://miniapp.apusher.com/export/anfas_happyatlas.txt`).href;
 
 export class WardrobeSpineScene extends Phaser.Scene {
   jsonUrl: string | undefined;
