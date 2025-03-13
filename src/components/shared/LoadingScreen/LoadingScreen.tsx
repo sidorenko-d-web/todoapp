@@ -10,6 +10,9 @@ import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
 import WhiteNoiseCanvas from '../../WhiteNoise/WhiteNoise';
 
+import qr from '../../../assets/icons/qr.png';
+
+
 interface LoadingScreenProps {
   onAnimationComplete: () => void;
   isAuthComplete: boolean;
@@ -32,6 +35,21 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   //     });
   //   });
   // }, []);
+
+  const [isMobile, setIsMobile] = useState(0);
+
+  useEffect(() => {
+    if (window.Telegram?.WebApp?.platform) {
+      const platform = window.Telegram.WebApp.platform.toLowerCase();
+      if (platform.includes("android") || platform.includes("ios")) {
+        setIsMobile(1);
+      } else {
+        setIsMobile(-1);
+      }
+    } else {
+      setIsMobile(-1);
+    }
+  }, []);
 
   useEffect(() => {
     const minLoadingTimeout = setTimeout(() => {
@@ -97,10 +115,11 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
     }
   }, []);
 
+
   return (
     <>
-      <WhiteNoiseCanvas/>
-      <div className={styles.root} onClick={handleAccelerate}>
+      <WhiteNoiseCanvas />
+      {isMobile === 1 && <div className={styles.root} onClick={handleAccelerate}>
         <div />
         <div className={styles.clickableArea}></div>
         <video
@@ -129,6 +148,17 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
           <></>
         )}
       </div>
+      }
+
+      {isMobile === -1 && <div className={styles.notMobile}>
+        <div className={styles.qr}>
+          <img src={qr} />
+          <p>Apusher MiniApp</p>
+        </div>
+        <p className={styles.useMobileApp}>Пожалуйста, используйте
+          <br />
+          ваше мобильное устройство</p>
+      </div>}
     </>
   );
 };
