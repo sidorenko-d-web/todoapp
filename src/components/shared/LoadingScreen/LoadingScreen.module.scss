@@ -17,6 +17,35 @@
     z-index: 10000;
   }
 
+  .beta {
+    display: flex;
+    padding: 5px 10px 6px 10px;
+    margin-left: 30px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 10px;
+    border: 1px solid #282830;
+    background: #1C1D22;
+    color: #AFB9D4;
+    text-align: center;
+    font-family: var.$font-default;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .loadingScreenBar {
+    width: 100%;
+  }
+
+  .betaAndProgressBar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 10px;
+  }
+
   .particle {
     position: absolute;
     width: 8px;
@@ -34,10 +63,12 @@
       transform: translate(0, 0) scale(1);
       opacity: 1;
     }
+
     50% {
       transform: translate(-50px, -30px) scale(1.2);
       opacity: 0.8;
     }
+
     100% {
       transform: translate(-100px, -10px) scale(0.5);
       opacity: 0;
@@ -67,25 +98,25 @@
   font-size: 16px;
 
 
-  .qr { 
-     display: flex;
-     flex-direction: column;
-     width: 100%;
-     align-items: center;
-     justify-content: center;
-     gap: 20px;
+  .qr {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
 
-     img {
-        width: 161px;
-        height: 161px;
-     }
+    img {
+      width: 161px;
+      height: 161px;
+    }
 
-     p {
+    p {
       width: 100%;
       text-align: center;
       color: var.$color-grayish-white;
       font-weight: 600;
-     }
+    }
   }
 
 

@@ -8,7 +8,7 @@ import subscribers from '../../../assets/icons/subscribers.png';
 import integration from '../../../assets/icons/integration-blue.svg';
 import starBlue from '../../../assets/icons/star-blue.svg';
 import starGray from '../../../assets/icons/star-dark-gray.svg';
-import lightning from '../../../assets/icons/lightning.svg';
+// import lightning from '../../../assets/icons/lightning.svg';
 import Lottie from 'lottie-react';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import confetti from '../../../assets/animations/confetti.json';
@@ -56,9 +56,9 @@ export default function RewardForIntegrationModal() {
       <div className={styles.wrapper}>
         <div className={styles.info}>
           <div className={styles.top}>
-            <div className={styles.lightning}>
+            {/* <div className={styles.lightning}>
               <img src={lightning} />
-            </div>
+            </div> */}
             {/* @ts-ignore */}
             <img className={styles.integration} src={args?.image_url ?? integration} />
           </div>
