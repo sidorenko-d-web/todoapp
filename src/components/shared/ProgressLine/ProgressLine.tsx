@@ -7,14 +7,14 @@ interface ProgressLineProps {
 }
 
 export const ProgressLine: React.FC<ProgressLineProps> = ({ level, color }) => {
-  const progressWidth = `${Math.max((level / 5) * 100, 5)}%`;
+  const progressWidth = `${(level / 5) * 100}%`;
 
   return (
     <div className={styles.progressContainer}>
       {color === 'red' ? (
         <div className={styles.progressBarRed} style={{ width: progressWidth }} />
       ) : color === 'blue' ? (
-        <div className={styles.progressBarBlue} style={{ width: 0 }} />
+        <div className={styles.progressBarBlue} style={{ width: progressWidth }} />
       ) : (
         <div className={styles.progressBarPurple} style={{ width: progressWidth }} />
       )}
