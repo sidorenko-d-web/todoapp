@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import peeps from '../../../assets/icons/peeps.svg';
 import piggy from '../../../assets/icons/piggy.svg';
 import subscribersIcon from '../../../assets/icons/subscribers.png';

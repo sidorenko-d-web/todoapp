@@ -7,7 +7,6 @@ import fireGrayIcon from '../../../assets/icons/fire-gray.svg';
 import infoIcon from '../../../assets/icons/info.svg';
 import infoRedIcon from '../../../assets/icons/info-red.svg';
 import { useGetUserProfileInfoByIdQuery, useMarkPushReminderSentMutation } from '../../../redux';
-import profileIconPlaceholder from '../../../assets/icons/referral-icon-placeholder.svg';
 import { formatAbbreviation } from '../../../helpers';
 import { Button } from '../../shared';
 import { useTranslation } from 'react-i18next';
@@ -24,19 +23,19 @@ interface ReferralCardProps {
 }
 
 export const ReferralCard: React.FC<ReferralCardProps> = ({
-  id_referral,
-  position,
-  name,
-  total_invited,
-  streak,
-  days_missed,
-  reminded_time,
-  profile_id,
-}) => {
+                                                            id_referral,
+                                                            position,
+                                                            name,
+                                                            total_invited,
+                                                            streak,
+                                                            days_missed,
+                                                            reminded_time,
+                                                            profile_id,
+                                                          }) => {
   const { t, i18n } = useTranslation('promotion');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data } = useGetUserProfileInfoByIdQuery(String(profile_id));
-  const [markPushReminderSent] = useMarkPushReminderSentMutation();
+  const [ markPushReminderSent ] = useMarkPushReminderSentMutation();
 
   const handleSendMessage = async () => {
     try {
@@ -55,9 +54,6 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
       <div className={s.userCard}>
         <div className={s.userCardTop}>
           <div className={s.infoUser}>
-            <div className={s.userCardAvatar}>
-              <img src={profileIconPlaceholder} width={24} height={24} />
-            </div>
             <div className={s.nameAndStreakWrapper}>
               <span className={s.text}>{name}</span>
               <div className={s.streakWrapper}>
@@ -85,25 +81,24 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
             <span className={s.badge}>
               +
               {data?.subscribers !== undefined
-                ? formatAbbreviation(data.subscribers, 'number', { locale: locale })
+                ? formatAbbreviation(data.subscribers_for_first_level_referrals, 'number', { locale: locale })
                 : 'N/A'}{' '}
               <img src={subscribersIcon} alt="Подписчики" />
             </span>
             <span className={classNames(s.level, s.text)}>1{t('p4')}.</span>
           </div>
-          <div className={s.userCardBonus}>
+          {data?.subscribers_for_second_level_referrals !== undefined &&
+            <div className={s.userCardBonus}>
             <span className={s.badge}>
-              +
-              {data?.subscribers_for_second_level_referrals !== undefined
-                ? formatAbbreviation(data.subscribers_for_second_level_referrals, 'number', { locale: locale })
-                : 'N/A'}{' '}
-              <img src={subscribersIcon} alt="Подписчики" />
+                <>+{formatAbbreviation(data.subscribers_for_second_level_referrals, 'number', { locale: locale })}
+                  <img src={subscribersIcon} alt="Подписчики" /></>
             </span>
-            <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
-          </div>
-          <Button className={classNames(s.userCardRefs, s.text)}>
+              <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
+            </div>
+          }
+          {data?.subscribers_for_second_level_referrals === undefined && <Button className={classNames(s.userCardRefs, s.text)}>
             {`(${t('p54')} ${total_invited} ${t('p55')}.)`}
-          </Button>
+          </Button>}
         </div>
         {days_missed > 1 && reminded_time === null ? (
           <div className={s.streakWarningWrapper}>
