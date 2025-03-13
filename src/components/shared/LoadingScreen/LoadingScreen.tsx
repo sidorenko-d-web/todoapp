@@ -36,14 +36,18 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   //   });
   // }, []);
 
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(0);
 
   useEffect(() => {
     if (window.Telegram?.WebApp?.platform) {
       const platform = window.Telegram.WebApp.platform.toLowerCase();
       if (platform.includes("android") || platform.includes("ios")) {
-        setIsMobile(true);
+        setIsMobile(1);
+      } else {
+        setIsMobile(-1);
       }
+    } else {
+      setIsMobile(-1);
     }
   }, []);
 
@@ -115,7 +119,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   return (
     <>
       <WhiteNoiseCanvas />
-      {isMobile ? <div className={styles.root} onClick={handleAccelerate}>
+      {isMobile === 1 && <div className={styles.root} onClick={handleAccelerate}>
         <div />
         <div className={styles.clickableArea}></div>
         <video
@@ -143,7 +147,10 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
           // <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
           <></>
         )}
-      </div> : <div className={styles.notMobile}>
+      </div>
+      }
+
+      {isMobile === -1 && <div className={styles.notMobile}>
         <div className={styles.qr}>
           <img src={qr} />
           <p>Apusher MiniApp</p>
@@ -151,8 +158,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
         <p className={styles.useMobileApp}>Пожалуйста, используйте
           <br />
           ваше мобильное устройство</p>
-      </div>
-      }
+      </div>}
     </>
   );
 };
