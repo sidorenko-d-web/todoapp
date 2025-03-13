@@ -17,29 +17,19 @@ interface InviteFriendProps {
   onClose: () => void;
 }
 
-export const TopUsers: FC<InviteFriendProps> = ({
-                                                  modalId,
-                                                  onClose,
-                                                }: InviteFriendProps) => {
-  const { data } = useGetTopProfilesQuery();
+export const TopUsers: FC<InviteFriendProps> = ({ modalId, onClose }: InviteFriendProps) => {
+  const { data } = useGetTopProfilesQuery({});
   const topProfiles = data?.profiles || [];
   const { data: userProfileData } = useGetProfileMeQuery();
 
   const userPosition =
     userProfileData && topProfiles
-      ? topProfiles.findIndex(
-        (profile: { id: string }) => profile.id === userProfileData.id,
-      )
+      ? topProfiles.findIndex((profile: { id: string }) => profile.id === userProfileData.id)
       : -1;
   const position = userPosition !== -1 ? userPosition + 1 : topProfiles.length!;
 
   return (
-    <BottomModal
-      modalId={modalId}
-      title={'Топ 10 000 инфлюенсеров'}
-      onClose={onClose}
-      titleIcon={cup}
-    >
+    <BottomModal modalId={modalId} title={'Топ 10 000 инфлюенсеров'} onClose={onClose} titleIcon={cup}>
       <ul className={classNames(s.subscribers, s.ulBlock)}>
         <li className={s.listBadge}>
           <span className={s.badge}>
