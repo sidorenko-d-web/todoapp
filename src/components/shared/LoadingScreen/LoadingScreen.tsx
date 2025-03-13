@@ -114,13 +114,10 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
     }
   }, []);
 
-<<<<<<< HEAD
-=======
   // useEffect(() => {
   //   localStorage.clear();
   // }, []);
 
->>>>>>> 4b384e9debd01f710b2f626fe703bbabc8a2b55b
   return (
     <>
       <WhiteNoiseCanvas />

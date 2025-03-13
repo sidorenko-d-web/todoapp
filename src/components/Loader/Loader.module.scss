@@ -9,6 +9,10 @@
   width: 100%;
   background-color: var.$color-bg;
 
+  &.transparent{
+    background-color: transparent;
+  }
+
   .hand {
     display: flex;
     justify-content: center;
