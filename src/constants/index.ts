@@ -16,3 +16,4 @@ export * from './influencersUnlockingSteps';
 export * from './mainScene';
 export * from './integrationStarsThresholds'
 export * from './polling'
+export * from './users'
