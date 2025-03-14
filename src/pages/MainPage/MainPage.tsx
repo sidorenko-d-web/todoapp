@@ -110,15 +110,14 @@ export const MainPage: FC = () => {
 
         setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
-
         reduxDispatch(resetGuideState());
 
         reduxDispatch(setFooterActive(true));
         reduxDispatch(setActiveFooterItemId(2));
       } else {
         if (data?.integrations[0].status === 'published'
-            && !getModalState(MODALS.INTEGRATION_REWARD).isOpen
-            && localStorage.getItem('integrationCreatedGuideOpen') !== '1') {
+          && !getModalState(MODALS.INTEGRATION_REWARD).isOpen
+          && localStorage.getItem('integrationCreatedGuideOpen') !== '1') {
 
           setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
@@ -131,13 +130,6 @@ export const MainPage: FC = () => {
           setGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED);
 
           setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
-
-          setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
-
-          setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
-
-          setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
 
           reduxDispatch(resetGuideState());
@@ -286,89 +278,89 @@ export const MainPage: FC = () => {
 
   return (
     <main className={s.page} onClick={accelerateIntegration}>
-      <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
-      {integrationCurrentlyCreating && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '0',
-            zIndex: '15000',
-            height: '70%',
-            width: '100%',
-            backgroundColor: 'transparent',
-          }}
-          onClick={accelerateIntegration}
-        />
-      )}
-
-      <Room mode="me" />
-
-      {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
-
-      {(!guideVisibility.firstGuideShown && !isAllIntegrationsLoading && !isInventoryDataLoading) && (
-        <InitialGuide onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)} />
-      )}
-
-      {(!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown) && (
-        <SubscrieGuide
-          onClose={() => {
-            handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
-            openModal(MODALS.SUBSCRIBE);
-            reduxDispatch(setSubscribeGuideShown(false));
-          }}
-          top="50%"
-          zIndex={12500}
-          description={
-            <>
-              {t('g11')}
-              <br />
-              <br />
-              {t('g12')} <span style={{ color: '#2F80ED' }}>{t('g13')}</span>!
-            </>
-          }
-        />
-      )}
-
-      {(!isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) && isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) && (
-        <GetCoinsGuide
-          onClose={() => {
-            reduxDispatch(setGetCoinsGuideShown(true));
-            setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-            handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-            openModal(MODALS.SUBSCRIBE);
-          }}
-        />
-      )}
-
-      {(integrationCurrentlyCreating && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) && (
-        <AccelerateIntegtrationGuide
-          onClose={() => {
-            setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
-            reduxDispatch(setAccelerateIntegrationGuideClosed(true));
-          }}
-        />
-      )}
-
-      {(isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) && (
-        <IntegrationCreatedGuide
-          onClose={() => {
-            setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-            handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-            navigate(AppRoute.Integration.replace(':integrationId', integrationId));
-          }}
-        />
-      )}
-
-      {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (
-          <FinishTutorialGuide
-            onClose={() => setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)}
+        <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
+        {integrationCurrentlyCreating && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '0',
+              zIndex: '15000',
+              height: '70%',
+              width: '100%',
+              backgroundColor: 'transparent',
+            }}
+            onClick={accelerateIntegration}
           />
         )}
 
-      <RewardForIntegrationModal />
-      {/* Награда с указанием медали и количества интеграций с определенной компанией */}
-      <IntegrationRewardModal />
-    </main>
+        <Room mode="me" />
+
+        {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
+
+        {(!guideVisibility.firstGuideShown && !isAllIntegrationsLoading && !isInventoryDataLoading) && (
+          <InitialGuide onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)} />
+        )}
+
+        {(!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown) && (
+          <SubscrieGuide
+            onClose={() => {
+              handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+              openModal(MODALS.SUBSCRIBE);
+              reduxDispatch(setSubscribeGuideShown(false));
+            }}
+            top="50%"
+            zIndex={12500}
+            description={
+              <>
+                {t('g11')}
+                <br />
+                <br />
+                {t('g12')} <span style={{ color: '#2F80ED' }}>{t('g13')}</span>!
+              </>
+            }
+          />
+        )}
+
+        {(!isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) && isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) && (
+          <GetCoinsGuide
+            onClose={() => {
+              reduxDispatch(setGetCoinsGuideShown(true));
+              setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+              handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+              openModal(MODALS.SUBSCRIBE);
+            }}
+          />
+        )}
+
+        {(integrationCurrentlyCreating && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) && (
+          <AccelerateIntegtrationGuide
+            onClose={() => {
+              setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+              reduxDispatch(setAccelerateIntegrationGuideClosed(true));
+            }}
+          />
+        )}
+
+        {(isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) && (
+          <IntegrationCreatedGuide
+            onClose={() => {
+              setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              navigate(AppRoute.Integration.replace(':integrationId', integrationId));
+            }}
+          />
+        )}
+
+        {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+          !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (
+            <FinishTutorialGuide
+              onClose={() => setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)}
+            />
+          )}
+
+        <RewardForIntegrationModal />
+        {/* Награда с указанием медали и количества интеграций с определенной компанией */}
+        <IntegrationRewardModal />
+      </main>
   );
 };

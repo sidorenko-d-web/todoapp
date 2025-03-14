@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 // import lightningIcon from '../../../assets/icons/lightning.svg';
 import {
@@ -129,13 +129,13 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   const buttonGlowing = integrationCreatingModalButtonGlowing();
 
-  const [firstGuideClosed, setFirstGuideClosed] = useState(false);
+  //const [firstGuideClosed, setFirstGuideClosed] = useState(false);
 
-  useEffect(() => {
-    if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) {
-      setFirstGuideClosed(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) {
+  //     setFirstGuideClosed(true);
+  //   }
+  // }, []);
 
 
   return (
@@ -236,7 +236,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         </div>
       }
 
-      {(!firstGuideClosed && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) && <CreatingIntegrationGuide
+      {/* {(!firstGuideClosed && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) && <CreatingIntegrationGuide
         onClose={() => {
           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
           setFirstGuideClosed(true);
@@ -252,9 +252,10 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         }
         align="left"
         top="9%"
-      />}
-      {(firstGuideClosed && !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)) && <CreatingIntegrationGuide
+      />} */}
+      {(!isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)) && <CreatingIntegrationGuide
         onClose={() => {
+          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
           onClose();
           navigate(AppRoute.Shop);
@@ -269,7 +270,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           </>
         }
         align="left"
-        top="22%"
+        top="65%"
       />}
 
     </CentralModal>

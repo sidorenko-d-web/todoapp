@@ -23,7 +23,7 @@ export const InitialGuide: React.FC<InitialGuideProps> = ({onClose}) => {
         
         <Guide align="left"
             zIndex={11110}
-            top={'35%'}
+            top={'39%'}
             description={t('g31')}
             onClose={onClose}>
             <button className={styles.nextBtn} onClick={handleClose}>{t('g4')}</button>
