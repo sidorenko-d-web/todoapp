@@ -64,6 +64,10 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   });
   const companies = data?.campaigns;
 
+  const integrationPublished = isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+
+
+
   const loadingTexts = [
     t("i35"),
     t("i36"),
@@ -183,18 +187,19 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
             {!noItemsMessage ? (
               <div className={s.companies}>
-                {companies?.map((company) =>
-                  company.growth_tree_stage !== 100 && (
-                    <CompanyCard
-                      key={company.id}
-                      company={company}
-                      selected={selectedCompanyId === company.id}
-                      disabled={hasCreatingIntegration || isSubmitting || (selectedCompanyId !== "" && selectedCompanyId !== company.id)}
-                      onClick={() => setSelectedCompanyId(company.id)
-                      }
-                    />
-                  ),
-                )}
+                {companies
+                  ?.filter((_, index) => integrationPublished || index === 1) 
+                  .map((company) =>
+                    company.growth_tree_stage !== 100 && (
+                      <CompanyCard
+                        key={company.id}
+                        company={company}
+                        selected={selectedCompanyId === company.id}
+                        disabled={hasCreatingIntegration || isSubmitting || (selectedCompanyId !== "" && selectedCompanyId !== company.id)}
+                        onClick={() => setSelectedCompanyId(company.id)}
+                      />
+                    )
+                  )}
               </div>
             ) : (
               <span className={s.message}>{noItemsMessage}</span>
