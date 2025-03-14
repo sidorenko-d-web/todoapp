@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import { svgHeadersString } from '../../constants';
 import { SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { WardrobeSpineScene } from '../../constants/wardrobeAnimation';
+import WhiteNoiseCanvas from '../../components/WhiteNoise/WhiteNoise';
 
 interface SkinSetupPageProps {
   onContinue: () => void;
@@ -100,7 +101,7 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
   };
 
   useEffect(() => {
-    if (!sceneRef.current || isLoading) return; 
+    if (!sceneRef.current || isLoading) return;
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
       width: 280,
@@ -150,55 +151,57 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
   });
 
   return (
-    <div className={styles.root}>
-      <div className={styles.skinControls}>
-        <div className={styles.avatarSection}>
-          <div className={styles.avatarPreview}>
-            <img src={wardrobeBg} alt="bg" />
-            <div
-              id={'player1'}
-              ref={sceneRef}
-              style={{ position: 'absolute', top: 0, borderRadius: 8, overflow: 'hidden', width: 280, height: 280 }}
-            />
-            {!isLoaded && (
-              <div className={styles.loader}>
-                <p>Loading</p>
-              </div>
-            )}
+    <>
+      <WhiteNoiseCanvas/>
+      <div className={styles.root}>
+        <div className={styles.skinControls}>
+          <div className={styles.avatarSection}>
+            <div className={styles.avatarPreview}>
+              <img src={wardrobeBg} alt="bg" />
+              <div
+                id={'player1'}
+                ref={sceneRef}
+                style={{ position: 'absolute', top: 0, borderRadius: 8, overflow: 'hidden', width: 280, height: 280 }}
+              />
+              {!isLoaded && (
+                <div className={styles.loader}>
+                  <p>Loading</p>
+                </div>
+              )}
+            </div>
+            <div className={styles.bodyPartsContainer}>
+              {categories.map(({ name, key }) => (
+                <Button
+                  key={key}
+                  className={`${styles.tab} ${activeTab === key ? styles.activeTab : ''} ${key === 'entire_body' && activeTab !== key ? styles.vipTab : ''
+                    }`}
+                  onClick={() => setActiveTab(key)}
+                >
+                  {name}
+                </Button>
+              ))}
+            </div>
           </div>
-          <div className={styles.bodyPartsContainer}>
-            {categories.map(({ name, key }) => (
+          <div className={styles.skinOptionsGrid}>
+            {categorizedSkins[activeTab as keyof CategorizedSkins]?.map(skin => (
               <Button
-                key={key}
-                className={`${styles.tab} ${activeTab === key ? styles.activeTab : ''} ${
-                  key === 'entire_body' && activeTab !== key ? styles.vipTab : ''
-                }`}
-                onClick={() => setActiveTab(key)}
+                key={skin.id}
+                onClick={() => handleSelectSkin(skin)}
+                className={clsx(
+                  styles.option,
+                  character?.skins.map(item => item.id).includes(skin.id) && styles.selected,
+                )}
               >
-                {name}
+                <img src={skin.image_url + svgHeadersString || skinPlaceholder} />
               </Button>
             ))}
           </div>
         </div>
-        <div className={styles.skinOptionsGrid}>
-          {categorizedSkins[activeTab as keyof CategorizedSkins]?.map(skin => (
-            <Button
-              key={skin.id}
-              onClick={() => handleSelectSkin(skin)}
-              className={clsx(
-                styles.option,
-                character?.skins.map(item => item.id).includes(skin.id) && styles.selected,
-              )}
-            >
-              <img src={skin.image_url + svgHeadersString || skinPlaceholder} />
-            </Button>
-          ))}
-        </div>
+        <Button className={styles.continueButton} onClick={onContinue}>
+          {t('w7')}
+        </Button>
+        <div className={styles.selectText}>{t('s35')}</div>
       </div>
-      <Button className={styles.continueButton} onClick={onContinue}>
-        {t('w7')}
-      </Button>
-      <div className={styles.selectText}>{t('s35')}</div>
-    </div>
+    </>
   );
 };
