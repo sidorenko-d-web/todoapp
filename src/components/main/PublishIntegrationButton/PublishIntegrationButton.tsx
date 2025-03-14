@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import integrationIcon from '../../../assets/icons/integration.svg';
-import { useAccelerateIntegration, useModal } from '../../../hooks';
+import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants/modals.ts';
 import { RootState, useClaimRewardForIntegrationMutation, useGetAllIntegrationsQuery, useGetIntegrationQuery, useGetIntegrationsQuery, usePublishIntegrationMutation } from '../../../redux';
 import { useDispatch, useSelector } from 'react-redux';
@@ -90,13 +90,12 @@ export const PublishIntegrationButton: React.FC = () => {
         const rewardRes = await claimRewardForIntegration(integrationIdToPublish);
 
         if (!rewardRes.error) {
-          const { company_name, image_url } = publishRes.data.campaign;
+          const company = publishRes.data.campaign;
           const { base_income, base_views, base_subscribers } = publishRes.data;
 
           console.log('Opening first modal: INTEGRATION_REWARD');
           openModal(MODALS.INTEGRATION_REWARD, {
-            company_name,
-            image_url,
+            company,
             base_income,
             base_views,
             base_subscribers
