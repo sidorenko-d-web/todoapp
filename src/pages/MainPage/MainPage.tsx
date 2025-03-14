@@ -214,6 +214,7 @@ export const MainPage: FC = () => {
 
     if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
       && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && !purchasingSubscriptionModalState.isOpen) {
+        console.log('subscr case 1')
       openModal(MODALS.SUBSCRIBE);
     }
 
@@ -226,7 +227,9 @@ export const MainPage: FC = () => {
       isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
       !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
       !getSubscriptionPurchased()
+      && data?.count === 0
     ) {
+      console.log('subscr case 2')
       openModal(MODALS.SUBSCRIBE);
     }
 
@@ -310,6 +313,7 @@ export const MainPage: FC = () => {
       {(!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown) && (
         <SubscrieGuide
           onClose={() => {
+            console.log('asdasdfsdgm,. hjmniklo;.cxv')
             handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
             openModal(MODALS.SUBSCRIBE);
             reduxDispatch(setSubscribeGuideShown(false));

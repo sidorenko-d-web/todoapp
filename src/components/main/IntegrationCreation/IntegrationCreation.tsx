@@ -26,7 +26,7 @@ export const IntegrationCreation = () => {
   const { openModal, closeModal } = useModal();
 
   const handleIntegrationCreation = () => {
-    openModal(MODALS.SUBSCRIBE);
+    //openModal(MODALS.SUBSCRIBE);
     if (!profile) return;
 
     if (profile?.subscription_integrations_left <= 0) {
