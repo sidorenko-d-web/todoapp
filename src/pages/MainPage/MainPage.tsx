@@ -344,15 +344,17 @@ export const MainPage: FC = () => {
       {true && (
         <InitialGuide onClose={() => {
           console.log('closing init guide');
-          
+          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+          setRerender(1);
           handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
         }} />
       )}
 
-      {(!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown) && (
+      {true && (
         <SubscrieGuide
           onClose={() => {
             console.log('asdasdfsdgm,. hjmniklo;.cxv')
+            setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
             handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
             openModal(MODALS.SUBSCRIBE);
             reduxDispatch(setSubscribeGuideShown(false));
