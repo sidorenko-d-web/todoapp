@@ -344,7 +344,7 @@ export const MainPage: FC = () => {
       {true && (
         <InitialGuide onClose={() => {
           console.log('closing init guide');
-          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)
+          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
           setRerender(1);
           handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
         }} />
