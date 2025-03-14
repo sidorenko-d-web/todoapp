@@ -58,38 +58,45 @@ export const MainPage: FC = () => {
 
 
   useEffect(() => {
-    itemsData?.items.forEach(item => {
-      if (item.name.toLowerCase().trim() === 'печатная машинка') {
-
-        setTypewriterFound(true);
-
-        handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
-        handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
-
-        setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
-        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
-
-        setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
-        setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
-
-        reduxDispatch(resetGuideState());
-      }
-    })
-
-    if (!typewriterFound) {
-      Object.entries(GUIDE_ITEMS).forEach(([page, items]) => {
-        console.log(`Page: ${page}`);
-        Object.entries(items).forEach(([_, value]) => {
-          localStorage.setItem(value, '0');
-        });
+    if (itemsData && !isInventoryDataLoading) {
+      let found = false;
+  
+      itemsData.items.forEach(item => {
+        if (item.name.toLowerCase().trim() === 'печатная машинка') {
+          console.log('typewriter found!!');
+          setTypewriterFound(true);
+          found = true;
+  
+          handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+          handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+  
+          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
+  
+          setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
+          setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+  
+          reduxDispatch(resetGuideState());
+        }
       });
+  
+      if (!found) {
+        console.log('typewriter not found!');
+        Object.entries(GUIDE_ITEMS).forEach(([page, items]) => {
+          console.log(`Page: ${page}`);
+          Object.entries(items).forEach(([_, value]) => {
+            console.log('value...');
+            localStorage.setItem(value, '0');
+          });
+        });
+      }
     }
   }, [itemsData, isInventoryDataLoading, typewriterFound]);
 
@@ -361,8 +368,8 @@ export const MainPage: FC = () => {
         />
       )}
 
-      {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (
+      {(isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+        !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) && (
           <FinishTutorialGuide
             onClose={() => setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)}
           />
