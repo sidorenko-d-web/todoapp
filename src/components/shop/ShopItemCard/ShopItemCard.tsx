@@ -32,9 +32,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   // for transactions
   const { sendUSDT } = useSendTransaction();
   const usdtTransactions = useUsdtTransactions();
-  const [currentTrxId, setCurrentTrxId] = useState("")
-
-
+  const [currentTrxId, setCurrentTrxId] = useState('');
 
   const userPoints = data?.points || 0;
   const handleBuyItem = async () => {
@@ -52,7 +50,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   };
 
   // for transactions
-  const {walletAddress, connectWallet} = useTonConnect()
+  const { walletAddress, connectWallet } = useTonConnect();
   const { startTransaction, failTransaction, completeTransaction } = useTransactionNotification();
   const handleUsdtPayment = async () => {
     if (!walletAddress) {
@@ -60,7 +58,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       return;
     }
 
-    openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' })
+    openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
 
     try {
       setError('');
@@ -68,14 +66,14 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       const trxId = await sendUSDT(Number(item.price_usdt));
       setCurrentTrxId(trxId || '');
     } catch (error) {
-      console.log("Error while sending USDT transaction", error)
+      console.log('Error while sending USDT transaction', error);
       failTransaction(handleUsdtPayment);
     }
   };
 
   useEffect(() => {
     const latestTransaction = usdtTransactions[0];
-    console.log("Transactions", latestTransaction)
+    console.log('Transactions', latestTransaction);
 
     if (!latestTransaction || latestTransaction.orderId !== currentTrxId) return;
 
@@ -86,20 +84,17 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     }
   }, [usdtTransactions, currentTrxId]);
 
-
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.storeCard}>
       <div className={styles.header}>
         <div className={clsx(styles.image)}>
-          <img src={item.image_url + svgHeadersString} />
+          <img src={item.image_url.replace('https://', 'https://storage.yandexcloud.net/') + svgHeadersString} />
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>
-            <h3>
-              {locale === 'ru' ? item.name : item.name_eng}
-            </h3>
+            <h3>{locale === 'ru' ? item.name : item.name_eng}</h3>
           </div>
           <p
             className={
@@ -154,7 +149,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
             onClick={handleBuyItem}
             className={clsx(
               Number(userPoints) < Number(item.price_internal) ? styles.disabledButton : '',
-              buyButtonGlowing && item.name.toLowerCase().trim().includes('печатная машинка') ? styles.glowingBtn : ''
+              buyButtonGlowing && item.name.toLowerCase().trim().includes('печатная машинка') ? styles.glowingBtn : '',
             )}
           >
             {isLoading ? (

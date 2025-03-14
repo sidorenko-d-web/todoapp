@@ -26,5 +26,9 @@ export const performSignIn = async (signIn: Function) => {
 
   // Еще акк для тестов 6983657401
   // const init_data = 'query_id=AAG5J0IgAwAAALknQiCiASHP&user=%7B%22id%22%3A6983657401%2C%22first_name%22%3A%22InnoSmoke%20%F0%9F%98%B6%E2%80%8D%F0%9F%8C%AB%EF%B8%8F%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22InnoSmokeAdmin%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FG6IL84jx2cu6pK5znAc4_zNQ5CGiot09A_OopubxolzjbRKMfYmY1sGiP59VL6Cl.svg%22%7D&auth_date=1741741025&signature=WW6o6BrJ3DNhab8frU8-XIc_otCfKD3xWhLVFKt0XBwSRv4J5pexx-fVRE3jzk560Ie5VW10XN9nmrKPp-3fAQ&hash=8ca00869d453dc6cedffd8a2cd527f2fb3dfe05aa5a28d3b14bb32fa129aa6db'
+
+  //Дмитрий 
+  // const init_data = 'query_id=AAEVZgYoAwAAABVmBihdMq7a&user=%7B%22id%22%3A7113958933%2C%22first_name%22%3A%22%D0%94%D0%BC%D0%B8%D1%82%D1%80%D0%B8%D0%B9%22%2C%22last_name%22%3A%22%D0%A1%D0%B8%D0%B4%D0%BE%D1%80%D0%B5%D0%BD%D0%BA%D0%BE%22%2C%22username%22%3A%22dm1trysidorenko%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FlNf1XkHWreKgWszEAkIC2e7JIdfHmoLxyGKt0kODWIy8iXx4pJuhDZrQ8Xb4BJeU.svg%22%7D&auth_date=1741958671&signature=hE7B0MB41j4Bzx3BovD9OSA8rBrtE2fKckvzYIfdt6SMqWb-c-oJkMp434hu3rx3ePvNWSC35nlrGaoekkFGDw&hash=aee1d7c2c74cd08795ae7e6ed5de5b996099e20851b1705bbe0c1cb95fda7fcc';
+
   return signIn({ init_data }).unwrap();
 };
