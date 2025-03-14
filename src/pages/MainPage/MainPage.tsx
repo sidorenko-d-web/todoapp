@@ -47,14 +47,27 @@ export const MainPage: FC = () => {
   const { getModalState, openModal, closeModal } = useModal();
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
-  const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
+  const { data, refetch, isLoading: isAllIntegrationsLoading, isError: isIntegrationsError} = useGetAllIntegrationsQuery();
 
 
   const [typewriterFound, setTypewriterFound] = useState(false);
 
-  const { data: itemsData, isLoading: isInventoryDataLoading } = useGetInventoryItemsQuery();
+  const { data: itemsData, isLoading: isInventoryDataLoading, isError: isInventoryFetchError } = useGetInventoryItemsQuery();
 
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+
+  useEffect(() => {
+    setTypewriterFound(false);
+    if(isIntegrationsError || isInventoryFetchError) {
+      Object.entries(GUIDE_ITEMS).forEach(([_, items]) => {
+        Object.entries(items).forEach(([_, value]) => {
+          localStorage.setItem(value, '0');
+          setGuideNotShown(value);
+        });
+      });
+      setTypewriterFound(false);
+    } 
+  }, [isIntegrationsError, isInventoryFetchError, isAllIntegrationsLoading, isInventoryDataLoading]);
 
 
   useEffect(() => {
@@ -94,6 +107,7 @@ export const MainPage: FC = () => {
           Object.entries(items).forEach(([_, value]) => {
             console.log('value...');
             localStorage.setItem(value, '0');
+            setGuideNotShown(value);
           });
         });
       }
@@ -196,6 +210,9 @@ export const MainPage: FC = () => {
       case 'SET_GUIDE_SHOWN':
         setGuideShown(action.payload);
         return { ...state, [action.payload]: true };
+      case 'SET_GUIDE_NOT_SHOWN':
+        localStorage.setItem(action.payload, '0');
+        return { ...state, [action.payload]: true };
       default:
         return state;
     }
@@ -209,6 +226,10 @@ export const MainPage: FC = () => {
   const handleGuideClose = (guideId: string) => {
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
+
+  const setGuideNotShown = (guideId: string) => {
+    dispatch({type: 'SET_GUIDE_NOT_SHOWN', payload: guideId});
+  }
 
   useEffect(() => {
     if (creatingIntegrationModalState.isOpen) {
