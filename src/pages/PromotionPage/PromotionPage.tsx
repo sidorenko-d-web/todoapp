@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
 import { DevelopmentPlan, IncreaseIncome, Loader, TopInfluencers } from '../../components';
 
@@ -61,7 +61,8 @@ export const PromotionPage: React.FC = () => {
             <div className={s.badges}>
               {/*<span className={s.badge}>{`#${position}`} <img src={clanRed} alt={'income'} /></span>*/}
               <span className={s.badge}>
-                +{formatAbbreviation(1, 'number', { locale: locale })} <img src={subscribersIcon} alt={'subscribers'} />
+                +{formatAbbreviation(userProfileData.subscribers, 'number', { locale: locale })}{' '}
+                <img src={subscribersIcon} alt={'subscribers'} />
               </span>
             </div>
 

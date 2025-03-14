@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from './InitialGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
@@ -12,7 +12,13 @@ export const InitialGuide: React.FC<InitialGuideProps> = ({onClose}) => {
     const { t } = useTranslation('guide');
     const [isOpen, setIsOpen] = useState(true);
 
+    useEffect(() => {
+        console.log('INITIAL GUIDE OPEN')
+    }, []);
+
+
     const handleClose = () => {
+        console.log('INITIAL GUIDE CLOSE')
         onClose();
         setIsOpen(false);
     };
