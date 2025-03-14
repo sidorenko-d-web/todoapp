@@ -47,20 +47,35 @@ export const MainPage: FC = () => {
   const { getModalState, openModal, closeModal } = useModal();
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
-  const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
+  const { data, refetch, isLoading: isAllIntegrationsLoading, isError: isIntegrationsError} = useGetAllIntegrationsQuery();
 
 
   const [typewriterFound, setTypewriterFound] = useState(false);
 
-  const { data: itemsData, isLoading: isInventoryDataLoading } = useGetInventoryItemsQuery();
+  const { data: itemsData, isLoading: isInventoryDataLoading, isError: isInventoryFetchError } = useGetInventoryItemsQuery();
 
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+
+  useEffect(() => {
+    console.log('setting guides to 0: case 1');
+    setTypewriterFound(false);
+    if(isIntegrationsError || isInventoryFetchError) {
+      Object.entries(GUIDE_ITEMS).forEach(([_, items]) => {
+        Object.entries(items).forEach(([_, value]) => {
+          localStorage.setItem(value, '0');
+          setGuideNotShown(value);
+        });
+      });
+      setTypewriterFound(false);
+    } 
+  }, [isIntegrationsError, isInventoryFetchError, isAllIntegrationsLoading, isInventoryDataLoading]);
 
 
   useEffect(() => {
     if (itemsData && !isInventoryDataLoading) {
       let found = false;
   
+      console.log('setting guides to 1: case 1');
       itemsData.items.forEach(item => {
         if (item.name.toLowerCase().trim() === 'печатная машинка') {
           console.log('typewriter found!!');
@@ -88,12 +103,14 @@ export const MainPage: FC = () => {
       });
   
       if (!found) {
+        console.log('setting guides to 0: case 2');
         console.log('typewriter not found!');
         Object.entries(GUIDE_ITEMS).forEach(([page, items]) => {
           console.log(`Page: ${page}`);
           Object.entries(items).forEach(([_, value]) => {
             console.log('value...');
             localStorage.setItem(value, '0');
+            setGuideNotShown(value);
           });
         });
       }
@@ -103,6 +120,7 @@ export const MainPage: FC = () => {
 
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
+      console.log('setting guides to 1: case 2');
       if (data?.count > 1) {
         setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
@@ -131,6 +149,8 @@ export const MainPage: FC = () => {
         if (data?.integrations[0].status === 'published'
           && !getModalState(MODALS.INTEGRATION_REWARD).isOpen
           && localStorage.getItem('integrationCreatedGuideOpen') !== '1') {
+
+            console.log('setting guides to 1: case 3');
 
           setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
@@ -196,6 +216,9 @@ export const MainPage: FC = () => {
       case 'SET_GUIDE_SHOWN':
         setGuideShown(action.payload);
         return { ...state, [action.payload]: true };
+      case 'SET_GUIDE_NOT_SHOWN':
+        localStorage.setItem(action.payload, '0');
+        return { ...state, [action.payload]: true };
       default:
         return state;
     }
@@ -209,6 +232,10 @@ export const MainPage: FC = () => {
   const handleGuideClose = (guideId: string) => {
     dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
   };
+
+  const setGuideNotShown = (guideId: string) => {
+    dispatch({type: 'SET_GUIDE_NOT_SHOWN', payload: guideId});
+  }
 
   useEffect(() => {
     if (creatingIntegrationModalState.isOpen) {
