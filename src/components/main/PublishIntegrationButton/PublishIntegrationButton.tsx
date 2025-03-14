@@ -17,7 +17,7 @@ import { starsThresholds } from '../../../constants/integrationStarsThresholds.t
 export const PublishIntegrationButton: React.FC = () => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
-  const { openModal} = useModal();
+  const { openModal } = useModal();
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed)
 
   const [publishIntegration] = usePublishIntegrationMutation();
@@ -36,7 +36,7 @@ export const PublishIntegrationButton: React.FC = () => {
   })
 
   const imageUrl = getIntegrationRewardImageUrl(
-    integrationData?.campaign.company_name ?? "", 
+    integrationData?.campaign.company_name ?? "",
     getCompanyStars(companyData?.count ?? 0)
   )
 
@@ -48,8 +48,8 @@ export const PublishIntegrationButton: React.FC = () => {
       image_url: imageUrl
     });
   };
-  
-  const canShowIntegrationReward = function() {
+
+  const canShowIntegrationReward = function () {
     if (companyData?.count === starsThresholds.firstStar) {
       return true;
     }
@@ -90,27 +90,16 @@ export const PublishIntegrationButton: React.FC = () => {
         const rewardRes = await claimRewardForIntegration(integrationIdToPublish);
 
         if (!rewardRes.error) {
-          const { company_name, image_url } = publishRes.data.campaign;
+          const company = publishRes.data.campaign;
           const { base_income, base_views, base_subscribers } = publishRes.data;
-  
+
           console.log('Opening first modal: INTEGRATION_REWARD');
-          openModal(MODALS.INTEGRATION_REWARD, { 
-            company_name, 
-            image_url, 
-            base_income, 
-            base_views, 
+          openModal(MODALS.INTEGRATION_REWARD, {
+            company,
+            base_income,
+            base_views,
             base_subscribers
           });
-          console.error("Data for integration congrats: ", 
-            integrationData?.campaign.company_name,
-            companyData?.count,
-            getIntegrationRewardImageUrl(
-              integrationData?.campaign.company_name ?? "", 
-              getCompanyStars(companyData?.count ?? 0)
-            ),
-            "Can open modal: ", canShowIntegrationReward
-          )
-
         } else {
           console.error('Failed to claim reward:', rewardRes.error);
           // If reward claim fails, open congratulations modal directly
@@ -128,11 +117,11 @@ export const PublishIntegrationButton: React.FC = () => {
       setIsPublishing(false);
     }
   };
-    
+
   return (
     <section className={s.integrationsControls} onClick={handlePublish}>
       <button className={`${s.button}`} disabled={isPublishing}>
-        {t('i25')}
+        {isPublishing ? t('i40') : t('i25')}
         <span className={s.buttonBadge}>
           {t('i26')}
           <img src={integrationIcon} height={12} width={12} alt="integration" />

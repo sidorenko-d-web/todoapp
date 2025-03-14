@@ -19,7 +19,12 @@ interface CompanyCardProps {
 
 const glowing = !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
-export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, disabled }) => {
+export const CompanyCard: FC<CompanyCardProps> = ({ 
+  company, 
+  selected, 
+  onClick, 
+  disabled,
+}) => {
   const { data: integrationsData } = useGetIntegrationsQuery({ company_name: company.company_name });
   const integrationCount = integrationsData?.count ?? 0;
 
@@ -55,21 +60,10 @@ export const CompanyCard: FC<CompanyCardProps> = ({ company, selected, onClick, 
 
   return (
     <Button
-      className={
-        s.card +
-        ' ' +
-        (selected ? ` ${s.selected}` : '') +
-        ' ' +
-        (disabled ? ` ${s.disabled}` : '') +
-        ' ' +
-        (glowing ? `${s.glowing}` : '')
-      }
+      className={`${s.card} ${selected ? s.selected : ''} ${disabled ? s.disabled : ''} ${glowing ? s.glowing : ''}`}
       onClick={() => onClick && !disabled && onClick(company.id)}
     >
-      <header className={s.header}>
-        {/* <div className={s.icon}>
-          <img src={lightningIcon} alt="Lightning" />
-        </div> */}
+        <header className={s.header}>
         <img
           src={company.image_url || getCompanyLogo(company.company_name) || integrationBlueIcon}
           alt="Company Logo"
