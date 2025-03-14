@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 // import lightningIcon from '../../../assets/icons/lightning.svg';
 import {
