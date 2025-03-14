@@ -9,6 +9,7 @@ interface GuideProps {
     top?: number | string;
     onClose: () => void;
     dimBackground?: boolean;
+    noButton?: boolean;
 }
 
 export const Guide = ({ 
@@ -18,22 +19,25 @@ export const Guide = ({
     zIndex, 
     top, 
     onClose, 
-    dimBackground = true 
+    dimBackground = true ,
+    noButton = false,
 }: GuideProps) => {
     const contentRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (contentRef.current && !contentRef.current.contains(event.target as Node)) {
-                onClose();
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
+        if(noButton) {
+            const handleClickOutside = (event: MouseEvent) => {
+                if (contentRef.current && !contentRef.current.contains(event.target as Node)) {
+                    onClose();
+                }
+            };
+    
+            document.addEventListener('mousedown', handleClickOutside);
+    
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }
     }, [onClose]);
 
     return (

@@ -129,6 +129,7 @@ export const ProfilePage: React.FC = () => {
 
           <div className={styles.info}>
             <ProfileInfo
+              showTreeLink
               nickname={userProfileData.username}
               blogName={userProfileData.blog_name}
               subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left}

@@ -7,7 +7,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import userIcon from '../../../assets/icons/user.svg';
 import fireIcon from '../../../assets/icons/fire.svg';
 import infoIcon from '../../../assets/icons/info.svg';
-import homeStroke from '../../../assets/icons/home-stroke.svg';
 
 export const StrangerHeader = () => {
   const { data } = useGetPushLineQuery();
@@ -59,7 +58,7 @@ export const StrangerHeader = () => {
         onClick={() => navigate(isRoom ? '/profile/' + profileId : '/profile/' + profileId + '/room')}
       >
         {/*{profile.vip ? <img src={chest} height={20} width={20} alt="chest" /> :*/}
-        <img src={isRoom ? infoIcon : homeStroke} alt="close" width={20} height={20} />
+        <img src={infoIcon}  alt="close" width={20} height={20} />
         {/*}*/}
       </Button>
     </div>

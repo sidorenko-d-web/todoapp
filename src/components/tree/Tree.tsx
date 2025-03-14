@@ -38,27 +38,27 @@ const shopUpgrades: ShopUpgrades = {
 export const Tree = () => {
   const { openModal } = useModal();
   const { t, i18n } = useTranslation('tree');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData, refetch } = useGetTreeInfoQuery();
   const { data: userProfileData } = useGetProfileMeQuery();
   const lastActiveLevelRef = useRef<HTMLDivElement | null>(null);
-  const [currentBoost, setCurrentBoost] = useState<Boost | null>(null);
+  const [ currentBoost, setCurrentBoost ] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
 
   const userSubscribers = userProfileData?.subscribers || 0;
 
   const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const [unlockAchievement] = useUnlockAchievementMutation();
+  const [ unlockAchievement ] = useUnlockAchievementMutation();
 
   const { progressPercent } = useTreeProgress({
     treeData,
     userSubscribers,
   });
 
-  console.log('progress percent: ', progressPercent);
   useEffect(() => {
     if (treeData && userProfileData && lastActiveLevelRef.current) {
+      console.log('trying to scroll');
       // Добавляем небольшую задержку для плавной прокрутки
       setTimeout(() => {
         lastActiveLevelRef.current?.scrollIntoView({
@@ -67,7 +67,7 @@ export const Tree = () => {
         });
       }, 100); // Задержка в 100 мс
     }
-  }, [progressPercent]);
+  }, [ progressPercent, treeData, userProfileData ]);
 
   if (!treeData || !isBgLoaded || !userProfileData) {
     return <Loader />;
@@ -98,8 +98,8 @@ export const Tree = () => {
             const isActive = userProfileData && stage.id <= userProfileData.growth_tree_stage_id;
             const bottomPosition = 150 + index * 300;
 
-            const giftColors = [giftBlue, giftPurple, giftRed];
-            const spinnerColors = [spinnerBlue, spinnerPurple, spinnerRed];
+            const giftColors = [ giftBlue, giftPurple, giftRed ];
+            const spinnerColors = [ spinnerBlue, spinnerPurple, spinnerRed ];
 
             const giftIcon = giftColors[index % giftColors.length];
             const spinnerIcon = spinnerColors[index % spinnerColors.length];

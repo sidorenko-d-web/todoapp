@@ -1,4 +1,4 @@
-import { FC, useEffect, useReducer } from 'react';
+import { FC, useEffect, useReducer, useState } from 'react';
 import {
   AccelerateIntegtrationGuide,
   FinishTutorialGuide,
@@ -50,42 +50,55 @@ export const MainPage: FC = () => {
   const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
 
 
+  const [typewriterFound, setTypewriterFound] = useState(false);
+
   const { data: itemsData, isLoading: isInventoryDataLoading } = useGetInventoryItemsQuery();
 
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
-  useEffect(() => {
-    window.Telegram.WebApp.setHeaderColor('#55ff99'); // Непрозрачный при открытии экрана
-
-    return () => {
-      window.Telegram.WebApp.setHeaderColor('#112233'); // Возврат прозрачности при выходе
-    };
-  }, []);
 
   useEffect(() => {
-    itemsData?.items.forEach(item => {
-      if (item.name.toLowerCase().trim() === 'печатная машинка') {
-
-        handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
-        handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
-
-        setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
-        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
-
-        setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
-        setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
-
-        reduxDispatch(resetGuideState());
+    if (itemsData && !isInventoryDataLoading) {
+      let found = false;
+  
+      itemsData.items.forEach(item => {
+        if (item.name.toLowerCase().trim() === 'печатная машинка') {
+          console.log('typewriter found!!');
+          setTypewriterFound(true);
+          found = true;
+  
+          handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+          handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+  
+          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
+  
+          setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
+          setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+  
+          reduxDispatch(resetGuideState());
+        }
+      });
+  
+      if (!found) {
+        console.log('typewriter not found!');
+        Object.entries(GUIDE_ITEMS).forEach(([page, items]) => {
+          console.log(`Page: ${page}`);
+          Object.entries(items).forEach(([_, value]) => {
+            console.log('value...');
+            localStorage.setItem(value, '0');
+          });
+        });
       }
-    })
-  }, [itemsData, isInventoryDataLoading]);
+    }
+  }, [itemsData, isInventoryDataLoading, typewriterFound]);
 
 
   useEffect(() => {
@@ -110,15 +123,14 @@ export const MainPage: FC = () => {
 
         setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
-
         reduxDispatch(resetGuideState());
 
         reduxDispatch(setFooterActive(true));
         reduxDispatch(setActiveFooterItemId(2));
       } else {
         if (data?.integrations[0].status === 'published'
-            && !getModalState(MODALS.INTEGRATION_REWARD).isOpen
-            && localStorage.getItem('integrationCreatedGuideOpen') !== '1') {
+          && !getModalState(MODALS.INTEGRATION_REWARD).isOpen
+          && localStorage.getItem('integrationCreatedGuideOpen') !== '1') {
 
           setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
@@ -131,13 +143,6 @@ export const MainPage: FC = () => {
           setGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED);
 
           setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
-
-          setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
-
-          setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
-
-          setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
 
           reduxDispatch(resetGuideState());
@@ -216,6 +221,7 @@ export const MainPage: FC = () => {
 
     if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
       && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && !purchasingSubscriptionModalState.isOpen) {
+        console.log('subscr case 1')
       openModal(MODALS.SUBSCRIBE);
     }
 
@@ -228,7 +234,9 @@ export const MainPage: FC = () => {
       isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
       !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
       !getSubscriptionPurchased()
+      && data?.count === 0
     ) {
+      console.log('subscr case 2')
       openModal(MODALS.SUBSCRIBE);
     }
 
@@ -312,6 +320,7 @@ export const MainPage: FC = () => {
       {(!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown) && (
         <SubscrieGuide
           onClose={() => {
+            console.log('asdasdfsdgm,. hjmniklo;.cxv')
             handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
             openModal(MODALS.SUBSCRIBE);
             reduxDispatch(setSubscribeGuideShown(false));
@@ -359,8 +368,8 @@ export const MainPage: FC = () => {
         />
       )}
 
-      {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (
+      {(isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+        !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) && (
           <FinishTutorialGuide
             onClose={() => setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)}
           />

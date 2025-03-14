@@ -182,7 +182,9 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
                   <img src={SubscriberCoin} />
                   <p>/{t('s12')}.</p>
                 </div>
-                <div className={styles.scoresItem}>
+                <div className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${
+                    statsGlowing ? styles.glowing : ''
+                  }`}>
                   <p>+{formatAbbreviation(boost.income_per_second)}</p>
                   <img src={CoinIcon} />
                   <p>/{t('s13')}.</p>

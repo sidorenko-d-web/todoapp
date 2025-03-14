@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { Loader, TrackedLink } from '../..';
 import { SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { WardrobeSpineScene } from '../../../constants/wardrobeAnimation';
+import clsx from 'clsx';
 
 interface ProfileInfoProps {
   nickname: string;
@@ -25,15 +26,17 @@ interface ProfileInfoProps {
   isVip?: boolean;
   nonEditable?: boolean;
   strangerId?: string;
+  showTreeLink?: boolean;
 }
 
 export const ProfileInfo: React.FC<ProfileInfoProps> = ({
-  nickname,
-  subscriptionIntegrationsLeft,
-  position,
-  isVip,
-  strangerId,
-}) => {
+                                                          nickname,
+                                                          subscriptionIntegrationsLeft,
+                                                          position,
+                                                          isVip,
+                                                          strangerId,
+                                                          showTreeLink,
+                                                        }) => {
   const { t } = useTranslation('profile');
   const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
 
@@ -42,8 +45,8 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
   const gameRef = useRef<Phaser.Game | null>(null);
   const spineSceneRef = useRef<any | null>(null);
 
-  const [size, setSize] = useState([0, 0]);
-  const [isLoading, setLoading] = useState(true);
+  const [ size, setSize ] = useState([ 0, 0 ]);
+  const [ isLoading, setLoading ] = useState(true);
   const { data: character, isLoading: isCharacterLoading } = useGetCharacterQuery(undefined, { skip: !!strangerId });
   const { data: strangerCharacter } = useGetCharacterByIdQuery({ id: strangerId! }, { skip: !strangerId });
 
@@ -51,7 +54,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
 
   useLayoutEffect(() => {
     function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
+      setSize([ window.innerWidth, window.innerHeight ]);
     }
 
     window.addEventListener('resize', updateSize);
@@ -63,6 +66,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
     if (!sceneRef.current || isCharacterLoading) return;
 
     setLoading(true);
+
     class SpineScene extends WardrobeSpineScene {
       create() {
         try {
@@ -71,7 +75,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         } catch (error: any) {
           if (error.message === 'add.spine') {
             console.log('avoid error');
-            setSize(prev => [prev[0] + 1, prev[1]]);
+            setSize(prev => [ prev[0] + 1, prev[1] ]);
           }
         }
         spineSceneRef.current = this;
@@ -85,10 +89,10 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         type: Phaser.AUTO,
         width: 118,
         height: 140,
-        scene: [SpineScene],
+        scene: [ SpineScene ],
         transparent: true,
         plugins: {
-          scene: [{ key: 'SpinePlugin', plugin: SpinePlugin, mapping: 'spine' }],
+          scene: [ { key: 'SpinePlugin', plugin: SpinePlugin, mapping: 'spine' } ],
         },
         parent: 'player',
       };
@@ -105,10 +109,10 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         spineSceneRef.current = null;
       }
     };
-  }, [isCharacterLoading, size]);
+  }, [ isCharacterLoading, size ]);
 
   return (
-    <div className={styles.wrp}>
+    <div className={clsx(styles.wrp, { [styles.showTreeLink]: showTreeLink })}>
       <div className={`${styles.avatar} ${isVip ? styles.vip : ''}`}>
         <div className={styles.avatarImageWrp}>
           <div className={`${styles.clanWrp} ${isVip ? styles.vip : ''}`}>
@@ -174,7 +178,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
           <ProgressLine level={subscriptionIntegrationsLeft} color="blue" />
         </div>
 
-        <TrackedLink
+        {showTreeLink && <TrackedLink
           className={styles.button}
           trackingData={{
             eventType: 'button',
@@ -183,7 +187,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
           to={AppRoute.ProgressTree}
         >
           {t('p23')}
-        </TrackedLink>
+        </TrackedLink>}
       </div>
     </div>
   );

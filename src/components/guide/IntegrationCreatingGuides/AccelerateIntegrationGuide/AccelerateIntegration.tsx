@@ -24,6 +24,7 @@ export const AccelerateIntegtrationGuide: React.FC<AccelerateIntegtrationGuidePr
         <Guide align="right"
             zIndex={11110}
             top={'45%'}
+            noButton={true}
             description= {
                 <>
                   {t('g1')}

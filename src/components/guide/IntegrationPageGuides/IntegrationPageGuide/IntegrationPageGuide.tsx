@@ -22,6 +22,7 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({onClo
     return (
         
         <Guide align="left"
+            noButton={true}
             zIndex={110}
             top={'25%'}
             description= {
