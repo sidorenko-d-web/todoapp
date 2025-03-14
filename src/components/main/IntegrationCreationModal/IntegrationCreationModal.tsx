@@ -213,8 +213,14 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                         key={company.id}
                         company={company}
                         selected={selectedCompanyId === company.id}
-                        disabled={hasCreatingIntegration || isSubmitting || (selectedCompanyId !== "" && selectedCompanyId !== company.id)}
-                        onClick={() => setSelectedCompanyId(company.id)}
+                        disabled={hasCreatingIntegration || isSubmitting}
+                        onClick={() => {
+                          if (selectedCompanyId === company.id) {
+                            setSelectedCompanyId(""); // Deselect if clicking the same card
+                          } else {
+                            setSelectedCompanyId(company.id); // Select new card
+                          }
+                        }}
                       />
                     )
                   )}
