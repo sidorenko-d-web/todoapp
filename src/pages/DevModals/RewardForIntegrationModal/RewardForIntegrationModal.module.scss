@@ -22,6 +22,17 @@
 }
 
 .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  .companyWrp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+  }
 }
 
 .info {
