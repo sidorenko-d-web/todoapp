@@ -340,8 +340,11 @@ export const MainPage: FC = () => {
 
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
-      {(!guideVisibility.firstGuideShown && !isAllIntegrationsLoading && !isInventoryDataLoading) && (
-        <InitialGuide onClose={() => handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)} />
+      {(!guideVisibility.firstGuideShown) && (
+        <InitialGuide onClose={() => {
+          console.log('closing init guide');
+          handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+        }} />
       )}
 
       {(!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown) && (
