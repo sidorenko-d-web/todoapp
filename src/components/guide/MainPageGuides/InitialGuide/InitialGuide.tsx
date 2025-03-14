@@ -19,6 +19,7 @@ export const InitialGuide: React.FC<InitialGuideProps> = ({onClose}) => {
     }, []);
 
     if(isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)) {
+        console.log('INITIAL GUIDE ALREADY SHOWN')
         return null;
     }
 
