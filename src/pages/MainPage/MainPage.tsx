@@ -49,6 +49,7 @@ export const MainPage: FC = () => {
   const reduxDispatch = useDispatch();
   const { data, refetch, isLoading: isAllIntegrationsLoading, isError: isIntegrationsError} = useGetAllIntegrationsQuery();
 
+  const [rerender, setRerender] = useState(0);
 
   const [typewriterFound, setTypewriterFound] = useState(false);
 
@@ -340,9 +341,10 @@ export const MainPage: FC = () => {
 
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
-      {(!guideVisibility.firstGuideShown) && (
+      {true && (
         <InitialGuide onClose={() => {
           console.log('closing init guide');
+          
           handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
         }} />
       )}

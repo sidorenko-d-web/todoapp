@@ -4,6 +4,8 @@ import styles from './InitialGuide.module.scss';
 import img1 from '../../../../assets/gif/guide1.gif';
 import { Guide } from "../../Guide/Guide";
 import { useTranslation } from 'react-i18next';
+import { isGuideShown } from "../../../../utils";
+import { GUIDE_ITEMS } from "../../../../constants";
 
 interface InitialGuideProps {
     onClose: () => void;
@@ -16,6 +18,9 @@ export const InitialGuide: React.FC<InitialGuideProps> = ({onClose}) => {
         console.log('INITIAL GUIDE OPEN')
     }, []);
 
+    if(isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)) {
+        return null;
+    }
 
     const handleClose = () => {
         console.log('INITIAL GUIDE CLOSE')
