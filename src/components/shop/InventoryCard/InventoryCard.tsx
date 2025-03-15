@@ -30,7 +30,6 @@ import {
   MODALS,
   PROFILE_ME_POLLING_INTERVAL,
   SOUNDS,
-  svgHeadersString,
 } from '../../../constants';
 import { useModal, useTonConnect } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
@@ -40,7 +39,7 @@ import { useSelector } from 'react-redux';
 import { Button } from '../../shared';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 import { useRoomItemsSlots } from '../../../../translate/items/items.ts';
-import { isGuideShown } from '../../../utils/guide-functions.ts';
+import { isGuideShown } from '../../../utils';
 
 interface Props {
   disabled?: boolean;
