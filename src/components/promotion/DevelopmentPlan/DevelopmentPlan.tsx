@@ -50,13 +50,12 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
       <section className={s.component}>
         <div className={s.countUser}>
           <img className={s.img} src={subscrite} alt={t('user')} />
-          // TODO замена статики на динамику (не трогать)
           {usersCount === countUser ? usersCount : countUser}
         </div>
         <ul className={s.list}>
           {infoText.map((item: InfoTextItem, index: number) => {
             const isUnlocked = countUser >= item.userCount && !item.isPlatform;
-            const isDescriptionBlurred = !isUnlocked;
+            const isDescriptionBlurred = !isUnlocked && item !== nextUnlockedItem;
             const isNumbersBlurred = !isUnlocked && item !== nextUnlockedItem;
 
             return (
