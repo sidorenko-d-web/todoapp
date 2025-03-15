@@ -77,9 +77,15 @@ const Layout = () => {
 
   return (
     <>
+<<<<<<< HEAD
       <WhiteNoiseCanvas />
       {strangerId && <StrangerHeader />}
       {showHeaderBG && <div className={styles.headerBG} />}
+=======
+      <WhiteNoiseCanvas/>
+
+      {/* {showHeaderBG && <div className={styles.headerBG} />} */}
+>>>>>>> 7639af97298d63b5b5bfce66d093cec2af41fedb
 
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
@@ -88,7 +94,7 @@ const Layout = () => {
         {showRoadmapBg && (
           <>
             <img src={roadmapBg} className={styles.bg_image} style={{ transform: `translateY(-${bgOffset}%)` }} />
-            <Lottie animationData={lampTable} loop autoplay style={{ position: 'fixed', bottom: '23px' }} />
+            <Lottie animationData={lampTable} loop autoplay style={{ position: 'fixed', bottom: '34px' }} />
           </>
         )}
         {showHeader && <Header />}
