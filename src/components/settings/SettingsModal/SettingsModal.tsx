@@ -4,10 +4,12 @@ import { useModal } from '../../../hooks';
 import ArrowRight from '../../../assets/icons/arrow-right.svg';
 import { useTranslation } from 'react-i18next';
 import { CentralModal } from '../../shared';
+import { useTonConnect } from '../../../hooks';
 
 export const SettingsModal = () => {
   const { t } = useTranslation('settings');
   const { closeModal, openModal } = useModal();
+  const { walletAddress, connectWallet } = useTonConnect();
 
   const handleCloseModal = () => {
     closeModal(MODALS.SETTINGS);
@@ -19,8 +21,11 @@ export const SettingsModal = () => {
   };
 
   const handleOpenWalletConnectionModal = () => {
-    openModal(MODALS.WALLET_CONNECTION);
-    // closeModal(MODALS.SETTINGS)
+    if (!walletAddress) {
+      connectWallet();
+    } else {
+      openModal(MODALS.WALLET_CONNECTION);
+    }
   };
 
   return (

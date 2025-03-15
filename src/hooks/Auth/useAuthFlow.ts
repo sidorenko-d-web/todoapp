@@ -90,6 +90,8 @@ export const useAuthFlow = () => {
 
       try {
         await minLoadingTime;
+        const authResponse = await performSignIn(signIn);
+        updateTokens(authResponse);
 
         if (savedStep === 'completed') {
           // Обновляем токены для пользователя, у которого сохранён completed

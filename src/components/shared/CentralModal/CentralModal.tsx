@@ -16,24 +16,24 @@ interface CentralModalProps {
   modalStyles?: string;
   headerStyles?: string;
   titleIcon?: string;
+  overlayOpacity?: number;
 }
 
 export const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
-                                                                         modalId,
-                                                                         title,
-                                                                         onClose,
-                                                                         disabled = false,
-                                                                         disableScrollLock = false,
-                                                                         containerStyles,
-                                                                         modalStyles,
-                                                                         children,
-                                                                         headerStyles,
-                                                                         titleIcon,
-                                                                       }) => {
+  modalId,
+  title,
+  onClose,
+  disabled = false,
+  disableScrollLock = false,
+  containerStyles,
+  modalStyles,
+  children,
+  headerStyles,
+  titleIcon,
+  overlayOpacity = 0.85,
+}) => {
   const { getModalState } = useModal();
-
   const { isOpen } = getModalState(modalId);
-
 
   useEffect(() => {
     if (isOpen && !disableScrollLock) {
@@ -41,11 +41,16 @@ export const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
     } else {
       document.body.style.overflow = 'auto';
     }
-  }, [ isOpen ]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
+
+  const overlayStyle = {
+    backgroundColor: `rgba(0, 0, 0, ${overlayOpacity})`,
+  };
+
   return (
-    <Overlay className={classNames(s.overlay, containerStyles)}>
+    <Overlay className={classNames(s.overlay, containerStyles)} style={overlayStyle}>
       <Fade open>
         <div className={classNames(s.modal, modalStyles)} onClick={e => e.stopPropagation()}>
           <div className={classNames({ [s.disabled]: disabled })}>

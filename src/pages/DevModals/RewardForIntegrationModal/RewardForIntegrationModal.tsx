@@ -1,4 +1,4 @@
-import { GUIDE_ITEMS, MODALS, SOUNDS } from '../../../constants';
+import { GUIDE_ITEMS, MODALS, SOUNDS, starsThresholds } from '../../../constants';
 import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './RewardForIntegrationModal.module.scss';
 import Button from '../partials/Button';
@@ -16,7 +16,7 @@ import { useDispatch } from 'react-redux';
 import { CentralModal } from '../../../components/shared';
 import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../helpers';
-import { setIsPublishedModalClosed, setNeedToPlayHappy } from '../../../redux';
+import { CompanyResponseDTO, setIsPublishedModalClosed, setNeedToPlayHappy, useGetIntegrationsQuery } from '../../../redux';
 import { setGuideShown } from '../../../utils';
 import { useEffect } from 'react';
 
@@ -24,9 +24,15 @@ export default function RewardForIntegrationModal() {
   const { t, i18n } = useTranslation('integrations');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal, getModalState } = useModal();
-
-  const { args } = getModalState(MODALS.INTEGRATION_REWARD);
-
+  
+  const { args } = getModalState<{
+    company: CompanyResponseDTO,
+    base_income: string,
+    base_subscribers: string,
+    base_views: string
+  }>(MODALS.INTEGRATION_REWARD);
+  const { data: integrationsData } = useGetIntegrationsQuery({ company_name: args?.company.company_name });
+  const integrationCount = integrationsData?.count ?? 0;
   const dispatch = useDispatch();
 
   useAutoPlaySound(MODALS.INTEGRATION_REWARD, SOUNDS.rewardHuge);
@@ -34,6 +40,33 @@ export default function RewardForIntegrationModal() {
   useEffect(() => {
     setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
   }, []);
+
+  const getBlueStarCount = (count: number = 0) => {
+    if (count >= 18) return 3;
+    if (count >= 10) return 2;
+    if (count >= 4) return 1;
+    return 0;
+  };
+
+  const getProgressBarPercentage = (count: number = 0) => {
+    if (count >= starsThresholds.thirdStar) {
+      return 100;
+    } else if (count >= starsThresholds.secondStar) {
+      const progressInSegment = count - starsThresholds.secondStar;
+      const segmentSize = starsThresholds.thirdStar - starsThresholds.secondStar;
+      return (progressInSegment / segmentSize) * 100;
+    } else if (count >= starsThresholds.firstStar) {
+      const progressInSegment = count - starsThresholds.firstStar;
+      const segmentSize = starsThresholds.secondStar - starsThresholds.firstStar;
+      return (progressInSegment / segmentSize) * 100;
+    } else {
+      return (count / starsThresholds.firstStar) * 100;
+    }
+  };
+
+  
+  const blueStarCount = getBlueStarCount(integrationCount);
+  const progressPercentage = getProgressBarPercentage(integrationCount);
 
   return (
     <CentralModal
@@ -54,27 +87,34 @@ export default function RewardForIntegrationModal() {
         <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
       </div>
       <div className={styles.wrapper}>
+
+
         <div className={styles.info}>
           <div className={styles.top}>
-            {/* <div className={styles.lightning}>
-              <img src={lightning} />
-            </div> */}
-            {/* @ts-ignore */}
-            <img className={styles.integration} src={args?.image_url ?? integration} />
+            <img className={styles.integration} src={args?.company.image_url ?? integration} />
           </div>
           <div className={styles.bottom}>
-            {/* @ts-ignore */}
-            <h2 className={styles.title}>{args?.company_name}</h2>
+            <h2 className={styles.title}>{args?.company.company_name}</h2>
             <div className={styles.rate}>
-              <img src={starBlue} />
-              <img src={starGray} />
-              <img src={starGray} />
+              {[...Array(3)].map((_, index) => (
+                <img 
+                  key={index}
+                  className={integrationCount >= starsThresholds.thirdStar ? styles.starsMax : ''}
+                  src={index < blueStarCount ? starBlue : starGray} 
+                />
+              ))}
             </div>
             <div className={styles.progress}>
-              <div className={styles.progressBar} />
+              {integrationCount < starsThresholds.thirdStar && (
+                <div 
+                  className={styles.progressBar} 
+                  style={{ width: `${progressPercentage}%` }} 
+                />
+              )}
             </div>
           </div>
         </div>
+
         <div className={styles.icons}>
           <div className={styles.item}>
             <span>+{formatAbbreviation(Number(args?.base_income), 'number', { locale: locale })}</span>

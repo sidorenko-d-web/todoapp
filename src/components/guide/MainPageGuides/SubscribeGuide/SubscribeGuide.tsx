@@ -3,6 +3,8 @@ import styles from './SubscribeGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
 import { Guide } from "../../Guide/Guide";
+import { isGuideShown, setGuideShown } from "../../../../utils";
+import { GUIDE_ITEMS } from "../../../../constants";
 
 interface CreateIntegrationGuideProps {
     description: ReactNode;
@@ -20,6 +22,7 @@ export const SubscrieGuide: React.FC<CreateIntegrationGuideProps> = ({
      const [isOpen, setIsOpen] = useState(true);
     
      const handleClose = () => {
+        setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
         onClose();
         setIsOpen(false);
     };
@@ -39,6 +42,14 @@ export const SubscrieGuide: React.FC<CreateIntegrationGuideProps> = ({
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [onClose]);
+
+    if(!isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)) {
+        return null;
+    }
+
+    if(isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)) {
+        return null;
+    }
 
     if (!isOpen) return null;
     

@@ -23,7 +23,7 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import {
+import { GUIDE_ITEMS,
   itemStoreString,
   localStorageConsts,
   MODALS,
@@ -39,6 +39,7 @@ import { useSelector } from 'react-redux';
 import { Button } from '../../shared';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 import { useRoomItemsSlots } from '../../../../translate/items/items.ts';
+import { isGuideShown } from '../../../utils/guide-functions.ts';
 
 interface Props {
   disabled?: boolean;
@@ -187,6 +188,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       console.error(error);
     }
   };
+
+
+  useEffect(() => {
+    if(item.name_eng.toLowerCase().trim() === 'typewriter' && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+      handleEquipItem();
+    }
+  }, []);
 
   const slot = Object.values(RoomItemsSlots).find(_item =>
     _item.name.find((__item: string) => item.name.includes(__item)),

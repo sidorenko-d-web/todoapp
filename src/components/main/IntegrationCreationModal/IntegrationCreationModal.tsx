@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 // import lightningIcon from '../../../assets/icons/lightning.svg';
 import {
@@ -64,6 +64,10 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   });
   const companies = data?.campaigns;
 
+  // const integrationPublished = isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+
+
+
   const loadingTexts = [
     t("i35"),
     t("i36"),
@@ -71,9 +75,24 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     t("i38"),
     t("i39"),
   ];
-  const [currentLoadingText, setCurrentLoadingText] = useState("");
+  const [currentLoadingText, setCurrentLoadingText] = useState(loadingTexts[0]);
   // Flag to prevent multiple submissions
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!isSubmitting) return;
+
+    const interval = setInterval(() => {
+      setCurrentLoadingText(prevText => {
+        const currentIndex = loadingTexts.indexOf(prevText);
+        const nextIndex = (currentIndex + 1) % loadingTexts.length;
+        return loadingTexts[nextIndex];
+      });
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [isSubmitting]);
+
 
   // const uniqueCompany = companies?.find(company => company.is_unique === true) || null;
   const uniqueCompany = useMemo(() =>
@@ -113,6 +132,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       });
 
     setSelectedCompanyId("");
+
   };
 
   const noItemsMessage = (() => {
@@ -136,6 +156,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   //     setFirstGuideClosed(true);
   //   }
   // }, []);
+
+  const integrationPublished = isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
 
   return (
@@ -183,18 +205,25 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
             {!noItemsMessage ? (
               <div className={s.companies}>
-                {companies?.map((company) =>
-                  company.growth_tree_stage !== 100 && (
-                    <CompanyCard
-                      key={company.id}
-                      company={company}
-                      selected={selectedCompanyId === company.id}
-                      disabled={hasCreatingIntegration || isSubmitting || (selectedCompanyId !== "" && selectedCompanyId !== company.id)}
-                      onClick={() => setSelectedCompanyId(company.id)
-                      }
-                    />
-                  ),
-                )}
+                {companies
+                  ?.filter((_, index) => integrationPublished || index === 1)
+                  .map((company) =>
+                    company.growth_tree_stage !== 100 && (
+                      <CompanyCard
+                        key={company.id}
+                        company={company}
+                        selected={selectedCompanyId === company.id}
+                        disabled={hasCreatingIntegration || isSubmitting}
+                        onClick={() => {
+                          if (selectedCompanyId === company.id) {
+                            setSelectedCompanyId(""); // Deselect if clicking the same card
+                          } else {
+                            setSelectedCompanyId(company.id); // Select new card
+                          }
+                        }}
+                      />
+                    )
+                  )}
               </div>
             ) : (
               <span className={s.message}>{noItemsMessage}</span>
@@ -255,7 +284,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       />} */}
       {(!isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)) && <CreatingIntegrationGuide
         onClose={() => {
-          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
           onClose();
           navigate(AppRoute.Shop);
