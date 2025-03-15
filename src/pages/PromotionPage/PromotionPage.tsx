@@ -69,9 +69,7 @@ export const PromotionPage: React.FC = () => {
 
             <IncreaseIncome />
             <TopInfluencers />
-            {usersCountData && topProfilesData && (
-              <DevelopmentPlan usersCount={usersCountData.players} user={topProfilesData.count || 0} />
-            )}
+            {usersCountData && topProfilesData && <DevelopmentPlan usersCount={usersCountData.players} />}
           </section>
         </main>
       )}

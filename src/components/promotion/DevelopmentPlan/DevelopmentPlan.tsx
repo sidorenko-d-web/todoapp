@@ -18,12 +18,12 @@ interface InfoTextItem {
 
 type DevelopmentPlanProps = {
   usersCount: number;
-  user: number;
 };
 
 const countUser = 1013;
+// TODO замена статики на динамику (замена countUser на usersCount)
 
-export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount, user }) => {
+export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) => {
   const { t, i18n } = useTranslation('promotion');
   const supportedLocales = ['ru', 'en'];
   const locale = supportedLocales.includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
@@ -32,8 +32,12 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount, us
     en: INFO_TEXT_EN,
   };
   const infoText = INFO_TEXT[locale];
-  const unlockedCount = infoText.filter((item: InfoTextItem) => usersCount >= item.userCount).length;
+
+  const unlockedCount = infoText.filter((item: InfoTextItem) => countUser >= item.userCount).length;
   const totalCount = infoText.length;
+
+  const nextUnlockedIndex = infoText.findIndex((item: InfoTextItem) => countUser < item.userCount);
+  const nextUnlockedItem = nextUnlockedIndex !== -1 ? infoText[nextUnlockedIndex] : null;
 
   return (
     <>
@@ -46,13 +50,14 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount, us
       <section className={s.component}>
         <div className={s.countUser}>
           <img className={s.img} src={subscrite} alt={t('user')} />
-          {user === countUser ? user : countUser}
+          // TODO замена статики на динамику (не трогать)
+          {usersCount === countUser ? usersCount : countUser}
         </div>
         <ul className={s.list}>
           {infoText.map((item: InfoTextItem, index: number) => {
-            const isUnlocked = usersCount >= item.userCount && !item.isPlatform;
-            const isDescriptionBlurred = index >= 1;
-            const isNumbersBlurred = index >= 8;
+            const isUnlocked = countUser >= item.userCount && !item.isPlatform;
+            const isDescriptionBlurred = !isUnlocked;
+            const isNumbersBlurred = !isUnlocked && item !== nextUnlockedItem;
 
             return (
               <li key={index} className={s.wrapperList}>

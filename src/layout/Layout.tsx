@@ -80,6 +80,10 @@ const Layout = () => {
       <WhiteNoiseCanvas />
       {strangerId && <StrangerHeader />}
       {showHeaderBG && <div className={styles.headerBG} />}
+<<<<<<< HEAD
+
+=======
+>>>>>>> 1bf72681dbb7e8d042f70e980077d78343062db4
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
       </div>
