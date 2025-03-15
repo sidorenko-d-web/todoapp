@@ -126,7 +126,10 @@ export const Tree = () => {
   }, []);
 
   if (!treeData || !isBgLoaded || !userProfileData) {
-    return <Loader />;
+    return <>
+      <div style={{position: 'fixed', top: '0', left: '0', width: '100vh', height: '100vh', background: '#141319'}}/>
+      <Loader />
+    </>;
   }
 
   const handleUnlock = async (id: string, boost: Boost) => {
