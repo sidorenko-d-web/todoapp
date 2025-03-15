@@ -1,5 +1,5 @@
 import styles from './NewItemModal.module.scss';
-import { AppRoute, MODALS, SOUNDS, svgHeadersString } from '../../../../constants';
+import { AppRoute, MODALS, SOUNDS, itemStoreString } from '../../../../constants';
 import { useAutoPlaySound, useModal } from '../../../../hooks';
 import { IShopItem } from '../../../../redux';
 import Button from '../partials/Button';
@@ -59,7 +59,7 @@ export const NewItemModal: React.FC = () => {
             isPro && styles.itemImageRed,
           )}
         >
-          <img src={state.args?.item.image_url + svgHeadersString} alt="item-image" />
+          <img src={itemStoreString(state.args?.item.image_url ?? '')} alt="item-image" />
         </div>
       </div>
       {state.args?.mode === 'item' && (

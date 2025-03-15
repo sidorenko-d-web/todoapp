@@ -23,7 +23,14 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { localStorageConsts, MODALS, PROFILE_ME_POLLING_INTERVAL, SOUNDS, svgHeadersString } from '../../../constants';
+import {
+  itemStoreString,
+  localStorageConsts,
+  MODALS,
+  PROFILE_ME_POLLING_INTERVAL,
+  SOUNDS,
+  svgHeadersString,
+} from '../../../constants';
 import { useModal, useTonConnect } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
@@ -239,14 +246,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             item.item_rarity === 'yellow' ? styles.purpleImage : item.item_rarity === 'green' && styles.redImage,
           )}
         >
-          <img
-            src={
-              item.image_url.replace('https://', 'https://storage.yandexcloud.net/') +
-              '?response-content-type=image%2Fsvg%2Bxml'
-            }
-            className={clsx(isBlocked && styles.disabledImage)}
-            alt=""
-          />
+          <img src={itemStoreString(item.image_url)} className={clsx(isBlocked && styles.disabledImage)} alt="" />
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
           {!isBlocked && <p>{item.item_premium_level === 'advanced' ? 'adv' : item.item_premium_level}</p>}
         </div>
