@@ -278,7 +278,7 @@ export const Tree = () => {
                   ref={lastActiveLevelRef} 
                   data-level={stage.stage_number}
                   onClick={() => console.log('Active level clicked')}
-                  style={{ height: '20px', width: '20px' }} 
+                  style={{ height: '20px', width: '20px', background: 'transparent', visibility: 'hidden'}} 
                 />}
               </div>
             );
