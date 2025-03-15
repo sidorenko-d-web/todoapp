@@ -12,6 +12,7 @@ import { lampTable } from '../assets/animations';
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
 import clsx from 'clsx';
 import WhiteNoiseCanvas from '../components/WhiteNoise/WhiteNoise';
+import { StrangerHeader } from '../components/profile/StrangerHeader';
 
 const Layout = () => {
   const location = useLocation();
@@ -20,18 +21,20 @@ const Layout = () => {
   const [bgOffset, setBgOffset] = useState(0);
   const contentRef = useScrollManager();
 
-  const showHeader = !(location.pathname.includes('profile') && !!location.pathname.split('/')?.[2]);
+  const showHeader = !location.pathname.includes('profile');
 
-  const needsReducedMargin = ['/', '/progressTree', location.pathname.match(/^\/profile\/[0-9a-fA-F-]{36}$/)].includes(
-    location.pathname,
-  );
+  const needsReducedMargin = [
+    '/',
+    '/progressTree',
+    `${location.pathname.includes(AppRoute.Profile) && location.pathname.split('/')?.[3]}`,
+  ].includes(location.pathname);
 
   const showRoadmapBg = location.pathname === '/progressTree';
 
-  const showHeaderBG = !(['/', '/progressTree'].includes(
-    location.pathname,
-  ))
-
+  const showHeaderBG =
+    !['/', '/progressTree'].includes(location.pathname) &&
+    !(location.pathname.split('/')[1] === 'profile' && location.pathname.split('/')[3] === 'room');
+  console.log(location.pathname);
   useEffect(() => {
     const isNeedToOpenChest = localStorage.getItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
@@ -39,14 +42,9 @@ const Layout = () => {
 
   const isRoom =
     location.pathname === AppRoute.Main ||
-    (location.pathname.includes(AppRoute.Profile) && location.pathname.split('/')?.[2]);
+    (location.pathname.includes(AppRoute.Profile) && location.pathname.split('/')?.[3]);
 
-  const contentClassName = clsx(
-    styles.content,
-    showHeader && styles.withHeader,
-    needsReducedMargin && styles.reducedMargin,
-    isRoom && styles.room,
-  );
+  const contentClassName = clsx(styles.content, showHeader, needsReducedMargin, isRoom && styles.room);
 
   useEffect(() => {
     if (showRoadmapBg && contentRef.current) {
@@ -75,10 +73,12 @@ const Layout = () => {
     }
   }, [showRoadmapBg]);
 
+  const strangerId = location.pathname.split('/')[1] === 'profile' && location.pathname.split('/')[2];
+
   return (
     <>
-      <WhiteNoiseCanvas/>
-
+      <WhiteNoiseCanvas />
+      {strangerId && <StrangerHeader />}
       {showHeaderBG && <div className={styles.headerBG} />}
 
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>

@@ -1,13 +1,13 @@
-@use '../../assets/styles/index.scss' as var;
+@use "../../assets/styles/index.scss" as var;
 
 .wrp {
   display: flex;
   flex-direction: column;
-  margin: 70px 0 20px;
+  margin: 30px 0 20px;
   background-color: var.$color-bg;
   color: var.$color-text;
   padding: 0 15px;
-  gap: 10px;
+  gap: 20px;
 
   @media (min-width: var.$breakpoint-md) {
     gap: 24px;
@@ -50,7 +50,6 @@
     padding: 10px;
     border-radius: 12px;
 
-
     .rewardImage {
       display: flex;
       justify-content: center;
@@ -60,7 +59,6 @@
       aspect-ratio: 1;
       background-color: var.$color-gray;
       border-radius: 6px;
-
 
       .image {
         aspect-ratio: 1;

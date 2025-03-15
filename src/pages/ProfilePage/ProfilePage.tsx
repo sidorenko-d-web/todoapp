@@ -35,9 +35,12 @@ export const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     if (!userProfileData) return;
-    const refetchInterval = setInterval(() => {
-      refetchCurrentProfile();
-    }, 5 * 60 * 1000); // 5 minutes
+    const refetchInterval = setInterval(
+      () => {
+        refetchCurrentProfile();
+      },
+      5 * 60 * 1000,
+    ); // 5 minutes
 
     return () => clearInterval(refetchInterval);
   }, [userProfileData, refetchCurrentProfile]);
@@ -95,14 +98,11 @@ export const ProfilePage: React.FC = () => {
 
   const weekData = getWeekData(streakDays, freezeDays);
 
-
-  const isLoading = isUserLoading || isTopProfilesLoading || awardsLoading ;
+  const isLoading = isUserLoading || isTopProfilesLoading || awardsLoading;
 
   if (isLoading) {
     return <Loader />;
   }
-
-  console.log(location.pathname);
 
   return (
     <>
