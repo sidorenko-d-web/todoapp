@@ -49,6 +49,7 @@ export const MainPage: FC = () => {
   const reduxDispatch = useDispatch();
   const { data, refetch, isLoading: isAllIntegrationsLoading, isError: isIntegrationsError} = useGetAllIntegrationsQuery();
 
+  const [rerender, setRerender] = useState(0);
 
   const [typewriterFound, setTypewriterFound] = useState(false);
 
@@ -340,17 +341,20 @@ export const MainPage: FC = () => {
 
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
-      {(!guideVisibility.firstGuideShown) && (
+      {true && (
         <InitialGuide onClose={() => {
           console.log('closing init guide');
+          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+          setRerender(1);
           handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
         }} />
       )}
 
-      {(!guideVisibility.secondGuideShown && guideVisibility.firstGuideShown) && (
+      {true && (
         <SubscrieGuide
           onClose={() => {
             console.log('asdasdfsdgm,. hjmniklo;.cxv')
+            setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
             handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
             openModal(MODALS.SUBSCRIBE);
             reduxDispatch(setSubscribeGuideShown(false));
