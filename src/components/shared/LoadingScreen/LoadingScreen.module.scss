@@ -44,6 +44,8 @@
     align-items: flex-start;
     width: 100%;
     gap: 10px;
+    position: relative;
+    z-index: 10000;
   }
 
   .particle {

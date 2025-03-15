@@ -79,7 +79,7 @@ const Layout = () => {
     <>
       <WhiteNoiseCanvas/>
 
-      {showHeaderBG && <div className={styles.headerBG} />}
+      {/* {showHeaderBG && <div className={styles.headerBG} />} */}
 
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
