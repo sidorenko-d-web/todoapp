@@ -18,7 +18,6 @@ import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 import { Loader } from '../../components';
 import { useLocation } from 'react-router-dom';
-import { StrangerHeader } from '../../components/profile/StrangerHeader';
 
 export const StrangerProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation('profile');

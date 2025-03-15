@@ -10,8 +10,7 @@ import subscriptionLeveIcon from '../../../assets/icons/subscription-level.svg';
 
 import { ProgressLine } from '../../shared';
 import { AppRoute } from '../../../constants';
-import { useSelector } from 'react-redux';
-import { RootState, useGetCharacterByIdQuery, useGetCharacterQuery } from '../../../redux';
+import { useGetCharacterByIdQuery, useGetCharacterQuery } from '../../../redux';
 import { useTranslation } from 'react-i18next';
 import { Loader, TrackedLink } from '../..';
 import { SpinePlugin } from '@esotericsoftware/spine-phaser';
