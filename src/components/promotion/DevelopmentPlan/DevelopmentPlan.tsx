@@ -21,6 +21,7 @@ type DevelopmentPlanProps = {
 };
 
 const countUser = 1013;
+// TODO замена статики на динамику (замена countUser на usersCount)
 
 export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) => {
   const { t, i18n } = useTranslation('promotion');
@@ -35,7 +36,6 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
   const unlockedCount = infoText.filter((item: InfoTextItem) => countUser >= item.userCount).length;
   const totalCount = infoText.length;
 
-  // Находим следующий уровень после последнего разблокированного
   const nextUnlockedIndex = infoText.findIndex((item: InfoTextItem) => countUser < item.userCount);
   const nextUnlockedItem = nextUnlockedIndex !== -1 ? infoText[nextUnlockedIndex] : null;
 
@@ -50,6 +50,7 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
       <section className={s.component}>
         <div className={s.countUser}>
           <img className={s.img} src={subscrite} alt={t('user')} />
+          // TODO замена статики на динамику (не трогать)
           {usersCount === countUser ? usersCount : countUser}
         </div>
         <ul className={s.list}>
