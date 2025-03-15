@@ -89,7 +89,7 @@ const Layout = () => {
         {showRoadmapBg && (
           <>
             <img src={roadmapBg} className={styles.bg_image} style={{ transform: `translateY(-${bgOffset}%)` }} />
-            <Lottie animationData={lampTable} loop autoplay style={{ position: 'fixed', bottom: '34px' }} />
+            <Lottie animationData={lampTable} loop autoplay style={{ position: 'fixed', bottom: '34px', zIndex:'1' }} />
           </>
         )}
         {showHeader && <Header />}
