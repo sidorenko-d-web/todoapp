@@ -77,15 +77,9 @@ const Layout = () => {
 
   return (
     <>
-<<<<<<< HEAD
       <WhiteNoiseCanvas />
       {strangerId && <StrangerHeader />}
       {showHeaderBG && <div className={styles.headerBG} />}
-=======
-      <WhiteNoiseCanvas/>
-
-      {/* {showHeaderBG && <div className={styles.headerBG} />} */}
->>>>>>> 7639af97298d63b5b5bfce66d093cec2af41fedb
 
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
