@@ -142,9 +142,9 @@ export const Tree = () => {
 
   return (
     <div className={s.container}>
-      {/* <div className={s.progressBarAdditional} /> */}
+      <div className={s.progressBarAdditional} />
       <div className={s.progressBarContainer}>
-        <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300}px` }}>
+        <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300 + 35}px` }}>
           <div className={s.progressFill} style={{ height: `${progressPercent}%` }} ref={progressBarContainerRef} />
           {treeData?.growth_tree_stages.map((stage, index) => {
             const isRewardAvailable = stage.achievement.is_available;
@@ -174,14 +174,14 @@ export const Tree = () => {
                   )}
                 </div>
 
-                {isRewardAvailable && !isRewardClaimed && showReward && (
+                {isRewardAvailable && !isRewardClaimed && showReward ? (
                   <Button
                     className={classNames(s.takeRewardBtn, { [s.hidden]: isRewardClaimed })}
                     onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}
                   >
                     {t('t2')}
                   </Button>
-                )}
+                ) : <span/>}
                 {showReward && (
                   <div
                     className={classNames(s.prize, {
@@ -278,7 +278,7 @@ export const Tree = () => {
                   ref={lastActiveLevelRef} 
                   data-level={stage.stage_number}
                   onClick={() => console.log('Active level clicked')}
-                  style={{ height: '20px', width: '20px', backgroundColor: 'rgba(255,0,0,0.3)' }} 
+                  style={{ height: '20px', width: '20px' }} 
                 />}
               </div>
             );

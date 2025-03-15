@@ -44,7 +44,9 @@ const Layout = () => {
     location.pathname === AppRoute.Main ||
     (location.pathname.includes(AppRoute.Profile) && location.pathname.split('/')?.[3]);
 
-  const contentClassName = clsx(styles.content, showHeader, needsReducedMargin, isRoom && styles.room);
+  const isProgressTree = location.pathname === AppRoute.ProgressTree;
+
+  const contentClassName = clsx(styles.content, showHeader, needsReducedMargin, isRoom && styles.room, isProgressTree && styles.progressTree);
 
   useEffect(() => {
     if (showRoadmapBg && contentRef.current) {
@@ -80,10 +82,6 @@ const Layout = () => {
       <WhiteNoiseCanvas />
       {strangerId && <StrangerHeader />}
       {showHeaderBG && <div className={styles.headerBG} />}
-<<<<<<< HEAD
-
-=======
->>>>>>> 1bf72681dbb7e8d042f70e980077d78343062db4
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
       </div>
