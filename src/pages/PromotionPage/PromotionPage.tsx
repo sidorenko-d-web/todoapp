@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
 import { DevelopmentPlan, IncreaseIncome, Loader, TopInfluencers } from '../../components';
 
