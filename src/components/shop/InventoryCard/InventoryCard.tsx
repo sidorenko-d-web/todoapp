@@ -23,7 +23,14 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { GUIDE_ITEMS, localStorageConsts, MODALS, PROFILE_ME_POLLING_INTERVAL, SOUNDS, svgHeadersString } from '../../../constants';
+import { GUIDE_ITEMS,
+  itemStoreString,
+  localStorageConsts,
+  MODALS,
+  PROFILE_ME_POLLING_INTERVAL,
+  SOUNDS,
+  svgHeadersString,
+} from '../../../constants';
 import { useModal, useTonConnect } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
@@ -51,7 +58,7 @@ const getPremiumLevelOrder = (level: TypeItemQuality) =>
   }[level]);
 
 function sortByPremiumLevel(items: IShopItem[]) {
-  return [ ...items ].sort(
+  return [...items].sort(
     (a, b) => getPremiumLevelOrder(a.item_premium_level) - getPremiumLevelOrder(b.item_premium_level),
   );
 }
@@ -71,9 +78,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   // return s25Key;
 
   const { walletAddress, connectWallet } = useTonConnect();
-  const [ idDisabled ] = useState(true);
+  const [idDisabled] = useState(true);
   const { t, i18n } = useTranslation('shop');
-  const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
+  const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const { data, isLoading: isItemsLoading } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
@@ -85,16 +92,16 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     item_rarity: item.item_rarity,
   });
 
-  const [ equipItem ] = useAddItemToRoomMutation();
-  const [ removeItem ] = useRemoveItemFromRoomMutation();
+  const [equipItem] = useAddItemToRoomMutation();
+  const [removeItem] = useRemoveItemFromRoomMutation();
   const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
   const { openModal } = useModal();
 
   const { data: profile, refetch } = useGetProfileMeQuery(undefined, {
-    pollingInterval: PROFILE_ME_POLLING_INTERVAL
+    pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
 
-  const [ playLvlSound ] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
+  const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
 
   const prevLvl = useRef<number | null>(null);
 
@@ -127,7 +134,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     }
 
     prevLvl.current = item.level;
-  }, [ item.level ]);
+  }, [item.level]);
 
   const handleBuyItem = async (itemPoints: string) => {
     if (profile && +profile?.points < +itemPoints) return;
@@ -173,9 +180,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
     try {
       if (isSlotNotEmpty) {
-        await removeItem({ items_to_remove: [ { id: isSlotNotEmpty.id } ] });
+        await removeItem({ items_to_remove: [{ id: isSlotNotEmpty.id }] });
       }
-      const res = await equipItem({ equipped_items: [ { id: item.id, slot } ] });
+      const res = await equipItem({ equipped_items: [{ id: item.id, slot }] });
       console.log(res);
     } catch (error) {
       console.error(error);
@@ -189,12 +196,14 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     }
   }, []);
 
-  const slot = Object.values(RoomItemsSlots).find(_item => _item.name.find((__item: string) => item.name.includes(__item)))?.slot;
+  const slot = Object.values(RoomItemsSlots).find(_item =>
+    _item.name.find((__item: string) => item.name.includes(__item)),
+  )?.slot;
   const isEquipped = equipedItems?.equipped_items.find(_item => _item.id === item.id);
 
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const [ isUpdateLoading, setIsUpdateLoading ] = useState(false);
+  const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 
   const handleUsdtPayment = async () => {
     if (!walletAddress) {
@@ -208,32 +217,32 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     item.level < 10
       ? 10
       : item.level < 20
-        ? 20
-        : item.level < 30
-          ? 30
-          : item.level < 40
-            ? 40
-            : item.level < 50
-              ? 50
-              : item.level < 60
-                ? 60
-                : item.level < 70
-                  ? 70
-                  : item.level < 80
-                    ? 80
-                    : item.level < 90
-                      ? 90
-                      : item.level < 100
-                        ? 100
-                        : item.level < 110
-                          ? 110
-                          : item.level < 120
-                            ? 120
-                            : item.level < 130
-                              ? 130
-                              : item.level < 140
-                                ? 140
-                                : 150;
+      ? 20
+      : item.level < 30
+      ? 30
+      : item.level < 40
+      ? 40
+      : item.level < 50
+      ? 50
+      : item.level < 60
+      ? 60
+      : item.level < 70
+      ? 70
+      : item.level < 80
+      ? 80
+      : item.level < 90
+      ? 90
+      : item.level < 100
+      ? 100
+      : item.level < 110
+      ? 110
+      : item.level < 120
+      ? 120
+      : item.level < 130
+      ? 130
+      : item.level < 140
+      ? 140
+      : 150;
 
   return (
     <div className={styles.storeCard}>
@@ -245,19 +254,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             item.item_rarity === 'yellow' ? styles.purpleImage : item.item_rarity === 'green' && styles.redImage,
           )}
         >
-          <img
-            src={item.image_url + '?response-content-type=image%2Fsvg%2Bxml'}
-            className={clsx(isBlocked && styles.disabledImage)}
-            alt=""
-          />
-          {/* <div style={{width: 60, height: 60}}>*/}
-          {/*  <SpineAnimation*/}
-          {/*    name={item.name}*/}
-          {/*    skin={item.item_premium_level}*/}
-          {/*    jsonUrl="https://storage.yandexcloud.net/miniapp-v2-prod/тетрадь-1.json"*/}
-          {/*    atlasUrl="https://storage.yandexcloud.net/miniapp-v2-prod/тетрадь-1atlas.txt"*/}
-          {/*  />*/}
-          {/*</div>*/}
+          <img src={itemStoreString(item.image_url)} className={clsx(isBlocked && styles.disabledImage)} alt="" />
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
           {!isBlocked && <p>{item.item_premium_level === 'advanced' ? 'adv' : item.item_premium_level}</p>}
         </div>
@@ -284,8 +281,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                ? styles.colorPurple
+                : styles.level
             }
           >
             {t('s20')} {item.level} {isB && t('s21')}
@@ -336,14 +333,14 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                       item.level < 50
                         ? ChestBlueIcon
                         : item.level >= 50 && item.level < 100
-                          ? ChestPurpleIcon
-                          : item.level >= 100 && item.level <= 150
-                            ? ChestRedIcon
-                            : item.item_rarity === 'red'
-                              ? ChestBlueIcon
-                              : item.item_rarity === 'yellow'
-                                ? ChestPurpleIcon
-                                : ChestRedIcon
+                        ? ChestPurpleIcon
+                        : item.level >= 100 && item.level <= 150
+                        ? ChestRedIcon
+                        : item.item_rarity === 'red'
+                        ? ChestBlueIcon
+                        : item.item_rarity === 'yellow'
+                        ? ChestPurpleIcon
+                        : ChestRedIcon
                     }
                     alt=""
                   />
@@ -357,8 +354,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                   item.item_rarity === 'red'
                     ? styles.done
                     : item.item_rarity === 'yellow'
-                      ? styles.donePurple
-                      : styles.doneRed
+                    ? styles.donePurple
+                    : styles.doneRed
                 }
                 style={{
                   width: `${Math.min(((item.level % 10) / 10) * 100, 100)}%`,
@@ -374,8 +371,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                       item.item_rarity === 'red'
                         ? styles.item
                         : item.item_rarity === 'yellow'
-                          ? styles.itemPurple
-                          : styles.itemRed,
+                        ? styles.itemPurple
+                        : styles.itemRed,
                       _item.item_premium_level === 'advanced' && !item.is_bought ? styles.noBorder : '',
                       _item.item_premium_level === 'pro' && !item.is_bought ? styles.noBorder : '',
                       // item.item_premium_level === 'advanced'
@@ -386,13 +383,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                     style={
                       item.level < 50 && index === 1
                         ? ({
-                          '--lvl-height': `${(item.level / 50) * 100}%`,
-                        } as React.CSSProperties)
+                            '--lvl-height': `${(item.level / 50) * 100}%`,
+                          } as React.CSSProperties)
                         : item.level >= 50 && index === 2
-                          ? ({
+                        ? ({
                             '--lvl-height': `${((item.level - 50) / 50) * 100}%`,
                           } as React.CSSProperties)
-                          : undefined
+                        : undefined
                     }
                   >
                     <img src={_item.image_url + svgHeadersString} className={styles.itemImage} alt="" />
@@ -469,7 +466,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             disabled={idDisabled}
             onClick={() => {
               console.log('object');
-              removeItem({ items_to_remove: [ { id: item.id } ] });
+              removeItem({ items_to_remove: [{ id: item.id }] });
             }}
           >
             <img src={idDisabled ? ListDisableIcon : ListIcon} alt="Tasks" />

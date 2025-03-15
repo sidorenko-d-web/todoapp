@@ -1,5 +1,5 @@
 import styles from './ItemUpgradedModal.module.scss';
-import { MODALS, localStorageConsts, svgHeadersString } from '../../../../constants';
+import { MODALS, itemStoreString, localStorageConsts } from '../../../../constants';
 import { useAutoPlaySound, useModal } from '../../../../hooks';
 import { IShopItem, useGetShopItemsQuery } from '../../../../redux';
 import Button from '../partials/Button';
@@ -62,12 +62,12 @@ export const ItemUpgradedModal = () => {
         >
           {/* <img src={state.args?.item.image_url} alt="item-image" /> */}
           <img
-            src={state.args?.item.image_url + svgHeadersString}
+            src={itemStoreString(state.args?.item.image_url ?? '')}
             alt="item-image"
             className={styles.imageOld}
           />
           <img
-            src={newItem?.items?.[0].image_url + svgHeadersString}
+            src={itemStoreString(newItem?.items?.[0].image_url ?? '')}
             alt="item-image"
             className={styles.imageNew}
           />
