@@ -27,26 +27,27 @@ interface ProfileInfoProps {
   nonEditable?: boolean;
   strangerId?: string;
   showTreeLink?: boolean;
+  levelUser: number;
 }
 
 export const ProfileInfo: React.FC<ProfileInfoProps> = ({
-                                                          nickname,
-                                                          subscriptionIntegrationsLeft,
-                                                          position,
-                                                          isVip,
-                                                          strangerId,
-                                                          showTreeLink,
-                                                        }) => {
+  nickname,
+  subscriptionIntegrationsLeft,
+  position,
+  isVip,
+  strangerId,
+  showTreeLink,
+  levelUser,
+}) => {
   const { t } = useTranslation('profile');
-  const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
 
   const sceneRef = useRef<HTMLDivElement | null>(null);
 
   const gameRef = useRef<Phaser.Game | null>(null);
   const spineSceneRef = useRef<any | null>(null);
 
-  const [ size, setSize ] = useState([ 0, 0 ]);
-  const [ isLoading, setLoading ] = useState(true);
+  const [size, setSize] = useState([0, 0]);
+  const [isLoading, setLoading] = useState(true);
   const { data: character, isLoading: isCharacterLoading } = useGetCharacterQuery(undefined, { skip: !!strangerId });
   const { data: strangerCharacter } = useGetCharacterByIdQuery({ id: strangerId! }, { skip: !strangerId });
 
@@ -54,7 +55,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
 
   useLayoutEffect(() => {
     function updateSize() {
-      setSize([ window.innerWidth, window.innerHeight ]);
+      setSize([window.innerWidth, window.innerHeight]);
     }
 
     window.addEventListener('resize', updateSize);
@@ -75,7 +76,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         } catch (error: any) {
           if (error.message === 'add.spine') {
             console.log('avoid error');
-            setSize(prev => [ prev[0] + 1, prev[1] ]);
+            setSize(prev => [prev[0] + 1, prev[1]]);
           }
         }
         spineSceneRef.current = this;
@@ -89,10 +90,10 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         type: Phaser.AUTO,
         width: 118,
         height: 140,
-        scene: [ SpineScene ],
+        scene: [SpineScene],
         transparent: true,
         plugins: {
-          scene: [ { key: 'SpinePlugin', plugin: SpinePlugin, mapping: 'spine' } ],
+          scene: [{ key: 'SpinePlugin', plugin: SpinePlugin, mapping: 'spine' }],
         },
         parent: 'player',
       };
@@ -109,7 +110,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         spineSceneRef.current = null;
       }
     };
-  }, [ isCharacterLoading, size ]);
+  }, [isCharacterLoading, size]);
 
   return (
     <div className={clsx(styles.wrp, { [styles.showTreeLink]: showTreeLink })}>
@@ -151,7 +152,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
               to={AppRoute.ProgressTree}
               className={styles.subscribers}
             >
-              {lastActiveStage}
+              {levelUser}
             </TrackedLink>
             {/*{!nonEditable && (*/}
             {/*  <img*/}
@@ -178,16 +179,18 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
           <ProgressLine level={subscriptionIntegrationsLeft} color="blue" />
         </div>
 
-        {showTreeLink && <TrackedLink
-          className={styles.button}
-          trackingData={{
-            eventType: 'button',
-            eventPlace: 'В дерево роста - Профиль',
-          }}
-          to={AppRoute.ProgressTree}
-        >
-          {t('p23')}
-        </TrackedLink>}
+        {showTreeLink && (
+          <TrackedLink
+            className={styles.button}
+            trackingData={{
+              eventType: 'button',
+              eventPlace: 'В дерево роста - Профиль',
+            }}
+            to={AppRoute.ProgressTree}
+          >
+            {t('p23')}
+          </TrackedLink>
+        )}
       </div>
     </div>
   );

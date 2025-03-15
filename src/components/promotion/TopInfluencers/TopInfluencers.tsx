@@ -39,7 +39,8 @@ export const TopInfluencers = () => {
       setInfluencersUnlockingStep('phone');
       dispatch(setInputType('phone'));
     }
-  }, [userData?.is_email_verified]);
+  }, [userData?.is_email_verified, userData?.is_phone_verified]);
+
   const userPosition =
     userProfileData && topProfiles
       ? topProfiles.findIndex((profile: { id: string }) => profile.id === userProfileData.id)

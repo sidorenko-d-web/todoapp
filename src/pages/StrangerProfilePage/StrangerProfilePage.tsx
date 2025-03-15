@@ -39,9 +39,12 @@ export const StrangerProfilePage: React.FC = () => {
 
   useEffect(() => {
     if (!userProfileData) return;
-    const refetchInterval = setInterval(() => {
-      refetchCurrentProfile();
-    }, 5 * 60 * 1000); // 5 minutes
+    const refetchInterval = setInterval(
+      () => {
+        refetchCurrentProfile();
+      },
+      5 * 60 * 1000,
+    ); // 5 minutes
 
     return () => clearInterval(refetchInterval);
   }, [userProfileData, refetchCurrentProfile]);
@@ -109,7 +112,6 @@ export const StrangerProfilePage: React.FC = () => {
 
   return (
     <>
-      <StrangerHeader />
       <GetRewardChestModal onClose={() => closeModal(MODALS.TASK_CHEST)} />
 
       {(isUserLoading || isTopProfilesLoading) && <p>{t('p3')}</p>}
@@ -139,6 +141,7 @@ export const StrangerProfilePage: React.FC = () => {
             <ProfileInfo
               nickname={userProfileData.username}
               blogName={userProfileData.blog_name}
+              levelUser={userProfileData.growth_tree_stage_id}
               subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left}
               position={position}
               isVip={false}

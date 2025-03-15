@@ -16,17 +16,14 @@ interface RewardItem {
 
 const RewardsList: React.FC = () => {
   const { t } = useTranslation('profile');
-  const {
-    data: awardsData,
-    error: awardsError,
-    isLoading: awardsLoading,
-  } = useGetInventoryAchievementsQuery();
+  const { data: awardsData, error: awardsError, isLoading: awardsLoading } = useGetInventoryAchievementsQuery();
   const { data: roomData, isLoading: roomLoading } = useGetEquipedQuery();
 
   const mappedRewards: RewardItem[] = React.useMemo(() => {
     if (!awardsData || !awardsData.achievements) return [];
-    
-    return awardsData.achievements.filter(item => !item.name.includes('этапа') )
+
+    return awardsData.achievements
+      .filter(item => !item.name.includes('этапа'))
       .map((achievement: IAchievement): RewardItem => {
         const medal: 'gold' | 'silver' | 'bronze' =
           achievement.level === 3 ? 'gold' : achievement.level === 2 ? 'silver' : 'bronze';

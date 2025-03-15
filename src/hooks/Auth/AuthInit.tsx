@@ -74,7 +74,7 @@ export function AuthInit({ children }: AuthInitProps) {
         <EnterInviteCodePage
           onContinue={handleInviteCodeContinue}
           // referral_id={WebApp.initDataUnsafe.user?.id ?? 0}
-          referral_id={window.Telegram.WebApp.initDataUnsafe.user.id}
+          // referral_id={window.Telegram.WebApp.initDataUnsafe.user.id}
           // referral_id={1259832544}
           // referral_id={1301940582}
           // referral_id={6547551264}

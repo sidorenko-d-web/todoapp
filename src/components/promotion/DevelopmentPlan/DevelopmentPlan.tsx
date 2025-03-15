@@ -1,6 +1,7 @@
 import lockOpen from '../../../assets/icons/lockOpen.svg';
 import tickCircle from '../../../assets/icons/tickCircle.svg';
 import circle from '../../../assets/icons/circle.svg';
+import subscrite from '../../../assets/icons/subscrite.svg';
 import s from './DevelopmentPlan.module.scss';
 import classNames from 'classnames';
 import { INFO_TEXT_RU, INFO_TEXT_EN } from './constantsPlan.ts';
@@ -17,9 +18,12 @@ interface InfoTextItem {
 
 type DevelopmentPlanProps = {
   usersCount: number;
+  user: number;
 };
 
-export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) => {
+const countUser = 1013;
+
+export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount, user }) => {
   const { t, i18n } = useTranslation('promotion');
   const supportedLocales = ['ru', 'en'];
   const locale = supportedLocales.includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
@@ -35,9 +39,15 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
     <>
       <div className={s.headerDevelopment}>
         <span className={s.textName}>{t('p14')}</span>
-        <span className={s.badge}>{unlockedCount}/{totalCount}</span>
+        <span className={s.badge}>
+          {unlockedCount}/{totalCount}
+        </span>
       </div>
       <section className={s.component}>
+        <div className={s.countUser}>
+          <img className={s.img} src={subscrite} alt={t('user')} />
+          {user === countUser ? user : countUser}
+        </div>
         <ul className={s.list}>
           {infoText.map((item: InfoTextItem, index: number) => {
             const isUnlocked = usersCount >= item.userCount && !item.isPlatform;
@@ -60,8 +70,8 @@ export const DevelopmentPlan: React.FC<DevelopmentPlanProps> = ({ usersCount }) 
                 <div className={s.users}>
                   <img src={lockOpen} alt="lockOpen" />
                   <span className={classNames(s.countUsers, s.text)}>
-                    {isNumbersBlurred ? '???' : formatAbbreviation(item.userCount, 'number', { locale })}{' '}
-                    {t('p23')} {item.isPlatform && ` ${t('p24')}`}
+                    {isNumbersBlurred ? '???' : formatAbbreviation(item.userCount, 'number', { locale })} {t('p23')}{' '}
+                    {item.isPlatform && ` ${t('p24')}`}
                   </span>
                 </div>
                 <p className={s.textInfoPlan}>{isDescriptionBlurred ? '*****' : item.description}</p>

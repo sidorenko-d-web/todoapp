@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react'; // Добавлен useState
 import styles from './Reward.module.scss';
 import goldMedal from '../../../../assets/icons/medal-gold.svg';
 import silverMedal from '../../../../assets/icons/medal-silver.svg';
@@ -27,17 +27,16 @@ interface RewardProps {
   id: string;
 }
 
-const Reward: React.FC<RewardProps> = ({ name,name_eng, stars, medal, isActive, id }) => {
-  const { t,i18n, } = useTranslation('profile');
-  const locale = ['ru', 'en'].includes(i18n.language)
-    ? (i18n.language as 'ru' | 'en')
-    : 'ru';
+const Reward: React.FC<RewardProps> = ({ name, name_eng, stars, medal, isActive: initialIsActive, id }) => {
+  const { t, i18n } = useTranslation('profile');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const { data: equipped_items } = useGetEquipedQuery();
-
   const { refetch } = useGetInventoryAchievementsQuery();
   const [addAchivement] = useAddItemToRoomMutation();
   const [removeAchivement] = useRemoveItemFromRoomMutation();
+
+  const [isActive, setIsActive] = useState(initialIsActive);
 
   const medalIcons = {
     gold: goldMedal,
@@ -47,17 +46,18 @@ const Reward: React.FC<RewardProps> = ({ name,name_eng, stars, medal, isActive, 
 
   const handleEquipAchivement = async () => {
     if (!equipped_items) return;
-    console.log(equipped_items);
+
+    setIsActive(false);
+
     try {
       if (equipped_items.achievements.length > 0) {
-        const res1 = await removeAchivement({ achievements_to_remove: [{ id: equipped_items?.achievements?.[0].id }] });
-        console.log(res1, 1);
+        await removeAchivement({ achievements_to_remove: [{ id: equipped_items?.achievements?.[0].id }] });
       }
-      const res = await addAchivement({ equipped_achievements: [{ id, slot: 100 }] });
-      console.log(res, 2);
+      await addAchivement({ equipped_achievements: [{ id, slot: 100 }] });
       refetch();
     } catch (error) {
       console.log(error);
+      setIsActive(initialIsActive);
     }
   };
 

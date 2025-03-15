@@ -1,4 +1,4 @@
-@use '../../../assets/styles/index.scss' as var;
+@use "../../../assets/styles/index.scss" as var;
 
 .headerDevelopment {
   width: 100%;
@@ -16,6 +16,27 @@
 .textName {
   margin: 0;
   color: var.$color-text-semi-transparent;
+}
+
+.countUser {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 48px;
+  border-radius: 12px;
+  padding: 12px;
+  width: 100%;
+  background: var.$color-card-bg;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 100%;
+  color: var.$color-blue-primary;
+}
+
+.img {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
 }
 
 .list {
@@ -82,7 +103,6 @@
   background: var.$color-gray;
 }
 
-
 .text {
   font-weight: 500;
   line-height: 100%;
@@ -107,7 +127,7 @@
   background-color: var.$color-dark-gray;
 
   img {
-    @include var.multi-size(14px, 16px)
+    @include var.multi-size(14px, 16px);
   }
 }
 
@@ -135,7 +155,7 @@
   align-items: center;
   gap: 10px;
   border-radius: 8px;
-  background: #373A43;
+  background: #373a43;
   padding: 10px 8px 10px 10px;
   font-weight: 500;
   line-height: 100%;

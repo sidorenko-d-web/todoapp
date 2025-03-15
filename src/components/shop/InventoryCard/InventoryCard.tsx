@@ -56,7 +56,7 @@ const getPremiumLevelOrder = (level: TypeItemQuality) =>
     base: 0,
     advanced: 1,
     pro: 2,
-  }[level]);
+  })[level];
 
 function sortByPremiumLevel(items: IShopItem[]) {
   return [...items].sort(
@@ -220,33 +220,34 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     item.level < 10
       ? 10
       : item.level < 20
-      ? 20
-      : item.level < 30
-      ? 30
-      : item.level < 40
-      ? 40
-      : item.level < 50
-      ? 50
-      : item.level < 60
-      ? 60
-      : item.level < 70
-      ? 70
-      : item.level < 80
-      ? 80
-      : item.level < 90
-      ? 90
-      : item.level < 100
-      ? 100
-      : item.level < 110
-      ? 110
-      : item.level < 120
-      ? 120
-      : item.level < 130
-      ? 130
-      : item.level < 140
-      ? 140
-      : 150;
+        ? 20
+        : item.level < 30
+          ? 30
+          : item.level < 40
+            ? 40
+            : item.level < 50
+              ? 50
+              : item.level < 60
+                ? 60
+                : item.level < 70
+                  ? 70
+                  : item.level < 80
+                    ? 80
+                    : item.level < 90
+                      ? 90
+                      : item.level < 100
+                        ? 100
+                        : item.level < 110
+                          ? 110
+                          : item.level < 120
+                            ? 120
+                            : item.level < 130
+                              ? 130
+                              : item.level < 140
+                                ? 140
+                                : 150;
 
+  console.log(item.level);
   return (
     <div className={styles.storeCard}>
       {<GetGift giftColor={localStorage.getItem('giftName') ?? ''} />}
@@ -284,8 +285,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                ? styles.colorPurple
-                : styles.level
+                  ? styles.colorPurple
+                  : styles.level
             }
           >
             {t('s20')} {item.level} {isB && t('s21')}
@@ -336,14 +337,14 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                       item.level < 50
                         ? ChestBlueIcon
                         : item.level >= 50 && item.level < 100
-                        ? ChestPurpleIcon
-                        : item.level >= 100 && item.level <= 150
-                        ? ChestRedIcon
-                        : item.item_rarity === 'red'
-                        ? ChestBlueIcon
-                        : item.item_rarity === 'yellow'
-                        ? ChestPurpleIcon
-                        : ChestRedIcon
+                          ? ChestPurpleIcon
+                          : item.level >= 100 && item.level <= 150
+                            ? ChestRedIcon
+                            : item.item_rarity === 'red'
+                              ? ChestBlueIcon
+                              : item.item_rarity === 'yellow'
+                                ? ChestPurpleIcon
+                                : ChestRedIcon
                     }
                     alt=""
                   />
@@ -357,8 +358,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                   item.item_rarity === 'red'
                     ? styles.done
                     : item.item_rarity === 'yellow'
-                    ? styles.donePurple
-                    : styles.doneRed
+                      ? styles.donePurple
+                      : styles.doneRed
                 }
                 style={{
                   width: `${Math.min(((item.level % 10) / 10) * 100, 100)}%`,
@@ -376,8 +377,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                         item.item_rarity === 'red'
                           ? styles.item
                           : item.item_rarity === 'yellow'
-                          ? styles.itemPurple
-                          : styles.itemRed,
+                            ? styles.itemPurple
+                            : styles.itemRed,
                         _item.item_premium_level === 'advanced' && !item.is_bought ? styles.noBorder : '',
                         _item.item_premium_level === 'pro' && !item.is_bought ? styles.noBorder : '',
                         // item.item_premium_level === 'advanced'
@@ -391,10 +392,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                               '--lvl-height': `${(item.level / 50) * 100}%`,
                             } as React.CSSProperties)
                           : item.level >= 50 && index === 2
-                          ? ({
-                              '--lvl-height': `${((item.level - 50) / 50) * 100}%`,
-                            } as React.CSSProperties)
-                          : undefined
+                            ? ({
+                                '--lvl-height': `${((item.level - 50) / 50) * 100}%`,
+                              } as React.CSSProperties)
+                            : undefined
                       }
                     >
                       <img src={itemStoreString(_item.image_url)} className={styles.itemImage} alt="" />
@@ -442,7 +443,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           <p>{t('s27')}</p>
           <img src={LockIcon} alt="" />
         </div>
-      ) : isUpgradeEnabled && profile && profile.growth_tree_stage_id > item.level + 1 ? (
+      ) : isUpgradeEnabled && profile && profile.growth_tree_stage_id > item.level ? (
         <div className={styles.actions}>
           <Button
             onClick={handleUsdtPayment}
@@ -483,7 +484,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>
-            {t('s18')} {profile && profile.growth_tree_stage_id + 1}
+            {t('s18')} {profile && profile.growth_tree_stage_id}
           </p>
           <img src={LockIcon} alt="" />
         </div>

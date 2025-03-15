@@ -7,28 +7,24 @@ import { isGuideShown } from '../../../utils';
 import { GUIDE_ITEMS } from '../../../constants';
 
 interface props {
-  shopCategory: {
-    title: string;
-    value: string;
-  } | undefined;
+  shopCategory:
+    | {
+        title: string;
+        value: string;
+      }
+    | undefined;
   shopItems?: IShopItem[];
   inventoryItems?: IShopItem[];
 }
 
 export const ItemsTab: FC<props> = ({ inventoryItems, shopItems }) => {
   const foundItem = shopItems?.find(item => item.name.toLowerCase().trim() === 'печатная машинка');
-
+  console.log(inventoryItems);
   return (
     <div className={styles.cardsWrapper}>
-      {inventoryItems?.map(item => (
-        <InventoryCard key={item.id} item={item} />
-      ))}
+      {inventoryItems?.map(item => <InventoryCard key={item.id} item={item} />)}
       {isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) ? (
-        <>
-          {shopItems?.map(item => (
-            <ShopItemCard key={item.id} item={item} />
-          ))}
-        </>
+        <>{shopItems?.map(item => <ShopItemCard key={item.id} item={item} />)}</>
       ) : foundItem ? (
         <ShopItemCard key={foundItem.id} item={foundItem} />
       ) : (
