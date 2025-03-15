@@ -118,58 +118,65 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   // useEffect(() => {
   //   localStorage.clear();
   // }, []);
+  const ref = useRef<any>(null);
 
   return (
     <>
-      <WhiteNoiseCanvas />
-      {isMobile === 1 && (
-        <div className={styles.root} onClick={handleAccelerate}>
-          <div />
-          <div className={styles.clickableArea}></div>
-          <video
-            ref={videoRef}
-            className={styles.coin}
-            src={loadingVid}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            width={410}
-            height={420}
-          />
-
-          {showProgressBar && !showAnimation && (
-            <div className={styles.betaAndProgressBar}>
-              <span className={styles.beta}>Beta</span>
-              <LoadingScreenBar
-                ref={loadingScreenBarRef}
-                speedMultiplier={speedMultiplier}
-                progress={progress}
-                setProgress={setProgress}
-                isAuthComplete={isAuthComplete}
+      <div ref={ref}>
+        <WhiteNoiseCanvas />
+      </div>
+      {ref && (
+        <>
+          {isMobile === 1 && (
+            <div className={styles.root} onClick={handleAccelerate}>
+              <div />
+              <div className={styles.clickableArea}></div>
+              <video
+                ref={videoRef}
+                className={styles.coin}
+                src={loadingVid}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                width={410}
+                height={420}
               />
+
+              {showProgressBar && !showAnimation && (
+                <div className={styles.betaAndProgressBar}>
+                  <span className={styles.beta}>Beta</span>
+                  <LoadingScreenBar
+                    ref={loadingScreenBarRef}
+                    speedMultiplier={speedMultiplier}
+                    progress={progress}
+                    setProgress={setProgress}
+                    isAuthComplete={isAuthComplete}
+                  />
+                </div>
+              )}
+              {showAnimation && (
+                // <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
+                <></>
+              )}
             </div>
           )}
-          {showAnimation && (
-            // <Lottie animationData={coinsAnim} loop={false} autoPlay={true} style={{ zIndex: '10000' }} />
-            <></>
-          )}
-        </div>
-      )}
 
-      {isMobile === -1 && (
-        <div className={styles.notMobile}>
-          <div className={styles.qr}>
-            <img src={qr} />
-            <p>Apusher MiniApp</p>
-          </div>
-          <p className={styles.useMobileApp}>
-            Пожалуйста, используйте
-            <br />
-            ваше мобильное устройство
-          </p>
-        </div>
+          {isMobile === -1 && (
+            <div className={styles.notMobile}>
+              <div className={styles.qr}>
+                <img src={qr} />
+                <p>Apusher MiniApp</p>
+              </div>
+              <p className={styles.useMobileApp}>
+                Пожалуйста, используйте
+                <br />
+                ваше мобильное устройство
+              </p>
+            </div>
+          )}
+        </>
       )}
     </>
   );

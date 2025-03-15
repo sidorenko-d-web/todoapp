@@ -1,5 +1,5 @@
 import styles from './NewItemModal.module.scss';
-import { AppRoute, MODALS, SOUNDS, itemStoreString } from '../../../../constants';
+import { AppRoute, MODALS, SOUNDS, itemStoreString, svgHeadersString } from '../../../../constants';
 import { useAutoPlaySound, useModal } from '../../../../hooks';
 import { IShopItem } from '../../../../redux';
 import Button from '../partials/Button';
@@ -15,15 +15,12 @@ import { setItemBought } from '../../../../redux/slices/guideSlice';
 import { CentralModal } from '../../../shared';
 import { useTranslation } from 'react-i18next';
 
-
 export const NewItemModal: React.FC = () => {
   const { closeModal, getModalState } = useModal();
   const { t, i18n } = useTranslation('shop');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const state = getModalState<{ item: IShopItem; mode: 'skin' | 'item' }>(
-    MODALS.NEW_ITEM,
-  );
+  const state = getModalState<{ item: IShopItem; mode: 'skin' | 'item' }>(MODALS.NEW_ITEM);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -36,15 +33,10 @@ export const NewItemModal: React.FC = () => {
   const isPrem = state.args?.item.item_rarity === 'yellow';
   const isPro = state.args?.item.item_rarity === 'green';
 
-
   useAutoPlaySound(MODALS.NEW_ITEM, SOUNDS.upgradeOrBuyItem);
 
   return (
-    <CentralModal
-      title={t('s43')}
-      onClose={() => closeModal(MODALS.NEW_ITEM)}
-      modalId={MODALS.NEW_ITEM}
-    >
+    <CentralModal title={t('s43')} onClose={() => closeModal(MODALS.NEW_ITEM)} modalId={MODALS.NEW_ITEM}>
       <div className={styles.images}>
         <Lottie
           animationData={isPrem ? purpleLight : isPro ? redLight : blueLight}
@@ -52,14 +44,15 @@ export const NewItemModal: React.FC = () => {
           className={styles.bgLight}
         />
 
-        <div
-          className={clsx(
-            styles.itemImage,
-            isPrem && styles.itemImagePurple,
-            isPro && styles.itemImageRed,
-          )}
-        >
-          <img src={itemStoreString(state.args?.item.image_url ?? '')} alt="item-image" />
+        <div className={clsx(styles.itemImage, isPrem && styles.itemImagePurple, isPro && styles.itemImageRed)}>
+          <img
+            src={
+              state.args?.mode === 'item'
+                ? itemStoreString(state.args?.item.image_url ?? '')
+                : state.args?.item.image_url + svgHeadersString
+            }
+            alt="item-image"
+          />
         </div>
       </div>
       {state.args?.mode === 'item' && (
@@ -84,7 +77,7 @@ export const NewItemModal: React.FC = () => {
           <p>
             {t('s48')}{' '}
             <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>
-              {locale === 'ru' ? state.args?.item.name :state.args?.item.name_eng}!
+              {locale === 'ru' ? state.args?.item.name : state.args?.item.name_eng}!
             </span>{' '}
             {t('s49')}
           </p>
@@ -92,7 +85,7 @@ export const NewItemModal: React.FC = () => {
           <p>
             {t('s50')}{' '}
             <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>
-              {locale === 'ru' ? state.args?.item.name :state.args?.item.name_eng}!
+              {locale === 'ru' ? state.args?.item.name : state.args?.item.name_eng}!
             </span>{' '}
             {t('s51')}
           </p>
