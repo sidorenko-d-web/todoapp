@@ -51,12 +51,7 @@ export const Tree = () => {
 
   const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
 
-<<<<<<< HEAD
-  const [unlockAchievement] = useUnlockAchievementMutation();
-
-=======
   const [ unlockAchievement ] = useUnlockAchievementMutation();
->>>>>>> 70676dadfab78d7ea062731d82a38d2db7b51b68
   const { progressPercent } = useTreeProgress({
     treeData,
     userSubscribers,
@@ -67,9 +62,6 @@ export const Tree = () => {
     if (treeData && userProfileData && isBgLoaded) {
       setDataLoaded(true);
     }
-<<<<<<< HEAD
-  }, [progressPercent, treeData, userProfileData]);
-=======
   }, [treeData, userProfileData, isBgLoaded]);
 
   // Handle scrolling with proper delay and conditions
@@ -132,7 +124,6 @@ export const Tree = () => {
       setHasScrolled(false);
     };
   }, []);
->>>>>>> 70676dadfab78d7ea062731d82a38d2db7b51b68
 
   if (!treeData || !isBgLoaded || !userProfileData) {
     return <Loader />;
