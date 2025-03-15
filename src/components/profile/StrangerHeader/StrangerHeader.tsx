@@ -13,8 +13,6 @@ export const StrangerHeader = () => {
   const { profileId } = useParams();
   const { data: profile } = useGetUserProfileInfoByIdQuery(profileId || '');
 
-  const frozen = data?.week_information.filter(day => day.push_line_data?.status === 'passed').length;
-
   const streaks = data?.week_information.filter(
     day => day && (day.push_line_data?.status === 'unspecified' || day.push_line_data?.status === 'passed'),
   ).length;
@@ -22,7 +20,7 @@ export const StrangerHeader = () => {
   const navigate = useNavigate();
 
   const isRoom = useLocation().pathname.includes('room');
-
+  console.log(profile);
   return (
     <div className={s.listUser}>
       <div
@@ -38,7 +36,7 @@ export const StrangerHeader = () => {
         <div className={s.userInfo}>
           <h3 className={s.text}>{profile?.username}</h3>
           <ul className={classNames(s.ulBlock, s.infoRang)}>
-            <li className={s.number}>{frozen ?? 0}</li>
+            <li className={s.number}>{profile?.growth_tree_stage_id}</li>
             <li className={s.fireIcon}>
               <img src={fireIcon} alt="fire" width={12} height={12} />
               <span>{formatAbbreviation(streaks ?? 0)}</span>
@@ -58,7 +56,7 @@ export const StrangerHeader = () => {
         onClick={() => navigate(isRoom ? '/profile/' + profileId : '/profile/' + profileId + '/room')}
       >
         {/*{profile.vip ? <img src={chest} height={20} width={20} alt="chest" /> :*/}
-        <img src={infoIcon}  alt="close" width={20} height={20} />
+        <img src={infoIcon} alt="close" width={20} height={20} />
         {/*}*/}
       </Button>
     </div>

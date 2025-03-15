@@ -11,6 +11,7 @@ import { useGetProfileMeQuery, useGetTopProfilesQuery } from '../../../../redux'
 import { Link } from 'react-router-dom';
 import { formatAbbreviation } from '../../../../helpers';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 interface InviteFriendProps {
   modalId: string;
@@ -18,6 +19,7 @@ interface InviteFriendProps {
 }
 
 export const TopUsers: FC<InviteFriendProps> = ({ modalId, onClose }: InviteFriendProps) => {
+  const { t } = useTranslation('promotion');
   const { data } = useGetTopProfilesQuery({});
   const topProfiles = data?.profiles || [];
   const { data: userProfileData } = useGetProfileMeQuery();
@@ -29,7 +31,7 @@ export const TopUsers: FC<InviteFriendProps> = ({ modalId, onClose }: InviteFrie
   const position = userPosition !== -1 ? userPosition + 1 : topProfiles.length!;
 
   return (
-    <BottomModal modalId={modalId} title={'Топ 10 000 инфлюенсеров'} onClose={onClose} titleIcon={cup}>
+    <BottomModal modalId={modalId} title={t('p62')} onClose={onClose} titleIcon={cup}>
       <ul className={classNames(s.subscribers, s.ulBlock)}>
         <li className={s.listBadge}>
           <span className={s.badge}>
@@ -37,7 +39,7 @@ export const TopUsers: FC<InviteFriendProps> = ({ modalId, onClose }: InviteFrie
           </span>
         </li>
         <li className={s.listBadge}>
-          <span className={classNames(s.badgeText, s.text)}>Осталось 3 д.</span>
+          <span className={classNames(s.badgeText, s.text)}>{t('p63')}</span>
         </li>
       </ul>
       <ul className={classNames(s.ulBlock, s.blogUsers)}>

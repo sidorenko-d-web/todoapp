@@ -27,6 +27,7 @@ interface ProfileInfoProps {
   nonEditable?: boolean;
   strangerId?: string;
   showTreeLink?: boolean;
+  levelUser: number;
 }
 
 export const ProfileInfo: React.FC<ProfileInfoProps> = ({
@@ -36,9 +37,9 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
   isVip,
   strangerId,
   showTreeLink,
+  levelUser,
 }) => {
   const { t } = useTranslation('profile');
-  const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
 
   const sceneRef = useRef<HTMLDivElement | null>(null);
 
@@ -151,7 +152,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
               to={AppRoute.ProgressTree}
               className={styles.subscribers}
             >
-              {lastActiveStage}
+              {levelUser}
             </TrackedLink>
             {/*{!nonEditable && (*/}
             {/*  <img*/}

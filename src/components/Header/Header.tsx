@@ -45,7 +45,7 @@ export const Header = () => {
   const dispatch = useDispatch();
   const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
   const { i18n } = useTranslation('profile');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const platform = getOS();
 
   const { getModalState } = useModal();
@@ -58,7 +58,7 @@ export const Header = () => {
         console.log('update ' + data?.points);
       });
     }
-  }, [ isOpen ]);
+  }, [isOpen]);
 
   const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
@@ -74,7 +74,7 @@ export const Header = () => {
     if (lastActiveStageNumber) {
       dispatch(setLastActiveStage(lastActiveStageNumber));
     }
-  }, [ lastActiveStageNumber, dispatch ]);
+  }, [lastActiveStageNumber, dispatch]);
 
   const handleNavigateToProfile = () => {
     if (footerActive) {

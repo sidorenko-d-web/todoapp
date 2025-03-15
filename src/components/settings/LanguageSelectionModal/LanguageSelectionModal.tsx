@@ -66,6 +66,7 @@ export const LanguageSelectionModal = () => {
             title="Язык/Language"
             headerStyles={styles.titleStyles} 
             onClose={handleCloseModal}
+            overlayOpacity={0}
         >
             <div className={styles.wrapper}>
                 <div className={styles.languageSection}>

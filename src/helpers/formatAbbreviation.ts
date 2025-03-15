@@ -21,17 +21,14 @@ const scales: ScaleConfig[] = [
 export const formatAbbreviation = (
   value: number | string | Date | undefined | null,
   abbreviationType: AbbreviationType = 'number',
-  { locale = 'ru', decimals = 3, currencySymbol = ' $USDT' }: FormatAbbreviationOptions = {},
+  { locale = 'ru', decimals = 2, currencySymbol = ' $USDT' }: FormatAbbreviationOptions = {},
 ): string => {
   if (value === undefined || value === null) {
     return ''; // Возвращаем пустую строку или значение по умолчанию
   }
 
   if (abbreviationType === 'date') {
-    const asDate =
-      typeof value === 'string' || typeof value === 'number'
-        ? new Date(value)
-        : value;
+    const asDate = typeof value === 'string' || typeof value === 'number' ? new Date(value) : value;
     if (Number.isNaN(asDate.getTime())) return '';
     const dd = String(asDate.getDate()).padStart(2, '0');
     const mm = String(asDate.getMonth() + 1).padStart(2, '0');
@@ -85,9 +82,7 @@ export const formatAbbreviation = (
     const intPart = formatInt(numericValue);
     const fracPart = formatFrac(numericValue);
     const s = intPart + fracPart;
-    return locale === 'ru'
-      ? `${s} ${currencySymbol}`
-      : `${s.replace(/\s/g, '')}${currencySymbol}`;
+    return locale === 'ru' ? `${s} ${currencySymbol}` : `${s.replace(/\s/g, '')}${currencySymbol}`;
   }
 
   if (abbreviationType === 'percent') {
@@ -99,7 +94,7 @@ export const formatAbbreviation = (
 
   if (abbreviationType === 'number') {
     const absVal = Math.abs(numericValue);
-    const scaleItem = scales.find((item) => absVal >= item.threshold);
+    const scaleItem = scales.find(item => absVal >= item.threshold);
 
     if (!scaleItem) {
       const intPart = formatInt(numericValue);
@@ -122,15 +117,11 @@ export const formatAbbreviation = (
     if (scaleItem.threshold === 1e12) {
       const truncatedValue = Math.floor(numericValue / 1e12);
       const truncatedString = truncatedValue.toString().slice(0, 4);
-      return locale === 'ru'
-        ? `${truncatedString}... ${suffix}`
-        : `${truncatedString}...${suffix}`;
+      return locale === 'ru' ? `${truncatedString}... ${suffix}` : `${truncatedString}...${suffix}`;
     }
 
     if (!fracRaw) {
-      return locale === 'ru'
-        ? `${formattedWhole} ${suffix}`
-        : `${formattedWhole}${suffix}`;
+      return locale === 'ru' ? `${formattedWhole} ${suffix}` : `${formattedWhole}${suffix}`;
     }
 
     return locale === 'ru'

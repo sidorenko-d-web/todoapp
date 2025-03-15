@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import subscribersIcon from '../../assets/icons/subscribers.png';
 import { DevelopmentPlan, IncreaseIncome, Loader, TopInfluencers } from '../../components';
 
@@ -28,9 +28,10 @@ export const PromotionPage: React.FC = () => {
     isLoading: isTopProfilesLoading,
   } = useGetTopProfilesQuery({});
   const { data: usersCountData, isLoading: isUsersCountLoading } = useGetUsersCountQuery();
-  // const userPosition = userProfileData && topProfilesData?.profiles
-  //   ? topProfilesData.profiles.findIndex((profile: { id: string; }) => profile.id === userProfileData.id)
-  //   : -1;
+  // const userPosition =
+  //   userProfileData && topProfilesData?.profiles
+  //     ? topProfilesData.profiles.findIndex((profile: { id: string }) => profile.id === userProfileData.id)
+  //     : -1;
 
   useEffect(() => {
     dispatch(setActiveFooterItemId(3));
@@ -68,7 +69,9 @@ export const PromotionPage: React.FC = () => {
 
             <IncreaseIncome />
             <TopInfluencers />
-            {usersCountData && <DevelopmentPlan usersCount={usersCountData.players} />}
+            {usersCountData && topProfilesData && (
+              <DevelopmentPlan usersCount={usersCountData.players} user={topProfilesData.count || 0} />
+            )}
           </section>
         </main>
       )}

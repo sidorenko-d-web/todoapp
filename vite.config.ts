@@ -54,10 +54,10 @@ export default defineConfig({
   // server: {
   //   allowedHosts: true,
   //   proxy: {
-  //     '/api/miniapp-v2-dev': {
-  //       target: 'https://storage.yandexcloud.net',
+  //     '/api/miniapp-v2-prod': {
+  //       target: 'https://miniapp.apusher.com',
   //       changeOrigin: true,
-  //       rewrite: path => path.replace(/^\/api\/miniapp-v2-dev/, ''),
+  //       rewrite: path => path.replace(/^\/api\/miniapp-v2-prod/, ''),
   //     },
   //   },
   // },

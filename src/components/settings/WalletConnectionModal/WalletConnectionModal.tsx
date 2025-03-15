@@ -61,6 +61,7 @@ export const WalletConnectionModal = () => {
       title={t('s3')}
       onClose={handleCloseModal}
       headerStyles={styles.titleStyles}
+      overlayOpacity={0}
     >
 
 

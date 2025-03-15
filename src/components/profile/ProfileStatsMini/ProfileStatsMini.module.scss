@@ -1,11 +1,9 @@
-@use '../../../assets/styles/index.scss' as var;
+@use "../../../assets/styles/index.scss" as var;
 
 .wrp {
   width: 100%;
   display: flex;
   justify-content: space-between;
-
-
 
   &.justifyCenter {
     justify-content: center;
@@ -18,11 +16,13 @@
   }
 
   .statsWrp {
+    max-width: 150px;
     display: flex;
+    flex: 1;
+    flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
     gap: 5px;
-    align-items: end;
 
     .statWrp {
       height: fit-content;
@@ -46,13 +46,8 @@
       }
 
       img {
-        width: 14px;
-        height: 14px;
-
-        @media (min-width: var.$breakpoint-md) {
-          width: 18px;
-          height: 18px;
-        }
+        width: 18px;
+        height: 18px;
       }
     }
   }
@@ -64,7 +59,7 @@
     background-color: var.$color-primary;
 
     border: none;
-    background-image: url('../../../assets/icons/wardrobe.svg');
+    background-image: url("../../../assets/icons/wardrobe.svg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 60%;

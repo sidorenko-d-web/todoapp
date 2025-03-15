@@ -157,6 +157,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   //   }
   // }, []);
 
+  const integrationPublished = isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+
 
   return (
     <CentralModal
@@ -203,23 +205,25 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
             {!noItemsMessage ? (
               <div className={s.companies}>
-                {companies?.map((company) =>
-                  company.growth_tree_stage !== 100 && (
-                    <CompanyCard
-                      key={company.id}
-                      company={company}
-                      selected={selectedCompanyId === company.id}
-                      disabled={hasCreatingIntegration || isSubmitting}
-                      onClick={() => {
-                        if (selectedCompanyId === company.id) {
-                          setSelectedCompanyId(""); // Deselect if clicking the same card
-                        } else {
-                          setSelectedCompanyId(company.id); // Select new card
-                        }
-                      }}
-                    />
-                  ),
-                )}
+                {companies
+                  ?.filter((_, index) => integrationPublished || index === 1)
+                  .map((company) =>
+                    company.growth_tree_stage !== 100 && (
+                      <CompanyCard
+                        key={company.id}
+                        company={company}
+                        selected={selectedCompanyId === company.id}
+                        disabled={hasCreatingIntegration || isSubmitting}
+                        onClick={() => {
+                          if (selectedCompanyId === company.id) {
+                            setSelectedCompanyId(""); // Deselect if clicking the same card
+                          } else {
+                            setSelectedCompanyId(company.id); // Select new card
+                          }
+                        }}
+                      />
+                    )
+                  )}
               </div>
             ) : (
               <span className={s.message}>{noItemsMessage}</span>
@@ -280,7 +284,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       />} */}
       {(!isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)) && <CreatingIntegrationGuide
         onClose={() => {
-          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
           onClose();
           navigate(AppRoute.Shop);

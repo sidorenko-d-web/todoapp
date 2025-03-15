@@ -141,6 +141,7 @@ export const StrangerProfilePage: React.FC = () => {
             <ProfileInfo
               nickname={userProfileData.username}
               blogName={userProfileData.blog_name}
+              levelUser={userProfileData.growth_tree_stage_id}
               subscriptionIntegrationsLeft={userProfileData.subscription_integrations_left}
               position={position}
               isVip={false}

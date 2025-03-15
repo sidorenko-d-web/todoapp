@@ -21,7 +21,7 @@ const Layout = () => {
   const [bgOffset, setBgOffset] = useState(0);
   const contentRef = useScrollManager();
 
-  const showHeader = !location.pathname.includes('profile');
+  const showHeader = !(location.pathname.split('/')[1] === 'profile' && !!location.pathname.split('/')[2]);
 
   const needsReducedMargin = [
     '/',
@@ -34,7 +34,7 @@ const Layout = () => {
   const showHeaderBG =
     !['/', '/progressTree'].includes(location.pathname) &&
     !(location.pathname.split('/')[1] === 'profile' && location.pathname.split('/')[3] === 'room');
-  console.log(location.pathname);
+
   useEffect(() => {
     const isNeedToOpenChest = localStorage.getItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
     if (isNeedToOpenChest) openModal(MODALS.TASK_CHEST);
