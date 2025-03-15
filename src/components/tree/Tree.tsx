@@ -38,18 +38,18 @@ const shopUpgrades: ShopUpgrades = {
 export const Tree = () => {
   const { openModal } = useModal();
   const { t, i18n } = useTranslation('tree');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData, refetch } = useGetTreeInfoQuery();
   const { data: userProfileData } = useGetProfileMeQuery();
   const lastActiveLevelRef = useRef<HTMLDivElement | null>(null);
-  const [ currentBoost, setCurrentBoost ] = useState<Boost | null>(null);
+  const [currentBoost, setCurrentBoost] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
 
   const userSubscribers = userProfileData?.subscribers || 0;
 
   const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const [ unlockAchievement ] = useUnlockAchievementMutation();
+  const [unlockAchievement] = useUnlockAchievementMutation();
 
   const { progressPercent } = useTreeProgress({
     treeData,
@@ -67,7 +67,7 @@ export const Tree = () => {
         });
       }, 100); // Задержка в 100 мс
     }
-  }, [ progressPercent, treeData, userProfileData ]);
+  }, [progressPercent, treeData, userProfileData]);
 
   if (!treeData || !isBgLoaded || !userProfileData) {
     return <Loader />;
@@ -86,7 +86,7 @@ export const Tree = () => {
 
   return (
     <div className={s.container}>
-      <div className={s.progressBarAdditional} />
+      {/* <div className={s.progressBarAdditional} /> */}
       <div className={s.progressBarContainer}>
         <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300}px` }}>
           <div className={s.progressFill} style={{ height: `${progressPercent}%` }} ref={progressBarContainerRef} />
@@ -98,8 +98,8 @@ export const Tree = () => {
             const isActive = userProfileData && stage.id <= userProfileData.growth_tree_stage_id;
             const bottomPosition = 150 + index * 300;
 
-            const giftColors = [ giftBlue, giftPurple, giftRed ];
-            const spinnerColors = [ spinnerBlue, spinnerPurple, spinnerRed ];
+            const giftColors = [giftBlue, giftPurple, giftRed];
+            const spinnerColors = [spinnerBlue, spinnerPurple, spinnerRed];
 
             const giftIcon = giftColors[index % giftColors.length];
             const spinnerIcon = spinnerColors[index % spinnerColors.length];
@@ -120,7 +120,7 @@ export const Tree = () => {
 
                 {isRewardAvailable && !isRewardClaimed && showReward && (
                   <Button
-                    className={s.takeRewardBtn}
+                    className={classNames(s.takeRewardBtn, { [s.hidden]: isRewardClaimed })}
                     onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}
                   >
                     {t('t2')}
