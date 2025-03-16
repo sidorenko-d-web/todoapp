@@ -1,10 +1,11 @@
 import styles from './Footer.module.scss';
-import { footerItems } from '../../constants';
+import { AppRoute, footerItems, GUIDE_ITEMS } from '../../constants';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux';
 import { TrackedButton } from '..';
+import { isGuideShown } from '../../utils';
 
 export const Footer = () => {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ export const Footer = () => {
   const [activeButton, setActiveButton] = useState<number>(-1);
   const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
+  const [hasInitialized, setHasInitialized] = useState<boolean>(false);
+  
   useEffect(() => {
     if (location.pathname === '/progressTree' || location.pathname === '/wardrobe') {
       setActiveButton(-1);
@@ -22,6 +25,16 @@ export const Footer = () => {
     if (footerActive) navigate(redirectTo);
     setActiveButton(id);
   };
+
+  useEffect(() => {
+    if (!hasInitialized && isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+      const mainItem = footerItems.find(item => item.redirectTo === AppRoute.Main);
+      if (mainItem) {
+        handleFooterItemClick(mainItem.id, mainItem.redirectTo);
+        setHasInitialized(true);
+      }
+    }
+  }, [hasInitialized]);
 
   return (
     <div className={styles.footerItems}>
