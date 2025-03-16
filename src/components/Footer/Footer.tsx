@@ -22,8 +22,10 @@ export const Footer = () => {
   }, [location.pathname]);
 
   const handleFooterItemClick = (id: number, redirectTo: string) => {
-    if (footerActive) navigate(redirectTo);
-    setActiveButton(id);
+    if (footerActive) { 
+      navigate(redirectTo);
+      setActiveButton(id);
+    }
   };
 
   useEffect(() => {
