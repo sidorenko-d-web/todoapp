@@ -12,3 +12,4 @@ export * from './guide';
 export * from './influencers';
 export * from './withTracking';
 export * from './Loader';
+export * from "./timer"
