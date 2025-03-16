@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { LoadingScreen } from '../../components/shared/LoadingScreen';
 import { LanguageSelect } from '../../pages/LanguageSelect';
 import { SkinSetupPage } from '../../pages/SkinSetupPage';
@@ -38,8 +38,14 @@ export function AuthInit({ children }: AuthInitProps) {
     }
   }, [isLoading]);
 
-  if (isLoading || isInitializing || !isAnimationFinished) {
-    console.log('object', 1);
+  const shouldShowLoading =
+    isLoading ||
+    isInitializing ||
+    !isAnimationFinished ||
+    currentStep === 'loading' ||
+    currentStep === 'final_loading';
+
+  if (shouldShowLoading) {
     return (
       <LoadingScreen
         isAuthComplete={!isLoading && loadingStarted}
@@ -48,82 +54,50 @@ export function AuthInit({ children }: AuthInitProps) {
     );
   }
 
-  switch (currentStep) {
-    case 'loading':
-      console.log('object', 2);
-      return (
-        <LoadingScreen
-          isAuthComplete={!isLoading && loadingStarted}
-          onAnimationComplete={() => setIsAnimationFinished(true)}
-        />
-      );
-
-    case 'language':
-      console.log('object', 3);
-      return (
+  return (
+    <Suspense fallback={<LoadingScreen isAuthComplete={false} onAnimationComplete={() => {}} />}>
+      {currentStep === 'language' && (
         <LanguageSelect
           selectedLanguage={selectedLanguage}
           onLanguageSelect={handleLanguageSelect}
           onContinue={handleLanguageContinue}
         />
-      );
-
-    case 'invite_code':
-      console.log('object', 4);
-      return (
+      )}
+      {currentStep === 'invite_code' && (
         <EnterInviteCodePage
           onContinue={handleInviteCodeContinue}
           // referral_id={WebApp.initDataUnsafe.user?.id ?? 0}
-          // referral_id={window.Telegram.WebApp.initDataUnsafe.user.id}
+          referral_id={window.Telegram.WebApp.initDataUnsafe.user.id}
           // referral_id={1259832544}
           // referral_id={1301940582}
           // referral_id={6547551264}
           // referral_id={1488618801}
-          referral_id={6475086298}
+          // referral_id={6475086298}
           // referral_id={6983657401}
         />
-      );
-
-    case 'final_loading':
-      console.log('object', 5);
-      return (
-        <LoadingScreen
-          isAuthComplete={!isLoading && loadingStarted}
-          onAnimationComplete={() => setIsAnimationFinished(true)}
-        />
-      );
-
-    case 'skin':
-      console.log('object', 6);
-      return <SkinSetupPage onContinue={handleSkinContinue} />;
-
-    // case 'push_line' :
-    //   return <DaysInARowModal onClose={handleModalClose} />;
-
-    case 'completed':
-      return (
+      )}
+      {currentStep === 'skin' && <SkinSetupPage onContinue={handleSkinContinue} />}
+      {currentStep === 'completed' && (
         <>
           {!coinsAnimationShown && (
             <Lottie
               animationData={coinsAnim}
               loop={false}
-              autoPlay={true}
-              style={{ zIndex: '10000', position: 'absolute' }}
-              onComplete={() => {
-                setCoinstAnimationShown(true);
-              }}
+              autoPlay
+              style={{ zIndex: 10000, position: 'absolute' }}
+              onComplete={() => setCoinstAnimationShown(true)}
             />
           )}
           {children}
         </>
-      );
-
-    default:
-      return (
+      )}
+      {/* Если ни один из кейсов не подошёл, показываем LoadingScreen */}
+      {!['language', 'invite_code', 'skin', 'completed'].includes(currentStep) && (
         <LoadingScreen
           isAuthComplete={!isLoading && loadingStarted}
           onAnimationComplete={() => setIsAnimationFinished(true)}
         />
-      );
-  }
+      )}
+    </Suspense>
+  );
 }
