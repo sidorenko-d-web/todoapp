@@ -8,7 +8,7 @@ import { ModalsProvider } from './providers';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { TonClientProvider } from './providers/TonClientProvider';
 import { TransactionNotificationProvider } from './providers/TransactionNotificationProvider/';
-
+// import CountdownTimer from './components/timer/CountdownTimer.tsx'; // Расскоментить таймер
 
 declare global {
   interface Window {
@@ -17,6 +17,14 @@ declare global {
 }
 
 function App() {
+
+  // // Раскомментить таймер
+  // const releaseDate = new Date('2025-03-18T12:00:00+03:00');
+  // const now = new Date();
+  // if (now < releaseDate) {
+  //   return <CountdownTimer />;
+  // }
+
   return (
     <>
       <Provider store={store}>
