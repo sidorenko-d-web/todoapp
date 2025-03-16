@@ -72,6 +72,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   } else if (item.level >= 100 && item.level <= 150) {
     s25Key = 's25_150';
   }
+  console.log('item ', item.name, ', level: ', item.item_premium_level)
   const RoomItemsSlots = useRoomItemsSlots();
 
   console.log('s25Key:', s25Key);
@@ -99,6 +100,16 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
   const [showEquipButton, setShowEquipButton] = useState(false);
 
+  const [price, setPrice] = useState("");
+
+  useEffect(() => {
+    if(data) {
+      const desiredItem = data.items.find(item_ => item_.item_premium_level === item.item_premium_level);
+     // console.log('item lvl: ', item.item_premium_level, ', cycle item lvl: ', item_.item_premium_level);
+      setPrice('' + desiredItem?.price_internal);
+     console.log('price: ', price);
+    }
+  }, [data, isItemsLoading]);
   
 
   const [equipItem] = useAddItemToRoomMutation();
@@ -277,7 +288,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                                 ? 140
                                 : 150;
 
-  console.log(item.level);
+  console.log(item.item_premium_level);
   return (
     <div className={styles.storeCard}>
       {<GetGift giftColor={localStorage.getItem('giftName') ?? ''} />}
@@ -496,10 +507,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                   : item.item_rarity === 'green' && styles.upgradeItemRed,
               )}
               disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
-              onClick={() => handleBuyItem(data?.items[0].price_internal ?? '')}
+              onClick={() => handleBuyItem(price ?? '')}
             >
               <>
-                {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {
+                {formatAbbreviation(price || 0, 'number', {
                   locale: locale,
                 })}{' '}
                 <img src={CoinIcon} alt="" />
