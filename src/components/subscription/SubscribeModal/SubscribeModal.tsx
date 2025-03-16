@@ -1,7 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import coinIcon from '../../../assets/icons/coin.png';
-import { RootState, setSubscribeGuideShown, useBuySubscriptionMutation, useGetProfileMeQuery } from '../../../redux';
+import {
+  RootState,
+  setSubscribeGuideShown,
+  useBuySubscriptionMutation,
+  useGetProfileMeWithPollingQuery,
+} from '../../../redux';
 
 import s from './SubscribeModal.module.scss';
 import { getSubscriptionPurchased, isGuideShown, setGuideShown, setSubscriptionPurchased } from '../../../utils';
@@ -34,7 +39,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
   const [timeUntilAvailable, setTimeUntilAvailable] = useState<number | null>(null);
 
   const [buySubscription] = useBuySubscriptionMutation();
-  const { data: current } = useGetProfileMeQuery(undefined, {
+  const { data: current } = useGetProfileMeWithPollingQuery(undefined, {
     pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
 

@@ -11,7 +11,6 @@ import { useRoomItemsSlots } from '../../../../translate/items/items.ts';
 import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfileStats.ts';
 import { useEffect, useState } from 'react';
 import { Loader } from '../../index.ts';
-import { PROFILE_ME_POLLING_INTERVAL } from '../../../constants';
 import { useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 
@@ -24,7 +23,6 @@ export const Room = ({ mode, strangerId }: props) => {
   const { data: room, isLoading: isRoomLoading } = useGetEquipedQuery(undefined, { skip: mode === 'stranger' });
   const character = useGetCharacterQuery(undefined, { skip: mode === 'stranger' });
   const { data } = useGetProfileMeQuery(undefined, {
-    pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
 
   const [isLoaded, setIsLoaded] = useState(false);

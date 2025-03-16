@@ -9,7 +9,7 @@ import medalSilver from '../../../assets/icons/medal-silver.svg';
 import blueLightAnimation from '../../../assets/animations/blueLight.json';
 import Lottie from 'lottie-react';
 import { useModal } from '../../../hooks';
-import { GUIDE_ITEMS, INVENTORY_ACHIEVEMENTS_POLLING_INTERVAL, MODALS, starsThresholds } from '../../../constants';
+import { GUIDE_ITEMS, MODALS, starsThresholds } from '../../../constants';
 import {
   setIsPublishedModalClosed,
   useAddItemToRoomMutation,
@@ -23,31 +23,29 @@ import { setGuideShown } from '../../../utils';
 export const IntegrationRewardModal = () => {
   const { getModalState, closeModal } = useModal();
   const { args } = getModalState<{
-    integrationsCount: number,
-    companyName: string,
-    image_url: string
+    integrationsCount: number;
+    companyName: string;
+    image_url: string;
   }>(MODALS.INTEGRATION_REWARD_CONGRATULATIONS);
   const { t, i18n } = useTranslation('integrations');
   const { data: equipped_items } = useGetEquipedQuery();
   const { refetch } = useGetInventoryAchievementsQuery();
-  const [ addAchivement ] = useAddItemToRoomMutation();
-  const [ removeAchivement ] = useRemoveItemFromRoomMutation();
+  const [addAchivement] = useAddItemToRoomMutation();
+  const [removeAchivement] = useRemoveItemFromRoomMutation();
 
   const dispatch = useDispatch();
 
-  const stars = function() {
+  const stars = (function () {
     if ((args?.integrationsCount ?? 0) === 18) return 3;
     if ((args?.integrationsCount ?? 0) === 10) return 2;
     if ((args?.integrationsCount ?? 0) === 4) return 1;
     return 0;
-  }();
+  })();
 
   const { data: achievementsData } = useGetInventoryAchievementsQuery({
     company_name: args?.companyName,
     total_integrations: args?.integrationsCount?.toString(),
     level: stars.toString(),
-  }, {
-    pollingInterval: INVENTORY_ACHIEVEMENTS_POLLING_INTERVAL,
   });
 
   const handleEquipAchivement = async () => {
@@ -55,12 +53,12 @@ export const IntegrationRewardModal = () => {
     console.log(equipped_items);
     try {
       if (equipped_items.achievements.length > 0) {
-        await removeAchivement({ achievements_to_remove: [ { id: equipped_items?.achievements?.[0].id } ] });
+        await removeAchivement({ achievements_to_remove: [{ id: equipped_items?.achievements?.[0].id }] });
       }
 
       const achievementId = achievementsData?.achievements[achievementsData.count - 1]?.id;
       if (achievementId) {
-        await addAchivement({ equipped_achievements: [ { id: achievementId, slot: 100 } ] });
+        await addAchivement({ equipped_achievements: [{ id: achievementId, slot: 100 }] });
       } else {
         console.error('Achievement ID is undefined');
       }
@@ -82,8 +80,12 @@ export const IntegrationRewardModal = () => {
     return i18n.language === 'ru' ? 'бронзовую медаль' : 'bronze medal';
   };
 
-  const ruText = `Поздравляем! Вы получили награду и ${getMedalTypeText()} за ${args?.integrationsCount ?? 0} интеграций с компанией ${args?.companyName ?? ''}!`;
-  const enText = `Congratulations! You received a reward and ${getMedalTypeText()} for ${args?.integrationsCount ?? 0} integrations with company ${args?.companyName ?? ''}!`;
+  const ruText = `Поздравляем! Вы получили награду и ${getMedalTypeText()} за ${
+    args?.integrationsCount ?? 0
+  } интеграций с компанией ${args?.companyName ?? ''}!`;
+  const enText = `Congratulations! You received a reward and ${getMedalTypeText()} for ${
+    args?.integrationsCount ?? 0
+  } integrations with company ${args?.companyName ?? ''}!`;
 
   return (
     <CentralModal
@@ -102,13 +104,12 @@ export const IntegrationRewardModal = () => {
           <div className={styles.imageAndAnimation}>
             <img className={styles.image} src={args?.image_url} alt="Image" />
             {/* <div className={styles.images}> */}
-            <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />;
-            {/* </div> */}
+            <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />;{/* </div> */}
           </div>
 
           <div className={styles.starsWrapper}>
             <img className={styles.medalIcon} src={getModalIcon()} alt="Medal icon" />
-            {[ ...Array(3) ].map((_, index) => (
+            {[...Array(3)].map((_, index) => (
               <img
                 className={styles.starIcon}
                 key={index}
@@ -118,7 +119,7 @@ export const IntegrationRewardModal = () => {
             ))}
           </div>
 
-          <span className={styles.text}> {i18n.language === 'ru' ? ruText : enText}  </span>
+          <span className={styles.text}> {i18n.language === 'ru' ? ruText : enText} </span>
         </main>
 
         <button className={styles.button} onClick={handleEquipAchivement}>

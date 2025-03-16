@@ -16,6 +16,15 @@ export const treeApi = createApi({
         },
       }),
     }),
+    getTreeInfoWithPolling: builder.query<GrowthTreeResponse, void>({
+      query: () => ({
+        url: '/growth-tree',
+        method: 'GET',
+        params: {
+          limit: 450,
+        },
+      }),
+    }),
     unlockAchievement: builder.mutation<string, { achievement_id: string }>({
       query: ({ achievement_id }) => ({
         url: `/growth-tree/${achievement_id}`,
@@ -29,4 +38,5 @@ export const treeApi = createApi({
 export const {
   useGetTreeInfoQuery,
   useUnlockAchievementMutation,
+  useGetTreeInfoWithPollingQuery
 } = treeApi;
