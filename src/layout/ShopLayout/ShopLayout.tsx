@@ -1,4 +1,4 @@
-import { type FC, PropsWithChildren, useEffect, useReducer, useState, useMemo } from 'react';
+import { type FC, PropsWithChildren, useEffect, useState, useMemo } from 'react';
 import styles from './ShopLayout.module.scss';
 import {
   RootState,
@@ -53,6 +53,9 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   ];
   const [shopCategory, setShopCategory] = useState(shopItemCategories[0]);
   const [itemsQuality, setItemsQuality] = useState(shopItemRarity[0]);
+
+  const [rerender, setRerender] = useState(0);
+  console.log(rerender);
 
   const { data: inventory, isSuccess } = useGetInventoryItemsQuery({});
   const { data: shop } = useGetShopItemsQuery({
@@ -109,29 +112,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   }, [shopCategory]);
 
   const reduxDispatch = useDispatch();
-
-  const initialGuideState = {
-    welcomeGuideShown: isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN),
-    backToMainGuideShown: isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE),
-    upgradeItemsGuideShown: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN),
-    treeLevelGuideShown: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN),
-  };
-
-  function guideReducer(state: any, action: { type: any; payload: string }) {
-    switch (action.type) {
-      case 'SET_GUIDE_SHOWN':
-        setGuideShown(action.payload);
-        return { ...state, [action.payload]: true };
-      default:
-        return state;
-    }
-  }
-
-  const [guideVisibility, dispatch] = useReducer(guideReducer, initialGuideState);
-
-  const handleGuideClose = (guideId: string) => {
-    dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
-  };
 
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(0));
@@ -226,24 +206,26 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         {children}
       </div>
 
-      {!guideVisibility.welcomeGuideShown && mode === 'shop' && (
+      {!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) && mode === 'shop' && (
         <WelcomeToShopGuide
           onClose={() => {
             reduxDispatch(setShopStatsGlowing(false));
             reduxDispatch(setBuyItemButtonGlowing(true));
-            handleGuideClose(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
+            setRerender((prev) => prev+1);
           }}
         />
       )}
 
       {(useSelector((state: RootState) => state.guide.itemBought) || isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) &&
-        guideVisibility.welcomeGuideShown &&
-        !guideVisibility.backToMainGuideShown &&
+        isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) &&
+        !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
         mode === 'inventory' && (
           <BackToMainPageGuide
             onClose={() => {
-              handleGuideClose(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+              setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)
               navigate(AppRoute.Main);
+              setRerender((prev) => prev+1);
             }}
           />
         )}
@@ -255,7 +237,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
           <UpgradeItemsGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
-              handleGuideClose(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
+              setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
+              setRerender((prev) => prev+1);
             }}
           />
         )}
@@ -266,8 +249,9 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
           <TreeLevelGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
-              handleGuideClose(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
+              setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
               navigate(AppRoute.ProgressTree);
+              setRerender((prev) => prev+1);
             }}
           />
         )}
