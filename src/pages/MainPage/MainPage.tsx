@@ -1,4 +1,4 @@
-import { FC, useEffect, useReducer, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import {
   AccelerateIntegtrationGuide,
   FinishTutorialGuide,
@@ -53,6 +53,9 @@ export const MainPage: FC = () => {
 
   const [readyForPublishing, setReadyForPublishing] = useState(false);
 
+  console.log(rerender);
+  console.log(readyForPublishing);
+
   const [typewriterFound, setTypewriterFound] = useState(false);
 
   const { data: itemsData, isLoading: isInventoryDataLoading, isError: isInventoryFetchError } = useGetInventoryItemsQuery();
@@ -66,7 +69,6 @@ export const MainPage: FC = () => {
       Object.entries(GUIDE_ITEMS).forEach(([_, items]) => {
         Object.entries(items).forEach(([_, value]) => {
           localStorage.setItem(value, '0');
-          setGuideNotShown(value);
         });
       });
       setTypewriterFound(false);
@@ -84,9 +86,7 @@ export const MainPage: FC = () => {
           console.log('typewriter found!!');
           setTypewriterFound(true);
           found = true;
-  
-          handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
-          handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+
   
           setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
@@ -113,7 +113,6 @@ export const MainPage: FC = () => {
           Object.entries(items).forEach(([_, value]) => {
             console.log('value...');
             localStorage.setItem(value, '0');
-            setGuideNotShown(value);
           });
         });
       }
@@ -211,40 +210,9 @@ export const MainPage: FC = () => {
 
 
 
-  const initialState = {
-    firstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN),
-    secondGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN),
-    subscribeModalOpened: isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN),
-    getCoinsGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN),
-    createIntegrationFirstGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN),
-    createIntegrationSecondGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN),
-  };
-
-  function guideReducer(state: any, action: { type: any; payload: string }) {
-    switch (action.type) {
-      case 'SET_GUIDE_SHOWN':
-        setGuideShown(action.payload);
-        return { ...state, [action.payload]: true };
-      case 'SET_GUIDE_NOT_SHOWN':
-        localStorage.setItem(action.payload, '0');
-        return { ...state, [action.payload]: true };
-      default:
-        return state;
-    }
-  }
-
-  const [guideVisibility, dispatch] = useReducer(guideReducer, initialState);
-
   const purchasingSubscriptionModalState = getModalState(MODALS.SUBSCRIBE);
   const creatingIntegrationModalState = getModalState(MODALS.CREATING_INTEGRATION);
 
-  const handleGuideClose = (guideId: string) => {
-    dispatch({ type: 'SET_GUIDE_SHOWN', payload: guideId });
-  };
-
-  const setGuideNotShown = (guideId: string) => {
-    dispatch({type: 'SET_GUIDE_NOT_SHOWN', payload: guideId});
-  }
 
   useEffect(() => {
     if (creatingIntegrationModalState.isOpen) {
@@ -353,8 +321,7 @@ export const MainPage: FC = () => {
         <InitialGuide onClose={() => {
           console.log('closing init guide');
           setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
-          setRerender(1);
-          handleGuideClose(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+          setRerender((prev) => prev+1);
         }} />
       )}
 
@@ -363,9 +330,9 @@ export const MainPage: FC = () => {
           onClose={() => {
             console.log('asdasdfsdgm,. hjmniklo;.cxv')
             setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
-            handleGuideClose(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
             openModal(MODALS.SUBSCRIBE);
             reduxDispatch(setSubscribeGuideShown(false));
+            setRerender((prev) => prev+1);
           }}
           top="50%"
           zIndex={12500}
@@ -385,8 +352,9 @@ export const MainPage: FC = () => {
           onClose={() => {
             reduxDispatch(setGetCoinsGuideShown(true));
             setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-            handleGuideClose(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
             openModal(MODALS.SUBSCRIBE);
+            setRerender((prev) => prev+1);
           }}
         />
       )}
@@ -404,7 +372,7 @@ export const MainPage: FC = () => {
         <IntegrationCreatedGuide
           onClose={() => {
             setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-            handleGuideClose(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+            setRerender((prev) => prev+1);
             navigate(AppRoute.Integration.replace(':integrationId', integrationId));
           }}
         />
