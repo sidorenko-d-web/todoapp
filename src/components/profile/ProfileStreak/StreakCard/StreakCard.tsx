@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styles from './StreakCard.module.scss';
 import ChestBlue from '../../../../assets/icons/chest-blue.svg';
 import ChestPurple from '../../../../assets/icons/chest-purple.svg';
@@ -22,6 +22,7 @@ interface WeekData {
   is_notified_at_late_evening: boolean;
   is_notified_at_night: boolean;
   is_notified_at_late_night: boolean;
+  in_streak_days?: number;
 }
 
 interface StreakCardProps {
@@ -44,47 +45,89 @@ export const StreakCard: React.FC<StreakCardProps> = ({
   streakDays,
   status,
   chest,
-  frozenDays,
+  frozenDays = 0,
   weekData,
   strangerId,
 }) => {
   const { t } = useTranslation('profile');
 
-  const calculateLevel = () => {
-    let maxStreak = 0;
-
-    if (streakDays < 30) {
-      maxStreak = 30;
-    } else if (streakDays < 60) {
-      maxStreak = 60;
-    } else if (streakDays < 120) {
-      maxStreak = 120;
+  // Get the most reliable streak count
+  const reliableStreakDays = useMemo(() => {
+    // First check if in_streak_days exists in weekData
+    const inStreakDays = weekData?.[0]?.push_line_data?.in_streak_days;
+    
+    if (typeof inStreakDays === 'number' && !isNaN(inStreakDays)) {
+      return inStreakDays;
     }
-    const maxLevel = 5;
+    
+    // Otherwise use the prop value
+    return typeof streakDays === 'number' && !isNaN(streakDays) ? streakDays : 0;
+  }, [streakDays, weekData]);
 
-    return Math.min(maxLevel, Math.floor((streakDays / maxStreak) * maxLevel));
-  };
+  // Calculate level based on streak days
+  const level = useMemo(() => {
+    // For streaks 0-29: progress from 0 to 3
+    // For streaks 30-59: level 4
+    // For streaks 60+: level 5
+    
+    if (reliableStreakDays >= 60) {
+      return 5;
+    } else if (reliableStreakDays >= 30) {
+      return 4;
+    } else if (reliableStreakDays > 0) {
+      // For streaks 1-29, calculate proportional level (max 3)
+      const calculatedLevel = Math.ceil((reliableStreakDays / 30) * 3);
+      return Math.min(3, Math.max(1, calculatedLevel));
+    }
+    
+    return 0; // Default level for 0 streaks
+  }, [reliableStreakDays]);
+  
+  // Determine the correct milestone text key
+  const p14Key = useMemo(() => {
+    if (reliableStreakDays >= 60) return 'p14_120';
+    if (reliableStreakDays >= 30) return 'p14_60';
+    return 'p14_30';
+  }, [reliableStreakDays]);
+  
+  // Determine color based on streak days
+  const color = useMemo(() => {
+    if (reliableStreakDays >= 60) return 'red';
+    if (reliableStreakDays >= 30) return 'purple';
+    return 'blue';
+  }, [reliableStreakDays]);
 
-  let p14Key = '';
-  if (streakDays < 30) {
-    p14Key = 'p14_30';
-  } else if (streakDays < 60) {
-    p14Key = 'p14_60';
-  } else if (streakDays >= 60) {
-    p14Key = 'p14_120';
-  }
+  // Determine the appropriate chest icon
+  const chestImage = useMemo(() => {
+    if (reliableStreakDays >= 60) return chestIcon;
+    if (reliableStreakDays >= 30) return ChestPurple;
+    return ChestBlue;
+  }, [reliableStreakDays]);
+  
+  // Determine the appropriate fire icon
+  const fireIcon = useMemo(() => {
+    if (reliableStreakDays >= 60) return FireRed;
+    if (reliableStreakDays >= 30) return FirePurple;
+    return FireBlue;
+  }, [reliableStreakDays]);
 
   return (
     <div className={styles.wrp}>
       <div className={styles.header}>
         <div className={styles.daysInARowWrp}>
-          <span className={streakDays < 30 ? styles.badge : streakDays < 60 ? styles.badgePurple : styles.badgeRed}>
+          <span className={
+            reliableStreakDays >= 60 
+              ? styles.badgeRed 
+              : reliableStreakDays >= 30 
+                ? styles.badgePurple 
+                : styles.badge
+          }>
             {status}
           </span>
 
           <div className={styles.title}>
             <span className={clsx(styles.daysInARow, strangerId && styles.stranger)}>
-              {streakDays} {t('p13').replace('в ', 'в\u00A0')}
+              {reliableStreakDays} {t('p13').replace('в ', 'в\u00A0')}
             </span>
             {!strangerId && !onlyStreak && (
               <div className={styles.freezeCount}>
@@ -95,7 +138,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
           </div>
         </div>
         <div className={clsx(styles.fire, styles.stranger)}>
-          <img src={streakDays < 30 ? FireBlue : streakDays < 60 ? FirePurple : FireRed} />
+          <img src={fireIcon} alt="Fire Icon" />
         </div>
       </div>
 
@@ -106,7 +149,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
               {days.map(({ day, type }, index) => (
                 <StreakDay
                   key={day}
-                  streakDays={streakDays}
+                  streakDays={reliableStreakDays}
                   dayNumber={day}
                   type={type}
                   weekIndex={index}
@@ -119,13 +162,13 @@ export const StreakCard: React.FC<StreakCardProps> = ({
           <div className={styles.progressContainer}>
             <div className={`${styles['progressBarTextWrp']} ${styles['progressText']}`}>
               <span>
-                {streakDays}/{t(p14Key)}
+                {reliableStreakDays}/{t(p14Key)}
               </span>
               <span className={styles.reward}>
                 {chest}
                 <div className={styles.chestImgContainer}>
                   <img
-                    src={streakDays < 30 ? ChestBlue : streakDays < 60 ? ChestPurple : chestIcon}
+                    src={chestImage}
                     className={styles.chestImg}
                     alt="Chest Icon"
                   />
@@ -134,8 +177,8 @@ export const StreakCard: React.FC<StreakCardProps> = ({
             </div>
 
             <ProgressLine
-              level={calculateLevel()}
-              color={streakDays < 30 ? 'blue' : streakDays < 60 ? 'purple' : 'red'}
+              level={level}
+              color={color}
             />
           </div>
         </>
