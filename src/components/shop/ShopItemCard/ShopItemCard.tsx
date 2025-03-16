@@ -117,7 +117,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                   : styles.level
               }
             >
-              {error}
+              {"Error while loading data"}
             </p>
           )}
           <div className={styles.stats}>

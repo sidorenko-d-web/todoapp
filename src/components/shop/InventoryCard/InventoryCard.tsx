@@ -97,6 +97,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     item_rarity: item.item_rarity,
   });
 
+  const [showEquipButton, setShowEquipButton] = useState(false);
+
+  
+
   const [equipItem] = useAddItemToRoomMutation();
   const [removeItem] = useRemoveItemFromRoomMutation();
   const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
@@ -175,8 +179,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     } catch (error) {
       console.log(error);
     } finally {
-      await refetchEquipped();
-      setIsUpdateLoading(false);
+      await refetchEquipped().then(() => {
+        setIsUpdateLoading(false);
+      });
+      //setIsUpdateLoading(false);
     }
   };
 
@@ -204,12 +210,17 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       handleEquipItem();
     }
   }, []);
+  
+
 
   const slot = Object.values(RoomItemsSlots).find(_item =>
     _item.name.find((__item: string) => item.name.includes(__item)),
   )?.slot;
   const isEquipped = equipedItems?.equipped_items.find(_item => _item.id === item.id);
 
+
+  
+  console.log('isEquiped: ', isEquipped, typeof isEquipped);
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
@@ -221,6 +232,19 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     }
     openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
   };
+
+  useEffect(() => {
+    if (!isUpdateLoading && !isEquipped) {
+      console.log('Delay showing the button to ensure `equipedItems` is updated')
+      // Delay showing the button to ensure `equipedItems` is updated
+      const timeout = setTimeout(() => {
+        setShowEquipButton(true);
+      }, 1500); // Adjust the delay as needed (e.g., 500ms)
+      return () => clearTimeout(timeout); // Clear the timer on unmount or re-render
+    } else {
+      setShowEquipButton(false); // Hide the button if the item is equipped or the upgrade is in progress
+    }
+  }, [isUpdateLoading, isEquipped]);
 
   const levelCap =
     item.level < 10
@@ -395,12 +419,12 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                       style={
                         item.level < 50 && index === 1
                           ? ({
-                              '--lvl-height': `${(item.level / 50) * 100}%`,
-                            } as React.CSSProperties)
+                            '--lvl-height': `${(item.level / 50) * 100}%`,
+                          } as React.CSSProperties)
                           : item.level >= 50 && index === 2
                             ? ({
-                                '--lvl-height': `${((item.level - 50) / 50) * 100}%`,
-                              } as React.CSSProperties)
+                              '--lvl-height': `${((item.level - 50) / 50) * 100}%`,
+                            } as React.CSSProperties)
                             : undefined
                       }
                     >
@@ -435,7 +459,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           <p>{t('s26')}</p>
           <img src={LockIcon} alt="" />
         </div>
-      ) : !isEquipped ? (
+      ) : (showEquipButton) ? (
         <Button
           onClick={handleEquipItem}
           className={styles.disabledActions}
@@ -443,58 +467,64 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         >
           {<p>{t('s28')}</p>}
         </Button>
-      ) : item.level === 50 ? (
-        <div className={styles.disabledUpgradeActions}>
-          <img src={LockIcon} alt="" />
-          <p>{t('s27')}</p>
-          <img src={LockIcon} alt="" />
-        </div>
-      ) : isUpgradeEnabled && profile && profile.growth_tree_stage_id > item.level ? (
-        <div className={styles.actions}>
-          <Button
-            onClick={handleUsdtPayment}
-            disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
-          >
-            {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', {
-              locale: locale,
-            })}
-          </Button>
-          <Button
-            className={clsx(
-              item.item_rarity === 'yellow'
-                ? styles.upgradeItemPurple
-                : item.item_rarity === 'green' && styles.upgradeItemRed,
-            )}
-            disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
-            onClick={() => handleBuyItem(data?.items[0].price_internal ?? '')}
-          >
-            <>
-              {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {
+      ) : isLoading ? (<Button
+        className={styles.disabledActions}
+        disabled={true}
+      >
+        {<p>Loading...</p>}
+      </Button>)
+        : item.level === 50 ? (
+          <div className={styles.disabledUpgradeActions}>
+            <img src={LockIcon} alt="" />
+            <p>{t('s27')}</p>
+            <img src={LockIcon} alt="" />
+          </div>
+        ) : isUpgradeEnabled && profile && profile.growth_tree_stage_id > item.level ? (
+          <div className={styles.actions}>
+            <Button
+              onClick={handleUsdtPayment}
+              disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
+            >
+              {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', {
                 locale: locale,
-              })}{' '}
-              <img src={CoinIcon} alt="" />
-            </>
-          </Button>
+              })}
+            </Button>
+            <Button
+              className={clsx(
+                item.item_rarity === 'yellow'
+                  ? styles.upgradeItemPurple
+                  : item.item_rarity === 'green' && styles.upgradeItemRed,
+              )}
+              disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
+              onClick={() => handleBuyItem(data?.items[0].price_internal ?? '')}
+            >
+              <>
+                {formatAbbreviation(data?.items[0].price_internal || 0, 'number', {
+                  locale: locale,
+                })}{' '}
+                <img src={CoinIcon} alt="" />
+              </>
+            </Button>
 
-          <Button
-            disabled={idDisabled}
-            onClick={() => {
-              console.log('object');
-              removeItem({ items_to_remove: [{ id: item.id }] });
-            }}
-          >
-            <img src={idDisabled ? ListDisableIcon : ListIcon} alt="Tasks" />
-          </Button>
-        </div>
-      ) : (
-        <div className={styles.disabledUpgradeActions}>
-          <img src={LockIcon} alt="" />
-          <p>
-            {t('s18')} {profile && profile.growth_tree_stage_id+1}
-          </p>
-          <img src={LockIcon} alt="" />
-        </div>
-      )}
+            <Button
+              disabled={idDisabled}
+              onClick={() => {
+                console.log('object');
+                removeItem({ items_to_remove: [{ id: item.id }] });
+              }}
+            >
+              <img src={idDisabled ? ListDisableIcon : ListIcon} alt="Tasks" />
+            </Button>
+          </div>
+        ) : (
+          <div className={styles.disabledUpgradeActions}>
+            <img src={LockIcon} alt="" />
+            <p>
+              {t('s18')} {profile && profile.growth_tree_stage_id + 1}
+            </p>
+            <img src={LockIcon} alt="" />
+          </div>
+        )}
     </div>
   );
 };
