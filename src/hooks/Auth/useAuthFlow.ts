@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSignInMutation } from '../../redux';
 import { useTranslation } from 'react-i18next';
 import { performSignIn } from './authService';
@@ -15,43 +15,48 @@ export const useAuthFlow = () => {
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
   // const { closeModal, openModal } = useModal();
 
-  const saveCurrentStep = (step: AuthStep) => {
+  const saveCurrentStep = useCallback((step: AuthStep) => {
     if (step !== 'loading') {
       localStorage.setItem('currentSetupStep', step);
     }
     setCurrentStep(step);
-  };
+  }, []);
 
-  const updateTokens = (authResponse: { access_token: string; refresh_token: string }) => {
-    if (authResponse?.access_token && authResponse?.refresh_token) {
-      localStorage.setItem('access_token', authResponse.access_token);
-      localStorage.setItem('refresh_token', authResponse.refresh_token);
-    }
-  };
+
+  const updateTokens = useCallback(
+    (authResponse: { access_token: string; refresh_token: string }) => {
+      if (authResponse?.access_token && authResponse?.refresh_token) {
+        localStorage.setItem('access_token', authResponse.access_token);
+        localStorage.setItem('refresh_token', authResponse.refresh_token);
+      }
+    },
+    []
+  );
 
   // Выбор языка
-  const handleLanguageSelect = async (language: string) => {
-    setSelectedLanguage(language);
-    localStorage.setItem('selectedLanguage', language);
-    await i18n.changeLanguage(language);
-  };
+  const handleLanguageSelect = useCallback(
+    async (language: string) => {
+      setSelectedLanguage(language);
+      localStorage.setItem('selectedLanguage', language);
+      await i18n.changeLanguage(language);
+    },
+    [i18n]
+  );
 
-  const handleLanguageContinue = async () => {
+  const handleLanguageContinue = useCallback(async () => {
     try {
-      // Обновляем токены
       const authResponse = await performSignIn(signIn);
       updateTokens(authResponse);
       saveCurrentStep('skin');
     } catch (err: any) {
       console.error('Ошибка при обновлении токена:', err);
-      // Если ошибка 401 или 403 – перенаправляем на ввод invite-кода
       if (err?.status === 401 || err?.status === 403) {
         saveCurrentStep('invite_code');
       }
     }
-  };
+  }, [signIn, updateTokens, saveCurrentStep]);
 
-  const handleInviteCodeContinue = async () => {
+  const handleInviteCodeContinue = useCallback(async () => {
     try {
       const authResponse = await performSignIn(signIn);
       updateTokens(authResponse);
@@ -59,11 +64,9 @@ export const useAuthFlow = () => {
     } catch (err: any) {
       console.error('Ошибка при авторизации:', err);
     }
-  };
+  }, [signIn, updateTokens, saveCurrentStep]);
 
   const handleSkinContinue = () => {
-    // saveCurrentStep('push_line');
-    // openModal(MODALS.DAYS_IN_A_ROW)
 
     saveCurrentStep('final_loading');
     setTimeout(() => saveCurrentStep('completed'), 1500);
@@ -78,7 +81,7 @@ export const useAuthFlow = () => {
 
   // Запрос fullscreen для Telegram WebApp
   useEffect(() => {
-    if (window?.Telegram && window?.Telegram?.WebApp && typeof window?.Telegram?.WebApp?.requestFullscreen === 'function') {
+    if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.requestFullscreen === 'function') {
       window.Telegram.WebApp.requestFullscreen();
     }
   }, []);
@@ -90,7 +93,7 @@ export const useAuthFlow = () => {
 
       try {
         await minLoadingTime;
-        const authResponse = await performSignIn(signIn);
+        const [authResponse] = await Promise.all([performSignIn(signIn), minLoadingTime]);
         updateTokens(authResponse);
 
         if (savedStep === 'completed') {
@@ -101,7 +104,6 @@ export const useAuthFlow = () => {
             saveCurrentStep('completed');
           } catch (err: any) {
             console.error('Ошибка при обновлении токена для пользователя completed:', err);
-            // Если ошибка 401 или 403 – перенаправляем на invite_code
             if (err?.status === 401 || err?.status === 403) {
               saveCurrentStep('invite_code');
             } else {
@@ -122,11 +124,11 @@ export const useAuthFlow = () => {
     };
 
     initAuthFlow();
-  }, []);
+  }, [signIn, updateTokens, saveCurrentStep]);
 
   return {
     currentStep,
-    isLoading: false, // При необходимости можно связать с состоянием загрузки мутации
+    isLoading: false,
     isInitializing,
     isAnimationFinished,
     setIsAnimationFinished,

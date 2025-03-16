@@ -1,0 +1,63 @@
+@use "../../assets/styles/abstracts/" as var;
+
+.countdownContainer {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    background-color: transparent;
+    overflow: hidden;
+
+    .mainContent {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -70%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 300px; /* Limit width to prevent shifting */
+
+        .lottiePlayer {
+            aspect-ratio: 1 / 1;
+            width: 100%;
+            height: auto;
+            margin-bottom: 0; /* Remove spacing between animation and timer */
+        }
+
+        .timerDisplay {
+            color: #2F80ED;
+            text-align: center;
+            font-family: var.$font-default;
+            font-size: 36px;
+            font-style: normal;
+            font-weight: 600;
+            white-space: nowrap;
+            width: 100%;
+            height: 44px; /* Fixed height to prevent jumping */
+            line-height: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: -20px; /* Move timer up closer to the animation */
+        }
+    }
+
+    .text {
+        position: absolute;
+        bottom: 100px;
+        left: 0;
+        width: 100%;
+        padding: 0 16px; /* Add some horizontal padding */
+        
+        .messageText {
+            color: #AFB9D4;
+            text-align: center;
+            font-family: var.$font-default;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 120%;
+        }
+    }
+}

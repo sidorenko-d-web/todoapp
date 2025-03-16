@@ -14,9 +14,19 @@ const ns = Object.keys(en) as TupleUnion<keyof typeof en>;
 
 export const defaultNS = ns[0];
 
+const supportedLanguages = ['en', 'ru'];
+
 let lang = localStorage.getItem('selectedLanguage');
 if (!lang) {
-  (lang = 'en') , localStorage.setItem('selectedLanguage', 'en');
+  const systemLang = navigator.language || navigator.userLanguage;
+  let shortLang = systemLang.split('-')[0];
+
+  if (!supportedLanguages.includes(shortLang)) {
+    shortLang = 'en';
+  }
+
+  lang = shortLang;
+  localStorage.setItem('selectedLanguage', lang);
 }
 
 void i18n.use(initReactI18next).init({
