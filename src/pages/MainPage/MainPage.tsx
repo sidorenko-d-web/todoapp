@@ -51,6 +51,8 @@ export const MainPage: FC = () => {
 
   const [rerender, setRerender] = useState(0);
 
+  const [readyForPublishing, setReadyForPublishing] = useState(false);
+
   const [typewriterFound, setTypewriterFound] = useState(false);
 
   const { data: itemsData, isLoading: isInventoryDataLoading, isError: isInventoryFetchError } = useGetInventoryItemsQuery();
@@ -165,6 +167,10 @@ export const MainPage: FC = () => {
 
           setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
 
+          setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
+  
+          setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
           reduxDispatch(resetGuideState());
 
@@ -180,6 +186,8 @@ export const MainPage: FC = () => {
   useEffect(() => {
     refetch().then(() => {
       if (data?.integrations[0].status === 'created') {
+        console.log('CREATED FOUND')
+        setReadyForPublishing(true);
         reduxDispatch(setIntegrationReadyForPublishing(true));
         reduxDispatch(setLastIntegrationId(data.integrations[0].id));
       } else {
