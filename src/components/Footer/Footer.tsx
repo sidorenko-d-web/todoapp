@@ -27,7 +27,7 @@ export const Footer = () => {
   };
 
   useEffect(() => {
-    if (!hasInitialized && isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+    if (!hasInitialized) {
       const mainItem = footerItems.find(item => item.redirectTo === AppRoute.Main);
       if (mainItem) {
         handleFooterItemClick(mainItem.id, mainItem.redirectTo);
