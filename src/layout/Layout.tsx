@@ -44,7 +44,9 @@ const Layout = () => {
     location.pathname === AppRoute.Main ||
     (location.pathname.includes(AppRoute.Profile) && location.pathname.split('/')?.[3]);
 
-  const contentClassName = clsx(styles.content, showHeader, needsReducedMargin, isRoom && styles.room);
+  const isProgressTree = location.pathname === AppRoute.ProgressTree;
+
+  const contentClassName = clsx(styles.content, showHeader, needsReducedMargin, isRoom && styles.room, isProgressTree && styles.progressTree);
 
   useEffect(() => {
     if (showRoadmapBg && contentRef.current) {
@@ -80,7 +82,6 @@ const Layout = () => {
       <WhiteNoiseCanvas />
       {strangerId && <StrangerHeader />}
       {showHeaderBG && <div className={styles.headerBG} />}
-
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
       </div>
@@ -88,7 +89,7 @@ const Layout = () => {
         {showRoadmapBg && (
           <>
             <img src={roadmapBg} className={styles.bg_image} style={{ transform: `translateY(-${bgOffset}%)` }} />
-            <Lottie animationData={lampTable} loop autoplay style={{ position: 'fixed', bottom: '34px' }} />
+            <Lottie animationData={lampTable} loop autoplay style={{ position: 'fixed', bottom: '34px', zIndex:'1' }} />
           </>
         )}
         {showHeader && <Header />}
