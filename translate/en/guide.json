@@ -24,10 +24,12 @@
   "g23": "Text, Photos and Videos.",
   "g24": "You can make any integrations, but first you need to buy the necessary equipment.",
   "g25": "Oh, yeah... you need to invest a little for this...",
-  "g26": "Here are 250 points for your blogging start!",
+  "g26": "Here are",
+  "g26_1": " 250 points ",
+  "g26_2": "for your blogging start!",
   "g27": "And more",
   "g28": "150 points",
-  "g29": "you get from a friend who invited you!!",
+  "g29": "you get from a friend who invited you!",
   "g30": "Collect",
   "g31": "My name is Push! Let me show you how it all works and how you can earn real money with Apusher!",
   "g32": "Here you are, a real blogger! Continue integrating with brands, attracting subscribers and earning! ",
@@ -84,5 +86,8 @@
   "g83": "Renew in",
   "g84": "min.",
   "g85": "h.",
-  "g86": "You have already purchased a subscription today. Come back tomorrow to buy more."
+  "g86": "You have already purchased a subscription today. Come back tomorrow to buy more.",
+
+  "g87": " and also increases your",
+  "g88": " income per second."
 }

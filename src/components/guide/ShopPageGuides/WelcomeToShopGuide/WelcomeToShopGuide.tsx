@@ -25,7 +25,8 @@ export const WelcomeToShopGuide: React.FC<WelcomeToShopGuideProps> = ({ onClose 
         <Guide
             description={
                 <>
-                    {t('g43')} <span style={{ color: '#2F80ED' }}>{t('g44')}</span> {t('g39')} <span style={{ color: '#EC7913' }}>{t('g45')}</span>. {t('g46')}
+                    {t('g43')} <span style={{ color: '#2F80ED' }}>{t('g44')}</span> {t('g39')} <span style={{ color: '#EC7913' }}>{t('g45')}</span> 
+                    {t('g87')} <span style={{ color: '#E0B01D' }}>{t('g88')}</span> {t('g46')}
                     <br />
                     {t('g47')}
                 </>

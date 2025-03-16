@@ -77,6 +77,11 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   console.log('s25Key:', s25Key);
   // return s25Key;
 
+  // console.log('inv isBlocked: ', isBlocked);
+  // console.log('inv isB: ', isB);
+  // console.log('inv isUpgradeEnabled: ', isUpgradeEnabled);
+  // console.log('inv disabled: ', disabled);
+
   const { walletAddress, connectWallet } = useTonConnect();
   const [idDisabled] = useState(true);
   const { t, i18n } = useTranslation('shop');
@@ -100,6 +105,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const { data: profile, refetch } = useGetProfileMeQuery(undefined, {
     pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
+
+
 
   const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
 
@@ -483,7 +490,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>
-            {t('s18')} {profile && profile.growth_tree_stage_id}
+            {t('s18')} {profile && profile.growth_tree_stage_id+1}
           </p>
           <img src={LockIcon} alt="" />
         </div>
