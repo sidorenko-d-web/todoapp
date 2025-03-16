@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Lottie from 'lottie-react';
 import { GUIDE_ITEMS, MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
@@ -32,7 +32,6 @@ export default function DaysInARowModal({ onClose }: Props) {
   const [dayNumbers, setDayNumbers] = useState<number[]>([]);
   const [frozenDays, setFrozenDays] = useState<number[]>([]);
   const [streakDays, setStreakDays] = useState<number[]>([]);
-
 
   useEffect(() => {
     const today = new Date();
@@ -85,58 +84,93 @@ export default function DaysInARowModal({ onClose }: Props) {
 
     setFrozenDays(frozen);
     setStreakDays(streak);
-  }, [data, isLoading]);
+  }, [data, isLoading, openModal]);
 
-  const streakCount = streakDays.length;
-
-  const calculateLevel = () => {
-    let maxStreak = 0;
-
-    if (streakCount < 30) {
-      maxStreak = 30;
-    } else if (streakCount < 60) {
-      maxStreak = 60;
-    } else if (streakCount < 120) {
-      maxStreak = 120;
+  // Get the reliable streak count
+  const streakCount = useMemo(() => {
+    // First check if in_streak_days exists in data
+    if (data?.in_streak_days !== undefined && data?.in_streak_days !== null) {
+      return data.in_streak_days;
     }
-    const maxLevel = 5;
+    
+    // Otherwise use the calculated streak days length
+    return streakDays.length;
+  }, [data, streakDays]);
 
-    return Math.min(maxLevel, Math.floor((streakCount / maxStreak) * maxLevel));
-  };
+  // Improved calculateLevel function
+  const calculateLevel = useMemo(() => {
+    // For streaks 0: level 0
+    // For streaks 1-29: levels 1-3 (proportionally)
+    // For streaks 30-59: level 4
+    // For streaks 60+: level 5
+    
+    if (streakCount >= 60) {
+      return 5;
+    } else if (streakCount >= 30) {
+      return 4;
+    } else if (streakCount > 0) {
+      // For streaks 1-29, calculate proportional level (max 3)
+      const calculatedLevel = Math.ceil((streakCount / 30) * 3);
+      return Math.min(3, Math.max(1, calculatedLevel));
+    }
+    
+    return 0; // Default level for 0 streaks
+  }, [streakCount]);
 
-  let p14Key = '';
-  if (streakCount < 30) {
-    p14Key = 'p14_30';
-  } else if (streakCount < 60) {
-    p14Key = 'p14_60';
-  } else if (streakCount >= 60) {
-    p14Key = 'p14_120';
-  }
+  // Determine the milestone text key
+  const p14Key = useMemo(() => {
+    if (streakCount >= 60) return 'p14_120';
+    if (streakCount >= 30) return 'p14_60';
+    return 'p14_30';
+  }, [streakCount]);
+
+  // Determine the color based on streak count
+  const color = useMemo(() => {
+    if (streakCount >= 60) return 'red';
+    if (streakCount >= 30) return 'purple';
+    return 'blue';
+  }, [streakCount]);
+
+  // Determine the animation data
+  const animationData = useMemo(() => {
+    if (streakCount >= 60) return redLightAnimation;
+    if (streakCount >= 30) return purpleLightAnimation;
+    return blueLightAnimation;
+  }, [streakCount]);
+
+  // Determine the fire icon
+  const fireIcon = useMemo(() => {
+    if (streakCount >= 60) return FireRed;
+    if (streakCount >= 30) return FirePurple;
+    return FireBlue;
+  }, [streakCount]);
+
+  // Determine the chest icon
+  const chestImage = useMemo(() => {
+    if (streakCount >= 60) return chestIcon;
+    if (streakCount >= 30) return ChestPurple;
+    return ChestBlue;
+  }, [streakCount]);
 
   return (
     <CentralModal
       modalId={MODALS.DAYS_IN_A_ROW}
-      title={`${streakCount === 0 ? 0 : streakCount} ${t('p21')}`}
+      title={`${streakCount} ${t('p21')}`}
       onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)}
     >
       <div className={styles.images}>
         <Lottie
-          animationData={
-            streakCount < 30
-              ? blueLightAnimation
-              : streakCount < 60
-                ? purpleLightAnimation
-                : redLightAnimation
-          }
+          animationData={animationData}
           loop={true}
           className={styles.light}
         />
         <img
           className={styles.fire}
-          src={streakCount < 30 ? FireBlue : streakCount < 60 ? FirePurple : FireRed}
+          src={fireIcon}
+          alt="Fire Icon"
         />
         <div className={styles.days}>
-          <p>{streakCount === 0 ? 0 : streakCount}</p>
+          <p>{streakCount}</p>
         </div>
       </div>
 
@@ -167,13 +201,7 @@ export default function DaysInARowModal({ onClose }: Props) {
         <div className={styles.chest}>
           <span>{locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}</span>
           <img
-            src={
-              streakCount < 30
-                ? ChestBlue
-                : streakCount < 60
-                  ? ChestPurple
-                  : chestIcon
-            }
+            src={chestImage}
             className={styles.chestImg}
             alt="Chest Icon"
           />
@@ -181,13 +209,13 @@ export default function DaysInARowModal({ onClose }: Props) {
       </div>
       <div className={styles.progress}>
         <ProgressLine
-          level={calculateLevel()}
-          color={streakCount < 30 ? 'blue' : streakCount < 60 ? 'purple' : 'red'}
+          level={calculateLevel}
+          color={color}
         />
       </div>
       <Button
         onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))}
-        variant={streakCount < 30 ? 'blue' : streakCount < 60 ? 'purple' : 'red'}
+        variant={color}
       >
         {t('p22')}
       </Button>
