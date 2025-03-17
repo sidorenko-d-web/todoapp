@@ -41,9 +41,8 @@ export const TasksPage: FC = () => {
 
   const dailyTask = useMemo(() => {
     if (!data?.assignments) return null;
-    console.log('data', data);
+
     const dailyTasks = dataDaily?.assignments;
-    console.log('dailyTasks', dailyTasks);
     // Модифицируем задание с учетом языка
     if (dailyTasks && dailyTasks[dailyTasks.length - 1]) {
       const task = dailyTasks[dailyTasks.length - 1];
@@ -100,7 +99,7 @@ export const TasksPage: FC = () => {
   if (error) {
     return <div>{t('q17')}</div>;
   }
-  console.log(getPlanStageByUsersCount(total_users));
+
   return (
     <main className={s.page}>
       <section className={s.topSection}>
@@ -116,8 +115,7 @@ export const TasksPage: FC = () => {
           </span>
           <span className={s.badge}>
             +{formatAbbreviation(Number(boostData?.income_per_second) || 0, 'number', { locale: locale })}
-            <img src={coinIcon} height={18} width={18} alt={'income'} />
-            /{t('q9')}
+            <img src={coinIcon} height={18} width={18} alt={'income'} />/{t('q9')}
           </span>
         </div>
       </section>
