@@ -22,16 +22,12 @@ export const useAuthFlow = () => {
     setCurrentStep(step);
   }, []);
 
-
-  const updateTokens = useCallback(
-    (authResponse: { access_token: string; refresh_token: string }) => {
-      if (authResponse?.access_token && authResponse?.refresh_token) {
-        localStorage.setItem('access_token', authResponse.access_token);
-        localStorage.setItem('refresh_token', authResponse.refresh_token);
-      }
-    },
-    []
-  );
+  const updateTokens = useCallback((authResponse: { access_token: string; refresh_token: string }) => {
+    if (authResponse?.access_token && authResponse?.refresh_token) {
+      localStorage.setItem('access_token', authResponse.access_token);
+      localStorage.setItem('refresh_token', authResponse.refresh_token);
+    }
+  }, []);
 
   // Выбор языка
   const handleLanguageSelect = useCallback(
@@ -40,7 +36,7 @@ export const useAuthFlow = () => {
       localStorage.setItem('selectedLanguage', language);
       await i18n.changeLanguage(language);
     },
-    [i18n]
+    [i18n],
   );
 
   const handleLanguageContinue = useCallback(async () => {
@@ -67,7 +63,6 @@ export const useAuthFlow = () => {
   }, [signIn, updateTokens, saveCurrentStep]);
 
   const handleSkinContinue = () => {
-
     saveCurrentStep('final_loading');
     setTimeout(() => saveCurrentStep('completed'), 1500);
   };
@@ -80,11 +75,11 @@ export const useAuthFlow = () => {
   // };
 
   // Запрос fullscreen для Telegram WebApp
-  useEffect(() => {
-    if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.requestFullscreen === 'function') {
-      window.Telegram.WebApp.requestFullscreen();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.requestFullscreen === 'function') {
+  //     window.Telegram.WebApp.requestFullscreen();
+  //   }
+  // }, []);
 
   useEffect(() => {
     const initAuthFlow = async () => {

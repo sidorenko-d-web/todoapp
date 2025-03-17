@@ -44,7 +44,6 @@ export const PublishIntegrationButton: React.FC = () => {
   );
 
   const openCongratsModal = () => {
-    console.log('Opening second modal: INTEGRATION_REWARD_CONGRATULATIONS');
     openModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS, {
       companyName: integrationData?.campaign.company_name,
       integrationsCount: companyData?.count,
@@ -70,17 +69,18 @@ export const PublishIntegrationButton: React.FC = () => {
 
     setIsPublishing(true);
 
-    setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-
     try {
+      setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+
       let integrationIdToPublish = lastIntId;
 
       if (!lastIntId) {
-        await refetch().unwrap();
-        if (data?.integrations && data.integrations.length > 0) {
-          integrationIdToPublish = data.integrations[0].id;
+        const refetchedData = await refetch().unwrap();
+        if (refetchedData?.integrations && refetchedData.integrations.length > 0) {
+          integrationIdToPublish = refetchedData.integrations[0].id;
         } else {
           console.error('No integrations found after refetch.');
+          setIsPublishing(false);
           return;
         }
       }
@@ -96,7 +96,6 @@ export const PublishIntegrationButton: React.FC = () => {
           const company = publishRes.data.campaign;
           const { base_income, base_views, base_subscribers } = publishRes.data;
 
-          console.log('Opening first modal: INTEGRATION_REWARD');
           openModal(MODALS.INTEGRATION_REWARD, {
             company,
             base_income,
@@ -104,8 +103,6 @@ export const PublishIntegrationButton: React.FC = () => {
             base_subscribers,
           });
         } else {
-          console.error('Failed to claim reward:', rewardRes.error);
-          // If reward claim fails, open congratulations modal directly
           if (canShowIntegrationReward && isPublishedModalClosed) {
             openCongratsModal();
           }
