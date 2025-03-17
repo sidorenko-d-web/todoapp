@@ -25,8 +25,6 @@ const INTEGRATION_ID_KEY = 'integration_id';
 export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration }) => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
-
-  // Состояние для управления границей
   const [hasBorder, setHasBorder] = useState(false);
 
   // Get stored values or use defaults from the integration
@@ -60,7 +58,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   // Reference to store the timeout ID
   const accelerationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
+  const { accelerateIntegration } = useAccelerateIntegration({
     integrationId: integration.id,
     onSuccess: newTimeLeft => {
       setTimeLeft(newTimeLeft);
@@ -163,24 +161,19 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       dispatch(setLastIntegrationId(integration.id));
       void accelerateIntegration(1);
       createParticles();
-
-      // Включаем границу
       setHasBorder(true);
 
-      // Clear any existing timeout to prevent multiple state updates
       if (accelerationTimeoutRef.current) {
         clearTimeout(accelerationTimeoutRef.current);
       }
 
-      // Set accelerated state if not already set
       if (!isAccelerated) {
         setIsAccelerated(true);
       }
 
-      // Set a new timeout
       accelerationTimeoutRef.current = setTimeout(() => {
         setIsAccelerated(false);
-        setHasBorder(false); // Выключаем границу через 2 секунды
+        setHasBorder(false);
         accelerationTimeoutRef.current = null;
       }, 2000);
     }
