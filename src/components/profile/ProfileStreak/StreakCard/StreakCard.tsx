@@ -55,11 +55,11 @@ export const StreakCard: React.FC<StreakCardProps> = ({
   const reliableStreakDays = useMemo(() => {
     // First check if in_streak_days exists in weekData
     const inStreakDays = weekData?.[0]?.push_line_data?.in_streak_days;
-    
+
     if (typeof inStreakDays === 'number' && !isNaN(inStreakDays)) {
       return inStreakDays;
     }
-    
+
     // Otherwise use the prop value
     return typeof streakDays === 'number' && !isNaN(streakDays) ? streakDays : 0;
   }, [streakDays, weekData]);
@@ -69,7 +69,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
     // For streaks 0-29: progress from 0 to 3
     // For streaks 30-59: level 4
     // For streaks 60+: level 5
-    
+
     if (reliableStreakDays >= 60) {
       return 5;
     } else if (reliableStreakDays >= 30) {
@@ -79,17 +79,17 @@ export const StreakCard: React.FC<StreakCardProps> = ({
       const calculatedLevel = Math.ceil((reliableStreakDays / 30) * 3);
       return Math.min(3, Math.max(1, calculatedLevel));
     }
-    
+
     return 0; // Default level for 0 streaks
   }, [reliableStreakDays]);
-  
+
   // Determine the correct milestone text key
   const p14Key = useMemo(() => {
     if (reliableStreakDays >= 60) return 'p14_120';
     if (reliableStreakDays >= 30) return 'p14_60';
     return 'p14_30';
   }, [reliableStreakDays]);
-  
+
   // Determine color based on streak days
   const color = useMemo(() => {
     if (reliableStreakDays >= 60) return 'red';
@@ -103,7 +103,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
     if (reliableStreakDays >= 30) return ChestPurple;
     return ChestBlue;
   }, [reliableStreakDays]);
-  
+
   // Determine the appropriate fire icon
   const fireIcon = useMemo(() => {
     if (reliableStreakDays >= 60) return FireRed;
@@ -115,13 +115,11 @@ export const StreakCard: React.FC<StreakCardProps> = ({
     <div className={styles.wrp}>
       <div className={styles.header}>
         <div className={styles.daysInARowWrp}>
-          <span className={
-            reliableStreakDays >= 60 
-              ? styles.badgeRed 
-              : reliableStreakDays >= 30 
-                ? styles.badgePurple 
-                : styles.badge
-          }>
+          <span
+            className={
+              reliableStreakDays >= 60 ? styles.badgeRed : reliableStreakDays >= 30 ? styles.badgePurple : styles.badge
+            }
+          >
             {status}
           </span>
 
@@ -167,19 +165,12 @@ export const StreakCard: React.FC<StreakCardProps> = ({
               <span className={styles.reward}>
                 {chest}
                 <div className={styles.chestImgContainer}>
-                  <img
-                    src={chestImage}
-                    className={styles.chestImg}
-                    alt="Chest Icon"
-                  />
+                  <img src={chestImage} className={styles.chestImg} alt="Chest Icon" />
                 </div>
               </span>
             </div>
 
-            <ProgressLine
-              level={level}
-              color={color}
-            />
+            <ProgressLine level={level} color={color} />
           </div>
         </>
       )}
