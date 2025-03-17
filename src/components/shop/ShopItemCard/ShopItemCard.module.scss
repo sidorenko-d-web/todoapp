@@ -213,6 +213,7 @@
 }
 
 .glowingBtn {
+  z-index: 1000000;
   box-shadow: 0 0 50px var.$color-primary;
   background: var.$color-primary;
 }

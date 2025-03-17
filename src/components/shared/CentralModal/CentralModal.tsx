@@ -5,6 +5,8 @@ import { Fade, Overlay } from '../common';
 import classNames from 'classnames';
 import closeIcon from '../../../assets/icons/close.svg';
 import { Button } from '..';
+import { isGuideShown } from '../../../utils';
+import { GUIDE_ITEMS } from '../../../constants';
 
 interface CentralModalProps {
   modalId: string;
@@ -57,9 +59,12 @@ export const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
             <header className={classNames(s.header, headerStyles)}>
               <h2 className={s.title}>{title}{titleIcon &&
                 <img src={titleIcon} alt={'title'} width={18} height={18} />}</h2>
-              <Button className={s.closeBtn} onClick={onClose}>
-                <img src={closeIcon} alt={'Close'} />
-              </Button>
+
+                {isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) &&
+                <Button className={s.closeBtn} onClick={onClose}>
+                  <img src={closeIcon} alt={'Close'} />
+                </Button>}
+                
             </header>
             <div>{children}</div>
           </div>

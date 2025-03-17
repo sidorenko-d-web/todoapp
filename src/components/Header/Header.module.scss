@@ -23,9 +23,9 @@ $header-border: 1px solid $color-header-border-dark;
   //padding: 0px 10px 0;
   //padding: calc(var(--tg-content-safe-area-inset-top) + 60px) 10px 0;
   //margin-top: calc(var(--tg-content-safe-area-inset-top) + -80px);
-  margin: calc(var(--tg-content-safe-area-inset-top)) 0 0;
+  margin: calc(var(--tg-content-safe-area-inset-top) + 0px) 0 0;
 
-  margin-top: 50px;
+  
   //margin: 0;
 
   // Prevent user from scrolling while interacting with header
@@ -37,7 +37,7 @@ $header-border: 1px solid $color-header-border-dark;
   // Paddings for each platform
   &.ios {
     //padding: calc(var(--tg-content-safe-area-inset-top) + 60px) 10px 0;
-    top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) - 35px);
+    top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) - 32px);
     left: calc(var(--tg-content-safe-area-inset-left) + 10px);
     right: calc(var(--tg-content-safe-area-inset-right) + 10px);
   }
@@ -226,6 +226,17 @@ $header-border: 1px solid $color-header-border-dark;
       }
     }
   }
+}
+
+.headerBG {
+  z-index: 10;
+  position: absolute;
+  top: -110px;
+  width: 120vw;
+  height: 102px;
+  margin-left: -20px;
+  border-bottom: 1px solid var.$color-dark-gray;
+  background: var.$color-card-bg;
 }
 
 .coinsWrapper {
