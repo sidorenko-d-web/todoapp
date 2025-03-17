@@ -185,7 +185,11 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
               <span
                 key={index}
                 className={`${s.tab} ${selectedOption === option.value ? s.active : ''}`}
-                onClick={() => setSelectedOption(option.value)}
+                onClick={() => {
+                  if(isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
+                    setSelectedOption(option.value)
+                  }
+                }}
               >
                 {option.label}
               </span>
