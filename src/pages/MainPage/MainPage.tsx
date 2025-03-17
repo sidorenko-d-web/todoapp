@@ -100,7 +100,7 @@ export const MainPage: FC = () => {
       });
 
       if (!found) {
-        Object.entries(GUIDE_ITEMS).forEach(([page, items]) => {
+        Object.entries(GUIDE_ITEMS).forEach(([items]) => {
           Object.entries(items).forEach(([_, value]) => {
             localStorage.setItem(value, '0');
           });
@@ -306,14 +306,22 @@ export const MainPage: FC = () => {
 
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
-      {( (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) 
-        && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) 
-      
-        || (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) && 
+      {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
+        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) ||
+        (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
-          <div style={{position: 'fixed', width: '100%', height: '100%', top: '0', left: '0', 
-            backgroundColor: 'rgba(0, 0, 0, 0.86)', pointerEvents: 'none', zIndex: '500'
-          }}/>
+        <div
+          style={{
+            position: 'fixed',
+            width: '100%',
+            height: '100%',
+            top: '0',
+            left: '0',
+            backgroundColor: 'rgba(0, 0, 0, 0.86)',
+            pointerEvents: 'none',
+            zIndex: '500',
+          }}
+        />
       )}
 
       {true && (
@@ -370,7 +378,6 @@ export const MainPage: FC = () => {
         <IntegrationCreatedGuide
           onClose={() => {
             setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-            setRerender(prev => prev + 1);
             navigate(AppRoute.Integration.replace(':integrationId', integrationId));
           }}
         />

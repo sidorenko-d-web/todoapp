@@ -16,29 +16,22 @@ import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 import { Loader } from '../../components';
-import DaysInARowModal from '../DevModals/DaysInARowModal/DaysInARowModal';
 
 export const ProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation('profile');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal, openModal } = useModal();
-  
+
   // State to track if data has been loaded initially
   const [initialDataLoaded, setInitialDataLoaded] = useState(false);
-  
+
   // Query for push line data
-  const { 
-    data: pushLineData, 
-    isLoading: isPushLineLoading 
-  } = useGetPushLineQuery();
+  const { data: pushLineData, isLoading: isPushLineLoading } = useGetPushLineQuery();
 
   const [claimChestReward] = useClaimChestRewardMutation();
 
-  const { 
-    data: awardsData, 
-    isLoading: awardsLoading 
-  } = useGetInventoryAchievementsQuery();
-  
+  const { data: awardsData, isLoading: awardsLoading } = useGetInventoryAchievementsQuery();
+
   const {
     data: userProfileData,
     error: userError,
@@ -57,18 +50,15 @@ export const ProfilePage: React.FC = () => {
   // Calculate streaks reliably using useMemo to prevent unnecessary recalculations
   const streaks = useMemo(() => {
     // First priority: Check if in_streak_days exists
-    if (pushLineData?.in_streak_days !== undefined && 
-        pushLineData?.in_streak_days !== null) {
+    if (pushLineData?.in_streak_days !== undefined && pushLineData?.in_streak_days !== null) {
       return pushLineData.in_streak_days;
     }
-    
+
     // Second priority: Count passed days from week_information
     if (pushLineData?.week_information) {
-      return pushLineData.week_information.filter(
-        day => day.push_line_data?.status === 'passed'
-      ).length;
+      return pushLineData.week_information.filter(day => day.push_line_data?.status === 'passed').length;
     }
-    
+
     // Default to 0 if no data is available
     return 0;
   }, [pushLineData]);
@@ -87,7 +77,7 @@ export const ProfilePage: React.FC = () => {
     // Only process rewards after data is loaded and confirmed
     if (!initialDataLoaded && streaks > 0) {
       setInitialDataLoaded(true);
-      
+
       // Check for reward milestones
       if (streaks === 30 || streaks === 60 || streaks === 120) {
         claimChestReward({ chest_reward_reason: 'push_line' })
@@ -108,7 +98,7 @@ export const ProfilePage: React.FC = () => {
   // Set up periodic profile refresh
   useEffect(() => {
     if (!userProfileData) return;
-    
+
     const refetchInterval = setInterval(
       () => {
         refetchCurrentProfile();
@@ -122,10 +112,8 @@ export const ProfilePage: React.FC = () => {
   // Calculate user position in leaderboard
   const userPosition = useMemo(() => {
     if (!userProfileData || !topProfilesData?.profiles) return -1;
-    
-    return topProfilesData.profiles.findIndex(
-      (profile: { id: string }) => profile.id === userProfileData.id
-    );
+
+    return topProfilesData.profiles.findIndex((profile: { id: string }) => profile.id === userProfileData.id);
   }, [userProfileData, topProfilesData]);
 
   const position = userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length || 0;
@@ -197,11 +185,7 @@ export const ProfilePage: React.FC = () => {
                   ? pushLineData?.push_line_profile_status?.status_name
                   : pushLineData?.push_line_profile_status?.status_name_eng
               }
-              chest={
-                locale === 'ru' 
-                  ? pushLineData?.next_chest?.chest_name 
-                  : pushLineData?.next_chest?.chest_name_eng
-              }
+              chest={locale === 'ru' ? pushLineData?.next_chest?.chest_name : pushLineData?.next_chest?.chest_name_eng}
               weekData={pushLineData?.week_information}
             />
           </div>

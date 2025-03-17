@@ -80,13 +80,11 @@ export const PublishIntegrationButton: React.FC = () => {
 
       if (integrationData?.status === 'creating') {
         if (integrationData?.time_left === 0) {
-          console.log('asdasgads');
-          const response = await updateTimeLeft({
+          await updateTimeLeft({
             integrationId: integrationIdToPublish,
             timeLeftDelta: 123,
           });
           refetchIntegration();
-          console.log('Update successful:', response);
         }
       }
 

@@ -59,14 +59,6 @@ function sortByPremiumLevel(items: IShopItem[]) {
 }
 
 export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled = true, item, isB }) => {
-  let s25Key = '';
-  if (item.level < 50) {
-    s25Key = 's25';
-  } else if (item.level >= 50 && item.level < 100) {
-    s25Key = 's25_100';
-  } else if (item.level >= 100 && item.level <= 150) {
-    s25Key = 's25_150';
-  }
   const RoomItemsSlots = useRoomItemsSlots();
 
   const { walletAddress, connectWallet } = useTonConnect();
@@ -187,7 +179,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       if (isSlotNotEmpty) {
         await removeItem({ items_to_remove: [{ id: isSlotNotEmpty.id }] });
       }
-      const res = await equipItem({ equipped_items: [{ id: item.id, slot }] });
+      await equipItem({ equipped_items: [{ id: item.id, slot }] });
     } catch (error) {
       console.error(error);
     }

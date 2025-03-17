@@ -31,9 +31,7 @@ const Layout = () => {
 
   const showRoadmapBg = location.pathname === '/progressTree';
 
-  const showHeaderBG =
-    !['/', '/progressTree'].includes(location.pathname) &&
-    !(location.pathname.split('/')[1] === 'profile' && location.pathname.split('/')[3] === 'room');
+  // const showHeaderBG =!['/', '/progressTree'].includes(location.pathname) && !(location.pathname.split('/')[1] === 'profile' && location.pathname.split('/')[3] === 'room');
 
   useEffect(() => {
     const isNeedToOpenChest = localStorage.getItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
@@ -46,7 +44,13 @@ const Layout = () => {
 
   const isProgressTree = location.pathname === AppRoute.ProgressTree;
 
-  const contentClassName = clsx(styles.content, showHeader, needsReducedMargin, isRoom && styles.room, isProgressTree && styles.progressTree);
+  const contentClassName = clsx(
+    styles.content,
+    showHeader,
+    needsReducedMargin,
+    isRoom && styles.room,
+    isProgressTree && styles.progressTree,
+  );
 
   useEffect(() => {
     if (showRoadmapBg && contentRef.current) {
@@ -89,7 +93,12 @@ const Layout = () => {
         {showRoadmapBg && (
           <>
             <img src={roadmapBg} className={styles.bg_image} style={{ transform: `translateY(-${bgOffset}%)` }} />
-            <Lottie animationData={lampTable} loop autoplay style={{ position: 'fixed', bottom: '34px', zIndex:'1' }} />
+            <Lottie
+              animationData={lampTable}
+              loop
+              autoplay
+              style={{ position: 'fixed', bottom: '34px', zIndex: '1' }}
+            />
           </>
         )}
         {showHeader && <Header />}
