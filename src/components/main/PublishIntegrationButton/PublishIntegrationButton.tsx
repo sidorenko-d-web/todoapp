@@ -79,6 +79,7 @@ export const PublishIntegrationButton: React.FC = () => {
         await refetch().unwrap();
         if (data?.integrations && data.integrations.length > 0) {
           integrationIdToPublish = data.integrations[0].id;
+          dispatch(setIntegrationReadyForPublishing(false));
         } else {
           console.error('No integrations found after refetch.');
           return;

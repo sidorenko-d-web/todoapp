@@ -159,7 +159,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     if (!isExpired) {
       playAccelerateIntegrationSound();
       dispatch(setLastIntegrationId(integration.id));
-      void accelerateIntegration(1);
+      void accelerateIntegration(timeLeft-5);
       createParticles();
 
       // Clear any existing timeout to prevent multiple state updates
@@ -198,7 +198,9 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   };
 
   if (isExpired) {
-    dispatch(setIntegrationReadyForPublishing(true));
+    if(integration.status === 'created') {
+      dispatch(setIntegrationReadyForPublishing(true));
+    }
     dispatch(setLastIntegrationId(integration.id));
     if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
