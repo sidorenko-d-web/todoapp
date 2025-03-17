@@ -1,5 +1,5 @@
 import { Skin, SpinePlugin } from '@esotericsoftware/spine-phaser';
-import { Dispatch, SetStateAction, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, memo, useEffect, useRef, useState } from 'react';
 import {
   IEquipedRoomResponse,
   IShopItem,
@@ -19,7 +19,7 @@ interface props {
   setIsLoaded: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AnimationScene = ({ room, character, setIsLoaded }: props) => {
+export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => {
   const gameRef = useRef<Phaser.Game | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const spineSceneRef = useRef<SpineSceneBase | null>(null);
@@ -30,17 +30,8 @@ export const AnimationScene = ({ room, character, setIsLoaded }: props) => {
 
   const dispatch = useDispatch();
 
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
-    }
-    window.addEventListener('resize', updateSize);
-    updateSize();
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
-
   useEffect(() => {
-    dispatch(setAnimationSceneLoaded(false));
+    setIsLoaded(false);
 
     if (!sceneRef.current || character?.isLoading) return;
     const width = sceneRef.current.offsetWidth;
@@ -52,7 +43,7 @@ export const AnimationScene = ({ room, character, setIsLoaded }: props) => {
 
         this.loadPerson();
 
-        //devided loading items of animated and static
+        // Разделение загрузки анимированных и статичных предметов
         room?.items.forEach(item => {
           if (findAnimatedItem(item)) {
             this.loadAnimatedItem(item);
@@ -73,7 +64,8 @@ export const AnimationScene = ({ room, character, setIsLoaded }: props) => {
             setSize(prev => [prev[0] + 1, prev[1]]);
           }
         }
-        //devided creating items of animated and static
+
+        // Разделение создания анимированных и статичных предметов
         room?.items.forEach(async (item, i) => {
           const animatedItem = findAnimatedItem(item);
           if (animatedItem) {
@@ -141,6 +133,7 @@ export const AnimationScene = ({ room, character, setIsLoaded }: props) => {
 
     return () => {
       if (gameRef.current) {
+        console.log('destroy');
         gameRef.current.destroy(true);
         gameRef.current = null;
         spineSceneRef.current = null;
@@ -173,4 +166,4 @@ export const AnimationScene = ({ room, character, setIsLoaded }: props) => {
       ></div>
     </>
   );
-};
+});

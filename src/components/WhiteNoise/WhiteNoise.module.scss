@@ -1,11 +1,27 @@
+// .vhsEffect::before {
+//   animation: grain 6s steps(10) infinite;
+//   background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+//   content: '';
+//   height: 300%;
+//   width: 300%;
+//   left: -100%;
+//   top: -110%;
+//   position: absolute;
+//   z-index: 100;
+//   filter: brightness(0.2);
+//   pointer-events: none;
+// }
+
 .vhsEffect::before {
   animation: grain 6s steps(10) infinite;
   background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+  background-repeat: repeat;
+  background-size: 4%;
   content: '';
-  height: 300%;
-  width: 300%;
-  left: -100%;
-  top: -110%;
+  height: 1000%;
+  width: 1000%;
+  left: -450%;
+  top: -450%;
   position: absolute;
   z-index: 100;
   filter: brightness(0.2);
