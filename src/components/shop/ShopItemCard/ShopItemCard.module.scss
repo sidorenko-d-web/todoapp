@@ -124,6 +124,7 @@
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+
     button {
       border-radius: 8px;
       padding: 8px 12px;
@@ -160,6 +161,11 @@
         border: none;
       }
     }
+
+    .disabledBtn {
+      color: var.$color-gray;
+    }
+
     .disabledButton {
       pointer-events: none !important;
       border: none !important;

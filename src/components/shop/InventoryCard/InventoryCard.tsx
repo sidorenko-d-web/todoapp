@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import LockIconSvg from '@icons/lock-closed.tsx';
 import ChestBlueIcon from '@icons/chest-blue.svg';
 import ChestPurpleIcon from '@icons/chest-purple.svg';
+import CointsGrey from '@icons/cointsGrey.svg';
 import ChestRedIcon from '@icons/chest-red.svg';
 import ListIcon from '@icons/list.svg';
 import ListDisableIcon from '@icons/list-disable.svg';
@@ -200,7 +201,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       handleEquipItem();
     }
     if (pointsUser) {
-      setIsUseBay(+pointsUser.points <= +price);
+      setIsUseBay(+pointsUser.points >= +price);
     }
   }, []);
   console.log(isUseBay);
@@ -479,10 +480,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             })}
           </Button>
           <Button
-            className={clsx(
-              item.item_rarity === 'yellow'
-                ? styles.upgradeItemPurple
-                : item.item_rarity === 'green' && styles.upgradeItemRed,
+            className={classNames(
+              clsx(
+                item.item_rarity === 'yellow'
+                  ? styles.upgradeItemPurple
+                  : item.item_rarity === 'green' && styles.upgradeItemRed,
+              ),
+              { [styles.disabledBtn]: !isUseBay },
             )}
             disabled={item.level === 50 || isLoading || isItemsLoading || isUpdateLoading || !isUseBay}
             onClick={() => handleBuyItem(price ?? '')}
@@ -491,14 +495,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               {formatAbbreviation(price || 0, 'number', {
                 locale: locale,
               })}{' '}
-              <img src={CoinIcon} alt="" />
+              <img className={styles.imgCoints} src={!isUseBay ? CointsGrey : CoinIcon} alt="" />
             </>
           </Button>
 
           <Button
             disabled={idDisabled}
             onClick={() => {
-              console.log('object');
               removeItem({ items_to_remove: [{ id: item.id }] });
             }}
           >
