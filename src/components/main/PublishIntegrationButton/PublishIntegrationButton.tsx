@@ -35,7 +35,7 @@ export const PublishIntegrationButton: React.FC = () => {
   const { data, refetch } = useGetAllIntegrationsQuery();
   const [isPublishing, setIsPublishing] = useState(false);
 
-  const [ updateTimeLeft ] = useUpdateTimeLeftMutation();
+  const [updateTimeLeft] = useUpdateTimeLeftMutation();
 
   const lastIntId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
@@ -48,7 +48,6 @@ export const PublishIntegrationButton: React.FC = () => {
   );
 
   const openCongratsModal = () => {
-    console.log('Opening second modal: INTEGRATION_REWARD_CONGRATULATIONS');
     openModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS, {
       companyName: integrationData?.campaign.company_name,
       integrationsCount: companyData?.count,
@@ -74,34 +73,34 @@ export const PublishIntegrationButton: React.FC = () => {
 
     setIsPublishing(true);
 
-    setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-
     try {
+      setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+
       let integrationIdToPublish = lastIntId;
 
-      if(integrationData?.status === 'creating') {
-        if(integrationData?.time_left === 0) {
-          console.log('asdasgads')
+      if (integrationData?.status === 'creating') {
+        if (integrationData?.time_left === 0) {
+          console.log('asdasgads');
           const response = await updateTimeLeft({
             integrationId: integrationIdToPublish,
-            timeLeftDelta: 123
-          })
+            timeLeftDelta: 123,
+          });
           refetchIntegration();
           console.log('Update successful:', response);
         }
       }
-      
+
       if (!lastIntId) {
         await refetch().unwrap();
         if (data?.integrations && data.integrations.length > 0) {
           integrationIdToPublish = data.integrations[0].id;
-          if(data.integrations[0].status !== 'created') {
-            if(data.integrations[0].status === 'creating' && data.integrations[0].time_left === 0) {
+          if (data.integrations[0].status !== 'created') {
+            if (data.integrations[0].status === 'creating' && data.integrations[0].time_left === 0) {
               dispatch(setLastIntegrationId(integrationIdToPublish));
-              
+
               const response = await updateTimeLeft({
                 integrationId: integrationIdToPublish,
-                timeLeftDelta: 123
+                timeLeftDelta: 123,
               }).unwrap();
               refetchIntegration();
               console.log('Update successful:', response);
@@ -111,6 +110,7 @@ export const PublishIntegrationButton: React.FC = () => {
           }
         } else {
           console.error('No integrations found after refetch.');
+          setIsPublishing(false);
           return;
         }
       }
@@ -126,7 +126,6 @@ export const PublishIntegrationButton: React.FC = () => {
           const company = publishRes.data.campaign;
           const { base_income, base_views, base_subscribers } = publishRes.data;
 
-          console.log('Opening first modal: INTEGRATION_REWARD');
           openModal(MODALS.INTEGRATION_REWARD, {
             company,
             base_income,
@@ -134,8 +133,6 @@ export const PublishIntegrationButton: React.FC = () => {
             base_subscribers,
           });
         } else {
-          console.error('Failed to claim reward:', rewardRes.error);
-          // If reward claim fails, open congratulations modal directly
           if (canShowIntegrationReward && isPublishedModalClosed) {
             openCongratsModal();
           }

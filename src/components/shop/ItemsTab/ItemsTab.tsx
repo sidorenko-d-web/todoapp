@@ -19,7 +19,6 @@ interface props {
 
 export const ItemsTab: FC<props> = ({ inventoryItems, shopItems }) => {
   const foundItem = shopItems?.find(item => item.name.toLowerCase().trim() === 'печатная машинка');
-  console.log(inventoryItems);
   return (
     <div className={styles.cardsWrapper}>
       {inventoryItems?.map(item => <InventoryCard key={item.id} item={item} />)}

@@ -112,7 +112,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
               )}
             </div>
           </div>
-          <p className={styles.description}>{t('s36')}</p>
+          <p className={styles.description}>{/* {t('s36')} */}</p>
         </div>
       </div>
 

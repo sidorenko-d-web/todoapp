@@ -24,8 +24,10 @@ const INTEGRATION_ID_KEY = 'integration_id';
 
 export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration }) => {
   const { t } = useTranslation('integrations');
-
   const dispatch = useDispatch();
+
+  // Состояние для управления границей
+  const [hasBorder, setHasBorder] = useState(false);
 
   // Get stored values or use defaults from the integration
   const getSavedTimeLeft = () => {
@@ -162,6 +164,9 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       void accelerateIntegration(1);
       createParticles();
 
+      // Включаем границу
+      setHasBorder(true);
+
       // Clear any existing timeout to prevent multiple state updates
       if (accelerationTimeoutRef.current) {
         clearTimeout(accelerationTimeoutRef.current);
@@ -175,6 +180,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       // Set a new timeout
       accelerationTimeoutRef.current = setTimeout(() => {
         setIsAccelerated(false);
+        setHasBorder(false); // Выключаем границу через 2 секунды
         accelerationTimeoutRef.current = null;
       }, 2000);
     }
@@ -222,7 +228,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
               {t('i12')} {formatTime(timeLeft)}
             </span>
           </div>
-          <div className={s.progressBar}>
+          <div className={s.progressBar} style={{ border: hasBorder ? '1px solid #2064C0' : 'none' }}>
             <div className={s.progressBarInner} style={{ width: `${progress}%` }} />
           </div>
         </div>
@@ -233,7 +239,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
           }}
           className={s.iconButton}
           onClick={handleAccelerateClick}
-          disabled={isExpired || isAccelerating}
+          disabled={false}
           aria-label={t('i24')}
         >
           <img src={rocketIcon} alt="rocket" />

@@ -39,11 +39,7 @@ export function AuthInit({ children }: AuthInitProps) {
   }, [isLoading]);
 
   const shouldShowLoading =
-    isLoading ||
-    isInitializing ||
-    !isAnimationFinished ||
-    currentStep === 'loading' ||
-    currentStep === 'final_loading';
+    isLoading || isInitializing || !isAnimationFinished || currentStep === 'loading' || currentStep === 'final_loading';
 
   if (shouldShowLoading) {
     return (
