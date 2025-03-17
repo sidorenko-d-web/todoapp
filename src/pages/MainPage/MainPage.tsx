@@ -317,6 +317,16 @@ export const MainPage: FC = () => {
 
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
+      {( (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) 
+        && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) 
+      
+        || (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) && 
+          !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
+          <div style={{position: 'fixed', width: '100%', height: '100%', top: '0', left: '0', 
+            backgroundColor: 'rgba(0, 0, 0, 0.86)', pointerEvents: 'none', zIndex: '500'
+          }}/>
+      )}
+
       {true && (
         <InitialGuide onClose={() => {
           console.log('closing init guide');
@@ -330,7 +340,7 @@ export const MainPage: FC = () => {
           onClose={() => {
             console.log('asdasdfsdgm,. hjmniklo;.cxv')
             setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
-            openModal(MODALS.SUBSCRIBE);
+            //openModal(MODALS.SUBSCRIBE);
             reduxDispatch(setSubscribeGuideShown(false));
             setRerender((prev) => prev+1);
           }}
