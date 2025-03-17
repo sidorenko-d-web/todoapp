@@ -217,6 +217,14 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         />
       )}
 
+      {(isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) 
+              && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) && (
+                <div style={{position: 'fixed', width: '100%', height: '120vh', top: '0', left: '0', 
+                  backgroundColor: 'rgba(0, 0, 0, 0.7)', pointerEvents: 'none', zIndex: '1500'
+                }}/>
+            )}
+      
+
       {(useSelector((state: RootState) => state.guide.itemBought) || isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) &&
         isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) &&
         !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&

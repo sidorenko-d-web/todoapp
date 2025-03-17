@@ -84,7 +84,12 @@ export const Header = () => {
 
   const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
 
+  const showHeaderBG =
+    !['/', '/progressTree'].includes(location) &&
+    !(location.split('/')[1] === 'profile' && location.split('/')[3] === 'room');
+
   return (
+   <>
     <header
       className={classNames(
         styles.header,
@@ -92,6 +97,8 @@ export const Header = () => {
         platform ? styles[platform] : '',
       )}
     >
+      {showHeaderBG && <div className={styles.headerBG} />}
+      
       {!isLoading && (
         <div className={styles.lowerHeader}>
           <div className={styles.levelWrapper}>
@@ -137,5 +144,6 @@ export const Header = () => {
         </div>
       )}
     </header>
+   </>
   );
 };
