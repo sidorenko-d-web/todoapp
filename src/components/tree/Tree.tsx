@@ -147,7 +147,7 @@ export const Tree = () => {
     <div className={s.container}>
       {/* <div className={s.progressBarAdditional} /> */}
       <div className={s.progressBarContainer}>
-        <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300 + 35}px` }}>
+        <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300 + 25}px` }}>
           <div className={s.progressFill} style={{ height: `${progressPercent}%` }} ref={progressBarContainerRef} />
           {treeData?.growth_tree_stages.map((stage, index) => {
             const isRewardAvailable = stage.achievement.is_available;
