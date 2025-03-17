@@ -9,12 +9,14 @@ import {
   useGetIntegrationQuery,
   useGetIntegrationsQuery,
   usePublishIntegrationMutation,
+  useUpdateTimeLeftMutation,
 } from '../../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
 import {
   setCreateIntegrationButtonGlowing,
   setIntegrationReadyForPublishing,
+  setLastIntegrationId,
 } from '../../../redux/slices/guideSlice.ts';
 import { getCompanyStars, getIntegrationRewardImageUrl, setGuideShown } from '../../../utils/index.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
@@ -33,9 +35,11 @@ export const PublishIntegrationButton: React.FC = () => {
   const { data, refetch } = useGetAllIntegrationsQuery();
   const [isPublishing, setIsPublishing] = useState(false);
 
+  const [ updateTimeLeft ] = useUpdateTimeLeftMutation();
+
   const lastIntId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
-  const { data: integrationData } = useGetIntegrationQuery(lastIntId, {});
+  const { data: integrationData, refetch: refetchIntegration } = useGetIntegrationQuery(lastIntId, {});
   const { data: companyData } = useGetIntegrationsQuery({ company_name: integrationData?.campaign.company_name }, {});
 
   const imageUrl = getIntegrationRewardImageUrl(
@@ -75,12 +79,35 @@ export const PublishIntegrationButton: React.FC = () => {
     try {
       let integrationIdToPublish = lastIntId;
 
+      if(integrationData?.status === 'creating') {
+        if(integrationData?.time_left === 0) {
+          console.log('asdasgads')
+          const response = await updateTimeLeft({
+            integrationId: integrationIdToPublish,
+            timeLeftDelta: 123
+          })
+          refetchIntegration();
+          console.log('Update successful:', response);
+        }
+      }
+      
       if (!lastIntId) {
         await refetch().unwrap();
         if (data?.integrations && data.integrations.length > 0) {
           integrationIdToPublish = data.integrations[0].id;
           if(data.integrations[0].status !== 'created') {
-            dispatch(setIntegrationReadyForPublishing(false));
+            if(data.integrations[0].status === 'creating' && data.integrations[0].time_left === 0) {
+              dispatch(setLastIntegrationId(integrationIdToPublish));
+              
+              const response = await updateTimeLeft({
+                integrationId: integrationIdToPublish,
+                timeLeftDelta: 123
+              }).unwrap();
+              refetchIntegration();
+              console.log('Update successful:', response);
+            } else {
+              dispatch(setIntegrationReadyForPublishing(false));
+            }
           }
         } else {
           console.error('No integrations found after refetch.');
