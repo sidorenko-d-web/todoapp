@@ -100,7 +100,7 @@ export const Header = () => {
 
   return (
     <>
-      {dim && <div
+      {(dim && location !== 'progressTree') && <div
         style={{
           position: 'fixed',
           width: '100%',
