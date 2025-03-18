@@ -31,7 +31,6 @@ interface StreakCardProps {
   streakDays: number | undefined;
   status: string | undefined;
   chest: string | undefined;
-  frozenDays?: number;
   weekData?: {
     creation_date: string;
     push_line_data: WeekData;
@@ -45,7 +44,6 @@ export const StreakCard: React.FC<StreakCardProps> = ({
   streakDays,
   status,
   chest,
-  frozenDays = 0,
   weekData,
   strangerId,
 }) => {

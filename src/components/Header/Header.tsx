@@ -7,10 +7,7 @@ import SubscribersIcon from '../../assets/icons/subscribers.png';
 import {
   RootState,
   setLastActiveStage,
-<<<<<<< HEAD
   useGetProfileMeQuery,
-=======
->>>>>>> 01f8a735179b1155fb14c8b455a118c4e5ad26eb
   useGetProfileMeWithPollingQuery,
   useGetTreeInfoWithPollingQuery,
 } from '../../redux';
@@ -58,7 +55,7 @@ export const Header = () => {
 
   const lastActiveStage = lastActiveStageFromState ?? lastActiveStageFromProfile;
   const { i18n } = useTranslation('profile');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const platform = getOS();
 
   const { getModalState } = useModal();
@@ -69,7 +66,7 @@ export const Header = () => {
     if (isOpen) {
       refetch();
     }
-  }, [ isOpen ]);
+  }, [isOpen]);
 
   const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
@@ -85,7 +82,7 @@ export const Header = () => {
     if (lastActiveStageNumber) {
       dispatch(setLastActiveStage(lastActiveStageNumber));
     }
-  }, [ lastActiveStageNumber, dispatch ]);
+  }, [lastActiveStageNumber, dispatch]);
 
   const handleNavigateToProfile = () => {
     if (footerActive) {
@@ -96,7 +93,7 @@ export const Header = () => {
   const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
 
   const showHeaderBG =
-    ![ '/', '/progressTree' ].includes(location) &&
+    !['/', '/progressTree'].includes(location) &&
     !(location.split('/')[1] === 'profile' && location.split('/')[3] === 'room');
 
   return (

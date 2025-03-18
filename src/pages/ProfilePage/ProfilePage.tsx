@@ -163,7 +163,6 @@ export const ProfilePage: React.FC = () => {
             />
             <StreakCard
               streakDays={streaks}
-              frozenDays={userProfileData.available_freezes}
               days={weekData}
               status={
                 locale === 'ru'
