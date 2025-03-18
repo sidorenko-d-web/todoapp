@@ -4,7 +4,12 @@ import { Address } from '@ton/core';
 import { isUUID } from '../helpers';
 import { UsdtTransaction } from '../types';
 import { AccountSubscriptionService } from '../services';
-import { MAINNET_RECEIVER_ADDRESS, MAINNET_USDT_MASTER_ADDRESS, TESTNET_RECEIVER_ADDRESS, TESTNET_USDT_MASTER_ADDRESS } from '../constants/addresses';
+import {
+  MAINNET_RECEIVER_ADDRESS,
+  MAINNET_USDT_MASTER_ADDRESS,
+  TESTNET_RECEIVER_ADDRESS,
+  TESTNET_USDT_MASTER_ADDRESS,
+} from '../constants/addresses';
 import { useTonConnect } from '../hooks';
 import { CHAIN } from '@tonconnect/ui-react';
 
@@ -71,7 +76,7 @@ export const useUsdtTransactions = (): UsdtTransaction[] => {
     if (!tonClient || !walletAddress) return;
     const jettonMaster = tonClient.open(JettonMaster.create(jettonMasterAddress));
     const address = await jettonMaster.getWalletAddress(receiverAddress);
-    console.log(walletAddress?.toString());
+
     accountSubscriptionService.current = new AccountSubscriptionService(tonClient, address, (txs) => {
       const newUsdtTransactions = txs.map(parseUsdtPayload)
         .filter((tx): tx is UsdtTransaction => tx?.fromAddress.toString() === walletAddress?.toString());

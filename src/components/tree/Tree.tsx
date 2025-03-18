@@ -77,8 +77,6 @@ export const Tree = () => {
             const activeLevelTop = lastActiveLevelRef.current.offsetTop;
             const scrollPosition = activeLevelTop - 150; // Offset for better positioning
             
-            console.log('Attempting to scroll to position:', scrollPosition);
-            
             // Try all possible scroll targets
             window.scrollTo(0, scrollPosition);
             document.body.scrollTop = scrollPosition;
@@ -280,7 +278,6 @@ export const Tree = () => {
                 {isActive && <div 
                   ref={lastActiveLevelRef} 
                   data-level={stage.stage_number}
-                  onClick={() => console.log('Active level clicked')}
                   style={{ height: '20px', width: '20px', background: 'transparent', visibility: 'hidden'}} 
                 />}
               </div>

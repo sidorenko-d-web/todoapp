@@ -18,8 +18,8 @@ type TypeTab<T> = { title: string; value: T };
 
 export const ShopInventoryPage = () => {
   const { t } = useTranslation('shop');
-  const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
-  const [itemsQuality, setItemsQuality] = useState<TypeTab<TypeItemRarity>>();
+  const [ shopCategory, setShopCategory ] = useState<TypeTab<TypeItemCategory>>();
+  const [ itemsQuality, setItemsQuality ] = useState<TypeTab<TypeItemRarity>>();
 
   const {
     data: inventory,
@@ -27,7 +27,7 @@ export const ShopInventoryPage = () => {
     isLoading: isInventoryLoading,
   } = useGetInventoryItemsQuery(
     {
-      item_categories: shopCategory ? [shopCategory.value] : [],
+      item_categories: shopCategory ? [ shopCategory.value ] : [],
       item_rarity: itemsQuality?.value as TypeItemRarity,
     },
     { skip: !shopCategory?.value },
@@ -71,7 +71,7 @@ export const ShopInventoryPage = () => {
         }
       })
       .reverse();
-  }, [inventory, shop, shopCategory]);
+  }, [ inventory, shop, shopCategory ]);
 
   const itemsForBuy = useMemo(() => {
     if (!inventory || !shop || !shopCategory) return [];
@@ -90,7 +90,7 @@ export const ShopInventoryPage = () => {
             _item.name === item.name,
         ),
       );
-  }, [inventory, shop, shopCategory]);
+  }, [ inventory, shop, shopCategory ]);
 
   const handleItemCategoryChange = useCallback((category: TypeTab<TypeItemCategory>) => {
     setShopCategory(category);
@@ -101,7 +101,7 @@ export const ShopInventoryPage = () => {
   }, []);
 
   if (isLoading) return <Loader />;
-  console.log('object1');
+
   return (
     <ShopLayout
       mode="inventory"

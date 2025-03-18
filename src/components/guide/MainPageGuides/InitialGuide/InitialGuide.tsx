@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from 'react';
 import styles from './InitialGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
-import { Guide } from "../../Guide/Guide";
+import { Guide } from '../../Guide/Guide';
 import { useTranslation } from 'react-i18next';
-import { isGuideShown } from "../../../../utils";
-import { GUIDE_ITEMS } from "../../../../constants";
+import { isGuideShown } from '../../../../utils';
+import { GUIDE_ITEMS } from '../../../../constants';
 
 interface InitialGuideProps {
     onClose: () => void;
@@ -14,17 +14,11 @@ export const InitialGuide: React.FC<InitialGuideProps> = ({onClose}) => {
     const { t } = useTranslation('guide');
     const [isOpen, setIsOpen] = useState(true);
 
-    useEffect(() => {
-        console.log('INITIAL GUIDE OPEN')
-    }, []);
-
     if(isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)) {
-        console.log('INITIAL GUIDE ALREADY SHOWN')
         return null;
     }
 
     const handleClose = () => {
-        console.log('INITIAL GUIDE CLOSE')
         onClose();
         setIsOpen(false);
     };

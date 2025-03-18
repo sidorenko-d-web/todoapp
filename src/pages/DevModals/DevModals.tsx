@@ -1,5 +1,5 @@
 import { SpineGameObject, SpinePlugin } from '@esotericsoftware/spine-phaser';
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useGetShopSkinsQuery } from '../../redux';
 import { svgHeadersString } from '../../constants';
 
@@ -32,7 +32,6 @@ export default function DevModals() {
         this.spineObject = this.add.spine(100, 100, 'json', 'atlas');
         this.spineObject.scale = 0.1;
         this.spineObject.skeleton.setSkinByName('base');
-        console.log(this.spineObject);
       }
     }
 
@@ -59,7 +58,6 @@ export default function DevModals() {
   }, [sceneRef]);
 
   const { data: skins } = useGetShopSkinsQuery();
-  console.log(skins);
 
   return (
     <div>

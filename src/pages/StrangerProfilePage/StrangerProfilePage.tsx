@@ -71,7 +71,6 @@ export const StrangerProfilePage: React.FC = () => {
       claimChestReward({ chest_reward_reason: 'push_line' })
         .unwrap()
         .then(result => {
-          console.log('Reward claimed:', result);
           openModal(MODALS.TASK_CHEST, {
             points: result.reward.points,
             subscribers: result.reward.subscribers,

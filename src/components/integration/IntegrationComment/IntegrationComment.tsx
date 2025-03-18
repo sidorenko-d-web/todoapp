@@ -50,8 +50,6 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
     voteWrongSound();
   };
 
-  console.log(hateText);
-
   return (
     <div className={`${styles.wrp} ${elevateComment ? styles.elevated : ''}`}>
       {!finished ? (
