@@ -34,7 +34,10 @@ export const IntegrationPage: React.FC = () => {
     skip: !queryIntegrationId && queryIntegrationId === 'undefined',
   });
 
-  const integrationId = queryIntegrationId !== 'undefined' ? queryIntegrationId : integrations?.integrations.find(item => item.status === 'published')?.id;
+  const integrationId =
+    queryIntegrationId !== 'undefined'
+      ? queryIntegrationId
+      : integrations?.integrations.find(item => item.status === 'published')?.id;
 
   const {
     data,
@@ -43,14 +46,17 @@ export const IntegrationPage: React.FC = () => {
     refetch: refetchCurrentIntegration,
   } = useGetIntegrationQuery(`${integrationId}`, {
     refetchOnMountOrArgChange: true,
-    pollingInterval: 5 * 60 * 1000
+    pollingInterval: 5 * 60 * 1000,
   });
 
   useEffect(() => {
     if (!data) return;
-    const refetchInterval = setInterval(() => {
-      refetchCurrentIntegration();
-    }, 5 * 60 * 1000); // 5 minutes
+    const refetchInterval = setInterval(
+      () => {
+        refetchCurrentIntegration();
+      },
+      5 * 60 * 1000,
+    ); // 5 minutes
 
     return () => clearInterval(refetchInterval);
   }, [data, refetchCurrentIntegration]);
@@ -77,7 +83,7 @@ export const IntegrationPage: React.FC = () => {
   }, []);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
-    const res = await postComment({ commentId, isHate: !isThumbsUp });
+    await postComment({ commentId, isHate: !isThumbsUp });
     await refetchCurrentIntegration();
 
     if (currentCommentIndex + 1 < comments.length) {
@@ -88,10 +94,7 @@ export const IntegrationPage: React.FC = () => {
     }
   };
 
-  const isLoading = (
-    isIntegrationLoading ||
-    isUnansweredIntegrationCommentLoading
-  );
+  const isLoading = isIntegrationLoading || isUnansweredIntegrationCommentLoading;
 
   if (isLoading) return <Loader />;
 

@@ -47,21 +47,7 @@ export const ProfilePage: React.FC = () => {
 
   const [, setIsModalShown] = useState(false);
 
-  // Calculate streaks reliably using useMemo to prevent unnecessary recalculations
-  const streaks = useMemo(() => {
-    // First priority: Check if in_streak_days exists
-    if (pushLineData?.in_streak_days !== undefined && pushLineData?.in_streak_days !== null) {
-      return pushLineData.in_streak_days;
-    }
-
-    // Second priority: Count passed days from week_information
-    if (pushLineData?.week_information) {
-      return pushLineData.week_information.filter(day => day.push_line_data?.status === 'passed').length;
-    }
-
-    // Default to 0 if no data is available
-    return 0;
-  }, [pushLineData]);
+  const streaks = pushLineData?.week_information.filter(day => day.push_line_data?.status === 'passed').length;
 
   // Handle one-time modal display
   useEffect(() => {
@@ -75,7 +61,7 @@ export const ProfilePage: React.FC = () => {
   // Handle streak milestone rewards
   useEffect(() => {
     // Only process rewards after data is loaded and confirmed
-    if (!initialDataLoaded && streaks > 0) {
+    if (!initialDataLoaded && streaks && streaks > 0) {
       setInitialDataLoaded(true);
 
       // Check for reward milestones
@@ -177,7 +163,6 @@ export const ProfilePage: React.FC = () => {
             />
             <StreakCard
               streakDays={streaks}
-              frozenDays={userProfileData.available_freezes}
               days={weekData}
               status={
                 locale === 'ru'

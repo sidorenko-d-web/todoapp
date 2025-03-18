@@ -147,7 +147,6 @@ export const StrangerProfilePage: React.FC = () => {
             />
             <StreakCard
               streakDays={streaks !== undefined ? streaks : 0}
-              frozenDays={userProfileData.available_freezes}
               days={weekData}
               status={
                 locale === 'ru'

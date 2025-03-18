@@ -96,7 +96,7 @@ export const PublishIntegrationButton: React.FC = () => {
             if (data.integrations[0].status === 'creating' && data.integrations[0].time_left === 0) {
               dispatch(setLastIntegrationId(integrationIdToPublish));
 
-              const response = await updateTimeLeft({
+              await updateTimeLeft({
                 integrationId: integrationIdToPublish,
                 timeLeftDelta: 123,
               }).unwrap();

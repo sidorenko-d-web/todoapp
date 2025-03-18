@@ -7,6 +7,7 @@ import SubscribersIcon from '../../assets/icons/subscribers.png';
 import {
   RootState,
   setLastActiveStage,
+  useGetProfileMeQuery,
   useGetProfileMeWithPollingQuery,
   useGetTreeInfoWithPollingQuery,
 } from '../../redux';
@@ -48,7 +49,11 @@ export const Header = () => {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
+  const { data: profile } = useGetProfileMeQuery();
+  const lastActiveStageFromProfile = profile?.growth_tree_stage_id;
+  const lastActiveStageFromState = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
+
+  const lastActiveStage = lastActiveStageFromState ?? lastActiveStageFromProfile;
   const { i18n } = useTranslation('profile');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const platform = getOS();
