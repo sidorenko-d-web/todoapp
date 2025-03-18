@@ -6,7 +6,7 @@ import { IntegrationCreationCard, IntegrationCreationModal } from '../';
 import { SubscribeModal, SuccessfullySubscribedModal, TrackedButton } from '../../';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { isIntegrationCreationButtonGlowing, setGuideShown } from '../../../utils/guide-functions.ts';
+import { isGuideShown, isIntegrationCreationButtonGlowing, setGuideShown } from '../../../utils/guide-functions.ts';
 
 import s from './IntegrationCreation.module.scss';
 import { useTranslation } from 'react-i18next';
@@ -48,6 +48,9 @@ export const IntegrationCreation = () => {
 
   const createIntegrationButtonGlowing = useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing);
 
+  const btnGlowing = ((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) 
+    && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)));
+
   return (
     <section className={s.integrationsControls}>
       {!integrationCreating && (
@@ -56,7 +59,8 @@ export const IntegrationCreation = () => {
             eventType: 'button',
             eventPlace: 'Создать интеграцию - Главный экран',
           }}
-          className={`${s.button} ${isButtonGlowing || createIntegrationButtonGlowing ? s.glowing : ''}`}
+          className={`${s.button} ${isButtonGlowing || createIntegrationButtonGlowing || btnGlowing ? s.glowing : ''}`}
+          style={{zIndex:'10000'}}
           disabled={!profile}
           onClick={handleIntegrationCreation}
         >

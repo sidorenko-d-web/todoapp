@@ -60,7 +60,6 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
           this.createPerson(contextProps, isWorking);
         } catch (error: any) {
           if (error.message === 'add.spine') {
-            console.log('avoid error');
             setSize(prev => [prev[0] + 1, prev[1]]);
           }
         }
@@ -86,7 +85,6 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
       changeSkin(updatedCharacter?: ICharacterResponse) {
         if (!this.person) return;
         const allSkins = this.person.skeleton.data.skins;
-        console.log(allSkins);
         const face = allSkins.find(item => item.name.includes(getSkin('face') ?? 'лицо 1'))!;
         const headSkin = allSkins.find(item => item.name.includes(getSkin('head') ?? 'голова 18'))!;
         const bottomSkin = allSkins.find(item => item.name.includes(getSkin('legs') ?? 'штаны базовые'))!;

@@ -71,7 +71,6 @@ export const StrangerProfilePage: React.FC = () => {
       claimChestReward({ chest_reward_reason: 'push_line' })
         .unwrap()
         .then(result => {
-          console.log('Reward claimed:', result);
           openModal(MODALS.TASK_CHEST, {
             points: result.reward.points,
             subscribers: result.reward.subscribers,
@@ -148,7 +147,6 @@ export const StrangerProfilePage: React.FC = () => {
             />
             <StreakCard
               streakDays={streaks !== undefined ? streaks : 0}
-              frozenDays={userProfileData.available_freezes}
               days={weekData}
               status={
                 locale === 'ru'

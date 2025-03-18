@@ -115,9 +115,6 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
     }
   }, []);
 
-  // useEffect(() => {
-  //   localStorage.clear();
-  // }, []);
   const ref = useRef<any>(null);
 
   return (

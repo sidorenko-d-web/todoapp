@@ -2,12 +2,12 @@ import { FC, useState } from 'react';
 import styles from './ShopSkinCard.module.scss';
 import clsx from 'clsx';
 import {
-  shopApi,
   IShopSkin,
+  shopApi,
   useBuySkinMutation,
   useGetCharacterQuery,
-  useUpdateCharacterMutation,
   useGetProfileMeQuery,
+  useUpdateCharacterMutation,
 } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import HeadIcon from '../../../assets/icons/head_icon.svg';
@@ -42,7 +42,6 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
   const handleBuySkin = async () => {
     try {
       const res = await buySkin({ payment_method: 'internal_wallet', id: item.id });
-      console.log(res);
       if (!res.error) {
         shopApi.util.resetApiState();
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' });
@@ -112,7 +111,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
               )}
             </div>
           </div>
-          <p className={styles.description}>{t('s36')}</p>
+          <p className={styles.description}>{/* {t('s36')} */}</p>
         </div>
       </div>
 

@@ -24,8 +24,8 @@ const INTEGRATION_ID_KEY = 'integration_id';
 
 export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration }) => {
   const { t } = useTranslation('integrations');
-
   const dispatch = useDispatch();
+  const [hasBorder, setHasBorder] = useState(false);
 
   // Get stored values or use defaults from the integration
   const getSavedTimeLeft = () => {
@@ -58,7 +58,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   // Reference to store the timeout ID
   const accelerationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
+  const { accelerateIntegration } = useAccelerateIntegration({
     integrationId: integration.id,
     onSuccess: newTimeLeft => {
       setTimeLeft(newTimeLeft);
@@ -161,20 +161,19 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       dispatch(setLastIntegrationId(integration.id));
       void accelerateIntegration(1);
       createParticles();
+      setHasBorder(true);
 
-      // Clear any existing timeout to prevent multiple state updates
       if (accelerationTimeoutRef.current) {
         clearTimeout(accelerationTimeoutRef.current);
       }
 
-      // Set accelerated state if not already set
       if (!isAccelerated) {
         setIsAccelerated(true);
       }
 
-      // Set a new timeout
       accelerationTimeoutRef.current = setTimeout(() => {
         setIsAccelerated(false);
+        setHasBorder(false);
         accelerationTimeoutRef.current = null;
       }, 2000);
     }
@@ -222,7 +221,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
               {t('i12')} {formatTime(timeLeft)}
             </span>
           </div>
-          <div className={s.progressBar}>
+          <div className={s.progressBar} style={{ border: hasBorder ? '1px solid #2064C0' : 'none' }}>
             <div className={s.progressBarInner} style={{ width: `${progress}%` }} />
           </div>
         </div>
@@ -233,7 +232,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
           }}
           className={s.iconButton}
           onClick={handleAccelerateClick}
-          disabled={isExpired || isAccelerating}
+          disabled={false}
           aria-label={t('i24')}
         >
           <img src={rocketIcon} alt="rocket" />

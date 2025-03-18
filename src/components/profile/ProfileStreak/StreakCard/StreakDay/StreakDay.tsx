@@ -45,13 +45,13 @@ export const StreakDay: React.FC<StreakDayProps> = ({ dayNumber, weekIndex, week
   });
 
   const isStreakDay = currentDayInfo?.push_line_data?.status === 'passed';
-  const isFailedDay = currentDayInfo && currentDayInfo.push_line_data?.status === 'unspecified' && !isStreakDay;
+  const isFailedDay =
+    (currentDayInfo && currentDayInfo.push_line_data?.status === 'frozen') ||
+    (currentDayInfo?.push_line_data?.status === 'unspecified' && !isStreakDay);
 
   const weekdaysRu = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
   const weekdaysEn = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
   const isCurrentDay = currentDay === dayNumber;
-
-  console.log('currentDayInfo');
 
   const getIcon = () => {
     if (isFailedDay) return <img src={freezeIcon} alt="Frozen Day" />;

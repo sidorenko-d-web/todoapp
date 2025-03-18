@@ -10,7 +10,8 @@ import type { RootState } from '../store';
 import { setCredentials, signOut } from '../slices';
 
 export const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://bbaa2o77ubs6r4cta1l2.containers.yandexcloud.net/',
+  // baseUrl: 'https://bbaa2o77ubs6r4cta1l2.containers.yandexcloud.net/', //Прод
+  baseUrl: 'https://bbajd7fltqec6462cm1j.containers.yandexcloud.net/', //Тест
   prepareHeaders: headers => {
     const token = localStorage.getItem('access_token');
     headers.set('X-Authorization', token || '');

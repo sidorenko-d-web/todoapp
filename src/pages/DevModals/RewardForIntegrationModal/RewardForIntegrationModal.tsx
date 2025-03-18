@@ -16,7 +16,12 @@ import { useDispatch } from 'react-redux';
 import { CentralModal } from '../../../components/shared';
 import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../helpers';
-import { CompanyResponseDTO, setIsPublishedModalClosed, setNeedToPlayHappy, useGetIntegrationsQuery } from '../../../redux';
+import {
+  CompanyResponseDTO,
+  setIsPublishedModalClosed,
+  setNeedToPlayHappy,
+  useGetIntegrationsQuery,
+} from '../../../redux';
 import { setGuideShown } from '../../../utils';
 import { useEffect } from 'react';
 
@@ -24,12 +29,12 @@ export default function RewardForIntegrationModal() {
   const { t, i18n } = useTranslation('integrations');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal, getModalState } = useModal();
-  
+
   const { args } = getModalState<{
-    company: CompanyResponseDTO,
-    base_income: string,
-    base_subscribers: string,
-    base_views: string
+    company: CompanyResponseDTO;
+    base_income: string;
+    base_subscribers: string;
+    base_views: string;
   }>(MODALS.INTEGRATION_REWARD);
   const { data: integrationsData } = useGetIntegrationsQuery({ company_name: args?.company.company_name });
   const integrationCount = integrationsData?.count ?? 0;
@@ -64,14 +69,12 @@ export default function RewardForIntegrationModal() {
     }
   };
 
-  
   const blueStarCount = getBlueStarCount(integrationCount);
   const progressPercentage = getProgressBarPercentage(integrationCount);
 
   return (
     <CentralModal
       onClose={() => {
-        console.log('abcdefg')
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
         dispatch(setIsPublishedModalClosed(true));
         dispatch(setNeedToPlayHappy(true));
@@ -87,8 +90,6 @@ export default function RewardForIntegrationModal() {
         <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />
       </div>
       <div className={styles.wrapper}>
-
-
         <div className={styles.info}>
           <div className={styles.top}>
             <img className={styles.integration} src={args?.company.image_url ?? integration} />
@@ -97,19 +98,16 @@ export default function RewardForIntegrationModal() {
             <h2 className={styles.title}>{args?.company.company_name}</h2>
             <div className={styles.rate}>
               {[...Array(3)].map((_, index) => (
-                <img 
+                <img
                   key={index}
                   className={integrationCount >= starsThresholds.thirdStar ? styles.starsMax : ''}
-                  src={index < blueStarCount ? starBlue : starGray} 
+                  src={index < blueStarCount ? starBlue : starGray}
                 />
               ))}
             </div>
             <div className={styles.progress}>
               {integrationCount < starsThresholds.thirdStar && (
-                <div 
-                  className={styles.progressBar} 
-                  style={{ width: `${progressPercentage}%` }} 
-                />
+                <div className={styles.progressBar} style={{ width: `${progressPercentage}%` }} />
               )}
             </div>
           </div>

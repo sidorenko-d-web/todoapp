@@ -16,7 +16,7 @@ import { usePushLineStatus } from '../../../hooks';
 import clsx from 'clsx';
 
 interface ProfileStatsMiniProps {
-  daysInARow: number;
+  daysInARow: number | undefined;
   position: number;
   onlyBadges?: boolean;
   strangerId?: string;

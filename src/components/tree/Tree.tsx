@@ -51,7 +51,7 @@ export const Tree = () => {
 
   const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const [ unlockAchievement ] = useUnlockAchievementMutation();
+  const [unlockAchievement] = useUnlockAchievementMutation();
   const { progressPercent } = useTreeProgress({
     treeData,
     userSubscribers,
@@ -72,23 +72,21 @@ export const Tree = () => {
         if (lastActiveLevelRef.current) {
           try {
             // Try multiple approaches to ensure scrolling works
-            
+
             // 1. Direct DOM manipulation - force scroll to the element position
             const activeLevelTop = lastActiveLevelRef.current.offsetTop;
             const scrollPosition = activeLevelTop - 150; // Offset for better positioning
-            
-            console.log('Attempting to scroll to position:', scrollPosition);
-            
+
             // Try all possible scroll targets
             window.scrollTo(0, scrollPosition);
             document.body.scrollTop = scrollPosition;
             document.documentElement.scrollTop = scrollPosition;
-            
+
             // 2. For iframe environments like Telegram
             if (window.parent && window.parent !== window) {
               window.parent.postMessage({ type: 'scroll', position: scrollPosition }, '*');
             }
-            
+
             // 3. If Telegram WebApp is available
             if (window.Telegram?.WebApp) {
               // Some versions support this method
@@ -99,13 +97,13 @@ export const Tree = () => {
               const event = new Event('scroll');
               window.dispatchEvent(event);
             }
-            
+
             // 4. Last resort - direct click on the element to bring focus
             setTimeout(() => {
               lastActiveLevelRef.current?.click();
               lastActiveLevelRef.current?.scrollIntoView({ block: 'center' });
             }, 100);
-            
+
             setHasScrolled(true);
           } catch (err) {
             console.error('Error during scroll:', err);
@@ -113,7 +111,7 @@ export const Tree = () => {
           }
         }
       }, 500); // Longer timeout to ensure TreeGuide is handled
-      
+
       return () => clearTimeout(timer);
     }
   }, [dataLoaded, hasScrolled]);
@@ -126,10 +124,14 @@ export const Tree = () => {
   }, []);
 
   if (!treeData || !isBgLoaded || !userProfileData) {
-    return <>
-      <div style={{position: 'fixed', top: '0', left: '0', width: '100vh', height: '100vh', background: '#141319'}}/>
-      <Loader />
-    </>;
+    return (
+      <>
+        <div
+          style={{ position: 'fixed', top: '0', left: '0', width: '100vh', height: '100vh', background: '#141319' }}
+        />
+        <Loader />
+      </>
+    );
   }
 
   const handleUnlock = async (id: string, boost: Boost) => {
@@ -147,7 +149,10 @@ export const Tree = () => {
     <div className={s.container}>
       {/* <div className={s.progressBarAdditional} /> */}
       <div className={s.progressBarContainer}>
-        <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300 + 35}px` }}>
+        <div
+          className={s.progressBar}
+          style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300 + 25}px` }}
+        >
           <div className={s.progressFill} style={{ height: `${progressPercent}%` }} ref={progressBarContainerRef} />
           {treeData?.growth_tree_stages.map((stage, index) => {
             const isRewardAvailable = stage.achievement.is_available;
@@ -184,7 +189,9 @@ export const Tree = () => {
                   >
                     {t('t2')}
                   </Button>
-                ) : <span/>}
+                ) : (
+                  <span />
+                )}
                 {showReward && (
                   <div
                     className={classNames(s.prize, {
@@ -277,12 +284,13 @@ export const Tree = () => {
                     </div>
                   </div>
                 )}
-                {isActive && <div 
-                  ref={lastActiveLevelRef} 
-                  data-level={stage.stage_number}
-                  onClick={() => console.log('Active level clicked')}
-                  style={{ height: '20px', width: '20px', background: 'transparent', visibility: 'hidden'}} 
-                />}
+                {isActive && (
+                  <div
+                    ref={lastActiveLevelRef}
+                    data-level={stage.stage_number}
+                    style={{ height: '20px', width: '20px', background: 'transparent', visibility: 'hidden' }}
+                  />
+                )}
               </div>
             );
           })}

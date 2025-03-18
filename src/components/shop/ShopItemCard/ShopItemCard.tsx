@@ -6,6 +6,7 @@ import { IShopItem, RootState, useGetProfileMeQuery } from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
+import CointsGrey from '@icons/cointsGrey.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
 import { useModal, useSendTransaction, useTonConnect, useUsdtTransactions } from '../../../hooks';
 import { useTransactionNotification } from '../../../hooks/useTransactionNotification';
@@ -15,6 +16,7 @@ import { isGuideShown, setGuideShown } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
+import classNames from 'classnames';
 
 interface Props {
   disabled?: boolean;
@@ -27,12 +29,21 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
   const [error, setError] = useState('');
+  const [isUseBay, setIsUseBay] = useState(false);
+
+  const { data: pointsUser } = useGetProfileMeQuery();
 
   const buyButtonGlowing = useSelector((state: RootState) => state.guide.buyItemButtonGlowing);
   // for transactions
   const { sendUSDT } = useSendTransaction();
   const usdtTransactions = useUsdtTransactions();
   const [currentTrxId, setCurrentTrxId] = useState('');
+
+  useEffect(() => {
+    if (pointsUser) {
+      setIsUseBay(+pointsUser.points >= +item.price_internal);
+    }
+  }, []);
 
   const userPoints = data?.points || 0;
   const handleBuyItem = async () => {
@@ -66,14 +77,12 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       const trxId = await sendUSDT(Number(item.price_usdt));
       setCurrentTrxId(trxId || '');
     } catch (error) {
-      console.log('Error while sending USDT transaction', error);
       failTransaction(handleUsdtPayment);
     }
   };
 
   useEffect(() => {
     const latestTransaction = usdtTransactions[0];
-    console.log('Transactions', latestTransaction);
 
     if (!latestTransaction || latestTransaction.orderId !== currentTrxId) return;
 
@@ -101,8 +110,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                ? styles.colorPurple
-                : styles.level
+                  ? styles.colorPurple
+                  : styles.level
             }
           >
             {t('s17')}
@@ -113,11 +122,11 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 item.item_rarity === 'green'
                   ? styles.colorRed
                   : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                    ? styles.colorPurple
+                    : styles.level
               }
             >
-              {"Error while loading data"}
+              {'Error while loading data'}
             </p>
           )}
           <div className={styles.stats}>
@@ -147,16 +156,23 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
           )}
           <Button
             onClick={handleBuyItem}
-            className={clsx(
-              Number(userPoints) < Number(item.price_internal) ? styles.disabledButton : '',
-              buyButtonGlowing && item.name.toLowerCase().trim().includes('печатная машинка') ? styles.glowingBtn : '',
+            disabled={!isUseBay}
+            className={classNames(
+              clsx(
+                Number(userPoints) < Number(item.price_internal) ? styles.disabledButton : '',
+                buyButtonGlowing && item.name.toLowerCase().trim().includes('печатная машинка')
+                  ? styles.glowingBtn
+                  : '',
+              ),
+              { [styles.disabledBtn]: !isUseBay },
             )}
           >
             {isLoading ? (
               <p>{t('s59')}</p>
             ) : (
               <>
-                {formatAbbreviation(item.price_internal, 'number', { locale: locale })} <img src={CoinIcon} alt="" />
+                {formatAbbreviation(item.price_internal, 'number', { locale: locale })}{' '}
+                <img src={!isUseBay ? CointsGrey : CoinIcon} alt="" />
               </>
             )}
           </Button>

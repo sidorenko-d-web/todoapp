@@ -33,9 +33,10 @@ export const IntegrationPage: React.FC = () => {
     skip: !queryIntegrationId && queryIntegrationId === 'undefined',
   });
 
-  // console.log(integrations?.integrations.find(item))
-
-  const integrationId = queryIntegrationId !== 'undefined' ? queryIntegrationId : integrations?.integrations.find(item => item.status === 'published')?.id;
+  const integrationId =
+    queryIntegrationId !== 'undefined'
+      ? queryIntegrationId
+      : integrations?.integrations.find(item => item.status === 'published')?.id;
 
   const {
     data,
@@ -44,14 +45,17 @@ export const IntegrationPage: React.FC = () => {
     refetch: refetchCurrentIntegration,
   } = useGetIntegrationQuery(`${integrationId}`, {
     refetchOnMountOrArgChange: true,
-    pollingInterval: 5 * 60 * 1000
+    pollingInterval: 5 * 60 * 1000,
   });
 
   useEffect(() => {
     if (!data) return;
-    const refetchInterval = setInterval(() => {
-      refetchCurrentIntegration();
-    }, 5 * 60 * 1000); // 5 minutes
+    const refetchInterval = setInterval(
+      () => {
+        refetchCurrentIntegration();
+      },
+      5 * 60 * 1000,
+    ); // 5 minutes
 
     return () => clearInterval(refetchInterval);
   }, [data, refetchCurrentIntegration]);
@@ -78,9 +82,9 @@ export const IntegrationPage: React.FC = () => {
   }, []);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
-    const res = await postComment({ commentId, isHate: !isThumbsUp });
+    await postComment({ commentId, isHate: !isThumbsUp });
     await refetchCurrentIntegration();
-    console.log(res.data ? 'угадано' : 'не угадано')
+
     if (currentCommentIndex + 1 < comments.length) {
       setCurrentCommentIndex(prevIndex => prevIndex + 1);
     } else {
@@ -89,10 +93,7 @@ export const IntegrationPage: React.FC = () => {
     }
   };
 
-  const isLoading = (
-    isIntegrationLoading ||
-    isUnansweredIntegrationCommentLoading
-  );
+  const isLoading = isIntegrationLoading || isUnansweredIntegrationCommentLoading;
 
   if (isLoading) return <Loader />;
 
@@ -103,7 +104,7 @@ export const IntegrationPage: React.FC = () => {
       {isLoading && <p>{t('i3')}</p>}
       {(error || !integrationId) && <p>{t('i2')}</p>}
 
-      {data  && (
+      {data && (
         <>
           <IntegrationStatsMini
             views={data.views}
@@ -114,12 +115,14 @@ export const IntegrationPage: React.FC = () => {
           />
           <div className={styles.container}>
             <div className={styles.integrationNameWrp}>
-            <p className={styles.integrationTitle}>{t('i1')} {data.number}</p>
-            <div className={styles.integrationLevelWrp}>
-              <p className={styles.integrationLevel}>{data.campaign.company_name}</p>
-              <img src={integrationIcon} height={16} width={16}  alt={'icon'}/>
+              <p className={styles.integrationTitle}>
+                {t('i1')} {data.number}
+              </p>
+              <div className={styles.integrationLevelWrp}>
+                <p className={styles.integrationLevel}>{data.campaign.company_name}</p>
+                <img src={integrationIcon} height={16} width={16} alt={'icon'} />
+              </div>
             </div>
-          </div>
             <Integration />
             <IntegrationStats
               views={data.views}
@@ -129,11 +132,11 @@ export const IntegrationPage: React.FC = () => {
               lastUpdatedAt={data.updated_at}
             />
             <div className={styles.commentsSectionTitleWrp}>
-            <p className={styles.commentsSectionTitle}>{t('i4')}</p>
-            <p className={styles.commentsAmount}>
-              {data.comments_generated}/{20}
-            </p>
-          </div>
+              <p className={styles.commentsSectionTitle}>{t('i4')}</p>
+              <p className={styles.commentsAmount}>
+                {data.comments_generated}/{20}
+              </p>
+            </div>
             {
               <IntegrationComment
                 progres={data.comments_answered_correctly % 5}
@@ -143,7 +146,7 @@ export const IntegrationPage: React.FC = () => {
                 finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
               />
             }
-            </div>
+          </div>
         </>
       )}
       {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (

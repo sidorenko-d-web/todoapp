@@ -135,7 +135,9 @@ export const TaskCard: React.FC<TasksCardProps> = ({
       {isCompleted && <div className={s.animationWrapper}>{animationLight}</div>}
 
       <section className={s.header}>
-        {icon && <img className={classNames(s.icon, { [s.iconSocial]: isSocialTask })} src={icon} alt="icon" />}
+        {icon && (
+          <img className={classNames(s.icon, { [s.iconSocial]: isSocialTask })} src={icon} alt="icon" loading="lazy" />
+        )}
         <div className={s.info}>
           <h2 className={s.title}>{title}</h2>
           <p className={s.description}>{description}</p>

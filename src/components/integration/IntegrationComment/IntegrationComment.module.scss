@@ -1,4 +1,4 @@
-@use '../../../assets/styles/index.scss' as var;
+@use "../../../assets/styles/index.scss" as var;
 
 .wrp {
   width: 100%;
@@ -77,11 +77,19 @@
       background-color: var.$color-green;
 
       border: none;
-      background-image: url('../../../assets/icons/thumbs-up.svg');
+      background-image: url("../../../assets/icons/thumbs-up.svg");
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
       background-size: 50%;
+
+      &:disabled {
+        background-image: url("../../../assets/icons/thumbs-up-gray.svg") !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-size: 50% !important;
+      }
     }
 
     .thumbsDown {
@@ -91,18 +99,29 @@
       background-color: var.$color-red;
 
       border: none;
-      background-image: url('../../../assets/icons/thumbs-down.svg');
+      background-image: url("../../../assets/icons/thumbs-down.svg");
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
       background-size: 50%;
+
+      &:disabled {
+        background-image: url("../../../assets/icons/thumbs-down-gray.svg") !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-size: 50% !important;
+      }
     }
   }
 
   .noComment {
     width: 100%;
-    text-align: center;
+    max-width: 250px;
+    height: 64px;
+    white-space: wrap;
     font-size: 16px;
+    color: var.$color-gray;
   }
 }
 

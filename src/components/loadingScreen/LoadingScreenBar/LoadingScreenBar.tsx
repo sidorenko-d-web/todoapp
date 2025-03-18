@@ -1,4 +1,4 @@
-import { useEffect, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, forwardRef, useImperativeHandle, useState } from 'react';
 import rocketIcon from '../../../assets/icons/rocket.svg';
 import s from './LoadingScreenBar.module.scss';
 import { useTranslation } from 'react-i18next';
@@ -8,83 +8,90 @@ const INITIAL_DURATION = 5000;
 const UPDATE_INTERVAL = 15;
 
 interface LoadingScreenBarProps {
-    speedMultiplier: number;
-    progress: number;
-    setProgress: React.Dispatch<React.SetStateAction<number>>;
-    isAuthComplete: boolean;
+  speedMultiplier: number;
+  progress: number;
+  setProgress: React.Dispatch<React.SetStateAction<number>>;
+  isAuthComplete: boolean;
 }
 
 export interface LoadingScreenBarRef {
-    createParticles: () => void;
+  createParticles: () => void;
 }
 
-export const LoadingScreenBar = forwardRef<LoadingScreenBarRef, LoadingScreenBarProps>( 
-    ({ speedMultiplier, progress, setProgress, isAuthComplete }, ref) => {
-        const { t } = useTranslation('integrations');
+export const LoadingScreenBar = forwardRef<LoadingScreenBarRef, LoadingScreenBarProps>(
+  ({ speedMultiplier, progress, setProgress, isAuthComplete }, ref) => {
+    const { t } = useTranslation('integrations');
+    const [hasBorder, setHasBorder] = useState(false); // Состояние для управления границей
 
-        const createParticles = () => {
-            const button = document.querySelector(`.${s.iconButton}`);
-            const progressBar = document.querySelector(`.${s.progressBar}`);
+    const createParticles = () => {
+      const button = document.querySelector(`.${s.iconButton}`);
+      const progressBar = document.querySelector(`.${s.progressBar}`);
 
-            if (!button || !progressBar) return;
+      if (!button || !progressBar) return;
 
-            for (let i = 0; i < 5; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add(s.particle);
+      for (let i = 0; i < 5; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add(s.particle);
 
-                button.appendChild(particle);
+        button.appendChild(particle);
 
-                setTimeout(() => {
-                    particle.remove();
-                }, 800);
-            }
-        };
+        setTimeout(() => {
+          particle.remove();
+        }, 800);
+      }
+    };
 
-        useImperativeHandle(ref, () => ({
-            createParticles,
-        }));
+    useImperativeHandle(ref, () => ({
+      createParticles,
+    }));
 
-        useEffect(() => {
-            if (progress >= 100) return;
+    useEffect(() => {
+      if (progress >= 100) return;
 
-            const baseIncrement = 100 / (INITIAL_DURATION / UPDATE_INTERVAL);
-            const finalSpeed = isAuthComplete ? 5 : 1;
-            const progressIncrement = baseIncrement * speedMultiplier * finalSpeed;
+      const baseIncrement = 100 / (INITIAL_DURATION / UPDATE_INTERVAL);
+      const finalSpeed = isAuthComplete ? 5 : 1;
+      const progressIncrement = baseIncrement * speedMultiplier * finalSpeed;
 
-            const timerId = setInterval(() => {
-                setProgress(prev => Math.min(prev + progressIncrement, 100));
-            }, UPDATE_INTERVAL);
+      const timerId = setInterval(() => {
+        setProgress(prev => Math.min(prev + progressIncrement, 100));
+      }, UPDATE_INTERVAL);
 
-            return () => clearInterval(timerId);
-        }, [speedMultiplier, progress, isAuthComplete]);
+      return () => clearInterval(timerId);
+    }, [speedMultiplier, progress, isAuthComplete]);
 
-        return (
-            <div className={`${s.wrp} ${s.elevated}`}>
-                <div className={s.integrationHeader}>
-                    <h2 className={s.title}>{t('i10')}</h2>
-                </div>
-                <div className={s.body}>
-                    <div className={s.info}>
-                        <span className={s.loadingText}>{t('i3')}</span>
-                        <div className={s.progressBar}>
-                            <div
-                                className={s.progressBarInner}
-                                style={{
-                                    width: `${progress}%`,
-                                    transition: progress >= 100 ? 'width 0.1s linear' : 'width 0.05s linear',
-                                }}
-                            />
-                        </div>
-                    </div>
-                    <Button 
-                        className={`${s.iconButton} ${s.progressButton}`} 
-                        disabled={false} 
-                        aria-label={t('i24')}
-                    >
-                        <img src={rocketIcon} alt="rocket" />
-                    </Button>
-                </div>
+    const handleButtonClick = () => {
+      setProgress(prev => Math.min(prev + 10, 100));
+      setHasBorder(true);
+    };
+
+    return (
+      <div className={`${s.wrp} ${s.elevated}`}>
+        <div className={s.integrationHeader}>
+          <h2 className={s.title}>{t('i10')}</h2>
+        </div>
+        <div className={s.body}>
+          <div className={s.info}>
+            <span className={s.loadingText}>{t('i3')}</span>
+            <div className={s.progressBar} style={{ border: hasBorder ? '1px solid #2064C0' : 'none' }}>
+              <div
+                className={s.progressBarInner}
+                style={{
+                  width: `${progress}%`,
+                  transition: progress >= 100 ? 'width 0.1s linear' : 'width 0.05s linear',
+                }}
+              />
             </div>
-        );
-    }
+          </div>
+          <Button
+            className={`${s.iconButton} ${s.progressButton}`}
+            disabled={false}
+            aria-label={t('i24')}
+            onClick={handleButtonClick}
+          >
+            <img src={rocketIcon} alt="rocket" />
+          </Button>
+        </div>
+      </div>
+    );
+  },
 );

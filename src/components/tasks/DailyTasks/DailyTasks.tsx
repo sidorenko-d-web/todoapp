@@ -2,15 +2,13 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { TaskCard } from '../';
 import giftIcon from '../../../assets/icons/gift.svg';
 import { useModal } from '../../../hooks';
-import { Task } from '../../../redux/api/tasks';
+import { Task, useGetAssignmentRewardMutation } from '../../../redux/api/tasks';
 import s from '../styles.module.scss';
 import { ModalDailyTasks } from './ModalDailyTasks';
 import { useTranslation } from 'react-i18next';
 import { MODALS } from '../../../constants';
 import GetGiftDaily from '../../../pages/DevModals/GetGiftDaily/GetGiftDaily';
-import { useGetAssignmentRewardMutation } from '../../../redux/api/tasks';
-import { useGetTreeInfoQuery } from '../../../redux';
-import { useGetProfileMeQuery } from '../../../redux';
+import { useGetProfileMeQuery, useGetTreeInfoQuery } from '../../../redux';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -50,7 +48,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
           category: task.category,
           assignmentId: task.id,
         }).unwrap();
-        console.log(reward);
+
         if (reward) {
           openModal(MODALS.GET_GIFT_DAILY, {
             points: reward.points,

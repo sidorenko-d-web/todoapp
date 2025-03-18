@@ -42,7 +42,6 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
           this.createPerson(personScale);
         } catch (error: any) {
           if (error.message === 'add.spine') {
-            console.log('avoid error');
             setSize(prev => [prev[0] + 1, prev[1]]);
           }
         }

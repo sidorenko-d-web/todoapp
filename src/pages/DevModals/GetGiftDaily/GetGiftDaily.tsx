@@ -61,8 +61,6 @@ export default function GetGiftDaily({ giftColor }: Props) {
     giftLight = <Lottie animationData={redLightAnimation} loop={true} className={styles.light} />;
   }
 
-  console.log(args);
-
   return (
     <CentralModal onClose={() => closeModal(MODALS.GET_GIFT_DAILY)} modalId={MODALS.GET_GIFT_DAILY} title={t('g1')}>
       <div className={styles.background}>

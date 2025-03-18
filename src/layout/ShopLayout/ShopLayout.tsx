@@ -1,7 +1,9 @@
-import { type FC, PropsWithChildren, useEffect, useState, useMemo } from 'react';
+import { type FC, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import styles from './ShopLayout.module.scss';
 import {
   RootState,
+  setLastOpenedRarity,
+  setLastOpenedTab,
   TypeItemCategory,
   TypeItemRarity,
   useGetCurrentUserBoostQuery,
@@ -20,8 +22,13 @@ import { formatAbbreviation, itemsInTab } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../utils';
-import { TrackedButton } from '../../components';
-import { BackToMainPageGuide, TreeLevelGuide, UpgradeItemsGuide, WelcomeToShopGuide } from '../../components';
+import {
+  BackToMainPageGuide,
+  TrackedButton,
+  TreeLevelGuide,
+  UpgradeItemsGuide,
+  WelcomeToShopGuide,
+} from '../../components';
 import { setActiveFooterItemId, setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
 
 type TypeTab<T> = { title: string; value: T };
@@ -33,29 +40,34 @@ interface Props {
 }
 
 export const ShopLayout: FC<PropsWithChildren<Props>> = ({
-  children,
-  onItemCategoryChange,
-  onItemQualityChange,
-  mode,
-}) => {
+                                                           children,
+                                                           onItemCategoryChange,
+                                                           onItemQualityChange,
+                                                           mode,
+                                                         }) => {
+  const lastOpenedTab = useSelector((state: RootState) => state.shop.lastOpenedTab);
+  const lastOpenedRarity = useSelector((state: RootState) => state.shop.lastOpenedRarity);
+  const dispatch = useDispatch()
+
+  console.log(lastOpenedTab);
+
   const { t } = useTranslation('shop');
   const shopItemCategories = [
     { title: `${t('s2')}`, value: 'text' },
     { title: `${t('s3')}`, value: 'image' },
     { title: `${t('s4')}`, value: 'video' },
     { title: `${t('s5')}`, value: 'decor' },
-    { title: `${t('s6')}`, value: 'decor' },
+    { title: `${t('s6')}`, value: 'you' },
   ];
   const shopItemRarity = [
     { title: `${t('s14')}`, value: 'red' },
     { title: `${t('s15')}`, value: 'yellow' },
     { title: `${t('s16')}`, value: 'green' },
   ];
-  const [shopCategory, setShopCategory] = useState(shopItemCategories[0]);
-  const [itemsQuality, setItemsQuality] = useState(shopItemRarity[0]);
+  const [ shopCategory, setShopCategory ] = useState(lastOpenedTab || shopItemCategories[0]);
+  const [ itemsQuality, setItemsQuality ] = useState(lastOpenedRarity || shopItemRarity[0]);
 
-  const [rerender, setRerender] = useState(0);
-  console.log(rerender);
+  const [ _, setRerender ] = useState(0);
 
   const { data: inventory, isSuccess } = useGetInventoryItemsQuery({});
   const { data: shop } = useGetShopItemsQuery({
@@ -66,8 +78,11 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     onItemCategoryChange(shopCategory as TypeTab<TypeItemCategory>);
+    dispatch(setLastOpenedTab(shopCategory));
+
     onItemQualityChange(itemsQuality as TypeTab<TypeItemRarity>);
-  }, [shopCategory, itemsQuality]);
+    dispatch(setLastOpenedRarity(itemsQuality));
+  }, [ shopCategory, itemsQuality ]);
 
   const navigate = useNavigate();
 
@@ -85,31 +100,31 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const inventoryTabs = useMemo(() => {
     const _inventoryTabs = [];
     isSuccess &&
-      inventory?.items.find(item => item.item_rarity === 'red' && item.item_category === shopCategory.value) &&
-      _inventoryTabs.push(shopItemRarity[0]);
+    inventory?.items.find(item => item.item_rarity === 'red' && item.item_category === shopCategory.value) &&
+    _inventoryTabs.push(shopItemRarity[0]);
     isSuccess &&
-      inventory?.items.find(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value) &&
-      _inventoryTabs.push(shopItemRarity[1]);
+    inventory?.items.find(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value) &&
+    _inventoryTabs.push(shopItemRarity[1]);
     isSuccess &&
-      inventory?.items.find(item => item.item_rarity === 'green' && item.item_category === shopCategory.value) &&
-      _inventoryTabs.push(shopItemRarity[2]);
+    inventory?.items.find(item => item.item_rarity === 'green' && item.item_category === shopCategory.value) &&
+    _inventoryTabs.push(shopItemRarity[2]);
 
     return _inventoryTabs;
   }, []);
 
   const handleShop = () => {
-    setItemsQuality(shopItemRarity[0]);
+    setItemsQuality(lastOpenedRarity || shopItemRarity[0]);
     navigate(AppRoute.Shop);
   };
 
   const handleInventory = () => {
-    setItemsQuality(shopItemRarity[0]);
+    setItemsQuality(lastOpenedRarity || shopItemRarity[0]);
     navigate(AppRoute.ShopInventory);
   };
 
   useEffect(() => {
     setItemsQuality(shopItemRarity[0]);
-  }, [shopCategory]);
+  }, [ shopCategory ]);
 
   const reduxDispatch = useDispatch();
 
@@ -119,9 +134,12 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const statsGlowing = useSelector((state: RootState) => state.guide.getShopStatsGlowing);
 
-  const isTabsNotEmpty = [...(itemsInTabs.green ?? []), ...(itemsInTabs.yellow ?? [])].length > 0;
+  const isTabsNotEmpty = [ ...(itemsInTabs.green ?? []), ...(itemsInTabs.yellow ?? []) ].length > 0;
 
-  // console.log(itemsInTabs, 1);
+
+  useEffect(() => {
+    console.info('shopCategory:', shopCategory.value);
+  }, [ shopCategory ]);
 
   return (
     <>
@@ -163,8 +181,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
                   <p>/{t('s12')}.</p>
                 </div>
                 <div className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${
-                    statsGlowing ? styles.glowing : ''
-                  }`}>
+                  statsGlowing ? styles.glowing : ''
+                }`}>
                   <p>+{formatAbbreviation(boost.income_per_second)}</p>
                   <img src={CoinIcon} />
                   <p>/{t('s13')}.</p>
@@ -212,10 +230,19 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             reduxDispatch(setShopStatsGlowing(false));
             reduxDispatch(setBuyItemButtonGlowing(true));
             setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
-            setRerender((prev) => prev+1);
+            setRerender((prev) => prev + 1);
           }}
         />
       )}
+
+      {(isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+        && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) && (
+        <div style={{
+          position: 'fixed', width: '100%', height: '120vh', top: '0', left: '0',
+          backgroundColor: 'rgba(0, 0, 0, 0.7)', pointerEvents: 'none', zIndex: '1500',
+        }} />
+      )}
+
 
       {(useSelector((state: RootState) => state.guide.itemBought) || isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) &&
         isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) &&
@@ -223,9 +250,9 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         mode === 'inventory' && (
           <BackToMainPageGuide
             onClose={() => {
-              setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)
+              setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
               navigate(AppRoute.Main);
-              setRerender((prev) => prev+1);
+              setRerender((prev) => prev + 1);
             }}
           />
         )}
@@ -238,7 +265,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
-              setRerender((prev) => prev+1);
+              setRerender((prev) => prev + 1);
             }}
           />
         )}
@@ -251,7 +278,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
               navigate(AppRoute.ProgressTree);
-              setRerender((prev) => prev+1);
+              setRerender((prev) => prev + 1);
             }}
           />
         )}
