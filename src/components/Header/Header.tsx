@@ -100,18 +100,7 @@ export const Header = () => {
 
   return (
     <>
-      {(dim && location !== 'progressTree') && <div
-        style={{
-          position: 'fixed',
-          width: '100%',
-          height: '185px',
-          top: '0',
-          left: '0',
-          backgroundColor: 'rgba(0, 0, 0, 0.86)',
-          pointerEvents: 'none',
-          zIndex: '100',
-        }}
-      />}
+
 
       <header
         className={classNames(
@@ -120,6 +109,10 @@ export const Header = () => {
           platform ? styles[platform] : '',
         )}
       >
+
+        {(dim && location !== 'progressTree') &&  <div className={styles.headerOverlay}></div> }
+
+        
         {showHeaderBG && <div className={styles.headerBG} />}
 
         {!isLoading && (

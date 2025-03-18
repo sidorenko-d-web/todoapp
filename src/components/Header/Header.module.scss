@@ -15,6 +15,7 @@ $progress-bar-color: #2f80ed;
 $mobile-device-safe-are-inset-top: env(safe-area-inset-top);
 $header-border: 1px solid $color-header-border-dark;
 
+
 .header {
   position: fixed;
   inset: 0 0 auto 0;
@@ -25,7 +26,6 @@ $header-border: 1px solid $color-header-border-dark;
   //margin-top: calc(var(--tg-content-safe-area-inset-top) + -80px);
   margin: calc(var(--tg-content-safe-area-inset-top) + 0px) 0 0;
 
-  
   //margin: 0;
 
   // Prevent user from scrolling while interacting with header
@@ -33,6 +33,30 @@ $header-border: 1px solid $color-header-border-dark;
   user-select: none; /* Prevents text selection */
   -webkit-user-select: none;
   -webkit-touch-callout: none; /* Prevents iOS callout */
+
+  .headerOverlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.9); // Dark overlay
+    z-index: 1; // Place it behind the header content
+
+    &.ios {
+      //padding: calc(var(--tg-content-safe-area-inset-top) + 60px) 10px 0;
+      top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) - 32px);
+      left: calc(var(--tg-content-safe-area-inset-left) + 10px);
+      right: calc(var(--tg-content-safe-area-inset-right) + 10px);
+    }
+  
+    &.android {
+      //padding: calc(var(--tg-content-safe-area-inset-top) + 30px) 10px 0;
+      top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) - 35px);
+      left: calc(var(--tg-content-safe-area-inset-left) + 10px);
+      right: calc(var(--tg-content-safe-area-inset-right) + 10px);
+    }
+    
+  }
+
 
   // Paddings for each platform
   &.ios {

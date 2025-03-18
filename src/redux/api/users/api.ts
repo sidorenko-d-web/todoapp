@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import { GetUserDTO, GetUsersCountDTO } from './dto';
+import { GetUserDTO, GetUsersCountDTO, GetUserWelcomeBonusDTO, GetUserWelcomeRequestDTO } from './dto';
 
 
 export const usersApi = createApi({
@@ -19,10 +19,15 @@ export const usersApi = createApi({
         method: 'GET',
       }),
     }),
-   
+    getUserWelcomeBonus: builder.query<GetUserWelcomeBonusDTO, GetUserWelcomeRequestDTO>({
+      query: () => ({
+        url: `/users/welcome-bonus`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
 export const {
-  useGetUsersCountQuery, useGetUserQuery
+  useGetUsersCountQuery, useGetUserQuery, useGetUserWelcomeBonusQuery
 } = usersApi;
