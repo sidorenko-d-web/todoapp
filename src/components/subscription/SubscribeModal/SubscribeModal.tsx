@@ -45,7 +45,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
 
   const buyBtnGlowing = getSubscriptionPurchased();
   const { openModal, closeModal } = useModal();
-  console.log(current?.next_subscription_at);
+
   // Установка nextSubscriptionAt
   useEffect(() => {
     if (current?.next_subscription_at) {

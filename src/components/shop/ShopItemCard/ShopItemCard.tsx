@@ -77,14 +77,12 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       const trxId = await sendUSDT(Number(item.price_usdt));
       setCurrentTrxId(trxId || '');
     } catch (error) {
-      console.log('Error while sending USDT transaction', error);
       failTransaction(handleUsdtPayment);
     }
   };
 
   useEffect(() => {
     const latestTransaction = usdtTransactions[0];
-    console.log('Transactions', latestTransaction);
 
     if (!latestTransaction || latestTransaction.orderId !== currentTrxId) return;
 

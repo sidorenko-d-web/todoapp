@@ -33,8 +33,6 @@ export const IntegrationPage: React.FC = () => {
     skip: !queryIntegrationId && queryIntegrationId === 'undefined',
   });
 
-  // console.log(integrations?.integrations.find(item))
-
   const integrationId = queryIntegrationId !== 'undefined' ? queryIntegrationId : integrations?.integrations.find(item => item.status === 'published')?.id;
 
   const {
@@ -80,7 +78,7 @@ export const IntegrationPage: React.FC = () => {
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     const res = await postComment({ commentId, isHate: !isThumbsUp });
     await refetchCurrentIntegration();
-    console.log(res.data ? 'угадано' : 'не угадано')
+
     if (currentCommentIndex + 1 < comments.length) {
       setCurrentCommentIndex(prevIndex => prevIndex + 1);
     } else {

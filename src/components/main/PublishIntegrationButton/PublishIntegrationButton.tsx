@@ -101,7 +101,6 @@ export const PublishIntegrationButton: React.FC = () => {
                 timeLeftDelta: 123,
               }).unwrap();
               refetchIntegration();
-              console.log('Update successful:', response);
             } else {
               dispatch(setIntegrationReadyForPublishing(false));
             }

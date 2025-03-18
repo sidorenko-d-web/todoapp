@@ -1,7 +1,6 @@
 import { SpineGameObject } from '@esotericsoftware/spine-phaser';
-import { GameObjects } from 'phaser';
+import Phaser, { GameObjects } from 'phaser';
 import { IRoomItem, IShopItem } from '../redux';
-import Phaser from 'phaser';
 
 export const itemsInSlots = {
   1: { width: 0, height: 0, x: -1000, y: -1000, z: -100 }, // walls === not here
@@ -175,7 +174,7 @@ export class SpineSceneBase extends Phaser.Scene {
     });
   }
 
-  setCurrentLoopedAnimation(isWorking: Boolean) {
+  setCurrentLoopedAnimation(isWorking: boolean) {
     if (isWorking) this.setWorking();
     else this.setIdle();
   }
@@ -202,7 +201,7 @@ const createLink = (itemString: string, type: 'json' | 'atlas' | 'json1' | 'atla
   else if (type === 'json1') string = new URL(itemsBaseUrl + itemString + '1.json').href;
   else if (type === 'atlas1') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
   else if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
-  console.log(string);
+
   return string;
   // return proxyImageUrl(string);
 };

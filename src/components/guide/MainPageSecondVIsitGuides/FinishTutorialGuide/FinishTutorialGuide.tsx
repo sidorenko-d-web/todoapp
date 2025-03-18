@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import styles from './FinishTutorialGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
-import { Guide } from "../../Guide/Guide";
+import { Guide } from '../../Guide/Guide';
 import { useTranslation } from 'react-i18next';
-import { isGuideShown, setGuideShown } from "../../../../utils";
-import { GUIDE_ITEMS } from "../../../../constants";
+import { setGuideShown } from '../../../../utils';
+import { GUIDE_ITEMS } from '../../../../constants';
 
 interface FinishTutorialGuideProps {
     onClose: () => void;
@@ -17,9 +17,6 @@ export const FinishTutorialGuide: React.FC<FinishTutorialGuideProps> = ({onClose
     const handleClose = () => {
         setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
         onClose();
-        console.log('finish guude')
-        console.log('finish guide shown: ' + isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN));
-        console.log('integ guide shown: ' + isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN));
         setIsOpen(false);
     };
 
