@@ -46,7 +46,7 @@ const initialState: GuideState = {
   footerActive: isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
   activeFooterItemId: getCurrentFooterItem(),
 
-  dimHeader: true
+  dimHeader: false
 };
 
 const guideSlice = createSlice({

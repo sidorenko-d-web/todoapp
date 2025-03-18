@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from './GetCoinsGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide4.gif';
@@ -7,6 +7,8 @@ import { Guide } from "../../Guide/Guide";
 import coin from '../../../../assets/icons/coin.png';
 // import { useGetUserQuery } from "../../../../redux";
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from "react-redux";
+import { setDimHeader } from "../../../../redux";
 
 interface GetCoinsGuideProps {
     onClose: () => void;
@@ -15,9 +17,17 @@ export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose }) => {
     const { t } = useTranslation('guide');
     // const { data } = useGetUserQuery();
 
+    const dispatch = useDispatch();
+    
     const [isOpen, setIsOpen] = useState(true);
 
+    useEffect(() => {
+        dispatch(setDimHeader(true));
+    }, []);
+
+
     const handleClose = () => {
+        dispatch(setDimHeader(false));
         onClose();
         setIsOpen(false);
     };

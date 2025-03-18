@@ -22,7 +22,6 @@ import {
   RootState,
   setAccelerateIntegrationGuideClosed,
   setActiveFooterItemId,
-  setDimHeader,
   setFooterActive,
   setGetCoinsGuideShown,
   setIntegrationReadyForPublishing,
@@ -331,7 +330,6 @@ export const MainPage: FC = () => {
         <InitialGuide
           onClose={() => {
             setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
-            reduxDispatch(setDimHeader(false));
             setRerender((prev) => prev+1);
           }}
         />
@@ -342,7 +340,6 @@ export const MainPage: FC = () => {
           onClose={() => {
             setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
             //openModal(MODALS.SUBSCRIBE);
-            reduxDispatch(setDimHeader(false));
             reduxDispatch(setSubscribeGuideShown(true));
             setRerender((prev) => prev+1);
           }}
