@@ -38,8 +38,24 @@ export const Footer = () => {
     }
   }, [hasInitialized, isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)]);
 
+  const dim = useSelector((state: RootState) => state.guide.dimHeader);
+
   return (
     <div className={styles.footerItems}>
+       {(dim && !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) && <div
+              style={{
+                position: 'fixed',
+                width: '100%',
+                height: '105px',
+                bottom: '0',
+                left: '0',
+                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                pointerEvents: 'none',
+                zIndex: '1100',
+              }}
+          />}
+
+
       {footerItems.map((item) => {
         const isActive = activeButton === item.id;
 

@@ -121,7 +121,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
     }
   };
   const dispatch = useDispatch();
-  const guideShown = useSelector((state: RootState) => state.guide.subscribeGuideShown);
+  const guideShown = isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
   const formatTime = (milliseconds: number) => {
     const hours = Math.floor((milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
@@ -160,14 +160,14 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
             {formatAbbreviation(1.99, 'currency')}
           </Button>
           <Button
-            className={`${s.button} ${!buyBtnGlowing ? s.glowing : ''}`}
-            disabled={!!isSubscriptionPurchased}
+            className={`${s.button} ${(!buyBtnGlowing && isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) ? s.glowing : ''}`}
+            disabled={!!isSubscriptionPurchased || !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)}
             onClick={() => handleBuySubscription('internal_wallet')}
           >
             {formatAbbreviation(point_integration)}{' '}
             <img src={isSubscriptionPurchased ? DisableCoin : coinIcon} height={14} width={14} alt={'Coin'} />
           </Button>
-          <Button className={s.button + ' ' + s.gray} disabled={idDisabled || !!isSubscriptionPurchased}>
+          <Button className={s.button + ' ' + s.gray} disabled={idDisabled || !!isSubscriptionPurchased }>
             <img src={idDisabled ? ListDisableIcon : list} height={16} width={16} alt={'list'} />
           </Button>
         </div>

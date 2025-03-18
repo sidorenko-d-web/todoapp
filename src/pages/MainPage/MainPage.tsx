@@ -22,6 +22,7 @@ import {
   RootState,
   setAccelerateIntegrationGuideClosed,
   setActiveFooterItemId,
+  setDimHeader,
   setFooterActive,
   setGetCoinsGuideShown,
   setIntegrationReadyForPublishing,
@@ -52,6 +53,9 @@ export const MainPage: FC = () => {
     isLoading: isAllIntegrationsLoading,
     isError: isIntegrationsError,
   } = useGetAllIntegrationsQuery();
+
+  const [_, setRerender] = useState(0);
+  //не убирать, нужно, чтобы гайды правильно отображались 
 
   const [typewriterFound, setTypewriterFound] = useState(false);
   const {
@@ -327,6 +331,8 @@ export const MainPage: FC = () => {
         <InitialGuide
           onClose={() => {
             setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+            reduxDispatch(setDimHeader(false));
+            setRerender((prev) => prev+1);
           }}
         />
       )}
@@ -336,7 +342,9 @@ export const MainPage: FC = () => {
           onClose={() => {
             setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
             //openModal(MODALS.SUBSCRIBE);
-            reduxDispatch(setSubscribeGuideShown(false));
+            reduxDispatch(setDimHeader(false));
+            reduxDispatch(setSubscribeGuideShown(true));
+            setRerender((prev) => prev+1);
           }}
           top="50%"
           zIndex={12500}
@@ -358,6 +366,7 @@ export const MainPage: FC = () => {
               reduxDispatch(setGetCoinsGuideShown(true));
               setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
               setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+              setRerender((prev) => prev+1);
               openModal(MODALS.SUBSCRIBE);
             }}
           />
@@ -369,6 +378,7 @@ export const MainPage: FC = () => {
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
               reduxDispatch(setAccelerateIntegrationGuideClosed(true));
+              setRerender((prev) => prev+1);
             }}
           />
         )}
@@ -378,6 +388,7 @@ export const MainPage: FC = () => {
           onClose={() => {
             setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
             navigate(AppRoute.Integration.replace(':integrationId', integrationId));
+            setRerender((prev) => prev+1);
           }}
         />
       )}

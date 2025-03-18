@@ -166,11 +166,11 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       modalId={modalId}
       onClose={
         () => {
-          onClose();
+          //onClose();
           if (!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
             setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
             setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-            navigate(AppRoute.Shop);
+            //navigate(AppRoute.Shop);
           }
         }}
       headerStyles={s.headerStyles}
@@ -186,7 +186,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                 key={index}
                 className={`${s.tab} ${selectedOption === option.value ? s.active : ''}`}
                 onClick={() => {
-                  if(isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
+                  if(!isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
                     setSelectedOption(option.value)
                   }
                 }}
@@ -245,7 +245,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                 eventPlace: 'В магазин - Главный экран - Окно создание интеграции',
               }}
               className={`${s.button} 
-            ${buttonGlowing ? s.glowingBtn : ''} `}
+            ${(buttonGlowing && isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)) ? s.glowingBtn : ''} `}
               onClick={goToShop}
             >
               {t('i21')}
@@ -291,8 +291,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         onClose={() => {
           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-          onClose();
-          navigate(AppRoute.Shop);
+          //onClose();
+          //navigate(AppRoute.Shop);
         }}
         buttonText={tGuide('g21')}
         description={

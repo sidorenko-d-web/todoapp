@@ -29,7 +29,7 @@ import {
   UpgradeItemsGuide,
   WelcomeToShopGuide,
 } from '../../components';
-import { setActiveFooterItemId, setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
+import { setActiveFooterItemId, setBuyItemButtonGlowing, setDimHeader, setShopStatsGlowing } from '../../redux/slices/guideSlice';
 
 type TypeTab<T> = { title: string; value: T };
 
@@ -75,6 +75,11 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     item_category: shopCategory.value as TypeItemCategory,
   });
   const { data: boost } = useGetCurrentUserBoostQuery();
+
+  const [dimSet, setDimSet] = useState(false);
+
+  const [showWelcomeGuide, setShowWelcomeGuide] = useState(false);
+  const [showBackToMainGuide, setShowBackToMainGuide] = useState(false);
 
   useEffect(() => {
     onItemCategoryChange(shopCategory as TypeTab<TypeItemCategory>);
@@ -140,6 +145,31 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   useEffect(() => {
     console.info('shopCategory:', shopCategory.value);
   }, [ shopCategory ]);
+
+  useEffect(() => {
+    if(!dimSet) {
+      setDimSet(true);
+      dispatch(setDimHeader(false));
+    }
+    const timer = setTimeout(() => {
+      dispatch(setDimHeader(true));
+      setShowWelcomeGuide(true);
+    }, 1000); // 2 seconds delay
+  
+    return () => clearTimeout(timer); // Cleanup the timer on component unmount
+  }, []);
+
+  useEffect(() => {
+    if (mode === 'inventory') {
+      const timer = setTimeout(() => {
+        setShowBackToMainGuide(true);
+      }, 2000); // 2 seconds delay
+  
+      return () => clearTimeout(timer); // Cleanup the timer on component unmount or mode change
+    } else {
+      setShowBackToMainGuide(false); // Reset the state when mode is not 'inventory'
+    }
+  }, [mode]); // Dependency on `mode`
 
   return (
     <>
@@ -224,9 +254,10 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         {children}
       </div>
 
-      {!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) && mode === 'shop' && (
+      {(!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) && mode === 'shop' && showWelcomeGuide) && (
         <WelcomeToShopGuide
           onClose={() => {
+            
             reduxDispatch(setShopStatsGlowing(false));
             reduxDispatch(setBuyItemButtonGlowing(true));
             setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
@@ -247,7 +278,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
       {(useSelector((state: RootState) => state.guide.itemBought) || isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) &&
         isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) &&
         !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
-        mode === 'inventory' && (
+        mode === 'inventory' && showBackToMainGuide && (
           <BackToMainPageGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);

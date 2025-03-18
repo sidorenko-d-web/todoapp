@@ -11,13 +11,13 @@ import {
   useGetTreeInfoWithPollingQuery,
 } from '../../redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AppRoute, MODALS, PROFILE_ME_POLLING_INTERVAL, TREE_POLLING_INTERVAL } from '../../constants';
+import { AppRoute, GUIDE_ITEMS, MODALS, PROFILE_ME_POLLING_INTERVAL, TREE_POLLING_INTERVAL } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { TrackedLink } from '../withTracking';
-import { getOS } from '../../utils';
+import { getOS, isGuideShown } from '../../utils';
 import { useModal, usePushLineStatus } from '../../hooks';
 import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
 import classNames from 'classnames';
@@ -50,7 +50,7 @@ export const Header = () => {
   const dispatch = useDispatch();
   const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
   const { i18n } = useTranslation('profile');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const platform = getOS();
 
   const { getModalState } = useModal();
@@ -61,7 +61,7 @@ export const Header = () => {
     if (isOpen) {
       refetch();
     }
-  }, [ isOpen ]);
+  }, [isOpen]);
 
   const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
@@ -77,7 +77,7 @@ export const Header = () => {
     if (lastActiveStageNumber) {
       dispatch(setLastActiveStage(lastActiveStageNumber));
     }
-  }, [ lastActiveStageNumber, dispatch ]);
+  }, [lastActiveStageNumber, dispatch]);
 
   const handleNavigateToProfile = () => {
     if (footerActive) {
@@ -87,12 +87,27 @@ export const Header = () => {
 
   const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
 
+  const dim = useSelector((state: RootState) => state.guide.dimHeader);
+
   const showHeaderBG =
-    ![ '/', '/progressTree' ].includes(location) &&
+    !['/', '/progressTree'].includes(location) &&
     !(location.split('/')[1] === 'profile' && location.split('/')[3] === 'room');
 
   return (
     <>
+      {(dim && !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) && <div
+        style={{
+          position: 'fixed',
+          width: '100%',
+          height: '185px',
+          top: '0',
+          left: '0',
+          backgroundColor: 'rgba(0, 0, 0, 0.86)',
+          pointerEvents: 'none',
+          zIndex: '100',
+        }}
+      />}
+
       <header
         className={classNames(
           styles.header,
