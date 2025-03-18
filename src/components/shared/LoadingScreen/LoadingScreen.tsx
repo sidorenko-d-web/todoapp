@@ -35,7 +35,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   //   });
   // }, []);
 
-  const [isMobile, setIsMobile] = useState(1);
+  const [isMobile] = useState(1);
 
   // useEffect(() => {
   //   if (window.Telegram?.WebApp?.platform) {
