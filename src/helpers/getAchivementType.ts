@@ -22,6 +22,13 @@ export const getAchivementType = (name: string, medal: 'gold' | 'silver' | 'bron
         Сапфировая: 'Спафир-13',
       };
       const itemName = name.split(' ');
+      
+      return {
+        image: `https://storage.yandexcloud.net/miniapp-v2-dev/Награда -${
+          imageNames[itemName[0] as keyof typeof imageNames]
+        }.svg${svgHeadersString}`,
+        type,
+      };
       return {
         image: `https://miniapp.apusher.com/export/Награда -${
           imageNames[itemName[0] as keyof typeof imageNames]
@@ -37,6 +44,12 @@ export const getAchivementType = (name: string, medal: 'gold' | 'silver' | 'bron
       } else {
         level = medal === 'bronze' ? 1 : medal === 'silver' ? 2 : 3;
       }
+      return {
+        image: `https://storage.yandexcloud.net/miniapp-v2-dev/${
+          _itemName[_itemName.length - 1]
+        }-${level}.svg${svgHeadersString}`,
+        type,
+      };
       return {
         image: `https://miniapp.apusher.com/export/${
           _itemName[_itemName.length - 1]

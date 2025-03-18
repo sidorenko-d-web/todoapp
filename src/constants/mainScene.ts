@@ -71,8 +71,11 @@ export const baseItems = [
   { name: 'window', slot: 5, width: 110, height: 110, x: -125, y: 260, z: 0 },
 ];
 // const proxyImageUrl = (url: string) => url.replace('https://miniapp.apusher.com', '/api/miniapp-v2-prod');
+const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
 
-export const itemsBaseUrl = 'https://miniapp.apusher.com/export/';
+// export const itemsBaseUrl = 'https://miniapp.apusher.com/export/';
+
+export const itemsBaseUrl = 'https://storage.yandexcloud.net/miniapp-v2-dev/';
 interface contextProps {
   equipped_items?: IRoomItem[];
   center: number;
@@ -105,11 +108,9 @@ export class SpineSceneBase extends Phaser.Scene {
   loadSvgItem(item: IShopItem, { equipped_items }: Pick<contextProps, 'equipped_items'>) {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const { width, height } = itemsInSlots[slot];
-    // this.load.svg('item' + item.id, `/api/miniapp-v2-prod/export/${imageId[imageId.length - 1]}`, { width, height });
-    // ('https://storage.yandexcloud.net/miniapp.apusher.com/export/a1740482-c387-41b3-8d31-9923230a1d56.svg');
     // this.load.svg('item' + item.id, item.image_url!.replace('https://miniapp.apusher.com', '/api/miniapp-v2-prod'), { width, height });
-    // this.load.svg('item' + item.id, `https://miniapp.apusher.com/export/${imageId[imageId.length - 1]}`, { width, height });
-    this.load.svg('item' + item.id, item.image_url!, { width, height });
+    // this.load.svg('item' + item.id, item.image_url!, { width, height });
+    this.load.svg('item' + item.id, proxyImageUrl(item.image_url!), { width, height });
   }
 
   loadBaseItems() {
@@ -202,8 +203,8 @@ const createLink = (itemString: string, type: 'json' | 'atlas' | 'json1' | 'atla
   else if (type === 'atlas1') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
   else if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
 
-  return string;
-  // return proxyImageUrl(string);
+  // return string;
+  return proxyImageUrl(string);
 };
 
 export enum PersonAnimations {
