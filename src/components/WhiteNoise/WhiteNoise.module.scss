@@ -16,16 +16,17 @@
   animation: grain 6s steps(10) infinite;
   background-image: url('https://grainy-gradients.vercel.app/noise.svg');
   background-repeat: repeat;
-  background-size: 4%;
+  background-size: 10%;
   content: '';
-  height: 1000%;
-  width: 1000%;
-  left: -450%;
-  top: -450%;
+  height: 500%;
+  width: 500%;
+  left: -200%;
+  top: -200%;
   position: absolute;
   z-index: 100;
-  filter: brightness(0.2);
+  filter: brightness(0.2) grayscale(8);
   pointer-events: none;
+  scale: 1.5;
 }
 
 .vhsEffect {
