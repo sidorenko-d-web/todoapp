@@ -22,7 +22,7 @@ import {
   isGuideShown,
   setGuideShown,
 } from '../../../utils';
-import { AppRoute, GUIDE_ITEMS, total_users } from '../../../constants';
+import {  GUIDE_ITEMS, total_users } from '../../../constants';
 import { CreatingIntegrationGuide, Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
 import { CentralModal } from '../../shared/';
