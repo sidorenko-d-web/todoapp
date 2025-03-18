@@ -208,7 +208,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             )}
 
             {!noItemsMessage ? (
-              <div className={s.companies}>
+              <div className={`${s.companies} 
+                ${!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) ? s.firstIntegration : ''}`}>
                 {companies
                   ?.filter((_, index) => integrationPublished || index === 1)
                   .map((company) =>
