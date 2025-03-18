@@ -7,7 +7,7 @@ import gif from '../../../../assets/gif/guide1.gif';
 import { setGuideShown } from "../../../../utils";
 import { GUIDE_ITEMS } from "../../../../constants";
 import { useDispatch } from "react-redux";
-import { setCreateIntegrationButtonGlowing } from "../../../../redux/slices/guideSlice";
+import { setCreateIntegrationButtonGlowing, setDimHeader } from "../../../../redux/slices/guideSlice";
 import { useTranslation } from 'react-i18next';
 
 
@@ -24,6 +24,7 @@ export const BackToMainPageGuide: React.FC<BackToMainPageGuideProps> = ({ onClos
     const handleClose = () => {
         setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
         dispatch(setCreateIntegrationButtonGlowing(true));
+        dispatch(setDimHeader(false));
         onClose();
         setIsOpen(false);
     };

@@ -29,7 +29,7 @@ import {
   UpgradeItemsGuide,
   WelcomeToShopGuide,
 } from '../../components';
-import { setActiveFooterItemId, setBuyItemButtonGlowing, setDimHeader, setShopStatsGlowing } from '../../redux/slices/guideSlice';
+import { setActiveFooterItemId, setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
 
 type TypeTab<T> = { title: string; value: T };
 
@@ -149,10 +149,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   useEffect(() => {
     if(!dimSet) {
       setDimSet(true);
-      dispatch(setDimHeader(false));
     }
     const timer = setTimeout(() => {
-      dispatch(setDimHeader(true));
       setShowWelcomeGuide(true);
     }, 1000); // 2 seconds delay
   

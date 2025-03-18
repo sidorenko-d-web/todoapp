@@ -12,13 +12,13 @@ import {
   useGetTreeInfoWithPollingQuery,
 } from '../../redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AppRoute, GUIDE_ITEMS, MODALS, PROFILE_ME_POLLING_INTERVAL, TREE_POLLING_INTERVAL } from '../../constants';
+import { AppRoute, MODALS, PROFILE_ME_POLLING_INTERVAL, TREE_POLLING_INTERVAL } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { TrackedLink } from '../withTracking';
-import { getOS, isGuideShown } from '../../utils';
+import { getOS } from '../../utils';
 import { useModal, usePushLineStatus } from '../../hooks';
 import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
 import classNames from 'classnames';
@@ -100,7 +100,7 @@ export const Header = () => {
 
   return (
     <>
-      {(dim && !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) && <div
+      {dim && <div
         style={{
           position: 'fixed',
           width: '100%',

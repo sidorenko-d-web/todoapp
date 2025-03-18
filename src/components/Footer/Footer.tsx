@@ -42,7 +42,7 @@ export const Footer = () => {
 
   return (
     <div className={styles.footerItems}>
-       {(dim && !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) && <div
+       {dim && <div
               style={{
                 position: 'fixed',
                 width: '100%',
