@@ -36,9 +36,6 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
   });
 
   const handleOpenTopTasks = async () => {
-    console.log('Task completion status:', task.is_completed);
-    console.log('Is reward given:', task.is_reward_given);
-    console.log('Current step:', task.completed_stages);
 
     if (task.is_completed && !task.is_reward_given) {
       openModal(MODALS.TASK_CHEST, {
@@ -49,7 +46,6 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
 
       try {
         const result = await claimChestReward({ chest_reward_reason: 'create_channel_assignment' }).unwrap();
-        console.log('Reward claimed:', result);
 
         openModal(MODALS.TASK_CHEST, {
           points: result.reward.points,

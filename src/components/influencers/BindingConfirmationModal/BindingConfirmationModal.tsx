@@ -50,7 +50,6 @@ export const BindingConfirmationModal = ({
     if (!isValid) return;
 
     try {
-      console.log('email');
         await confirmEmail({ email: inputValue, confirmation_code: value }).unwrap();
       // dispatch(setInputType('phone'));
       setValue('');

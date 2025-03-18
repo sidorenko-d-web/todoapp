@@ -84,9 +84,6 @@ export const TasksPage: FC = () => {
   }, [data, locale]);
 
   useEffect(() => {
-    if (boostData) {
-      console.log('Boost Data:', boostData);
-    }
     if (error) {
       console.error('Error fetching boost data:', error);
     }

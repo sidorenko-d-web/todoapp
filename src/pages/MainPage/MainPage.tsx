@@ -227,7 +227,6 @@ export const MainPage: FC = () => {
       !getSubscriptionPurchased() &&
       data?.count === 0
     ) {
-      console.log('subscr case 2');
       openModal(MODALS.SUBSCRIBE);
     }
 

@@ -50,7 +50,6 @@ export const IntegrationRewardModal = () => {
 
   const handleEquipAchivement = async () => {
     if (!equipped_items) return;
-    console.log(equipped_items);
     try {
       if (equipped_items.achievements.length > 0) {
         await removeAchivement({ achievements_to_remove: [{ id: equipped_items?.achievements?.[0].id }] });
@@ -92,7 +91,6 @@ export const IntegrationRewardModal = () => {
       title={t('i33')}
       modalId={MODALS.INTEGRATION_REWARD_CONGRATULATIONS}
       onClose={() => {
-        console.log('abcdefg');
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
         dispatch(setIsPublishedModalClosed(true));
         closeModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS);

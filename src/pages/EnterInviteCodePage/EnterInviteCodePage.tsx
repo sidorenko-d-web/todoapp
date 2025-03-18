@@ -65,8 +65,6 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ referr
     setErrorMessage('');
 
     try {
-      console.log('Referral Id: ', referral_id);
-      console.log('Referral Code: ', Number.parseInt(inputValue));
       await sendReferralCode({
         referral_id,
         referral_code: Number.parseInt(inputValue),

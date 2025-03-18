@@ -4,7 +4,12 @@ import StreakAlarm from '../../assets/icons/streak-alarm.svg';
 import FireBlue from '../../assets/icons/fire-blue.svg';
 import FireGray from '../../assets/icons/fire-gray.svg';
 import SubscribersIcon from '../../assets/icons/subscribers.png';
-import { RootState, setLastActiveStage, useGetProfileMeWithPollingQuery, useGetTreeInfoWithPollingQuery } from '../../redux';
+import {
+  RootState,
+  setLastActiveStage,
+  useGetProfileMeWithPollingQuery,
+  useGetTreeInfoWithPollingQuery,
+} from '../../redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AppRoute, MODALS, PROFILE_ME_POLLING_INTERVAL, TREE_POLLING_INTERVAL } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,7 +50,7 @@ export const Header = () => {
   const dispatch = useDispatch();
   const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
   const { i18n } = useTranslation('profile');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const platform = getOS();
 
   const { getModalState } = useModal();
@@ -54,11 +59,9 @@ export const Header = () => {
   useEffect(() => {
     //needed to re-render header when gift modal closes to update the coin number
     if (isOpen) {
-      refetch().then(() => {
-        console.log('update ' + data?.points);
-      });
+      refetch();
     }
-  }, [isOpen]);
+  }, [ isOpen ]);
 
   const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
@@ -74,7 +77,7 @@ export const Header = () => {
     if (lastActiveStageNumber) {
       dispatch(setLastActiveStage(lastActiveStageNumber));
     }
-  }, [lastActiveStageNumber, dispatch]);
+  }, [ lastActiveStageNumber, dispatch ]);
 
   const handleNavigateToProfile = () => {
     if (footerActive) {
@@ -85,65 +88,65 @@ export const Header = () => {
   const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
 
   const showHeaderBG =
-    !['/', '/progressTree'].includes(location) &&
+    ![ '/', '/progressTree' ].includes(location) &&
     !(location.split('/')[1] === 'profile' && location.split('/')[3] === 'room');
 
   return (
-   <>
-    <header
-      className={classNames(
-        styles.header,
-        { [styles.headerNot]: location === '/' || location === '/progressTree' },
-        platform ? styles[platform] : '',
-      )}
-    >
-      {showHeaderBG && <div className={styles.headerBG} />}
-      
-      {!isLoading && (
-        <div className={styles.lowerHeader}>
-          <div className={styles.levelWrapper}>
-            <div className={styles.avatarWrapper} onClick={handleNavigateToProfile}>
-              <img className={styles.avatarIcon} src={in_streak ? FireBlue : FireGray} alt="AvatarIcon" />
-              {!in_streak && <img className={styles.fireIcon} src={StreakAlarm} alt="FireIcon" />}
-            </div>
+    <>
+      <header
+        className={classNames(
+          styles.header,
+          { [styles.headerNot]: location === '/' || location === '/progressTree' },
+          platform ? styles[platform] : '',
+        )}
+      >
+        {showHeaderBG && <div className={styles.headerBG} />}
 
-            <div className={styles.info}>
-              <div className={styles.subscribers}>
-                <p className={styles.subscribersNumber}>
-                  {formatAbbreviation(subscribers || 0, 'number', { locale: locale })}
-                </p>
-                <img className={styles.subscribersIcon} src={SubscribersIcon} alt="SubscribersIcon" />
+        {!isLoading && (
+          <div className={styles.lowerHeader}>
+            <div className={styles.levelWrapper}>
+              <div className={styles.avatarWrapper} onClick={handleNavigateToProfile}>
+                <img className={styles.avatarIcon} src={in_streak ? FireBlue : FireGray} alt="AvatarIcon" />
+                {!in_streak && <img className={styles.fireIcon} src={StreakAlarm} alt="FireIcon" />}
               </div>
 
-              <div className={styles.levelInfo}>
-                {footerActive ? (
-                  <TrackedLink
-                    trackingData={{
-                      eventType: 'button',
-                      eventPlace: 'В дерево роста - Хедер',
-                    }}
-                    to={AppRoute.ProgressTree}
-                    className={styles.levelNumber}
-                  >
-                    {lastActiveStage}
-                  </TrackedLink>
-                ) : (
-                  <span className={styles.levelNumber}>{lastActiveStage}</span>
-                )}
-                <progress max={10} value={6} className={styles.levelProgressBar}></progress>
+              <div className={styles.info}>
+                <div className={styles.subscribers}>
+                  <p className={styles.subscribersNumber}>
+                    {formatAbbreviation(subscribers || 0, 'number', { locale: locale })}
+                  </p>
+                  <img className={styles.subscribersIcon} src={SubscribersIcon} alt="SubscribersIcon" />
+                </div>
+
+                <div className={styles.levelInfo}>
+                  {footerActive ? (
+                    <TrackedLink
+                      trackingData={{
+                        eventType: 'button',
+                        eventPlace: 'В дерево роста - Хедер',
+                      }}
+                      to={AppRoute.ProgressTree}
+                      className={styles.levelNumber}
+                    >
+                      {lastActiveStage}
+                    </TrackedLink>
+                  ) : (
+                    <span className={styles.levelNumber}>{lastActiveStage}</span>
+                  )}
+                  <progress max={10} value={6} className={styles.levelProgressBar}></progress>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className={styles.coinsWrapper}>
-            <p className={styles.coins}>
-              {formatAbbreviation(showCoins ? points || 0 : '0', 'number', { locale: locale })}
-            </p>
-            <img className={styles.coinIcon} src={CoinIcon} alt="CoinIcon" />
+            <div className={styles.coinsWrapper}>
+              <p className={styles.coins}>
+                {formatAbbreviation(showCoins ? points || 0 : '0', 'number', { locale: locale })}
+              </p>
+              <img className={styles.coinIcon} src={CoinIcon} alt="CoinIcon" />
+            </div>
           </div>
-        </div>
-      )}
-    </header>
-   </>
+        )}
+      </header>
+    </>
   );
 };

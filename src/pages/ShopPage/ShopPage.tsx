@@ -19,8 +19,8 @@ type TypeTab<T> = { title: string; value: T };
 
 const StorePage: FC = () => {
   const { t } = useTranslation('shop');
-  const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
-  const [itemsRarity, setItemsQuality] = useState<TypeTab<TypeItemRarity>>();
+  const [ shopCategory, setShopCategory ] = useState<TypeTab<TypeItemCategory>>();
+  const [ itemsRarity, setItemsQuality ] = useState<TypeTab<TypeItemRarity>>();
 
   const dispatch = useDispatch();
 
@@ -40,10 +40,10 @@ const StorePage: FC = () => {
     isLoading: isInventoryLoading,
     isFetching: isInventoryFetching,
   } = useGetInventoryItemsQuery({
-    item_categories: shopCategory ? [shopCategory.value as TypeItemCategory] : [],
+    item_categories: shopCategory ? [ shopCategory.value as TypeItemCategory ] : [],
   });
 
-  const [items, setItems] = useState<IShopItem[]>();
+  const [ items, setItems ] = useState<IShopItem[]>();
 
   useEffect(() => {
     dispatch(setActiveFooterItemId(0));
@@ -51,7 +51,7 @@ const StorePage: FC = () => {
 
   useEffect(() => {
     setItems(itemsInTab(shop?.items, inventory?.items)[itemsRarity?.value as TypeItemRarity]);
-  }, [inventory, shop]);
+  }, [ inventory, shop ]);
 
   const { isLoading: isBoostLoading } = useGetCurrentUserBoostQuery();
 
@@ -60,11 +60,15 @@ const StorePage: FC = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <ShopLayout mode="shop" onItemCategoryChange={setShopCategory} onItemQualityChange={setItemsQuality}>
+    <ShopLayout
+      mode="shop"
+      onItemCategoryChange={setShopCategory}
+      onItemQualityChange={setItemsQuality}
+    >
       {isShopLoading || isShopFetching || isInventoryLoading || isInventoryFetching ? (
         <Loader className={styles.itemsLoader} />
       ) : !(isShopLoading || isShopFetching || isInventoryLoading || isInventoryFetching) &&
-        (!shopCategory || !itemsRarity) ? (
+      (!shopCategory || !itemsRarity) ? (
         <p style={{ color: '#282830' }}>{t('s61')}</p>
       ) : shopCategory?.title !== t('s6') ? (
         items?.length === 0 ? (

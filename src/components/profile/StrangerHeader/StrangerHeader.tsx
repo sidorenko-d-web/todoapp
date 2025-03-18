@@ -20,7 +20,7 @@ export const StrangerHeader = () => {
   const navigate = useNavigate();
 
   const isRoom = useLocation().pathname.includes('room');
-  console.log(profile);
+
   return (
     <div className={s.listUser}>
       <div

@@ -84,7 +84,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   useEffect(() => {
     if (data) {
       const desiredItem = data.items.find(item_ => item_.item_premium_level === item.item_premium_level);
-      // console.log('item lvl: ', item.item_premium_level, ', cycle item lvl: ', item_.item_premium_level);
       setPrice('' + desiredItem?.price_internal);
     }
   }, [data, isItemsLoading]);
@@ -196,7 +195,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       setIsUseBay(+pointsUser.points >= +price);
     }
   }, []);
-  console.log(isUseBay);
+
   const slot = Object.values(RoomItemsSlots).find(_item =>
     _item.name.find((__item: string) => item.name.includes(__item)),
   )?.slot;
@@ -257,7 +256,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                                 ? 140
                                 : 150;
 
-  console.log(item.item_premium_level);
   return (
     <div className={styles.storeCard}>
       {<GetGift giftColor={localStorage.getItem('giftName') ?? ''} />}

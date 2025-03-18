@@ -47,7 +47,7 @@ const StatisticsPage: FC = () => {
 
   // Условный рендеринг после всех хуков
   if (isLoading) return <Loader />;
-  console.log(statisticData);
+
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
