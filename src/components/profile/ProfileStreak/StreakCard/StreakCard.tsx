@@ -28,7 +28,7 @@ interface WeekData {
 interface StreakCardProps {
   days?: { day: number; type: DayType }[];
   onlyStreak?: boolean;
-  streakDays: number;
+  streakDays: number | undefined;
   status: string | undefined;
   chest: string | undefined;
   frozenDays?: number;
@@ -129,7 +129,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
             </span>
             {!strangerId && !onlyStreak && (
               <div className={styles.freezeCount}>
-                <span>{frozenDays}</span>
+                <span>{streakDays}</span>
                 <img src={snowflake} alt="Freeze Icon" />
               </div>
             )}

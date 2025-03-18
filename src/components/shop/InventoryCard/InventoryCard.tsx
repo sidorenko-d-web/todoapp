@@ -257,7 +257,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                                 ? 140
                                 : 150;
 
-  console.log(item.item_premium_level);
   return (
     <div className={styles.storeCard}>
       {<GetGift giftColor={localStorage.getItem('giftName') ?? ''} />}
