@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './FinishTutorialGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
@@ -49,7 +49,3 @@ export const FinishTutorialGuide: React.FC<FinishTutorialGuideProps> = ({ onClos
         </Guide>
     );
 };
-
-function useEffect(arg0: () => void, arg1: never[]) {
-    throw new Error('Function not implemented.');
-}
