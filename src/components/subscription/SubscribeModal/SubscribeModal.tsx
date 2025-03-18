@@ -2,7 +2,6 @@ import { FC, useEffect, useState } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import coinIcon from '../../../assets/icons/coin.png';
 import {
-  RootState,
   setSubscribeGuideShown,
   useBuySubscriptionMutation,
   useGetProfileMeWithPollingQuery,
@@ -17,7 +16,7 @@ import { useModal, useSendTransaction, useTonConnect, useUsdtTransactions } from
 import { useTranslation } from 'react-i18next';
 import list from '../../../assets/icons/list.svg';
 import { SubscrieGuide } from '../../guide';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import ListDisableIcon from '@icons/list-disable.svg';
 import DisableCoin from '@icons/disableCoin.svg';
 
