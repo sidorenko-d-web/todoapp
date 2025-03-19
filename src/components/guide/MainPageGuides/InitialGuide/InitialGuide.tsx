@@ -23,8 +23,9 @@ export const InitialGuide: React.FC<InitialGuideProps> = ({ onClose }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowGuide(true);
-        dispatch(setDimHeader(true));
-
+            if(!isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)) {
+                dispatch(setDimHeader(true));
+            }
         }, 1200);
         return () => clearTimeout(timer);
 
@@ -33,9 +34,7 @@ export const InitialGuide: React.FC<InitialGuideProps> = ({ onClose }) => {
 
     if (isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)) {
         return null;
-    } else {
-    }
-
+    } 
     const handleClose = () => {
         dispatch(setDimHeader(false));
         onClose();
