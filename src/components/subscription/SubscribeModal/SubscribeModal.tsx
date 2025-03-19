@@ -72,11 +72,13 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
       return () => clearInterval(interval);
     }
   }, [nextSubscriptionAt]);
+
   // USDT buy subscription
   const { sendUSDT } = useSendTransaction();
   const usdtTransactions = useUsdtTransactions();
   const [currentTrxId, setCurrentTrxId] = useState('');
   const { walletAddress, connectWallet } = useTonConnect();
+
   const handleUsdtPayment = async () => {
     if (!walletAddress) {
       connectWallet();
@@ -156,7 +158,10 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
           <span className={s.description}>{isSubscriptionPurchased ? t('g86') : t('g75')}</span>
         </div>
         <div className={s.buttons}>
-          <Button className={s.button} disabled={idDisabled || !!isSubscriptionPurchased} onClick={handleUsdtPayment}>
+          <Button
+          className={s.button}
+          disabled={!!isSubscriptionPurchased}
+          onClick={handleUsdtPayment}>
             {formatAbbreviation(1.99, 'currency')}
           </Button>
           <Button

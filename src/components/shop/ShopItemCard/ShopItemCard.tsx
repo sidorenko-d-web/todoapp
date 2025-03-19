@@ -45,10 +45,10 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const { data: pointsUser } = useGetProfileMeQuery();
 
   const buyButtonGlowing = useSelector((state: RootState) => state.guide.buyItemButtonGlowing);
-  // for transactions
-  const { sendUSDT } = useSendTransaction();
-  const usdtTransactions = useUsdtTransactions();
-  const [currentTrxId, setCurrentTrxId] = useState('');
+  //// for transactions
+  // const { sendUSDT } = useSendTransaction();
+  // const usdtTransactions = useUsdtTransactions();
+  // const [currentTrxId, setCurrentTrxId] = useState('');
 
   const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal;
 
@@ -86,38 +86,81 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     }
   };
 
-  // for transactions
+  //// for transactions
+  // const { walletAddress, connectWallet } = useTonConnect();
+  // const { startTransaction, failTransaction, completeTransaction } = useTransactionNotification();
+  // const handleUsdtPayment = async () => {
+
+  //   if (!walletAddress) {
+  //     const connected = await connectWallet();
+  //     if (!connected) {
+  //       setError('Wallet connection timed out');
+  //       failTransaction(handleUsdtPayment);
+  //       return;
+  //     }
+  //   }
+
+  //   try {
+  //     setError('');
+  //     startTransaction();
+  //     const trxId = await sendUSDT(1);
+  //     setCurrentTrxId(trxId || '');
+  //   } catch (error) {
+  //     console.log('Error while sending USDT transaction', error);
+  //     failTransaction(handleUsdtPayment);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const latestTransaction = usdtTransactions[0];
+  //   console.error('Transactions', latestTransaction);
+  //   console.warn("Trx id: ", currentTrxId)
+  //   if (!latestTransaction || latestTransaction.orderId !== currentTrxId) return;
+
+  //   if (latestTransaction.status === 'succeeded') {
+  //     completeTransaction();
+  //   } else {
+  //     failTransaction(handleUsdtPayment);
+  //   }
+  // }, [usdtTransactions, currentTrxId]);
+
+
+  const {
+    startTransaction,
+    failTransaction,
+    setCurrentTrxId
+  } = useTransactionNotification();
+
+  // For transactions
+  const { sendUSDT } = useSendTransaction();
   const { walletAddress, connectWallet } = useTonConnect();
-  const { startTransaction, failTransaction, completeTransaction } = useTransactionNotification();
+
   const handleUsdtPayment = async () => {
     if (!walletAddress) {
-      connectWallet();
-      return;
+      const connected = await connectWallet();
+      if (!connected) {
+        setError('Wallet connection timed out');
+        failTransaction(handleUsdtPayment);
+        return;
+      }
     }
 
     openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
 
     try {
       setError('');
-      startTransaction();
-      const trxId = await sendUSDT(Number(item.price_usdt));
-      setCurrentTrxId(trxId || '');
+      startTransaction('Processing your payment...');
+
+      const trxId = await sendUSDT(1);
+      if (trxId) {
+        setCurrentTrxId(trxId);
+      } else {
+        failTransaction(handleUsdtPayment);
+      }
     } catch (error) {
       failTransaction(handleUsdtPayment);
     }
   };
-
-  useEffect(() => {
-    const latestTransaction = usdtTransactions[0];
-
-    if (!latestTransaction || latestTransaction.orderId !== currentTrxId) return;
-
-    if (latestTransaction.status === 'succeeded') {
-      completeTransaction();
-    } else {
-      failTransaction(handleUsdtPayment);
-    }
-  }, [usdtTransactions, currentTrxId]);
 
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
