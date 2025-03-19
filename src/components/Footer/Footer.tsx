@@ -42,19 +42,8 @@ export const Footer = () => {
 
   return (
     <div className={styles.footerItems}>
-       {dim && <div
-              style={{
-                position: 'fixed',
-                width: '100%',
-                height: '105px',
-                bottom: '0',
-                left: '0',
-                backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                pointerEvents: 'none',
-                zIndex: '1100',
-              }}
-          />}
 
+      {dim && <div className={styles.footerOverlay} />}
 
       {footerItems.map((item) => {
         const isActive = activeButton === item.id;
