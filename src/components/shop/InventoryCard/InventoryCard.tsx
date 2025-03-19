@@ -3,12 +3,10 @@ import styles from './InventoryCard.module.scss';
 import clsx from 'clsx';
 //@ts-ignore
 import LockIconSvg from '@icons/lock-closed.tsx';
-import ChestBlueIcon from '@icons/chest-blue.svg';
-import ChestPurpleIcon from '@icons/chest-purple.svg';
 import CointsGrey from '@icons/cointsGrey.svg';
-import ChestRedIcon from '@icons/chest-red.svg';
 import ListIcon from '@icons/list.svg';
 import ListDisableIcon from '@icons/list-disable.svg';
+import GiftIcon from '../../../assets/icons/gift.svg';
 import {
   IShopItem,
   selectVolume,
@@ -53,7 +51,7 @@ const getPremiumLevelOrder = (level: TypeItemQuality) =>
   })[level];
 
 function sortByPremiumLevel(items: IShopItem[]) {
-  return [...items].sort(
+  return [ ...items ].sort(
     (a, b) => getPremiumLevelOrder(a.item_premium_level) - getPremiumLevelOrder(b.item_premium_level),
   );
 }
@@ -62,10 +60,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const RoomItemsSlots = useRoomItemsSlots();
 
   const { walletAddress, connectWallet } = useTonConnect();
-  const [idDisabled] = useState(true);
+  const [ idDisabled ] = useState(true);
   const { t, i18n } = useTranslation('shop');
   const { data: pointsUser } = useGetProfileMeQuery();
-  const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
+  const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
   const { data, isLoading: isItemsLoading } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
@@ -76,26 +74,26 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     level: 1,
     item_rarity: item.item_rarity,
   });
-  const [isUseBay, setIsUseBay] = useState(false);
-  const [showEquipButton, setShowEquipButton] = useState(false);
+  const [ isUseBay, setIsUseBay ] = useState(false);
+  const [ showEquipButton, setShowEquipButton ] = useState(false);
 
-  const [price, setPrice] = useState('');
+  const [ price, setPrice ] = useState('');
 
   useEffect(() => {
     if (data) {
       const desiredItem = data.items.find(item_ => item_.item_premium_level === item.item_premium_level);
       setPrice('' + desiredItem?.price_internal);
     }
-  }, [data, isItemsLoading]);
+  }, [ data, isItemsLoading ]);
 
-  const [equipItem] = useAddItemToRoomMutation();
-  const [removeItem] = useRemoveItemFromRoomMutation();
+  const [ equipItem ] = useAddItemToRoomMutation();
+  const [ removeItem ] = useRemoveItemFromRoomMutation();
   const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
   const { openModal } = useModal();
 
   const { data: profile, refetch } = useGetProfileMeQuery();
 
-  const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
+  const [ playLvlSound ] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
 
   const prevLvl = useRef<number | null>(null);
 
@@ -128,7 +126,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     }
 
     prevLvl.current = item.level;
-  }, [item.level]);
+  }, [ item.level ]);
 
   const handleBuyItem = async (itemPoints: string) => {
     if (profile && +profile?.points < +itemPoints) return;
@@ -136,27 +134,29 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     try {
       setIsUpdateLoading(true);
       const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
-      localStorage.setItem('giftName', res.data.chest.chest_name);
-      localStorage.setItem('lvlGift', res.data.chest.item_levels_to_give);
+      localStorage.setItem('giftName', res.data?.chest.chest_name || '');
 
       if (!res.error) {
         playLvlSound();
         refetch();
         refetchEquipped();
-        if (item.level === 49) {
-          if (item.item_premium_level === 'pro') {
-            openModal(MODALS.UPGRADED_SHOP, {
-              item,
-              isYellow: item.item_rarity === 'red',
-            });
-          } else {
+        if (item.item_premium_level === 'pro') {
+          openModal(MODALS.UPGRADED_SHOP, {
+            item,
+            isYellow: item.item_rarity === 'red',
+          });
+        } else {
+          console.info(res.data.level, res.data.level % 10);
+          if (res.data.level % 10 === 0) {
             localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
-            openModal(MODALS.UPGRADED_ITEM, {
-              item,
-              mode: 'item',
-              reward: 'reward of item',
-            });
+            localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
           }
+
+          openModal(MODALS.UPGRADED_ITEM, {
+            item,
+            mode: 'item',
+            reward: 'reward of item',
+          });
         }
       }
     } catch (error) {
@@ -176,9 +176,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
     try {
       if (isSlotNotEmpty) {
-        await removeItem({ items_to_remove: [{ id: isSlotNotEmpty.id }] });
+        await removeItem({ items_to_remove: [ { id: isSlotNotEmpty.id } ] });
       }
-      await equipItem({ equipped_items: [{ id: item.id, slot }] });
+      await equipItem({ equipped_items: [ { id: item.id, slot } ] });
     } catch (error) {
       console.error(error);
     }
@@ -201,9 +201,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   )?.slot;
   const isEquipped = equipedItems?.equipped_items.find(_item => _item.id === item.id);
 
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const [isUpdateLoading, setIsUpdateLoading] = useState(false);
+  const [ isUpdateLoading, setIsUpdateLoading ] = useState(false);
 
   const handleUsdtPayment = async () => {
     if (!walletAddress) {
@@ -223,7 +223,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     } else {
       setShowEquipButton(false); // Hide the button if the item is equipped or the upgrade is in progress
     }
-  }, [isUpdateLoading, isEquipped]);
+  }, [ isUpdateLoading, isEquipped ]);
 
   const levelCap =
     item.level < 10
@@ -342,19 +342,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                   <p>{locale === 'ru' ? item.chest.chest_name : item.chest.chest_name_eng}</p>
                   <img
                     src={
-                      item.level < 50
-                        ? ChestBlueIcon
-                        : item.level >= 50 && item.level < 100
-                          ? ChestPurpleIcon
-                          : item.level >= 100 && item.level <= 150
-                            ? ChestRedIcon
-                            : item.item_rarity === 'red'
-                              ? ChestBlueIcon
-                              : item.item_rarity === 'yellow'
-                                ? ChestPurpleIcon
-                                : ChestRedIcon
+                      item.chest.chest_image_url || GiftIcon
                     }
-                    alt=""
+                    alt="Reward"
                   />
                 </div>
               }
@@ -397,12 +387,12 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                       style={
                         item.level < 50 && index === 1
                           ? ({
-                              '--lvl-height': `${(item.level / 50) * 100}%`,
-                            } as React.CSSProperties)
+                            '--lvl-height': `${(item.level / 50) * 100}%`,
+                          } as React.CSSProperties)
                           : item.level >= 50 && index === 2
                             ? ({
-                                '--lvl-height': `${((item.level - 50) / 50) * 100}%`,
-                              } as React.CSSProperties)
+                              '--lvl-height': `${((item.level - 50) / 50) * 100}%`,
+                            } as React.CSSProperties)
                             : undefined
                       }
                     >
@@ -437,10 +427,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           <p>{t('s26')}</p>
           <img src={LockIcon} alt="" />
         </div>
-      ) : isItemsLoading ? (
-        <Button className={styles.disabledActions} disabled={true}>
-          {<p>Loading...</p>}
-        </Button>
       ) : showEquipButton ? (
         <Button
           onClick={handleEquipItem}
@@ -448,10 +434,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
         >
           {<p>{t('s28')}</p>}
-        </Button>
-      ) : isLoading ? (
-        <Button className={styles.disabledActions} disabled={true}>
-          {<p>Loading...</p>}
         </Button>
       ) : item.level === 50 ? (
         <div className={styles.disabledUpgradeActions}>
@@ -492,7 +474,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           <Button
             disabled={idDisabled}
             onClick={() => {
-              removeItem({ items_to_remove: [{ id: item.id }] });
+              removeItem({ items_to_remove: [ { id: item.id } ] });
             }}
           >
             <img src={idDisabled ? ListDisableIcon : ListIcon} alt="Tasks" />

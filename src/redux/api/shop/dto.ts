@@ -16,13 +16,15 @@ export interface IShopItem {
     id: string,
     chest_name: string,
     chest_name_eng: string,
-  }
+    chest_image_url: null | string
+  };
 }
 
 export interface IShopItemsResponse {
   count: number;
   items: IShopItem[];
 }
+
 export interface IShopSkin {
   id: string;
   name: string;
@@ -77,6 +79,41 @@ export interface IBoosts {
   income_per_second: string;
   subscribers: number;
 }
+
+export type Reward_range = {
+  points: string[];
+  subscribers: number[];
+  freezes: number[];
+  subscriptions: number[];
+}
+
+export type Chest = {
+  id: string;
+  chest_name: string;
+  chest_name_eng: string;
+  reward_range: Reward_range;
+  days_in_streak_list: number[];
+  item_levels_to_give: number[];
+  chest_image_url: string;
+}
+
+export type UpgradeItemResponse = {
+  name: string;
+  item_category: string;
+  item_rarity: string;
+  item_premium_level: string;
+  depends: string;
+  level: number;
+  price_internal: string;
+  price_usdt: string;
+  boost: IBoosts;
+  image_url: string;
+  is_reward_given: boolean;
+  name_eng: string;
+  id: string;
+  chest: Chest;
+}
+
 export interface IBuyItemRequest {
   payment_method: 'internal_wallet' | 'usdt';
   id: string;
@@ -103,17 +140,18 @@ export interface IAchievementsResponse {
   count: number;
   achievements: IAchievement[];
 }
+
 export interface IAchievementsRequest {
   is_unlocked?: boolean;
-  ids?: string[]
-  name?: string
-  total_integrations?: string
-  level?: string
-  company_name?: string
-  is_precious_drop?: boolean
-  is_growth_tree_achievement?: boolean
-  order_by?: string
-  asc?: boolean
-  offset?: number
-  limit?: number
+  ids?: string[];
+  name?: string;
+  total_integrations?: string;
+  level?: string;
+  company_name?: string;
+  is_precious_drop?: boolean;
+  is_growth_tree_achievement?: boolean;
+  order_by?: string;
+  asc?: boolean;
+  offset?: number;
+  limit?: number;
 }

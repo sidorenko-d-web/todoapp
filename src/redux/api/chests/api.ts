@@ -1,7 +1,6 @@
-// api.ts
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import { ChestRewardResponseDTO, ChestRewardRequestDTO } from './dto';
+import { ChestRewardRequestDTO, ChestRewardResponseDTO } from './dto';
 
 export const chestApi = createApi({
   reducerPath: 'chestApi',
@@ -9,10 +8,10 @@ export const chestApi = createApi({
   tagTypes: ['Chest'],
   endpoints: builder => ({
     claimChestReward: builder.mutation<ChestRewardResponseDTO, ChestRewardRequestDTO>({
-      query: (params) => ({
+      query: (body) => ({
         url: `/chests`,
         method: 'POST',
-        params,
+        body,
       }),
     }),
   }),

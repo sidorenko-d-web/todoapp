@@ -49,8 +49,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const lastOpenedRarity = useSelector((state: RootState) => state.shop.lastOpenedRarity);
   const dispatch = useDispatch()
 
-  console.log(lastOpenedTab);
-
   const { t } = useTranslation('shop');
   const shopItemCategories = [
     { title: `${t('s2')}`, value: 'text' },
@@ -141,7 +139,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const isTabsNotEmpty = [ ...(itemsInTabs.green ?? []), ...(itemsInTabs.yellow ?? []) ].length > 0;
 
-
   useEffect(() => {
     console.info('shopCategory:', shopCategory.value);
   }, [ shopCategory ]);
@@ -152,8 +149,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     }
     const timer = setTimeout(() => {
       setShowWelcomeGuide(true);
-    }, 1000); 
-  
+    }, 1000);
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -161,13 +158,13 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     if (mode === 'inventory') {
       const timer = setTimeout(() => {
         setShowBackToMainGuide(true);
-      }, 1); 
-  
+      }, 1);
+
       return () => clearTimeout(timer);
     } else {
       setShowBackToMainGuide(false);
     }
-  }, [mode]); 
+  }, [mode]);
 
   return (
     <>
@@ -255,7 +252,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
       {(!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) && mode === 'shop' && showWelcomeGuide) && (
         <WelcomeToShopGuide
           onClose={() => {
-            
+
             reduxDispatch(setShopStatsGlowing(false));
             reduxDispatch(setBuyItemButtonGlowing(true));
             setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);

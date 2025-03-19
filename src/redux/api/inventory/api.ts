@@ -6,6 +6,7 @@ import {
   IShopItemsResponse,
   IShopSkinsResponse,
   shopApi,
+  UpgradeItemResponse,
 } from '../shop';
 
 export const inventoryApi = shopApi.injectEndpoints({
@@ -27,7 +28,7 @@ export const inventoryApi = shopApi.injectEndpoints({
       providesTags: ['items'],
     }),
 
-    upgradeItem: builder.mutation<any, IBuyItemRequest>({
+    upgradeItem: builder.mutation<UpgradeItemResponse, IBuyItemRequest>({
       query: ({ id, ...params }) => ({
         url: `/inventory/upgrade/${id}`,
         method: 'PATCH',
