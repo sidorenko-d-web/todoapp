@@ -51,7 +51,7 @@ export default defineConfig({
       },
     ],
   },
-  // server: {
+  // server: { //prodDev
   //   allowedHosts: true,
   //   proxy: {
   //     '/api/miniapp-v2-prod': {
@@ -61,7 +61,7 @@ export default defineConfig({
   //     },
   //   },
   // },
-   server: {
+   server: { //testDev
     allowedHosts: true,
     proxy: {
       '/api/miniapp-v2-dev': {

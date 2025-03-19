@@ -1,6 +1,7 @@
 import { SpineGameObject } from '@esotericsoftware/spine-phaser';
 import Phaser, { GameObjects } from 'phaser';
 import { IRoomItem, IShopItem } from '../redux';
+import { buildLink } from './buildMode';
 
 export const itemsInSlots = {
   1: { width: 0, height: 0, x: -1000, y: -1000, z: -100 }, // walls === not here
@@ -70,12 +71,10 @@ export const baseItems = [
   { name: 'table', slot: 2, width: 140, height: 140, x: -6, y: 455, z: 3 },
   { name: 'window', slot: 5, width: 110, height: 110, x: -125, y: 260, z: 0 },
 ];
-// const proxyImageUrl = (url: string) => url.replace('https://miniapp.apusher.com', '/api/miniapp-v2-prod');
-const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
+const proxyImageUrl = buildLink()?.proxy!;
 
-// export const itemsBaseUrl = 'https://miniapp.apusher.com/export/';
 
-export const itemsBaseUrl = 'https://storage.yandexcloud.net/miniapp-v2-dev/';
+export const itemsBaseUrl = buildLink()?.itemBaseUrl;
 interface contextProps {
   equipped_items?: IRoomItem[];
   center: number;
@@ -108,9 +107,7 @@ export class SpineSceneBase extends Phaser.Scene {
   loadSvgItem(item: IShopItem, { equipped_items }: Pick<contextProps, 'equipped_items'>) {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const { width, height } = itemsInSlots[slot];
-    // this.load.svg('item' + item.id, item.image_url!.replace('https://miniapp.apusher.com', '/api/miniapp-v2-prod'), { width, height });
-    // this.load.svg('item' + item.id, item.image_url!, { width, height });
-    this.load.svg('item' + item.id, proxyImageUrl(item.image_url!), { width, height });
+    this.load.svg('item' + item.id, buildLink()?.svgLink(item.image_url), { width, height });
   }
 
   loadBaseItems() {
@@ -139,29 +136,25 @@ export class SpineSceneBase extends Phaser.Scene {
     const _item = itemsInSlots[slot];
 
     //changing position for camera if there is stand in the room
-    if (slot === 11 && equipped_items?.find(item => item.slot === 12)) {
-      this.objects?.push(
-        this.add.spine(center + animatedItem.x + 65, animatedItem.y + 17 + 50, 'json' + item.id, 'atlas' + item.id),
-      );
-    } else {
-      this.objects?.push(
-        this.add.spine(center + animatedItem.x, animatedItem.y + 50, 'json' + item.id, 'atlas' + item.id),
-      );
-    }
+    const x = slot === 11 && equipped_items?.find(item => item.slot === 12) ? animatedItem.x + 65 : animatedItem.x;
+    const y =
+      slot === 11 && equipped_items?.find(item => item.slot === 12) ? animatedItem.y + 17 + 50 : animatedItem.y + 50;
 
-    this.objects[i].scale = animatedItem.width / this.spine.getSkeletonData('json' + item.id, 'atlas' + item.id).width;
-    //@ts-ignore
-    this.objects[i]?.animationState?.setAnimation(0, animatedItem.animation, true);
-    //@ts-ignore
-    this.objects[i]?.skeleton.setSkinByName(animatedItem.skin(item.item_premium_level));
-    this.objects[i]?.setDepth(_item.z);
+    const spineObject = this.add.spine(center + x, y, 'json' + item.id, 'atlas' + item.id);
+    spineObject.scale = animatedItem.width / this.spine.getSkeletonData('json' + item.id, 'atlas' + item.id).width;
+    spineObject.animationState.setAnimation(0, animatedItem.animation, true);
+    spineObject.skeleton.setSkinByName(animatedItem.skin(item.item_premium_level));
+    spineObject.setDepth(_item.z);
+
+    this.objects[i] = spineObject;
   }
 
   createSVGItem(item: IShopItem, i: number, { equipped_items, center }: contextProps) {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const _item = itemsInSlots[slot];
-    this.objects?.push(this.add.image(center + _item.x, _item.y + 50, 'item' + item.id));
-    this.objects[i]?.setDepth(_item.z);
+    const imageObject = this.add.image(center + _item.x, _item.y + 50, 'item' + item.id);
+    imageObject.setDepth(_item.z);
+    this.objects[i] = imageObject;
   }
 
   createBaseItems({ equipped_items, center }: contextProps) {
@@ -203,7 +196,6 @@ const createLink = (itemString: string, type: 'json' | 'atlas' | 'json1' | 'atla
   else if (type === 'atlas1') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
   else if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
 
-  // return string;
   return proxyImageUrl(string);
 };
 

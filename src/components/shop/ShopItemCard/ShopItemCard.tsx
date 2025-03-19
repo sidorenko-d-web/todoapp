@@ -17,6 +17,7 @@ import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 import classNames from 'classnames';
+import { buildLink } from '../../../constants/buildMode';
 
 interface Props {
   disabled?: boolean;
@@ -99,7 +100,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     <div className={styles.storeCard}>
       <div className={styles.header}>
         <div className={clsx(styles.image)}>
-          <img src={item.image_url.replace('https://', 'https://storage.yandexcloud.net/') + svgHeadersString} />
+          <img src={buildLink()?.svgShop(item.image_url) + svgHeadersString} />
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>

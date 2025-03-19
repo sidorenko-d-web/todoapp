@@ -1,5 +1,6 @@
 import { svgHeadersString } from '../constants';
 import starGray from '../assets/icons/star-gray.svg';
+import { buildLink } from '../constants/buildMode';
 
 export const getAchivementType = (name: string, medal: 'gold' | 'silver' | 'bronze' | number) => {
   const type = name.includes('капля') ? 'drop' : name.includes('этапа') ? 'stage' : 'integration';
@@ -22,15 +23,9 @@ export const getAchivementType = (name: string, medal: 'gold' | 'silver' | 'bron
         Сапфировая: 'Спафир-13',
       };
       const itemName = name.split(' ');
-      
+
       return {
-        image: `https://storage.yandexcloud.net/miniapp-v2-dev/Награда -${
-          imageNames[itemName[0] as keyof typeof imageNames]
-        }.svg${svgHeadersString}`,
-        type,
-      };
-      return {
-        image: `https://miniapp.apusher.com/export/Награда -${
+        image: `${buildLink()?.itemBaseUrl}Награда -${
           imageNames[itemName[0] as keyof typeof imageNames]
         }.svg${svgHeadersString}`,
         type,
@@ -45,15 +40,7 @@ export const getAchivementType = (name: string, medal: 'gold' | 'silver' | 'bron
         level = medal === 'bronze' ? 1 : medal === 'silver' ? 2 : 3;
       }
       return {
-        image: `https://storage.yandexcloud.net/miniapp-v2-dev/${
-          _itemName[_itemName.length - 1]
-        }-${level}.svg${svgHeadersString}`,
-        type,
-      };
-      return {
-        image: `https://miniapp.apusher.com/export/${
-          _itemName[_itemName.length - 1]
-        }-${level}.svg${svgHeadersString}`,
+        image: `${buildLink()?.itemBaseUrl}${_itemName[_itemName.length - 1]}-${level}.svg${svgHeadersString}`,
         type,
       };
 

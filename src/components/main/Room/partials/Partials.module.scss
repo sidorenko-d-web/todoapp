@@ -163,8 +163,7 @@ $translateY: -15vh;
 
 .loader {
   position: absolute;
-  z-index: 10000001;
-  background-color: transparent;
+  z-index: 1000001;
 
   &.upper {
     top: -50px;
