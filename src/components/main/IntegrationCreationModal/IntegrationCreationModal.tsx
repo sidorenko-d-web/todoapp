@@ -5,6 +5,7 @@ import {
   integrationsApi,
   profileApi,
   RootState,
+  setGoToShopBtnGlowing,
   setIntegrationCreated,
   setLastIntegrationId,
   useCreateIntegrationMutation,
@@ -237,7 +238,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             }
 
             {noItemsMessage && <TrackedButton
-              disabled={!isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)}
+              disabled={!goToShopButtonGlowing && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)}
               trackingData={{
                 eventType: 'button',
                 eventPlace: 'В магазин - Главный экран - Окно создание интеграции',
@@ -289,6 +290,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         onClose={() => {
           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+          dispatch(setGoToShopBtnGlowing(true));
           //onClose();
           //navigate(AppRoute.Shop);
         }}

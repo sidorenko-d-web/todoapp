@@ -27,6 +27,14 @@
   user-select: none; /* Prevents text selection */
   -webkit-user-select: none;
   -webkit-touch-callout: none; /* Prevents iOS callout */
+
+  &.noBorder {
+    border-top: none;
+  }
+}
+
+.darken {
+  border-top: none;
 }
 
 

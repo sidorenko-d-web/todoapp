@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import coinIcon from '../../../assets/icons/coin.png';
 import {
+  setDimHeader,
   setSubscribeGuideShown,
   useBuySubscriptionMutation,
   useGetProfileMeWithPollingQuery,
@@ -160,7 +161,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
           </Button>
           <Button
             className={`${s.button} ${(!buyBtnGlowing && isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) ? s.glowing : ''}`}
-            disabled={!!isSubscriptionPurchased || !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)}
+           // disabled={!!isSubscriptionPurchased || !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)}
             onClick={() => handleBuySubscription('internal_wallet')}
           >
             {formatAbbreviation(point_integration)}{' '}
@@ -174,6 +175,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
       {!guideShown && (
         <SubscrieGuide
           onClose={() => {
+            dispatch(setDimHeader(false));
             dispatch(setSubscribeGuideShown(true));
             setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
             closeModal(MODALS.SUBSCRIBE);

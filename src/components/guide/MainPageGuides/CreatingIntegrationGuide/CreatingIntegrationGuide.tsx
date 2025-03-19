@@ -18,9 +18,9 @@ export const CreatingIntegrationGuide: React.FC<CreatingIntegrationGuideProps> =
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(setDimHeader(true));
-    }, []);
+    // useEffect(() => {
+    //     dispatch(setDimHeader(true));
+    // }, []);
     
     const handleClose = () => {
         dispatch(setDimHeader(false));

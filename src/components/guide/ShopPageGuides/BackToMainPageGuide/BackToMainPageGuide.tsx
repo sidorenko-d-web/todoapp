@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Guide } from "../../Guide";
 
 import styles from './BackToMainPageGuide.module.scss';
@@ -21,10 +21,15 @@ export const BackToMainPageGuide: React.FC<BackToMainPageGuideProps> = ({ onClos
 
     const dispatch = useDispatch();
 
+    
+    useEffect(() => {
+        dispatch(setDimHeader(true));
+    }, []);
+
     const handleClose = () => {
         setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
         dispatch(setCreateIntegrationButtonGlowing(true));
-        dispatch(setDimHeader(false));
+        //dispatch(setDimHeader(false));
         onClose();
         setIsOpen(false);
     };
@@ -37,7 +42,7 @@ export const BackToMainPageGuide: React.FC<BackToMainPageGuideProps> = ({ onClos
             align="right"
             description={
                 <>
-                {t('g37')}<span style={{ color: '#2F80ED' }}>{t('g38')}</span> {t('g39')} <span style={{ color: '#2F80ED' }}>{t('g40')}</span>.
+                    {t('g37')}<span style={{ color: '#2F80ED' }}>{t('g38')}</span> {t('g39')} <span style={{ color: '#2F80ED' }}>{t('g40')}</span>.
                     <br />
                     <br />
                     {t('g41')}

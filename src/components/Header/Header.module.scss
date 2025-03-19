@@ -261,8 +261,13 @@ $header-border: 1px solid $color-header-border-dark;
   margin-left: -20px;
   border-bottom: 1px solid var.$color-dark-gray;
   background: var.$color-card-bg;
-}
 
+  
+}
+.darken {
+    border-bottom: none;
+    background: rgba(0, 0, 0, 0.9)
+  }
 .coinsWrapper {
   display: flex;
   padding: 4px 4px 4px 7px;

@@ -75,6 +75,8 @@ export const IntegrationPage: React.FC = () => {
 
   const comments = commentData ? (Array.isArray(commentData) ? commentData : [commentData]) : [];
 
+  const [showGuide, setShowGuide] = useState(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -93,6 +95,14 @@ export const IntegrationPage: React.FC = () => {
       setCurrentCommentIndex(0);
     }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowGuide(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const isLoading = isIntegrationLoading || isUnansweredIntegrationCommentLoading;
 
@@ -137,16 +147,16 @@ export const IntegrationPage: React.FC = () => {
               </p>
             </div>
             <IntegrationComment
-                progres={data.comments_answered_correctly % 5}
-                {...comments[currentCommentIndex]}
-                onVote={handleVote}
-                hateText={commentData?.is_hate}
-                finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
-              />
+              progres={data.comments_answered_correctly % 5}
+              {...comments[currentCommentIndex]}
+              onVote={handleVote}
+              hateText={commentData?.is_hate}
+              finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
+            />
           </div>
         </>
       )}
-      {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
+      {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && showGuide && (
         <IntegrationPageGuide
           onClose={() => {
             setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);

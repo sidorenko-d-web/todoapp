@@ -22,6 +22,7 @@ import {
   RootState,
   setAccelerateIntegrationGuideClosed,
   setActiveFooterItemId,
+  setDimHeader,
   setFooterActive,
   setGetCoinsGuideShown,
   setIntegrationReadyForPublishing,
@@ -68,16 +69,23 @@ export const MainPage: FC = () => {
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
   useEffect(() => {
-    setTypewriterFound(false);
-    if (isIntegrationsError || isInventoryFetchError) {
-      Object.entries(GUIDE_ITEMS).forEach(([_, items]) => {
-        Object.entries(items).forEach(([_, value]) => {
-          localStorage.setItem(value, '0');
-        });
-      });
-      setTypewriterFound(false);
+    if(integrationCurrentlyCreating) {
+      reduxDispatch(setDimHeader(false));
     }
-  }, [isIntegrationsError, isInventoryFetchError, isAllIntegrationsLoading, isInventoryDataLoading]);
+  }, [integrationCurrentlyCreating]);
+
+
+  // useEffect(() => {
+  //   setTypewriterFound(false);
+  //   if (isIntegrationsError || isInventoryFetchError) {
+  //     Object.entries(GUIDE_ITEMS).forEach(([_, items]) => {
+  //       Object.entries(items).forEach(([_, value]) => {
+  //         localStorage.setItem(value, '0');
+  //       });
+  //     });
+  //     setTypewriterFound(false);
+  //   }
+  // }, [isIntegrationsError, isInventoryFetchError, isAllIntegrationsLoading, isInventoryDataLoading]);
 
   useEffect(() => {
     if (itemsData && !isInventoryDataLoading) {
@@ -224,7 +232,7 @@ export const MainPage: FC = () => {
       isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
       !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
     ) {
-      navigate(AppRoute.Shop);
+      //navigate(AppRoute.Shop);
     }
 
     if (
@@ -256,11 +264,11 @@ export const MainPage: FC = () => {
       isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) &&
       !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)
     ) {
-      navigate(AppRoute.Shop);
+      //navigate(AppRoute.Shop);
     }
 
     if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
-      navigate(AppRoute.ShopInventory);
+      //navigate(AppRoute.ShopInventory);
     }
   }, []);
 
@@ -338,7 +346,7 @@ export const MainPage: FC = () => {
         />
       )}
 
-      {showGuide && (
+      {true && (
         <InitialGuide
           onClose={() => {
             setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
@@ -380,17 +388,6 @@ export const MainPage: FC = () => {
             }}
           />
         )}
-
-{/* <GetCoinsGuide
-            onClose={() => {
-              reduxDispatch(setGetCoinsGuideShown(true));
-              setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-              setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-              setRerender((prev) => prev+1);
-              openModal(MODALS.SUBSCRIBE);
-            }}
-          /> */}
-
 
       {integrationCurrentlyCreating &&
         !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED) && (

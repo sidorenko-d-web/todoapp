@@ -19,7 +19,10 @@ export const TreeLevelGuide: React.FC<TreeLevelGuideProps> = ({ onClose }) => {
 
     const dispatch = useDispatch();
 
+    dispatch(setDimHeader(true));
+    
     useEffect(() => {
+        dispatch(setDimHeader(true));
         dispatch(setDimHeader(true));
     }, []);
 

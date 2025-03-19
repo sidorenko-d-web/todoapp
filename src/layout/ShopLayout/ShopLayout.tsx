@@ -152,22 +152,22 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     }
     const timer = setTimeout(() => {
       setShowWelcomeGuide(true);
-    }, 1000); // 2 seconds delay
+    }, 1000); 
   
-    return () => clearTimeout(timer); // Cleanup the timer on component unmount
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
     if (mode === 'inventory') {
       const timer = setTimeout(() => {
         setShowBackToMainGuide(true);
-      }, 2000); // 2 seconds delay
+      }, 1); 
   
-      return () => clearTimeout(timer); // Cleanup the timer on component unmount or mode change
+      return () => clearTimeout(timer);
     } else {
-      setShowBackToMainGuide(false); // Reset the state when mode is not 'inventory'
+      setShowBackToMainGuide(false);
     }
-  }, [mode]); // Dependency on `mode`
+  }, [mode]); 
 
   return (
     <>
