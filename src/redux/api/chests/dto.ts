@@ -1,6 +1,6 @@
 export type ChestRewardRequestDTO = {
   chest_reward_reason: 'push_line' | 'profile_rating' | 'create_channel_assignment' | 'item_upgrade';
-  entity_id: string
+  entity_id?: string
 };
 
 export type ChestRewardResponseDTO = {
