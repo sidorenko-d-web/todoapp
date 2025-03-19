@@ -163,7 +163,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       modalId={modalId}
       onClose={
         () => {
-          //onClose();
+          onClose();
           if (!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
             setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
             setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
