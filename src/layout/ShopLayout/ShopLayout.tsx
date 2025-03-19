@@ -76,6 +76,11 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   });
   const { data: boost } = useGetCurrentUserBoostQuery();
 
+  const [dimSet, setDimSet] = useState(false);
+
+  const [showWelcomeGuide, setShowWelcomeGuide] = useState(false);
+  const [showBackToMainGuide, setShowBackToMainGuide] = useState(false);
+
   useEffect(() => {
     onItemCategoryChange(shopCategory as TypeTab<TypeItemCategory>);
     dispatch(setLastOpenedTab(shopCategory));
@@ -140,6 +145,29 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   useEffect(() => {
     console.info('shopCategory:', shopCategory.value);
   }, [ shopCategory ]);
+
+  useEffect(() => {
+    if(!dimSet) {
+      setDimSet(true);
+    }
+    const timer = setTimeout(() => {
+      setShowWelcomeGuide(true);
+    }, 1000); 
+  
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (mode === 'inventory') {
+      const timer = setTimeout(() => {
+        setShowBackToMainGuide(true);
+      }, 1); 
+  
+      return () => clearTimeout(timer);
+    } else {
+      setShowBackToMainGuide(false);
+    }
+  }, [mode]); 
 
   return (
     <>
@@ -224,9 +252,10 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         {children}
       </div>
 
-      {!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) && mode === 'shop' && (
+      {(!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) && mode === 'shop' && showWelcomeGuide) && (
         <WelcomeToShopGuide
           onClose={() => {
+            
             reduxDispatch(setShopStatsGlowing(false));
             reduxDispatch(setBuyItemButtonGlowing(true));
             setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
@@ -247,7 +276,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
       {(useSelector((state: RootState) => state.guide.itemBought) || isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) &&
         isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) &&
         !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
-        mode === 'inventory' && (
+        mode === 'inventory' && showBackToMainGuide && (
           <BackToMainPageGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);

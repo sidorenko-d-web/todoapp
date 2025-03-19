@@ -27,6 +27,7 @@ export const IntegrationCreation = () => {
 
   const handleIntegrationCreation = () => {
     //openModal(MODALS.SUBSCRIBE);
+
     if (!profile) return;
 
     if (profile?.subscription_integrations_left <= 0) {
@@ -34,7 +35,11 @@ export const IntegrationCreation = () => {
       return;
     }
 
-    openModal(MODALS.CREATING_INTEGRATION);
+    if(!isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) {
+      openModal(MODALS.SUBSCRIBE);
+    } else {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
   };
 
   const handleSuccessfullySubscribed = () => {

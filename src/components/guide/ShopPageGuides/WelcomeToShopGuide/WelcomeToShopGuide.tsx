@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Guide } from "../../Guide";
 
 import styles from './WelcomeToShopGuide.module.scss';
 
 import gif from '../../../../assets/gif/guide1.gif';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from "react-redux";
+import { setDimHeader } from "../../../../redux";
 
 
 interface WelcomeToShopGuideProps {
@@ -14,6 +16,12 @@ export const WelcomeToShopGuide: React.FC<WelcomeToShopGuideProps> = ({ onClose 
     const { t } = useTranslation('guide');
     const [isOpen, setIsOpen] = useState(true);
 
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(setDimHeader(true));
+    }, []);
+    
     const handleClose = () => {
         onClose();
         setIsOpen(false);
