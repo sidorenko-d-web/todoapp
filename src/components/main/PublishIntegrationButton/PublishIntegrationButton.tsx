@@ -29,7 +29,6 @@ export const PublishIntegrationButton: React.FC = () => {
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
   const [publishIntegration] = usePublishIntegrationMutation();
-  //const [claimRewardForIntegration] = useClaimRewardForIntegrationMutation();
 
   const { data, refetch } = useGetAllIntegrationsQuery();
   const [isPublishing, setIsPublishing] = useState(false);

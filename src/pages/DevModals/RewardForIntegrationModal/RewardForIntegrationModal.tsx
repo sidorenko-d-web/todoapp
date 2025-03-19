@@ -5,7 +5,6 @@ import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
 import views from '../../../assets/icons/views.png';
 import subscribers from '../../../assets/icons/subscribers.png';
-import integration from '../../../assets/icons/integration-blue.svg';
 import starBlue from '../../../assets/icons/star-blue.svg';
 import starGray from '../../../assets/icons/star-dark-gray.svg';
 // import lightning from '../../../assets/icons/lightning.svg';
