@@ -244,7 +244,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                 eventPlace: 'В магазин - Главный экран - Окно создание интеграции',
               }}
               className={`${s.button} 
-              ${goToShopButtonGlowing ? s.glowingBtn : ''} `}
+              ${goToShopButtonGlowing ? s.glowing : ''} `}
               onClick={goToShop}
             >
               {t('i21')}
