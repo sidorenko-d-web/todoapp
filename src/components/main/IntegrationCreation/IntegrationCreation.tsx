@@ -57,7 +57,8 @@ export const IntegrationCreation = () => {
     && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)));
 
   return (
-    <section className={s.integrationsControls}>
+    <section className={`${s.integrationsControls} 
+      ${(isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)) ? s.elevated : ''}`}>
       {!integrationCreating && (
         <TrackedButton
           trackingData={{

@@ -21,7 +21,7 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({ onCl
   }, []);
   
   const handleClose = () => {
-    dispatch(setDimHeader(false));
+    //dispatch(setDimHeader(false));
     onClose();
     setIsOpen(false);
   };

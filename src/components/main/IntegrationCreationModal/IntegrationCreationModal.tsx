@@ -132,7 +132,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       });
 
     setSelectedCompanyId("");
-
   };
 
   const noItemsMessage = (() => {
@@ -194,7 +193,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             ))}
           </div>
 
-          <div className={s.scrollableContent}>
+          <div className={`${s.scrollableContent}
+           ${!isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) ? s.visibleOverflow : ''}`}>
             {uniqueCompany && !noItemsMessage && getPlanStageByUsersCount(total_users) >= 5 && (
               <SpecialIntegration
                 company={uniqueCompany}
