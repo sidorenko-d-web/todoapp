@@ -118,9 +118,10 @@ export const PublishIntegrationButton: React.FC = () => {
       if (!publishRes.error) {
         //const rewardRes = await claimRewardForIntegration(integrationIdToPublish);
 
-        const company = integrationData?.campaign.company_name;
+        const company = integrationData?.campaign;
         if (true) {
-          //const company = publishRes.data.campaign;
+          // const company = publishRes.data.campaign;
+          console.log(integrationData)
           const { base_income, base_views, base_subscribers } = publishRes.data;
 
           openModal(MODALS.INTEGRATION_REWARD, {

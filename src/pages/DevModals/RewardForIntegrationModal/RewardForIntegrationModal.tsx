@@ -36,7 +36,7 @@ export default function RewardForIntegrationModal() {
     base_subscribers: string;
     base_views: string;
   }>(MODALS.INTEGRATION_REWARD);
-  const { data: integrationsData } = useGetIntegrationsQuery({ company_name: args?.company.company_name });
+  const { data: integrationsData } = useGetIntegrationsQuery({ company_name: args?.company?.company_name });
   const integrationCount = integrationsData?.count ?? 0;
   const dispatch = useDispatch();
 
@@ -92,7 +92,7 @@ export default function RewardForIntegrationModal() {
       <div className={styles.wrapper}>
         <div className={styles.info}>
           <div className={styles.top}>
-            <img className={styles.integration} src={args?.company.image_url ?? integration} />
+            <img className={styles.integration} src={args?.company.image_url} alt='image' />
           </div>
           <div className={styles.bottom}>
             <h2 className={styles.title}>{args?.company.company_name}</h2>

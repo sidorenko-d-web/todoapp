@@ -8,10 +8,6 @@ const proxy = {
 };
 
 const links = {
-  mainScene_TestDev: '',
-  mainScene_ProdDev: '',
-  mainScene_Production: '',
-
   svgItem_TestDev: (imageUrl: string) => proxy.proxy_TestDev(imageUrl),
   svgItem_Test: (imageUrl: string) => imageUrl,
   svgItem_ProdDev: (imageUrl: string) => imageUrl!.replace('https://miniapp.apusher.com', '/api/miniapp-v2-prod'),
@@ -22,7 +18,9 @@ const links = {
   itemsBaseUrl_ProdDev: 'https://miniapp.apusher.com/export/',
   itemsBaseUrl_Production: 'https://miniapp.apusher.com/export/',
 
-  svgShop_TestDev: (url: string) => url.replace('https://', 'https://storage.yandexcloud.net/'),
+  // url.replace('https://', 'https://storage.yandexcloud.net/') mb it would be need
+  
+  svgShop_TestDev: (url: string) => url,
   svgShop_Test: (url: string) => url,
   svgShop_ProdDev: (url: string) => url,
   svgShop_Production: (url: string) => url,
