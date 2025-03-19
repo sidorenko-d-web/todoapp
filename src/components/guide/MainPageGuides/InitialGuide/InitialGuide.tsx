@@ -50,7 +50,7 @@ export const InitialGuide: React.FC<InitialGuideProps> = ({ onClose }) => {
             zIndex={11110}
             top={'39%'}
             description={t('g31')}
-            onClose={onClose}>
+            onClose={handleClose}>
             <button className={styles.nextBtn} onClick={handleClose}>{t('g4')}</button>
             <img src={img1} className={styles.gifImage} height={146} width={140} />
         </Guide>}

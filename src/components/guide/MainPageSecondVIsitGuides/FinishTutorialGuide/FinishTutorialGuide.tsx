@@ -43,7 +43,7 @@ export const FinishTutorialGuide: React.FC<FinishTutorialGuideProps> = ({ onClos
                     {t('g33')} <span style={{ color: '#E0B01D' }}>{t('g34')}</span>! {t('g35')}
                 </>
             }
-            onClose={onClose}>
+            onClose={handleClose}>
             <button className={styles.nextBtn} onClick={handleClose}>{t('g36')}</button>
             <img src={img1} className={styles.gifImage} height={146} width={140} />
         </Guide>

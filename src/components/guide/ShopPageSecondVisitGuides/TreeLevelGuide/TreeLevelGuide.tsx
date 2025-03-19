@@ -47,7 +47,7 @@ export const TreeLevelGuide: React.FC<TreeLevelGuideProps> = ({ onClose }) => {
                     {t('g52')} <span style={{ color: '#E0B01D' }}> {t('g53')}</span>. {t('g54')}
                 </>
             }
-            onClose={onClose}>
+            onClose={handleClose}>
             <div className={`${styles.disabledUpgradeActions} ${styles.elevated}`}>
                 <img src={LockIcon} alt="" />
                 <p>{t('g55')} 7</p>

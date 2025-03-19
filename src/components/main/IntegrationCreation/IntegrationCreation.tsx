@@ -28,17 +28,19 @@ export const IntegrationCreation = () => {
   const handleIntegrationCreation = () => {
     //openModal(MODALS.SUBSCRIBE);
 
-    if (!profile) return;
+    if(isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)) {
+      if (!profile) return;
 
-    if (profile?.subscription_integrations_left <= 0) {
-      openModal(MODALS.SUBSCRIBE);
-      return;
-    }
-
-    if(!isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) {
-      openModal(MODALS.SUBSCRIBE);
-    } else {
-      openModal(MODALS.CREATING_INTEGRATION);
+      if (profile?.subscription_integrations_left <= 0) {
+        openModal(MODALS.SUBSCRIBE);
+        return;
+      }
+  
+      if(!isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) {
+        openModal(MODALS.SUBSCRIBE);
+      } else {
+        openModal(MODALS.CREATING_INTEGRATION);
+      }
     }
   };
 

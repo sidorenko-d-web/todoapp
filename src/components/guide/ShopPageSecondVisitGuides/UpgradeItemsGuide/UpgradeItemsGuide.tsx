@@ -42,7 +42,7 @@ export const UpgradeItemsGuide: React.FC<UpgradeItemsGuideProps> = ({ onClose })
           {t('g62')} <span style={{ color: '#2F80ED' }}>{t('g63')}</span> {t('g64')}
         </>
       }
-      onClose={onClose}>
+      onClose={handleClose}>
       <button className={styles.nextBtn} onClick={handleClose}>{t('g17')}</button>
       <img src={img1} className={styles.gifImage} height={146} width={140} />
     </Guide>

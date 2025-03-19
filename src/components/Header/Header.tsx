@@ -94,6 +94,8 @@ export const Header = () => {
 
   const dim = useSelector((state: RootState) => state.guide.dimHeader);
 
+  const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+  
   const showHeaderBG =
     !['/', '/progressTree'].includes(location) &&
     !(location.split('/')[1] === 'profile' && location.split('/')[3] === 'room');
@@ -105,6 +107,9 @@ export const Header = () => {
     && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
 
   const darken3 = isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+
+  const notDarken = integrationCurrentlyCreating && isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+
 
   return (
     <>
@@ -118,10 +123,10 @@ export const Header = () => {
         )}
       >
 
-        {(darken || darken2 || darken3) && <div className={styles.headerOverlay}></div>}
+        {((darken || darken2 || darken3) && !notDarken) && <div className={styles.headerOverlay}></div>}
 
 
-        {showHeaderBG && <div className={`${styles.headerBG} ${(darken || darken2 || darken3) ? styles.darken : ''}`} />}
+        {showHeaderBG && <div className={`${styles.headerBG} ${((darken || darken2 || darken3) && !notDarken)? styles.darken : ''}`} />}
 
         {!isLoading && (
           <div className={styles.lowerHeader}>

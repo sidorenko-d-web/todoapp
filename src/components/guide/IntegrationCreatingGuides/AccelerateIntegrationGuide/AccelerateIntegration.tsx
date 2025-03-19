@@ -21,9 +21,9 @@ export const AccelerateIntegtrationGuide: React.FC<AccelerateIntegtrationGuidePr
   }, []);
   
   const handleClose = () => {
+    dispatch(setDimHeader(false));
     onClose();
     setIsOpen(false);
-    dispatch(setDimHeader(false));
   };
 
   if (!isOpen) return null;
@@ -42,7 +42,7 @@ export const AccelerateIntegtrationGuide: React.FC<AccelerateIntegtrationGuidePr
           {t('g2')} <span style={{ color: '#2F80ED' }}>{t('g3')}</span>
         </>
       }
-      onClose={onClose}>
+      onClose={handleClose}>
       <button className={styles.nextBtn} onClick={handleClose}>{t('g4')}</button>
       <img src={img1} className={styles.gifImage} height={146} width={140} />
     </Guide>
