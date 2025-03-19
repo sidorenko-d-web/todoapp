@@ -1,11 +1,10 @@
 import { Skin, SpinePlugin } from '@esotericsoftware/spine-phaser';
-import { Dispatch, SetStateAction, memo, useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, memo, useCallback, useEffect, useRef, useState } from 'react';
 import {
   IEquipedRoomResponse,
   IShopItem,
   selectIsNeedToPlayHappy,
   selectIsWorking,
-  setAnimationSceneLoaded,
   setNeedToPlayHappy,
   TypeWearLocation,
 } from '../../../../redux';
@@ -31,8 +30,6 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setIsLoaded(false);
-
     if (!sceneRef.current || character?.isLoading) return;
     const width = sceneRef.current.offsetWidth;
     const contextProps = { equipped_items: room?.equipped_items, center: width / 2 };
@@ -60,10 +57,10 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
           this.createPerson(contextProps, isWorking);
         } catch (error: any) {
           if (error.message === 'add.spine') {
+            console.log('avoid err');
             setSize(prev => [prev[0] + 1, prev[1]]);
           }
         }
-
         // Разделение создания анимированных и статичных предметов
         room?.items.forEach(async (item, i) => {
           const animatedItem = findAnimatedItem(item);
@@ -78,11 +75,10 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
 
         spineSceneRef.current = this;
         this.changeSkin();
-        setIsLoaded(true);
-        dispatch(setAnimationSceneLoaded(true));
+        setTimeout(() => setIsLoaded(true), 5000);
       }
 
-      changeSkin(updatedCharacter?: ICharacterResponse) {
+      changeSkin() {
         if (!this.person) return;
         const allSkins = this.person.skeleton.data.skins;
         const face = allSkins.find(item => item.name.includes(getSkin('face') ?? 'лицо 1'))!;
@@ -100,20 +96,8 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
         skin.addSkin(skinColor);
 
         this.person.skeleton.setSkin(skin);
-
-        function getSkin(wear_location: TypeWearLocation) {
-          return (updatedCharacter ?? character?.data)?.skins
-            .find(item => item.wear_location === wear_location)
-            ?.name.toLowerCase();
-        }
       }
     }
-
-    const findAnimatedItem = (item: IShopItem) => {
-      let animatedItem = animated.find(_item => item.name === _item.name);
-      if (!animatedItem) animatedItem = animated.find(_item => item.name + item.item_premium_level === _item.name);
-      return animatedItem;
-    };
 
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
@@ -132,6 +116,7 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
     return () => {
       if (gameRef.current) {
         console.log('destroy');
+        setIsLoaded(false);
         gameRef.current.destroy(true);
         gameRef.current = null;
         spineSceneRef.current = null;
@@ -139,10 +124,23 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
     };
   }, [sceneRef, size, character?.isLoading]);
 
+  const getSkin = useCallback(
+    (wear_location: TypeWearLocation) => {
+      return character?.data?.skins.find(item => item.wear_location === wear_location)?.name.toLowerCase();
+    },
+    [character?.data],
+  );
+
+  const findAnimatedItem = useCallback((item: IShopItem) => {
+    let animatedItem = animated.find(_item => item.name === _item.name);
+    if (!animatedItem) animatedItem = animated.find(_item => item.name + item.item_premium_level === _item.name);
+    return animatedItem;
+  }, []);
+
   useEffect(() => {
     if (!spineSceneRef.current) return;
     spineSceneRef.current?.setCurrentLoopedAnimation(isWorking);
-  }, [isWorking, spineSceneRef.current, size]);
+  }, [isWorking]);
 
   useEffect(() => {
     if (!spineSceneRef.current) return;
@@ -153,7 +151,7 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
         if (isNeedToPlayHappy) spineSceneRef.current?.setIdle();
       }, 4000);
     }
-  }, [isNeedToPlayHappy, spineSceneRef.current]);
+  }, [isNeedToPlayHappy, dispatch]);
 
   return (
     <>

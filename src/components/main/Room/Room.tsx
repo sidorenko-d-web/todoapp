@@ -1,4 +1,10 @@
-import { useGetEquipedByIdQuery, useGetEquipedQuery, useGetProfileMeQuery } from '../../../redux';
+import {
+  useGetEquipedByIdQuery,
+  useGetEquipedQuery,
+  useGetProfileMeQuery,
+  useGetCharacterQuery,
+  useGetCharacterByIdQuery,
+} from '../../../redux';
 import { AnimationScene, Floor, Walls } from './partials';
 import styles from './partials/Partials.module.scss';
 import TreshinaRight from '../../../assets/images/start-room/treshina-right.svg';
@@ -6,7 +12,6 @@ import TreshinaLeft from '../../../assets/images/start-room/treshina-left.svg';
 import Shelf from '../../../assets/images/start-room/shelf.svg';
 import CoinIcon from '../../../assets/icons/coin.png';
 import { getAchivementType } from '../../../helpers';
-import { useGetCharacterByIdQuery, useGetCharacterQuery } from '../../../redux/api/character';
 import { useRoomItemsSlots } from '../../../../translate/items/items.ts';
 import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfileStats.ts';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -51,6 +56,7 @@ export const Room = ({ mode, strangerId }: props) => {
   const isDefaultWall = !(room ?? strangerRoom)?.equipped_items.find(item => item.slot === RoomItemsSlots.wall.slot);
 
   const [didIncreased, setDidIncreased] = useState(false);
+
   const playCoin = useCallback(() => {
     if (didIncreased && isLoaded) return;
     setDidIncreased(true);
@@ -61,24 +67,25 @@ export const Room = ({ mode, strangerId }: props) => {
 
   useEffect(() => {
     playCoin();
-  }, [displayedPoints, playCoin]);
+  }, [displayedPoints]);
 
   const isLoading = useMemo(
     () => !isLoaded || isStrangerLoading || isRoomLoading,
-    [isLoaded, isStrangerLoading, isRoomLoading]
+    [isLoaded, isStrangerLoading, isRoomLoading],
   );
 
   const isIntegrationPage = useLocation().pathname.includes('integrations');
 
   return (
     <div className={styles.room}>
+      {
+      isLoading && <Loader className={clsx(styles.loader, isIntegrationPage && styles.upper)} />}
       <AnimationScene
         setIsLoaded={setIsLoaded}
         room={room ?? strangerRoom}
         character={mode === 'me' ? character : strangerCharacter}
       />
 
-      {isLoading && <Loader className={clsx(styles.loader, isIntegrationPage && styles.upper)} />}
       <Walls room={room ?? strangerRoom} isLoading={isLoading} />
 
       {!isLoading && (
