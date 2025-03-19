@@ -19,7 +19,6 @@ import { useInventoryItemsFilter } from '../../../hooks';
 import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
 import {
-  integrationCreatingModalTabsGlowing,
   isGuideShown,
   setGuideShown,
 } from '../../../utils';
@@ -133,7 +132,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
       });
 
     setSelectedCompanyId("");
-
   };
 
   const noItemsMessage = (() => {
@@ -146,7 +144,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   // const lightningsGlowing = integrationCreatingModalLightningsGlowing();
 
-  const tabsGlowing = integrationCreatingModalTabsGlowing();
+  const tabsGlowing = !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
   //const [firstGuideClosed, setFirstGuideClosed] = useState(false);
 
   // useEffect(() => {
@@ -177,7 +175,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
       {isProfileLoading || isCompaniesLoading
         ? <Loader noMargin />
-        : <div className={s.content}>
+        : <div className={`${s.content}
+           ${!isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) ? s.visibleOverflow : ''}`}>
           <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
             {contentOptions.map((option, index) => (
               <span
@@ -194,7 +193,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             ))}
           </div>
 
-          <div className={s.scrollableContent}>
+          <div className={`${s.scrollableContent}
+           ${!isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) ? s.visibleOverflow : ''}`}>
             {uniqueCompany && !noItemsMessage && getPlanStageByUsersCount(total_users) >= 5 && (
               <SpecialIntegration
                 company={uniqueCompany}
@@ -244,7 +244,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                 eventPlace: 'В магазин - Главный экран - Окно создание интеграции',
               }}
               className={`${s.button} 
-              ${goToShopButtonGlowing ? s.glowingBtn : ''} `}
+              ${goToShopButtonGlowing ? s.glowing : ''} `}
               onClick={goToShop}
             >
               {t('i21')}

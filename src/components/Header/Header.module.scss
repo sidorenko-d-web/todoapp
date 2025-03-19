@@ -36,25 +36,10 @@ $header-border: 1px solid $color-header-border-dark;
 
   .headerOverlay {
     position: absolute;
-    inset: 0;
+    inset: -3px 0 0 0;
     border-radius: 10px;
     background-color: rgba(0, 0, 0, 0.9); // Dark overlay
     z-index: 1; // Place it behind the header content
-
-    &.ios {
-      //padding: calc(var(--tg-content-safe-area-inset-top) + 60px) 10px 0;
-      top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) - 32px);
-      left: calc(var(--tg-content-safe-area-inset-left) + 10px);
-      right: calc(var(--tg-content-safe-area-inset-right) + 10px);
-    }
-  
-    &.android {
-      //padding: calc(var(--tg-content-safe-area-inset-top) + 30px) 10px 0;
-      top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) - 35px);
-      left: calc(var(--tg-content-safe-area-inset-left) + 10px);
-      right: calc(var(--tg-content-safe-area-inset-right) + 10px);
-    }
-    
   }
 
 

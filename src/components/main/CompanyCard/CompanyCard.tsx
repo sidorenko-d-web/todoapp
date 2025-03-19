@@ -60,7 +60,8 @@ export const CompanyCard: FC<CompanyCardProps> = ({
 
   return (
     <Button
-      className={`${s.card} ${selected ? s.selected : ''} ${disabled ? s.disabled : ''} ${glowing ? s.glowing : ''}`}
+      className={`${s.card} ${selected ? s.selected : ''} ${disabled ? s.disabled : ''}
+         ${(glowing && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) ? s.glowing : ''}`}
       onClick={() => onClick && !disabled && onClick(company.id)}
     >
         <header className={s.header}>

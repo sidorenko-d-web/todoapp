@@ -68,8 +68,8 @@ export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose }) => {
                                 style={{ color: '#E0B01D' }}>{refBonus} {t('g28')}</span> {t('g29')}</span>}
                             </>
                           }
-                          onClose={onClose}>
-        <button className={styles.nextBtn} onClick={handleClose}>{`${t('g30')} ${'400'}`}<img src={coin} width={14}
+                          onClose={handleClose}>
+        <button className={styles.nextBtn} onClick={handleClose}>{`${t('g30')} ${bonus + refBonus}`}<img src={coin} width={14}
                                                                                               height={14} /></button>
         <img src={img1} className={styles.gifImage} height={146} width={140} />
       </Guide>}

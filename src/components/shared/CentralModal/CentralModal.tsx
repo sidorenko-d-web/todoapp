@@ -62,10 +62,15 @@ export const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
     backgroundColor: `rgba(0, 0, 0, ${overlayOpacity})`,
   };
 
+
   return (
-    <Overlay className={classNames(s.overlay, containerStyles)} style={overlayStyle}>
+    <Overlay className={classNames(s.overlay, containerStyles,
+      {[s.visibleOverflow] : !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)}
+    )} style={overlayStyle}>
       <Fade open>
-        <div className={classNames(s.modal, modalStyles)} onClick={e => e.stopPropagation()}>
+        <div className={classNames(s.modal, modalStyles, 
+          {[s.visibleOverflow] : !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)})}
+           onClick={e => e.stopPropagation()}>
           <div className={classNames({ [s.disabled]: disabled })}>
             <header className={classNames(s.header, headerStyles)}>
               <h2 className={s.title}>{title}{titleIcon &&

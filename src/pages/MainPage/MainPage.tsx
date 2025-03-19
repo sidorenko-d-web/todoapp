@@ -180,6 +180,7 @@ export const MainPage: FC = () => {
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
   useEffect(() => {
+    
     refetch().then(() => {
       if (data?.integrations[0].status === 'created') {
         reduxDispatch(setIntegrationReadyForPublishing(true));
@@ -227,8 +228,9 @@ export const MainPage: FC = () => {
     if (
       isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
       !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+      && !getModalState(MODALS.CREATING_INTEGRATION).isOpen
     ) {
-      //navigate(AppRoute.Shop);
+      navigate(AppRoute.Shop);
     }
 
     if (
@@ -260,11 +262,11 @@ export const MainPage: FC = () => {
       isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) &&
       !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)
     ) {
-      //navigate(AppRoute.Shop);
+      navigate(AppRoute.Shop);
     }
 
     if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
-      //navigate(AppRoute.ShopInventory);
+      navigate(AppRoute.ShopInventory);
     }
   }, []);
 
