@@ -26,7 +26,7 @@ export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose }) => {
     }, []);
 
     const { data: welcomeBonusData, isLoading: isBonusLoading, error } = useGetUserWelcomeBonusQuery(
-        { user_id: 12 },
+        { user_id: userData?.id! },
     );
 
     useEffect(() => {
@@ -55,10 +55,10 @@ export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose }) => {
                         {t('g25')}
                         <br />
                         <br />
-                        {t('g26')} <span style={{ color: '#E0B01D' }}>{t('g26_1')}</span> {t('g26_2')}
+                        {t('g26')} <span style={{ color: '#E0B01D' }}>{bonus} {t('g26_1')}</span> {t('g26_2')}
                         <br />
                         <br />
-                        {<span>{t('g27')} <span style={{ color: '#E0B01D' }}>{t('g28')}</span> {t('g29')}</span>}
+                        {<span>{t('g27')} <span style={{ color: '#E0B01D' }}>{refBonus} {t('g28')}</span> {t('g29')}</span>}
                     </>
                 }
                 onClose={onClose}>

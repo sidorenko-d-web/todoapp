@@ -20,15 +20,11 @@ export const usersApi = createApi({
       }),
     }),
     getUserWelcomeBonus: builder.query<GetUserWelcomeBonusDTO, GetUserWelcomeRequestDTO>({
-      query: (body) => ({
-        url: `/users/welcome-bonus`,
+      query: ({ user_id }) => ({
+        url: `/users/welcome-bonus?user_id=${user_id}`,
         method: 'GET',
-        body, // Ensure the body is included
-        headers: {
-          'Content-Type': 'application/json', // Explicitly set the content type
-        },
       }),
-    }),
+    }),    
   }),
 });
 
