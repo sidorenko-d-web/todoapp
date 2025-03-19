@@ -13,7 +13,7 @@ interface TransactionNotificationProps {
 }
 
 export const TransactionNotification: React.FC<TransactionNotificationProps> = ({ type, message, onRetry }) => {
-  const {t} = useTranslation('settings')
+  const {t} = useTranslation('transaction')
 
   return (
     <div className={styles.transactionIndicator}>
@@ -23,7 +23,7 @@ export const TransactionNotification: React.FC<TransactionNotificationProps> = (
       >
         {type === 'error' ? (
           <>
-            <span>{t('s9')}</span>
+            <span>{t('t2')}</span>
             <button onClick={onRetry} className={styles.retryButton}>
               <img src={refresh} alt="Retry transaction" />
             </button>

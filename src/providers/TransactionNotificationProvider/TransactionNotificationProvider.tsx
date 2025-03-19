@@ -87,20 +87,20 @@
 
 
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux';
 import { useUsdtTransactions } from '../../hooks';
-import { TransactionNotification } from '../../components';
+import { TransactionNotification } from '../../components/';
 import { 
   completeTransaction, 
   failTransaction, 
   hideNotification 
-} from '../../redux';
+} from '../../redux/slices';
 
 export const TransactionNotificationProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
   const dispatch = useDispatch();
-  const usdtTransactions = useUsdtTransactions();
+  const { transactions, checkTransaction, refreshTransactions } = useUsdtTransactions();
   const { 
     isVisible, 
     type, 
@@ -108,6 +108,8 @@ export const TransactionNotificationProvider: React.FC<{children: React.ReactNod
     currentTrxId, 
     retryFunction 
   } = useSelector((state: RootState) => state.transactionNotification);
+  
+  const [transactionCheckFailed, setTransactionCheckFailed] = useState(false);
 
   // Auto-hide success notification after 5 seconds
   useEffect(() => {
@@ -122,21 +124,66 @@ export const TransactionNotificationProvider: React.FC<{children: React.ReactNod
     };
   }, [isVisible, type, dispatch]);
 
-  // Monitor transaction status changes
+  // Monitor transaction status from transactions list
   useEffect(() => {
-    if (!currentTrxId) return;
+    if (!currentTrxId || !isVisible || type !== 'progress') return;
 
-    const latestTransaction = usdtTransactions.find(tx => tx.orderId === currentTrxId);
-    if (!latestTransaction) return;
-
-    if (latestTransaction.status === 'succeeded') {
-      dispatch(completeTransaction({ message: 'Transaction completed successfully!' }));
-    } else if (latestTransaction.status === 'failed') {
-      dispatch(failTransaction({}));
+    const foundTransaction = transactions.find(tx => tx.orderId === currentTrxId);
+    if (foundTransaction) {
+      if (foundTransaction.status === 'succeeded') {
+        dispatch(completeTransaction({ message: 'Transaction completed successfully!' }));
+        console.log("Transaction completed:", foundTransaction);
+      } else if (foundTransaction.status === 'failed') {
+        dispatch(failTransaction({}));
+        console.log("Transaction failed:", foundTransaction);
+      }
     }
-  }, [usdtTransactions, currentTrxId, dispatch]);
+  }, [transactions, currentTrxId, dispatch, isVisible, type]);
+
+  // Directly check transaction status when not found in the transactions list
+  useEffect(() => {
+    if (!currentTrxId || !isVisible || type !== 'progress' || transactionCheckFailed) return;
+
+    const checkInterval = setInterval(async () => {
+      try {
+        console.log("Directly checking transaction status for:", currentTrxId);
+        const transaction = await checkTransaction(currentTrxId);
+        
+        if (transaction) {
+          clearInterval(checkInterval);
+          
+          if (transaction.status === 'succeeded') {
+            dispatch(completeTransaction({ message: 'Transaction completed successfully!' }));
+            console.log("Transaction completed:", transaction);
+          } else if (transaction.status === 'failed') {
+            dispatch(failTransaction({}));
+            console.log("Transaction failed:", transaction);
+          }
+        } else {
+          // Manual refresh after check
+          await refreshTransactions();
+        }
+      } catch (error) {
+        console.error("Error checking transaction:", error);
+        setTransactionCheckFailed(true);
+        clearInterval(checkInterval);
+      }
+    }, 5000); // Check every 5 seconds
+
+    // Clear the interval after 2 minutes if transaction is not found
+    const timeoutId = setTimeout(() => {
+      clearInterval(checkInterval);
+      setTransactionCheckFailed(true);
+    }, 2 * 60 * 1000);
+
+    return () => {
+      clearInterval(checkInterval);
+      clearTimeout(timeoutId);
+    };
+  }, [currentTrxId, isVisible, type, checkTransaction, refreshTransactions, dispatch, transactionCheckFailed]);
 
   const handleRetry = () => {
+    setTransactionCheckFailed(false); // Reset the check failed state
     if (retryFunction) {
       retryFunction();
     }
@@ -150,21 +197,21 @@ export const TransactionNotificationProvider: React.FC<{children: React.ReactNod
     <>
       {children}
       {isVisible && (
-        <div style={{ 
-          position: 'fixed', 
-          bottom: '20px', 
-          left: '50%', 
-          transform: 'translateX(-50%)',
-          zIndex: 1000
-        }}>
+        // <div style={{ 
+        //   position: 'fixed', 
+        //   bottom: '20px', 
+        //   left: '50%', 
+        //   transform: 'translateX(-50%)',
+        //   zIndex: 1000
+        // }}>
           <TransactionNotification
             type={type}
             message={message}
             onClose={handleClose}
             onRetry={handleRetry}
           />
-        </div>
+        // </div>
       )}
     </>
   );
-};  
+};

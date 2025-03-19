@@ -125,39 +125,52 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   // }, [usdtTransactions, currentTrxId]);
 
 
-  const {
-    startTransaction,
-    failTransaction,
-    setCurrentTrxId
+  const { 
+    startTransaction, 
+    failTransaction, 
+    setCurrentTrxId 
   } = useTransactionNotification();
-
+  
   // For transactions
   const { sendUSDT } = useSendTransaction();
   const { walletAddress, connectWallet } = useTonConnect();
 
   const handleUsdtPayment = async () => {
     if (!walletAddress) {
-      const connected = await connectWallet();
-      if (!connected) {
-        setError('Wallet connection timed out');
-        failTransaction(handleUsdtPayment);
+      try {
+        const connected = await connectWallet();
+        if (!connected) {
+          setError('Wallet connection timed out');
+          return;
+        }
+      } catch (error) {
+        console.error("Error connecting wallet:", error);
+        setError('Failed to connect wallet');
         return;
       }
     }
 
-    openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
-
     try {
       setError('');
+      // Start the transaction notification
       startTransaction('Processing your payment...');
-
+      
+      console.log("Initiating USDT payment...");
       const trxId = await sendUSDT(1);
+      
       if (trxId) {
+        console.log("Transaction initiated with ID:", trxId);
         setCurrentTrxId(trxId);
+        
+        // After setting the transaction ID in the state, you could also manually
+        // push this "pending" transaction to your local state if needed
       } else {
+        console.error("Failed to get transaction ID");
         failTransaction(handleUsdtPayment);
       }
     } catch (error) {
+      console.error('Error while sending USDT transaction:', error);
+      setError('Transaction failed: ' + (error instanceof Error ? error.message : String(error)));
       failTransaction(handleUsdtPayment);
     }
   };
