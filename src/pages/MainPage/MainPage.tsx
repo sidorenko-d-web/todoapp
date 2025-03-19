@@ -51,20 +51,17 @@ export const MainPage: FC = () => {
     data,
     refetch,
     isLoading: isAllIntegrationsLoading,
-    isError: isIntegrationsError,
   } = useGetAllIntegrationsQuery();
 
   const [_, setRerender] = useState(0);
   //не убирать, нужно, чтобы гайды правильно отображались 
 
-  const [showGuide, setShowGuide] = useState(false);
-
 
   const [typewriterFound, setTypewriterFound] = useState(false);
+  
   const {
     data: itemsData,
     isLoading: isInventoryDataLoading,
-    isError: isInventoryFetchError,
   } = useGetInventoryItemsQuery();
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
