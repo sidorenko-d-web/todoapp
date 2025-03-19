@@ -4,6 +4,8 @@ import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import {
   integrationsApi,
   profileApi,
+  RootState,
+  setGoToShopBtnGlowing,
   setIntegrationCreated,
   setLastIntegrationId,
   useCreateIntegrationMutation,
@@ -11,18 +13,17 @@ import {
   useGetProfileMeQuery,
 } from '../../../redux';
 import { CompanyCard, SpecialIntegration } from '../';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useInventoryItemsFilter } from '../../../hooks';
 
 import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
 import {
-  integrationCreatingModalButtonGlowing,
   integrationCreatingModalTabsGlowing,
   isGuideShown,
   setGuideShown,
 } from '../../../utils';
-import { AppRoute, GUIDE_ITEMS, total_users } from '../../../constants';
+import {  GUIDE_ITEMS, total_users } from '../../../constants';
 import { CreatingIntegrationGuide, Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
 import { CentralModal } from '../../shared/';
@@ -66,7 +67,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   // const integrationPublished = isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
-
+  const goToShopButtonGlowing = useSelector((state: RootState) => state.guide.goToShopBtnGlowing);
 
   const loadingTexts = [
     t("i35"),
@@ -146,9 +147,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   // const lightningsGlowing = integrationCreatingModalLightningsGlowing();
 
   const tabsGlowing = integrationCreatingModalTabsGlowing();
-
-  const buttonGlowing = integrationCreatingModalButtonGlowing();
-
   //const [firstGuideClosed, setFirstGuideClosed] = useState(false);
 
   // useEffect(() => {
@@ -170,7 +168,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           if (!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)) {
             setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
             setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-            navigate(AppRoute.Shop);
+            //navigate(AppRoute.Shop);
           }
         }}
       headerStyles={s.headerStyles}
@@ -208,7 +206,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             )}
 
             {!noItemsMessage ? (
-              <div className={s.companies}>
+              <div className={`${s.companies} 
+                ${!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) ? s.firstIntegration : ''}`}>
                 {companies
                   ?.filter((_, index) => integrationPublished || index === 1)
                   .map((company) =>
@@ -239,12 +238,13 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             }
 
             {noItemsMessage && <TrackedButton
+              disabled={!goToShopButtonGlowing && !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)}
               trackingData={{
                 eventType: 'button',
                 eventPlace: 'В магазин - Главный экран - Окно создание интеграции',
               }}
               className={`${s.button} 
-            ${buttonGlowing ? s.glowingBtn : ''} `}
+              ${goToShopButtonGlowing ? s.glowingBtn : ''} `}
               onClick={goToShop}
             >
               {t('i21')}
@@ -290,8 +290,9 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         onClose={() => {
           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
           setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-          onClose();
-          navigate(AppRoute.Shop);
+          dispatch(setGoToShopBtnGlowing(true));
+          //onClose();
+          //navigate(AppRoute.Shop);
         }}
         buttonText={tGuide('g21')}
         description={

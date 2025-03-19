@@ -7,6 +7,8 @@ import closeIcon from '../../../assets/icons/close.svg';
 import { Button } from '..';
 import { isGuideShown } from '../../../utils';
 import { GUIDE_ITEMS } from '../../../constants';
+import { useDispatch } from 'react-redux';
+import { setDimHeader } from '../../../redux';
 
 interface CentralModalProps {
   modalId: string;
@@ -37,6 +39,9 @@ export const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
   const { getModalState } = useModal();
   const { isOpen } = getModalState(modalId);
 
+  const dispatch = useDispatch();
+
+  
   useEffect(() => {
     if (isOpen && !disableScrollLock) {
       document.body.style.overflow = 'hidden';
@@ -44,6 +49,12 @@ export const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
       document.body.style.overflow = 'auto';
     }
   }, [isOpen]);
+
+
+    useEffect(() => {
+      dispatch(setDimHeader(false));
+    }, []);
+    
 
   if (!isOpen) return null;
 
@@ -61,7 +72,10 @@ export const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
                 <img src={titleIcon} alt={'title'} width={18} height={18} />}</h2>
 
                 {isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) &&
-                <Button className={s.closeBtn} onClick={onClose}>
+                <Button className={s.closeBtn} onClick={() => {
+                  dispatch(setDimHeader(false));
+                  onClose();
+                }}>
                   <img src={closeIcon} alt={'Close'} />
                 </Button>}
                 

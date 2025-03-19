@@ -4,7 +4,6 @@ import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants/modals.ts';
 import {
   RootState,
-  useClaimRewardForIntegrationMutation,
   useGetAllIntegrationsQuery,
   useGetIntegrationQuery,
   useGetIntegrationsQuery,
@@ -30,7 +29,7 @@ export const PublishIntegrationButton: React.FC = () => {
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
   const [publishIntegration] = usePublishIntegrationMutation();
-  const [claimRewardForIntegration] = useClaimRewardForIntegrationMutation();
+  //const [claimRewardForIntegration] = useClaimRewardForIntegrationMutation();
 
   const { data, refetch } = useGetAllIntegrationsQuery();
   const [isPublishing, setIsPublishing] = useState(false);
@@ -117,10 +116,11 @@ export const PublishIntegrationButton: React.FC = () => {
 
       const publishRes = await publishIntegration(integrationIdToPublish);
       if (!publishRes.error) {
-        const rewardRes = await claimRewardForIntegration(integrationIdToPublish);
+        //const rewardRes = await claimRewardForIntegration(integrationIdToPublish);
 
-        if (!rewardRes.error) {
-          const company = publishRes.data.campaign;
+        const company = integrationData?.campaign.company_name;
+        if (true) {
+          //const company = publishRes.data.campaign;
           const { base_income, base_views, base_subscribers } = publishRes.data;
 
           openModal(MODALS.INTEGRATION_REWARD, {
@@ -129,11 +129,7 @@ export const PublishIntegrationButton: React.FC = () => {
             base_views,
             base_subscribers,
           });
-        } else {
-          if (canShowIntegrationReward && isPublishedModalClosed) {
-            openCongratsModal();
-          }
-        }
+        } 
       }
     } catch (error) {
       console.error('Failed to publish integration:', error);

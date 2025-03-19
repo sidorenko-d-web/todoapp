@@ -1,11 +1,12 @@
 import styles from './Footer.module.scss';
-import { AppRoute, footerItems, GUIDE_ITEMS } from '../../constants';
+import { AppRoute, footerItems, GUIDE_ITEMS, MODALS } from '../../constants';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux';
 import { TrackedButton } from '..';
 import { isGuideShown } from '../../utils';
+import { useModal } from '../../hooks';
 
 export const Footer = () => {
   const navigate = useNavigate();
@@ -38,8 +39,25 @@ export const Footer = () => {
     }
   }, [hasInitialized, isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)]);
 
+  const dim = useSelector((state: RootState) => state.guide.dimHeader);
+
+  const { getModalState } = useModal();
+
+
+  const darken = (dim && !getModalState(MODALS.SUBSCRIBE).isOpen && 
+  !getModalState(MODALS.CREATING_INTEGRATION).isOpen);
+
+  const darken2 = isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) 
+  && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+
+  const darken3 = isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+
+
   return (
-    <div className={styles.footerItems}>
+    <div className={`${styles.footerItems} ${(darken || darken2 || darken3) ? styles.darken : ''}`}>
+
+      {(darken || darken2 || darken3) && <div className={styles.footerOverlay} />}
+
       {footerItems.map((item) => {
         const isActive = activeButton === item.id;
 

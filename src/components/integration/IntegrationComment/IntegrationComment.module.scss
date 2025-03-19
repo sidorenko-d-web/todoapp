@@ -126,7 +126,9 @@
 }
 
 .elevated {
-  z-index: 10000;
+  position: fixed;
+  width: 92vw;
+  z-index: 15000;
   border: 2px solid var.$color-primary;
   box-shadow: 0px 0px 50px var.$color-blue-primary;
 }

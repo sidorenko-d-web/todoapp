@@ -12,13 +12,13 @@ import {
   useGetTreeInfoWithPollingQuery,
 } from '../../redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AppRoute, MODALS, PROFILE_ME_POLLING_INTERVAL, TREE_POLLING_INTERVAL } from '../../constants';
+import { AppRoute, GUIDE_ITEMS, MODALS, PROFILE_ME_POLLING_INTERVAL, TREE_POLLING_INTERVAL } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { TrackedLink } from '../withTracking';
-import { getOS } from '../../utils';
+import { getOS, isGuideShown } from '../../utils';
 import { useModal, usePushLineStatus } from '../../hooks';
 import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
 import classNames from 'classnames';
@@ -92,12 +92,24 @@ export const Header = () => {
 
   const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
 
+  const dim = useSelector((state: RootState) => state.guide.dimHeader);
+
   const showHeaderBG =
     !['/', '/progressTree'].includes(location) &&
     !(location.split('/')[1] === 'profile' && location.split('/')[3] === 'room');
 
+  const darken = (dim && !getModalState(MODALS.SUBSCRIBE).isOpen &&
+    !getModalState(MODALS.CREATING_INTEGRATION).isOpen);
+
+  const darken2 = isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)
+    && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+
+  const darken3 = isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+
   return (
     <>
+
+
       <header
         className={classNames(
           styles.header,
@@ -105,7 +117,11 @@ export const Header = () => {
           platform ? styles[platform] : '',
         )}
       >
-        {showHeaderBG && <div className={styles.headerBG} />}
+
+        {(darken || darken2 || darken3) && <div className={styles.headerOverlay}></div>}
+
+
+        {showHeaderBG && <div className={`${styles.headerBG} ${(darken || darken2 || darken3) ? styles.darken : ''}`} />}
 
         {!isLoading && (
           <div className={styles.lowerHeader}>

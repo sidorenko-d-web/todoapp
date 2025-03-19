@@ -10,3 +10,12 @@ export type GetUserDTO = {
     is_email_verified: boolean,
     is_phone_verified: boolean,
 }
+
+export type GetUserWelcomeBonusDTO = {
+    welcome_bonus: string,
+    referrer_bonus: string
+}
+
+export type GetUserWelcomeRequestDTO = {
+    user_id: number;
+}
