@@ -87,41 +87,41 @@ export const MainPage: FC = () => {
   //   }
   // }, [isIntegrationsError, isInventoryFetchError, isAllIntegrationsLoading, isInventoryDataLoading]);
 
-  useEffect(() => {
-    if (itemsData && !isInventoryDataLoading) {
-      let found = false;
+  // useEffect(() => {
+  //   if (itemsData && !isInventoryDataLoading) {
+  //     let found = false;
 
-      itemsData.items.forEach(item => {
-        if (item.name.toLowerCase().trim() === 'печатная машинка') {
-          setTypewriterFound(true);
-          found = true;
+  //     itemsData.items.forEach(item => {
+  //       if (item.name.toLowerCase().trim() === 'печатная машинка') {
+  //         setTypewriterFound(true);
+  //         found = true;
 
-          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
-          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+  //         setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
 
-          setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
-          setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+  //         setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
+  //         setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
+  //         setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
 
-          reduxDispatch(resetGuideState());
-        }
-      });
+  //         reduxDispatch(resetGuideState());
+  //       }
+  //     });
 
-      if (!found) {
-        Object.entries(GUIDE_ITEMS).forEach(([items]) => {
-          Object.entries(items).forEach(([_, value]) => {
-            localStorage.setItem(value, '0');
-          });
-        });
-      }
-    }
-  }, [itemsData, isInventoryDataLoading, typewriterFound]);
+  //     if (!found) {
+  //       Object.entries(GUIDE_ITEMS).forEach(([items]) => {
+  //         Object.entries(items).forEach(([_, value]) => {
+  //           localStorage.setItem(value, '0');
+  //         });
+  //       });
+  //     }
+  //   }
+  // }, [itemsData, isInventoryDataLoading, typewriterFound]);
 
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
@@ -283,14 +283,7 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(2));
   }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowGuide(true);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []); 
-
+ 
   const isLoading =
     isAllIntegrationsLoading ||
     isCurrentUserProfileInfoLoading ||
@@ -299,6 +292,15 @@ export const MainPage: FC = () => {
     isInventoryDataLoading;
 
   if (isLoading) return <Loader />;
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setShowGuide(true);
+  //   }, 2500);
+  //   return () => clearTimeout(timer);
+
+  // }, []); 
+
 
   const accelerateIntegration = () => {
     if (integrationCurrentlyCreating) {
