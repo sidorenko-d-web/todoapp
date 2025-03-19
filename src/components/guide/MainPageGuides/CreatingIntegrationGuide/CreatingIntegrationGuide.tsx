@@ -1,8 +1,10 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import styles from './CreatingIntegrationGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
 import { Guide } from "../../Guide/Guide";
+import { useDispatch } from "react-redux";
+import { setDimHeader } from "../../../../redux";
 
 interface CreatingIntegrationGuideProps {
     onClose: () => void;
@@ -14,7 +16,14 @@ interface CreatingIntegrationGuideProps {
 export const CreatingIntegrationGuide: React.FC<CreatingIntegrationGuideProps> = ({ onClose, description, buttonText, align, top}) => {
     const [isOpen, setIsOpen] = useState(true);
 
+    const dispatch = useDispatch();
+
+    // useEffect(() => {
+    //     dispatch(setDimHeader(true));
+    // }, []);
+    
     const handleClose = () => {
+        dispatch(setDimHeader(false));
         onClose();
         setIsOpen(false);
     };
