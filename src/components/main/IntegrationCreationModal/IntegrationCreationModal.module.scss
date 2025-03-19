@@ -40,6 +40,11 @@
     overflow-x: hidden;
 
     overflow-y: auto;
+
+    &.visibleOverflow {
+      overflow: visible;
+    }
+    
     &::-webkit-scrollbar {
       width: 6px;
     }
