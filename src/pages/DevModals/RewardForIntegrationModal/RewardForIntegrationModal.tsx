@@ -5,7 +5,6 @@ import Button from '../partials/Button';
 import coin from '../../../assets/icons/coin.png';
 import views from '../../../assets/icons/views.png';
 import subscribers from '../../../assets/icons/subscribers.png';
-import integration from '../../../assets/icons/integration-blue.svg';
 import starBlue from '../../../assets/icons/star-blue.svg';
 import starGray from '../../../assets/icons/star-dark-gray.svg';
 // import lightning from '../../../assets/icons/lightning.svg';
@@ -36,7 +35,7 @@ export default function RewardForIntegrationModal() {
     base_subscribers: string;
     base_views: string;
   }>(MODALS.INTEGRATION_REWARD);
-  const { data: integrationsData } = useGetIntegrationsQuery({ company_name: args?.company.company_name });
+  const { data: integrationsData } = useGetIntegrationsQuery({ company_name: args?.company?.company_name });
   const integrationCount = integrationsData?.count ?? 0;
   const dispatch = useDispatch();
 
@@ -92,7 +91,7 @@ export default function RewardForIntegrationModal() {
       <div className={styles.wrapper}>
         <div className={styles.info}>
           <div className={styles.top}>
-            <img className={styles.integration} src={args?.company.image_url ?? integration} />
+            <img className={styles.integration} src={args?.company.image_url} alt='image' />
           </div>
           <div className={styles.bottom}>
             <h2 className={styles.title}>{args?.company.company_name}</h2>

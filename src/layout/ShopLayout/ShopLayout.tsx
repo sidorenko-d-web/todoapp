@@ -40,14 +40,14 @@ interface Props {
 }
 
 export const ShopLayout: FC<PropsWithChildren<Props>> = ({
-                                                           children,
-                                                           onItemCategoryChange,
-                                                           onItemQualityChange,
-                                                           mode,
-                                                         }) => {
+  children,
+  onItemCategoryChange,
+  onItemQualityChange,
+  mode,
+}) => {
   const lastOpenedTab = useSelector((state: RootState) => state.shop.lastOpenedTab);
   const lastOpenedRarity = useSelector((state: RootState) => state.shop.lastOpenedRarity);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const { t } = useTranslation('shop');
   const shopItemCategories = [
@@ -62,15 +62,16 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     { title: `${t('s15')}`, value: 'yellow' },
     { title: `${t('s16')}`, value: 'green' },
   ];
-  const [ shopCategory, setShopCategory ] = useState(lastOpenedTab || shopItemCategories[0]);
-  const [ itemsQuality, setItemsQuality ] = useState(lastOpenedRarity || shopItemRarity[0]);
+  const [shopCategory, setShopCategory] = useState(lastOpenedTab || shopItemCategories[0]);
+  const [itemsQuality, setItemsQuality] = useState(lastOpenedRarity || shopItemRarity[0]);
 
-  const [ _, setRerender ] = useState(0);
+  const [_, setRerender] = useState(0);
 
   const { data: inventory, isSuccess } = useGetInventoryItemsQuery({});
   const { data: shop } = useGetShopItemsQuery({
     level: 1,
     item_category: shopCategory.value as TypeItemCategory,
+    is_bought: true,
   });
   const { data: boost } = useGetCurrentUserBoostQuery();
 
@@ -85,11 +86,11 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
     onItemQualityChange(itemsQuality as TypeTab<TypeItemRarity>);
     dispatch(setLastOpenedRarity(itemsQuality));
-  }, [ shopCategory, itemsQuality ]);
+  }, [shopCategory, itemsQuality]);
 
   const navigate = useNavigate();
 
-  const itemsInTabs = useMemo(() => itemsInTab(shop?.items, inventory?.items, mode === 'inventory'), []);
+  const itemsInTabs = useMemo(() => itemsInTab(shop?.items, inventory?.items), []);
 
   const tabs = useMemo(() => {
     const _tabs = [];
@@ -103,14 +104,14 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const inventoryTabs = useMemo(() => {
     const _inventoryTabs = [];
     isSuccess &&
-    inventory?.items.find(item => item.item_rarity === 'red' && item.item_category === shopCategory.value) &&
-    _inventoryTabs.push(shopItemRarity[0]);
+      inventory?.items.find(item => item.item_rarity === 'red' && item.item_category === shopCategory.value) &&
+      _inventoryTabs.push(shopItemRarity[0]);
     isSuccess &&
-    inventory?.items.find(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value) &&
-    _inventoryTabs.push(shopItemRarity[1]);
+      inventory?.items.find(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value) &&
+      _inventoryTabs.push(shopItemRarity[1]);
     isSuccess &&
-    inventory?.items.find(item => item.item_rarity === 'green' && item.item_category === shopCategory.value) &&
-    _inventoryTabs.push(shopItemRarity[2]);
+      inventory?.items.find(item => item.item_rarity === 'green' && item.item_category === shopCategory.value) &&
+      _inventoryTabs.push(shopItemRarity[2]);
 
     return _inventoryTabs;
   }, []);
@@ -127,7 +128,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     setItemsQuality(shopItemRarity[0]);
-  }, [ shopCategory ]);
+  }, [shopCategory]);
 
   const reduxDispatch = useDispatch();
 
@@ -137,14 +138,14 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const statsGlowing = useSelector((state: RootState) => state.guide.getShopStatsGlowing);
 
-  const isTabsNotEmpty = [ ...(itemsInTabs.green ?? []), ...(itemsInTabs.yellow ?? []) ].length > 0;
+  const isTabsNotEmpty = [...(itemsInTabs.green ?? []), ...(itemsInTabs.yellow ?? [])].length > 0;
+
+  // useEffect(() => {
+  //   console.info('shopCategory:', shopCategory.value);
+  // }, [ shopCategory ]);
 
   useEffect(() => {
-    console.info('shopCategory:', shopCategory.value);
-  }, [ shopCategory ]);
-
-  useEffect(() => {
-    if(!dimSet) {
+    if (!dimSet) {
       setDimSet(true);
     }
     const timer = setTimeout(() => {
@@ -205,9 +206,11 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
                   <img src={SubscriberCoin} />
                   <p>/{t('s12')}.</p>
                 </div>
-                <div className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${
-                  statsGlowing ? styles.glowing : ''
-                }`}>
+                <div
+                  className={`${styles.scoresItem} ${statsGlowing ? styles.elevatedBordered : ''} ${
+                    statsGlowing ? styles.glowing : ''
+                  }`}
+                >
                   <p>+{formatAbbreviation(boost.income_per_second)}</p>
                   <img src={CoinIcon} />
                   <p>/{t('s13')}.</p>
@@ -237,8 +240,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
                 itemsQuality.title === t('s14')
                   ? 'tabItemSelectedBlue'
                   : itemsQuality.title === t('s15')
-                    ? 'tabItemSelectedPurple'
-                    : 'tabItemSelectedRed'
+                  ? 'tabItemSelectedPurple'
+                  : 'tabItemSelectedRed'
               }
               tabs={mode === 'shop' ? tabs : inventoryTabs}
               currentTab={itemsQuality.title}
@@ -249,36 +252,43 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         {children}
       </div>
 
-      {(!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) && mode === 'shop' && showWelcomeGuide) && (
+      {!isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) && mode === 'shop' && showWelcomeGuide && (
         <WelcomeToShopGuide
           onClose={() => {
-
             reduxDispatch(setShopStatsGlowing(false));
             reduxDispatch(setBuyItemButtonGlowing(true));
             setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
-            setRerender((prev) => prev + 1);
+            setRerender(prev => prev + 1);
           }}
         />
       )}
 
-      {(isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
-        && !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) && (
-        <div style={{
-          position: 'fixed', width: '100%', height: '120vh', top: '0', left: '0',
-          backgroundColor: 'rgba(0, 0, 0, 0.7)', pointerEvents: 'none', zIndex: '1500',
-        }} />
-      )}
-
+      {isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) &&
+        !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && (
+          <div
+            style={{
+              position: 'fixed',
+              width: '100%',
+              height: '120vh',
+              top: '0',
+              left: '0',
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              pointerEvents: 'none',
+              zIndex: '1500',
+            }}
+          />
+        )}
 
       {(useSelector((state: RootState) => state.guide.itemBought) || isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)) &&
         isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) &&
         !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
-        mode === 'inventory' && showBackToMainGuide && (
+        mode === 'inventory' &&
+        showBackToMainGuide && (
           <BackToMainPageGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
               navigate(AppRoute.Main);
-              setRerender((prev) => prev + 1);
+              setRerender(prev => prev + 1);
             }}
           />
         )}
@@ -291,7 +301,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
-              setRerender((prev) => prev + 1);
+              setRerender(prev => prev + 1);
             }}
           />
         )}
@@ -304,7 +314,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
               navigate(AppRoute.ProgressTree);
-              setRerender((prev) => prev + 1);
+              setRerender(prev => prev + 1);
             }}
           />
         )}
