@@ -49,8 +49,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const lastOpenedRarity = useSelector((state: RootState) => state.shop.lastOpenedRarity);
   const dispatch = useDispatch()
 
-  console.log(lastOpenedTab);
-
   const { t } = useTranslation('shop');
   const shopItemCategories = [
     { title: `${t('s2')}`, value: 'text' },
@@ -135,11 +133,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const statsGlowing = useSelector((state: RootState) => state.guide.getShopStatsGlowing);
 
   const isTabsNotEmpty = [ ...(itemsInTabs.green ?? []), ...(itemsInTabs.yellow ?? []) ].length > 0;
-
-
-  useEffect(() => {
-    console.info('shopCategory:', shopCategory.value);
-  }, [ shopCategory ]);
 
   return (
     <>

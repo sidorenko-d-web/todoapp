@@ -18,7 +18,6 @@ const TabsNavigation: FC<Props> = ({ tabs, currentTab, onChange, colorClass }) =
       {tabs.map((item, index) => {
         const handleClick = () => {
           if(isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
-            console.info('change to:', item.value);
             onChange(item);
           }
         };
