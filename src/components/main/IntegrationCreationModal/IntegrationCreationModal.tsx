@@ -19,7 +19,6 @@ import { useInventoryItemsFilter } from '../../../hooks';
 import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
 import {
-  integrationCreatingModalTabsGlowing,
   isGuideShown,
   setGuideShown,
 } from '../../../utils';
@@ -146,7 +145,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   // const lightningsGlowing = integrationCreatingModalLightningsGlowing();
 
-  const tabsGlowing = integrationCreatingModalTabsGlowing();
+  const tabsGlowing = !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
   //const [firstGuideClosed, setFirstGuideClosed] = useState(false);
 
   // useEffect(() => {
@@ -177,7 +176,8 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
       {isProfileLoading || isCompaniesLoading
         ? <Loader noMargin />
-        : <div className={s.content}>
+        : <div className={`${s.content}
+           ${!isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) ? s.visibleOverflow : ''}`}>
           <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
             {contentOptions.map((option, index) => (
               <span

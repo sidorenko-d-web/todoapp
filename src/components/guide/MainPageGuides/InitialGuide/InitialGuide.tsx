@@ -36,7 +36,7 @@ export const InitialGuide: React.FC<InitialGuideProps> = ({ onClose }) => {
         return null;
     } 
     const handleClose = () => {
-        dispatch(setDimHeader(false));
+        //dispatch(setDimHeader(false));
         onClose();
         setIsOpen(false);
     };

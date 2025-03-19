@@ -26,15 +26,15 @@ export const SubscrieGuide: React.FC<CreateIntegrationGuideProps> = ({
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN)) {
-            dispatch(setDimHeader(false));
+        if (isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)) {
+            dispatch(setDimHeader(true));
         }
     }, []);
 
     const handleClose = () => {
         setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
         onClose();
-        //dispatch(setDimHeader(true));
+        dispatch(setDimHeader(false));
         setIsOpen(false);
     };
 
@@ -71,7 +71,7 @@ export const SubscrieGuide: React.FC<CreateIntegrationGuideProps> = ({
             description={description}
             top={top}
             onClose={handleClose}
-            dimBackground={false}
+            dimBackground={top==='50%' ? true : false}
             noButton={true}
         >
             <img src={img1} className={styles.image} height={146} width={140} />

@@ -99,7 +99,7 @@ export const Header = () => {
     !(location.split('/')[1] === 'profile' && location.split('/')[3] === 'room');
 
   const darken = (dim && !getModalState(MODALS.SUBSCRIBE).isOpen &&
-    !getModalState(MODALS.CREATING_INTEGRATION).isOpen);
+    !getModalState(MODALS.CREATING_INTEGRATION).isOpen) && !getModalState(MODALS.SUCCESSFULLY_SUBSCRIBED).isOpen;
 
   const darken2 = isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)
     && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
