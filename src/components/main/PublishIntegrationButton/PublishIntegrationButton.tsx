@@ -4,7 +4,6 @@ import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants/modals.ts';
 import {
   RootState,
-  useClaimRewardForIntegrationMutation,
   useGetAllIntegrationsQuery,
   useGetIntegrationQuery,
   useGetIntegrationsQuery,

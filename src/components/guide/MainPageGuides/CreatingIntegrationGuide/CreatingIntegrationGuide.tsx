@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import styles from './CreatingIntegrationGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
