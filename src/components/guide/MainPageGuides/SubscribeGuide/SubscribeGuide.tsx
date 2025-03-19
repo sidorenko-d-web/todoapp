@@ -34,7 +34,7 @@ export const SubscrieGuide: React.FC<CreateIntegrationGuideProps> = ({
     const handleClose = () => {
         setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
         onClose();
-        dispatch(setDimHeader(true));
+        //dispatch(setDimHeader(true));
         setIsOpen(false);
     };
 

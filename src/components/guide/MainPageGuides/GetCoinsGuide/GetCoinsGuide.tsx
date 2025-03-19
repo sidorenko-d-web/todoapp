@@ -22,8 +22,11 @@ export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(setDimHeader(true));
-    }, []);
+        if(userData) {
+            dispatch(setDimHeader(true));
+        }
+        //dispatch(setDimHeader(true));
+    }, [userData, isUserLoading]);
 
     const { data: welcomeBonusData, isLoading: isBonusLoading, error } = useGetUserWelcomeBonusQuery(
         { user_id: userData?.id! },
