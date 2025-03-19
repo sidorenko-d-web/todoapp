@@ -26,8 +26,7 @@ export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose }) => {
     }, []);
 
     const { data: welcomeBonusData, isLoading: isBonusLoading, error } = useGetUserWelcomeBonusQuery(
-        { user_id: userData?.id || 0 },
-        { skip: !userData } 
+        { user_id: 12 },
     );
 
     useEffect(() => {

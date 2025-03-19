@@ -56,6 +56,9 @@ export const MainPage: FC = () => {
   const [_, setRerender] = useState(0);
   //не убирать, нужно, чтобы гайды правильно отображались 
 
+  const [showGuide, setShowGuide] = useState(false);
+
+
   const [typewriterFound, setTypewriterFound] = useState(false);
   const {
     data: itemsData,
@@ -272,6 +275,14 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(2));
   }, []);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowGuide(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []); 
+
   const isLoading =
     isAllIntegrationsLoading ||
     isCurrentUserProfileInfoLoading ||
@@ -290,6 +301,7 @@ export const MainPage: FC = () => {
   return (
     <main className={s.page} onClick={accelerateIntegration}>
       <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
+
       {integrationCurrentlyCreating && (
         <div
           style={{
@@ -326,7 +338,7 @@ export const MainPage: FC = () => {
         />
       )}
 
-      {true && (
+      {showGuide && (
         <InitialGuide
           onClose={() => {
             setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
@@ -368,6 +380,17 @@ export const MainPage: FC = () => {
             }}
           />
         )}
+
+{/* <GetCoinsGuide
+            onClose={() => {
+              reduxDispatch(setGetCoinsGuideShown(true));
+              setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+              setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+              setRerender((prev) => prev+1);
+              openModal(MODALS.SUBSCRIBE);
+            }}
+          /> */}
+
 
       {integrationCurrentlyCreating &&
         !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED) && (

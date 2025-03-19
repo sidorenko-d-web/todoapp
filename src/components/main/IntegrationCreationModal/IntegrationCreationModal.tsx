@@ -4,6 +4,7 @@ import integrationWhiteIcon from '../../../assets/icons/integration-white.svg';
 import {
   integrationsApi,
   profileApi,
+  RootState,
   setIntegrationCreated,
   setLastIntegrationId,
   useCreateIntegrationMutation,
@@ -11,13 +12,12 @@ import {
   useGetProfileMeQuery,
 } from '../../../redux';
 import { CompanyCard, SpecialIntegration } from '../';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useInventoryItemsFilter } from '../../../hooks';
 
 import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
 import {
-  integrationCreatingModalButtonGlowing,
   integrationCreatingModalTabsGlowing,
   isGuideShown,
   setGuideShown,
@@ -66,7 +66,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   // const integrationPublished = isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
-
+  const goToShopButtonGlowing = useSelector((state: RootState) => state.guide.goToShopBtnGlowing);
 
   const loadingTexts = [
     t("i35"),
@@ -146,9 +146,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   // const lightningsGlowing = integrationCreatingModalLightningsGlowing();
 
   const tabsGlowing = integrationCreatingModalTabsGlowing();
-
-  const buttonGlowing = integrationCreatingModalButtonGlowing();
-
   //const [firstGuideClosed, setFirstGuideClosed] = useState(false);
 
   // useEffect(() => {
@@ -240,12 +237,13 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             }
 
             {noItemsMessage && <TrackedButton
+              disabled={!isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)}
               trackingData={{
                 eventType: 'button',
                 eventPlace: 'В магазин - Главный экран - Окно создание интеграции',
               }}
               className={`${s.button} 
-            ${(buttonGlowing && isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN)) ? s.glowingBtn : ''} `}
+              ${goToShopButtonGlowing ? s.glowingBtn : ''} `}
               onClick={goToShop}
             >
               {t('i21')}
