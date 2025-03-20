@@ -244,3 +244,13 @@
   bottom: -5px;
   pointer-events: none;
 }
+
+.progressBarWithGuide {
+  z-index: 30000;
+  background-color: transparent;
+  border: none;
+}
+
+.progressFillWithGuide {
+  visibility: hidden;
+}

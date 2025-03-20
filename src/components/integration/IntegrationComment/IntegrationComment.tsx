@@ -51,7 +51,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
   };
 
   return (
-    <div className={`${styles.wrp} ${elevateComment ? styles.elevated : ''}`}>
+    <div className={`${styles.wrp} ${true ? styles.elevated : ''}`}>
       {!finished ? (
         <div className={styles.usernameAndComment}>
           <p className={styles.username}>{author_username}:</p>

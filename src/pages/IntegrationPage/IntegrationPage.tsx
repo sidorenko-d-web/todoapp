@@ -104,6 +104,11 @@ export const IntegrationPage: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
+
+  // useEffect(() => {
+  //   window.scrollTo(0, document.body.scrollHeight);
+  // }, []);
+
   const isLoading = isIntegrationLoading || isUnansweredIntegrationCommentLoading;
 
   if (isLoading) return <Loader />;
@@ -133,26 +138,29 @@ export const IntegrationPage: React.FC = () => {
               </div>
             </div>
             <Integration />
-            <IntegrationStats
-              views={data.views}
-              income={data.income}
-              subscribers={data.subscribers}
-              futureStatistics={data.future_statistics}
-              lastUpdatedAt={data.updated_at}
-            />
-            <div className={styles.commentsSectionTitleWrp}>
-              <p className={styles.commentsSectionTitle}>{t('i4')}</p>
-              <p className={styles.commentsAmount}>
-                {data.comments_generated}/{20}
-              </p>
-            </div>
-            <IntegrationComment
-              progres={data.comments_answered_correctly % 5}
-              {...comments[currentCommentIndex]}
-              onVote={handleVote}
-              hateText={commentData?.is_hate}
-              finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
-            />
+            {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+              <>
+                <IntegrationStats
+                  views={data.views}
+                  income={data.income}
+                  subscribers={data.subscribers}
+                  futureStatistics={data.future_statistics}
+                  lastUpdatedAt={data.updated_at}
+                />
+                <div className={styles.commentsSectionTitleWrp}>
+                  <p className={styles.commentsSectionTitle}>{t('i4')}</p>
+                  <p className={styles.commentsAmount}>
+                    {data.comments_generated}/{20}
+                  </p>
+                </div>
+                <IntegrationComment
+                  progres={data.comments_answered_correctly % 5}
+                  {...comments[currentCommentIndex]}
+                  onVote={handleVote}
+                  hateText={commentData?.is_hate}
+                  finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
+                /></>
+            }
           </div>
         </>
       )}
@@ -165,6 +173,14 @@ export const IntegrationPage: React.FC = () => {
           }}
         />
       )}
+
+      <IntegrationPageGuide
+        onClose={() => {
+          setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+          dispatch(setElevateIntegrationStats(false));
+          dispatch(setDimHeader(false));
+        }}
+      />
     </div>
   );
 };

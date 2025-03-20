@@ -20,11 +20,12 @@ import { giftBlick } from '../../assets/animations';
 import { Button } from '../shared';
 import LazyLottie from './LazyLottie';
 import { useModal } from '../../hooks';
-import { MODALS } from '../../constants';
+import { GUIDE_ITEMS, MODALS } from '../../constants';
 import GetGift from '../../pages/DevModals/GetGift/GetGift';
 import { Loader } from '../Loader';
 import { useOutletContext } from 'react-router-dom';
 import { useTreeProgress } from '../../hooks/useTreeProgress';
+import { isGuideShown } from '../../utils';
 
 type ShopUpgrades = {
   [key: string]: { icon: string };
@@ -148,12 +149,23 @@ export const Tree = () => {
   return (
     <div className={s.container}>
       {/* <div className={s.progressBarAdditional} /> */}
+
+      {!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) &&
+        <div className={s.progressBarContainer}>
+          <div className={s.progressBar} style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300 + 25}px` }}>
+            <div className={s.progressFill} style={{ height: `${progressPercent}%` }} ref={progressBarContainerRef} />
+          </div>
+        </div>
+      }
+
       <div className={s.progressBarContainer}>
         <div
-          className={s.progressBar}
-          style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300 + 25}px` }}
+          className={`${s.progressBar} ${!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? s.progressBarWithGuide : ''}`}
+          style={{
+            height: `${150 + (treeData.growth_tree_stages.length - 1) * 300 + 25}px`}}
         >
-          <div className={s.progressFill} style={{ height: `${progressPercent}%` }} ref={progressBarContainerRef} />
+          <div className={`${s.progressFill} ${!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? s.progressFillWithGuide : ''}`} 
+            style={{ height: `${progressPercent}%` }} ref={progressBarContainerRef} />
           {treeData?.growth_tree_stages.map((stage, index) => {
             const isRewardAvailable = stage.achievement.is_available;
             const isRewardClaimed = stage.achievement.is_unlocked;
@@ -170,7 +182,7 @@ export const Tree = () => {
 
             return (
               <div key={stage.id} className={s.levelMarker} style={{ bottom: `${bottomPosition}px` }}>
-                <div className={classNames(s.levelCircle, { [s.active]: isActive })}>
+                {/* <div className={classNames(s.levelCircle, { [s.active]: isActive })}>
                   {isActive ? (
                     <img src={tickCircle} height={16} width={16} alt="tickCircle" style={{ zIndex: '0' }} />
                   ) : (
@@ -180,9 +192,9 @@ export const Tree = () => {
                   {stage.stage_number % 10 === 0 && (
                     <img className={s.spiner} src={spinnerIcon} height={120} width={120} alt="spinner" />
                   )}
-                </div>
+                </div> */}
 
-                {isRewardAvailable && !isRewardClaimed && showReward ? (
+                {isRewardAvailable && !isRewardClaimed && showReward && !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? (
                   <Button
                     className={classNames(s.takeRewardBtn, { [s.hidden]: isRewardClaimed })}
                     onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}
@@ -202,7 +214,7 @@ export const Tree = () => {
                     <div className={s.rewardsIconsWrapper}>
                       {/* Блок с подарком */}
                       {stage.achievement && (
-                        <div className={classNames(s.imgPrize)}>
+                        <div className={classNames(s.imgPrize)} >
                           {!isRewardClaimed && (
                             <>
                               <div className={s.blickAnimation}>
