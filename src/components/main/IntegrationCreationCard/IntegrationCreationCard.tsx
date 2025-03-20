@@ -17,24 +17,26 @@ interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
 }
 
-// Keys for localStorage
 const TIME_LEFT_KEY = 'integration_time_left';
 const INITIAL_TIME_LEFT_KEY = 'integration_initial_time_left';
 const INTEGRATION_ID_KEY = 'integration_id';
+const LAST_UPDATED_TIME_KEY = 'last_updated_time';
 
 export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration }) => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const [hasBorder, setHasBorder] = useState(false);
 
-  // Get stored values or use defaults from the integration
   const getSavedTimeLeft = () => {
     const savedIntegrationId = localStorage.getItem(INTEGRATION_ID_KEY);
     const savedTimeLeft = localStorage.getItem(TIME_LEFT_KEY);
+    const lastUpdatedTime = localStorage.getItem(LAST_UPDATED_TIME_KEY);
 
-    // Only use saved time if it's for the same integration
-    if (savedIntegrationId === integration.id && savedTimeLeft) {
-      return parseInt(savedTimeLeft);
+    if (savedIntegrationId === integration.id && savedTimeLeft && lastUpdatedTime) {
+      const currentTime = Math.floor(Date.now() / 1000);
+      const elapsedTime = currentTime - parseInt(lastUpdatedTime);
+      const newTimeLeft = Math.max(parseInt(savedTimeLeft) - elapsedTime, 0);
+      return newTimeLeft;
     }
     return integration.time_left;
   };
@@ -55,29 +57,27 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   const [isAccelerated, setIsAccelerated] = useState(false);
   const [playAccelerateIntegrationSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
 
-  // Reference to store the timeout ID
   const accelerationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { accelerateIntegration } = useAccelerateIntegration({
     integrationId: integration.id,
     onSuccess: newTimeLeft => {
       setTimeLeft(newTimeLeft);
-      // Save updated time to localStorage
       localStorage.setItem(TIME_LEFT_KEY, newTimeLeft.toString());
+      localStorage.setItem(LAST_UPDATED_TIME_KEY, Math.floor(Date.now() / 1000).toString());
     },
   });
 
-  // Save integration ID when component mounts
   useEffect(() => {
     localStorage.setItem(INTEGRATION_ID_KEY, integration.id);
     localStorage.setItem(INITIAL_TIME_LEFT_KEY, initialTimeLeft.toString());
-  }, []);
+    localStorage.setItem(LAST_UPDATED_TIME_KEY, Math.floor(Date.now() / 1000).toString());
+  }, [integration.id, initialTimeLeft]);
 
   useEffect(() => {
     dispatch(setIntegrationCreating(true));
-  }, []);
+  }, [dispatch]);
 
-  // Save timeLeft whenever it changes
   useEffect(() => {
     localStorage.setItem(TIME_LEFT_KEY, timeLeft.toString());
   }, [timeLeft]);
@@ -86,7 +86,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   const reduxAcceleration = useSelector((state: RootState) => state.acceleration.acceleration);
 
   useEffect(() => {
-    if (acceleration != reduxAcceleration) {
+    if (acceleration !== reduxAcceleration) {
       handleAccelerateClick();
       setAcceleration(reduxAcceleration + 20);
     }
@@ -102,7 +102,6 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     setProgress(calculateProgress());
   }, [timeLeft]);
 
-  // Clean up the timeout when the component unmounts
   useEffect(() => {
     return () => {
       if (accelerationTimeoutRef.current) {
@@ -117,22 +116,22 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       setIsExpired(true);
       dispatch(integrationsApi.util.invalidateTags(['Integrations']));
     }
-  }, [timeLeft, accelerateIntegration]);
+  }, [timeLeft, accelerateIntegration, isExpired, dispatch]);
 
   useEffect(() => {
     if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET)) {
       accelerateIntegration(timeLeft - 20);
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
     }
-  }, []);
+  }, [accelerateIntegration, timeLeft]);
 
   useEffect(() => {
     dispatch(setIsWorking(true));
     const timerId = setInterval(() => {
       setTimeLeft(prevTime => {
         const newTime = Math.max(prevTime - 1, 0);
-        // Save to localStorage on each tick
         localStorage.setItem(TIME_LEFT_KEY, newTime.toString());
+        localStorage.setItem(LAST_UPDATED_TIME_KEY, Math.floor(Date.now() / 1000).toString());
         return newTime;
       });
     }, 1000);
@@ -146,7 +145,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     return () => {
       clearInterval(timerId);
     };
-  }, [isExpired]);
+  }, [isExpired, dispatch]);
 
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
