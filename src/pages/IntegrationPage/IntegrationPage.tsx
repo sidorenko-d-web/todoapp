@@ -97,17 +97,14 @@ export const IntegrationPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowGuide(true);
-    }, 2000);
+    if (data && !isIntegrationLoading) {
+      const timer = setTimeout(() => {
+        setShowGuide(true);
+      }, 1000);
 
-    return () => clearTimeout(timer);
-  }, []);
-
-
-  // useEffect(() => {
-  //   window.scrollTo(0, document.body.scrollHeight);
-  // }, []);
+      return () => clearTimeout(timer);
+    }
+  }, [data, isIntegrationLoading]);
 
   const isLoading = isIntegrationLoading || isUnansweredIntegrationCommentLoading;
 
@@ -138,7 +135,7 @@ export const IntegrationPage: React.FC = () => {
               </div>
             </div>
             <Integration />
-            {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+            {isIntegrationLoading || isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
               <>
                 <IntegrationStats
                   views={data.views}
