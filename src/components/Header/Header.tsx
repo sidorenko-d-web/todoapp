@@ -92,6 +92,8 @@ export const Header = () => {
 
   const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
 
+  const accelerateGuideShown = useSelector((state: RootState) => state.guide.accelerateIntegrationGuideClosed);
+    
   const dim = useSelector((state: RootState) => state.guide.dimHeader);
 
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
@@ -108,7 +110,7 @@ export const Header = () => {
 
   const darken3 = isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
 
-  const notDarken = integrationCurrentlyCreating && isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+  const notDarken = integrationCurrentlyCreating && accelerateGuideShown;
 
 
   return (

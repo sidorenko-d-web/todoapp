@@ -3,12 +3,7 @@ import styles from './TreeGuide.module.scss';
 
 import img1 from '../../../assets/gif/guide1.gif';
 import { Guide } from '../Guide';
-
-import gift from '../../../assets/icons/gift.svg';
-import cup from '../../../assets/icons/medal-gold.svg';
-import home from '../../../assets/icons/colored-home.svg';
 import { useTranslation } from 'react-i18next';
-import { formatAbbreviation } from '../../../helpers';
 import { useDispatch } from "react-redux";
 import { setDimHeader } from "../../../redux";
 
@@ -17,8 +12,7 @@ interface TreeGuideProps {
     onClose: () => void;
 }
 export const TreeGuide: React.FC<TreeGuideProps> = ({ onClose }) => {
-    const { t, i18n } = useTranslation('guide');
-    const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+    const { t } = useTranslation('guide');
     const [isOpen, setIsOpen] = useState(true);
 
     const dispatch = useDispatch();

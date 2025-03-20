@@ -194,7 +194,7 @@ export const Tree = () => {
                   )}
                 </div> */}
 
-                {isRewardAvailable && !isRewardClaimed && showReward && !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? (
+                {isRewardAvailable && !isRewardClaimed && showReward && isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? (
                   <Button
                     className={classNames(s.takeRewardBtn, { [s.hidden]: isRewardClaimed })}
                     onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}

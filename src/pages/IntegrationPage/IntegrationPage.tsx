@@ -173,14 +173,6 @@ export const IntegrationPage: React.FC = () => {
           }}
         />
       )}
-
-      <IntegrationPageGuide
-        onClose={() => {
-          setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
-          dispatch(setElevateIntegrationStats(false));
-          dispatch(setDimHeader(false));
-        }}
-      />
     </div>
   );
 };
