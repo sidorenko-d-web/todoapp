@@ -29,7 +29,7 @@ import {
   UpgradeItemsGuide,
   WelcomeToShopGuide,
 } from '../../components';
-import { setActiveFooterItemId, setBuyItemButtonGlowing, setShopStatsGlowing } from '../../redux/slices/guideSlice';
+import { setActiveFooterItemId, setBuyItemButtonGlowing, setDimHeader, setShopStatsGlowing } from '../../redux/slices/guideSlice';
 
 type TypeTab<T> = { title: string; value: T };
 
@@ -301,6 +301,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
+              dispatch(setDimHeader(false));
               setRerender(prev => prev + 1);
             }}
           />
@@ -313,8 +314,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
-              navigate(AppRoute.ProgressTree);
               setRerender(prev => prev + 1);
+              navigate(AppRoute.ProgressTree);
             }}
           />
         )}

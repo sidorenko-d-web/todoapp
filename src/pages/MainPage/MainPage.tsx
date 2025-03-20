@@ -177,6 +177,13 @@ export const MainPage: FC = () => {
     }
   }, [ data, isInventoryDataLoading ]);
 
+
+  useEffect(() => {
+    if(isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
+      reduxDispatch(setDimHeader(false));
+    }
+  }, []);
+
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
   useEffect(() => {
@@ -331,7 +338,7 @@ export const MainPage: FC = () => {
             height: '100%',
             top: '0',
             left: '0',
-            backgroundColor: 'rgba(0, 0, 0, 0.86)',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
             pointerEvents: 'none',
             zIndex: '500',
           }}
@@ -401,7 +408,11 @@ export const MainPage: FC = () => {
       {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (
           <FinishTutorialGuide
-            onClose={() => setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)}
+            onClose={() => {
+              reduxDispatch(setDimHeader(false));
+              setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
+              setRerender((prev) => prev + 1);
+            }}
           />
         )}
 
