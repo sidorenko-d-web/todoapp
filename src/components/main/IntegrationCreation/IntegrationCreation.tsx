@@ -16,6 +16,8 @@ export const IntegrationCreation = () => {
   const dispatch = useDispatch();
   const integrationCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
+  const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+
   const { data: profile } = useGetProfileMeQuery();
   const { data: integrations, error: integrationsError } = useGetIntegrationsQuery(
     { status: 'creating' },
@@ -28,21 +30,27 @@ export const IntegrationCreation = () => {
   const handleIntegrationCreation = () => {
     //openModal(MODALS.SUBSCRIBE);
 
-    if(isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)) {
+    if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)) {
       if (!profile) return;
 
       if (profile?.subscription_integrations_left <= 0) {
         openModal(MODALS.SUBSCRIBE);
         return;
       }
-  
-      if(!isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) {
+
+      if (!isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) {
         openModal(MODALS.SUBSCRIBE);
       } else {
         openModal(MODALS.CREATING_INTEGRATION);
       }
     }
   };
+
+  // useEffect(() => {
+  //   if(integrationsError?.status === 404) {
+  //     console.log('basdsafa 404');
+  //   }
+  // }, [integrationsError])
 
   const handleSuccessfullySubscribed = () => {
     closeModal(MODALS.SUBSCRIBE);
@@ -55,7 +63,7 @@ export const IntegrationCreation = () => {
 
   const createIntegrationButtonGlowing = useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing);
 
-  const btnGlowing = ((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) 
+  const btnGlowing = ((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
     && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)));
 
   return (
@@ -68,7 +76,7 @@ export const IntegrationCreation = () => {
             eventPlace: 'Создать интеграцию - Главный экран',
           }}
           className={`${s.button} ${isButtonGlowing || createIntegrationButtonGlowing || btnGlowing ? s.glowing : ''}`}
-          style={{zIndex:'10000'}}
+          style={{ zIndex: '10000' }}
           disabled={!profile}
           onClick={handleIntegrationCreation}
         >
@@ -80,10 +88,14 @@ export const IntegrationCreation = () => {
         </TrackedButton>
       )}
       {
-        // @ts-expect-error ts(2339)
-        integrationsError?.status === 404
-          ? null
-          : integrations?.integrations && <IntegrationCreationCard integration={integrations?.integrations[0]} />
+        integrationCurrentlyCreating ? (
+          <IntegrationCreationCard integration={integrations?.integrations[0]!} />
+        ) : (
+          // @ts-expect-error ts(2339)
+          integrationsError?.status === 404
+            ? null
+            : integrations?.integrations && <IntegrationCreationCard integration={integrations?.integrations[0]} />
+        )
       }
 
       <IntegrationCreationModal
