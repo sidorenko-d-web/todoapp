@@ -97,12 +97,14 @@ export const IntegrationPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowGuide(true);
-    }, 1000);
+    if (data && !isIntegrationLoading) {
+      const timer = setTimeout(() => {
+        setShowGuide(true);
+      }, 1000);
 
-    return () => clearTimeout(timer);
-  }, []);
+      return () => clearTimeout(timer);
+    }
+  }, [data, isIntegrationLoading]);
 
   const isLoading = isIntegrationLoading || isUnansweredIntegrationCommentLoading;
 
@@ -133,26 +135,29 @@ export const IntegrationPage: React.FC = () => {
               </div>
             </div>
             <Integration />
-            <IntegrationStats
-              views={data.views}
-              income={data.income}
-              subscribers={data.subscribers}
-              futureStatistics={data.future_statistics}
-              lastUpdatedAt={data.updated_at}
-            />
-            <div className={styles.commentsSectionTitleWrp}>
-              <p className={styles.commentsSectionTitle}>{t('i4')}</p>
-              <p className={styles.commentsAmount}>
-                {data.comments_generated}/{20}
-              </p>
-            </div>
-            <IntegrationComment
-              progres={data.comments_answered_correctly % 5}
-              {...comments[currentCommentIndex]}
-              onVote={handleVote}
-              hateText={commentData?.is_hate}
-              finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
-            />
+            {isIntegrationLoading || isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+              <>
+                <IntegrationStats
+                  views={data.views}
+                  income={data.income}
+                  subscribers={data.subscribers}
+                  futureStatistics={data.future_statistics}
+                  lastUpdatedAt={data.updated_at}
+                />
+                <div className={styles.commentsSectionTitleWrp}>
+                  <p className={styles.commentsSectionTitle}>{t('i4')}</p>
+                  <p className={styles.commentsAmount}>
+                    {data.comments_generated}/{20}
+                  </p>
+                </div>
+                <IntegrationComment
+                  progres={data.comments_answered_correctly % 5}
+                  {...comments[currentCommentIndex]}
+                  onVote={handleVote}
+                  hateText={commentData?.is_hate}
+                  finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
+                /></>
+            }
           </div>
         </>
       )}

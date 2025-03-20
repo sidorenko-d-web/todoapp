@@ -3,12 +3,13 @@ import coinIcon from '../../../assets/icons/coin.png';
 import { formatAbbreviation } from '../../../helpers';
 import styles from './IntegrationComment.module.scss';
 import { useSelector } from 'react-redux';
-import { RootState, selectButtonVolume } from '../../../redux';
-import { SOUNDS } from '../../../constants';
+import { selectButtonVolume } from '../../../redux';
+import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
 import { ProgressLine } from '../../shared';
 import clsx from 'clsx';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
+import { isGuideShown } from '../../../utils';
 
 interface IntegrationCommentProps {
   author_username: string;
@@ -33,7 +34,6 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
 }) => {
   const { t, i18n } = useTranslation('integrations');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const elevateComment = useSelector((state: RootState) => state.guide.elevateIntegrationStats);
 
   const [voteRightSound] = useSound(SOUNDS.rightAnswer, {
     volume: useSelector(selectButtonVolume) * 1.5,
@@ -51,7 +51,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
   };
 
   return (
-    <div className={`${styles.wrp} ${elevateComment ? styles.elevated : ''}`}>
+    <div className={`${styles.wrp} ${!isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) ? styles.elevated : ''}`}>
       {!finished ? (
         <div className={styles.usernameAndComment}>
           <p className={styles.username}>{author_username}:</p>

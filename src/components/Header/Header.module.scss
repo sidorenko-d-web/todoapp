@@ -36,9 +36,9 @@ $header-border: 1px solid $color-header-border-dark;
 
   .headerOverlay {
     position: absolute;
-    inset: -3px 0 0 0;
+    inset: -2px 0 0 0;
     border-radius: 10px;
-    background-color: rgba(0, 0, 0, 0.9); // Dark overlay
+    background-color: rgba(0, 0, 0, 0.7); // Dark overlay
     z-index: 1; // Place it behind the header content
   }
 

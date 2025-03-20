@@ -110,11 +110,11 @@
 }
 
 .elevated {
-  z-index: 5000;
+  z-index: 16000;
 }
-// .bordered {
-//   border: 2px solid var.$color-primary;
-// }
+.bordered {
+  border: 2px solid var.$color-primary;
+}
 
 .accelerated {
   border-color: #2F80ED;

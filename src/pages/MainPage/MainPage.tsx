@@ -177,6 +177,13 @@ export const MainPage: FC = () => {
     }
   }, [ data, isInventoryDataLoading ]);
 
+
+  useEffect(() => {
+    if(isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
+      reduxDispatch(setDimHeader(false));
+    }
+  }, []);
+
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
   useEffect(() => {
@@ -323,7 +330,9 @@ export const MainPage: FC = () => {
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
           !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) ||
         (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
-          !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
+          !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))
+        
+          || (integrationCurrentlyCreating && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
         <div
           style={{
             position: 'fixed',
@@ -331,7 +340,7 @@ export const MainPage: FC = () => {
             height: '100%',
             top: '0',
             left: '0',
-            backgroundColor: 'rgba(0, 0, 0, 0.86)',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
             pointerEvents: 'none',
             zIndex: '500',
           }}
@@ -401,7 +410,11 @@ export const MainPage: FC = () => {
       {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (
           <FinishTutorialGuide
-            onClose={() => setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)}
+            onClose={() => {
+              reduxDispatch(setDimHeader(false));
+              setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
+              setRerender((prev) => prev + 1);
+            }}
           />
         )}
 

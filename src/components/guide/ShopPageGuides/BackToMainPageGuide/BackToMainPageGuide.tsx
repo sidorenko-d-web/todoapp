@@ -21,6 +21,8 @@ export const BackToMainPageGuide: React.FC<BackToMainPageGuideProps> = ({ onClos
 
     const dispatch = useDispatch();
 
+    dispatch(setDimHeader(true));
+    dispatch(setDimHeader(true));
     
     useEffect(() => {
         dispatch(setDimHeader(true));

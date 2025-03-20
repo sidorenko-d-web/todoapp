@@ -33,6 +33,7 @@ export const AccelerateIntegtrationGuide: React.FC<AccelerateIntegtrationGuidePr
     <Guide align="right"
       zIndex={11110}
       top={'45%'}
+      dimBackground={false}
       noButton={true}
       description={
         <>

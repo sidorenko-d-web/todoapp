@@ -18,6 +18,9 @@ export const FinishTutorialGuide: React.FC<FinishTutorialGuideProps> = ({ onClos
 
     const dispatch = useDispatch();
 
+    dispatch(setDimHeader(true));
+    dispatch(setDimHeader(true));
+    
     useEffect(() => {
         dispatch(setDimHeader(true));
     }, []);

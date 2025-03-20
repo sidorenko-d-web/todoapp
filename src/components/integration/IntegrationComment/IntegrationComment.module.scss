@@ -126,7 +126,7 @@
 }
 
 .elevated {
-  position: fixed;
+  bottom: 30px;
   width: 92vw;
   z-index: 15000;
   border: 2px solid var.$color-primary;

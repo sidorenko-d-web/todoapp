@@ -44,6 +44,7 @@ export const Footer = () => {
   const { getModalState } = useModal();
 
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+  const accelerateGuideShown = useSelector((state: RootState) => state.guide.accelerateIntegrationGuideClosed);
   
   const darken = (dim && !getModalState(MODALS.SUBSCRIBE).isOpen && 
   !getModalState(MODALS.CREATING_INTEGRATION).isOpen)&& !getModalState(MODALS.SUCCESSFULLY_SUBSCRIBED).isOpen;
@@ -58,7 +59,7 @@ export const Footer = () => {
           (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
             !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)));
 
-  const notDarken = integrationCurrentlyCreating && isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+  const notDarken = integrationCurrentlyCreating && accelerateGuideShown;
             
   return (
     <div className={`${styles.footerItems} ${((darken || darken2 || darken3 || darken4) && !notDarken) ? styles.darken : ''}`}>
