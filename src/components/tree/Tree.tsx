@@ -20,11 +20,12 @@ import { giftBlick } from '../../assets/animations';
 import { Button } from '../shared';
 import LazyLottie from './LazyLottie';
 import { useModal } from '../../hooks';
-import { MODALS } from '../../constants';
+import { GUIDE_ITEMS, MODALS } from '../../constants';
 import GetGift from '../../pages/DevModals/GetGift/GetGift';
 import { Loader } from '../Loader';
 import { useOutletContext } from 'react-router-dom';
 import { useTreeProgress } from '../../hooks/useTreeProgress';
+import { isGuideShown } from '../../utils';
 
 type ShopUpgrades = {
   [key: string]: { icon: string };
@@ -158,6 +159,17 @@ export const Tree = () => {
           }}
         >
           <Loader />
+        </div>
+      )}
+      {/* <div className={s.progressBarAdditional} /> */}
+      {!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) && (
+        <div className={s.progressBarContainer}>
+          <div
+            className={s.progressBar}
+            style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300 + 25}px` }}
+          >
+            <div className={s.progressFill} style={{ height: `${progressPercent}%` }} ref={progressBarContainerRef} />
+          </div>
         </div>
       )}
 
