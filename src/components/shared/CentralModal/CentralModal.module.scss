@@ -28,6 +28,11 @@
   pointer-events: none;
 }
 
+.visibleOverflow {
+  overflow: visible;
+}
+
+
 .header {
   position: sticky;
   top: 0;

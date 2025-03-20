@@ -27,14 +27,21 @@ export const IntegrationCreation = () => {
 
   const handleIntegrationCreation = () => {
     //openModal(MODALS.SUBSCRIBE);
-    if (!profile) return;
 
-    if (profile?.subscription_integrations_left <= 0) {
-      openModal(MODALS.SUBSCRIBE);
-      return;
+    if(isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)) {
+      if (!profile) return;
+
+      if (profile?.subscription_integrations_left <= 0) {
+        openModal(MODALS.SUBSCRIBE);
+        return;
+      }
+  
+      if(!isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) {
+        openModal(MODALS.SUBSCRIBE);
+      } else {
+        openModal(MODALS.CREATING_INTEGRATION);
+      }
     }
-
-    openModal(MODALS.CREATING_INTEGRATION);
   };
 
   const handleSuccessfullySubscribed = () => {
@@ -52,7 +59,8 @@ export const IntegrationCreation = () => {
     && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)));
 
   return (
-    <section className={s.integrationsControls}>
+    <section className={`${s.integrationsControls} 
+      ${(isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)) ? s.elevated : ''}`}>
       {!integrationCreating && (
         <TrackedButton
           trackingData={{

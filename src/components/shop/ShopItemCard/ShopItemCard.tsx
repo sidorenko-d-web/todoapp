@@ -17,6 +17,7 @@ import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 import classNames from 'classnames';
+import { buildLink } from '../../../constants/buildMode';
 
 interface Props {
   disabled?: boolean;
@@ -25,11 +26,9 @@ interface Props {
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [buyItem, { isLoading }] = useBuyItemMutation();
-  const { data } = useGetProfileMeQuery();
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
   const [error, setError] = useState('');
-  const [isUseBay, setIsUseBay] = useState(false);
 
   const { data: pointsUser } = useGetProfileMeQuery();
 
@@ -39,13 +38,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const usdtTransactions = useUsdtTransactions();
   const [currentTrxId, setCurrentTrxId] = useState('');
 
-  useEffect(() => {
-    if (pointsUser) {
-      setIsUseBay(+pointsUser.points >= +item.price_internal);
-    }
-  }, []);
+  const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal
 
-  const userPoints = data?.points || 0;
   const handleBuyItem = async () => {
     setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
     try {
@@ -99,7 +93,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     <div className={styles.storeCard}>
       <div className={styles.header}>
         <div className={clsx(styles.image)}>
-          <img src={item.image_url.replace('https://', 'https://storage.yandexcloud.net/') + svgHeadersString} />
+          <img src={buildLink()?.svgShop(item.image_url) + svgHeadersString} />
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>
@@ -156,15 +150,15 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
           )}
           <Button
             onClick={handleBuyItem}
-            disabled={!isUseBay}
+            disabled={!isAffordable}
             className={classNames(
               clsx(
-                Number(userPoints) < Number(item.price_internal) ? styles.disabledButton : '',
+                !isAffordable ? styles.disabledButton : '',
                 buyButtonGlowing && item.name.toLowerCase().trim().includes('печатная машинка')
                   ? styles.glowingBtn
                   : '',
               ),
-              { [styles.disabledBtn]: !isUseBay },
+              { [styles.disabledBtn]: !isAffordable },
             )}
           >
             {isLoading ? (
@@ -172,7 +166,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
             ) : (
               <>
                 {formatAbbreviation(item.price_internal, 'number', { locale: locale })}{' '}
-                <img src={!isUseBay ? CointsGrey : CoinIcon} alt="" />
+                <img src={!isAffordable ? CointsGrey : CoinIcon} alt="" />
               </>
             )}
           </Button>

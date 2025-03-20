@@ -1,4 +1,10 @@
-import { useGetEquipedByIdQuery, useGetEquipedQuery, useGetProfileMeQuery } from '../../../redux';
+import {
+  useGetEquipedByIdQuery,
+  useGetEquipedQuery,
+  useGetProfileMeQuery,
+  useGetCharacterQuery,
+  useGetCharacterByIdQuery,
+} from '../../../redux';
 import { AnimationScene, Floor, Walls } from './partials';
 import styles from './partials/Partials.module.scss';
 import TreshinaRight from '../../../assets/images/start-room/treshina-right.svg';
@@ -6,10 +12,9 @@ import TreshinaLeft from '../../../assets/images/start-room/treshina-left.svg';
 import Shelf from '../../../assets/images/start-room/shelf.svg';
 import CoinIcon from '../../../assets/icons/coin.png';
 import { getAchivementType } from '../../../helpers';
-import { useGetCharacterByIdQuery, useGetCharacterQuery } from '../../../redux/api/character';
 import { useRoomItemsSlots } from '../../../../translate/items/items.ts';
 import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfileStats.ts';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Loader } from '../../index.ts';
 import { useLocation } from 'react-router-dom';
 import clsx from 'clsx';
@@ -22,8 +27,7 @@ interface props {
 export const Room = ({ mode, strangerId }: props) => {
   const { data: room, isLoading: isRoomLoading } = useGetEquipedQuery(undefined, { skip: mode === 'stranger' });
   const character = useGetCharacterQuery(undefined, { skip: mode === 'stranger' });
-  const { data } = useGetProfileMeQuery(undefined, {
-  });
+  const { data } = useGetProfileMeQuery(undefined, {});
 
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -52,31 +56,36 @@ export const Room = ({ mode, strangerId }: props) => {
   const isDefaultWall = !(room ?? strangerRoom)?.equipped_items.find(item => item.slot === RoomItemsSlots.wall.slot);
 
   const [didIncreased, setDidIncreased] = useState(false);
-  const playCoin = () => {
+
+  const playCoin = useCallback(() => {
     if (didIncreased && isLoaded) return;
     setDidIncreased(true);
     setTimeout(() => {
       setDidIncreased(false);
     }, 1150);
-  };
+  }, [didIncreased, isLoaded]);
 
   useEffect(() => {
     playCoin();
   }, [displayedPoints]);
 
-  const isLoading = !isLoaded || isStrangerLoading || isRoomLoading;
+  const isLoading = useMemo(
+    () => !isLoaded || isStrangerLoading || isRoomLoading,
+    [isLoaded, isStrangerLoading, isRoomLoading],
+  );
 
-  const isIntegrationPage = useLocation().pathname.includes('integrations')
+  const isIntegrationPage = useLocation().pathname.includes('integrations');
 
   return (
     <div className={styles.room}>
+      {
+      isLoading && <Loader className={clsx(styles.loader, isIntegrationPage && styles.upper)} />}
       <AnimationScene
         setIsLoaded={setIsLoaded}
         room={room ?? strangerRoom}
         character={mode === 'me' ? character : strangerCharacter}
       />
 
-      {isLoading && <Loader className={clsx(styles.loader, isIntegrationPage && styles.upper)} />}
       <Walls room={room ?? strangerRoom} isLoading={isLoading} />
 
       {!isLoading && (

@@ -1,10 +1,11 @@
 import { SpineGameObject, Skin } from '@esotericsoftware/spine-phaser';
 import { TypeWearLocation } from '../redux';
 import { ICharacterResponse } from '../redux';
-// const proxyImageUrl = (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev');
+import { buildLink } from './buildMode';
+const proxyImageUrl = buildLink()?.proxy!;
 
-const jsonUrl = new URL(`https://miniapp.apusher.com/export/anfas_happy.json`).href;
-const atlasUrl = new URL(`https://miniapp.apusher.com/export/anfas_happyatlas.txt`).href;
+const jsonUrl = new URL(`${buildLink()?.itemBaseUrl}anfas_happy1.json`).href;
+const atlasUrl = new URL(`${buildLink()?.itemBaseUrl}anfas_happyatlas1.txt`).href;
 
 export class WardrobeSpineScene extends Phaser.Scene {
   jsonUrl: string | undefined;
@@ -18,10 +19,10 @@ export class WardrobeSpineScene extends Phaser.Scene {
   }
 
   preload() {
-    // this.load.spineJson('data', proxyImageUrl(jsonUrl));
-    // this.load.spineAtlas('atlas', proxyImageUrl(atlasUrl));
-    this.load.spineJson('data', (jsonUrl));
-    this.load.spineAtlas('atlas', (atlasUrl));
+    this.load.spineJson('data', proxyImageUrl(jsonUrl));
+    this.load.spineAtlas('atlas', proxyImageUrl(atlasUrl));
+    this.load.spineJson('data', jsonUrl);
+    this.load.spineAtlas('atlas', atlasUrl);
   }
 
   makeHappy() {

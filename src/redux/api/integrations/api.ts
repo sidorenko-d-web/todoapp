@@ -78,13 +78,6 @@ export const integrationsApi = createApi({
       }),
       invalidatesTags: ['Integrations'],
     }),
-    claimRewardForIntegration: builder.mutation<any, string>({
-      query: integrationId => ({
-        url: `/integrations/${integrationId}/claim_rewards`,
-        method: 'POST',
-      }),
-      invalidatesTags: ['Integrations']
-    })
   }),
 });
 
@@ -97,5 +90,4 @@ export const {
   useGetUnansweredIntegrationCommentQuery,
   useUpdateTimeLeftMutation,
   usePublishIntegrationMutation,
-  useClaimRewardForIntegrationMutation
 } = integrationsApi;

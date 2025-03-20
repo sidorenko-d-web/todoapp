@@ -162,6 +162,7 @@ export const Tree = () => {
         </div>
       )}
       {/* <div className={s.progressBarAdditional} /> */}
+
       {!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) && (
         <div className={s.progressBarContainer}>
           <div
@@ -175,10 +176,16 @@ export const Tree = () => {
 
       <div className={s.progressBarContainer}>
         <div
-          className={s.progressBar}
-          style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300 + 25}px` }}
+          className={`${s.progressBar} ${!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? s.progressBarWithGuide : ''}`}
+          style={{
+            height: `${150 + (treeData.growth_tree_stages.length - 1) * 300 + 25}px`,
+          }}
         >
-          <div className={s.progressFill} style={{ height: `${progressPercent}%` }} ref={progressBarContainerRef} />
+          <div
+            className={`${s.progressFill} ${!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? s.progressFillWithGuide : ''}`}
+            style={{ height: `${progressPercent}%` }}
+            ref={progressBarContainerRef}
+          />
           {treeData?.growth_tree_stages.map((stage, index) => {
             const isRewardAvailable = stage.achievement.is_available;
             const isRewardClaimed = stage.achievement.is_unlocked;
@@ -207,7 +214,10 @@ export const Tree = () => {
                   )}
                 </div>
 
-                {isRewardAvailable && !isRewardClaimed && showReward ? (
+                {isRewardAvailable &&
+                !isRewardClaimed &&
+                showReward &&
+                isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? (
                   <Button
                     className={classNames(s.takeRewardBtn, { [s.hidden]: isRewardClaimed })}
                     onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}

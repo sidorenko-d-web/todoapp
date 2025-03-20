@@ -1,12 +1,11 @@
 import styles from './ItemUpgradedModal.module.scss';
-import { MODALS, itemStoreString, localStorageConsts } from '../../../../constants';
+import { itemStoreString, localStorageConsts, MODALS } from '../../../../constants';
 import { useAutoPlaySound, useModal } from '../../../../hooks';
 import { IShopItem, useGetShopItemsQuery } from '../../../../redux';
 import Button from '../partials/Button';
 import ViewsIcon from '../../../../assets/icons/views.png';
 import SubsIcon from '../../../../assets/icons/subscriber_coin.svg';
 import CoinIcon from '../../../../assets/icons/coin.png';
-import BlueChest from '../../../../assets/icons/chest-blue.svg';
 import clsx from 'clsx';
 import Lottie from 'lottie-react';
 import { blueLight, purpleLight, redLight } from '../../../../assets/animations';
@@ -35,9 +34,12 @@ export const ItemUpgradedModal = () => {
   useAutoPlaySound(MODALS.UPGRADED_ITEM, SOUNDS.upgradeOrBuyItem);
 
   const handleOpenChest = () => {
-    localStorage.removeItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
     closeModal(MODALS.UPGRADED_ITEM);
-    openModal(MODALS.TASK_CHEST);
+
+    if (localStorage.getItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST)) {
+      localStorage.removeItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST);
+      openModal(MODALS.TASK_CHEST);
+    }
   };
 
   if (!newItem) return <></>;
@@ -92,10 +94,6 @@ export const ItemUpgradedModal = () => {
           <img src={CoinIcon} alt="Coin icon" />
           <p>{t('s44')}</p>
         </div>
-        <div className={styles.statItem}>
-          <p>+</p>
-          <img src={BlueChest} alt="blue chest icon" />
-        </div>
       </div>
       <div className={styles.text}>
         <p>
@@ -111,7 +109,7 @@ export const ItemUpgradedModal = () => {
         </p>
       </div>
       <Button onClick={handleOpenChest} variant="blue">
-        {t('s47')}
+        {t('s34')}
       </Button>
     </CentralModal>
   );

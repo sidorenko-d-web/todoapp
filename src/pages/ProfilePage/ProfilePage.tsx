@@ -27,7 +27,7 @@ export const ProfilePage: React.FC = () => {
 
   // Query for push line data
   const { data: pushLineData, isLoading: isPushLineLoading } = useGetPushLineQuery();
-
+  console.log(pushLineData)
   const [claimChestReward] = useClaimChestRewardMutation();
 
   const { data: awardsData, isLoading: awardsLoading } = useGetInventoryAchievementsQuery();

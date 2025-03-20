@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './IntegrationPage.module.scss';
 import {
   setActiveFooterItemId,
+  setDimHeader,
   setElevateIntegrationStats,
   setFooterActive,
   useGetIntegrationQuery,
@@ -74,6 +75,8 @@ export const IntegrationPage: React.FC = () => {
 
   const comments = commentData ? (Array.isArray(commentData) ? commentData : [commentData]) : [];
 
+  const [showGuide, setShowGuide] = useState(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -92,6 +95,16 @@ export const IntegrationPage: React.FC = () => {
       setCurrentCommentIndex(0);
     }
   };
+
+  useEffect(() => {
+    if (data && !isIntegrationLoading) {
+      const timer = setTimeout(() => {
+        setShowGuide(true);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [data, isIntegrationLoading]);
 
   const isLoading = isIntegrationLoading || isUnansweredIntegrationCommentLoading;
 
@@ -115,45 +128,45 @@ export const IntegrationPage: React.FC = () => {
           />
           <div className={styles.container}>
             <div className={styles.integrationNameWrp}>
-              <p className={styles.integrationTitle}>
-                {t('i1')} {data.number}
-              </p>
+              <p className={styles.integrationTitle}>{t('i1')} {data.number}</p>
               <div className={styles.integrationLevelWrp}>
                 <p className={styles.integrationLevel}>{data.campaign.company_name}</p>
                 <img src={integrationIcon} height={16} width={16} alt={'icon'} />
               </div>
             </div>
             <Integration />
-            <IntegrationStats
-              views={data.views}
-              income={data.income}
-              subscribers={data.subscribers}
-              futureStatistics={data.future_statistics}
-              lastUpdatedAt={data.updated_at}
-            />
-            <div className={styles.commentsSectionTitleWrp}>
-              <p className={styles.commentsSectionTitle}>{t('i4')}</p>
-              <p className={styles.commentsAmount}>
-                {data.comments_generated}/{20}
-              </p>
-            </div>
-            {
-              <IntegrationComment
-                progres={data.comments_answered_correctly % 5}
-                {...comments[currentCommentIndex]}
-                onVote={handleVote}
-                hateText={commentData?.is_hate}
-                finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
-              />
+            {isIntegrationLoading || isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+              <>
+                <IntegrationStats
+                  views={data.views}
+                  income={data.income}
+                  subscribers={data.subscribers}
+                  futureStatistics={data.future_statistics}
+                  lastUpdatedAt={data.updated_at}
+                />
+                <div className={styles.commentsSectionTitleWrp}>
+                  <p className={styles.commentsSectionTitle}>{t('i4')}</p>
+                  <p className={styles.commentsAmount}>
+                    {data.comments_generated}/{20}
+                  </p>
+                </div>
+                <IntegrationComment
+                  progres={data.comments_answered_correctly % 5}
+                  {...comments[currentCommentIndex]}
+                  onVote={handleVote}
+                  hateText={commentData?.is_hate}
+                  finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
+                /></>
             }
           </div>
         </>
       )}
-      {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
+      {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && showGuide && (
         <IntegrationPageGuide
           onClose={() => {
             setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
             dispatch(setElevateIntegrationStats(false));
+            dispatch(setDimHeader(false));
           }}
         />
       )}

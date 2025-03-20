@@ -1,5 +1,10 @@
 @use '../../../assets/styles/index.scss' as var;
 
+.visibleOverflow {
+  overflow: visible;
+}
+
+
 .content {
   display: flex;
   flex-direction: column;
@@ -7,13 +12,15 @@
   gap: 20px;
 
   max-height: 65vh;
-  overflow-y: auto;
   scrollbar-width: thin;
   position: relative;
 
-  overflow-y: auto; 
-  overflow-x: hidden; 
+  overflow-y: auto;
 
+  &.visibleOverflow {
+    overflow: visible;
+  }
+  
 
   @media (min-width: var.$breakpoint-md) {
     gap: 20px;
@@ -25,15 +32,19 @@
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    overflow-y: auto;
     max-height: 65vh;
     scrollbar-width: thin;
     padding: 2px 2px;
     margin-top: -10px;
 
-    overflow-y: auto;
     overflow-x: hidden;
 
+    overflow-y: auto;
+
+    &.visibleOverflow {
+      overflow: visible;
+    }
+    
     &::-webkit-scrollbar {
       width: 6px;
     }
@@ -116,6 +127,11 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
+
+    &.firstIntegration {
+      grid-template-columns: repeat(1, 1fr);
+      padding: 4px;
+    }
   }
 
   .errorMessage {
@@ -177,7 +193,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  background: #141319;
+  //background: #141319;
 
   // Fix for full width across container
   margin-left: -5px;
@@ -222,12 +238,27 @@
 }
 
 .glowing {
-  box-shadow: 2px 3px 40px var.$color-primary;
-  border: 2px solid var.$color-primary;
-}
+  position: relative;
+  box-shadow: 0px 0px 60px 10px rgba(47, 115, 189, 0.9);
+  transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
+  
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: inherit;
+    background: rgba(47, 115, 189, 0.5);
+    filter: blur(20px);
+    z-index: -1;
+    animation: glowPulse 1.5s infinite alternate ease-in-out;
+  }}
 
 .glowingBtn {
-  box-shadow: 0 0 50px var.$color-primary;
+  box-shadow: 0 0 20px var.$color-primary;
 }
 
 .glowingBtnElevated {

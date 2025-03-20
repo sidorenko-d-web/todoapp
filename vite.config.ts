@@ -51,7 +51,7 @@ export default defineConfig({
       },
     ],
   },
-  // server: {
+  // server: { //prodDev
   //   allowedHosts: true,
   //   proxy: {
   //     '/api/miniapp-v2-prod': {
@@ -61,4 +61,14 @@ export default defineConfig({
   //     },
   //   },
   // },
+   server: { //testDev
+    allowedHosts: true,
+    proxy: {
+      '/api/miniapp-v2-dev': {
+        target: 'https://storage.yandexcloud.net',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api\/miniapp-v2-dev/, ''),
+      },
+    },
+  },
 });

@@ -10,7 +10,9 @@
   // border: 2px solid var.$color-blue-primary;
   background-color: var.$color-card-bg;
   // box-shadow: 0 0 10px 4px rgba(72, 128, 255, 0.6);
-  border: 1px solid #282830;;
+  border: 1px solid #282830;
+
+  z-index: 15000;
 
   .integrationHeader {
     display: flex;
@@ -108,11 +110,11 @@
 }
 
 .elevated {
-  z-index: 5000;
+  z-index: 16000;
 }
-// .bordered {
-//   border: 2px solid var.$color-primary;
-// }
+.bordered {
+  border: 2px solid var.$color-primary;
+}
 
 .accelerated {
   border-color: #2F80ED;
