@@ -99,7 +99,7 @@ export const IntegrationPage: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowGuide(true);
-    }, 1000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);

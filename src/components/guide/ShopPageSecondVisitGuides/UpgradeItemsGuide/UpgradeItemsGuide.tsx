@@ -21,7 +21,7 @@ export const UpgradeItemsGuide: React.FC<UpgradeItemsGuideProps> = ({ onClose })
   }, []);
 
   const handleClose = () => {
-    //dispatch(setDimHeader(false));
+    dispatch(setDimHeader(false));
     onClose();
     setIsOpen(false);
   };

@@ -11,7 +11,7 @@ export const ProgressTreePage = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowGuide(true);
-    }, 2000);
+    }, 2300);
 
     return () => clearTimeout(timer);
   }, []);
