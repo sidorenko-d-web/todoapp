@@ -70,7 +70,6 @@ export const ShopInventoryPage = () => {
           return true;
         }
       })
-      .reverse();
   }, [ inventory, shop, shopCategory ]);
 
   const itemsForBuy = useMemo(() => {
