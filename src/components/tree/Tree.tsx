@@ -182,7 +182,7 @@ export const Tree = () => {
 
             return (
               <div key={stage.id} className={s.levelMarker} style={{ bottom: `${bottomPosition}px` }}>
-                {/* <div className={classNames(s.levelCircle, { [s.active]: isActive })}>
+                <div className={classNames(s.levelCircle, { [s.active]: isActive })}>
                   {isActive ? (
                     <img src={tickCircle} height={16} width={16} alt="tickCircle" style={{ zIndex: '0' }} />
                   ) : (
@@ -192,7 +192,7 @@ export const Tree = () => {
                   {stage.stage_number % 10 === 0 && (
                     <img className={s.spiner} src={spinnerIcon} height={120} width={120} alt="spinner" />
                   )}
-                </div> */}
+                </div>
 
                 {isRewardAvailable && !isRewardClaimed && showReward && isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? (
                   <Button
