@@ -5,7 +5,7 @@ import loadingVid from '../../../assets/gif/loading.mp4';
 // import { coinsAnim } from '../../../assets/animations';
 import { LoadingScreenBar, LoadingScreenBarRef } from '../../loadingScreen/LoadingScreenBar/LoadingScreenBar';
 import useSound from 'use-sound';
-import { SOUNDS } from '../../../constants';
+import { SOUNDS, buildMode } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
 import WhiteNoiseCanvas from '../../WhiteNoise/WhiteNoise';
@@ -35,9 +35,10 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   //   });
   // }, []);
 
-  const [isMobile, setIsMobile] = useState(0);
+  const [isMobile, setIsMobile] = useState(buildMode.includes('Dev') ? 1 : 0);
 
   useEffect(() => {
+    if (buildMode.includes('Dev')) return;
     if (window.Telegram?.WebApp?.platform) {
       const platform = window.Telegram.WebApp.platform.toLowerCase();
       if (platform.includes('android') || platform.includes('ios')) {

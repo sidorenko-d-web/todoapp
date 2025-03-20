@@ -70,6 +70,7 @@ export const baseItems = [
   { name: 'chair', slot: 3, width: 46, height: 46, x: -48, y: 430, z: 2 },
   { name: 'table', slot: 2, width: 140, height: 140, x: -6, y: 455, z: 3 },
   { name: 'window', slot: 5, width: 110, height: 110, x: -125, y: 260, z: 0 },
+  { name: 'vase', slot: 19, width: 70, height: 70, x: -120, y: 485, z: 0 },
 ];
 const proxyImageUrl = buildLink()?.proxy!;
 
