@@ -120,7 +120,6 @@ export const PublishIntegrationButton: React.FC = () => {
         const company = integrationData?.campaign;
         if (true) {
           // const company = publishRes.data.campaign;
-          console.log(integrationData)
           const { base_income, base_views, base_subscribers } = publishRes.data;
 
           openModal(MODALS.INTEGRATION_REWARD, {
@@ -129,7 +128,7 @@ export const PublishIntegrationButton: React.FC = () => {
             base_views,
             base_subscribers,
           });
-        } 
+        }
       }
     } catch (error) {
       console.error('Failed to publish integration:', error);
