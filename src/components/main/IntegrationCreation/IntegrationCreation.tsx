@@ -19,7 +19,11 @@ export const IntegrationCreation = () => {
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
   const { data: profile } = useGetProfileMeQuery();
-  const { data: integrations, error: integrationsError } = useGetIntegrationsQuery(
+  const {
+    data: integrations,
+    error: integrationsError,
+    isLoading,
+  } = useGetIntegrationsQuery(
     { status: 'creating' },
     {
       pollingInterval: 10 * 60 * 1000,
@@ -63,12 +67,18 @@ export const IntegrationCreation = () => {
 
   const createIntegrationButtonGlowing = useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing);
 
-  const btnGlowing = ((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
-    && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)));
+  const btnGlowing =
+    isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
+    !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
 
   return (
-    <section className={`${s.integrationsControls} 
-      ${(isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)) ? s.elevated : ''}`}>
+    <section
+      className={`${s.integrationsControls} ${
+        isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
+          ? s.elevated
+          : ''
+      }`}
+    >
       {!integrationCreating && (
         <TrackedButton
           trackingData={{
@@ -87,24 +97,19 @@ export const IntegrationCreation = () => {
           </span>
         </TrackedButton>
       )}
-      {
-        integrationCurrentlyCreating ? (
-          <IntegrationCreationCard integration={integrations?.integrations[0]!} />
-        ) : (
-          // @ts-expect-error ts(2339)
-          integrationsError?.status === 404
-            ? null
-            : integrations?.integrations && <IntegrationCreationCard integration={integrations?.integrations[0]} />
-        )
-      }
+
+      {integrationCurrentlyCreating ? (
+        <IntegrationCreationCard integration={integrations?.integrations[0]!} />
+      ) : (
+        !isLoading &&
+        integrations &&
+        integrations.count !== 0 && <IntegrationCreationCard integration={integrations.integrations[0]} />
+      )}
 
       <IntegrationCreationModal
         modalId={MODALS.CREATING_INTEGRATION}
         onClose={() => closeModal(MODALS.CREATING_INTEGRATION)}
-        hasCreatingIntegration={
-          // @ts-expect-error ts(2339)
-          integrationsError?.status !== 404 && integrations?.integrations && integrations?.integrations.length > 0
-        }
+        hasCreatingIntegration={integrationsError?.status !== 404 && integrations?.integrations?.length > 0}
       />
       <SubscribeModal
         modalId={MODALS.SUBSCRIBE}

@@ -321,7 +321,7 @@ export const Tree = () => {
                 )}
                 {isActive && stage.id === userProfileData.growth_tree_stage_id && (
                   <div
-                    ref={currentLevelRef} // Используем currentLevelRef для текущего уровня
+                    ref={currentLevelRef}
                     data-level={stage.stage_number}
                     style={{ height: '20px', width: '20px', background: 'transparent', visibility: 'hidden' }}
                   />
