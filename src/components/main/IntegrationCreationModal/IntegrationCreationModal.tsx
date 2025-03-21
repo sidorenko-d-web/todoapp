@@ -71,6 +71,14 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
 
+  useEffect(() => {
+    companies?.forEach(company => {
+      if(company.company_name.toLowerCase() === 'microsolve') {
+        console.log('SOLVE MICRO')
+        localStorage.setItem('microsolve', company.id);
+      }
+    })
+  }, [data, isCompaniesLoading]);
 
   const loadingTexts = [
     t("i35"),

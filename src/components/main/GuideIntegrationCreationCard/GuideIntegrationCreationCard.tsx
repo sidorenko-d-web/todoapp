@@ -60,7 +60,7 @@ export const UserGuideCreationCard: FC = () => {
             clearInterval(timerId);
 
             if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED)) {
-              createIntegration('909f329a-234f-4eca-87ab-0e29973cf8f3').unwrap().then((response) => {
+              createIntegration(localStorage.getItem('microsolve') || '909f329a-234f-4eca-87ab-0e29973cf8f3').unwrap().then((response) => {
                 if (response.id) {
                   setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED);
                   updateTimeLeft({ integrationId: response.id, timeLeftDelta: 36000 });

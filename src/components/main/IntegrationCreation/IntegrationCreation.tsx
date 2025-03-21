@@ -10,6 +10,7 @@ import { isGuideShown, isIntegrationCreationButtonGlowing, setGuideShown } from 
 
 import s from './IntegrationCreation.module.scss';
 import { useTranslation } from 'react-i18next';
+import { UserGuideCreationCard } from '../GuideIntegrationCreationCard/GuideIntegrationCreationCard.tsx';
 
 export const IntegrationCreation = () => {
   const { t } = useTranslation('integrations');
@@ -67,6 +68,9 @@ export const IntegrationCreation = () => {
 
   const createIntegrationButtonGlowing = useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing);
 
+  const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
+
+
   const btnGlowing =
     isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
     !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
@@ -79,7 +83,7 @@ export const IntegrationCreation = () => {
           : ''
       }`}
     >
-      {!integrationCreating && (
+      {(!integrationCreating && !firstIntegrationCreating) && (
         <TrackedButton
           trackingData={{
             eventType: 'button',
@@ -98,6 +102,8 @@ export const IntegrationCreation = () => {
         </TrackedButton>
       )}
 
+      {firstIntegrationCreating && <UserGuideCreationCard/>}
+      
       {
         (!isLoading && integrations) && <>
          { (integrations && integrations.count !== 0) 
