@@ -96,6 +96,8 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     return ((initialTimeLeft - timeLeft) / initialTimeLeft) * 100;
   };
 
+  const accelerateGuideClosed = useSelector((state: RootState) => state.guide.accelerateIntegrationGuideClosed);
+
   const [progress, setProgress] = useState(calculateProgress());
 
   useEffect(() => {
@@ -137,6 +139,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     }, 1000);
 
     if (isExpired) {
+      console.log('INTEGRATION EXPIRED!!!')
       dispatch(setIntegrationCreating(false));
       dispatch(setIsWorking(false));
       clearInterval(timerId);
@@ -205,7 +208,8 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   }
 
   return (
-    <div className={`${s.integration} ${s.elevated} ${isAccelerated ? s.accelerated : ''}`}>
+    <div className={`${s.integration} ${isAccelerated ? s.accelerated : ''}
+       ${(accelerateGuideClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) ? s.bordered : ''}`}>
       <div className={s.integrationHeader}>
         <h2 className={s.title}>{t('i10')}</h2>
         <span className={s.author}>

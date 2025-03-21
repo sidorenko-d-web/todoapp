@@ -138,7 +138,6 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
     { name: t('w4-1'), key: 'skin_color' },
     { name: t('w5'), key: 'upper_body' },
     { name: t('w6'), key: 'lower_body' }, // Merged legs & feet //bottom wear is too long to display
-    { name: 'VIP', key: 'entire_body' },
   ];
 
   inventorySkinsData?.skins.forEach(skin => {

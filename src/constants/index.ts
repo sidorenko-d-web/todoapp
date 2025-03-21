@@ -17,3 +17,5 @@ export * from './mainScene';
 export * from './integrationStarsThresholds'
 export * from './polling'
 export * from './users'
+export * from './buildMode'
+export * from './config'
