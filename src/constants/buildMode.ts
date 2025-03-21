@@ -1,4 +1,5 @@
-const buildMode: 'testDev' | 'test' | 'prodDev' | 'production' = 'testDev'; //change type of building here
+import { buildMode } from "./config";
+
 
 const proxy = {
   proxy_TestDev: (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev'),

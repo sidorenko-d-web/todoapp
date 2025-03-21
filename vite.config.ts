@@ -5,8 +5,9 @@ import { defineConfig } from 'vite';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import svgr from 'vite-plugin-svgr';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import { viteStaticCopy } from 'vite-plugin-static-copy'; // Для обработки .mp3
+import { buildMode } from './src/constants';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
@@ -19,6 +20,14 @@ export default defineConfig({
       symbolId: 'icon-[dir]-[name]',
     }),
     svgr(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'src/assets/audio/*.mp3', // Копируем все .mp3 файлы
+          dest: 'assets/audio',
+        },
+      ],
+    }),
   ],
   define: {
     'process.env': {},
@@ -51,24 +60,27 @@ export default defineConfig({
       },
     ],
   },
-  // server: { //prodDev
-  //   allowedHosts: true,
-  //   proxy: {
-  //     '/api/miniapp-v2-prod': {
-  //       target: 'https://miniapp.apusher.com',
-  //       changeOrigin: true,
-  //       rewrite: path => path.replace(/^\/api\/miniapp-v2-prod/, ''),
-  //     },
-  //   },
-  // },
-   server: { //testDev
-    allowedHosts: true,
-    proxy: {
-      '/api/miniapp-v2-dev': {
-        target: 'https://storage.yandexcloud.net',
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/api\/miniapp-v2-dev/, ''),
+  server:
+    //prodDev
+    // {
+    //   allowedHosts: true,
+    //   proxy: {
+    //     '/api/miniapp-v2-prod': {
+    //       target: 'https://miniapp.apusher.com',
+    //       changeOrigin: true,
+    //       rewrite: path => path.replace(/^\/api\/miniapp-v2-prod/, ''),
+    //     },
+    //   },
+    // }
+    {
+      //testDev
+      allowedHosts: true,
+      proxy: {
+        '/api/miniapp-v2-dev': {
+          target: 'https://storage.yandexcloud.net',
+          changeOrigin: true,
+          rewrite: path => path.replace(/^\/api\/miniapp-v2-dev/, ''),
+        },
       },
     },
-  },
 });

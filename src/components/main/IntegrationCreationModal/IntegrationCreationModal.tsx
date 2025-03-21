@@ -197,7 +197,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                 onClick={() => {
                   if(isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
                     setSelectedOption(option.value)
-                  }setSelectedOption(option.value)
+                  }
                 }}
               >
                 {option.label}

@@ -17,12 +17,17 @@ import { setIntegrationCreating } from '../../../redux/slices/integrationAcceler
 export const IntegrationCreation = () => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
-  const integrationCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+  const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
   const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
 
+
   const { data: profile } = useGetProfileMeQuery();
-  const { data: integrations, error: integrationsError } = useGetIntegrationsQuery(
+  const {
+    data: integrations,
+    error: integrationsError,
+    isLoading,
+  } = useGetIntegrationsQuery(
     { status: 'creating' },
     {
       pollingInterval: 10 * 60 * 1000,
@@ -72,13 +77,19 @@ export const IntegrationCreation = () => {
 
   const createIntegrationButtonGlowing = useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing);
 
-  const btnGlowing = ((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
-    && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)));
+  const btnGlowing =
+    isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
+    !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
 
   return (
-    <section className={`${s.integrationsControls} 
-      ${(isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)) ? s.elevated : ''}`}>
-      {(!integrationCreating && !firstIntegrationCreating) && (
+    <section
+      className={`${s.integrationsControls} ${
+        isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
+          ? s.elevated
+          : ''
+      }`}
+    >
+      {!integrationCurrentlyCreating && (
         <TrackedButton
           trackingData={{
             eventType: 'button',
@@ -97,26 +108,24 @@ export const IntegrationCreation = () => {
         </TrackedButton>
       )}
 
-      {/* <UserGuideCreationCard/> */}
-
-      {
-        firstIntegrationCreating ? (
+       {
+        firstIntegrationCreating && (
           <UserGuideCreationCard/>
-        ) : (
-          // @ts-expect-error ts(2339)
-          integrationsError?.status === 404
-            ? null
-            : integrations?.integrations && <IntegrationCreationCard integration={integrations?.integrations[0]} />
-        )
-      }
+        ) 
+       }
+
+      {integrationCurrentlyCreating ? (
+        <IntegrationCreationCard integration={integrations?.integrations[0]!} />
+      ) : (
+        !isLoading &&
+        integrations &&
+        integrations.count !== 0 && <IntegrationCreationCard integration={integrations.integrations[0]} />
+      )}
 
       <IntegrationCreationModal
         modalId={MODALS.CREATING_INTEGRATION}
         onClose={() => closeModal(MODALS.CREATING_INTEGRATION)}
-        hasCreatingIntegration={
-          // @ts-expect-error ts(2339)
-          integrationsError?.status !== 404 && integrations?.integrations && integrations?.integrations.length > 0
-        }
+        hasCreatingIntegration={integrationsError?.status !== 404 && integrations?.integrations?.length > 0}
       />
       <SubscribeModal
         modalId={MODALS.SUBSCRIBE}

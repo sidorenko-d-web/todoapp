@@ -74,10 +74,11 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     level: 1,
     item_rarity: item.item_rarity,
   });
-  const [ isUseBay, setIsUseBay ] = useState(false);
   const [ showEquipButton, setShowEquipButton ] = useState(false);
 
   const [ price, setPrice ] = useState('');
+
+  const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal
 
   useEffect(() => {
     if (data) {
@@ -190,9 +191,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)
     ) {
       handleEquipItem();
-    }
-    if (pointsUser) {
-      setIsUseBay(+pointsUser.points >= +price);
     }
   }, []);
 
@@ -458,16 +456,16 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                   ? styles.upgradeItemPurple
                   : item.item_rarity === 'green' && styles.upgradeItemRed,
               ),
-              { [styles.disabledBtn]: !isUseBay },
+              { [styles.disabledBtn]: !isAffordable },
             )}
-            disabled={item.level === 50 || isLoading || isItemsLoading || isUpdateLoading || !isUseBay}
+            disabled={item.level === 50 || isLoading || isItemsLoading || isUpdateLoading || !isAffordable}
             onClick={() => handleBuyItem(price ?? '')}
           >
             <>
               {formatAbbreviation(price || 0, 'number', {
                 locale: locale,
               })}{' '}
-              <img className={styles.imgCoints} src={!isUseBay ? CointsGrey : CoinIcon} alt="" />
+              <img className={styles.imgCoints} src={!isAffordable ? CointsGrey : CoinIcon} alt="" />
             </>
           </Button>
 
