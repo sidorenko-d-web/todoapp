@@ -25,6 +25,8 @@ interface GuideState {
 
   dimHeader: boolean;
   goToShopBtnGlowing: boolean;
+
+  firstIntegrationCreating: boolean;
 }
 
 const initialState: GuideState = {
@@ -50,6 +52,9 @@ const initialState: GuideState = {
   dimHeader: false,
 
   goToShopBtnGlowing: false,
+
+  firstIntegrationCreating: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)
+    && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED)
 };
 
 const guideSlice = createSlice({
@@ -109,6 +114,10 @@ const guideSlice = createSlice({
       state.goToShopBtnGlowing = action.payload;
     },
 
+    setFirstIntegrationCreating: (state, action: PayloadAction<boolean>) => {
+      state.firstIntegrationCreating = action.payload;
+    },
+
     resetGuideState: (state) => {
       Object.assign(state, {
         subscribeGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN),
@@ -141,6 +150,6 @@ export const { setGetCoinsGuideShown, setSubscribeGuideShown,
     setIntegrationCreated, setAccelerateIntegrationGuideClosed,
     setIsPublishedModalClosed, setIntegrationReadyForPublishing, 
     setElevateIntegrationStats, 
-    setItemBought, setLastIntegrationId, setDimHeader, setGoToShopBtnGlowing,
+    setItemBought, setLastIntegrationId, setDimHeader, setGoToShopBtnGlowing, setFirstIntegrationCreating,
     setFooterActive, setActiveFooterItemId, resetGuideState} = guideSlice.actions;
 export default guideSlice.reducer;

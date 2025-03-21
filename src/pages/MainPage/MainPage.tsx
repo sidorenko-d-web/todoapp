@@ -64,6 +64,8 @@ export const MainPage: FC = () => {
   } = useGetInventoryItemsQuery();
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
+  const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
+
   useEffect(() => {
     if (integrationCurrentlyCreating) {
       reduxDispatch(setDimHeader(false));
@@ -325,6 +327,7 @@ export const MainPage: FC = () => {
 
       <Room mode="me" />
 
+
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
@@ -332,10 +335,10 @@ export const MainPage: FC = () => {
         (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))
         
-          || (integrationCurrentlyCreating && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
+          || (firstIntegrationCreating && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
         <div
           style={{
-            position: 'fixed',
+            position: 'absolute',
             width: '100%',
             height: '100%',
             top: '0',
@@ -386,7 +389,7 @@ export const MainPage: FC = () => {
           />
         )}
 
-      {integrationCurrentlyCreating &&
+      {firstIntegrationCreating &&
         !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED) && (
           <AccelerateIntegtrationGuide
             onClose={() => {

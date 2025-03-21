@@ -10,13 +10,14 @@ import { isGuideShown, isIntegrationCreationButtonGlowing, setGuideShown } from 
 
 import s from './IntegrationCreation.module.scss';
 import { useTranslation } from 'react-i18next';
+import { UserGuideCreationCard } from '../GuideIntegrationCreationCard.tsx/GuideIntegrationCreationCard.tsx';
 
 export const IntegrationCreation = () => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const integrationCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
-  const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+  const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
 
   const { data: profile } = useGetProfileMeQuery();
   const { data: integrations, error: integrationsError } = useGetIntegrationsQuery(
@@ -69,7 +70,7 @@ export const IntegrationCreation = () => {
   return (
     <section className={`${s.integrationsControls} 
       ${(isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)) ? s.elevated : ''}`}>
-      {!integrationCreating && (
+      {(!integrationCreating && !firstIntegrationCreating) && (
         <TrackedButton
           trackingData={{
             eventType: 'button',
@@ -87,9 +88,12 @@ export const IntegrationCreation = () => {
           </span>
         </TrackedButton>
       )}
+
+      {/* <UserGuideCreationCard/> */}
+
       {
-        integrationCurrentlyCreating ? (
-          <IntegrationCreationCard integration={integrations?.integrations[0]!} />
+        firstIntegrationCreating ? (
+          <UserGuideCreationCard/>
         ) : (
           // @ts-expect-error ts(2339)
           integrationsError?.status === 404

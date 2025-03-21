@@ -1,0 +1,120 @@
+@use '../../../assets/styles/index.scss' as var;
+
+.integration {
+  width: 100%;
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 10px;
+  background-color: var.$color-card-bg;
+  border: 2px solid var.$color-primary;
+
+  z-index: 20000;
+
+  .integrationHeader {
+    display: flex;
+    justify-content: space-between;
+
+    .title {
+      margin: 0;
+      color: var.$color-text-semi-transparent;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 100%;
+    }
+
+    .author {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var.$color-text;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 100%;
+    }
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      .infoHeader {
+        display: flex;
+        justify-content: space-between;
+        color: var.$color-text-super-transparent;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 100%;
+      }
+
+      .progressBar {
+        height: 16px;
+        border-radius: 3px;
+        background-color: var.$color-gray;
+        overflow: hidden;
+
+        .progressBarInner {
+          @include var.striped-progress-bar();
+        }
+      }
+    }
+
+    .iconButton {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      padding: 8px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+      background: var.$color-primary;
+      border: none;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      .particle {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: var.$color-blue-primary;
+        pointer-events: none;
+        opacity: 1;
+        transform: scale(1);
+        animation: flyToProgress 0.8s cubic-bezier(0.42, 0, 0.58, 1) forwards;
+      }
+    }
+
+    @keyframes flyToProgress {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(-50px, -30px) scale(1.2);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(-100px, -10px) scale(0.5);
+        opacity: 0;
+      }
+    }
+  }
+}
+
+.elevated {
+  z-index: 16000;
+}
+.bordered {
+  border: 2px solid var.$color-primary;
+}
+
+.accelerated {
+  border-color: #2F80ED;
+  box-shadow: 0px 0px 16px 0px rgba(47, 128, 237, 0.50);
+}

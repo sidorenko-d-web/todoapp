@@ -5,6 +5,7 @@ import {
   integrationsApi,
   profileApi,
   RootState,
+  setFirstIntegrationCreating,
   setGoToShopBtnGlowing,
   setIntegrationCreated,
   setLastIntegrationId,
@@ -67,6 +68,9 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   // const integrationPublished = isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
   const goToShopButtonGlowing = useSelector((state: RootState) => state.guide.goToShopBtnGlowing);
+
+  const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
+
 
   const loadingTexts = [
     t("i35"),
@@ -134,6 +138,13 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     setSelectedCompanyId("");
   };
 
+  const submitFirstIntegrationCreation = () => {
+    console.log('!!!submitFirstIntegrationCreation')
+    dispatch(setFirstIntegrationCreating(true));
+
+    onClose();
+  }
+
   const noItemsMessage = (() => {
     const baseText = t('i16');
     if (selectedOption === 'text' && !hasText) return baseText + t('i17');
@@ -142,6 +153,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     return null;
   })();
 
+  // const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
   // const lightningsGlowing = integrationCreatingModalLightningsGlowing();
 
   const tabsGlowing = !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
@@ -185,7 +197,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
                 onClick={() => {
                   if(isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
                     setSelectedOption(option.value)
-                  }
+                  }setSelectedOption(option.value)
                 }}
               >
                 {option.label}
@@ -250,11 +262,13 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
               {t('i21')}
             </TrackedButton>}
 
-            {!noItemsMessage && !hasCreatingIntegration && (
+            {(!noItemsMessage && !hasCreatingIntegration && !firstIntegrationCreating) && (
               <div className={s.stickyButtonContainer}>
                 <button
                   className={`${s.createButton} ${!selectedCompanyId ? s.disabledButton : ''}`}
-                  onClick={submitCreation}
+                  onClick
+                  = {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) 
+                    ? submitCreation : submitFirstIntegrationCreation}
                   disabled={!selectedCompanyId || isSubmitting}
                   style={{
                     color: isLoading ? 'white' : ''
