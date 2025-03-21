@@ -302,6 +302,7 @@ export const MainPage: FC = () => {
 
 
   const accelerateIntegration = () => {
+    console.log('_acceleration')
     if (integrationCurrentlyCreating || firstIntegrationCreating) {
       reduxDispatch(incrementAcceleration());
     }
