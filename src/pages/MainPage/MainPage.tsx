@@ -85,99 +85,102 @@ export const MainPage: FC = () => {
   //   }
   // }, [isIntegrationsError, isInventoryFetchError, isAllIntegrationsLoading, isInventoryDataLoading]);
 
-  // useEffect(() => {
-  //   if (itemsData && !isInventoryDataLoading) {
-  //     let found = false;
+  useEffect(() => {
+    if (itemsData && !isInventoryDataLoading) {
+      let found = false;
 
-  //     itemsData.items.forEach(item => {
-  //       if (item.name.toLowerCase().trim() === 'печатная машинка') {
-  //         setTypewriterFound(true);
-  //         found = true;
+      itemsData.items.forEach(item => {
+        if (item.name.toLowerCase().trim() === 'печатная машинка') {
+          setTypewriterFound(true);
+          found = true;
 
-  //         setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
-  //         setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
-  //         setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
-  //         setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-  //         setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
-  //         setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
-  //         setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-  //         setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
+          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
 
-  //         setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
-  //         setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
-  //         setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+          setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
+          setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
 
-  //         reduxDispatch(resetGuideState());
-  //       }
-  //     });
+          reduxDispatch(resetGuideState());
+        }
+      });
 
-  //     if (!found) {
-  //       Object.entries(GUIDE_ITEMS).forEach(([ items ]) => {
-  //         Object.entries(items).forEach(([ _, value ]) => {
-  //           localStorage.setItem(value, '0');
-  //         });
-  //       });
-  //     }
-  //   }
-  // }, [ itemsData, isInventoryDataLoading, typewriterFound ]);
+      if (!found) {
+        Object.entries(GUIDE_ITEMS).forEach(([ items ]) => {
+          Object.entries(items).forEach(([ _, value ]) => {
+            localStorage.setItem(value, '0');
+          });
+        });
+      }
+    }
+  }, [ itemsData, isInventoryDataLoading, typewriterFound ]);
 
-  // useEffect(() => {
-  //   if (typeof data?.count !== 'undefined' && data?.count > 0) {
-  //     if (data?.count > 1) {
-  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
-  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED);
-  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
-  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN);
-  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
-  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
-  //       setGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED);
+  useEffect(() => {
+    if (typeof data?.count !== 'undefined' && data?.count > 0) {
+      if (data?.count > 1) {
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED);
 
-  //       setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
 
-  //       setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
 
-  //       setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
-  //       setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED);
 
-  //       setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
+        
+        setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
 
-  //       reduxDispatch(resetGuideState());
+        setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
-  //       reduxDispatch(setFooterActive(true));
-  //       reduxDispatch(setActiveFooterItemId(2));
-  //     } else {
-  //       if (
-  //         data?.integrations[0].status === 'published' &&
-  //         !getModalState(MODALS.INTEGRATION_REWARD).isOpen &&
-  //         localStorage.getItem('integrationCreatedGuideOpen') !== '1'
-  //       ) {
-  //         setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-  //         setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
-  //         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED);
-  //         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
-  //         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN);
-  //         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
-  //         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-  //         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
-  //         setGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED);
+        reduxDispatch(resetGuideState());
 
-  //         setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+        reduxDispatch(setFooterActive(true));
+        reduxDispatch(setActiveFooterItemId(2));
+      } else {
+        if (
+          data?.integrations[0].status === 'published' &&
+          !getModalState(MODALS.INTEGRATION_REWARD).isOpen &&
+          localStorage.getItem('integrationCreatedGuideOpen') !== '1'
+        ) {
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED);
 
-  //         // setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
-  //         // setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
+          setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
 
-  //         // setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
+          // setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
+          // setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
 
-  //         reduxDispatch(resetGuideState());
+          // setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
-  //         reduxDispatch(setFooterActive(true));
-  //         reduxDispatch(setActiveFooterItemId(2));
-  //       }
-  //     }
-  //   }
-  // }, [ data, isInventoryDataLoading ]);
+          reduxDispatch(resetGuideState());
+
+          reduxDispatch(setFooterActive(true));
+          reduxDispatch(setActiveFooterItemId(2));
+        }
+      }
+    }
+  }, [ data, isInventoryDataLoading ]);
 
 
   useEffect(() => {
@@ -223,61 +226,61 @@ export const MainPage: FC = () => {
     }
   }, [ creatingIntegrationModalState.isOpen ]);
 
-  // useEffect(() => {
-  //   reduxDispatch(setActiveFooterItemId(2));
+  useEffect(() => {
+    reduxDispatch(setActiveFooterItemId(2));
 
-  //   if (
-  //     isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
-  //     !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) &&
-  //     !purchasingSubscriptionModalState.isOpen
-  //   ) {
-  //     openModal(MODALS.SUBSCRIBE);
-  //   }
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) &&
+      !purchasingSubscriptionModalState.isOpen
+    ) {
+      openModal(MODALS.SUBSCRIBE);
+    }
 
-  //   if (
-  //     isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
-  //     !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
-  //     && !getModalState(MODALS.CREATING_INTEGRATION).isOpen
-  //   ) {
-  //     navigate(AppRoute.Shop);
-  //   }
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
+      && !getModalState(MODALS.CREATING_INTEGRATION).isOpen
+    ) {
+      navigate(AppRoute.Shop);
+    }
 
-  //   if (
-  //     isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
-  //     !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-  //     !getSubscriptionPurchased() &&
-  //     data?.count === 0
-  //   ) {
-  //     openModal(MODALS.SUBSCRIBE);
-  //   }
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+      !getSubscriptionPurchased() &&
+      data?.count === 0
+    ) {
+      openModal(MODALS.SUBSCRIBE);
+    }
 
-  //   if (
-  //     isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) &&
-  //     !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-  //     !creatingIntegrationModalState.isOpen
-  //   ) {
-  //     openModal(MODALS.CREATING_INTEGRATION);
-  //   }
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+      !creatingIntegrationModalState.isOpen
+    ) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
 
-  //   if (
-  //     isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-  //     !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
-  //     !creatingIntegrationModalState.isOpen
-  //   ) {
-  //     openModal(MODALS.CREATING_INTEGRATION);
-  //   }
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
+      !creatingIntegrationModalState.isOpen
+    ) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
 
-  //   if (
-  //     isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) &&
-  //     !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)
-  //   ) {
-  //     navigate(AppRoute.Shop);
-  //   }
+    if (
+      isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)
+    ) {
+      navigate(AppRoute.Shop);
+    }
 
-  //   if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
-  //     navigate(AppRoute.ShopInventory);
-  //   }
-  // }, []);
+    if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+      navigate(AppRoute.ShopInventory);
+    }
+  }, []);
 
   const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
