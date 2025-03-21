@@ -180,7 +180,7 @@ export const Tree = () => {
             !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? s.progressBarWithGuide : ''
           }`}
           style={{
-            height: `${treeData && 150 + (treeData.growth_tree_stages.length - 1) * 300 + 25}px`,
+            height: `${150 + (treeData ? (treeData.growth_tree_stages.length - 1) * 300 : 0) + 25}px`,
           }}
         >
           <div

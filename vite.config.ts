@@ -5,9 +5,6 @@ import { defineConfig } from 'vite';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import svgr from 'vite-plugin-svgr';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
-import { viteStaticCopy } from 'vite-plugin-static-copy'; // Для обработки .mp3
-import { buildMode } from './src/constants';
-
 export default defineConfig({
   plugins: [
     react(),
@@ -20,14 +17,6 @@ export default defineConfig({
       symbolId: 'icon-[dir]-[name]',
     }),
     svgr(),
-    viteStaticCopy({
-      targets: [
-        {
-          src: 'src/assets/audio/*.mp3', // Копируем все .mp3 файлы
-          dest: 'assets/audio',
-        },
-      ],
-    }),
   ],
   define: {
     'process.env': {},
