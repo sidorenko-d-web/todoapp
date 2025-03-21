@@ -2,12 +2,13 @@ import { FC, useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
-import { RootState, selectVolume, setFirstIntegrationCreating, setIntegrationReadyForPublishing, setIsWorking, setLastIntegrationId, useCreateIntegrationMutation, useUpdateTimeLeftMutation } from '../../../redux';
+import { integrationsApi, profileApi, RootState, selectVolume, setFirstIntegrationCreating, setIntegrationReadyForPublishing, setIsWorking, setLastIntegrationId, useCreateIntegrationMutation, useUpdateTimeLeftMutation } from '../../../redux';
 import s from './GuideIntegrationCreationCard.module.scss';
-import { SOUNDS } from '../../../constants';
+import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
 
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
+import { isGuideShown, setGuideShown } from '../../../utils';
 
 
 export const UserGuideCreationCard: FC = () => {
@@ -55,15 +56,21 @@ export const UserGuideCreationCard: FC = () => {
             dispatch(setIsWorking(false));
             clearInterval(timerId);
 
-            createIntegration('7b4387bc-1897-4861-8be4-622b4137d57d').unwrap().then((response) => {
-              if (response.id) {
-                updateTimeLeft({ integrationId: response.id, timeLeftDelta: 36000 });
-                dispatch(setIntegrationReadyForPublishing(true));
-                dispatch(setLastIntegrationId(response.id));
-                dispatch(setFirstIntegrationCreating(false));
-                setIsExpired(true);
-              }
-            });
+            if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED)) {
+              createIntegration('909f329a-234f-4eca-87ab-0e29973cf8f3').unwrap().then((response) => {
+                if (response.id) {
+                  setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED);
+                  updateTimeLeft({ integrationId: response.id, timeLeftDelta: 36000 });
+                  dispatch(setIntegrationReadyForPublishing(true));
+                  dispatch(setLastIntegrationId(response.id));
+                  dispatch(setFirstIntegrationCreating(false));
+                  dispatch(integrationsApi.util.invalidateTags(['Integrations']));
+                  dispatch(profileApi.util.invalidateTags(['Me']));
+                  setIsExpired(true); 
+                }
+              });
+              
+            }
           }
           return newTime;
         });
@@ -79,6 +86,7 @@ export const UserGuideCreationCard: FC = () => {
     if (!isExpired) {
       playAccelerateSound();
       setTimeLeft((prev) => Math.max(prev - 1, 0));
+      createParticles();
       setHasBorder(true);
 
       if (accelerationTimeoutRef.current) {
@@ -93,6 +101,23 @@ export const UserGuideCreationCard: FC = () => {
         setHasBorder(false);
         accelerationTimeoutRef.current = null;
       }, 2000);
+    }
+  };
+
+  const createParticles = () => {
+    const button = document.querySelector(`.${s.iconButton}`);
+    const progressBar = document.querySelector(`.${s.progressBar}`);
+
+    if (!button || !progressBar) return;
+
+    for (let i = 0; i < 5; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add(s.particle);
+      button.appendChild(particle);
+
+      setTimeout(() => {
+        particle.remove();
+      }, 800);
     }
   };
 

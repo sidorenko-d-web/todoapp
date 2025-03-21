@@ -239,7 +239,7 @@ export const MainPage: FC = () => {
       !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
       && !getModalState(MODALS.CREATING_INTEGRATION).isOpen
     ) {
-      //navigate(AppRoute.Shop);
+      navigate(AppRoute.Shop);
     }
 
     if (
