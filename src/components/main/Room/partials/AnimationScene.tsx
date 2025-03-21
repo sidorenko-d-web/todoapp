@@ -29,9 +29,11 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
 
   const dispatch = useDispatch();
 
+  const dpi = window.devicePixelRatio ?? 1;
+
   useEffect(() => {
     if (!sceneRef.current || character?.isLoading) return;
-    const width = sceneRef.current.offsetWidth;
+    const width = sceneRef.current.offsetWidth * dpi;
     const contextProps = { equipped_items: room?.equipped_items, center: width / 2 };
 
     class SpineScene extends SpineSceneBase {
@@ -101,14 +103,20 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
 
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
-      width: width,
-      height: sceneRef.current.offsetHeight,
+      width: window.innerWidth * window.devicePixelRatio,
+      height: window.innerHeight * window.devicePixelRatio,
       transparent: true,
       scene: [SpineScene],
+      canvasStyle: `width: ${window.innerWidth}px; height: ${window.innerHeight}px`,
+      autoRound: false, // Отключаем округление размеров
       plugins: {
         scene: [{ key: 'player', plugin: SpinePlugin, mapping: 'spine' }],
       },
       parent: 'player',
+      render: {
+        antialias: true,
+        antialiasGL: true,
+      },
     };
 
     gameRef.current = new Phaser.Game(config);
@@ -130,6 +138,30 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
     },
     [character?.data],
   );
+
+  function resizeApp() {
+    // Width-height-ratio of game resolution
+    // Replace 360 with your game width, and replace 640 with your game height
+    let game_ratio = 360 / 640;
+
+    // Make div full height of browser and keep the ratio of game resolution
+    let div = document.getElementById('player')!;
+    div.style.width = window.innerHeight * game_ratio + 'px';
+    div.style.height = window.innerHeight + 'px';
+
+    // Check if device DPI messes up the width-height-ratio
+    let canvas = document.getElementsByTagName('canvas')[0];
+
+    let dpi_w = parseInt(div.style.width) / canvas.width;
+    let dpi_h = parseInt(div.style.height) / canvas.height;
+
+    let height = window.innerHeight * (dpi_w / dpi_h);
+    let width = height * game_ratio;
+
+    // Scale canvas
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+  }
 
   const findAnimatedItem = useCallback((item: IShopItem) => {
     let animatedItem = animated.find(_item => item.name === _item.name);

@@ -5,7 +5,6 @@ import { defineConfig } from 'vite';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import svgr from 'vite-plugin-svgr';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
-import { buildMode } from './src/constants';
 
 // https://vitejs.dev/config/
 export default defineConfig({

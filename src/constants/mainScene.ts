@@ -20,8 +20,8 @@ export const itemsInSlots = {
   13: { width: 60, height: 60, x: 30, y: 398, z: 100 }, //lightDesc
   14: { width: 45, height: 45, x: -60, y: 420, z: 100 }, //mic
   15: { width: 40, height: 40, x: 35, y: 210, z: 1000 }, //photograph
-  16: { width: 58, height: 58, x: -17, y: 443, z: 102 }, //pc
-  17: { width: 17, height: 17, x: 15, y: 400, z: 100 }, //pen
+  16: { width: 58, height: 58, x: -17, y: 438, z: 102 }, //pc
+  17: { width: 17, height: 17, x: 15, y: 390, z: 100 }, //pen
   18: { width: 50, height: 50, x: 2, y: 187, z: 10 }, //lamp
   19: { width: 70, height: 70, x: -120, y: 485, z: 0 }, //ottoman
   20: { width: 60, height: 60, x: 145, y: 390, z: 0 }, //plant
@@ -37,7 +37,7 @@ export const animated = [
     skin: (prem_lvl: string) => prem_lvl,
     width: 40,
     x: 22,
-    y: 420,
+    y: 415,
   },
   {
     animation: 'animation',
@@ -66,14 +66,14 @@ export const animated = [
 ];
 
 export const baseItems = [
-  { name: 'broken-sofa', slot: 4, width: 140, height: 140, x: 60, y: 320, z: 0 },
-  { name: 'chair', slot: 3, width: 46, height: 46, x: -48, y: 430, z: 2 },
-  { name: 'table', slot: 2, width: 140, height: 140, x: -6, y: 455, z: 3 },
-  { name: 'window', slot: 5, width: 110, height: 110, x: -125, y: 260, z: 0 },
+  { name: 'broken-sofa', slot: 4, width: 150, height: 150, x: 60, y: 310, z: 0 },
+  { name: 'chair', slot: 3, width: 46, height: 46, x: -52, y: 422, z: 2 },
+  { name: 'table', slot: 2, width: 150, height: 150, x: -6, y: 442, z: 3 },
+  { name: 'window', slot: 5, width: 140, height: 140, x: -125, y: 260, z: 0 },
   { name: 'vase', slot: 19, width: 70, height: 70, x: -120, y: 485, z: 0 },
 ];
 const proxyImageUrl = buildLink()?.proxy!;
-
+const dpi = window.devicePixelRatio;
 
 export const itemsBaseUrl = buildLink()?.itemBaseUrl;
 interface contextProps {
@@ -108,20 +108,20 @@ export class SpineSceneBase extends Phaser.Scene {
   loadSvgItem(item: IShopItem, { equipped_items }: Pick<contextProps, 'equipped_items'>) {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const { width, height } = itemsInSlots[slot];
-    this.load.svg('item' + item.id, buildLink()?.svgLink(item.image_url), { width, height });
+    this.load.svg('item' + item.id, buildLink()?.svgLink(item.image_url), { width: width * dpi, height: height * dpi });
   }
 
   loadBaseItems() {
     baseItems.forEach(item => {
-      this.load.svg(item.name, createLink(item.name, 'base'), { width: item.width, height: item.height });
+      this.load.image(item.name, createLink(item.name, 'png'));
     });
   }
 
   //helpers for scene creation
   createPerson({ center }: Pick<contextProps, 'center'>, isWorking: boolean) {
     if (!this.add.spine) throw new Error('add.spine');
-    this.person = this.add.spine(center - 40, 437, 'personJson', 'personAtlas');
-    this.person.scale = 0.07;
+    this.person = this.add.spine(center - 40 * dpi, 437 * dpi, 'personJson', 'personAtlas');
+    this.person.scale = 0.07 * dpi;
     this.person.setDepth(3);
     this.person.animationState.data.defaultMix = 0.1;
     this.setCurrentLoopedAnimation(isWorking);
@@ -137,12 +137,15 @@ export class SpineSceneBase extends Phaser.Scene {
     const _item = itemsInSlots[slot];
 
     //changing position for camera if there is stand in the room
-    const x = slot === 11 && equipped_items?.find(item => item.slot === 12) ? animatedItem.x + 65 : animatedItem.x;
+    const x =
+      (slot === 11 && equipped_items?.find(item => item.slot === 12) ? animatedItem.x + 65 : animatedItem.x) * dpi;
     const y =
-      slot === 11 && equipped_items?.find(item => item.slot === 12) ? animatedItem.y + 17 + 50 : animatedItem.y + 50;
+      (slot === 11 && equipped_items?.find(item => item.slot === 12) ? animatedItem.y + 17 + 50 : animatedItem.y + 50) *
+      dpi;
 
     const spineObject = this.add.spine(center + x, y, 'json' + item.id, 'atlas' + item.id);
-    spineObject.scale = animatedItem.width / this.spine.getSkeletonData('json' + item.id, 'atlas' + item.id).width;
+    spineObject.scale =
+      (animatedItem.width / this.spine.getSkeletonData('json' + item.id, 'atlas' + item.id).width) * dpi;
     spineObject.animationState.setAnimation(0, animatedItem.animation, true);
     spineObject.skeleton.setSkinByName(animatedItem.skin(item.item_premium_level));
     spineObject.setDepth(_item.z);
@@ -153,7 +156,7 @@ export class SpineSceneBase extends Phaser.Scene {
   createSVGItem(item: IShopItem, i: number, { equipped_items, center }: contextProps) {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const _item = itemsInSlots[slot];
-    const imageObject = this.add.image(center + _item.x, _item.y + 50, 'item' + item.id);
+    const imageObject = this.add.image(center + _item.x * dpi, (_item.y + 50) * dpi, 'item' + item.id);
     imageObject.setDepth(_item.z);
     this.objects[i] = imageObject;
   }
@@ -162,8 +165,10 @@ export class SpineSceneBase extends Phaser.Scene {
     const slots = equipped_items?.map(item => item.slot);
     baseItems.forEach(item => {
       if (!slots?.includes(item.slot)) {
-        const added = this.add.image(center + item.x, item.y + 50, item.name);
+        const added = this.add.image(center + item.x * dpi, (item.y + 50) * dpi, item.name);
         added.setDepth(item.z);
+        added.displayWidth = item.width * dpi;
+        added.displayHeight = item.height * dpi;
         this.objects?.push(added);
       }
     });
@@ -189,13 +194,14 @@ export class SpineSceneBase extends Phaser.Scene {
   }
 }
 
-const createLink = (itemString: string, type: 'json' | 'atlas' | 'json1' | 'atlas1' | 'base') => {
+const createLink = (itemString: string, type: 'json' | 'atlas' | 'json1' | 'atlas1' | 'base' | 'png') => {
   let string: string = '';
   if (type === 'json') string = new URL(itemsBaseUrl + itemString + '.json').href;
   else if (type === 'atlas') string = new URL(itemsBaseUrl + itemString + 'atlas.txt').href;
   else if (type === 'json1') string = new URL(itemsBaseUrl + itemString + '1.json').href;
   else if (type === 'atlas1') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
   else if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
+  else if (type === 'png') string = new URL(itemsBaseUrl + itemString + '.png').href;
 
   return proxyImageUrl(string);
 };
