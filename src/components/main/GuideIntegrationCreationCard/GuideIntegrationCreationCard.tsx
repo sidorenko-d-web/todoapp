@@ -9,12 +9,15 @@ import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
 import { isGuideShown, setGuideShown } from '../../../utils';
+import { useTranslation } from 'react-i18next';
 
 
 export const UserGuideCreationCard: FC = () => {
   const dispatch = useDispatch();
   const [hasBorder, setHasBorder] = useState(false);
 
+  const { t } = useTranslation('integrations');
+  
   const [timeLeft, setTimeLeft] = useState(20);
   const [isExpired, setIsExpired] = useState(false);
   const [isAccelerated, setIsAccelerated] = useState(false);
@@ -51,7 +54,7 @@ export const UserGuideCreationCard: FC = () => {
       if (!isPaused) {
         setTimeLeft((prevTime) => {
           const newTime = Math.max(prevTime - 1, 0);
-          if (newTime === 10) setIsPaused(true);
+          if (newTime < 10 && newTime > 0) setIsPaused(true);
           if (newTime === 0) {
             dispatch(setIsWorking(false));
             clearInterval(timerId);
@@ -134,16 +137,16 @@ export const UserGuideCreationCard: FC = () => {
   return (
     <div className={`${s.integration} ${isAccelerated ? s.accelerated : ''}`}>
       <div className={s.integrationHeader}>
-        <h2 className={s.title}>"User Guide Creation"</h2>
+      <h2 className={s.title}>{t('i10')}</h2>
         <span className={s.author}>
-          "Guide System" <img src={dotIcon} height={14} width={14} alt="dot" />
+          Microsolve <img src={dotIcon} height={14} width={14} alt="dot" />
         </span>
       </div>
       <div className={s.body}>
         <div className={s.info}>
           <div className={s.infoHeader}>
-            <span>"Guide in Progress..."</span>
-            <span>"Time left: " {formatTime(timeLeft)}</span>
+          <span>{t('i11')}...</span>
+            <span> {t('i12')} {formatTime(timeLeft)}</span>
           </div>
           <div className={s.progressBar} style={{ border: hasBorder ? '1px solid #2064C0' : 'none' }}>
             <div className={s.progressBarInner} style={{ width: `${progress}%` }} />

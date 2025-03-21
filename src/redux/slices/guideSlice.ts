@@ -54,7 +54,7 @@ const initialState: GuideState = {
   goToShopBtnGlowing: false,
 
   firstIntegrationCreating: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)
-    && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED)
+    && !isGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED)
 };
 
 const guideSlice = createSlice({
