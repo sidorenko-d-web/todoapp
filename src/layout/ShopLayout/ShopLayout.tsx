@@ -71,7 +71,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const { data: shop } = useGetShopItemsQuery({
     level: 1,
     item_category: shopCategory.value as TypeItemCategory,
-    is_bought: true,
+    is_bought: false,
   });
   const { data: boost } = useGetCurrentUserBoostQuery();
 

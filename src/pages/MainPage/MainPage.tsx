@@ -239,7 +239,7 @@ export const MainPage: FC = () => {
       !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
       && !getModalState(MODALS.CREATING_INTEGRATION).isOpen
     ) {
-      navigate(AppRoute.Shop);
+      //navigate(AppRoute.Shop);
     }
 
     if (
@@ -302,7 +302,7 @@ export const MainPage: FC = () => {
 
 
   const accelerateIntegration = () => {
-    if (integrationCurrentlyCreating) {
+    if (integrationCurrentlyCreating || firstIntegrationCreating) {
       reduxDispatch(incrementAcceleration());
     }
   };
@@ -311,7 +311,7 @@ export const MainPage: FC = () => {
     <main className={s.page} onClick={accelerateIntegration}>
       <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
 
-      {integrationCurrentlyCreating && (
+      {integrationCurrentlyCreating || firstIntegrationCreating && (
         <div
           style={{
             position: 'absolute',
