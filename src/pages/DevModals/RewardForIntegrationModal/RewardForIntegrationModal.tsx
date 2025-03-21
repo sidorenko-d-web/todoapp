@@ -1,4 +1,4 @@
-import { GUIDE_ITEMS, MODALS, SOUNDS, starsThresholds } from '../../../constants';
+import { GUIDE_ITEMS, MODALS, PROFILE_ME_POLLING_INTERVAL, SOUNDS, starsThresholds } from '../../../constants';
 import { useAutoPlaySound, useModal } from '../../../hooks';
 import styles from './RewardForIntegrationModal.module.scss';
 import Button from '../partials/Button';
@@ -20,6 +20,7 @@ import {
   setIsPublishedModalClosed,
   setNeedToPlayHappy,
   useGetIntegrationsQuery,
+  useGetProfileMeWithPollingQuery,
 } from '../../../redux';
 import { setGuideShown } from '../../../utils';
 import { useEffect } from 'react';
@@ -28,6 +29,9 @@ export default function RewardForIntegrationModal() {
   const { t, i18n } = useTranslation('integrations');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal, getModalState } = useModal();
+  const { refetch } = useGetProfileMeWithPollingQuery(undefined, {
+    pollingInterval: PROFILE_ME_POLLING_INTERVAL,
+  });
 
   const { args } = getModalState<{
     company: CompanyResponseDTO;
@@ -91,7 +95,7 @@ export default function RewardForIntegrationModal() {
       <div className={styles.wrapper}>
         <div className={styles.info}>
           <div className={styles.top}>
-            <img className={styles.integration} src={args?.company.image_url} alt='image' />
+            <img className={styles.integration} src={args?.company.image_url} alt="image" />
           </div>
           <div className={styles.bottom}>
             <h2 className={styles.title}>{args?.company.company_name}</h2>
@@ -132,6 +136,7 @@ export default function RewardForIntegrationModal() {
         <Button
           variant={'blue'}
           onClick={() => {
+            refetch();
             dispatch(setIsPublishedModalClosed(true));
             closeModal(MODALS.INTEGRATION_REWARD);
           }}
