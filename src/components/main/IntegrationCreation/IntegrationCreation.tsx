@@ -114,7 +114,7 @@ export const IntegrationCreation = () => {
         ) 
        }
 
-      {integrationCurrentlyCreating ? (
+      {(integrationCurrentlyCreating && !firstIntegrationCreating) ? (
         <IntegrationCreationCard integration={integrations?.integrations[0]!} />
       ) : (
         !isLoading &&
