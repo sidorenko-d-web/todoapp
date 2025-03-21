@@ -119,7 +119,7 @@ export const Tree = () => {
     };
   }, []);
 
-  if ((!treeData || !isBgLoaded || !userProfileData) && isCalculating) {
+  if ((treeData === undefined || !isBgLoaded || !userProfileData) && isCalculating) {
     return (
       <>
         <div
@@ -167,7 +167,7 @@ export const Tree = () => {
         <div className={s.progressBarContainer}>
           <div
             className={s.progressBar}
-            style={{ height: `${150 + (treeData.growth_tree_stages.length - 1) * 300 + 25}px` }}
+            style={{ height: `${150 + ({treeData && treeData.growth_tree_stages.length - 1}) * 300 + 25}px` }}
           >
             <div className={s.progressFill} style={{ height: `${progressPercent}%` }} ref={progressBarContainerRef} />
           </div>
@@ -176,13 +176,17 @@ export const Tree = () => {
 
       <div className={s.progressBarContainer}>
         <div
-          className={`${s.progressBar} ${!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? s.progressBarWithGuide : ''}`}
+          className={`${s.progressBar} ${
+            !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? s.progressBarWithGuide : ''
+          }`}
           style={{
             height: `${150 + (treeData.growth_tree_stages.length - 1) * 300 + 25}px`,
           }}
         >
           <div
-            className={`${s.progressFill} ${!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? s.progressFillWithGuide : ''}`}
+            className={`${s.progressFill} ${
+              !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? s.progressFillWithGuide : ''
+            }`}
             style={{ height: `${progressPercent}%` }}
             ref={progressBarContainerRef}
           />
