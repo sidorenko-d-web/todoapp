@@ -10,17 +10,13 @@ import { isGuideShown, isIntegrationCreationButtonGlowing, setGuideShown } from 
 
 import s from './IntegrationCreation.module.scss';
 import { useTranslation } from 'react-i18next';
-import { UserGuideCreationCard } from '../GuideIntegrationCreationCard/GuideIntegrationCreationCard.tsx';
-import { useEffect } from 'react';
-import { setIntegrationCreating } from '../../../redux/slices/integrationAcceleration.ts';
 
 export const IntegrationCreation = () => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
-  const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+  const integrationCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
-  const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
-
+  //const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
   const { data: profile } = useGetProfileMeQuery();
   const {
@@ -60,12 +56,6 @@ export const IntegrationCreation = () => {
   //   }
   // }, [integrationsError])
 
-  useEffect(() => {
-    if(integrations?.count !== undefined && integrations?.count > 0) {
-      dispatch(setIntegrationCreating(true));
-    }
-  }, [integrations]);
-  
   const handleSuccessfullySubscribed = () => {
     closeModal(MODALS.SUBSCRIBE);
     dispatch(profileApi.util.invalidateTags(['Me']));
@@ -89,7 +79,7 @@ export const IntegrationCreation = () => {
           : ''
       }`}
     >
-      {!integrationCurrentlyCreating && (
+      {!integrationCreating && (
         <TrackedButton
           trackingData={{
             eventType: 'button',
@@ -108,23 +98,17 @@ export const IntegrationCreation = () => {
         </TrackedButton>
       )}
 
-       {
-        firstIntegrationCreating && (
-          <UserGuideCreationCard/>
-        ) 
-       }
-
-      {(integrationCurrentlyCreating && !firstIntegrationCreating) ? (
-        <IntegrationCreationCard integration={integrations?.integrations[0]!} />
-      ) : (
-        !isLoading &&
-        integrations &&
-        integrations.count !== 0 && <IntegrationCreationCard integration={integrations.integrations[0]} />
-      )}
+      {
+        (!isLoading && integrations) && <>
+         { (integrations && integrations.count !== 0) 
+        ? <IntegrationCreationCard integration={integrations?.integrations[0]} /> : null}
+        </>
+      }
 
       <IntegrationCreationModal
         modalId={MODALS.CREATING_INTEGRATION}
         onClose={() => closeModal(MODALS.CREATING_INTEGRATION)}
+        // @ts-expect-error ts(2339)
         hasCreatingIntegration={integrationsError?.status !== 404 && integrations?.integrations?.length > 0}
       />
       <SubscribeModal
