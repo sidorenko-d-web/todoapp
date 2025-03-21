@@ -10,7 +10,9 @@ import { isGuideShown, isIntegrationCreationButtonGlowing, setGuideShown } from 
 
 import s from './IntegrationCreation.module.scss';
 import { useTranslation } from 'react-i18next';
-import { UserGuideCreationCard } from '../GuideIntegrationCreationCard.tsx/GuideIntegrationCreationCard.tsx';
+import { UserGuideCreationCard } from '../GuideIntegrationCreationCard/GuideIntegrationCreationCard.tsx';
+import { useEffect } from 'react';
+import { setIntegrationCreating } from '../../../redux/slices/integrationAcceleration.ts';
 
 export const IntegrationCreation = () => {
   const { t } = useTranslation('integrations');
@@ -53,6 +55,12 @@ export const IntegrationCreation = () => {
   //   }
   // }, [integrationsError])
 
+  useEffect(() => {
+    if(integrations?.count !== undefined && integrations?.count > 0) {
+      dispatch(setIntegrationCreating(true));
+    }
+  }, [integrations]);
+  
   const handleSuccessfullySubscribed = () => {
     closeModal(MODALS.SUBSCRIBE);
     dispatch(profileApi.util.invalidateTags(['Me']));
