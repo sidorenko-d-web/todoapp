@@ -15,6 +15,7 @@ import { setIntegrationCreating } from '../../../redux/slices/integrationAcceler
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
+  refetchIntegration: () => void;
 }
 
 const TIME_LEFT_KEY = 'integration_time_left';
@@ -22,7 +23,7 @@ const INITIAL_TIME_LEFT_KEY = 'integration_initial_time_left';
 const INTEGRATION_ID_KEY = 'integration_id';
 const LAST_UPDATED_TIME_KEY = 'last_updated_time';
 
-export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration }) => {
+export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration, refetchIntegration }) => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const [hasBorder, setHasBorder] = useState(false);
@@ -139,7 +140,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     }, 1000);
 
     if (isExpired) {
-      console.log('INTEGRATION EXPIRED!!!')
+      console.log('INTEGRATION EXPIRED!!!');
       dispatch(setIntegrationCreating(false));
       dispatch(setIsWorking(false));
       clearInterval(timerId);
@@ -178,6 +179,9 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
         setHasBorder(false);
         accelerationTimeoutRef.current = null;
       }, 2000);
+
+      // Обновляем данные о текущей интеграции
+      refetchIntegration();
     }
   };
 
@@ -208,8 +212,14 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   }
 
   return (
-    <div className={`${s.integration} ${isAccelerated ? s.accelerated : ''}
-       ${(accelerateGuideClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) ? s.bordered : ''}`}>
+    <div
+      className={`${s.integration} ${isAccelerated ? s.accelerated : ''}
+       ${
+         accelerateGuideClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)
+           ? s.bordered
+           : ''
+       }`}
+    >
       <div className={s.integrationHeader}>
         <h2 className={s.title}>{t('i10')}</h2>
         <span className={s.author}>

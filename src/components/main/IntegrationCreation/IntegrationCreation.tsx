@@ -1,13 +1,17 @@
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { GUIDE_ITEMS, MODALS } from '../../../constants';
-import { profileApi, RootState, useGetIntegrationsQuery, useGetProfileMeQuery } from '../../../redux';
+import {
+  profileApi,
+  RootState,
+  useGetIntegrationQuery,
+  useGetIntegrationsQuery,
+  useGetProfileMeQuery,
+} from '../../../redux';
 import { IntegrationCreationCard, IntegrationCreationModal } from '../';
 import { SubscribeModal, SuccessfullySubscribedModal, TrackedButton } from '../../';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { isGuideShown, isIntegrationCreationButtonGlowing, setGuideShown } from '../../../utils/guide-functions.ts';
-
 import s from './IntegrationCreation.module.scss';
 import { useTranslation } from 'react-i18next';
 import { UserGuideCreationCard } from '../GuideIntegrationCreationCard/GuideIntegrationCreationCard.tsx';
@@ -20,29 +24,29 @@ export const IntegrationCreation = () => {
   //const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
   const { data: profile } = useGetProfileMeQuery();
-  const {
-    data: integrations,
-    error: integrationsError,
-    isLoading,
-  } = useGetIntegrationsQuery(
+  const { data: integrations, isLoading } = useGetIntegrationsQuery(
     { status: 'creating' },
     {
       pollingInterval: 10 * 60 * 1000,
     },
   );
+
+  const { data: integration, refetch: refetchIntegration } = useGetIntegrationQuery(
+    integrations?.integrations[0]?.id || '',
+    {
+      skip: !integrations?.integrations[0]?.id,
+    },
+  );
+
   const { openModal, closeModal } = useModal();
 
   const handleIntegrationCreation = () => {
-    //openModal(MODALS.SUBSCRIBE);
-
     if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)) {
       if (!profile) return;
-
       if (profile?.subscription_integrations_left <= 0) {
         openModal(MODALS.SUBSCRIBE);
         return;
       }
-
       if (!isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) {
         openModal(MODALS.SUBSCRIBE);
       } else {
@@ -51,21 +55,13 @@ export const IntegrationCreation = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if(integrationsError?.status === 404) {
-  //     console.log('basdsafa 404');
-  //   }
-  // }, [integrationsError])
-
   const handleSuccessfullySubscribed = () => {
     closeModal(MODALS.SUBSCRIBE);
-    dispatch(profileApi.util.invalidateTags(['Me']));
     dispatch(profileApi.util.invalidateTags(['Me']));
     openModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
   };
 
   const isButtonGlowing = isIntegrationCreationButtonGlowing();
-
   const createIntegrationButtonGlowing = useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing);
 
   const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
@@ -77,7 +73,8 @@ export const IntegrationCreation = () => {
 
   return (
     <section
-      className={`${s.integrationsControls} ${
+      className={`${s.integrationsControls} 
+      ${
         isGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)
           ? s.elevated
           : ''
@@ -107,15 +104,19 @@ export const IntegrationCreation = () => {
       {
         (!isLoading && integrations) && <>
          { (integrations && integrations.count !== 0) 
-        ? <IntegrationCreationCard integration={integrations?.integrations[0]} /> : null}
+        ? <IntegrationCreationCard integration={integrations?.integrations[0]} refetchIntegration={refetchIntegration}/> : null}
         </>
       }
 
       <IntegrationCreationModal
         modalId={MODALS.CREATING_INTEGRATION}
         onClose={() => closeModal(MODALS.CREATING_INTEGRATION)}
-        // @ts-expect-error ts(2339)
-        hasCreatingIntegration={integrationsError?.status !== 404 && integrations?.integrations?.length > 0}
+        hasCreatingIntegration={
+          integrations &&
+          integrations.count !== 0 &&
+          integrations?.integrations &&
+          integrations?.integrations.length > 0
+        }
       />
       <SubscribeModal
         modalId={MODALS.SUBSCRIBE}
