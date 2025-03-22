@@ -50,6 +50,9 @@ const StorePage: FC = () => {
 
   if (isLoading) return <Loader />;
 
+  console.log(shopCategory);
+  console.log(shop, 'shop');
+
   return (
     <ShopLayout mode="shop" onItemCategoryChange={setShopCategory} onItemQualityChange={setItemsQuality}>
       {isShopLoading || isShopFetching ? (

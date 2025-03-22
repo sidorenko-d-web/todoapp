@@ -68,9 +68,9 @@ export function AuthInit({ children }: AuthInitProps) {
           // referral_id={1301940582}
           // referral_id={6547551264}
           // referral_id={1488618801}
-          // referral_id={6475086298}
+          referral_id={6475086298}
           // referral_id={6983657401}
-          referral_id={563486774}
+          // referral_id={563486774}
           // referral_id={7113958933}
         />
       )}
