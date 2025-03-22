@@ -102,7 +102,7 @@ export const IntegrationCreation = () => {
       {firstIntegrationCreating && <UserGuideCreationCard/>}
       
       {
-        (!isLoading && integrations) && <>
+        (!isLoading && integrations && !firstIntegrationCreating) && <>
          { (integrations && integrations.count !== 0) 
         ? <IntegrationCreationCard integration={integrations?.integrations[0]} refetchIntegration={refetchIntegration}/> : null}
         </>
