@@ -29,7 +29,7 @@ export const SuccessfullySubscribedModal: FC<SuccessfullySubscribedModalProps> =
           <div className={s.progress}>
             <div className={s.progressInfo}>
               <span>{t('g76')}</span>
-              <span className={s.progressIcon}>5/5 <img src={integrationWhiteIcon} height={12} width={12}
+              <span className={s.progressIcon}>5/5 <img src={integrationWhiteIcon} height={18} width={18}
                                                         alt={'Integration'} /></span>
             </div>
             <div className={s.progressBar}>
