@@ -21,7 +21,7 @@
     border-radius: 8px;
     overflow: hidden;
     position: relative;
-    margin: 20px 0 20px 0;
+    margin: 16px 0 20px 0;
     animation: img-scale-anim 0.8s forwards ease;
 
     img{
@@ -44,7 +44,7 @@
 
 .text {
   width: 100%;
-  margin-bottom: 40px;
+  margin-bottom: 45px;
 
   p {
     color: $color-text-semi-transparent;
