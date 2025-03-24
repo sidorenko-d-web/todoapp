@@ -84,7 +84,7 @@ export const IntegrationPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(setActiveFooterItemId(1));
-    dispatch(setFooterActive(true));
+    //dispatch(setFooterActive(true));
   }, []);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
@@ -169,6 +169,8 @@ export const IntegrationPage: React.FC = () => {
           onClose={() => {
             setRerender(1);
             setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+            dispatch(setFooterActive(true));
+            dispatch(setActiveFooterItemId(1));
             dispatch(setElevateIntegrationStats(false));
             dispatch(setDimHeader(false));
             setRerender(1);
