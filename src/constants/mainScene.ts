@@ -6,8 +6,8 @@ import { buildLink } from './buildMode';
 export const itemsInSlots = {
   1: { width: 0, height: 0, x: -1000, y: -1000, z: -100 }, // walls === not here
   0: { width: 0, height: 0, x: -1000, y: -1000, z: -100 }, // floor === not here
-  2: { width: 160, height: 160, x: -6, y: 455, z: 3 }, //desc
-  3: { width: 120, height: 120, x: -50, y: 415, z: 2 }, //chair
+  2: { width: 160, height: 160, x: -6, y: 451, z: 3 }, //desc
+  3: { width: 120, height: 120, x: -45, y: 415, z: 2 }, //chair
   4: { width: 150, height: 150, x: 60, y: 320, z: 0 }, //sofa
   5: { width: 150, height: 150, x: -125, y: 260, z: 0 }, //window
   6: { width: 35, height: 35, x: -70, y: 223, z: 0 }, //poster
@@ -21,14 +21,14 @@ export const itemsInSlots = {
   14: { width: 45, height: 45, x: -60, y: 420, z: 100 }, //mic
   15: { width: 40, height: 40, x: 35, y: 210, z: 1000 }, //photograph
   16: { width: 58, height: 58, x: -17, y: 438, z: 102 }, //pc
-  17: { width: 17, height: 17, x: 15, y: 390, z: 100 }, //pen
+  17: { width: 17, height: 17, x: 15, y: 392, z: 100 }, //pen
   18: { width: 50, height: 50, x: 2, y: 187, z: 10 }, //lamp
   19: { width: 70, height: 70, x: -120, y: 485, z: 0 }, //ottoman
-  20: { width: 60, height: 60, x: 145, y: 390, z: 0 }, //plant
+  20: { width: 60, height: 60, x: 135, y: 365, z: 100 }, //plant
 };
 
 export const animated = [
-  { animation: '2_idle', name: 'Постерbase', skin: () => 'default', width: 35, x: -70, y: 223 },
+  { animation: '2_idle', name: 'Постерbase', skin: () => 'default', width: 40, x: -70, y: 213 },
   { animation: 'animation', name: 'Постерadvanced', skin: () => 'default', width: 190, x: -70, y: 223 },
   { animation: 'anim_2', name: 'Постерpro', skin: () => 'default', width: 37, x: -70, y: 223 },
   {
@@ -55,8 +55,8 @@ export const animated = [
     name: 'Лампа настольная',
     skin: (prem_lvl: string) => prem_lvl,
     width: 60,
-    x: 30,
-    y: 398,
+    x: 32,
+    y: 394,
   },
   { animation: 'blink_2', name: 'Лампа', skin: (prem_lvl: string) => prem_lvl, width: 110, x: 2, y: 187 },
   { animation: 'animation', name: 'ПКbase', skin: (prem_lvl: string) => prem_lvl, width: 100, x: -27, y: 425 },
@@ -66,12 +66,13 @@ export const animated = [
 ];
 
 export const baseItems = [
-  { name: 'broken-sofa', slot: 4, width: 150, height: 150, x: 60, y: 310, z: 0 },
+  { name: 'broken-sofa', slot: 4, width: 150, height: 150, x: 60, y: 320, z: 0 },
   { name: 'chair', slot: 3, width: 46, height: 46, x: -52, y: 422, z: 2 },
   { name: 'table', slot: 2, width: 150, height: 150, x: -6, y: 442, z: 3 },
   { name: 'window', slot: 5, width: 140, height: 140, x: -125, y: 260, z: 0 },
   { name: 'vase', slot: 19, width: 70, height: 70, x: -120, y: 485, z: 0 },
 ];
+
 const proxyImageUrl = buildLink()?.proxy!;
 const dpi = window.devicePixelRatio;
 
@@ -140,7 +141,7 @@ export class SpineSceneBase extends Phaser.Scene {
     const x =
       (slot === 11 && equipped_items?.find(item => item.slot === 12) ? animatedItem.x + 65 : animatedItem.x) * dpi;
     const y =
-      (slot === 11 && equipped_items?.find(item => item.slot === 12) ? animatedItem.y + 17 + 50 : animatedItem.y + 50) *
+      (slot === 11 && equipped_items?.find(item => item.slot === 12) ? animatedItem.y + 20 + 50 : animatedItem.y + 50) *
       dpi;
 
     const spineObject = this.add.spine(center + x, y, 'json' + item.id, 'atlas' + item.id);
