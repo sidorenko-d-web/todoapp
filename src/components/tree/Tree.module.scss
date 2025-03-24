@@ -254,3 +254,7 @@
 .progressFillWithGuide {
   visibility: hidden;
 }
+
+.bordered {
+  border: 2px solid var.$color-border-primary;
+}

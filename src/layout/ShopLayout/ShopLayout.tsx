@@ -71,7 +71,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const { data: shop } = useGetShopItemsQuery({
     level: 1,
     item_category: shopCategory.value as TypeItemCategory,
-    is_bought: true,
+    is_bought: false,
   });
   const { data: boost } = useGetCurrentUserBoostQuery();
 
@@ -161,7 +161,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     if (mode === 'inventory') {
       const timer = setTimeout(() => {
         setShowBackToMainGuide(true);
-      }, 1);
+      }, 1000);
 
       return () => clearTimeout(timer);
     } else {
@@ -298,20 +298,21 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
       {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
         isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN) &&
-        mode === 'shop' && (
+        mode === 'shop' && showWelcomeGuide && (
           <UpgradeItemsGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
               //dispatch(setDimHeader(false));
               setRerender(prev => prev + 1);
+              navigate(AppRoute.ShopInventory);
             }}
           />
         )}
 
       {isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) &&
-        mode === 'inventory' && (
+        mode === 'inventory' && showBackToMainGuide && (
           <TreeLevelGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);

@@ -61,10 +61,7 @@ export function AuthInit({ children }: AuthInitProps) {
         />
       )}
       {currentStep === 'invite_code' && (
-        <EnterInviteCodePage
-          onContinue={handleInviteCodeContinue}
-          referral_id={referral_id}
-        />
+        <EnterInviteCodePage onContinue={handleInviteCodeContinue} referral_id={referral_id} />
       )}
       {currentStep === 'skin' && <SkinSetupPage onContinue={handleSkinContinue} />}
       {currentStep === 'completed' && (

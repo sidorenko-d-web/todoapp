@@ -26,6 +26,7 @@ export const ProgressTreePage = () => {
           onClose={() => {
             setRerender((prev) => prev + 1);
             setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
+            setRerender((prev) => prev + 1);
           }}
         />
       )}

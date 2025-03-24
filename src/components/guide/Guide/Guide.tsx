@@ -1,5 +1,7 @@
 import { ReactNode, useEffect, useRef } from 'react';
 import styles from './Guide.module.scss';
+import { isGuideShown } from '../../../utils';
+import { GUIDE_ITEMS } from '../../../constants';
 
 interface GuideProps {
     align?: 'left' | 'right';
@@ -40,9 +42,12 @@ export const Guide = ({
         }
     }, [onClose]);
 
+    const treeGuideDisplaying = isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN) 
+        && !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
+
     return (
         <div
-            className={`${styles.wrp} ${dimBackground ? styles.dimmed : ''}`}
+            className={`${styles.wrp} ${dimBackground ? (treeGuideDisplaying ?  styles.dimmedTree :  styles.dimmed) : ''}`}
             style={{ zIndex }}
         >
             <div

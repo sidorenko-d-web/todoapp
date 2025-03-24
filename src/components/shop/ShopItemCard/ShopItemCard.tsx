@@ -38,7 +38,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const usdtTransactions = useUsdtTransactions();
   const [currentTrxId, setCurrentTrxId] = useState('');
 
-  const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal
+  const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal;
 
   const handleBuyItem = async () => {
     setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
@@ -104,8 +104,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                ? styles.colorPurple
+                : styles.level
             }
           >
             {t('s17')}
@@ -116,8 +116,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 item.item_rarity === 'green'
                   ? styles.colorRed
                   : item.item_rarity === 'yellow'
-                    ? styles.colorPurple
-                    : styles.level
+                  ? styles.colorPurple
+                  : styles.level
               }
             >
               {'Error while loading data'}

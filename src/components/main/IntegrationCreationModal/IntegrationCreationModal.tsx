@@ -5,6 +5,7 @@ import {
   integrationsApi,
   profileApi,
   RootState,
+  setFirstIntegrationCreating,
   setGoToShopBtnGlowing,
   setIntegrationCreated,
   setLastIntegrationId,
@@ -68,6 +69,17 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   const goToShopButtonGlowing = useSelector((state: RootState) => state.guide.goToShopBtnGlowing);
 
+  const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
+
+  useEffect(() => {
+    companies?.forEach(company => {
+      if(company.company_name.toLowerCase() === 'microsolve') {
+        console.log('SOLVE MICRO')
+        localStorage.setItem('microsolve', company.id);
+      }
+    })
+  }, [data, isCompaniesLoading]);
+
   const loadingTexts = [
     t("i35"),
     t("i36"),
@@ -122,6 +134,9 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         dispatch(setIntegrationCreated(true));
         dispatch(setLastIntegrationId(data.id));
         onClose();
+        localStorage.setItem('integration_id', data.id);
+        localStorage.setItem('integration_time_left', ''+data.time_left);
+        localStorage.setItem('integration_initial_time_left', ''+data.time_left);
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         dispatch(integrationsApi.util.invalidateTags(['Integrations']));
         dispatch(profileApi.util.invalidateTags(['Me']));
@@ -134,6 +149,13 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     setSelectedCompanyId("");
   };
 
+  const submitFirstIntegrationCreation = () => {
+    console.log('!!!submitFirstIntegrationCreation')
+    dispatch(setFirstIntegrationCreating(true));
+
+    onClose();
+  }
+
   const noItemsMessage = (() => {
     const baseText = t('i16');
     if (selectedOption === 'text' && !hasText) return baseText + t('i17');
@@ -142,6 +164,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     return null;
   })();
 
+  // const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
   // const lightningsGlowing = integrationCreatingModalLightningsGlowing();
 
   const tabsGlowing = !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
@@ -177,7 +200,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         ? <Loader noMargin />
         : <div className={`${s.content}
            ${!isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) ? s.visibleOverflow : ''}`}>
-          <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
+          <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''} ${tabsGlowing ? s.tabsStroke : ''}`}>
             {contentOptions.map((option, index) => (
               <span
                 key={index}
@@ -250,11 +273,13 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
               {t('i21')}
             </TrackedButton>}
 
-            {!noItemsMessage && !hasCreatingIntegration && (
+            {(!noItemsMessage && !hasCreatingIntegration && !firstIntegrationCreating) && (
               <div className={s.stickyButtonContainer}>
                 <button
                   className={`${s.createButton} ${!selectedCompanyId ? s.disabledButton : ''}`}
-                  onClick={submitCreation}
+                  onClick
+                  = {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) 
+                    ? submitCreation : submitFirstIntegrationCreation}
                   disabled={!selectedCompanyId || isSubmitting}
                   style={{
                     color: isLoading ? 'white' : ''
