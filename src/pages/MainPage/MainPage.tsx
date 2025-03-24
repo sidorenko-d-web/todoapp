@@ -315,7 +315,7 @@ export const MainPage: FC = () => {
     <main className={s.page} onClick={accelerateIntegration}>
       <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
 
-      {integrationCurrentlyCreating || firstIntegrationCreating && (
+      {(integrationCurrentlyCreating || firstIntegrationCreating) && (
         <div
           style={{
             position: 'absolute',

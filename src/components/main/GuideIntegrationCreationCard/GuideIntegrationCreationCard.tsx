@@ -60,16 +60,17 @@ export const UserGuideCreationCard: FC = () => {
             clearInterval(timerId);
 
             if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED)) {
+              setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED);
               createIntegration(localStorage.getItem('microsolve') || '909f329a-234f-4eca-87ab-0e29973cf8f3').unwrap().then((response) => {
                 if (response.id) {
-                  setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED);
-                  updateTimeLeft({ integrationId: response.id, timeLeftDelta: 36000 });
-                  dispatch(setIntegrationReadyForPublishing(true));
-                  dispatch(setLastIntegrationId(response.id));
-                  dispatch(setFirstIntegrationCreating(false));
-                  dispatch(integrationsApi.util.invalidateTags(['Integrations']));
-                  dispatch(profileApi.util.invalidateTags(['Me']));
-                  setIsExpired(true); 
+                  updateTimeLeft({ integrationId: response.id, timeLeftDelta: 36000 }).unwrap().then(() => {
+                    dispatch(setIntegrationReadyForPublishing(true));
+                    dispatch(setLastIntegrationId(response.id));
+                    dispatch(setFirstIntegrationCreating(false));
+                    dispatch(integrationsApi.util.invalidateTags(['Integrations']));
+                    dispatch(profileApi.util.invalidateTags(['Me']));
+                    setIsExpired(true); 
+                  })
                 }
               });
               
@@ -84,6 +85,11 @@ export const UserGuideCreationCard: FC = () => {
       clearInterval(timerId);
     };
   }, [isExpired, isPaused, dispatch, createIntegration, updateTimeLeft]);
+
+  if(isExpired) {
+    return null;
+  }
+
 
   const handleAccelerateClick = () => {
     if (!isExpired) {
@@ -130,10 +136,7 @@ export const UserGuideCreationCard: FC = () => {
     return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
   };
 
-  if (isExpired) {
-    return null;
-  }
-
+  useEffect
   return (
     <div className={`${s.integration} ${isAccelerated ? s.accelerated : ''}`}>
       <div className={s.integrationHeader}>

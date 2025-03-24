@@ -134,6 +134,9 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         dispatch(setIntegrationCreated(true));
         dispatch(setLastIntegrationId(data.id));
         onClose();
+        localStorage.setItem('integration_id', data.id);
+        localStorage.setItem('integration_time_left', ''+data.time_left);
+        localStorage.setItem('integration_initial_time_left', ''+data.time_left);
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
         dispatch(integrationsApi.util.invalidateTags(['Integrations']));
         dispatch(profileApi.util.invalidateTags(['Me']));
@@ -197,7 +200,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
         ? <Loader noMargin />
         : <div className={`${s.content}
            ${!isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) ? s.visibleOverflow : ''}`}>
-          <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''}`}>
+          <div className={`${s.tabs} ${tabsGlowing ? s.glowing : ''} ${tabsGlowing ? s.tabsStroke : ''}`}>
             {contentOptions.map((option, index) => (
               <span
                 key={index}

@@ -161,7 +161,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     if (mode === 'inventory') {
       const timer = setTimeout(() => {
         setShowBackToMainGuide(true);
-      }, 1);
+      }, 1000);
 
       return () => clearTimeout(timer);
     } else {
@@ -311,7 +311,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
       {isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) &&
-        mode === 'inventory' && (
+        mode === 'inventory' && showBackToMainGuide && (
           <TreeLevelGuide
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
