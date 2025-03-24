@@ -176,17 +176,15 @@ export const Tree = () => {
 
       <div className={s.progressBarContainer}>
         <div
-          className={`${s.progressBar} ${
-            !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? s.progressBarWithGuide : ''
-          }`}
+          className={`${s.progressBar} ${!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? s.progressBarWithGuide : ''
+            }`}
           style={{
             height: `${150 + (treeData ? (treeData.growth_tree_stages.length - 1) * 300 : 0) + 25}px`,
           }}
         >
           <div
-            className={`${s.progressFill} ${
-              !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? s.progressFillWithGuide : ''
-            }`}
+            className={`${s.progressFill} ${!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? s.progressFillWithGuide : ''
+              }`}
             style={{ height: `${progressPercent}%` }}
             ref={progressBarContainerRef}
           />
@@ -206,22 +204,23 @@ export const Tree = () => {
 
             return (
               <div key={stage.id} className={s.levelMarker} style={{ bottom: `${bottomPosition}px` }}>
-                <div className={classNames(s.levelCircle, { [s.active]: isActive })}>
-                  {isActive ? (
-                    <img src={tickCircle} height={16} width={16} alt="tickCircle" style={{ zIndex: '0' }} />
-                  ) : (
-                    <img src={circle} height={16} width={16} alt="circle" style={{ zIndex: '0' }} />
-                  )}
-                  {stage.stage_number}
-                  {stage.stage_number % 10 === 0 && (
-                    <img className={s.spiner} src={spinnerIcon} height={120} width={120} alt="spinner" />
-                  )}
-                </div>
+                {isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) &&
+                  <div className={classNames(s.levelCircle, { [s.active]: isActive })}>
+                    {isActive ? (
+                      <img src={tickCircle} height={16} width={16} alt="tickCircle" style={{ zIndex: '0' }} />
+                    ) : (
+                      <img src={circle} height={16} width={16} alt="circle" style={{ zIndex: '0' }} />
+                    )}
+                    {stage.stage_number}
+                    {stage.stage_number % 10 === 0 && (
+                      <img className={s.spiner} src={spinnerIcon} height={120} width={120} alt="spinner" />
+                    )}
+                  </div>}
 
                 {isRewardAvailable &&
-                !isRewardClaimed &&
-                showReward &&
-                isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? (
+                  !isRewardClaimed &&
+                  showReward &&
+                  isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) ? (
                   <Button
                     className={classNames(s.takeRewardBtn, { [s.hidden]: isRewardClaimed })}
                     onClick={() => handleUnlock(stage.achievement.id, stage.achievement.boost)}
@@ -241,7 +240,7 @@ export const Tree = () => {
                     <div className={s.rewardsIconsWrapper}>
                       {/* Блок с подарком */}
                       {stage.achievement && (
-                        <div className={classNames(s.imgPrize)}>
+                        <div className={classNames(s.imgPrize, {[s.bordered]: !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW)})}>
                           {!isRewardClaimed && (
                             <>
                               <div className={s.blickAnimation}>
@@ -310,7 +309,9 @@ export const Tree = () => {
                     </div>
 
                     {/* Блок с кол-вом подписчиков  */}
-                    <div className={classNames(s.text, { [s.textActive]: isRewardAvailable })}>
+                    <div className={classNames(s.text, { [s.textActive]: isRewardAvailable,
+                      [s.bordered]: !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW)
+                     })}>
                       <span className={`${!isRewardAvailable && !isRewardClaimed ? s.inactive : ''}`}>
                         {formatAbbreviation(stage.subscribers, 'number', { locale: locale })}{' '}
                       </span>

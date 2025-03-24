@@ -44,7 +44,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
   });
 
   const buyBtnGlowing = getSubscriptionPurchased();
-  const { openModal, closeModal } = useModal();
+  const { openModal, closeModal, getModalState } = useModal();
 
   // Установка nextSubscriptionAt
   useEffect(() => {
@@ -116,7 +116,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
       .then(() => {
         onSuccess();
       });
-    if (!isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) {
+    if (!isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) && !getModalState(MODALS.SUCCESSFULLY_SUBSCRIBED).isOpen) {
       openModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
     }
   };

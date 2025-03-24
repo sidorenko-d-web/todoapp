@@ -77,13 +77,11 @@ export const PublishIntegrationButton: React.FC = () => {
       let integrationIdToPublish = lastIntId;
 
       if (integrationData?.status === 'creating') {
-        if (integrationData?.time_left === 0) {
-          await updateTimeLeft({
-            integrationId: integrationIdToPublish,
-            timeLeftDelta: 123,
-          });
-          refetchIntegration();
-        }
+        await updateTimeLeft({
+          integrationId: integrationIdToPublish,
+          timeLeftDelta: 123214,
+        });
+        refetchIntegration();
       }
 
       if (!lastIntId) {
@@ -91,7 +89,7 @@ export const PublishIntegrationButton: React.FC = () => {
         if (data?.integrations && data.integrations.length > 0) {
           integrationIdToPublish = data.integrations[0].id;
           if (data.integrations[0].status !== 'created') {
-            if (data.integrations[0].status === 'creating' && data.integrations[0].time_left === 0) {
+            if (data.integrations[0].status === 'creating') {
               dispatch(setLastIntegrationId(integrationIdToPublish));
 
               await updateTimeLeft({

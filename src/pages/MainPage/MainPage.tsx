@@ -33,6 +33,8 @@ import {
   useGetIntegrationsQuery,
   useGetInventoryItemsQuery,
   useGetProfileMeQuery,
+  useGetUserQuery,
+  useGetUserWelcomeBonusQuery,
 } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/RewardForIntegrationModal.tsx';
@@ -53,6 +55,17 @@ export const MainPage: FC = () => {
     isLoading: isAllIntegrationsLoading,
   } = useGetAllIntegrationsQuery();
 
+
+  const { data: userData } = useGetUserQuery();
+  
+
+  const { data: welcomeBonusData } = useGetUserWelcomeBonusQuery(
+      { user_id: userData?.id || 0 }, {
+        skip: !userData,
+      },
+  );
+
+    
   const setRerender = useState(0)[1];
   //не убирать, нужно, чтобы гайды правильно отображались
 
@@ -63,6 +76,8 @@ export const MainPage: FC = () => {
     isLoading: isInventoryDataLoading,
   } = useGetInventoryItemsQuery();
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+
+  const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
 
   useEffect(() => {
     if (integrationCurrentlyCreating) {
@@ -135,6 +150,9 @@ export const MainPage: FC = () => {
         setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
 
         setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
+
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED);
+
 
         setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
         setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
@@ -300,7 +318,8 @@ export const MainPage: FC = () => {
 
 
   const accelerateIntegration = () => {
-    if (integrationCurrentlyCreating) {
+    console.log('_acceleration')
+    if (integrationCurrentlyCreating || firstIntegrationCreating) {
       reduxDispatch(incrementAcceleration());
     }
   };
@@ -309,7 +328,7 @@ export const MainPage: FC = () => {
     <main className={s.page} onClick={accelerateIntegration}>
       <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
 
-      {integrationCurrentlyCreating && (
+      {(integrationCurrentlyCreating || firstIntegrationCreating) && (
         <div
           style={{
             position: 'absolute',
@@ -325,6 +344,7 @@ export const MainPage: FC = () => {
 
       <Room mode="me" />
 
+
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
@@ -332,10 +352,10 @@ export const MainPage: FC = () => {
         (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))
         
-          || (integrationCurrentlyCreating && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
+          || (firstIntegrationCreating && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
         <div
           style={{
-            position: 'fixed',
+            position: 'absolute',
             width: '100%',
             height: '100%',
             top: '0',
@@ -376,6 +396,8 @@ export const MainPage: FC = () => {
       {!isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
         isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && (
           <GetCoinsGuide
+            welcomeBonus={welcomeBonusData?.welcome_bonus || '500'}
+            refBonus={welcomeBonusData?.referrer_bonus || '250'}
             onClose={() => {
               reduxDispatch(setGetCoinsGuideShown(true));
               setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
@@ -386,7 +408,7 @@ export const MainPage: FC = () => {
           />
         )}
 
-      {integrationCurrentlyCreating &&
+      {firstIntegrationCreating &&
         !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED) && (
           <AccelerateIntegtrationGuide
             onClose={() => {

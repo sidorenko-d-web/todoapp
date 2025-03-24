@@ -15,7 +15,7 @@ import { setIntegrationCreating } from '../../../redux/slices/integrationAcceler
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
-  refetchIntegration: () => void;
+  refetchIntegration?: () => void;
 }
 
 const TIME_LEFT_KEY = 'integration_time_left';
@@ -23,7 +23,7 @@ const INITIAL_TIME_LEFT_KEY = 'integration_initial_time_left';
 const INTEGRATION_ID_KEY = 'integration_id';
 const LAST_UPDATED_TIME_KEY = 'last_updated_time';
 
-export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration, refetchIntegration }) => {
+export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration }) => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const [hasBorder, setHasBorder] = useState(false);
@@ -39,7 +39,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       const newTimeLeft = Math.max(parseInt(savedTimeLeft) - elapsedTime, 0);
       return newTimeLeft;
     }
-    return integration.time_left;
+    return 300;
   };
 
   const getSavedInitialTimeLeft = () => {
@@ -49,7 +49,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     if (savedIntegrationId === integration.id && savedInitialTimeLeft) {
       return parseInt(savedInitialTimeLeft);
     }
-    return integration.time_left;
+    return 300;
   };
 
   const [timeLeft, setTimeLeft] = useState(getSavedTimeLeft());
@@ -121,12 +121,12 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     }
   }, [timeLeft, accelerateIntegration, isExpired, dispatch]);
 
-  useEffect(() => {
-    if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET)) {
-      accelerateIntegration(timeLeft - 20);
-      setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
-    }
-  }, [accelerateIntegration, timeLeft]);
+  // useEffect(() => {
+  //   if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET)) {
+  //     accelerateIntegration(timeLeft - 20);
+  //     setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
+  //   }
+  // }, [accelerateIntegration, timeLeft]);
 
   useEffect(() => {
     dispatch(setIsWorking(true));
@@ -181,7 +181,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       }, 2000);
 
       // Обновляем данные о текущей интеграции
-      refetchIntegration();
+      //refetchIntegration();
     }
   };
 
@@ -205,6 +205,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   if (isExpired) {
     dispatch(setIntegrationReadyForPublishing(true));
     dispatch(setLastIntegrationId(integration.id));
+    dispatch(setIntegrationCreating(false));
     if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
     }

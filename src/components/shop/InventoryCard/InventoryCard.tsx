@@ -255,7 +255,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                                 : 150;
 
   return (
-    <div className={styles.storeCard}>
+    <div className={`${styles.storeCard} ${!isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) ? styles.animated : ''}`}>
       {<GetGift giftColor={localStorage.getItem('giftName') ?? ''} />}
       <div className={styles.header}>
         <div

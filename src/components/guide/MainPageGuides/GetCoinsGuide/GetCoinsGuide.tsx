@@ -7,40 +7,35 @@ import { Guide } from '../../Guide/Guide';
 import coin from '../../../../assets/icons/coin.png';
 // import { useGetUserQuery } from "../../../../redux";
 import { useTranslation } from 'react-i18next';
-import { setDimHeader, useGetUserQuery, useGetUserWelcomeBonusQuery } from '../../../../redux';
+import { setDimHeader } from '../../../../redux';
 import { useDispatch } from 'react-redux';
 
 interface GetCoinsGuideProps {
   onClose: () => void;
+
+  welcomeBonus: string;
+  refBonus: string;
 }
 
-export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose }) => {
+export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose, welcomeBonus, refBonus }) => {
   const { t } = useTranslation('guide');
-  const { data: userData, isLoading: isUserLoading } = useGetUserQuery(); // Get loading state for userData
-  const [ bonus, setBonus ] = useState('');
-  const [ refBonus, setRefBonus ] = useState('');
+  //const [ bonus, setBonus ] = useState('');
+  //const [ refBonus, setRefBonus ] = useState('');
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (userData) {
-      dispatch(setDimHeader(true));
-    }
+    dispatch(setDimHeader(true));
     //dispatch(setDimHeader(true));
-  }, [ userData, isUserLoading ]);
+  }, []);
 
-  const { data: welcomeBonusData } = useGetUserWelcomeBonusQuery(
-    { user_id: userData?.id || 0 }, {
-      skip: !userData,
-    },
-  );
 
-  useEffect(() => {
-    if (welcomeBonusData) {
-      setBonus(welcomeBonusData.welcome_bonus);
-      setRefBonus(welcomeBonusData.referrer_bonus);
-    }
-  }, [ welcomeBonusData ]);
+  // useEffect(() => {
+  //   if (welcomeBonusData) {
+  //     setBonus(welcomeBonusData.welcome_bonus);
+  //     setRefBonus(welcomeBonusData.referrer_bonus);
+  //   }
+  // }, [ welcomeBonusData ]);
 
   const [ isOpen, setIsOpen ] = useState(true);
 
@@ -53,7 +48,7 @@ export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose }) => {
 
   return (
     <>
-      {userData && <Guide align="left"
+      {<Guide align="left"
                           zIndex={11110}
                           top={'35%'}
                           description={
@@ -61,7 +56,7 @@ export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose }) => {
                               {t('g25')}
                               <br />
                               <br />
-                              {t('g26')} <span style={{ color: '#E0B01D' }}>{bonus} {t('g26_1')}</span> {t('g26_2')}
+                              {t('g26')} <span style={{ color: '#E0B01D' }}>{welcomeBonus} {t('g26_1')}</span> {t('g26_2')}
                               <br />
                               <br />
                               {<span>{t('g27')} <span
@@ -69,7 +64,8 @@ export const GetCoinsGuide: React.FC<GetCoinsGuideProps> = ({ onClose }) => {
                             </>
                           }
                           onClose={handleClose}>
-        <button className={styles.nextBtn} onClick={handleClose}>{`${t('g30')} ${bonus + refBonus}`}<img src={coin} width={14}
+        <button className={styles.nextBtn} 
+          onClick={handleClose}>{`${t('g30')} ${Number(welcomeBonus) + Number(refBonus)}`}<img src={coin} width={14}
                                                                                               height={14} /></button>
         <img src={img1} className={styles.gifImage} height={146} width={140} />
       </Guide>}

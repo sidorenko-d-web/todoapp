@@ -25,7 +25,9 @@ export const GUIDE_ITEMS = {
         INTEGRATION_ACCELERATED_GUIDE_CLOSED: 'integrationAcceleratedGuideClosed',
         INTEGRATION_PUBLISHED_MODAL_CLOSED: 'integrationPublishedModalClosed',
         INTEGRATION_PUBLISHED: 'integrationPublished',
-        GO_TO_INTEGRATION_GUIDE_SHOWN: 'goToIntegrationGuideShown'
+        GO_TO_INTEGRATION_GUIDE_SHOWN: 'goToIntegrationGuideShown',
+
+        FIRST_INTEGRATION_CREATED: 'firstIntegrationCreated'
     },
 
     integrationPage: {

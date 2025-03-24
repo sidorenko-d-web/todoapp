@@ -14,11 +14,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isGuideShown, isIntegrationCreationButtonGlowing, setGuideShown } from '../../../utils/guide-functions.ts';
 import s from './IntegrationCreation.module.scss';
 import { useTranslation } from 'react-i18next';
+import { UserGuideCreationCard } from '../GuideIntegrationCreationCard/GuideIntegrationCreationCard.tsx';
 
 export const IntegrationCreation = () => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const integrationCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+
+  //const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
+
   const { data: profile } = useGetProfileMeQuery();
   const { data: integrations, isLoading } = useGetIntegrationsQuery(
     { status: 'creating' },
@@ -27,7 +31,7 @@ export const IntegrationCreation = () => {
     },
   );
 
-  const { data: integration, refetch: refetchIntegration } = useGetIntegrationQuery(
+  const { refetch: refetchIntegration } = useGetIntegrationQuery(
     integrations?.integrations[0]?.id || '',
     {
       skip: !integrations?.integrations[0]?.id,
@@ -59,6 +63,10 @@ export const IntegrationCreation = () => {
 
   const isButtonGlowing = isIntegrationCreationButtonGlowing();
   const createIntegrationButtonGlowing = useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing);
+
+  const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
+
+
   const btnGlowing =
     isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
     !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
@@ -72,7 +80,7 @@ export const IntegrationCreation = () => {
           : ''
       }`}
     >
-      {!integrationCreating && (
+      {(!integrationCreating && !firstIntegrationCreating) && (
         <TrackedButton
           trackingData={{
             eventType: 'button',
@@ -91,11 +99,14 @@ export const IntegrationCreation = () => {
         </TrackedButton>
       )}
 
-      {!isLoading && integration && (
-        <>
-          <IntegrationCreationCard integration={integration} refetchIntegration={refetchIntegration} />
+      {firstIntegrationCreating && <UserGuideCreationCard/>}
+      
+      {
+        (!isLoading && integrations && !firstIntegrationCreating) && <>
+         { (integrations && integrations.count !== 0) 
+        ? <IntegrationCreationCard integration={integrations?.integrations[0]} refetchIntegration={refetchIntegration}/> : null}
         </>
-      )}
+      }
 
       <IntegrationCreationModal
         modalId={MODALS.CREATING_INTEGRATION}
