@@ -37,7 +37,7 @@ const StorePage: FC = () => {
   const [items, setItems] = useState<IShopItem[]>();
 
   useEffect(() => {
-    dispatch(setActiveFooterItemId(0));
+    dispatch(setActiveFooterItemId(1));
   }, []);
 
   useEffect(() => {
