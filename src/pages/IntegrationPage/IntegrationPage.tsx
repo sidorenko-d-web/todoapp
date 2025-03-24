@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './IntegrationPage.module.scss';
 import {
   setActiveFooterItemId,
+  setCommentGlow,
   setDimHeader,
   setElevateIntegrationStats,
   setFooterActive,
@@ -83,7 +84,7 @@ export const IntegrationPage: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setActiveFooterItemId(1));
+    dispatch(setActiveFooterItemId(2));
     //dispatch(setFooterActive(true));
   }, []);
 
@@ -170,7 +171,8 @@ export const IntegrationPage: React.FC = () => {
             setRerender(1);
             setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
             dispatch(setFooterActive(true));
-            dispatch(setActiveFooterItemId(1));
+            dispatch(setCommentGlow(false));
+            dispatch(setActiveFooterItemId(2));
             dispatch(setElevateIntegrationStats(false));
             dispatch(setDimHeader(false));
             setRerender(1);
