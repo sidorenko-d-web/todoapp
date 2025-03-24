@@ -1,7 +1,23 @@
 @use "../../../assets/styles" as var;
 @use "sass:color";
 
+@keyframes smoothAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .storeCard {
+  opacity: 0;
+  animation: smoothAppear 0.5s ease-in-out forwards;
+
+  animation-delay: 0.3s;
+
   background-color: var.$color-card-bg;
   align-self: stretch;
   padding: 10px;

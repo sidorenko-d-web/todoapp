@@ -30,14 +30,14 @@ export const Footer = () => {
   };
 
   useEffect(() => {
-    if (!hasInitialized && isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+    if (!hasInitialized && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
       const mainItem = footerItems.find(item => item.redirectTo === AppRoute.Main);
       if (mainItem) {
         handleFooterItemClick(mainItem.id, mainItem.redirectTo);
         setHasInitialized(true);
       }
     }
-  }, [hasInitialized, isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)]);
+  }, [hasInitialized, isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)]);
 
   const dim = useSelector((state: RootState) => state.guide.dimHeader);
 

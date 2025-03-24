@@ -135,7 +135,7 @@ const guideSlice = createSlice({
           && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED),
         isPublishedModalClosed: false,
         elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
-        //lastIntegrationId: "",
+        firstIntegrationCreating: false,
         footerActive: isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
         activeFooterItemId: getCurrentFooterItem(),
       });
