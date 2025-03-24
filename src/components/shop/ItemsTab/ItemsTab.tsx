@@ -17,13 +17,22 @@ interface props {
   inventoryItems?: IShopItem[];
 }
 
-export const ItemsTab: FC<props> = ({ inventoryItems, shopItems }) => {
+export const ItemsTab: FC<props> = ({ inventoryItems, shopItems, shopCategory }) => {
   const foundItem = shopItems?.find(item => item.name.toLowerCase().trim() === 'печатная машинка');
+
+  const shopeFiltered = shopItems?.filter(elem => elem.item_category === shopCategory?.value);
+
   return (
     <div className={styles.cardsWrapper}>
-      {inventoryItems?.map(item => <InventoryCard key={item.id} item={item} />)}
+      {inventoryItems?.map(item => (
+        <InventoryCard key={item.id} item={item} />
+      ))}
       {isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) ? (
-        <>{shopItems?.map(item => <ShopItemCard key={item.id} item={item} />)}</>
+        <>
+          {shopeFiltered?.map(item => (
+            <ShopItemCard key={item.id} item={item} />
+          ))}
+        </>
       ) : foundItem ? (
         <ShopItemCard key={foundItem.id} item={foundItem} />
       ) : (
