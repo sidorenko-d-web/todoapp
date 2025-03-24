@@ -34,6 +34,9 @@ export const IntegrationPage: React.FC = () => {
     skip: !queryIntegrationId && queryIntegrationId === 'undefined',
   });
 
+  const [_, setRerender] = useState(0);
+
+
   const integrationId =
     queryIntegrationId !== 'undefined'
       ? queryIntegrationId
@@ -164,9 +167,11 @@ export const IntegrationPage: React.FC = () => {
       {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && showGuide && (
         <IntegrationPageGuide
           onClose={() => {
+            setRerender(1);
             setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
             dispatch(setElevateIntegrationStats(false));
             dispatch(setDimHeader(false));
+            setRerender(1);
           }}
         />
       )}
