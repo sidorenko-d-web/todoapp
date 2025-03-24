@@ -33,6 +33,8 @@ import {
   useGetIntegrationsQuery,
   useGetInventoryItemsQuery,
   useGetProfileMeQuery,
+  useGetUserQuery,
+  useGetUserWelcomeBonusQuery,
 } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/RewardForIntegrationModal.tsx';
@@ -53,6 +55,17 @@ export const MainPage: FC = () => {
     isLoading: isAllIntegrationsLoading,
   } = useGetAllIntegrationsQuery();
 
+
+  const { data: userData } = useGetUserQuery();
+  
+
+  const { data: welcomeBonusData } = useGetUserWelcomeBonusQuery(
+      { user_id: userData?.id || 0 }, {
+        skip: !userData,
+      },
+  );
+
+    
   const setRerender = useState(0)[1];
   //не убирать, нужно, чтобы гайды правильно отображались
 
@@ -383,6 +396,8 @@ export const MainPage: FC = () => {
       {!isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
         isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && (
           <GetCoinsGuide
+            welcomeBonus={welcomeBonusData?.welcome_bonus || '500'}
+            refBonus={welcomeBonusData?.referrer_bonus || '250'}
             onClose={() => {
               reduxDispatch(setGetCoinsGuideShown(true));
               setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);

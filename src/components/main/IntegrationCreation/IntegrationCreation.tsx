@@ -31,7 +31,7 @@ export const IntegrationCreation = () => {
     },
   );
 
-  const { data: integration, refetch: refetchIntegration } = useGetIntegrationQuery(
+  const { refetch: refetchIntegration } = useGetIntegrationQuery(
     integrations?.integrations[0]?.id || '',
     {
       skip: !integrations?.integrations[0]?.id,

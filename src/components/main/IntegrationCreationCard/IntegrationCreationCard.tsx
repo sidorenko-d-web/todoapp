@@ -15,7 +15,7 @@ import { setIntegrationCreating } from '../../../redux/slices/integrationAcceler
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
-  refetchIntegration: () => void;
+  refetchIntegration?: () => void;
 }
 
 const TIME_LEFT_KEY = 'integration_time_left';
@@ -23,7 +23,7 @@ const INITIAL_TIME_LEFT_KEY = 'integration_initial_time_left';
 const INTEGRATION_ID_KEY = 'integration_id';
 const LAST_UPDATED_TIME_KEY = 'last_updated_time';
 
-export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration, refetchIntegration }) => {
+export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration }) => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const [hasBorder, setHasBorder] = useState(false);
