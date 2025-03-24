@@ -12,12 +12,15 @@
   }
 }
 
-.storeCard {
+.animated {
   opacity: 0;
   animation: smoothAppear 0.5s ease-in-out forwards;
 
   animation-delay: 0.3s;
 
+}
+.storeCard {
+  
   background-color: var.$color-card-bg;
   align-self: stretch;
   padding: 10px;

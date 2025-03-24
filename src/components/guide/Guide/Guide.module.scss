@@ -11,7 +11,11 @@
     justify-content: center;
 
     &.dimmed {
-        background-color: rgba(0, 0, 0, 0.9);
+        background-color: rgba(0, 0, 0, 0.85);
+    }
+
+    &.dimmedTree {
+        background-color: rgba(0, 0, 0, 0.95);
     }
 
     .content {

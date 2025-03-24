@@ -53,8 +53,8 @@ export const UserGuideCreationCard: FC = () => {
     const timerId = setInterval(() => {
       if (!isPaused) {
         setTimeLeft((prevTime) => {
-          const newTime = Math.max(prevTime - 1, 0);
-          if (newTime < 10 && newTime > 0) setIsPaused(true);
+          const newTime = (prevTime <= 10 && prevTime > 0) ? prevTime : Math.max(prevTime - 1, 0);
+          if (newTime <= 10 && newTime > 0) setIsPaused(true);
           if (newTime === 0) {
             dispatch(setIsWorking(false));
             clearInterval(timerId);
