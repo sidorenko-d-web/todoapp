@@ -162,7 +162,7 @@ export const MainPage: FC = () => {
         reduxDispatch(resetGuideState());
 
         reduxDispatch(setFooterActive(true));
-        reduxDispatch(setActiveFooterItemId(2));
+        reduxDispatch(setActiveFooterItemId(3));
       } else {
         if (
           data?.integrations[0].status === 'published' &&
@@ -189,7 +189,7 @@ export const MainPage: FC = () => {
           reduxDispatch(resetGuideState());
 
           reduxDispatch(setFooterActive(true));
-          reduxDispatch(setActiveFooterItemId(2));
+          reduxDispatch(setActiveFooterItemId(3));
         }
       }
     }
@@ -240,7 +240,7 @@ export const MainPage: FC = () => {
   }, [ creatingIntegrationModalState.isOpen ]);
 
   useEffect(() => {
-    reduxDispatch(setActiveFooterItemId(2));
+    reduxDispatch(setActiveFooterItemId(3));
 
     if (
       isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
@@ -303,7 +303,7 @@ export const MainPage: FC = () => {
   const { isLoading: isRoomLoading } = useGetEquipedQuery();
 
   useEffect(() => {
-    reduxDispatch(setActiveFooterItemId(2));
+    reduxDispatch(setActiveFooterItemId(3));
   }, []);
 
 

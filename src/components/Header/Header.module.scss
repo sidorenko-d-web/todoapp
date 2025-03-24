@@ -16,6 +16,7 @@ $mobile-device-safe-are-inset-top: env(safe-area-inset-top);
 $header-border: 1px solid $color-header-border-dark;
 
 
+
 .header {
   position: fixed;
   inset: 0 0 auto 0;
@@ -36,12 +37,15 @@ $header-border: 1px solid $color-header-border-dark;
 
   .headerOverlay {
     position: absolute;
-    inset: -2px 0 0 0;
+    inset: 0 0 0 0;
     border-radius: 10px;
     background-color: rgba(0, 0, 0, 0.65); // Dark overlay
     z-index: 1; // Place it behind the header content
   }
 
+  .increaseOffset {
+    inset: -3px 0 0 0;
+  }
 
   // Paddings for each platform
   &.ios {
@@ -251,7 +255,7 @@ $header-border: 1px solid $color-header-border-dark;
 }
 .darken {
     border-bottom: none;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.3);
   }
 .coinsWrapper {
   display: flex;

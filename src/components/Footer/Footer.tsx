@@ -16,6 +16,13 @@ export const Footer = () => {
 
   const [hasInitialized, setHasInitialized] = useState<boolean>(false);
   
+  const footerItemId = useSelector((state: RootState) => state.guide.activeFooterItemId);
+
+  useEffect(() => {
+    setActiveButton(footerItemId);
+  }, [footerItemId]);
+
+
   useEffect(() => {
     if (location.pathname === '/progressTree' || location.pathname === '/wardrobe') {
       setActiveButton(-1);

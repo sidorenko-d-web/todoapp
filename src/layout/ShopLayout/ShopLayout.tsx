@@ -135,7 +135,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const reduxDispatch = useDispatch();
 
   useEffect(() => {
-    reduxDispatch(setActiveFooterItemId(0));
+    reduxDispatch(setActiveFooterItemId(1));
   }, []);
 
   const statsGlowing = useSelector((state: RootState) => state.guide.getShopStatsGlowing);
