@@ -58,7 +58,7 @@ export const SubscrieGuide: React.FC<CreateIntegrationGuideProps> = ({
         return null;
     }
 
-    if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) && top !== '65%') {
+    if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) && top !== '68%') {
         return null;
     }
 

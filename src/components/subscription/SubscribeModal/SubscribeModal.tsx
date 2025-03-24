@@ -180,7 +180,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
             setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
             closeModal(MODALS.SUBSCRIBE);
           }}
-          top="65%"
+          top="68%"
           zIndex={1500}
           description={
             <>
