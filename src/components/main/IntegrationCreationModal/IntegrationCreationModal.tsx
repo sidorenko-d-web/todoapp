@@ -52,7 +52,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     { label: t('i15'), value: 'video' },
   ] as const;
 
-  const [selectedOption, setSelectedOption] = useState<(typeof contentOptions)[number]['value']>('image');
+  const [selectedOption, setSelectedOption] = useState<(typeof contentOptions)[number]['value']>('text');
   const [selectedCompanyId, setSelectedCompanyId] = useState("");
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
   const [createIntegration, { isError, error, isLoading }] = useCreateIntegrationMutation();
