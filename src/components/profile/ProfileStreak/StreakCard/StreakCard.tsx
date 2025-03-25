@@ -115,9 +115,11 @@ export const StreakCard: React.FC<StreakCardProps> = ({
     (isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) && !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN)) ||
     (isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN));
 
+  const elevatedFreeze = 
+    (isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN));
 
   return (
-    <div className={`${styles.wrp} ${elevateCard ? styles.elevated : ''}`}>
+    <div className={`${styles.wrp} ${elevateCard ? styles.elevated : ''} ${elevatedFreeze ? styles.noBorder : ''}`}>
       <div className={styles.header}>
         <div className={styles.daysInARowWrp}>
           <span
@@ -133,7 +135,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
               {reliableStreakDays} {t('p13').replace('в ', 'в\u00A0')}
             </span>
             {!strangerId && !onlyStreak && (
-              <div className={styles.freezeCount}>
+              <div className={`${styles.freezeCount} ${elevatedFreeze ? styles.elevatedFreeze : ''}`}>
                 <span>{streakDays}</span>
                 <img src={snowflake} alt="Freeze Icon" />
               </div>

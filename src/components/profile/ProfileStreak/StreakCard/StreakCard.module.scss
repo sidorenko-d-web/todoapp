@@ -6,6 +6,16 @@
   z-index: 10000;
 }
 
+.noBorder {
+  border: 2px solid transparent;
+}
+
+.elevatedFreeze {
+  border: 2px solid var.$color-blue-primary;
+  box-shadow: 0 0 30px var.$color-primary;
+  z-index: 10000;
+}
+
 .wrp {
   width: 100%;
   background-color: var.$color-card-bg;

@@ -18,6 +18,7 @@ import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/Ch
 import { Loader } from '../../components';
 import { ProfileFirstGuide } from '../../components/guide/ProfilePageGuides/ProfileFirstGuide/ProfileFirstGuide';
 import { PushLineGuide } from '../../components/guide/ProfilePageGuides/PushLineGuide/PushLineGuide';
+import { FreezeGuide } from '../../components/guide/ProfilePageGuides/FreezeGuide/FreezeGuide';
 
 export const ProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation('profile');
@@ -212,6 +213,14 @@ export const ProfilePage: React.FC = () => {
             setRerender((prev) => prev+1);
           }
         }/>
+      }
+
+      {
+        isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN) &&
+        <FreezeGuide onClose={() => {
+          setGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN);
+          setRerender((prev) => prev+1);
+        }}/>
       }
     </>
   );
