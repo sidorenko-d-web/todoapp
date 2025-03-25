@@ -11,11 +11,12 @@ import {
   useGetTopProfilesQuery,
 } from '../../redux';
 import RewardsList from '../../components/profile/RewardsCard/RewardsList';
-import { getWeekData } from '../../utils';
+import { getWeekData, isGuideShown, setGuideShown } from '../../utils';
 import { useModal } from '../../hooks';
-import { MODALS } from '../../constants';
+import { GUIDE_ITEMS, MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 import { Loader } from '../../components';
+import { ProfileFirstGuide } from '../../components/guide/ProfilePageGuides/ProfileFirstGuide/ProfileFirstGuide';
 
 export const ProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation('profile');
@@ -29,6 +30,9 @@ export const ProfilePage: React.FC = () => {
   const { data: pushLineData, isLoading: isPushLineLoading } = useGetPushLineQuery();
   console.log(pushLineData)
   const [claimChestReward] = useClaimChestRewardMutation();
+
+  const [_, setRerender] = useState(0);
+
 
   const { data: awardsData, isLoading: awardsLoading } = useGetInventoryAchievementsQuery();
 
@@ -191,6 +195,13 @@ export const ProfilePage: React.FC = () => {
           )}
         </div>
       )}
+
+      {
+        !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) && <ProfileFirstGuide onClose={() => {
+          setGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE);
+          setRerender((prev) => prev+1);
+        }} />
+      }
     </>
   );
 };

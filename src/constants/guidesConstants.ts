@@ -27,11 +27,14 @@ export const GUIDE_ITEMS = {
         INTEGRATION_PUBLISHED: 'integrationPublished',
         GO_TO_INTEGRATION_GUIDE_SHOWN: 'goToIntegrationGuideShown',
 
-        FIRST_INTEGRATION_CREATED: 'firstIntegrationCreated'
+        FIRST_INTEGRATION_CREATED: 'firstIntegrationCreated',
+
+        PUSHLINE_MODAL_OPENED: 'pushlineModalOpened'
     },
 
     integrationPage: {
         INTEGRATION_PAGE_GUIDE_SHOWN: 'integrationPageGuideShown',
+        INTEGRATION_STATS_GUIDE_SHOWN: 'integrationStatsGuideShown'
     },
 
     mainPageSecondVisit: {
@@ -43,6 +46,11 @@ export const GUIDE_ITEMS = {
         TREE_LEVEL_GUIDE_SHOWN: 'treeLevelGuideShown'
     },
 
+    profilePage: {
+        PROFILE_FIRST_GUIDE: 'profileFirstGuide',
+        PROFILE_SECOND_GUIDE_SHOWN: 'profileSecondGuideShown',
+        PROFILE_THIRD_GUIDE_SHOWN: 'profileThirdGuideShown'
+    },
     treePage: {
         TREE_GUIDE_SHONW: 'treeGuideShown',
     }

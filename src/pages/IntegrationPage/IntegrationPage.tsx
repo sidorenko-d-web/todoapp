@@ -25,6 +25,7 @@ import { isGuideShown, setGuideShown } from '../../utils';
 import { GUIDE_ITEMS } from '../../constants';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { IntegrationStatsGuide } from '../../components/guide/IntegrationPageGuides/IntegrationStatsGuide/IntegrationStatsGuide';
 
 export const IntegrationPage: React.FC = () => {
   const { t } = useTranslation('integrations');
@@ -139,7 +140,7 @@ export const IntegrationPage: React.FC = () => {
               </div>
             </div>
             <Integration />
-            {isIntegrationLoading || isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+            {isIntegrationLoading || isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN) &&
               <>
                 <IntegrationStats
                   views={data.views}
@@ -179,6 +180,21 @@ export const IntegrationPage: React.FC = () => {
           }}
         />
       )}
+
+      {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN)
+       && isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && <IntegrationStatsGuide
+        onClose={() => {
+          setRerender(1);
+          setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN);
+          dispatch(setFooterActive(true));
+          dispatch(setCommentGlow(false));
+          dispatch(setActiveFooterItemId(2));
+          dispatch(setElevateIntegrationStats(false));
+          dispatch(setDimHeader(false));
+          setRerender(1);
+        }}
+      >
+      </IntegrationStatsGuide>}
     </div>
   );
 };
