@@ -142,10 +142,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const isTabsNotEmpty = [...(itemsInTabs.green ?? []), ...(itemsInTabs.yellow ?? [])].length > 0;
 
-  // useEffect(() => {
-  //   console.info('shopCategory:', shopCategory.value);
-  // }, [ shopCategory ]);
-
   useEffect(() => {
     if (!dimSet) {
       setDimSet(true);
