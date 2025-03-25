@@ -73,7 +73,7 @@
       }
 
       .progressBar {
-        height: 16px;
+        height: 20px;
         border-radius: 3px;
         background-color: var.$color-gray;
         overflow: hidden;
@@ -86,7 +86,7 @@
     }
 
     .description {
-      margin-top: 10px;
+      margin-top: 20px;
       color: var.$color-text-semi-transparent;
       text-align: center;
       font-size: 14px;
@@ -104,6 +104,8 @@
     align-items: center;
     border-radius: 8px;
     color: var.$color-text;
+
+    margin-top: 10px;
 
     font-size: 14px;
     font-weight: 500;

@@ -127,7 +127,7 @@
 
     button {
       border-radius: 8px;
-      padding: 8px 12px;
+      padding: 14px;
       display: flex;
       justify-content: center;
       font-weight: 500;
@@ -154,11 +154,13 @@
         background: var.$color-primary;
         border: 1px solid var.$color-border-primary;
         flex: 1;
+        padding: 16px;
       }
 
       &:last-child {
         flex: 1;
         border: none;
+        padding: 16px;
       }
     }
 
@@ -222,4 +224,5 @@
   z-index: 1000000;
   box-shadow: 0 0 50px var.$color-primary;
   background: var.$color-primary;
+  padding: 16px;
 }

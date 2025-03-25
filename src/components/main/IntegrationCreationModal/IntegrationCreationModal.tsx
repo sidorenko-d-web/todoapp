@@ -52,7 +52,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     { label: t('i15'), value: 'video' },
   ] as const;
 
-  const [selectedOption, setSelectedOption] = useState<(typeof contentOptions)[number]['value']>('text');
+  const [selectedOption, setSelectedOption] = useState<(typeof contentOptions)[number]['value']>('image');
   const [selectedCompanyId, setSelectedCompanyId] = useState("");
   const { hasText, hasImage, hasVideo } = useInventoryItemsFilter();
   const [createIntegration, { isError, error, isLoading }] = useCreateIntegrationMutation();
@@ -178,7 +178,6 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   const integrationPublished = isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
-
   return (
     <CentralModal
       title={t('i11')}
@@ -270,7 +269,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
               ${goToShopButtonGlowing ? s.glowing : ''} `}
               onClick={goToShop}
             >
-              {t('i21')}
+            {t('i21')}
             </TrackedButton>}
 
             {(!noItemsMessage && !hasCreatingIntegration && !firstIntegrationCreating) && (
@@ -329,7 +328,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
           </>
         }
         align="left"
-        top="65%"
+        top="66.5%"
       />}
 
     </CentralModal>

@@ -125,7 +125,8 @@ export const Header = () => {
         )}
       >
 
-        {((darken || darken2 || darken3) && !notDarken) && <div className={styles.headerOverlay}></div>}
+        {((darken || darken2 || darken3) && !notDarken) && 
+          <div className={`${styles.headerOverlay} ${!in_streak ? styles.increaseOffset : ''}`}></div>}
 
 
         {showHeaderBG && <div className={`${styles.headerBG} ${((darken || darken2 || darken3) && !notDarken)? styles.darken : ''}`} />}
