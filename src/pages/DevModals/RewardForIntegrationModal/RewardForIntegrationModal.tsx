@@ -22,13 +22,13 @@ import {
   useGetIntegrationsQuery,
   useGetProfileMeWithPollingQuery,
 } from '../../../redux';
-import { setGuideShown } from '../../../utils';
+import { isGuideShown, setGuideShown } from '../../../utils';
 import { useEffect } from 'react';
 
 export default function RewardForIntegrationModal() {
   const { t, i18n } = useTranslation('integrations');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { closeModal, getModalState } = useModal();
+  const { closeModal, getModalState, openModal } = useModal();
   const { refetch } = useGetProfileMeWithPollingQuery(undefined, {
     pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
@@ -81,6 +81,9 @@ export default function RewardForIntegrationModal() {
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
         dispatch(setIsPublishedModalClosed(true));
         dispatch(setNeedToPlayHappy(true));
+        if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.PUSHLINE_MODAL_OPENED)) {
+          openModal(MODALS.DAYS_IN_A_ROW);
+        }
         closeModal(MODALS.INTEGRATION_REWARD);
       }}
       modalId={MODALS.INTEGRATION_REWARD}

@@ -4,11 +4,11 @@ import subscribersIcon from '../../../assets/icons/subscribers.png';
 import viewsIcon from '../../../assets/icons/views.png';
 import coinIcon from '../../../assets/icons/coin.png';
 import { formatAbbreviation } from '../../../helpers';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux';
 import { useTranslation } from 'react-i18next';
 import { useIncrementingIntegrationStats } from '../../../hooks/useIncrementingIntegrationStats.ts';
 import { usePushLineStatus } from '../../../hooks/index.ts';
+import { isGuideShown } from '../../../utils/guide-functions.ts';
+import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 
 interface IntegrationStatsProps {
   subscribers: number;
@@ -31,7 +31,7 @@ export const IntegrationStats: React.FC<IntegrationStatsProps> = ({
                                                                   }) => {
   const { t, i18n } = useTranslation('integrations');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const elevateStats = useSelector((state: RootState) => state.guide.elevateIntegrationStats);
+  const elevateStats = !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN);
 
   const integrationId = window.location.pathname.split('/').pop() || '';
   const {in_streak} = usePushLineStatus()
