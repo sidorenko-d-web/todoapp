@@ -140,7 +140,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             isYellow: item.item_rarity === 'red',
           });
         } else {
-          console.info(res.data.level, res.data.level % 10);
           if (res.data.level % 10 === 0) {
             localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
             localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
@@ -339,53 +338,54 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 sortByPremiumLevel(itemsForImages?.items)
                   .filter(_item => _item.name === item.name)
                   .map((_item, index) => (
-                    <div
-                      className={clsx(
-                        item.item_rarity === 'red'
-                          ? styles.item
-                          : item.item_rarity === 'yellow'
-                            ? styles.itemPurple
-                            : styles.itemRed,
-                        _item.item_premium_level === 'advanced' && !item.is_bought ? styles.noBorder : '',
-                        _item.item_premium_level === 'pro' && !item.is_bought ? styles.noBorder : '',
-                        // item.item_premium_level === 'advanced'
-                        //   ? index > 1 && styles.itemLocked
-                        //   : item.item_premium_level === 'base' && index > 0 && styles.itemLocked,
-                      )}
-                      key={_item.id}
-                      style={
-                        itemLevel < 50 && index === 1
-                          ? ({
-                            '--lvl-height': `${(itemLevel / 50) * 100}%`,
-                          } as React.CSSProperties)
-                          : itemLevel >= 50 && index === 2
-                            ? ({
-                              '--lvl-height': `${((itemLevel - 50) / 50) * 100}%`,
-                            } as React.CSSProperties)
-                            : undefined
-                      }
-                    >
-                      <img src={itemStoreString(_item.image_url)} className={styles.itemImage} alt="" />
+                      <div
+                        className={clsx(
+                          styles.item,
+                          index === 0 && (itemLevel < 50 || item.item_premium_level === 'base') && styles.blue,
+                          index === 1 && (itemLevel >= 50 && itemLevel < 100 && item.item_premium_level !== 'base' || item.item_premium_level === 'advanced') && styles.purple,
+                          index === 2 && (itemLevel >= 100 && ![ 'base', 'advanced' ].includes(item.item_premium_level) || item.item_premium_level === 'pro') && styles.red,
+                          !(
+                            (index === 0 && (itemLevel < 50 || item.item_premium_level === 'base')) ||
+                            (index === 1 && (itemLevel >= 50 && itemLevel < 100 && item.item_premium_level !== 'base' || item.item_premium_level === 'advanced')) ||
+                            (index === 2 && (itemLevel >= 100 && ![ 'base', 'advanced' ].includes(item.item_premium_level) || item.item_premium_level === 'pro'))
+                          ) && styles.noBorder,
+                        )}
 
-                      {item.item_premium_level === 'base' &&
-                        _item.item_premium_level === 'advanced' &&
-                        !item.is_bought && (
+                        key={_item.id}
+                        style={
+                          itemLevel < 50 && index === 1
+                            ? ({
+                              '--lvl-height': `${(itemLevel / 50) * 100}%`,
+                            } as React.CSSProperties)
+                            : itemLevel >= 50 && index === 2
+                              ? ({
+                                '--lvl-height': `${((itemLevel - 50) / 50) * 100}%`,
+                              } as React.CSSProperties)
+                              : undefined
+                        }
+                      >
+                        <img src={itemStoreString(_item.image_url)} className={styles.itemImage} alt="" />
+
+                        {item.item_premium_level === 'base' &&
+                          _item.item_premium_level === 'advanced' &&
+                          !item.is_bought && (
+                            <>
+                              <div className={styles.lockedOverlay50}></div>
+                              <span className={styles.itemLevel}>50</span>
+                              <img src={LockIcon} alt="" className={styles.lockIcon} />
+                            </>
+                          )}
+
+                        {item.item_premium_level !== 'pro' && _item.item_premium_level === 'pro' && !item.is_bought && (
                           <>
-                            <div className={styles.lockedOverlay50}></div>
-                            <span className={styles.itemLevel}>50</span>
+                            <div className={styles.lockedOverlay100}></div>
+                            <span className={styles.itemLevel}>100</span>
                             <img src={LockIcon} alt="" className={styles.lockIcon} />
                           </>
                         )}
-
-                      {item.item_premium_level !== 'pro' && _item.item_premium_level === 'pro' && !item.is_bought && (
-                        <>
-                          <div className={styles.lockedOverlay100}></div>
-                          <span className={styles.itemLevel}>100</span>
-                          <img src={LockIcon} alt="" className={styles.lockIcon} />
-                        </>
-                      )}
-                    </div>
-                  ))}
+                      </div>
+                    ),
+                  )}
             </div>
           </div>
         ))}
