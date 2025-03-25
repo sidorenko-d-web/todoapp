@@ -17,6 +17,7 @@ import { GUIDE_ITEMS, MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 import { Loader } from '../../components';
 import { ProfileFirstGuide } from '../../components/guide/ProfilePageGuides/ProfileFirstGuide/ProfileFirstGuide';
+import { PushLineGuide } from '../../components/guide/ProfilePageGuides/PushLineGuide/PushLineGuide';
 
 export const ProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation('profile');
@@ -201,6 +202,16 @@ export const ProfilePage: React.FC = () => {
           setGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE);
           setRerender((prev) => prev+1);
         }} />
+      }
+
+      {
+        isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) && !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN ) &&
+        <PushLineGuide onClose={
+          () => {
+            setGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN);
+            setRerender((prev) => prev+1);
+          }
+        }/>
       }
     </>
   );
