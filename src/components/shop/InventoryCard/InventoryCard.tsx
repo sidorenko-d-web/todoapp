@@ -67,7 +67,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const { data: pointsUser } = useGetProfileMeQuery();
   const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
   const { data, isLoading: isItemsLoading } = useGetShopItemsQuery({
-    level: itemLevel === 50 ? 50 : itemLevel + 1,
+    level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
     item_rarity: item.item_rarity,
   });
@@ -78,7 +78,16 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   });
   const [ showEquipButton, setShowEquipButton ] = useState(false);
 
-  const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal;
+  const [ price, setPrice ] = useState('');
+
+  const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal
+
+  useEffect(() => {
+    if (data) {
+      const desiredItem = data.items.find(item_ => item_.item_premium_level === item.item_premium_level);
+      setPrice('' + desiredItem?.price_internal);
+    }
+  }, [ data, isItemsLoading ]);
 
   const [ equipItem ] = useAddItemToRoomMutation();
   const [ removeItem ] = useRemoveItemFromRoomMutation();
@@ -145,8 +154,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
           }
 
+          openModal(MODALS.TASK_CHEST)
+
           openModal(MODALS.UPGRADED_ITEM, {
-            item,
+            item: res.data,
             mode: 'item',
             reward: 'reward of item',
           });
@@ -430,10 +441,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               { [styles.disabledBtn]: !isAffordable },
             )}
             disabled={itemLevel === 50 || isLoading || isItemsLoading || isUpdateLoading || !isAffordable}
-            onClick={() => handleBuyItem(item.price_internal ?? '')}
+            onClick={() => handleBuyItem(price ?? '')}
           >
             <>
-              {formatAbbreviation(item.price_internal || 0, 'number', {
+              {formatAbbreviation(price || 0, 'number', {
                 locale: locale,
               })}{' '}
               <img className={styles.imgCoints} src={!isAffordable ? CointsGrey : CoinIcon} alt="" />
