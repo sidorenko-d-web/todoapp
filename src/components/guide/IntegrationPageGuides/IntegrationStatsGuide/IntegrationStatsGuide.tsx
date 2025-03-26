@@ -38,13 +38,13 @@ export const IntegrationStatsGuide: React.FC<IntegrationStatsGuideProps> = ({ on
         top={'59%'}
         description={
           <>
-            <div style={{ wordWrap: 'break-word', whiteSpace: 'pre-line' }}>
-            Не забывай создавать интеграции каждый день, активируя Пуш-линию! Без нее показатели за твои интеграции и доход  НЕ БУДЕТ РАСТИ!
-            </div>
+            {t('g103')}<span style={{ color: '#2F80ED' }}>{t('g104')}</span> 
+            <br/>
+            {t('g105')}<span style={{ color: '#E84949' }}>{t('g106')}</span> 
           </>
         }
         onClose={handleClose}>
-        <button className={styles.nextBtn} onClick={handleClose}>{'Понятно!'}</button>
+        <button className={styles.nextBtn} onClick={handleClose}>{t('g107')}</button>
         <img src={img1} className={styles.gifImage} height={146} width={140} />
 
 

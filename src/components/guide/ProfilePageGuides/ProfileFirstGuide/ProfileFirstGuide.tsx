@@ -37,12 +37,16 @@ export const ProfileFirstGuide: React.FC<ProfileFirstGuideProps> = ({ onClose })
         top={'49%'}
         description={
           <>
-            Это твой профиль! Тут ты можешь видесь основные показатели своего аккаунта!
-            Помимо просмотров и подписчиков тут также ты можешь увидеть свою позицию в рейтинге игроков и количество дней в Пушл-линии!
+            {t('g89')} 
+            <br/>
+            {t('g89_2')} 
+            <span style={{ color: '#FF6480' }}>{t('g90')}</span> 
+            {t('g39')} 
+            <span style={{ color: '#2F80ED' }}>{t('g91')}</span> 
           </>
         }
         onClose={handleClose}>
-        <button className={styles.nextBtn} onClick={handleClose}>{'Супер!'}</button>
+        <button className={styles.nextBtn} onClick={handleClose}>{t('g108')}</button>
         <img src={img1} className={styles.gifImage} height={146} width={140} />
       </Guide>
     </>

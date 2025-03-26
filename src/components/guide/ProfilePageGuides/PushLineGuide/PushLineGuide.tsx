@@ -37,12 +37,13 @@ export const PushLineGuide: React.FC<PushLineGuideProps> = ({ onClose }) => {
         top={'5%'}
         description={
           <>
-            Пуш-линия очень важна, так как от нее зависит сохранение твоего прогресса, а также твой доход!
-            Только с активной Пуш-линией твои интеграции приносят деньги. Чтобы ее активировать достаточно сделать 1 интеграцию в день!
+            {t('g92')}<span style={{ color: '#2F80ED' }}>{t('g93')}</span>
+            {t('g94')}<span style={{ color: '#EC7913' }}>{t('g94_2')}</span>
+            {t('g95')}<span style={{ color: '#2F80ED' }}>{t('g96')}</span>
           </>
         }
         onClose={handleClose}>
-        <button className={styles.nextBtn} onClick={handleClose}>{'Супер!'}</button>
+        <button className={styles.nextBtn} onClick={handleClose}>{t('g109')}</button>
         <img src={img1} className={styles.gifImage} height={146} width={140} />
       </Guide>
     </>

@@ -37,13 +37,18 @@ export const FreezeGuide: React.FC<FreezeGuideProps> = ({ onClose }) => {
                 top={'3%'}
                 description={
                     <>
-                        Если ты не сделашь за день ни одной интеграции твой стрик обнулится, а подписчики начнут уходить...
-                        Но иногда этого можно избежать с помощью заморозки! 1 заморозка позволяет пропустить 1 день Пуш-линии без потери прогресса.
-                        Ты найдешь их в сундуках!
-                    </>
+                    {t('g97')}
+                    <span style={{ color: '#2F80ED' }}>{t('g98')}</span> 
+                    {t('g99')}
+                    <br/>
+                    {t('g100')}
+                    <span style={{ color: '#56CCF2' }}>{t('g101')}</span> 
+                    <br/>
+                    {t('g102')}
+                  </>
                 }
                 onClose={handleClose}>
-                <button className={styles.nextBtn} onClick={handleClose}>{'Супер!'}</button>
+                <button className={styles.nextBtn} onClick={handleClose}>{t('g107')}</button>
                 <img src={img1} className={styles.gifImage} height={146} width={140} />
             </Guide>
         </>

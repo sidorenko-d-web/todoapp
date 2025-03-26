@@ -35,6 +35,7 @@ export const ProfilePage: React.FC = () => {
 
   const [_, setRerender] = useState(0);
 
+  const [showGuide, setShowGuide] = useState(false);
 
   const { data: awardsData, isLoading: awardsLoading } = useGetInventoryAchievementsQuery();
 
@@ -130,6 +131,16 @@ export const ProfilePage: React.FC = () => {
 
   const isLoading = isUserLoading || isTopProfilesLoading || awardsLoading || isPushLineLoading;
 
+  useEffect(() => {
+      if (initialDataLoaded && !isLoading) {
+        const timer = setTimeout(() => {
+          setShowGuide(true);
+        }, 1000);
+  
+        return () => clearTimeout(timer);
+      }
+    }, [initialDataLoaded, isLoading]);
+
   if (isLoading) {
     return <Loader />;
   }
@@ -199,7 +210,7 @@ export const ProfilePage: React.FC = () => {
       )}
 
       {
-        !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) && <ProfileFirstGuide onClose={() => {
+        !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) && showGuide && <ProfileFirstGuide onClose={() => {
           setGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE);
           setRerender((prev) => prev+1);
         }} />
