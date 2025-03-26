@@ -34,7 +34,7 @@ export const PushLineGuide: React.FC<PushLineGuideProps> = ({ onClose }) => {
       <Guide align="left"
         noButton={true}
         zIndex={110}
-        top={'5%'}
+        top={'21%'}
         description={
           <>
             {t('g92')}<span style={{ color: '#2F80ED' }}>{t('g93')}</span>

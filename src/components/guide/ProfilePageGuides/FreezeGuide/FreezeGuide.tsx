@@ -21,7 +21,7 @@ export const FreezeGuide: React.FC<FreezeGuideProps> = ({ onClose }) => {
     }, []);
 
     const handleClose = () => {
-        //dispatch(setDimHeader(false));
+        dispatch(setDimHeader(false));
         onClose();
         setIsOpen(false);
     };
@@ -34,7 +34,7 @@ export const FreezeGuide: React.FC<FreezeGuideProps> = ({ onClose }) => {
             <Guide align="right"
                 noButton={true}
                 zIndex={110}
-                top={'3%'}
+                top={'21%'}
                 description={
                     <>
                     {t('g97')}

@@ -1,13 +1,13 @@
 import { useEffect, useState, useMemo } from 'react';
 import Lottie from 'lottie-react';
-import { GUIDE_ITEMS, MODALS } from '../../../constants';
+import { AppRoute, GUIDE_ITEMS, MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import FireBlue from '../../../assets/icons/fire-blue.svg';
 import FireRed from '../../../assets/icons/fire-red.svg';
 import FirePurple from '../../../assets/icons/fire-purple.svg';
 import styles from './DaysInARowModal.module.scss';
 import Button from '../partials/Button';
-import { useGetPushLineQuery } from '../../../redux';
+import { RootState, useGetPushLineQuery } from '../../../redux';
 import ChestBlue from '../../../assets/icons/chest-blue.svg';
 import ChestPurple from '../../../assets/icons/chest-purple.svg';
 import chestIcon from '../../../assets/icons/chest-red.svg';
@@ -17,7 +17,10 @@ import purpleLightAnimation from '../../../assets/animations/purpleLight.json';
 import { useTranslation } from 'react-i18next';
 import { CentralModal, ProgressLine } from '../../../components/shared';
 import { StreakDay } from '../../../components/profile/ProfileStreak/StreakCard/StreakDay';
-import { isGuideShown } from '../../../utils';
+import { isGuideShown, setGuideShown } from '../../../utils';
+import { IntegrationCreatedGuide } from '../../../components';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 interface Props {
   days?: number;
@@ -32,6 +35,9 @@ export default function DaysInARowModal({ onClose }: Props) {
   const [dayNumbers, setDayNumbers] = useState<number[]>([]);
   const [frozenDays, setFrozenDays] = useState<number[]>([]);
   const [streakDays, setStreakDays] = useState<number[]>([]);
+
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const today = new Date();
@@ -92,7 +98,7 @@ export default function DaysInARowModal({ onClose }: Props) {
     if (data?.in_streak_days !== undefined && data?.in_streak_days !== null) {
       return data.in_streak_days;
     }
-    
+
     // Otherwise use the calculated streak days length
     return streakDays.length;
   }, [data, streakDays]);
@@ -103,7 +109,7 @@ export default function DaysInARowModal({ onClose }: Props) {
     // For streaks 1-29: levels 1-3 (proportionally)
     // For streaks 30-59: level 4
     // For streaks 60+: level 5
-    
+
     if (streakCount >= 60) {
       return 5;
     } else if (streakCount >= 30) {
@@ -113,7 +119,7 @@ export default function DaysInARowModal({ onClose }: Props) {
       const calculatedLevel = Math.ceil((streakCount / 30) * 3);
       return Math.min(3, Math.max(1, calculatedLevel));
     }
-    
+
     return 0; // Default level for 0 streaks
   }, [streakCount]);
 
@@ -152,73 +158,90 @@ export default function DaysInARowModal({ onClose }: Props) {
     return ChestBlue;
   }, [streakCount]);
 
+  const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
+
   return (
-    <CentralModal
-      modalId={MODALS.DAYS_IN_A_ROW}
-      title={`${streakCount} ${t('p21')}`}
-      onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)}
-    >
-      <div className={styles.images}>
-        <Lottie
-          animationData={animationData}
-          loop={true}
-          className={styles.light}
-        />
-        <img
-          className={styles.fire}
-          src={fireIcon}
-          alt="Fire Icon"
-        />
-        <div className={styles.days}>
-          <p>{streakCount}</p>
-        </div>
-      </div>
-
-      <div className={styles.days}>
-        {dayNumbers.map((day, index) => {
-          const isFrozen = frozenDays.includes(day);
-          const isStreak = streakDays.includes(day);
-
-          const type = isStreak ? 'passed' : isFrozen ? 'freeze' : 'regular';
-
-          return (
-            <StreakDay
-              key={day}
-              dayNumber={day}
-              type={type}
-              weekIndex={index}
-              weekData={data?.week_information ?? []}
-              streakDays={streakCount}
-            />
-          );
-        })}
-      </div>
-
-      <div className={styles.progressTitle}>
-        <span>
-          {streakCount}/{t(p14Key)}
-        </span>
-        <div className={styles.chest}>
-          <span>{locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}</span>
+    <>
+      <CentralModal
+        modalId={MODALS.DAYS_IN_A_ROW}
+        title={`${streakCount} ${t('p21')}`}
+        onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)}
+      >
+        <div className={styles.images}>
+          <Lottie
+            animationData={animationData}
+            loop={true}
+            className={styles.light}
+          />
           <img
-            src={chestImage}
-            className={styles.chestImg}
-            alt="Chest Icon"
+            className={styles.fire}
+            src={fireIcon}
+            alt="Fire Icon"
+          />
+          <div className={styles.days}>
+            <p>{streakCount}</p>
+          </div>
+        </div>
+
+        <div className={styles.days}>
+          {dayNumbers.map((day, index) => {
+            const isFrozen = frozenDays.includes(day);
+            const isStreak = streakDays.includes(day);
+
+            const type = isStreak ? 'passed' : isFrozen ? 'freeze' : 'regular';
+
+            return (
+              <StreakDay
+                key={day}
+                dayNumber={day}
+                type={type}
+                weekIndex={index}
+                weekData={data?.week_information ?? []}
+                streakDays={streakCount}
+              />
+            );
+          })}
+        </div>
+
+        <div className={styles.progressTitle}>
+          <span>
+            {streakCount}/{t(p14Key)}
+          </span>
+          <div className={styles.chest}>
+            <span>{locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}</span>
+            <img
+              src={chestImage}
+              className={styles.chestImg}
+              alt="Chest Icon"
+            />
+          </div>
+        </div>
+        <div className={styles.progress}>
+          <ProgressLine
+            level={calculateLevel}
+            color={color}
           />
         </div>
-      </div>
-      <div className={styles.progress}>
-        <ProgressLine
-          level={calculateLevel}
-          color={color}
+        <Button
+          onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))}
+          variant={color}
+        >
+          {t('p22')}
+        </Button>
+
+        {
+          !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+          <IntegrationCreatedGuide
+          onClose={() => {
+            closeModal(MODALS.DAYS_IN_A_ROW);
+            setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+            navigate(AppRoute.Integration.replace(':integrationId', integrationId));
+            //setRerender((prev) => prev + 1);
+          }}
         />
-      </div>
-      <Button
-        onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))}
-        variant={color}
-      >
-        {t('p22')}
-      </Button>
-    </CentralModal>
+        }
+      </CentralModal>
+
+    </>
   );
 }

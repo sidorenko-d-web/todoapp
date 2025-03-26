@@ -22,7 +22,7 @@ import {
   useGetIntegrationsQuery,
   useGetProfileMeWithPollingQuery,
 } from '../../../redux';
-import { isGuideShown, setGuideShown } from '../../../utils';
+import { setGuideShown } from '../../../utils';
 import { useEffect } from 'react';
 
 export default function RewardForIntegrationModal() {
@@ -44,10 +44,6 @@ export default function RewardForIntegrationModal() {
   const dispatch = useDispatch();
 
   useAutoPlaySound(MODALS.INTEGRATION_REWARD, SOUNDS.rewardHuge);
-
-  useEffect(() => {
-    setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
-  }, []);
 
   const getBlueStarCount = (count: number = 0) => {
     if (count >= 18) return 3;
@@ -81,9 +77,6 @@ export default function RewardForIntegrationModal() {
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
         dispatch(setIsPublishedModalClosed(true));
         dispatch(setNeedToPlayHappy(true));
-        if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.PUSHLINE_MODAL_OPENED)) {
-          openModal(MODALS.DAYS_IN_A_ROW);
-        }
         closeModal(MODALS.INTEGRATION_REWARD);
       }}
       modalId={MODALS.INTEGRATION_REWARD}

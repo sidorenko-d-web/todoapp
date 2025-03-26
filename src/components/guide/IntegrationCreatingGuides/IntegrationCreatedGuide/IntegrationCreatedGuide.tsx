@@ -6,6 +6,8 @@ import { Guide } from "../../Guide/Guide";
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from "react-redux";
 import { setDimHeader } from "../../../../redux";
+import { useModal } from "../../../../hooks";
+
 
 interface IntegrationCreatedGuideProps {
   onClose: () => void;
@@ -14,9 +16,11 @@ export const IntegrationCreatedGuide: React.FC<IntegrationCreatedGuideProps> = (
   const { t } = useTranslation('guide');
   const [isOpen, setIsOpen] = useState(true);
 
+  useModal();
   const dispatch = useDispatch();
 
   useEffect(() => {
+    //openModal(MODALS.DAYS_IN_A_ROW);
     dispatch(setDimHeader(true));
     localStorage.setItem('integrationCreatedGuideOpen', '1');
   }, []);
@@ -34,7 +38,8 @@ export const IntegrationCreatedGuide: React.FC<IntegrationCreatedGuideProps> = (
 
     <Guide align="left"
       zIndex={11110}
-      top={'55%'}
+      top={'65%'}
+      dimBackground={false}
       description
       ={
         <>

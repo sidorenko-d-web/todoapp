@@ -4,7 +4,6 @@ import {
   FinishTutorialGuide,
   GetCoinsGuide,
   InitialGuide,
-  IntegrationCreatedGuide,
   IntegrationCreation,
   IntegrationRewardModal,
   Loader,
@@ -148,6 +147,7 @@ export const MainPage: FC = () => {
         setGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED);
 
         setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN);
 
         setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
 
@@ -201,8 +201,6 @@ export const MainPage: FC = () => {
       reduxDispatch(setDimHeader(false));
     }
   }, []);
-
-  const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
   useEffect(() => {
     
@@ -293,6 +291,12 @@ export const MainPage: FC = () => {
     if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
       navigate(AppRoute.ShopInventory);
     }
+
+    if(isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED) 
+      && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)
+      && !getModalState(MODALS.DAYS_IN_A_ROW).isOpen) {
+      openModal(MODALS.DAYS_IN_A_ROW);
+    }
   }, []);
 
   const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
@@ -306,6 +310,11 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(3));
   }, []);
 
+  useEffect(() => {
+    if(isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+      openModal(MODALS.DAYS_IN_A_ROW);
+    }
+  }, [isPublishedModalClosed, isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)]);
 
   const isLoading =
     isAllIntegrationsLoading ||
@@ -326,7 +335,11 @@ export const MainPage: FC = () => {
 
   return (
     <main className={s.page} onClick={accelerateIntegration}>
-      <DaysInARowModal onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)} />
+      <DaysInARowModal onClose={() => {
+        if(isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+          closeModal(MODALS.DAYS_IN_A_ROW);
+        }
+      }} />
 
       {(integrationCurrentlyCreating || firstIntegrationCreating) && (
         <div
@@ -419,7 +432,7 @@ export const MainPage: FC = () => {
           />
         )}
 
-      {isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
+      {/* {isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
         <IntegrationCreatedGuide
           onClose={() => {
             setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
@@ -427,7 +440,7 @@ export const MainPage: FC = () => {
             setRerender((prev) => prev + 1);
           }}
         />
-      )}
+      )} */}
 
       {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (
