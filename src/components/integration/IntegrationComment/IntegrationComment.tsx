@@ -19,6 +19,7 @@ interface IntegrationCommentProps {
   onVote: (isThumbsUp: boolean, id: string) => void;
   finished: boolean;
   hateText: boolean;
+  isVoting: boolean;
 }
 
 export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
@@ -30,6 +31,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
   onVote,
   finished,
   hateText,
+  isVoting,
 }) => {
   const { t, i18n } = useTranslation('integrations');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
@@ -40,13 +42,19 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
   const [voteWrongSound] = useSound(SOUNDS.wrongAnswer, {
     volume: useSelector(selectButtonVolume) * 1.5,
   });
+
   const handleVoteRight = () => {
-    onVote(true, id);
-    voteRightSound();
+    if (!isVoting && !finished) {
+      onVote(true, id);
+      voteRightSound();
+    }
   };
+
   const handleVoteWrong = () => {
-    onVote(false, id);
-    voteWrongSound();
+    if (!isVoting && !finished) {
+      onVote(false, id);
+      voteWrongSound();
+    }
   };
 
   const commentGlow = useSelector((state: RootState) => state.guide.commentGlow);
@@ -70,7 +78,9 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
       )}
       <div className={styles.progressWrp}>
         <div className={styles.amountAndRewardWrp}>
-          <p className={styles.amount}>{progres}/5</p>
+          <p className={styles.amount}>
+            {progres}/{5}
+          </p>
           <div className={styles.rewardWrp}>
             <p className={styles.reward}>+{formatAbbreviation(100, 'number', { locale: locale })}</p>
             <img src={coinIcon} width={18} height={18} />
@@ -81,7 +91,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
 
       <div className={styles.thumbs}>
         <TrackedButton
-          disabled={finished}
+          disabled={finished || isVoting}
           trackingData={{
             eventType: 'button',
             eventPlace: 'Лайк - Интеграции - Комментарий',
@@ -90,7 +100,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
           onClick={handleVoteRight}
         />
         <TrackedButton
-          disabled={finished}
+          disabled={finished || isVoting}
           trackingData={{
             eventType: 'button',
             eventPlace: 'Дизлайк - Интеграции - Комментарий',

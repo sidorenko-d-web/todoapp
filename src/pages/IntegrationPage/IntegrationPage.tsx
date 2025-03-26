@@ -36,7 +36,8 @@ export const IntegrationPage: React.FC = () => {
   });
 
   const [_, setRerender] = useState(0);
-
+  const [localProgress, setLocalProgress] = useState(0);
+  const [localCommentsGenerated, setLocalCommentsGenerated] = useState(0);
 
   const integrationId =
     queryIntegrationId !== 'undefined'
@@ -54,13 +55,17 @@ export const IntegrationPage: React.FC = () => {
   });
 
   useEffect(() => {
+    if (data) {
+      setLocalProgress(data.comments_answered_correctly % 5);
+      setLocalCommentsGenerated(data.comments_generated);
+    }
+  }, [data]);
+
+  useEffect(() => {
     if (!data) return;
-    const refetchInterval = setInterval(
-      () => {
-        refetchCurrentIntegration();
-      },
-      5 * 60 * 1000,
-    ); // 5 minutes
+    const refetchInterval = setInterval(() => {
+      refetchCurrentIntegration();
+    }, 5 * 60 * 1000); // 5 minutes
 
     return () => clearInterval(refetchInterval);
   }, [data, refetchCurrentIntegration]);
@@ -76,6 +81,7 @@ export const IntegrationPage: React.FC = () => {
   const [postComment] = usePostCommentIntegrationsMutation();
 
   const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
+  const [isVoting, setIsVoting] = useState(false);
 
   const comments = commentData ? (Array.isArray(commentData) ? commentData : [commentData]) : [];
 
@@ -85,18 +91,38 @@ export const IntegrationPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(setActiveFooterItemId(2));
-    //dispatch(setFooterActive(true));
   }, []);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
-    await postComment({ commentId, isHate: !isThumbsUp });
-    await refetchCurrentIntegration();
+    if (isVoting) return;
+    setIsVoting(true);
 
-    if (currentCommentIndex + 1 < comments.length) {
-      setCurrentCommentIndex(prevIndex => prevIndex + 1);
-    } else {
-      await refetch();
-      setCurrentCommentIndex(0);
+    try {
+      // Оптимистичное обновление
+      const wasCorrect = isThumbsUp === !commentData?.is_hate;
+      if (wasCorrect) {
+        setLocalProgress(prev => (prev + 1) % 5);
+      }
+      setLocalCommentsGenerated(prev => prev + 1);
+
+      await postComment({ commentId, isHate: !isThumbsUp }).unwrap();
+      await refetchCurrentIntegration();
+
+      if (currentCommentIndex + 1 < comments.length) {
+        setCurrentCommentIndex(prevIndex => prevIndex + 1);
+      } else {
+        await refetch();
+        setCurrentCommentIndex(0);
+      }
+    } catch (error) {
+      console.error('Error handling vote:', error);
+      // Откат оптимистичного обновления
+      if (isThumbsUp === !commentData?.is_hate) {
+        setLocalProgress(prev => (prev - 1) % 5);
+      }
+      setLocalCommentsGenerated(prev => prev - 1);
+    } finally {
+      setIsVoting(false);
     }
   };
 
@@ -132,36 +158,41 @@ export const IntegrationPage: React.FC = () => {
           />
           <div className={styles.container}>
             <div className={styles.integrationNameWrp}>
-              <p className={styles.integrationTitle}>{t('i1')} {data.number}</p>
+              <p className={styles.integrationTitle}>
+                {t('i1')} {data.number}
+              </p>
               <div className={styles.integrationLevelWrp}>
                 <p className={styles.integrationLevel}>{data.campaign.company_name}</p>
                 <img src={integrationIcon} height={16} width={16} alt={'icon'} />
               </div>
             </div>
             <Integration />
-            {isIntegrationLoading || isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
-              <>
-                <IntegrationStats
-                  views={data.views}
-                  income={data.income}
-                  subscribers={data.subscribers}
-                  futureStatistics={data.future_statistics}
-                  lastUpdatedAt={data.updated_at}
-                />
-                <div className={styles.commentsSectionTitleWrp}>
-                  <p className={styles.commentsSectionTitle}>{t('i4')}</p>
-                  <p className={styles.commentsAmount}>
-                    {data.comments_generated}/{20}
-                  </p>
-                </div>
-                <IntegrationComment
-                  progres={data.comments_answered_correctly % 5}
-                  {...comments[currentCommentIndex]}
-                  onVote={handleVote}
-                  hateText={commentData?.is_hate}
-                  finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
-                /></>
-            }
+            {isIntegrationLoading ||
+              (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
+                <>
+                  <IntegrationStats
+                    views={data.views}
+                    income={data.income}
+                    subscribers={data.subscribers}
+                    futureStatistics={data.future_statistics}
+                    lastUpdatedAt={data.updated_at}
+                  />
+                  <div className={styles.commentsSectionTitleWrp}>
+                    <p className={styles.commentsSectionTitle}>{t('i4')}</p>
+                    <p className={styles.commentsAmount}>
+                      {localCommentsGenerated}/{20}
+                    </p>
+                  </div>
+                  <IntegrationComment
+                    progres={localProgress}
+                    {...comments[currentCommentIndex]}
+                    onVote={handleVote}
+                    hateText={commentData?.is_hate}
+                    finished={localCommentsGenerated >= 20 || !(commentData && isSuccess)}
+                    isVoting={isVoting}
+                  />
+                </>
+              ))}
           </div>
         </>
       )}

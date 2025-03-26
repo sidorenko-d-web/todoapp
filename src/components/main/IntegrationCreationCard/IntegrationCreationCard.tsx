@@ -15,31 +15,26 @@ import { setIntegrationCreating } from '../../../redux/slices/integrationAcceler
 
 interface CreatingIntegrationCardProps {
   integration: IntegrationResponseDTO;
-  refetchIntegration?: () => void;
+  refetchIntegration: () => void;
 }
 
 const TIME_LEFT_KEY = 'integration_time_left';
 const INITIAL_TIME_LEFT_KEY = 'integration_initial_time_left';
 const INTEGRATION_ID_KEY = 'integration_id';
-const LAST_UPDATED_TIME_KEY = 'last_updated_time';
 
-export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration }) => {
+export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration, refetchIntegration }) => {
   const { t } = useTranslation('integrations');
+
   const dispatch = useDispatch();
-  const [hasBorder, setHasBorder] = useState(false);
 
   const getSavedTimeLeft = () => {
     const savedIntegrationId = localStorage.getItem(INTEGRATION_ID_KEY);
     const savedTimeLeft = localStorage.getItem(TIME_LEFT_KEY);
-    const lastUpdatedTime = localStorage.getItem(LAST_UPDATED_TIME_KEY);
 
-    if (savedIntegrationId === integration.id && savedTimeLeft && lastUpdatedTime) {
-      const currentTime = Math.floor(Date.now() / 1000);
-      const elapsedTime = currentTime - parseInt(lastUpdatedTime);
-      const newTimeLeft = Math.max(parseInt(savedTimeLeft) - elapsedTime, 0);
-      return newTimeLeft;
+    if (savedIntegrationId === integration.id && savedTimeLeft) {
+      return parseInt(savedTimeLeft);
     }
-    return 300;
+    return integration.time_left;
   };
 
   const getSavedInitialTimeLeft = () => {
@@ -49,7 +44,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     if (savedIntegrationId === integration.id && savedInitialTimeLeft) {
       return parseInt(savedInitialTimeLeft);
     }
-    return 300;
+    return integration.time_left;
   };
 
   const [timeLeft, setTimeLeft] = useState(getSavedTimeLeft());
@@ -60,24 +55,22 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
 
   const accelerationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const { accelerateIntegration } = useAccelerateIntegration({
+  const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
     integrationId: integration.id,
-    onSuccess: newTimeLeft => {
-      setTimeLeft(newTimeLeft);
-      localStorage.setItem(TIME_LEFT_KEY, newTimeLeft.toString());
-      localStorage.setItem(LAST_UPDATED_TIME_KEY, Math.floor(Date.now() / 1000).toString());
+    onSuccess: () => {
+      setTimeLeft(integration.time_left);
+      localStorage.setItem(TIME_LEFT_KEY, integration.time_left.toString());
     },
   });
 
   useEffect(() => {
     localStorage.setItem(INTEGRATION_ID_KEY, integration.id);
     localStorage.setItem(INITIAL_TIME_LEFT_KEY, initialTimeLeft.toString());
-    localStorage.setItem(LAST_UPDATED_TIME_KEY, Math.floor(Date.now() / 1000).toString());
-  }, [integration.id, initialTimeLeft]);
+  }, []);
 
   useEffect(() => {
     dispatch(setIntegrationCreating(true));
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem(TIME_LEFT_KEY, timeLeft.toString());
@@ -87,17 +80,15 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   const reduxAcceleration = useSelector((state: RootState) => state.acceleration.acceleration);
 
   useEffect(() => {
-    if (acceleration !== reduxAcceleration) {
+    if (acceleration != reduxAcceleration) {
       handleAccelerateClick();
-      setAcceleration(reduxAcceleration + 20);
+      setAcceleration(reduxAcceleration);
     }
   }, [reduxAcceleration]);
 
   const calculateProgress = () => {
     return ((initialTimeLeft - timeLeft) / initialTimeLeft) * 100;
   };
-
-  const accelerateGuideClosed = useSelector((state: RootState) => state.guide.accelerateIntegrationGuideClosed);
 
   const [progress, setProgress] = useState(calculateProgress());
 
@@ -119,28 +110,27 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       setIsExpired(true);
       dispatch(integrationsApi.util.invalidateTags(['Integrations']));
     }
-  }, [timeLeft, accelerateIntegration, isExpired, dispatch]);
+  }, [timeLeft, accelerateIntegration, dispatch]);
 
   // useEffect(() => {
   //   if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET)) {
   //     accelerateIntegration(timeLeft - 20);
   //     setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
   //   }
-  // }, [accelerateIntegration, timeLeft]);
+  // }, []);
 
   useEffect(() => {
     dispatch(setIsWorking(true));
     const timerId = setInterval(() => {
       setTimeLeft(prevTime => {
         const newTime = Math.max(prevTime - 1, 0);
+        // Save to localStorage on each tick
         localStorage.setItem(TIME_LEFT_KEY, newTime.toString());
-        localStorage.setItem(LAST_UPDATED_TIME_KEY, Math.floor(Date.now() / 1000).toString());
         return newTime;
       });
     }, 1000);
 
     if (isExpired) {
-      console.log('INTEGRATION EXPIRED!!!');
       dispatch(setIntegrationCreating(false));
       dispatch(setIsWorking(false));
       clearInterval(timerId);
@@ -164,7 +154,6 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       dispatch(setLastIntegrationId(integration.id));
       void accelerateIntegration(1);
       createParticles();
-      setHasBorder(true);
 
       if (accelerationTimeoutRef.current) {
         clearTimeout(accelerationTimeoutRef.current);
@@ -176,12 +165,10 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
 
       accelerationTimeoutRef.current = setTimeout(() => {
         setIsAccelerated(false);
-        setHasBorder(false);
         accelerationTimeoutRef.current = null;
       }, 2000);
 
-      // Обновляем данные о текущей интеграции
-      //refetchIntegration();
+      refetchIntegration();
     }
   };
 
@@ -205,7 +192,6 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   if (isExpired) {
     dispatch(setIntegrationReadyForPublishing(true));
     dispatch(setLastIntegrationId(integration.id));
-    dispatch(setIntegrationCreating(false));
     if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
     }
@@ -213,14 +199,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   }
 
   return (
-    <div
-      className={`${s.integration} ${isAccelerated ? s.accelerated : ''}
-       ${
-         accelerateGuideClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)
-           ? s.bordered
-           : ''
-       }`}
-    >
+    <div className={`${s.integration} ${s.elevated} ${isAccelerated ? s.accelerated : ''}`}>
       <div className={s.integrationHeader}>
         <h2 className={s.title}>{t('i10')}</h2>
         <span className={s.author}>
@@ -235,7 +214,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
               {t('i12')} {formatTime(timeLeft)}
             </span>
           </div>
-          <div className={s.progressBar} style={{ border: hasBorder ? '1px solid #2064C0' : 'none' }}>
+          <div className={s.progressBar}>
             <div className={s.progressBarInner} style={{ width: `${progress}%` }} />
           </div>
         </div>
@@ -246,7 +225,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
           }}
           className={s.iconButton}
           onClick={handleAccelerateClick}
-          disabled={false}
+          disabled={isExpired || isAccelerating}
           aria-label={t('i24')}
         >
           <img src={rocketIcon} alt="rocket" />
