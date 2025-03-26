@@ -4,35 +4,36 @@ import coinIcon from '../../assets/icons/coin.png';
 
 import s from './TasksPage.module.scss';
 import { DailyTasks, Loader, SocialTasks } from '../../components';
-import { formatAbbreviation, getPlanStageByUsersCount } from '../../helpers';
-import { useGetBoostQuery, useGetTasksQuery } from '../../redux/api/tasks';
+import { formatAbbreviation } from '../../helpers';
+import { useGetBoostQuery, useGetTasksQuery, TaskCategory } from '../../redux/api/tasks';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setActiveFooterItemId } from '../../redux';
 import GetGiftDaily from '../DevModals/GetGiftDaily/GetGiftDaily';
-import { total_users } from '../../constants';
+import { RootState } from '../../redux';
 
 export const TasksPage: FC = () => {
   const dispatch = useDispatch();
+  const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
 
   const { t, i18n } = useTranslation('quests');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const {
-    data,
-    error,
-    isLoading: isTasksLoading,
-  } = useGetTasksQuery({
+  // Мемоизируем параметры запросов
+  const tasksQueryParams = useMemo(() => ({
     offset: 0,
     limit: 100,
-  });
-  const { data: dataDaily, isLoading: isDailyLoading } = useGetTasksQuery({
-    is_assigned: true,
-    category: 'quiz',
-    offset: 0,
-    limit: 100,
-  });
+  }), []);
 
+  const dailyTasksQueryParams = useMemo(() => ({
+    ...tasksQueryParams,
+    is_assigned: true,
+    category: 'quiz' as TaskCategory,
+  }), []);
+
+  // Используем мемоизированные параметры
+  const { data, error, isLoading: isTasksLoading } = useGetTasksQuery(tasksQueryParams);
+  const { data: dataDaily, isLoading: isDailyLoading } = useGetTasksQuery(dailyTasksQueryParams);
   const { data: boostData, isLoading: isBoostLoading } = useGetBoostQuery();
 
   useEffect(() => {
@@ -117,7 +118,7 @@ export const TasksPage: FC = () => {
         </div>
       </section>
 
-      {dailyTask && getPlanStageByUsersCount(total_users) >= 4 && <DailyTasks task={dailyTask} />}
+      {dailyTask && lastActiveStage >= 4 && <DailyTasks task={dailyTask} />}
       {/*{topTask && <TopTasks task={topTask} />}*/}
       {socialTasks.length > 0 && <SocialTasks tasks={socialTasks} />}
       <GetGiftDaily />
