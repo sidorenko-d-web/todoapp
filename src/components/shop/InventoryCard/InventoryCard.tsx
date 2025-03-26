@@ -154,8 +154,6 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
           }
 
-          openModal(MODALS.TASK_CHEST)
-
           openModal(MODALS.UPGRADED_ITEM, {
             item: res.data,
             mode: 'item',

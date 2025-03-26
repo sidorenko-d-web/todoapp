@@ -58,10 +58,6 @@ export default function GetRewardChestModal({}: GetRewardChestModalProps) {
 
   useAutoPlaySound(MODALS.TASK_CHEST, SOUNDS.chestOpen);
 
-  useEffect(() => {
-    console.info(chestId, chestReward, [ points, subscribers, freezes ]);
-  }, [ chestId, chestReward, freezes, points, subscribers ]);
-
   return (
     <CentralModal
       onClose={handleClose}
