@@ -30,7 +30,7 @@ const StorePage: FC = () => {
     item_category: shopCategory?.value as TypeItemCategory,
     level: 1,
     item_rarity: itemsRarity?.value,
-    item_premium_level: 'base',
+    item_premium_level: 'pro',
     is_bought: false,
   });
 

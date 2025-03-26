@@ -37,7 +37,6 @@ export const IntegrationPage: React.FC = () => {
 
   const [_, setRerender] = useState(0);
 
-
   const integrationId =
     queryIntegrationId !== 'undefined'
       ? queryIntegrationId
@@ -55,12 +54,9 @@ export const IntegrationPage: React.FC = () => {
 
   useEffect(() => {
     if (!data) return;
-    const refetchInterval = setInterval(
-      () => {
-        refetchCurrentIntegration();
-      },
-      5 * 60 * 1000,
-    ); // 5 minutes
+    const refetchInterval = setInterval(() => {
+      refetchCurrentIntegration();
+    }, 5 * 60 * 1000); // 5 minutes
 
     return () => clearInterval(refetchInterval);
   }, [data, refetchCurrentIntegration]);
@@ -114,6 +110,8 @@ export const IntegrationPage: React.FC = () => {
 
   if (isLoading) return <Loader />;
 
+  console.log(data?.comments_generated);
+
   return (
     <div className={styles.wrp}>
       <h1 className={styles.pageTitle}>{t('i1')}</h1>
@@ -132,36 +130,40 @@ export const IntegrationPage: React.FC = () => {
           />
           <div className={styles.container}>
             <div className={styles.integrationNameWrp}>
-              <p className={styles.integrationTitle}>{t('i1')} {data.number}</p>
+              <p className={styles.integrationTitle}>
+                {t('i1')} {data.number}
+              </p>
               <div className={styles.integrationLevelWrp}>
                 <p className={styles.integrationLevel}>{data.campaign.company_name}</p>
                 <img src={integrationIcon} height={16} width={16} alt={'icon'} />
               </div>
             </div>
             <Integration />
-            {isIntegrationLoading || isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
-              <>
-                <IntegrationStats
-                  views={data.views}
-                  income={data.income}
-                  subscribers={data.subscribers}
-                  futureStatistics={data.future_statistics}
-                  lastUpdatedAt={data.updated_at}
-                />
-                <div className={styles.commentsSectionTitleWrp}>
-                  <p className={styles.commentsSectionTitle}>{t('i4')}</p>
-                  <p className={styles.commentsAmount}>
-                    {data.comments_generated}/{20}
-                  </p>
-                </div>
-                <IntegrationComment
-                  progres={data.comments_answered_correctly % 5}
-                  {...comments[currentCommentIndex]}
-                  onVote={handleVote}
-                  hateText={commentData?.is_hate}
-                  finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
-                /></>
-            }
+            {isIntegrationLoading ||
+              (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
+                <>
+                  <IntegrationStats
+                    views={data.views}
+                    income={data.income}
+                    subscribers={data.subscribers}
+                    futureStatistics={data.future_statistics}
+                    lastUpdatedAt={data.updated_at}
+                  />
+                  <div className={styles.commentsSectionTitleWrp}>
+                    <p className={styles.commentsSectionTitle}>{t('i4')}</p>
+                    <p className={styles.commentsAmount}>
+                      {data.comments_generated}/{20}
+                    </p>
+                  </div>
+                  <IntegrationComment
+                    progres={data.comments_answered_correctly % 5}
+                    {...comments[currentCommentIndex]}
+                    onVote={handleVote}
+                    hateText={commentData?.is_hate}
+                    finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
+                  />
+                </>
+              ))}
           </div>
         </>
       )}

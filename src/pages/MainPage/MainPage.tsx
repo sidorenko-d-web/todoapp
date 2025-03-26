@@ -49,32 +49,22 @@ export const MainPage: FC = () => {
   const { getModalState, openModal, closeModal } = useModal();
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
-  const {
-    data,
-    refetch,
-    isLoading: isAllIntegrationsLoading,
-  } = useGetAllIntegrationsQuery();
-
+  const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
 
   const { data: userData } = useGetUserQuery();
-  
 
   const { data: welcomeBonusData } = useGetUserWelcomeBonusQuery(
-      { user_id: userData?.id || 0 }, {
-        skip: !userData,
-      },
+    { user_id: userData?.id || 0 },
+    {
+      skip: !userData,
+    },
   );
 
-    
   const setRerender = useState(0)[1];
   //не убирать, нужно, чтобы гайды правильно отображались
 
-
-  const [ typewriterFound, setTypewriterFound ] = useState(false);
-  const {
-    data: itemsData,
-    isLoading: isInventoryDataLoading,
-  } = useGetInventoryItemsQuery();
+  const [typewriterFound, setTypewriterFound] = useState(false);
+  const { data: itemsData, isLoading: isInventoryDataLoading } = useGetInventoryItemsQuery();
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
   const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
@@ -83,8 +73,7 @@ export const MainPage: FC = () => {
     if (integrationCurrentlyCreating) {
       reduxDispatch(setDimHeader(false));
     }
-  }, [ integrationCurrentlyCreating ]);
-
+  }, [integrationCurrentlyCreating]);
 
   // useEffect(() => {
   //   setTypewriterFound(false);
@@ -125,14 +114,14 @@ export const MainPage: FC = () => {
       });
 
       if (!found) {
-        Object.entries(GUIDE_ITEMS).forEach(([ items ]) => {
-          Object.entries(items).forEach(([ _, value ]) => {
+        Object.entries(GUIDE_ITEMS).forEach(([items]) => {
+          Object.entries(items).forEach(([_, value]) => {
             localStorage.setItem(value, '0');
           });
         });
       }
     }
-  }, [ itemsData, isInventoryDataLoading, typewriterFound ]);
+  }, [itemsData, isInventoryDataLoading, typewriterFound]);
 
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
@@ -152,7 +141,6 @@ export const MainPage: FC = () => {
         setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
 
         setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED);
-
 
         setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
         setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
@@ -193,11 +181,10 @@ export const MainPage: FC = () => {
         }
       }
     }
-  }, [ data, isInventoryDataLoading ]);
-
+  }, [data, isInventoryDataLoading]);
 
   useEffect(() => {
-    if(isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
+    if (isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
       reduxDispatch(setDimHeader(false));
     }
   }, []);
@@ -205,7 +192,6 @@ export const MainPage: FC = () => {
   const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
   useEffect(() => {
-    
     refetch().then(() => {
       if (data?.integrations[0].status === 'created') {
         reduxDispatch(setIntegrationReadyForPublishing(true));
@@ -226,7 +212,7 @@ export const MainPage: FC = () => {
         }
       }
     });
-  }, [ data, isAllIntegrationsLoading ]);
+  }, [data, isAllIntegrationsLoading]);
   // const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
   // const showAccelerateGuide = localStorage.getItem('integrationCreated') === 'true';
 
@@ -237,7 +223,7 @@ export const MainPage: FC = () => {
     if (creatingIntegrationModalState.isOpen) {
       closeModal(MODALS.SUBSCRIBE);
     }
-  }, [ creatingIntegrationModalState.isOpen ]);
+  }, [creatingIntegrationModalState.isOpen]);
 
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(3));
@@ -252,8 +238,8 @@ export const MainPage: FC = () => {
 
     if (
       isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
-      !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN)
-      && !getModalState(MODALS.CREATING_INTEGRATION).isOpen
+      !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) &&
+      !getModalState(MODALS.CREATING_INTEGRATION).isOpen
     ) {
       navigate(AppRoute.Shop);
     }
@@ -306,7 +292,6 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(3));
   }, []);
 
-
   const isLoading =
     isAllIntegrationsLoading ||
     isCurrentUserProfileInfoLoading ||
@@ -316,9 +301,8 @@ export const MainPage: FC = () => {
 
   if (isLoading) return <Loader />;
 
-
   const accelerateIntegration = () => {
-    console.log('_acceleration')
+    console.log('_acceleration');
     if (integrationCurrentlyCreating || firstIntegrationCreating) {
       reduxDispatch(incrementAcceleration());
     }
@@ -344,15 +328,14 @@ export const MainPage: FC = () => {
 
       <Room mode="me" />
 
-
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
-          !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) ||
+        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) ||
         (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
-          !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))
-        
-          || (firstIntegrationCreating && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
+          !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) ||
+        (firstIntegrationCreating &&
+          !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
         <div
           style={{
             position: 'absolute',
@@ -370,7 +353,7 @@ export const MainPage: FC = () => {
       <InitialGuide
         onClose={() => {
           setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
-          setRerender((prev) => prev + 1);
+          setRerender(prev => prev + 1);
         }}
       />
 
@@ -379,7 +362,7 @@ export const MainPage: FC = () => {
           setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
           //openModal(MODALS.SUBSCRIBE);
           reduxDispatch(setSubscribeGuideShown(true));
-          setRerender((prev) => prev + 1);
+          setRerender(prev => prev + 1);
         }}
         top="50%"
         zIndex={12500}
@@ -402,7 +385,7 @@ export const MainPage: FC = () => {
               reduxDispatch(setGetCoinsGuideShown(true));
               setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
               setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-              setRerender((prev) => prev + 1);
+              setRerender(prev => prev + 1);
               openModal(MODALS.SUBSCRIBE);
             }}
           />
@@ -414,7 +397,7 @@ export const MainPage: FC = () => {
             onClose={() => {
               setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
               reduxDispatch(setAccelerateIntegrationGuideClosed(true));
-              setRerender((prev) => prev + 1);
+              setRerender(prev => prev + 1);
             }}
           />
         )}
@@ -424,7 +407,7 @@ export const MainPage: FC = () => {
           onClose={() => {
             setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
             navigate(AppRoute.Integration.replace(':integrationId', integrationId));
-            setRerender((prev) => prev + 1);
+            setRerender(prev => prev + 1);
           }}
         />
       )}
@@ -435,7 +418,7 @@ export const MainPage: FC = () => {
             onClose={() => {
               reduxDispatch(setDimHeader(false));
               setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
-              setRerender((prev) => prev + 1);
+              setRerender(prev => prev + 1);
             }}
           />
         )}

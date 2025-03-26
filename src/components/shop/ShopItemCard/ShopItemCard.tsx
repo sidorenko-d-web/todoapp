@@ -34,13 +34,13 @@ interface Props {
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const RoomItemsSlots = useRoomItemsSlots();
-  const [ buyItem, { isLoading } ] = useBuyItemMutation();
-  const [ equipItem ] = useAddItemToRoomMutation();
-  const [ removeItem ] = useRemoveItemFromRoomMutation();
+  const [buyItem, { isLoading }] = useBuyItemMutation();
+  const [equipItem] = useAddItemToRoomMutation();
+  const [removeItem] = useRemoveItemFromRoomMutation();
   const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
-  const [ error, setError ] = useState('');
+  const [error, setError] = useState('');
 
   const { data: pointsUser } = useGetProfileMeQuery();
 
@@ -48,7 +48,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   // for transactions
   const { sendUSDT } = useSendTransaction();
   const usdtTransactions = useUsdtTransactions();
-  const [ currentTrxId, setCurrentTrxId ] = useState('');
+  const [currentTrxId, setCurrentTrxId] = useState('');
 
   const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal;
 
@@ -63,9 +63,9 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
     try {
       if (isSlotNotEmpty) {
-        await removeItem({ items_to_remove: [ { id: isSlotNotEmpty.id } ] });
+        await removeItem({ items_to_remove: [{ id: isSlotNotEmpty.id }] });
       }
-      await equipItem({ equipped_items: [ { id: item.id, slot } ] });
+      await equipItem({ equipped_items: [{ id: item.id, slot }] });
     } catch (error) {
       console.error(error);
     }
@@ -76,7 +76,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     try {
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
       if (!res.error) {
-        void handleEquipItem()
+        void handleEquipItem();
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
       } else {
         setError(JSON.stringify(res.error));
@@ -117,9 +117,9 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     } else {
       failTransaction(handleUsdtPayment);
     }
-  }, [ usdtTransactions, currentTrxId ]);
+  }, [usdtTransactions, currentTrxId]);
 
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   return (
     <div className={styles.storeCard}>
@@ -136,8 +136,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                ? styles.colorPurple
+                : styles.level
             }
           >
             {t('s17')}
@@ -148,8 +148,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 item.item_rarity === 'green'
                   ? styles.colorRed
                   : item.item_rarity === 'yellow'
-                    ? styles.colorPurple
-                    : styles.level
+                  ? styles.colorPurple
+                  : styles.level
               }
             >
               {'Error while loading data'}

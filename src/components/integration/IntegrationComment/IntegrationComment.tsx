@@ -70,7 +70,9 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
       )}
       <div className={styles.progressWrp}>
         <div className={styles.amountAndRewardWrp}>
-          <p className={styles.amount}>{progres}/5</p>
+          <p className={styles.amount}>
+            {progres}/{5}
+          </p>
           <div className={styles.rewardWrp}>
             <p className={styles.reward}>+{formatAbbreviation(100, 'number', { locale: locale })}</p>
             <img src={coinIcon} width={18} height={18} />
