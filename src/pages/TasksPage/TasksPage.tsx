@@ -4,17 +4,16 @@ import coinIcon from '../../assets/icons/coin.png';
 
 import s from './TasksPage.module.scss';
 import { DailyTasks, Loader, SocialTasks } from '../../components';
-import { formatAbbreviation } from '../../helpers';
+import { formatAbbreviation, getPlanStageByUsersCount } from '../../helpers';
 import { useGetBoostQuery, useGetTasksQuery, TaskCategory } from '../../redux/api/tasks';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setActiveFooterItemId } from '../../redux';
 import GetGiftDaily from '../DevModals/GetGiftDaily/GetGiftDaily';
-import { RootState } from '../../redux';
+import { total_users } from '../../constants';
 
 export const TasksPage: FC = () => {
   const dispatch = useDispatch();
-  const lastActiveStage = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
 
   const { t, i18n } = useTranslation('quests');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
@@ -118,7 +117,7 @@ export const TasksPage: FC = () => {
         </div>
       </section>
 
-      {dailyTask && lastActiveStage >= 4 && <DailyTasks task={dailyTask} />}
+      {dailyTask && getPlanStageByUsersCount(total_users) >= 4 && <DailyTasks task={dailyTask} />}
       {/*{topTask && <TopTasks task={topTask} />}*/}
       {socialTasks.length > 0 && <SocialTasks tasks={socialTasks} />}
       <GetGiftDaily />
