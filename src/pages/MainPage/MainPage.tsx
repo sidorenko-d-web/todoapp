@@ -432,16 +432,6 @@ export const MainPage: FC = () => {
           />
         )}
 
-      {/* {isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
-        <IntegrationCreatedGuide
-          onClose={() => {
-            setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-            navigate(AppRoute.Integration.replace(':integrationId', integrationId));
-            setRerender((prev) => prev + 1);
-          }}
-        />
-      )} */}
-
       {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (
           <FinishTutorialGuide

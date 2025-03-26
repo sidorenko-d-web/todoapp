@@ -43,10 +43,11 @@ export const IntegrationCreatedGuide: React.FC<IntegrationCreatedGuideProps> = (
       description
       ={
         <>
-          {t('g5')}
-          <br />
-          <br />
-          {t('g6')}
+          {t('g110')}<span style={{ color: '#2F80ED' }}>{t('g111')}</span> 
+          {t('g39')} {t('g112')}
+          <br/>
+          <br/>
+          {t('g113')}<span style={{ color: '#219653' }}>{t('g114')}</span> 
         </>
       }
       onClose={handleClose}>
