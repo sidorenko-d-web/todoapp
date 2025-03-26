@@ -18,7 +18,6 @@ interface CreatingIntegrationCardProps {
   refetchIntegration: () => void;
 }
 
-// Keys for localStorage
 const TIME_LEFT_KEY = 'integration_time_left';
 const INITIAL_TIME_LEFT_KEY = 'integration_initial_time_left';
 const INTEGRATION_ID_KEY = 'integration_id';
@@ -28,12 +27,10 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
 
   const dispatch = useDispatch();
 
-  // Get stored values or use defaults from the integration
   const getSavedTimeLeft = () => {
     const savedIntegrationId = localStorage.getItem(INTEGRATION_ID_KEY);
     const savedTimeLeft = localStorage.getItem(TIME_LEFT_KEY);
 
-    // Only use saved time if it's for the same integration
     if (savedIntegrationId === integration.id && savedTimeLeft) {
       return parseInt(savedTimeLeft);
     }
@@ -56,19 +53,16 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   const [isAccelerated, setIsAccelerated] = useState(false);
   const [playAccelerateIntegrationSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
 
-  // Reference to store the timeout ID
   const accelerationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
     integrationId: integration.id,
     onSuccess: () => {
       setTimeLeft(integration.time_left);
-      // Save updated time to localStorage
       localStorage.setItem(TIME_LEFT_KEY, integration.time_left.toString());
     },
   });
 
-  // Save integration ID when component mounts
   useEffect(() => {
     localStorage.setItem(INTEGRATION_ID_KEY, integration.id);
     localStorage.setItem(INITIAL_TIME_LEFT_KEY, initialTimeLeft.toString());
@@ -78,7 +72,6 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     dispatch(setIntegrationCreating(true));
   }, []);
 
-  // Save timeLeft whenever it changes
   useEffect(() => {
     localStorage.setItem(TIME_LEFT_KEY, timeLeft.toString());
   }, [timeLeft]);
@@ -103,7 +96,6 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     setProgress(calculateProgress());
   }, [timeLeft]);
 
-  // Clean up the timeout when the component unmounts
   useEffect(() => {
     return () => {
       if (accelerationTimeoutRef.current) {
@@ -163,17 +155,14 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       void accelerateIntegration(1);
       createParticles();
 
-      // Clear any existing timeout to prevent multiple state updates
       if (accelerationTimeoutRef.current) {
         clearTimeout(accelerationTimeoutRef.current);
       }
 
-      // Set accelerated state if not already set
       if (!isAccelerated) {
         setIsAccelerated(true);
       }
 
-      // Set a new timeout
       accelerationTimeoutRef.current = setTimeout(() => {
         setIsAccelerated(false);
         accelerationTimeoutRef.current = null;
