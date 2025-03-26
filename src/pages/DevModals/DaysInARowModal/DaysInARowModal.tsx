@@ -82,7 +82,7 @@ export default function DaysInARowModal({ onClose }: Props) {
         (entry) => entry.creation_date === todayDate && entry.push_line_data?.status === 'passed'
       );
 
-      if (isTodayPassed) {
+      if (isTodayPassed && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
         openModal(MODALS.DAYS_IN_A_ROW);
         localStorage.setItem('modalShownToday', todayDate);
       }
