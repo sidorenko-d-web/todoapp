@@ -2,7 +2,6 @@ import { FC, useEffect, useState } from 'react';
 import { ShopLayout } from '../../layout/ShopLayout/ShopLayout';
 import { ItemsTab, Loader, NewItemModal, SkinTab } from '../../components';
 import {
-  IShopItem,
   setActiveFooterItemId,
   TypeItemCategory,
   TypeItemRarity,
@@ -29,26 +28,17 @@ const StorePage: FC = () => {
   } = useGetShopItemsQuery({
     item_category: shopCategory?.value as TypeItemCategory,
     level: 1,
-    item_rarity: itemsRarity?.value,
-    item_premium_level: 'pro',
+    item_premium_level: 'base',
     is_bought: false,
   });
-
-  const [items, setItems] = useState<IShopItem[]>();
 
   useEffect(() => {
     dispatch(setActiveFooterItemId(1));
   }, []);
 
-  useEffect(() => {
-    setItems(shop?.items);
-  }, [shop]);
-
   const { isLoading: isBoostLoading } = useGetCurrentUserBoostQuery();
 
-  const isLoading = isBoostLoading;
-
-  if (isLoading) return <Loader />;
+  if (isBoostLoading) return <Loader />;
 
   return (
     <ShopLayout mode="shop" onItemCategoryChange={setShopCategory} onItemQualityChange={setItemsQuality}>
@@ -57,10 +47,10 @@ const StorePage: FC = () => {
       ) : !(isShopLoading || isShopFetching) && (!shopCategory || !itemsRarity) ? (
         <p style={{ color: '#282830' }}>{t('s61')}</p>
       ) : shopCategory?.title !== t('s6') ? (
-        items?.length === 0 ? (
+        !shop?.items || shop?.items.length === 0 ? (
           <p className={styles.emptyText}>{t('s37')}</p>
         ) : (
-          <ItemsTab shopCategory={shopCategory} shopItems={items} />
+          <ItemsTab shopCategory={shopCategory} shopItems={shop?.items} />
         )
       ) : (
         <SkinTab mode="shop" />

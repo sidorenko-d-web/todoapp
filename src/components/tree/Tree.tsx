@@ -39,32 +39,39 @@ const shopUpgrades: ShopUpgrades = {
 export const Tree = () => {
   const { openModal } = useModal();
   const { t, i18n } = useTranslation('tree');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData, refetch } = useGetTreeInfoQuery();
   const { data: userProfileData } = useGetProfileMeQuery();
   const currentLevelRef = useRef<HTMLDivElement | null>(null);
-  const [currentBoost, setCurrentBoost] = useState<Boost | null>(null);
+  const [ currentBoost, setCurrentBoost ] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
-  const [hasScrolled, setHasScrolled] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
-  const [isCalculating, setIsCalculating] = useState(true);
+  const [ hasScrolled, setHasScrolled ] = useState(false);
+  const [ dataLoaded, setDataLoaded ] = useState(false);
+  const [ isCalculating, setIsCalculating ] = useState(true);
 
   const userSubscribers = userProfileData?.subscribers || 0;
 
   const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const [unlockAchievement] = useUnlockAchievementMutation();
+  const [ unlockAchievement ] = useUnlockAchievementMutation();
   const { progressPercent } = useTreeProgress({
     treeData,
     userSubscribers,
   });
+
+  useEffect(() => {
+    const elements = document.querySelectorAll(`.${s.levelMarker}`);
+    const elements1 = document.querySelectorAll(`.${s.rewardsIconsWrapper}`);
+    const elements2 = document.querySelectorAll(`.${s.levelCircle}`);
+    const elements3 = document.querySelectorAll(`.${s.takeRewardBtn}`);
+  }, [ treeData ]);
 
   // Track when data has loaded
   useEffect(() => {
     if (treeData && userProfileData && isBgLoaded) {
       setDataLoaded(true);
     }
-  }, [treeData, userProfileData, isBgLoaded]);
+  }, [ treeData, userProfileData, isBgLoaded ]);
 
   // Handle scrolling to the current user level
   useEffect(() => {
@@ -110,7 +117,7 @@ export const Tree = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [dataLoaded, hasScrolled]);
+  }, [ dataLoaded, hasScrolled ]);
 
   // Reset scroll state when component unmounts
   useEffect(() => {
@@ -196,8 +203,8 @@ export const Tree = () => {
             const isActive = userProfileData && stage.id <= userProfileData.growth_tree_stage_id;
             const bottomPosition = 150 + index * 300;
 
-            const giftColors = [giftBlue, giftPurple, giftRed];
-            const spinnerColors = [spinnerBlue, spinnerPurple, spinnerRed];
+            const giftColors = [ giftBlue, giftPurple, giftRed ];
+            const spinnerColors = [ spinnerBlue, spinnerPurple, spinnerRed ];
 
             const giftIcon = giftColors[index % giftColors.length];
             const spinnerIcon = spinnerColors[index % spinnerColors.length];
