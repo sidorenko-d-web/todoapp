@@ -9,7 +9,7 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { TonClientProvider } from './providers/TonClientProvider';
 import { TransactionNotificationProvider } from './providers/TransactionNotificationProvider/';
 // import CountdownTimer from './components/timer/CountdownTimer.tsx'; // Расскоментить таймер
-
+// import TechWorkPage from './components/TechWorkPage/TechWorkPage'; // Расскоментить страницу с технической работой
 declare global {
   interface Window {
     Telegram: any;
@@ -23,6 +23,11 @@ function App() {
   // const now = new Date();
   // if (now < releaseDate) {
   //   return <CountdownTimer />;
+  // }
+
+  // Технические работы
+  // if (true) {
+  //   return <TechWorkPage />;
   // }
 
   return (
