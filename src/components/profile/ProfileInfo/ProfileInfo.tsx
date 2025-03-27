@@ -51,6 +51,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
   const { data: strangerCharacter } = useGetCharacterByIdQuery({ id: strangerId! }, { skip: !strangerId });
 
   const personScale = 0.085;
+  const dpi = window.devicePixelRatio;
 
   useLayoutEffect(() => {
     function updateSize() {
@@ -86,8 +87,8 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
     const createAnimation = () => {
       const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
-        width: 118,
-        height: 140,
+        width: 118 * dpi,
+        height: 140 * dpi,
         scene: [SpineScene],
         transparent: true,
         plugins: {

@@ -89,6 +89,7 @@ const Layout = () => {
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
         <Settings />
       </div>
+
       <div className={styles.wrp}>
         {showRoadmapBg && (
           <>

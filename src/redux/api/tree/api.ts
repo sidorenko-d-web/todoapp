@@ -24,6 +24,7 @@ export const treeApi = createApi({
           limit: 450,
         },
       }),
+      keepUnusedDataFor: 5,
     }),
     unlockAchievement: builder.mutation<string, { achievement_id: string }>({
       query: ({ achievement_id }) => ({

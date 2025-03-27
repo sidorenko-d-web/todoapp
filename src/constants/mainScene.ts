@@ -9,16 +9,16 @@ export const itemsInSlots = {
   2: { width: 160, height: 160, x: -6, y: 451, z: 3 }, //desc
   3: { width: 120, height: 120, x: -45, y: 415, z: 2 }, //chair
   4: { width: 150, height: 150, x: 60, y: 320, z: 0 }, //sofa
-  5: { width: 150, height: 150, x: -125, y: 260, z: 0 }, //window
+  5: { width: 150, height: 150, x: -135, y: 260, z: 0 }, //window
   6: { width: 35, height: 35, x: -70, y: 223, z: 0 }, //poster
-  7: { width: 35, height: 35, x: 100, y: 245, z: 0 }, //lens
+  7: { width: 35, height: 35, x: 107, y: 243, z: 0 }, //lens
   8: { width: 40, height: 40, x: 60, y: 228, z: 0 }, //note
-  9: { width: 100, height: 100, x: 70, y: 210, z: 100 }, //light portable
+  9: { width: 100, height: 100, x: 80, y: 205, z: 100 }, //light portable
   10: { width: 240, height: 240, x: -70, y: 390, z: -10 }, //carpet
-  11: { width: 40, height: 40, x: 22, y: 420, z: 101 }, //camera
-  12: { width: 140, height: 140, x: 90, y: 500, z: 99 }, //stand
-  13: { width: 60, height: 60, x: 30, y: 398, z: 100 }, //lightDesc
-  14: { width: 45, height: 45, x: -60, y: 420, z: 100 }, //mic
+  11: { width: 60, height: 60, x: 22, y: 420, z: 101 }, //camera
+  12: { width: 140, height: 140, x: 95, y: 500, z: 99 }, //stand
+  13: { width: 100, height: 100, x: 17, y: 375, z: 100 }, //lightDesc
+  14: { width: 45, height: 45, x: -58, y: 413, z: 100 }, //mic
   15: { width: 40, height: 40, x: 35, y: 210, z: 1000 }, //photograph
   16: { width: 58, height: 58, x: -17, y: 438, z: 102 }, //pc
   17: { width: 17, height: 17, x: 15, y: 392, z: 100 }, //pen
@@ -30,7 +30,7 @@ export const itemsInSlots = {
 export const animated = [
   { animation: '2_idle', name: 'Постерbase', skin: () => 'default', width: 40, x: -70, y: 213 },
   { animation: 'animation', name: 'Постерadvanced', skin: () => 'default', width: 190, x: -70, y: 223 },
-  { animation: 'anim_2', name: 'Постерpro', skin: () => 'default', width: 37, x: -70, y: 223 },
+  { animation: 'anim_2', name: 'Постерpro', skin: () => 'default', width: 40, x: -70, y: 213 },
   {
     animation: 'animation',
     name: 'Камера любительская',
@@ -43,7 +43,7 @@ export const animated = [
     animation: 'animation',
     name: 'Камера профессиональная',
     skin: (prem_lvl: string) => prem_lvl,
-    width: 65,
+    width: 55,
     x: 22,
     y: 420,
   },
@@ -61,8 +61,8 @@ export const animated = [
   { animation: 'blink_2', name: 'Лампа', skin: (prem_lvl: string) => prem_lvl, width: 110, x: 2, y: 187 },
   { animation: 'animation', name: 'ПКbase', skin: (prem_lvl: string) => prem_lvl, width: 100, x: -27, y: 425 },
   { animation: 'animation', name: 'ПКadvanced', skin: (prem_lvl: string) => prem_lvl, width: 100, x: -27, y: 425 },
-  { animation: 'animation', name: 'ПК', skin: (prem_lvl: string) => prem_lvl, width: 100, x: -27, y: 425 },
-  { animation: '2_idle', name: 'Ноутбук', skin: (prem_lvl: string) => prem_lvl, width: 52, x: -15, y: 439 },
+  { animation: 'pro', name: 'ПКpro', skin: (prem_lvl: string) => prem_lvl, width: 120, x: -16, y: 420 },
+  { animation: '2_idle', name: 'Ноутбук', skin: (prem_lvl: string) => prem_lvl, width: 52, x: -15, y: 433 },
 ];
 
 export const baseItems = [
@@ -109,7 +109,20 @@ export class SpineSceneBase extends Phaser.Scene {
   loadSvgItem(item: IShopItem, { equipped_items }: Pick<contextProps, 'equipped_items'>) {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const { width, height } = itemsInSlots[slot];
-    this.load.svg('item' + item.id, buildLink()?.svgLink(item.image_url), { width: width * dpi, height: height * dpi });
+    if (item.name === 'Кресло') {
+      this.load.svg('item' + item.id, buildLink()?.svgLink(item.image_url), {
+        width: (width + 80) * dpi,
+        height: (height + 80) * dpi,
+      });
+    }else if (item.name === 'Стол массив') {
+      this.load.svg('item' + item.id, buildLink()?.svgLink(item.image_url), {
+        width: (width + 20) * dpi,  
+        height: (height + 20) * dpi,
+      });
+    }else{
+          
+      this.load.svg('item' + item.id, buildLink()?.svgLink(item.image_url), { width: width * dpi, height: height * dpi });
+    }
   }
 
   loadBaseItems() {
@@ -157,7 +170,23 @@ export class SpineSceneBase extends Phaser.Scene {
   createSVGItem(item: IShopItem, i: number, { equipped_items, center }: contextProps) {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const _item = itemsInSlots[slot];
-    const imageObject = this.add.image(center + _item.x * dpi, (_item.y + 50) * dpi, 'item' + item.id);
+    let imageObject;
+    if (item.name === 'Штатив регулируемый') {
+      imageObject = this.add.image(center + _item.x * dpi, (_item.y + 50 - 15) * dpi, 'item' + item.id);
+    } else if (item.name === 'Кинокамера' && equipped_items?.find(item => item.slot === 12)) {
+      imageObject = this.add.image(center + (_item.x + 65) * dpi, (_item.y + 50) * dpi, 'item' + item.id);
+    } else if (item.name === 'Лампа кольцевая' && equipped_items?.find(item => item.slot === 12)) {
+      imageObject = this.add.image(center + (_item.x + 23) * dpi, (_item.y + 50 - 10) * dpi, 'item' + item.id);
+      imageObject.scale = 1.2;
+    } else if (item.name === 'ПК' && equipped_items?.find(item => item.slot === 12)) {
+      imageObject = this.add.image(center + (_item.x + 10) * dpi, (_item.y + 50 - 10) * dpi, 'item' + item.id);
+      imageObject.scale = 1.2;
+    } else if (item.name === 'Кресло' && equipped_items?.find(item => item.slot === 12)) {
+      imageObject = this.add.image(center + (_item.x - 30) * dpi, (_item.y + 50) * dpi, 'item' + item.id);
+      imageObject.scale = 1.2;
+    } else {
+      imageObject = this.add.image(center + _item.x * dpi, (_item.y + 50) * dpi, 'item' + item.id);
+    }
     imageObject.setDepth(_item.z);
     this.objects[i] = imageObject;
   }
