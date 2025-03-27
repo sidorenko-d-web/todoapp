@@ -126,7 +126,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     <div className={styles.storeCard}>
       <div className={styles.header}>
         <div className={clsx(styles.image)}>
-          <img src={imageString} />
+          <img src={imageString  + svgHeadersString} />
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>

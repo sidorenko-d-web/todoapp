@@ -245,7 +245,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             item.item_rarity === 'yellow' ? styles.purpleImage : item.item_rarity === 'green' && styles.redImage,
           )}
         >
-          <img src={imageString} alt="" />
+          <img src={imageString  + svgHeadersString} alt="" />
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
           {!isBlocked && <p>{item.item_premium_level === 'advanced' ? 'adv' : item.item_premium_level}</p>}
         </div>
