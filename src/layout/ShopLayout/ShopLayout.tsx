@@ -65,12 +65,13 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const [shopCategory, setShopCategory] = useState(lastOpenedTab || shopItemCategories[0]);
   const [itemsQuality, setItemsQuality] = useState(lastOpenedRarity || shopItemRarity[0]);
 
-  const [_, setRerender] = useState(0);
+  const setRerender = useState(0)[1];
 
   const { data: inventory, isSuccess } = useGetInventoryItemsQuery({});
   const { data: shop } = useGetShopItemsQuery({
+    item_category: shopCategory?.value as TypeItemCategory,
     level: 1,
-    item_category: shopCategory.value as TypeItemCategory,
+    item_premium_level: 'base',
     is_bought: false,
   });
   const { data: boost } = useGetCurrentUserBoostQuery();
