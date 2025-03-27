@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import closeIcon from '../../../assets/icons/close.svg';
 import { Button } from '..';
 import { isGuideShown } from '../../../utils';
-import { GUIDE_ITEMS } from '../../../constants';
+import { GUIDE_ITEMS, MODALS } from '../../../constants';
 import { useDispatch } from 'react-redux';
 import { setDimHeader } from '../../../redux';
 
@@ -62,13 +62,14 @@ export const CentralModal: FC<PropsWithChildren<CentralModalProps>> = ({
     backgroundColor: `rgba(0, 0, 0, ${overlayOpacity})`,
   };
 
+  const higher = modalId === MODALS.DAYS_IN_A_ROW && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
 
   return (
     <Overlay className={classNames(s.overlay, containerStyles,
       {[s.visibleOverflow] : !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)}
     )} style={overlayStyle}>
       <Fade open>
-        <div className={classNames(s.modal, modalStyles, 
+        <div className={classNames(s.modal, modalStyles, {[s.higher] : higher},
           {[s.visibleOverflow] : !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)})}
            onClick={e => e.stopPropagation()}>
           <div className={classNames({ [s.disabled]: disabled })}>

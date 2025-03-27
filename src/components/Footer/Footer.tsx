@@ -27,6 +27,23 @@ export const Footer = () => {
     if (location.pathname === '/progressTree' || location.pathname === '/wardrobe') {
       setActiveButton(-1);
     }
+
+    if(location.pathname === '/profile') {
+      setActiveButton(0);
+    }
+
+    if(location.pathname === '/shop' || location.pathname === 'shop/inventory') {
+      setActiveButton(1);
+    }
+
+    if(location.pathname.includes('integration')) {
+      setActiveButton(2);
+    }
+
+
+    if(location.pathname === '/') {
+      setActiveButton(3);
+    }
   }, [location.pathname]);
 
   const handleFooterItemClick = (id: number, redirectTo: string) => {

@@ -6,3 +6,4 @@ export * from './IntegrationPageGuides';
 export * from './MainPageSecondVIsitGuides';
 export * from './ShopPageSecondVisitGuides';
 export * from './TreeGuide';
+export * from './ProfilePageGuides';

@@ -85,7 +85,8 @@ export const IntegrationCreation = () => {
             eventType: 'button',
             eventPlace: 'Создать интеграцию - Главный экран',
           }}
-          className={`${s.button} ${isButtonGlowing || createIntegrationButtonGlowing || btnGlowing ? s.glowing : ''}`}
+          className={`${s.button} ${(isButtonGlowing || createIntegrationButtonGlowing || btnGlowing)
+             && !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) ? s.glowing : ''}`}
           style={{ zIndex: '10000' }}
           disabled={!profile}
           onClick={handleIntegrationCreation}

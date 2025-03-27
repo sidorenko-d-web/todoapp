@@ -7,7 +7,7 @@
   gap: 15px;
   position: fixed;
   right: 15px;
-  bottom: 40px; // 90px - footer height, 15px - padding from footer
+  bottom: 45px; // 90px - footer height, 15px - padding from footer
   left: 15px;
   z-index: 1000;
   touch-action: none; /* Prevents all touch actions */
@@ -36,7 +36,7 @@
 
     &.glowing {
       position: relative;
-      box-shadow: 0px 0px 35px 5px rgba(47, 115, 189, 0.9);
+      box-shadow: 0px 0px 30px 5px rgba(47, 115, 189, 0.9);
       transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
       
     
