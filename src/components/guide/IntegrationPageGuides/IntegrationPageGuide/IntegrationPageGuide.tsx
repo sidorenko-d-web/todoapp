@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from './IntegrationPageGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
-import { Guide } from "../../Guide/Guide";
+import { Guide } from '../../Guide';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from "react-redux";
 import { setDimHeader } from "../../../../redux";
@@ -35,7 +35,7 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({ onCl
       <Guide align="left"
         noButton={true}
         zIndex={110}
-        top={'25%'}
+        top={'20%'}
         description={
           <>
             <div style={{ wordWrap: 'break-word', whiteSpace: 'pre-line' }}>
@@ -48,8 +48,20 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({ onCl
         <button className={styles.nextBtn} onClick={handleClose}>{t('g10')}</button>
         <img src={img1} className={styles.gifImage} height={146} width={140} />
 
-        <div style={{ position: 'absolute', top: '150%', left: '0', 
-          width: '90vw', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        
+      </Guide>
+
+      <div style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '90vw',
+        display: 'flex',
+        zIndex: '10000',
+
+        justifyContent: 'center'
+      }}>
           <IntegrationStats
             views={1234}
             income={"56789"}
@@ -59,15 +71,14 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({ onCl
           />
 
         </div>
-        <div style={{ position: 'absolute', top: '205%', left: '0', width: '90vw' }}>
+        <div style={{ position: 'absolute', top: '64%',left: '4vw',
+        width: '90vw', zIndex: '10000' }}>
           <IntegrationComment
             author_username="User1"
+            isVoting={false}
             comment_text="Текст комментария" comment_text_eng="Comment text" id="123" progres={1}
-            onVote={() => { console.log('vote') }} finished={false} hateText={false} />
+            onVote={() => { console.log('vote') }} finished={false} hateText={false} isVoting={false} />
         </div>
-      </Guide>
-
-
     </>
   );
 };

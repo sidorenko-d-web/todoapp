@@ -27,6 +27,12 @@ interface GuideState {
   goToShopBtnGlowing: boolean;
 
   firstIntegrationCreating: boolean;
+
+  commentGlow: boolean;
+
+  openDaysInARow: boolean;
+
+  itemUpgraded: boolean;
 }
 
 const initialState: GuideState = {
@@ -54,7 +60,13 @@ const initialState: GuideState = {
   goToShopBtnGlowing: false,
 
   firstIntegrationCreating: isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)
-    && !isGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED)
+    && !isGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED),
+
+  commentGlow: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
+
+  openDaysInARow: false,
+
+  itemUpgraded: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED)
 };
 
 const guideSlice = createSlice({
@@ -118,6 +130,17 @@ const guideSlice = createSlice({
       state.firstIntegrationCreating = action.payload;
     },
 
+    setCommentGlow: (state, action: PayloadAction<boolean>) => {
+      state.commentGlow = action.payload;
+    },
+
+    setOpenDaysInARow: (state, action: PayloadAction<boolean>) => {
+      state.openDaysInARow = action.payload;
+    },
+
+    setItemUpgraded: (state, action: PayloadAction<boolean>) => {
+      state.itemUpgraded = action.payload;
+    },
     resetGuideState: (state) => {
       Object.assign(state, {
         subscribeGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN),
@@ -137,7 +160,8 @@ const guideSlice = createSlice({
         elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
         firstIntegrationCreating: false,
         footerActive: isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
-        activeFooterItemId: getCurrentFooterItem(),
+        commentGlow: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
+        itemUpgraded: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED)
       });
     }
   },
@@ -149,7 +173,7 @@ export const { setGetCoinsGuideShown, setSubscribeGuideShown,
     setCreateIntegrationButtonGlowing, 
     setIntegrationCreated, setAccelerateIntegrationGuideClosed,
     setIsPublishedModalClosed, setIntegrationReadyForPublishing, 
-    setElevateIntegrationStats, 
+    setElevateIntegrationStats, setItemUpgraded,
     setItemBought, setLastIntegrationId, setDimHeader, setGoToShopBtnGlowing, setFirstIntegrationCreating,
-    setFooterActive, setActiveFooterItemId, resetGuideState} = guideSlice.actions;
+    setFooterActive, setActiveFooterItemId, setCommentGlow, resetGuideState, setOpenDaysInARow} = guideSlice.actions;
 export default guideSlice.reducer;

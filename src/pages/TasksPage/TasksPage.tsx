@@ -5,7 +5,7 @@ import coinIcon from '../../assets/icons/coin.png';
 import s from './TasksPage.module.scss';
 import { DailyTasks, Loader, SocialTasks } from '../../components';
 import { formatAbbreviation, getPlanStageByUsersCount } from '../../helpers';
-import { useGetBoostQuery, useGetTasksQuery } from '../../redux/api/tasks';
+import { useGetBoostQuery, useGetTasksQuery, TaskCategory } from '../../redux/api/tasks';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setActiveFooterItemId } from '../../redux';
@@ -18,21 +18,21 @@ export const TasksPage: FC = () => {
   const { t, i18n } = useTranslation('quests');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const {
-    data,
-    error,
-    isLoading: isTasksLoading,
-  } = useGetTasksQuery({
+  // Мемоизируем параметры запросов
+  const tasksQueryParams = useMemo(() => ({
     offset: 0,
     limit: 100,
-  });
-  const { data: dataDaily, isLoading: isDailyLoading } = useGetTasksQuery({
-    is_assigned: true,
-    category: 'quiz',
-    offset: 0,
-    limit: 100,
-  });
+  }), []);
 
+  const dailyTasksQueryParams = useMemo(() => ({
+    ...tasksQueryParams,
+    is_assigned: true,
+    category: 'quiz' as TaskCategory,
+  }), []);
+
+  // Используем мемоизированные параметры
+  const { data, error, isLoading: isTasksLoading } = useGetTasksQuery(tasksQueryParams);
+  const { data: dataDaily, isLoading: isDailyLoading } = useGetTasksQuery(dailyTasksQueryParams);
   const { data: boostData, isLoading: isBoostLoading } = useGetBoostQuery();
 
   useEffect(() => {

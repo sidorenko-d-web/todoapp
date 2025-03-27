@@ -1,5 +1,21 @@
 @use "../../../assets/styles/index.scss" as var;
 
+.glowing {
+  box-shadow: 0 0 60px var.$color-primary;
+  z-index: 10000;
+  border: 2px solid var.$color-primary;
+  border-radius: 16px;
+}
+
+.elevatedBordered {
+  z-index: 200;
+ 
+}
+
+.elevated {
+  z-index: 200;
+}
+
 .wrp {
   width: 100%;
   display: flex;
@@ -26,7 +42,7 @@
 
     .statWrp {
       height: fit-content;
-      border-radius: 10px;
+      border-radius: 30px;
       background-color: var.$color-badge-bg;
       display: flex;
       padding: 4px 4px 4px 7px;

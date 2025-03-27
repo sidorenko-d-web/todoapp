@@ -19,6 +19,18 @@
   animation-delay: 0.3s;
 
 }
+
+.noBorder {
+  border: none;
+}
+
+.glowingBtn {
+  box-shadow: 0 0 50px var.$color-primary;
+  background: var.$color-primary;
+  background-color: var.$color-primary;
+  padding: 16px;
+}
+
 .storeCard {
   
   background-color: var.$color-card-bg;
@@ -266,7 +278,7 @@
       gap: 5px;
 
       .item {
-        border: 1.4px solid var.$color-primary;
+        border: 1.4px solid;
         border-radius: 4px;
         display: flex;
         align-items: center;
@@ -282,6 +294,18 @@
             height: 30px;
             border-radius: 7px;
           }
+        }
+
+        &.blue {
+          border-color: var.$color-primary;
+        }
+
+        &.purple {
+          border-color: var.$color-purple;
+        }
+
+        &.red {
+          border-color: var.$color-red;
         }
 
         .itemLevel {
@@ -354,16 +378,6 @@
         }
       }
 
-      .itemPurple {
-        @extend .item;
-        border-color: var.$color-purple;
-      }
-
-      .itemRed {
-        @extend .item;
-        border-color: var.$color-red;
-      }
-
       .noBorder {
         border: 1px solid var.$color-badge-bg;
       }
@@ -392,6 +406,13 @@
       gap: 5px;
       box-sizing: border-box;
 
+      &.blue {
+        background: var.$color-primary;
+      }
+
+     
+
+      ;
       & > img {
         width: 14px;
         aspect-ratio: 1;

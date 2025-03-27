@@ -93,30 +93,33 @@ export const Header = () => {
   const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
 
   const accelerateGuideShown = useSelector((state: RootState) => state.guide.accelerateIntegrationGuideClosed);
-    
+
   const dim = useSelector((state: RootState) => state.guide.dimHeader);
 
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
-  
+
   const showHeaderBG =
     !['/', '/progressTree'].includes(location) &&
     !(location.split('/')[1] === 'profile' && location.split('/')[3] === 'room');
 
-  const darken = (dim && !getModalState(MODALS.SUBSCRIBE).isOpen &&
-    !getModalState(MODALS.CREATING_INTEGRATION).isOpen) && !getModalState(MODALS.SUCCESSFULLY_SUBSCRIBED).isOpen;
+  const darken =
+    dim &&
+    !getModalState(MODALS.SUBSCRIBE).isOpen &&
+    !getModalState(MODALS.CREATING_INTEGRATION).isOpen &&
+    !getModalState(MODALS.SUCCESSFULLY_SUBSCRIBED).isOpen;
 
-  const darken2 = isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)
-    && !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+  const darken2 =
+    isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
+    !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
 
-  const darken3 = isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+  const darken3 =
+    isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
+    !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
 
   const notDarken = integrationCurrentlyCreating && accelerateGuideShown;
 
-
   return (
     <>
-
-
       <header
         className={classNames(
           styles.header,
@@ -124,11 +127,13 @@ export const Header = () => {
           platform ? styles[platform] : '',
         )}
       >
+        {(darken || darken2 || darken3) && !notDarken && (
+          <div className={`${styles.headerOverlay} ${!in_streak ? styles.increaseOffset : ''}`}></div>
+        )}
 
-        {((darken || darken2 || darken3) && !notDarken) && <div className={styles.headerOverlay}></div>}
-
-
-        {showHeaderBG && <div className={`${styles.headerBG} ${((darken || darken2 || darken3) && !notDarken)? styles.darken : ''}`} />}
+        {showHeaderBG && (
+          <div className={`${styles.headerBG} ${(darken || darken2 || darken3) && !notDarken ? styles.darken : ''}`} />
+        )}
 
         {!isLoading && (
           <div className={styles.lowerHeader}>

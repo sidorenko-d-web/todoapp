@@ -16,9 +16,33 @@ export const Footer = () => {
 
   const [hasInitialized, setHasInitialized] = useState<boolean>(false);
   
+  const footerItemId = useSelector((state: RootState) => state.guide.activeFooterItemId);
+
+  useEffect(() => {
+    setActiveButton(footerItemId);
+  }, [footerItemId]);
+
+
   useEffect(() => {
     if (location.pathname === '/progressTree' || location.pathname === '/wardrobe') {
       setActiveButton(-1);
+    }
+
+    if(location.pathname === '/profile') {
+      setActiveButton(0);
+    }
+
+    if(location.pathname === '/shop' || location.pathname === 'shop/inventory') {
+      setActiveButton(1);
+    }
+
+    if(location.pathname.includes('integration')) {
+      setActiveButton(2);
+    }
+
+
+    if(location.pathname === '/') {
+      setActiveButton(3);
     }
   }, [location.pathname]);
 

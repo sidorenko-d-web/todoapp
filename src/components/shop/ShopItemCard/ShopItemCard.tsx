@@ -1,8 +1,15 @@
 import { FC, useEffect, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
-import { useBuyItemMutation } from '../../../redux/api/shop/api';
-import { IShopItem, RootState, useGetProfileMeQuery } from '../../../redux';
+import { useBuyItemMutation } from '../../../redux';
+import {
+  IShopItem,
+  RootState,
+  useAddItemToRoomMutation,
+  useGetEquipedQuery,
+  useGetProfileMeQuery,
+  useRemoveItemFromRoomMutation,
+} from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
@@ -10,14 +17,15 @@ import CointsGrey from '@icons/cointsGrey.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
 import { useModal, useSendTransaction, useTonConnect, useUsdtTransactions } from '../../../hooks';
 import { useTransactionNotification } from '../../../hooks/useTransactionNotification';
-import { GUIDE_ITEMS, MODALS, svgHeadersString } from '../../../constants';
+import { buildMode, GUIDE_ITEMS, MODALS, svgHeadersString } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 import classNames from 'classnames';
-import { buildLink } from '../../../constants/buildMode';
+import { buildLink } from '../../../constants';
+import { useRoomItemsSlots } from '../../../../translate/items/items';
 
 interface Props {
   disabled?: boolean;
@@ -25,7 +33,11 @@ interface Props {
 }
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
+  const RoomItemsSlots = useRoomItemsSlots();
   const [buyItem, { isLoading }] = useBuyItemMutation();
+  const [equipItem] = useAddItemToRoomMutation();
+  const [removeItem] = useRemoveItemFromRoomMutation();
+  const { data: equipedItems } = useGetEquipedQuery();
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
   const [error, setError] = useState('');
@@ -40,11 +52,31 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
   const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal;
 
+  const slot = Object.values(RoomItemsSlots).find(_item =>
+    _item.name.find((__item: string) => item.name.includes(__item)),
+  )?.slot;
+
+  const handleEquipItem = async () => {
+    if (!slot && slot !== 0)
+      throw new Error('error while getting slot for item, check names in "redux/api/room/dto.ts - RoomItemsSlots"');
+    const isSlotNotEmpty = equipedItems?.equipped_items.find(item => item.slot === slot);
+
+    try {
+      if (isSlotNotEmpty) {
+        await removeItem({ items_to_remove: [{ id: isSlotNotEmpty.id }] });
+      }
+      await equipItem({ equipped_items: [{ id: item.id, slot }] });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleBuyItem = async () => {
     setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
     try {
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
       if (!res.error) {
+        void handleEquipItem();
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
       } else {
         setError(JSON.stringify(res.error));
@@ -88,12 +120,13 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   }, [usdtTransactions, currentTrxId]);
 
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const imageString = buildMode === 'production' ? buildLink()?.svgShop(item.image_url).replace('https://', 'https://storage.yandexcloud.net/') : buildLink()?.svgShop(item.image_url)
 
   return (
     <div className={styles.storeCard}>
       <div className={styles.header}>
         <div className={clsx(styles.image)}>
-          <img src={buildLink()?.svgShop(item.image_url) + svgHeadersString} />
+          <img src={imageString  + svgHeadersString} />
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>

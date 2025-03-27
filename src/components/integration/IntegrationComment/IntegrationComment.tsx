@@ -3,13 +3,12 @@ import coinIcon from '../../../assets/icons/coin.png';
 import { formatAbbreviation } from '../../../helpers';
 import styles from './IntegrationComment.module.scss';
 import { useSelector } from 'react-redux';
-import { selectButtonVolume } from '../../../redux';
-import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
+import { RootState, selectButtonVolume } from '../../../redux';
+import { SOUNDS } from '../../../constants';
 import { ProgressLine } from '../../shared';
 import clsx from 'clsx';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
-import { isGuideShown } from '../../../utils';
 
 interface IntegrationCommentProps {
   author_username: string;
@@ -20,6 +19,7 @@ interface IntegrationCommentProps {
   onVote: (isThumbsUp: boolean, id: string) => void;
   finished: boolean;
   hateText: boolean;
+  isVoting: boolean;
 }
 
 export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
@@ -31,6 +31,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
   onVote,
   finished,
   hateText,
+  isVoting,
 }) => {
   const { t, i18n } = useTranslation('integrations');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
@@ -41,17 +42,25 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
   const [voteWrongSound] = useSound(SOUNDS.wrongAnswer, {
     volume: useSelector(selectButtonVolume) * 1.5,
   });
+
   const handleVoteRight = () => {
-    onVote(true, id);
-    voteRightSound();
-  };
-  const handleVoteWrong = () => {
-    onVote(false, id);
-    voteWrongSound();
+    if (!isVoting && !finished) {
+      onVote(true, id);
+      voteRightSound();
+    }
   };
 
+  const handleVoteWrong = () => {
+    if (!isVoting && !finished) {
+      onVote(false, id);
+      voteWrongSound();
+    }
+  };
+
+  const commentGlow = useSelector((state: RootState) => state.guide.commentGlow);
+
   return (
-    <div className={`${styles.wrp} ${!isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) ? styles.elevated : ''}`}>
+    <div className={`${styles.wrp} ${commentGlow ? styles.elevated : ''}`}>
       {!finished ? (
         <div className={styles.usernameAndComment}>
           <p className={styles.username}>{author_username}:</p>
@@ -69,7 +78,9 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
       )}
       <div className={styles.progressWrp}>
         <div className={styles.amountAndRewardWrp}>
-          <p className={styles.amount}>{progres}/5</p>
+          <p className={styles.amount}>
+            {progres}/{5}
+          </p>
           <div className={styles.rewardWrp}>
             <p className={styles.reward}>+{formatAbbreviation(100, 'number', { locale: locale })}</p>
             <img src={coinIcon} width={18} height={18} />
@@ -80,7 +91,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
 
       <div className={styles.thumbs}>
         <TrackedButton
-          disabled={finished}
+          disabled={finished || isVoting}
           trackingData={{
             eventType: 'button',
             eventPlace: 'Лайк - Интеграции - Комментарий',
@@ -89,7 +100,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
           onClick={handleVoteRight}
         />
         <TrackedButton
-          disabled={finished}
+          disabled={finished || isVoting}
           trackingData={{
             eventType: 'button',
             eventPlace: 'Дизлайк - Интеграции - Комментарий',
