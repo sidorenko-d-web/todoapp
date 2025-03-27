@@ -28,7 +28,7 @@ import { useEffect } from 'react';
 export default function RewardForIntegrationModal() {
   const { t, i18n } = useTranslation('integrations');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { closeModal, getModalState } = useModal();
+  const { closeModal, getModalState, openModal } = useModal();
   const { refetch } = useGetProfileMeWithPollingQuery(undefined, {
     pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
@@ -44,10 +44,6 @@ export default function RewardForIntegrationModal() {
   const dispatch = useDispatch();
 
   useAutoPlaySound(MODALS.INTEGRATION_REWARD, SOUNDS.rewardHuge);
-
-  useEffect(() => {
-    setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
-  }, []);
 
   const getBlueStarCount = (count: number = 0) => {
     if (count >= 18) return 3;

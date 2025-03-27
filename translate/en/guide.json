@@ -87,7 +87,40 @@
   "g84": "min.",
   "g85": "h.",
   "g86": "You have already purchased a subscription today. Come back tomorrow to buy more.",
-
   "g87": " and also increases your",
-  "g88": " income per second."
+  "g88": " income per second.",
+
+  "g89": "This is your profile! Here you can see the main metrics of your account! ",
+  "g89_2": "Besides views and subscribers, you can also see your ",
+  "g90": "position in the player rankings ",
+  "g91": " number of days in the Push-line!",
+  "g92": "The Push-line is very important because it determines ",
+  "g93": "the preservation of your progress, ",
+  "g94": " as well as",
+  "g94_2": " your income!",
+  "g95": "Only with an active Push-line do your integrations generate money. To activate it, simply ",
+  "g96": "complete 1 integration per day!",
+  "g97": "If you don't complete any integrations in a day, your streak will reset, and ",
+  "g98": "subscribers",
+  "g99": " will start leaving...",
+  "g100": "But sometimes you can avoid this with a freeze! ",
+  "g101": "1 freeze allows you to skip 1 day of the Push-line without losing progress.",
+  "g102": " You can find them in chests!",
+
+  "g103": "Don't forget to create integrations every day, ",  
+  "g104": "to activate the Push-line!",  
+  "g105": "Without it, the metrics for your integrations and income ",  
+  "g106": " WILL NOT GROW!",
+
+  "g107": "Got it!",
+  "g108": "Great!",
+  "g109": "I won't lose my progress!",
+
+  "g110": "Publish integrations every day to progress in the ",  
+  "g111": "Push-line ",  
+  "g112": " earn extra rewards!",  
+  "g113": "Now let's check the ",  
+  "g114": "results of your integration!",
+
+  "g115": "Click on the upgrade button for points or $USDT to enhance the item, and soon you'll be able to improve items by completing simple tasks!"
 }

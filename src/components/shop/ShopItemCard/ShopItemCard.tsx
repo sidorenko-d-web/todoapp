@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
-import { useBuyItemMutation } from '../../../redux/api/shop/api';
+import { useBuyItemMutation } from '../../../redux';
 import {
   IShopItem,
   RootState,
@@ -17,14 +17,14 @@ import CointsGrey from '@icons/cointsGrey.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
 import { useModal, useSendTransaction, useTonConnect, useUsdtTransactions } from '../../../hooks';
 import { useTransactionNotification } from '../../../hooks/useTransactionNotification';
-import { GUIDE_ITEMS, MODALS, svgHeadersString } from '../../../constants';
+import { buildMode, GUIDE_ITEMS, MODALS, svgHeadersString } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 import classNames from 'classnames';
-import { buildLink } from '../../../constants/buildMode';
+import { buildLink } from '../../../constants';
 import { useRoomItemsSlots } from '../../../../translate/items/items';
 
 interface Props {
@@ -37,7 +37,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [buyItem, { isLoading }] = useBuyItemMutation();
   const [equipItem] = useAddItemToRoomMutation();
   const [removeItem] = useRemoveItemFromRoomMutation();
-  const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
+  const { data: equipedItems } = useGetEquipedQuery();
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
   const [error, setError] = useState('');
@@ -120,12 +120,13 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   }, [usdtTransactions, currentTrxId]);
 
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const imageString = buildMode === 'production' ? buildLink()?.svgShop(item.image_url).replace('https://', 'https://storage.yandexcloud.net/') : buildLink()?.svgShop(item.image_url)
 
   return (
     <div className={styles.storeCard}>
       <div className={styles.header}>
         <div className={clsx(styles.image)}>
-          <img src={buildLink()?.svgShop(item.image_url) + svgHeadersString} />
+          <img src={imageString  + svgHeadersString} />
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>

@@ -14,6 +14,8 @@ import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfi
 import { useGetProfileMeQuery, useGetUserProfileInfoByIdQuery } from '../../../redux';
 import { usePushLineStatus } from '../../../hooks';
 import clsx from 'clsx';
+import { isGuideShown } from '../../../utils';
+import { GUIDE_ITEMS } from '../../../constants';
 
 interface ProfileStatsMiniProps {
   daysInARow: number | undefined;
@@ -48,27 +50,30 @@ export const ProfileStatsMini: React.FC<ProfileStatsMiniProps> = ({ daysInARow, 
   const subscribers = in_streak ? displayedSubscribers : ((userProfileData ?? strangerProfileData)?.subscribers ?? 0);
   const totalViews = in_streak ? displayedTotalViews : ((userProfileData ?? strangerProfileData)?.total_views ?? 0);
 
+  const statsGlowing = !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE);
+
+
   return (
     <div className={clsx(styles.wrp, (strangerId || onlyBadges) && styles.justifyCenter)}>
       {!strangerId && !onlyBadges && <div className={styles.toCenterStats} />}
 
-      <div className={styles.statsWrp}>
-        <div className={styles.statWrp}>
+      <div className={`${styles.statsWrp}`}>
+        <div className={`${styles.statWrp} ${statsGlowing ? styles.glowing : ''}`}>
           <p className={styles.stat}>{`#${position}`}</p>
           <img src={clanIcon} />
         </div>
 
-        <div className={styles.statWrp}>
-          <span className={styles.stat}>{formatAbbreviation(subscribers, 'number', { locale: locale })}</span>
+        <div className={`${styles.statWrp} ${statsGlowing ? styles.glowing : ''}`}>
+          <span className={`${styles.stat}`}>{formatAbbreviation(subscribers, 'number', { locale: locale })}</span>
           <img src={subscriberIcon} />
         </div>
 
-        <div className={styles.statWrp}>
+        <div className={`${styles.statWrp} ${statsGlowing ? styles.glowing : ''}`}>
           <span className={styles.stat}>{formatAbbreviation(totalViews, 'number', { locale: locale })}</span>
           <img src={viewsIcon} />
         </div>
 
-        <div className={styles.statWrp}>
+        <div className={`${styles.statWrp} ${statsGlowing ? styles.glowing : ''}`}>
           <p className={styles.stat}>{daysInARow}</p>
           <img src={fireIcon} />
         </div>

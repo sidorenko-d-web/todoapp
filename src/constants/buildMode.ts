@@ -1,12 +1,18 @@
-import { buildMode } from "./config";
-
+import { buildMode } from './config';
 
 const proxy = {
   proxy_TestDev: (url: string) => url.replace('https://storage.yandexcloud.net', '/api/miniapp-v2-dev'),
   proxy_Test: (url: string) => url,
   proxy_ProdDev: (url: string) => url.replace('https://miniapp.apusher.com', '/api/miniapp-v2-prod'),
-  proxy_Production: (url: string) => url,
+  proxy_Production: (url: string) => {
+    if (url.startsWith('https://storage.yandexcloud.net/')) {
+      return url.replace('https://storage.yandexcloud.net/', 'https://');
+    }
+    return url;
+  },
 };
+
+
 
 const links = {
   svgItem_TestDev: (imageUrl: string) => proxy.proxy_TestDev(imageUrl),
@@ -20,7 +26,7 @@ const links = {
   itemsBaseUrl_Production: 'https://miniapp.apusher.com/export/',
 
   // url.replace('https://', 'https://storage.yandexcloud.net/') mb it would be need
-  
+
   svgShop_TestDev: (url: string) => url,
   svgShop_Test: (url: string) => url,
   svgShop_ProdDev: (url: string) => url,
@@ -65,3 +71,4 @@ export function buildLink() {
     baseUrl: links.baseUrl_TestDev,
   };
 }
+
