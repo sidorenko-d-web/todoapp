@@ -15,10 +15,7 @@ import { getWeekData, isGuideShown, setGuideShown } from '../../utils';
 import { useModal } from '../../hooks';
 import { GUIDE_ITEMS, MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
-import { Loader } from '../../components';
-import { ProfileFirstGuide } from '../../components/guide/ProfilePageGuides/ProfileFirstGuide/ProfileFirstGuide';
-import { PushLineGuide } from '../../components/guide/ProfilePageGuides/PushLineGuide/PushLineGuide';
-import { FreezeGuide } from '../../components/guide/ProfilePageGuides/FreezeGuide/FreezeGuide';
+import { FreezeGuide, Loader, ProfileFirstGuide, PushLineGuide } from '../../components';
 
 export const ProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation('profile');
@@ -210,7 +207,8 @@ export const ProfilePage: React.FC = () => {
       )}
 
       {
-        !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) && showGuide && <ProfileFirstGuide onClose={() => {
+        !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) && showGuide && 
+        <ProfileFirstGuide onClose={() => {
           setGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE);
           setRerender((prev) => prev+1);
         }} />

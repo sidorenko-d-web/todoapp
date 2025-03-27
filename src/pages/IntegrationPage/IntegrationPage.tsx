@@ -16,6 +16,7 @@ import {
   IntegrationComment,
   IntegrationPageGuide,
   IntegrationStats,
+  IntegrationStatsGuide,
   IntegrationStatsMini,
   Loader,
 } from '../../components';
@@ -25,7 +26,7 @@ import { isGuideShown, setGuideShown } from '../../utils';
 import { GUIDE_ITEMS } from '../../constants';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { IntegrationStatsGuide } from '../../components/guide/IntegrationPageGuides/IntegrationStatsGuide/IntegrationStatsGuide';
+
 
 export const IntegrationPage: React.FC = () => {
   const { t } = useTranslation('integrations');
