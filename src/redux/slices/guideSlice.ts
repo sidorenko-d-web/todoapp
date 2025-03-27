@@ -160,7 +160,6 @@ const guideSlice = createSlice({
         elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
         firstIntegrationCreating: false,
         footerActive: isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
-        activeFooterItemId: getCurrentFooterItem(),
         commentGlow: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
         itemUpgraded: true
       });
