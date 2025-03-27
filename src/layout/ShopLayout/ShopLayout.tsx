@@ -308,7 +308,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
       {isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) &&
-        mode === 'inventory' && !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED) && showBackToMainGuide && (
+        mode === 'inventory' && !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED) && showBackToMainGuide && inventory && (
           <TreeLevelGuide
             item={inventory?.items[1]!}
             onClose={() => {
