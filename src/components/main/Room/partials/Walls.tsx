@@ -1,12 +1,18 @@
 import { IEquipedRoomResponse } from '../../../../redux';
 import styles from './Partials.module.scss';
-import greenWallUp from '../../../../assets/images/walls/green-wall-up.svg';
-import greenWallDown from '../../../../assets/images/walls/green-wall-down.svg';
 
-import greenWallDotted from '../../../../assets/images/walls/green-wall-dotted.svg';
-import blueRedWall from '../../../../assets/images/walls/blue-red-wall.svg';
-import blueWall from '../../../../assets/images/walls/blue-wall.svg';
-import yellowWall from '../../../../assets/images/walls/yellow wall62.svg';
+import redBase from '../../../../assets/images/walls/Бетонные-стены-1.svg';
+import redAdvanced from '../../../../assets/images/walls/Бетонные-стены-2.svg';
+import redPro from '../../../../assets/images/walls/Бетонные-стены-3.svg';
+
+import yellowBase from '../../../../assets/images/walls/Стена-1.svg';
+import yellowAdvanced from '../../../../assets/images/walls/Стена-1-1.svg';
+import yellowPro from '../../../../assets/images/walls/Стена-1-2.svg';
+
+import greenBase from '../../../../assets/images/walls/Обои-1.svg';
+import greenAdvanced from '../../../../assets/images/walls/Обои-2.svg';
+import greenPro from '../../../../assets/images/walls/Обои-3.svg';
+
 import clsx from 'clsx';
 import { useRoomItemsSlots } from '../../../../../translate/items/items.ts';
 
@@ -20,74 +26,59 @@ export const Walls = ({ room, isLoading }: props) => {
   const equipedWall = room?.items.find(
     item => item.id === room.equipped_items.find(_item => _item.slot === RoomItemsSlots.wall.slot)?.id,
   );
-
-  const redWalls = {
-    default: '#bbc2d4',
-    base: '#E88A8B',
-    advanced: '#87C2CC',
-    pro: '#98B75C',
-  };
-
   const walls = {
-    greenWall: {
-      image: greenWallUp,
+    redbase: {
+      image: redBase,
       isSkew: true,
-      name: 'greenbase',
-      isBottomPart: true,
     },
-    greenWallDotted: {
-      image: greenWallDotted,
+    redadvanced: {
+      image: redAdvanced,
       isSkew: true,
-      name: 'yellowpro',
-      isBottomPart: false,
     },
-    blueRedWall: {
-      image: blueRedWall,
-      isSkew: false,
-      name: 'greenpro',
-      isBottomPart: false,
-    },
-    blueWall: {
-      image: blueWall,
+    redpro: {
+      image: redPro,
       isSkew: true,
-      name: 'yellowadvanced',
-      isBottomPart: false,
     },
-    yellowWall: {
-      image: yellowWall,
-      isSkew: false,
-      name: 'yellowbase',
-      isBottomPart: false,
+
+    yellowbase: {
+      image: yellowBase,
+      isSkew: true,
+    },
+    yellowadvanced: {
+      image: yellowAdvanced,
+      isSkew: true,
+    },
+    yellowpro: {
+      image: yellowPro,
+      isSkew: true,
+    },
+
+    greenbase: {
+      image: greenBase,
+      isSkew: true,
+    },
+    greenadvanced: {
+      image: greenAdvanced,
+      isSkew: true,
+    },
+    greenpro: {
+      image: greenPro,
+      isSkew: true,
     },
   };
+  const currentWall = walls[(equipedWall?.item_rarity! + equipedWall?.item_premium_level) as keyof typeof walls];
 
-  const currentWall = Object.values(walls).find(
-    item => item.name === equipedWall?.item_rarity! + equipedWall?.item_premium_level,
-  );
-
-  // const currentWall = walls.greenWallDotted
+  // const currentWall = walls.yellowpro
 
   return (
     <div className={styles.wallsWrapper}>
       {!isLoading && (
         <>
-          <div
-            style={{
-              backgroundColor: redWalls[equipedWall?.item_premium_level as keyof typeof redWalls] ?? redWalls.default,
-            }}
-            className={styles.wallLeft}
-          >
+          <div className={styles.wallLeft}>
             <img src={currentWall?.image} className={clsx(currentWall?.isSkew && styles.skewed)} alt="" />
-            {currentWall?.isBottomPart && <img src={greenWallDown} alt="" className={styles.greenWallDown} />}
           </div>
-          <div
-            style={{
-              backgroundColor: redWalls[equipedWall?.item_premium_level as keyof typeof redWalls] ?? redWalls.default,
-            }}
-            className={styles.wallRight}
-          >
+          <div className={styles.wallRight}>
             <img src={currentWall?.image} className={clsx(currentWall?.isSkew && styles.skewed)} alt="" />
-            {currentWall?.isBottomPart && <img src={greenWallDown} alt="" className={styles.greenWallDown} />}
           </div>
         </>
       )}
