@@ -28,7 +28,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
   flex-direction: column;
   width: 100%;
   max-width: 1728px;
-  height: var(--tg-viewport-stable-height);
+  height:calc( var(--tg-viewport-stable-height) - 37px);
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
@@ -43,7 +43,6 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
 
   
   padding-top: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-area-inset-top) + 68px);
-  margin-bottom: 84px;
 
   &.room {
     padding-top: 0;
