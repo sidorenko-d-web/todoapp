@@ -15,6 +15,8 @@
   border: 2px solid var.$color-blue-primary;
   box-shadow: 0 0 30px var.$color-primary;
   z-index: 10000;
+
+  border-radius: 16px;
 }
 
 .wrp {
@@ -132,6 +134,10 @@
     padding: 3px 4px;
     border-radius: 4px;
     background: var.$footer-bg;
+
+    &.border12{
+      border-radius: 12px;
+    }
 
     img {
       width: 20px;

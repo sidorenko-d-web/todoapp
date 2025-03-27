@@ -135,7 +135,8 @@ export const StreakCard: React.FC<StreakCardProps> = ({
               {reliableStreakDays} {t('p13').replace('в ', 'в\u00A0')}
             </span>
             {!strangerId && !onlyStreak && (
-              <div className={`${styles.freezeCount} ${elevatedFreeze ? styles.elevatedFreeze : ''}`}>
+              <div className={`${styles.freezeCount} ${elevatedFreeze ? styles.elevatedFreeze : ''}
+               ${elevatedFreeze ? styles.border12 : ''}`}>
                 <span>{streakDays}</span>
                 <img src={snowflake} alt="Freeze Icon" />
               </div>
