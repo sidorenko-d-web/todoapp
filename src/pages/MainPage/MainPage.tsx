@@ -37,7 +37,7 @@ import {
 } from '../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import RewardForIntegrationModal from '../DevModals/RewardForIntegrationModal/RewardForIntegrationModal.tsx';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { incrementAcceleration } from '../../redux/slices/integrationAcceleration.ts';
@@ -49,6 +49,9 @@ export const MainPage: FC = () => {
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
   const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
+
+  const location = useLocation();
+
 
   const { data: userData } = useGetUserQuery();
 
@@ -264,6 +267,11 @@ export const MainPage: FC = () => {
       openModal(MODALS.DAYS_IN_A_ROW);
     }
   }, []);
+
+  useEffect(() => {
+    reduxDispatch(setActiveFooterItemId(3));
+  }, [location.pathname]);
+
 
   const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
