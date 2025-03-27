@@ -120,12 +120,13 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   }, [usdtTransactions, currentTrxId]);
 
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const imageString = buildMode === 'production' ? buildLink()?.svgShop(item.image_url).replace('https://', 'https://storage.yandexcloud.net/') : buildLink()?.svgShop(item.image_url)
 
   return (
     <div className={styles.storeCard}>
       <div className={styles.header}>
         <div className={clsx(styles.image)}>
-          <img src={buildLink()?.svgShop(item.image_url).replace('https://', 'https://storage.yandexcloud.net/') + svgHeadersString} />
+          <img src={imageString} />
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>

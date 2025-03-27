@@ -232,6 +232,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         : itemLevel % 10 === 0
           ? (itemLevel === 50 || itemLevel === 100 || itemLevel === 150 ? itemLevel : itemLevel + 10)
           : Math.ceil(itemLevel / 10) * 10;
+          
+  const imageString = buildMode === 'production' ? buildLink()?.svgShop(item.image_url).replace('https://', 'https://storage.yandexcloud.net/') : buildLink()?.svgShop(item.image_url)
 
   return (
     <div className={`${styles.storeCard} ${!isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) ? styles.animated : ''}`}>
@@ -243,7 +245,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             item.item_rarity === 'yellow' ? styles.purpleImage : item.item_rarity === 'green' && styles.redImage,
           )}
         >
-          <img src={buildLink()?.svgShop(item.image_url)} className={clsx(isBlocked && styles.disabledImage)} alt="" />
+          <img src={imageString} alt="" />
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
           {!isBlocked && <p>{item.item_premium_level === 'advanced' ? 'adv' : item.item_premium_level}</p>}
         </div>
