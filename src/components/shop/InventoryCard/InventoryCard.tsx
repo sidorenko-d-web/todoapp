@@ -10,6 +10,7 @@ import GiftIcon from '../../../assets/icons/gift.svg';
 import {
   IShopItem,
   selectVolume,
+  setItemUpgraded,
   TypeItemQuality,
   useAddItemToRoomMutation,
   useGetEquipedQuery,
@@ -27,11 +28,11 @@ import { useModal, useTonConnect } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import useSound from 'use-sound';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../shared';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 import { useRoomItemsSlots } from '../../../../translate/items/items.ts';
-import { isGuideShown } from '../../../utils';
+import { isGuideShown, setGuideShown } from '../../../utils';
 import classNames from 'classnames';
 
 interface Props {
@@ -77,6 +78,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const [ showEquipButton, setShowEquipButton ] = useState(false);
 
   const [ price, setPrice ] = useState('');
+
+  const dispatch = useDispatch();
+
 
   const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal
 
@@ -138,6 +142,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       localStorage.setItem('giftName', res.data?.chest.chest_name || '');
 
       if (!res.error) {
+        setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED);
+        dispatch(setItemUpgraded(true));
+
         playLvlSound();
         refetch();
         refetchEquipped();
@@ -194,6 +201,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     }
   }, []);
 
+  
   const slot = Object.values(RoomItemsSlots).find(_item =>
     _item.name.find((__item: string) => item.name.includes(__item)),
   )?.slot;
@@ -253,6 +261,11 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                               : item.level < 140
                                 ? 140
                                 : 150;
+
+                                
+  const upgradeButtonGlowing = isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN)
+    && !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
+
 
   return (
     <div className={`${styles.storeCard} ${!isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) ? styles.animated : ''}`}>
@@ -455,6 +468,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 item.item_rarity === 'yellow'
                   ? styles.upgradeItemPurple
                   : item.item_rarity === 'green' && styles.upgradeItemRed,
+                  upgradeButtonGlowing && styles.glowingBtn
               ),
               { [styles.disabledBtn]: !isAffordable },
             )}

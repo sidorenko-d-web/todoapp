@@ -71,8 +71,8 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({ onCl
           />
 
         </div>
-        <div style={{ position: 'absolute', top: '70%',left: '50%',
-        transform: 'translateX(-50%)', width: '90vw', zIndex: '10000' }}>
+        <div style={{ position: 'absolute', top: '70%',left: '5vw',
+        width: '90vw', zIndex: '10000' }}>
           <IntegrationComment
             author_username="User1"
             comment_text="Текст комментария" comment_text_eng="Comment text" id="123" progres={1}

@@ -19,6 +19,13 @@
   animation-delay: 0.3s;
 
 }
+
+.glowingBtn {
+  box-shadow: 0 0 50px var.$color-primary;
+  background: var.$color-primary;
+  padding: 16px;
+}
+
 .storeCard {
   
   background-color: var.$color-card-bg;
