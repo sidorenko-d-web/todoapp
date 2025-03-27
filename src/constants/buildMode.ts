@@ -23,7 +23,7 @@ const links = {
   svgShop_TestDev: (url: string) => url,
   svgShop_Test: (url: string) => url,
   svgShop_ProdDev: (url: string) => url,
-  svgShop_Production: (url: string) => url.replace('https://', 'https://storage.yandexcloud.net/'),
+  svgShop_Production: (url: string) => url,
 
   baseUrl_TestDev: 'https://bbajd7fltqec6462cm1j.containers.yandexcloud.net/',
   baseUrl_Test: 'https://bbajd7fltqec6462cm1j.containers.yandexcloud.net/',

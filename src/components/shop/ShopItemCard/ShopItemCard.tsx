@@ -37,7 +37,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const [buyItem, { isLoading }] = useBuyItemMutation();
   const [equipItem] = useAddItemToRoomMutation();
   const [removeItem] = useRemoveItemFromRoomMutation();
-  const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
+  const { data: equipedItems } = useGetEquipedQuery();
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
   const [error, setError] = useState('');
@@ -125,7 +125,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     <div className={styles.storeCard}>
       <div className={styles.header}>
         <div className={clsx(styles.image)}>
-          <img src={buildLink()?.svgShop(item.image_url) + svgHeadersString} />
+          <img src={buildLink()?.svgShop(item.image_url).replace('https://', 'https://storage.yandexcloud.net/') + svgHeadersString} />
         </div>
         <div className={styles.title}>
           <div className={styles.headline}>
