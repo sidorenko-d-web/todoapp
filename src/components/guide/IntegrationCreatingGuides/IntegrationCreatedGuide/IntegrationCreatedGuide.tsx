@@ -21,7 +21,7 @@ export const IntegrationCreatedGuide: React.FC<IntegrationCreatedGuideProps> = (
 
   useEffect(() => {
     //openModal(MODALS.DAYS_IN_A_ROW);
-    dispatch(setDimHeader(true));
+    dispatch(setDimHeader(false));
     localStorage.setItem('integrationCreatedGuideOpen', '1');
   }, []);
 
