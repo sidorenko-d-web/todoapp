@@ -27,6 +27,10 @@ export const Footer = () => {
     if (location.pathname === '/progressTree' || location.pathname === '/wardrobe') {
       setActiveButton(-1);
     }
+
+    if(location.pathname === '/profile') {
+      setActiveButton(0);
+    }
   }, [location.pathname]);
 
   const handleFooterItemClick = (id: number, redirectTo: string) => {
