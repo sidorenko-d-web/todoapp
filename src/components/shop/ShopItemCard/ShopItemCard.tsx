@@ -2,7 +2,14 @@ import { FC, useEffect, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
 import { useBuyItemMutation } from '../../../redux/api/shop/api';
-import { IShopItem, RootState, useGetProfileMeQuery } from '../../../redux';
+import {
+  IShopItem,
+  RootState,
+  useAddItemToRoomMutation,
+  useGetEquipedQuery,
+  useGetProfileMeQuery,
+  useRemoveItemFromRoomMutation,
+} from '../../../redux';
 import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
@@ -18,6 +25,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 import classNames from 'classnames';
 import { buildLink } from '../../../constants/buildMode';
+import { useRoomItemsSlots } from '../../../../translate/items/items';
 
 interface Props {
   disabled?: boolean;
@@ -25,7 +33,11 @@ interface Props {
 }
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
+  const RoomItemsSlots = useRoomItemsSlots();
   const [buyItem, { isLoading }] = useBuyItemMutation();
+  const [equipItem] = useAddItemToRoomMutation();
+  const [removeItem] = useRemoveItemFromRoomMutation();
+  const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
   const [error, setError] = useState('');
@@ -40,11 +52,31 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
   const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal;
 
+  const slot = Object.values(RoomItemsSlots).find(_item =>
+    _item.name.find((__item: string) => item.name.includes(__item)),
+  )?.slot;
+
+  const handleEquipItem = async () => {
+    if (!slot && slot !== 0)
+      throw new Error('error while getting slot for item, check names in "redux/api/room/dto.ts - RoomItemsSlots"');
+    const isSlotNotEmpty = equipedItems?.equipped_items.find(item => item.slot === slot);
+
+    try {
+      if (isSlotNotEmpty) {
+        await removeItem({ items_to_remove: [{ id: isSlotNotEmpty.id }] });
+      }
+      await equipItem({ equipped_items: [{ id: item.id, slot }] });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleBuyItem = async () => {
     setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
     try {
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
       if (!res.error) {
+        void handleEquipItem();
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
       } else {
         setError(JSON.stringify(res.error));

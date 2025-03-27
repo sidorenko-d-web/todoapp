@@ -75,6 +75,7 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({ onCl
         width: '90vw', zIndex: '10000' }}>
           <IntegrationComment
             author_username="User1"
+            isVoting={false}
             comment_text="Текст комментария" comment_text_eng="Comment text" id="123" progres={1}
             onVote={() => { console.log('vote') }} finished={false} hateText={false} />
         </div>

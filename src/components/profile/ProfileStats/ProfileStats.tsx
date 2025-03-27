@@ -30,8 +30,8 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ favoriteCompany, com
     lastUpdatedAt: userProfileData?.updated_at,
   });
 
-  const earned = in_streak ? displayedTotalViews : userProfileData?.total_views ?? 0;
-  const views = in_streak ? displayedTotalEarned : userProfileData?.total_earned ?? '';
+  const views = in_streak ? displayedTotalViews : userProfileData?.total_views ?? 0;
+  const earned = in_streak ? displayedTotalEarned : userProfileData?.total_earned ?? '';
 
   return (
     <div className={styles.profileStats}>

@@ -31,7 +31,7 @@ export const IntegrationCreation = () => {
     },
   );
 
-  const { refetch: refetchIntegration } = useGetIntegrationQuery(
+  const { data: integration, refetch: refetchIntegration } = useGetIntegrationQuery(
     integrations?.integrations[0]?.id || '',
     {
       skip: !integrations?.integrations[0]?.id,
@@ -66,7 +66,6 @@ export const IntegrationCreation = () => {
 
   const firstIntegrationCreating = useSelector((state: RootState) => state.guide.firstIntegrationCreating);
 
-
   const btnGlowing =
     isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
     !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
@@ -80,7 +79,7 @@ export const IntegrationCreation = () => {
           : ''
       }`}
     >
-      {(!integrationCreating && !firstIntegrationCreating) && (
+      {!integrationCreating && !firstIntegrationCreating && (
         <TrackedButton
           trackingData={{
             eventType: 'button',
@@ -100,14 +99,13 @@ export const IntegrationCreation = () => {
         </TrackedButton>
       )}
 
-      {firstIntegrationCreating && <UserGuideCreationCard/>}
-      
-      {
-        (!isLoading && integrations && !firstIntegrationCreating) && <>
-         { (integrations && integrations.count !== 0) 
-        ? <IntegrationCreationCard integration={integrations?.integrations[0]} refetchIntegration={refetchIntegration}/> : null}
+      {firstIntegrationCreating && <UserGuideCreationCard />}
+
+      {!isLoading && integration && integrations?.integrations?.[0]?.id && !firstIntegrationCreating && (
+        <>
+          <IntegrationCreationCard integration={integration} refetchIntegration={refetchIntegration} />
         </>
-      }
+      )}
 
       <IntegrationCreationModal
         modalId={MODALS.CREATING_INTEGRATION}

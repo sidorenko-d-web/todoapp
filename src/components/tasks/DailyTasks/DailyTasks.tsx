@@ -86,7 +86,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
           type="progress"
           icon={giftIcon}
           buttonText={isCompleted && !task.is_reward_given ? t('q33') : isCompleted ? t('q15') : t('q5')}
-          disabled={!task.is_reward_given}
+          disabled={task.is_reward_given}
           onClick={handleOpenDailyTasks}
           questionStates={questionStates}
           boost={task.boost}

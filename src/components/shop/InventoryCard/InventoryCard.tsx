@@ -60,6 +60,8 @@ function sortByPremiumLevel(items: IShopItem[]) {
 export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled = true, item, isB }) => {
   const RoomItemsSlots = useRoomItemsSlots();
 
+  const itemLevel = item.item_premium_level === 'advanced' ? item.level + 50 : item.item_premium_level === 'pro' ? item.level + 100 : item.level;
+
   const { walletAddress, connectWallet } = useTonConnect();
   const [ idDisabled ] = useState(true);
   const { t, i18n } = useTranslation('shop');
@@ -114,24 +116,24 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     const lvlGiftFromStorage = localStorage.getItem('lvlGift');
 
     if (prevLvl.current === null) {
-      prevLvl.current = item.level;
+      prevLvl.current = itemLevel;
       return;
     }
 
     if (
-      (item.level === 50 || item.level === 100 || item.level === 150) &&
-      item.level !== lastTriggeredLevel &&
-      item.level !== prevLvl.current
+      (itemLevel === 50 || itemLevel === 100 || itemLevel === 150) &&
+      itemLevel !== lastTriggeredLevel &&
+      itemLevel !== prevLvl.current
     ) {
       openModal(MODALS.TASK_CHEST);
-      localStorage.setItem('lastTriggeredLevel', String(item.level));
-    } else if (lvlGiftFromStorage && lvlGiftFromStorage.includes(String(item.level))) {
+      localStorage.setItem('lastTriggeredLevel', String(itemLevel));
+    } else if (lvlGiftFromStorage && lvlGiftFromStorage.includes(String(itemLevel))) {
       openModal(MODALS.GET_GIFT);
-      localStorage.setItem('lastTriggeredLevel', String(item.level));
+      localStorage.setItem('lastTriggeredLevel', String(itemLevel));
     }
 
-    prevLvl.current = item.level;
-  }, [ item.level ]);
+    prevLvl.current = itemLevel;
+  }, [ itemLevel ]);
 
   const handleBuyItem = async (itemPoints: string) => {
     if (profile && +profile?.points < +itemPoints) return;
@@ -154,14 +156,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             isYellow: item.item_rarity === 'red',
           });
         } else {
-          console.info(res.data.level, res.data.level % 10);
           if (res.data.level % 10 === 0) {
             localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
             localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
           }
 
           openModal(MODALS.UPGRADED_ITEM, {
-            item,
+            item: res.data,
             mode: 'item',
             reward: 'reward of item',
           });
@@ -197,7 +198,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       item.name_eng.toLowerCase().trim() === 'typewriter' &&
       !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)
     ) {
-      handleEquipItem();
+      void handleEquipItem();
     }
   }, []);
 
@@ -232,35 +233,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   }, [ isUpdateLoading, isEquipped ]);
 
   const levelCap =
-    item.level < 10
+    itemLevel < 10
       ? 10
-      : item.level < 20
-        ? 20
-        : item.level < 30
-          ? 30
-          : item.level < 40
-            ? 40
-            : item.level < 50
-              ? 50
-              : item.level < 60
-                ? 60
-                : item.level < 70
-                  ? 70
-                  : item.level < 80
-                    ? 80
-                    : item.level < 90
-                      ? 90
-                      : item.level < 100
-                        ? 100
-                        : item.level < 110
-                          ? 110
-                          : item.level < 120
-                            ? 120
-                            : item.level < 130
-                              ? 130
-                              : item.level < 140
-                                ? 140
-                                : 150;
+      : itemLevel > 150
+        ? 150
+        : itemLevel % 10 === 0
+          ? (itemLevel === 50 || itemLevel === 100 || itemLevel === 150 ? itemLevel : itemLevel + 10)
+          : Math.ceil(itemLevel / 10) * 10;
 
                                 
   const upgradeButtonGlowing = isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN)
@@ -308,7 +287,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                   : styles.level
             }
           >
-            {t('s20')} {item.level} {isB && t('s21')}
+            {t('s20')} {itemLevel} {isB && t('s21')}
           </p>
           <div className={clsx(styles.stats, (isBlocked || disabled) && styles.disabledStats)}>
             <div className={styles.statsItem}>
@@ -346,7 +325,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           <div className={styles.progress}>
             <div className={styles.text}>
               <p>
-                {item.level}/{levelCap} {t('s24')}{' '}
+                {itemLevel}/{levelCap} {t('s24')}{' '}
               </p>
               {
                 <div className={styles.goal}>
@@ -371,7 +350,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                       : styles.doneRed
                 }
                 style={{
-                  width: `${Math.min(((item.level % 10) / 10) * 100, 100)}%`,
+                  width: `${Math.min(((itemLevel % 10) / 10) * 100, 100)}%`,
                 }}
               />
             </div>
@@ -381,53 +360,54 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 sortByPremiumLevel(itemsForImages?.items)
                   .filter(_item => _item.name === item.name)
                   .map((_item, index) => (
-                    <div
-                      className={clsx(
-                        item.item_rarity === 'red'
-                          ? styles.item
-                          : item.item_rarity === 'yellow'
-                            ? styles.itemPurple
-                            : styles.itemRed,
-                        _item.item_premium_level === 'advanced' && !item.is_bought ? styles.noBorder : '',
-                        _item.item_premium_level === 'pro' && !item.is_bought ? styles.noBorder : '',
-                        // item.item_premium_level === 'advanced'
-                        //   ? index > 1 && styles.itemLocked
-                        //   : item.item_premium_level === 'base' && index > 0 && styles.itemLocked,
-                      )}
-                      key={_item.id}
-                      style={
-                        item.level < 50 && index === 1
-                          ? ({
-                            '--lvl-height': `${(item.level / 50) * 100}%`,
-                          } as React.CSSProperties)
-                          : item.level >= 50 && index === 2
-                            ? ({
-                              '--lvl-height': `${((item.level - 50) / 50) * 100}%`,
-                            } as React.CSSProperties)
-                            : undefined
-                      }
-                    >
-                      <img src={itemStoreString(_item.image_url)} className={styles.itemImage} alt="" />
+                      <div
+                        className={clsx(
+                          styles.item,
+                          index === 0 && (itemLevel < 50 || item.item_premium_level === 'base') && styles.blue,
+                          index === 1 && (itemLevel >= 50 && itemLevel < 100 && item.item_premium_level !== 'base' || item.item_premium_level === 'advanced') && styles.purple,
+                          index === 2 && (itemLevel >= 100 && ![ 'base', 'advanced' ].includes(item.item_premium_level) || item.item_premium_level === 'pro') && styles.red,
+                          !(
+                            (index === 0 && (itemLevel < 50 || item.item_premium_level === 'base')) ||
+                            (index === 1 && (itemLevel >= 50 && itemLevel < 100 && item.item_premium_level !== 'base' || item.item_premium_level === 'advanced')) ||
+                            (index === 2 && (itemLevel >= 100 && ![ 'base', 'advanced' ].includes(item.item_premium_level) || item.item_premium_level === 'pro'))
+                          ) && styles.noBorder,
+                        )}
 
-                      {item.item_premium_level === 'base' &&
-                        _item.item_premium_level === 'advanced' &&
-                        !item.is_bought && (
+                        key={_item.id}
+                        style={
+                          itemLevel < 50 && index === 1
+                            ? ({
+                              '--lvl-height': `${(itemLevel / 50) * 100}%`,
+                            } as React.CSSProperties)
+                            : itemLevel >= 50 && index === 2
+                              ? ({
+                                '--lvl-height': `${((itemLevel - 50) / 50) * 100}%`,
+                              } as React.CSSProperties)
+                              : undefined
+                        }
+                      >
+                        <img src={itemStoreString(_item.image_url)} className={styles.itemImage} alt="" />
+
+                        {item.item_premium_level === 'base' &&
+                          _item.item_premium_level === 'advanced' &&
+                          !item.is_bought && (
+                            <>
+                              <div className={styles.lockedOverlay50}></div>
+                              <span className={styles.itemLevel}>50</span>
+                              <img src={LockIcon} alt="" className={styles.lockIcon} />
+                            </>
+                          )}
+
+                        {item.item_premium_level !== 'pro' && _item.item_premium_level === 'pro' && !item.is_bought && (
                           <>
-                            <div className={styles.lockedOverlay50}></div>
-                            <span className={styles.itemLevel}>50</span>
+                            <div className={styles.lockedOverlay100}></div>
+                            <span className={styles.itemLevel}>100</span>
                             <img src={LockIcon} alt="" className={styles.lockIcon} />
                           </>
                         )}
-
-                      {item.item_premium_level !== 'pro' && _item.item_premium_level === 'pro' && !item.is_bought && (
-                        <>
-                          <div className={styles.lockedOverlay100}></div>
-                          <span className={styles.itemLevel}>100</span>
-                          <img src={LockIcon} alt="" className={styles.lockIcon} />
-                        </>
-                      )}
-                    </div>
-                  ))}
+                      </div>
+                    ),
+                  )}
             </div>
           </div>
         ))}
@@ -442,11 +422,11 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         <Button
           onClick={handleEquipItem}
           className={styles.disabledActions}
-          disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
+          disabled={itemLevel === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
         >
           {<p>{t('s28')}</p>}
         </Button>
-      ) : item.level === 50 ? (
+      ) : itemLevel === 50 ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>{t('s27')}</p>
@@ -456,7 +436,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         <div className={styles.actions}>
           <Button
             onClick={handleUsdtPayment}
-            disabled={item.level === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
+            disabled={itemLevel === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
           >
             {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', {
               locale: locale,
@@ -472,7 +452,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               ),
               { [styles.disabledBtn]: !isAffordable },
             )}
-            disabled={item.level === 50 || isLoading || isItemsLoading || isUpdateLoading || !isAffordable}
+            disabled={itemLevel === 50 || isLoading || isItemsLoading || isUpdateLoading || !isAffordable}
             onClick={() => handleBuyItem(price ?? '')}
           >
             <>
