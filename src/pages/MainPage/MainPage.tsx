@@ -107,12 +107,26 @@ export const MainPage: FC = () => {
 
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
-      if (data?.count > 1) {
+      if (data?.count > 2) {
         Object.values(GUIDE_ITEMS).forEach(category => {
           Object.values(category).forEach(value => {
             localStorage.setItem(value, '1');
           });
         });
+      }
+      if (data?.count > 1) {
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
+        setGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED);
+
+        setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN);
 
         reduxDispatch(resetGuideState());
 

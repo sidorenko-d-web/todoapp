@@ -35,7 +35,7 @@ export const IntegrationStatsGuide: React.FC<IntegrationStatsGuideProps> = ({ on
       <Guide align="right"
         noButton={true}
         zIndex={110}
-        top={'57%'}
+        top={'56%'}
         description={
           <>
             {t('g103')}<span style={{ color: '#2F80ED' }}>{t('g104')}</span> 
@@ -51,7 +51,7 @@ export const IntegrationStatsGuide: React.FC<IntegrationStatsGuideProps> = ({ on
       </Guide>
       <div style={{
         position: 'absolute',
-        top: '53%',
+        top: '50%',
         left: '50%',
         transform: 'translateX(-50%)',
         width: '90vw',
