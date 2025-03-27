@@ -35,7 +35,7 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({ onCl
       <Guide align="left"
         noButton={true}
         zIndex={110}
-        top={'23%'}
+        top={'20%'}
         description={
           <>
             <div style={{ wordWrap: 'break-word', whiteSpace: 'pre-line' }}>
@@ -53,7 +53,7 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({ onCl
 
       <div style={{
         position: 'absolute',
-        top: '56%',
+        top: '50%',
         left: '50%',
         transform: 'translateX(-50%)',
         width: '90vw',
@@ -71,7 +71,7 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({ onCl
           />
 
         </div>
-        <div style={{ position: 'absolute', top: '70%',left: '4vw',
+        <div style={{ position: 'absolute', top: '64%',left: '4vw',
         width: '90vw', zIndex: '10000' }}>
           <IntegrationComment
             author_username="User1"
