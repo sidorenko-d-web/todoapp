@@ -34,7 +34,7 @@ export const PromotionPage: React.FC = () => {
   //     : -1;
 
   useEffect(() => {
-    dispatch(setActiveFooterItemId(3));
+    dispatch(setActiveFooterItemId(5));
   }, []);
 
   const { isLoading: isCurrentUsersReferralsLoading } = useGetCurrentUsersReferralsQuery();
