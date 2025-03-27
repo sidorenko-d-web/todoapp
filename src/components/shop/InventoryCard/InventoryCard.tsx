@@ -22,7 +22,15 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { GUIDE_ITEMS, itemStoreString, localStorageConsts, MODALS, SOUNDS } from '../../../constants';
+import {
+  buildLink,
+  buildMode,
+  GUIDE_ITEMS,
+  itemStoreString,
+  localStorageConsts,
+  MODALS,
+  SOUNDS, svgHeadersString,
+} from '../../../constants';
 import { useModal, useTonConnect } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';

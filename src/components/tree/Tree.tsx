@@ -59,13 +59,6 @@ export const Tree = () => {
     userSubscribers,
   });
 
-  useEffect(() => {
-    const elements = document.querySelectorAll(`.${s.levelMarker}`);
-    const elements1 = document.querySelectorAll(`.${s.rewardsIconsWrapper}`);
-    const elements2 = document.querySelectorAll(`.${s.levelCircle}`);
-    const elements3 = document.querySelectorAll(`.${s.takeRewardBtn}`);
-  }, [ treeData ]);
-
   // Track when data has loaded
   useEffect(() => {
     if (treeData && userProfileData && isBgLoaded) {

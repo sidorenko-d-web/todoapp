@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from './IntegrationPageGuide.module.scss';
 
 import img1 from '../../../../assets/gif/guide1.gif';
-import { Guide } from "../../Guide/Guide";
+import { Guide } from '../../Guide';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from "react-redux";
 import { setDimHeader } from "../../../../redux";
@@ -63,7 +63,7 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({ onCl
           <IntegrationComment
             author_username="User1"
             comment_text="Текст комментария" comment_text_eng="Comment text" id="123" progres={1}
-            onVote={() => { console.log('vote') }} finished={false} hateText={false} />
+            onVote={() => { console.log('vote') }} finished={false} hateText={false} isVoting={false} />
         </div>
       </Guide>
 

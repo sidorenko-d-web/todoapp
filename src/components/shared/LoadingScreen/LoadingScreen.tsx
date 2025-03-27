@@ -36,6 +36,8 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   // }, []);
 
   const [isMobile, setIsMobile] = useState(buildMode.includes('Dev') ? 1 : 0);
+  // const [isMobile, setIsMobile] = useState(1);
+
 
   useEffect(() => {
     if (buildMode.includes('Dev')) return;
