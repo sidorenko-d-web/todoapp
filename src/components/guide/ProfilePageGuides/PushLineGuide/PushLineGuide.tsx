@@ -39,11 +39,13 @@ export const PushLineGuide: React.FC<PushLineGuideProps> = ({ onClose }) => {
           <>
             {t('g92')}<span style={{ color: '#2F80ED' }}>{t('g93')}</span>
             {t('g94')}<span style={{ color: '#EC7913' }}>{t('g94_2')}</span>
+            <br/>
+            <br/>
             {t('g95')}<span style={{ color: '#2F80ED' }}>{t('g96')}</span>
           </>
         }
         onClose={handleClose}>
-        <button className={styles.nextBtn} onClick={handleClose}>{t('g109')}</button>
+        <button className={styles.nextBtn} onClick={handleClose}>{t('g107')}</button>
         <img src={img1} className={styles.gifImage} height={146} width={140} />
       </Guide>
     </>

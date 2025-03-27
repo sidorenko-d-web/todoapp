@@ -48,7 +48,7 @@ export const FreezeGuide: React.FC<FreezeGuideProps> = ({ onClose }) => {
                   </>
                 }
                 onClose={handleClose}>
-                <button className={styles.nextBtn} onClick={handleClose}>{t('g107')}</button>
+                <button className={styles.nextBtn} onClick={handleClose}>{t('g109')}</button>
                 <img src={img1} className={styles.gifImage} height={146} width={140} />
             </Guide>
         </>

@@ -169,33 +169,8 @@ export const IntegrationPage: React.FC = () => {
               </div>
             </div>
             <Integration />
-<<<<<<< HEAD
-            {isIntegrationLoading || isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN) &&
-              <>
-                <IntegrationStats
-                  views={data.views}
-                  income={data.income}
-                  subscribers={data.subscribers}
-                  futureStatistics={data.future_statistics}
-                  lastUpdatedAt={data.updated_at}
-                />
-                <div className={styles.commentsSectionTitleWrp}>
-                  <p className={styles.commentsSectionTitle}>{t('i4')}</p>
-                  <p className={styles.commentsAmount}>
-                    {data.comments_generated}/{20}
-                  </p>
-                </div>
-                <IntegrationComment
-                  progres={data.comments_answered_correctly % 5}
-                  {...comments[currentCommentIndex]}
-                  onVote={handleVote}
-                  hateText={commentData?.is_hate}
-                  finished={data.comments_generated >= 20 || !(commentData && isSuccess)}
-                /></>
-            }
-=======
             {isIntegrationLoading ||
-              (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
+              (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN) && (
                 <>
                   <IntegrationStats
                     views={data.views}
@@ -220,7 +195,6 @@ export const IntegrationPage: React.FC = () => {
                   />
                 </>
               ))}
->>>>>>> b4c6ca53501441ff422243bf89d7875a6a5ff22e
           </div>
         </>
       )}

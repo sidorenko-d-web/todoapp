@@ -60,13 +60,14 @@ export const TreeLevelGuide: React.FC<TreeLevelGuideProps> = ({ onClose, item })
         <>
             <Guide align="left"
                 zIndex={15000}
-                top={'60%'}
+                top={'62%'}
                 description={
                     <>
-                        <span style={{ color: '#2F80ED' }}>{t('g48')}</span> {t('g49')} <span style={{ color: '#E0B01D' }}> {t('g50')}</span>  {t('g51')}
+                        {/* <span style={{ color: '#2F80ED' }}>{t('g48')}</span> {t('g49')} <span style={{ color: '#E0B01D' }}> {t('g50')}</span>  {t('g51')}
                         <br />
                         <br />
-                        {t('g52')} <span style={{ color: '#E0B01D' }}> {t('g53')}</span>. {t('g54')}
+                        {t('g52')} <span style={{ color: '#E0B01D' }}> {t('g53')}</span>. {t('g54')} */}
+                        {t('g115')}
                     </>
                 }
                 onClose={handleClose}>

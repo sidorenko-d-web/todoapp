@@ -20,9 +20,14 @@
 
 }
 
+.noBorder {
+  border: none;
+}
+
 .glowingBtn {
   box-shadow: 0 0 50px var.$color-primary;
   background: var.$color-primary;
+  background-color: var.$color-primary;
   padding: 16px;
 }
 
@@ -401,6 +406,13 @@
       gap: 5px;
       box-sizing: border-box;
 
+      &.blue {
+        background: var.$color-primary;
+      }
+
+     
+
+      ;
       & > img {
         width: 14px;
         aspect-ratio: 1;

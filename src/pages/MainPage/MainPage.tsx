@@ -74,34 +74,28 @@ export const MainPage: FC = () => {
     }
   }, [integrationCurrentlyCreating]);
 
-  
+
   useEffect(() => {
     if (itemsData && !isInventoryDataLoading) {
-      let found = false;
 
-      itemsData.items.forEach(item => {
-        if (item.name.toLowerCase().trim() === 'печатная машинка') {
-          setTypewriterFound(true);
-          found = true;
+      if (itemsData.count > 0) {
+        setTypewriterFound(true);
 
-          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
-          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
+        setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
+        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
 
-          setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
-          setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
-          setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+        setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
+        setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
+        setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
 
-          reduxDispatch(resetGuideState());
-        }
-      });
-
-      if (!found) {
+        reduxDispatch(resetGuideState());
+      } else {
         Object.entries(GUIDE_ITEMS).forEach(([items]) => {
           Object.entries(items).forEach(([_, value]) => {
             localStorage.setItem(value, '0');
@@ -114,26 +108,11 @@ export const MainPage: FC = () => {
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
       if (data?.count > 1) {
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATION_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_CREATED);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.PUBLISHED_MODAL_OPENED);
-
-        setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
-
-        setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
-
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED);
-
-        setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
-        setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
-
-        setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
+        Object.values(GUIDE_ITEMS).forEach(category => {
+          Object.values(category).forEach(value => {
+            localStorage.setItem(value, '1');
+          });
+        });
 
         reduxDispatch(resetGuideState());
 
@@ -157,10 +136,6 @@ export const MainPage: FC = () => {
 
           setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
 
-          // setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
-          // setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
-
-          // setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
           reduxDispatch(resetGuideState());
 
@@ -267,7 +242,7 @@ export const MainPage: FC = () => {
     if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
       navigate(AppRoute.ShopInventory);
     }
-    
+
     if (isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED)
       && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)
       && !getModalState(MODALS.DAYS_IN_A_ROW).isOpen
@@ -280,11 +255,11 @@ export const MainPage: FC = () => {
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
   useEffect(() => {
-    if(isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+    if (isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
       openModal(MODALS.DAYS_IN_A_ROW);
     }
   }, [isPublishedModalClosed, isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)]);
-  
+
 
   const { isLoading: isCurrentUserProfileInfoLoading } = useGetProfileMeQuery();
   const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
@@ -342,19 +317,19 @@ export const MainPage: FC = () => {
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) ||
         (firstIntegrationCreating &&
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
-        <div
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            top: '0',
-            left: '0',
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            pointerEvents: 'none',
-            zIndex: '500',
-          }}
-        />
-      )}
+          <div
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              top: '0',
+              left: '0',
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              pointerEvents: 'none',
+              zIndex: '500',
+            }}
+          />
+        )}
 
       <InitialGuide
         onClose={() => {

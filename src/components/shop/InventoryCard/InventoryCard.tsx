@@ -9,7 +9,9 @@ import ListDisableIcon from '@icons/list-disable.svg';
 import GiftIcon from '../../../assets/icons/gift.svg';
 import {
   IShopItem,
+  RootState,
   selectVolume,
+  setDimHeader,
   setItemUpgraded,
   TypeItemQuality,
   useAddItemToRoomMutation,
@@ -241,9 +243,14 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           ? (itemLevel === 50 || itemLevel === 100 || itemLevel === 150 ? itemLevel : itemLevel + 10)
           : Math.ceil(itemLevel / 10) * 10;
 
-                                
-  const upgradeButtonGlowing = isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN)
-    && !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
+
+  const itemUpgraded = useSelector((state: RootState) => state.guide.itemUpgraded);
+
+  useEffect(() => {
+    if(itemUpgraded) {
+      dispatch(setDimHeader(false));
+    }
+  }, [itemUpgraded]);
 
 
   return (
@@ -435,12 +442,19 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       ) : isUpgradeEnabled && profile && profile.growth_tree_stage_id > item.level ? (
         <div className={styles.actions}>
           <Button
+            style={{ 
+              border: !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN) ? 
+                'none' : ' border: 1px solid var.$color-border-primary;' 
+            }}
             onClick={handleUsdtPayment}
-            disabled={itemLevel === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
+            disabled={itemLevel === 50 || isLoading || 
+              isItemsLoading || isLoading || isUpdateLoading || !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN)}
           >
             {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', {
               locale: locale,
             })}
+
+            
           </Button>
           <Button
             className={classNames(
@@ -448,7 +462,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 item.item_rarity === 'yellow'
                   ? styles.upgradeItemPurple
                   : item.item_rarity === 'green' && styles.upgradeItemRed,
-                  upgradeButtonGlowing && styles.glowingBtn
+                  !itemUpgraded && styles.glowingBtn,
+                  !itemUpgraded && styles.blue
               ),
               { [styles.disabledBtn]: !isAffordable },
             )}
