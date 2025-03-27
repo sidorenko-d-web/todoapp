@@ -189,10 +189,10 @@ export const MainPage: FC = () => {
 
           setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
 
-          // setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
-          // setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
+           setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.TREE_LEVEL_GUIDE_SHOWN);
+           setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN);
 
-          // setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
+           setGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
           reduxDispatch(resetGuideState());
 
@@ -320,7 +320,9 @@ export const MainPage: FC = () => {
   }, []);
 
   useEffect(() => {
-    if(isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+    if(isPublishedModalClosed 
+      && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)
+      && !getModalState(MODALS.DAYS_IN_A_ROW).isOpen) {
       openModal(MODALS.DAYS_IN_A_ROW);
     }
   }, [isPublishedModalClosed, isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)]);
