@@ -66,7 +66,7 @@ const initialState: GuideState = {
 
   openDaysInARow: false,
 
-  itemUpgraded: false
+  itemUpgraded: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED)
 };
 
 const guideSlice = createSlice({
@@ -161,7 +161,7 @@ const guideSlice = createSlice({
         firstIntegrationCreating: false,
         footerActive: isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
         commentGlow: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
-        itemUpgraded: true
+        itemUpgraded: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED)
       });
     }
   },
