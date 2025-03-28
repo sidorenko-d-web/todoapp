@@ -171,9 +171,9 @@ export const MainPage: FC = () => {
 
   useEffect(() => {
     if(data) {
-      if (typeof data.count !== 'undefined' && data.count === 0) {
+      if (data.count === 0) {
         if (itemsData) {
-          if (itemsData.count !== undefined && itemsData.count > 0) {
+          if (itemsData.count > 0) {
             // MainPage items
             setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
             setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
