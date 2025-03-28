@@ -55,19 +55,39 @@ $background-icon: #373A43;
 .languageAndIcon {
     display: flex;
     flex-direction: row;
-    gap: 8px;
     align-items: center;
-    color: $text-default;
-    text-align: center;
-    font-family: var.$font-default;
+    gap: 5px;
+    color: #FFF;
+    font-family: Inter;
     font-size: 14px;
     font-weight: 500;
     padding: 6px;
     padding-left: 8px;
     transition: all 0.2s ease;
+}
 
-    &.selectedText {
-        color: $text-selected;
+.status {
+    display: flex;
+    padding: 3.5px 6px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 6px;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%;
+    letter-spacing: -0.7px;
+
+    &.statusEnabled {
+        background: rgba(47, 128, 237, 0.20);
+        color: #2F80ED;
+    }
+
+    &.statusDisabled {
+        background: rgba(80, 91, 120, 0.20);
+        color: #505B78;
     }
 }
 

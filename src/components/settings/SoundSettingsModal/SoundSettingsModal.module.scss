@@ -1,0 +1,94 @@
+@use "../../../assets/styles/abstracts" as var;
+
+.titleStyles {
+    display: flex;
+    padding: 10px 12px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    align-self: stretch;
+}
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+}
+
+.soundSection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.soundWrapper {
+    display: flex;
+    padding: 6px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    gap: 10px;
+    border-radius: 12px;
+    border: 1px solid #282830;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.selected {
+        border-color: #2F80ED;
+    }
+}
+
+.soundAndIcon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+    color: #FFF;
+    font-family: var.$font-default;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 8px;
+
+    .status {
+        color: #2F80ED;
+    }
+}
+
+.selectionIconWrapper {
+    display: flex;
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background: #282830;
+    cursor: pointer;
+
+    .selectionIcon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.applyButton {
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    align-self: stretch;
+    border-radius: 8px;
+    border: 1px solid #2064C0;
+    background: #2F80ED;
+    color: #FFF;
+    text-align: center;
+    font-family: var.$font-default;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+} 
