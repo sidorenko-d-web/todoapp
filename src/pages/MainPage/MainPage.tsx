@@ -170,17 +170,31 @@ export const MainPage: FC = () => {
   }, [data, isInventoryDataLoading]);
 
   useEffect(() => {
-    if (typeof data?.count !== 'undefined' && data?.count === 0) {
-      setRerender((prev) => prev + 1);
-      Object.values(GUIDE_ITEMS).forEach(category => {
-        Object.values(category).forEach(value => {
-          localStorage.setItem(value, '0');
-          console.log('GUIDE... ', value)
-        });
-      });
-      setRerender((prev) => prev + 1);
+    if(data) {
+      if (typeof data.count !== 'undefined' && data.count === 0) {
+        if (itemsData) {
+          if (itemsData.count !== undefined && itemsData.count > 0) {
+            // MainPage items
+            setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
+            setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
+  
+            // ShopPage items
+            setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
+            setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+          }
+        }
+  
+      }
     }
-  })
+  }, [data, isAllIntegrationsLoading, itemsData, isInventoryDataLoading])
+
   useEffect(() => {
     if (isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
       reduxDispatch(setDimHeader(false));
