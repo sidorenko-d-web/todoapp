@@ -24,8 +24,8 @@ html {
 body {
   position: relative;
 
-  filter: saturate(1.2) brightness(1.1);
-  // filter: saturate(1.5) brightness(1.2);
+  // filter: saturate(1.2) brightness(1.1);
+  filter: saturate(1.5) brightness(1.2);
   color: var.$color-black;
   font-family: var.$font-default;
   font-size: 14px;

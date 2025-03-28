@@ -112,11 +112,13 @@ $translateY: -15vh;
   @extend .item;
   top: 79px;
   transform: translateX(-150%);
+  z-index: 4;
 }
 .treshinaRight {
   @extend .item;
   top: 0;
   transform: translateX(100%);
+  z-index: 4;
 }
 .shelf {
   @extend .item;

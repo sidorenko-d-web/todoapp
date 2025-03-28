@@ -66,7 +66,8 @@ export const Walls = ({ room, isLoading }: props) => {
       isSkew: true,
     },
   };
-  const currentWall = walls[(equipedWall?.item_rarity! + equipedWall?.item_premium_level) as keyof typeof walls];
+  const currentWall =
+    walls[(equipedWall?.item_rarity! + equipedWall?.item_premium_level) as keyof typeof walls] ?? walls.redbase;
 
   // const currentWall = walls.yellowpro
 
@@ -75,10 +76,10 @@ export const Walls = ({ room, isLoading }: props) => {
       {!isLoading && (
         <>
           <div className={styles.wallLeft}>
-            <img src={currentWall?.image} className={clsx(currentWall?.isSkew && styles.skewed)} alt="" />
+            <img src={currentWall?.image} className={clsx(styles.skewed)} alt="" />
           </div>
           <div className={styles.wallRight}>
-            <img src={currentWall?.image} className={clsx(currentWall?.isSkew && styles.skewed)} alt="" />
+            <img src={currentWall?.image} className={clsx(styles.skewed)} alt="" />
           </div>
         </>
       )}
