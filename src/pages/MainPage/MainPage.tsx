@@ -100,14 +100,14 @@ export const MainPage: FC = () => {
         reduxDispatch(resetGuideState());
 
       } else {
-        setRerender((prev) => prev+1);
+        setRerender((prev) => prev + 1);
         Object.values(GUIDE_ITEMS).forEach(category => {
           Object.values(category).forEach(value => {
             localStorage.setItem(value, '0');
             console.log('GUIDE... ', value)
           });
         });
-        setRerender((prev) => prev+1);
+        setRerender((prev) => prev + 1);
       }
     }
   }, [itemsData, isInventoryDataLoading, typewriterFound]);
@@ -169,6 +169,18 @@ export const MainPage: FC = () => {
     }
   }, [data, isInventoryDataLoading]);
 
+  useEffect(() => {
+    if (typeof data?.count !== 'undefined' && data?.count === 0) {
+      setRerender((prev) => prev + 1);
+      Object.values(GUIDE_ITEMS).forEach(category => {
+        Object.values(category).forEach(value => {
+          localStorage.setItem(value, '0');
+          console.log('GUIDE... ', value)
+        });
+      });
+      setRerender((prev) => prev + 1);
+    }
+  })
   useEffect(() => {
     if (isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
       reduxDispatch(setDimHeader(false));
