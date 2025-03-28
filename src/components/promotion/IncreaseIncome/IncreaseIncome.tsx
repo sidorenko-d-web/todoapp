@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants';
 import { InviteFriend, UserReferrals } from '../Modal';
+
 import { ReferralCard } from '../ReferralCard/ReferralCard';
 import {
   useGetCurrentUsersReferralsQuery,
@@ -34,37 +35,25 @@ export const IncreaseIncome = () => {
     [visibleReferralsAll],
   );
 
-  // Используем один хук для всех запросов
-  const [trigger, { data: profileData }] = useGetUserProfileInfoByIdQuery();
+  const profileQueries = profileIdsAll.map(profileId => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return useGetUserProfileInfoByIdQuery(profileId);
+  });
 
   useEffect(() => {
-    const fetchProfiles = async () => {
-      const profiles: UserProfileInfoResponseDTO[] = [];
-      for (const profileId of profileIdsAll) {
-        try {
-          const result = await trigger(profileId);
-          if (result.data) {
-            profiles.push(result.data);
-          }
-        } catch (err) {
-          console.error('Failed to fetch profile', err);
-        }
-      }
+    if (profileQueries.every(query => !query.isLoading && query.data)) {
+      const profiles = profileQueries.map(query => query.data!);
       setProfilesData(profiles);
-    };
-
-    if (profileIdsAll.length > 0) {
-      fetchProfiles();
     }
-  }, [profileIdsAll, trigger]);
+  }, [profileQueries]);
 
   const { totalSubscribers, subscribersForFirstLevel, subscribersForSecondLevel } = useMemo(() => {
     const subscribersForFirstLevel = profilesData.reduce(
-      (sum, profile) => sum + (profile.subscribers_for_first_level_referrals || 0),
+      (sum, profile) => sum + profile.subscribers_for_first_level_referrals,
       0,
     );
     const subscribersForSecondLevel = profilesData.reduce(
-      (sum, profile) => sum + (profile.subscribers_for_second_level_referrals || 0),
+      (sum, profile) => sum + profile.subscribers_for_second_level_referrals,
       0,
     );
     const totalSubscribers = subscribersForFirstLevel + subscribersForSecondLevel;
@@ -169,3 +158,10 @@ export const IncreaseIncome = () => {
     </>
   );
 };
+/*function useQueries(arg0: { queryKey: string[]; queryFn: () => any }[]) {
+  throw new Error('Function not implemented.');
+}
+
+function fetchUserProfile(profile_id: never): any {
+  throw new Error('Function not implemented.');
+}*/
