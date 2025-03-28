@@ -47,7 +47,7 @@ export const InitialGuide: React.FC<InitialGuideProps> = ({ onClose }) => {
 
        <>
         {showGuide &&  <Guide align="left"
-            zIndex={11110}
+            zIndex={20000}
             top={'39%'}
             description={t('g31')}
             onClose={handleClose}>
