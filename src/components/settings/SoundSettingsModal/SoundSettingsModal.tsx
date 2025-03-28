@@ -15,32 +15,41 @@ interface SoundOptionProps {
     onToggle: () => void;
 }
 
-const SoundOption = ({ title, isEnabled, onToggle }: SoundOptionProps) => (
-    <div className={`${styles.soundWrapper} ${isEnabled ? styles.selected : ''}`}>
-        <div className={styles.soundAndIcon}>
-            <span>{title}</span>
-            <span className={styles.status}>{isEnabled ? 'Вкл.' : 'Откл.'}</span>
+const SoundOption = ({ title, isEnabled, onToggle }: SoundOptionProps) => {
+    const { t } = useTranslation('settings');
+    
+    return (
+        <div
+            className={`${styles.soundWrapper} ${isEnabled ? styles.selected : ''}`}
+            onClick={onToggle}
+        >
+            <div className={styles.soundAndIcon}>
+                <span>{title}</span>
+                <span className={`${styles.status} ${isEnabled ? styles.statusEnabled : styles.statusDisabled}`}>
+                    {isEnabled ? t('s11') : t('s12')}
+                </span>
+            </div>
+            <div className={styles.selectionIconWrapper}>
+                <img
+                    src={isEnabled ? tick : circle}
+                    alt={isEnabled ? "Selected" : "Not selected"}
+                    className={styles.selectionIcon}
+                />
+            </div>
         </div>
-        <div className={styles.selectionIconWrapper} onClick={onToggle}>
-            <img
-                src={isEnabled ? tick : circle}
-                alt={isEnabled ? "Enabled" : "Disabled"}
-                className={styles.selectionIcon}
-            />
-        </div>
-    </div>
-);
+    );
+};
 
 export const SoundSettingsModal = () => {
     const { t } = useTranslation('settings');
     const { closeModal } = useModal();
     const dispatch = useDispatch();
     const [isMusicEnabled, setIsMusicEnabled] = useState(true);
-    const [isSoundEnabled, setIsSoundEnabled] = useState(false);
+    const [isSoundEnabled, setIsSoundEnabled] = useState(true);
 
     const handleCloseModal = () => {
         closeModal(MODALS.SOUND_SETTINGS);
-        // Здесь можно добавить логику сохранения настроек
+        // Применяем настройки звука
         dispatch(setVolume(isMusicEnabled ? 0.5 : 0));
     };
 
@@ -70,9 +79,11 @@ export const SoundSettingsModal = () => {
                     className={styles.applyButton}
                     onClick={handleCloseModal}
                 >
-                    {t('s7')}
+                    {t('s13')}
                 </button>
             </div>
         </CentralModal>
     );
 };
+
+export default SoundSettingsModal;

@@ -16,6 +16,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 30px;
+    padding-top: 23px;
 }
 
 .soundSection {
@@ -44,17 +45,40 @@
 
 .soundAndIcon {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
     align-items: center;
-    flex: 1;
+    gap: 5px;
     color: #FFF;
-    font-family: var.$font-default;
+    font-family: Inter;
     font-size: 14px;
     font-weight: 500;
-    padding: 6px 8px;
+    padding: 6px;
+    padding-left: 8px;
+    transition: all 0.2s ease;
+}
 
-    .status {
+.status {
+    display: flex;
+    padding: 3.5px 6px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 6px;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%;
+    letter-spacing: -0.7px;
+
+    &.statusEnabled {
+        background: rgba(47, 128, 237, 0.20);
         color: #2F80ED;
+    }
+
+    &.statusDisabled {
+        background: rgba(80, 91, 120, 0.20);
+        color: #505B78;
     }
 }
 
@@ -63,11 +87,11 @@
     width: 26px;
     height: 26px;
     padding: 5px;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
     background: #282830;
-    cursor: pointer;
 
     .selectionIcon {
         width: 16px;
