@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { parsePhoneNumberFromString } from 'libphonenumber-js'; // <-- Добавлено
 import { InfluencerRatingSteps } from '../../../constants';
 import tick from '../../../assets/icons/input-tick.svg';
 import clan from '../../../assets/icons/clan-red.svg';
@@ -25,12 +26,7 @@ type BindingModalProps = {
   onNext: () => void;
 };
 
-export const BindingModal = ({
-                               modalId,
-                               onClose,
-                               binding,
-                               onNext,
-                             }: BindingModalProps) => {
+export const BindingModal = ({ modalId, onClose, binding, onNext }: BindingModalProps) => {
   const { t } = useTranslation('promotion');
   const [value, setValue] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
@@ -41,10 +37,18 @@ export const BindingModal = ({
   const [sendCode] = useSendEmailConfirmationCodeMutation();
   const [sendPhone] = useSendPhoneConfirmationCodeMutation();
 
-  // Регулярное выражение для проверки телефонных номеров
-  const phoneRegex = /^(\s*)?(\+)?(?!(\d)([- _():=+]?\3){9,})([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
+  // Проверка валидности телефона через libphonenumber-js
+  const isValidPhone = (phone: string) => {
+    try {
+      const phoneNumber = parsePhoneNumberFromString(phone);
+      return phoneNumber?.isValid() || false;
+    } catch {
+      return false;
+    }
+  };
 
-  const isValid = inputType === 'phone' ? phoneRegex.test(value) : value.trim() !== '';
+  // Общая проверка валидности (email или телефон)
+  const isValid = inputType === 'phone' ? isValidPhone(value) : value.trim() !== '';
 
   const handleNext = async () => {
     try {
@@ -56,21 +60,21 @@ export const BindingModal = ({
         onNext();
       }
       if (inputType === 'phone') {
-        if (phoneRegex.test(value)) {
-          await sendPhone({ phone_number: value.trim() });
+        if (isValidPhone(value)) {
+          await sendPhone({ phone_number: value.trim() }).unwrap();
           dispatch(setInputValue(value.trim()));
           setValue('');
           onNext();
         } else {
-          setError('Неверный формат номера телефона');
+          setError(t('promotion:errors.invalid_phone')); // Можно добавить перевод
         }
       }
     } catch (err) {
-      const error = err as { status: number };
+      const error = err as { status: number; data?: { message?: string } };
       if (error.status === 409) {
-        setError('Такой email уже привязан');
+        setError(t('promotion:errors.email_already_used'));
       } else {
-        setError('Произошла ошибка при отправке кода подтверждения.');
+        setError(error.data?.message || t('promotion:errors.confirmation_error'));
       }
     }
   };
@@ -83,7 +87,9 @@ export const BindingModal = ({
 
           <div className={ss.progressBarSection}>
             <div className={ss.progressBarSectionHeader}>
-              <span>{binding.stepIndex}/{binding.stepsTotal} {t("p36")}</span>
+              <span>
+                {binding.stepIndex}/{binding.stepsTotal} {t('p36')}
+              </span>
               <span className={ss.progressReward}>
                 {t('p37')} <img src={clan} height={12} width={12} alt="reward" />
               </span>
@@ -97,9 +103,9 @@ export const BindingModal = ({
             <label>{binding.inputLabel}</label>
             <div className={s.inputWrapper}>
               <input
-                type="text"
+                type="tel"
                 value={value}
-                onChange={(e) => {
+                onChange={e => {
                   setValue(e.target.value);
                   setError('');
                 }}
@@ -113,7 +119,9 @@ export const BindingModal = ({
           <span className={ss.semiText}>{binding.description}</span>
         </div>
 
-        <Button disabled={!isValid} onClick={handleNext}>{binding.buttonNext}</Button>
+        <Button disabled={!isValid} onClick={handleNext}>
+          {binding.buttonNext}
+        </Button>
       </div>
     </CentralModal>
   );

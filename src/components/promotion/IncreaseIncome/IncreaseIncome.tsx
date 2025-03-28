@@ -7,7 +7,6 @@ import classNames from 'classnames';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants';
 import { InviteFriend, UserReferrals } from '../Modal';
-
 import { ReferralCard } from '../ReferralCard/ReferralCard';
 import {
   useGetCurrentUsersReferralsQuery,
@@ -35,35 +34,50 @@ export const IncreaseIncome = () => {
     [visibleReferralsAll],
   );
 
-  const profileQueries = profileIdsAll.map(profileId => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useGetUserProfileInfoByIdQuery(profileId);
-  });
+  // Используем один хук для всех запросов
+  const [trigger, { data: profileData }] = useGetUserProfileInfoByIdQuery();
 
   useEffect(() => {
-    if (profileQueries.every(query => !query.isLoading && query.data)) {
-      const profiles = profileQueries.map(query => query.data!);
+    const fetchProfiles = async () => {
+      const profiles: UserProfileInfoResponseDTO[] = [];
+      for (const profileId of profileIdsAll) {
+        try {
+          const result = await trigger(profileId);
+          if (result.data) {
+            profiles.push(result.data);
+          }
+        } catch (err) {
+          console.error('Failed to fetch profile', err);
+        }
+      }
       setProfilesData(profiles);
-    }
-  }, [profileQueries]);
+    };
 
-  const { totalSubscribers, subscribersForSecondLevel } = useMemo(() => {
-    const totalSubscribers = profilesData.reduce((sum, profile) => sum + profile.subscribers, 0);
-    const subscribersForSecondLevel = profilesData.reduce(
-      (sum, profile) => sum + profile.subscribers_for_second_level_referrals,
+    if (profileIdsAll.length > 0) {
+      fetchProfiles();
+    }
+  }, [profileIdsAll, trigger]);
+
+  const { totalSubscribers, subscribersForFirstLevel, subscribersForSecondLevel } = useMemo(() => {
+    const subscribersForFirstLevel = profilesData.reduce(
+      (sum, profile) => sum + (profile.subscribers_for_first_level_referrals || 0),
       0,
     );
-    return { totalSubscribers, subscribersForSecondLevel };
+    const subscribersForSecondLevel = profilesData.reduce(
+      (sum, profile) => sum + (profile.subscribers_for_second_level_referrals || 0),
+      0,
+    );
+    const totalSubscribers = subscribersForFirstLevel + subscribersForSecondLevel;
+    return { totalSubscribers, subscribersForFirstLevel, subscribersForSecondLevel };
   }, [profilesData]);
-
-  const sumSubscribers = totalSubscribers + subscribersForSecondLevel;
 
   return (
     <>
       <h2 className={s.headerIncrease}>
         <span className={s.textName}>{t('p2')}</span>
         <span className={s.badge}>
-          +{formatAbbreviation(sumSubscribers, 'number', { locale: locale })} <img src={peeps} alt="Количество peeps" />
+          +{formatAbbreviation(totalSubscribers, 'number', { locale: locale })}{' '}
+          <img src={peeps} alt="Количество peeps" />
         </span>
       </h2>
       <section className={s.wrapperIncrease}>
@@ -75,7 +89,7 @@ export const IncreaseIncome = () => {
               <li className={s.listBadge}>
                 <span className={s.badge}>
                   +
-                  {formatAbbreviation(totalSubscribers, 'number', {
+                  {formatAbbreviation(subscribersForFirstLevel, 'number', {
                     locale: locale,
                   })}{' '}
                   <img src={subscribersIcon} alt="Подписчики" />
@@ -155,10 +169,3 @@ export const IncreaseIncome = () => {
     </>
   );
 };
-/*function useQueries(arg0: { queryKey: string[]; queryFn: () => any }[]) {
-  throw new Error('Function not implemented.');
-}
-
-function fetchUserProfile(profile_id: never): any {
-  throw new Error('Function not implemented.');
-}*/
