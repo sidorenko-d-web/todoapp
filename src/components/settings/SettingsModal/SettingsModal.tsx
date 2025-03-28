@@ -31,8 +31,8 @@ export const SettingsModal = () => {
     }
   };
 
-  const handleToggleSound = () => {
-    console.log('toggle sound');
+  const handleOpenSoundSettings = () => {
+    openModal(MODALS.SOUND_SETTINGS);
   };
 
   return (
@@ -53,7 +53,7 @@ export const SettingsModal = () => {
           <img className={styles.arrow} src={ArrowRight} alt="" />
         </div>
 
-        <div className={styles.childModalWrapper} onClick={handleToggleSound}>
+        <div className={styles.childModalWrapper} onClick={handleOpenSoundSettings}>
           <div className={styles.titleAndIcon}>{t('s8')}</div>
           <img className={styles.arrow} src={ArrowRight} alt="" />
         </div>

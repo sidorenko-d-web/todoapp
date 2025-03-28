@@ -13,7 +13,7 @@ import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
 import clsx from 'clsx';
 import WhiteNoiseCanvas from '../components/WhiteNoise/WhiteNoise';
 import { StrangerHeader } from '../components/profile/StrangerHeader';
-
+import { SoundSettingsModal } from '../components/settings/SoundSettingsModal';
 const Layout = () => {
   const location = useLocation();
   const platform = getOS();
@@ -108,7 +108,8 @@ const Layout = () => {
           <SettingsModal />
           <WalletConnectionModal />
           <LanguageSelectionModal />
-          <AudioBg />
+          <SoundSettingsModal />
+          {/*<AudioBg />*/}
         </main>
         <Footer />
       </div>
