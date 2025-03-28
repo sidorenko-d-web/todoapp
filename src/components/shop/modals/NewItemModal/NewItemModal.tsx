@@ -1,5 +1,5 @@
 import styles from './NewItemModal.module.scss';
-import { AppRoute, MODALS, SOUNDS, itemStoreString, svgHeadersString } from '../../../../constants';
+import { AppRoute, MODALS, SOUNDS, buildLink, buildMode, svgHeadersString } from '../../../../constants';
 import { useAutoPlaySound, useModal } from '../../../../hooks';
 import { IShopItem } from '../../../../redux';
 import Button from '../partials/Button';
@@ -35,6 +35,9 @@ export const NewItemModal: React.FC = () => {
 
   useAutoPlaySound(MODALS.NEW_ITEM, SOUNDS.upgradeOrBuyItem);
 
+  
+  const getImage = (url: string) => buildMode === 'production' ? buildLink()?.svgShop(url).replace('https://', 'https://storage.yandexcloud.net/') : buildLink()?.svgShop(url)  + svgHeadersString
+
   return (
     <CentralModal title={t('s43')} onClose={() => closeModal(MODALS.NEW_ITEM)} modalId={MODALS.NEW_ITEM}>
       <div className={styles.images}>
@@ -48,7 +51,7 @@ export const NewItemModal: React.FC = () => {
           <img
             src={
               state.args?.mode === 'item'
-                ? itemStoreString(state.args?.item.image_url ?? '')
+                ? getImage(state.args?.item.image_url ?? '')
                 : state.args?.item.image_url + svgHeadersString
             }
             alt="item-image"

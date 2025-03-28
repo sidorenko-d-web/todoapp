@@ -26,6 +26,7 @@ type CategorizedSkins = {
 };
 
 export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
+  const dpi = window.devicePixelRatio;
   const { t } = useTranslation('wardrobe');
   const { data: inventorySkinsData, isLoading } = useGetInventorySkinsQuery();
   const [activeTab, setActiveTab] = useState('head');
@@ -103,8 +104,8 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
     if (!sceneRef.current || isLoading) return;
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
-      width: 280,
-      height: 280,
+      width: 280 * dpi,
+      height: 280 * dpi,
       scene: [SpineScene],
       transparent: true,
       plugins: {

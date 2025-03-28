@@ -25,9 +25,11 @@ const StorePage: FC = () => {
     data: shop,
     isLoading: isShopLoading,
     isFetching: isShopFetching,
+    isSuccess,
   } = useGetShopItemsQuery({
-    item_category: shopCategory?.value as TypeItemCategory,
+    item_category: shopCategory?.value,
     level: 1,
+    item_rarity: itemsRarity?.value,
     item_premium_level: 'base',
     is_bought: false,
   });
@@ -47,7 +49,7 @@ const StorePage: FC = () => {
       ) : !(isShopLoading || isShopFetching) && (!shopCategory || !itemsRarity) ? (
         <p style={{ color: '#282830' }}>{t('s61')}</p>
       ) : shopCategory?.title !== t('s6') ? (
-        !shop?.items || shop?.items.length === 0 ? (
+        shop?.items?.length === 0 || !isSuccess ? (
           <p className={styles.emptyText}>{t('s37')}</p>
         ) : (
           <ItemsTab shopCategory={shopCategory} shopItems={shop?.items} />
