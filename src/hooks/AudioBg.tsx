@@ -25,15 +25,15 @@ export const AudioBg = () => {
   }, [volume, track]);
 
   useEffect(() => {
-    document.addEventListener('click', () => playAudio());
+    document.addEventListener('click', playAudio);
     return () => {
-      document.removeEventListener('click', () => playAudio());
+      document.removeEventListener('click', playAudio);
     };
   }, []);
 
   return (
-    <iframe id="audio" style={{ display: 'none' }}>
+    <div style={{ display: 'none' }}>
       <audio autoPlay ref={audioRef} id={'audio'} loop />
-    </iframe>
+    </div>
   );
 };

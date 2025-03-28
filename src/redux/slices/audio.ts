@@ -33,7 +33,7 @@ export const selectVolume = (state: { audioSlice: initialState }) =>
 export const selectTrack = (state: { audioSlice: initialState }) =>
   state.audioSlice.track;
 export const selectButtonVolume = (state: { audioSlice: initialState }) =>
-  state.audioSlice.track;
+  state.audioSlice.buttonVolume;
 
 export const { setVolume, setTrack, setButtonVolume } = audioSlice.actions;
 export const audioReducer = audioSlice.reducer;

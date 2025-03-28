@@ -1,13 +1,17 @@
 import { MODALS } from "../../../constants/modals";
 import { useModal } from "../../../hooks/useModal";
 import styles from "./SoundSettingsModal.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import tick from "../../../assets/icons/input-tick.svg";
 import circle from "../../../assets/icons/circle-blue.svg";
 import { useTranslation } from 'react-i18next';
 import { CentralModal } from "../../shared";
-import { useDispatch } from 'react-redux';
-import { setVolume } from '../../../redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectVolume, setButtonVolume, setVolume } from '../../../redux';
+
+// Ключи для localStorage
+const MUSIC_ENABLED_KEY = 'musicEnabled';
+const SOUND_EFFECTS_ENABLED_KEY = 'soundEffectsEnabled';
 
 interface SoundOptionProps {
     title: string;
@@ -44,13 +48,47 @@ export const SoundSettingsModal = () => {
     const { t } = useTranslation('settings');
     const { closeModal } = useModal();
     const dispatch = useDispatch();
-    const [isMusicEnabled, setIsMusicEnabled] = useState(true);
-    const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+    const currentVolume = useSelector(selectVolume);
+    
+    // Инициализация с сохраненными значениями из localStorage
+    const [isMusicEnabled, setIsMusicEnabled] = useState(() => {
+        const saved = localStorage.getItem(MUSIC_ENABLED_KEY);
+        return saved !== null ? saved === 'true' : currentVolume > 0;
+    });
+    
+    const [isSoundEnabled, setIsSoundEnabled] = useState(() => {
+        const saved = localStorage.getItem(SOUND_EFFECTS_ENABLED_KEY);
+        return saved !== null ? saved === 'true' : true;
+    });
+
+    // При первом рендере применяем сохраненные настройки
+    useEffect(() => {
+        dispatch(setVolume(isMusicEnabled ? 0.5 : 0));
+        dispatch(setButtonVolume(isSoundEnabled ? 2.1 : 0));
+    }, []);
 
     const handleCloseModal = () => {
         closeModal(MODALS.SOUND_SETTINGS);
-        // Применяем настройки звука
-        dispatch(setVolume(isMusicEnabled ? 0.5 : 0));
+    };
+
+    const toggleMusic = () => {
+        const newValue = !isMusicEnabled;
+        setIsMusicEnabled(newValue);
+        
+        // Сразу применяем настройки звука
+        dispatch(setVolume(newValue ? 0.5 : 0));
+        // Сохраняем в localStorage
+        localStorage.setItem(MUSIC_ENABLED_KEY, String(newValue));
+    };
+
+    const toggleSoundEffects = () => {
+        const newValue = !isSoundEnabled;
+        setIsSoundEnabled(newValue);
+        
+        // Сразу применяем настройки звуковых эффектов
+        dispatch(setButtonVolume(newValue ? 2.1 : 0));
+        // Сохраняем в localStorage
+        localStorage.setItem(SOUND_EFFECTS_ENABLED_KEY, String(newValue));
     };
 
     return (
@@ -66,12 +104,12 @@ export const SoundSettingsModal = () => {
                     <SoundOption
                         title={t('s9')}
                         isEnabled={isMusicEnabled}
-                        onToggle={() => setIsMusicEnabled(!isMusicEnabled)}
+                        onToggle={toggleMusic}
                     />
                     <SoundOption
                         title={t('s10')}
                         isEnabled={isSoundEnabled}
-                        onToggle={() => setIsSoundEnabled(!isSoundEnabled)}
+                        onToggle={toggleSoundEffects}
                     />
                 </div>
 
