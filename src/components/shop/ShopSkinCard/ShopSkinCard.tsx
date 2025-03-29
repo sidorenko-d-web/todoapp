@@ -22,6 +22,7 @@ import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 import ListDisableIcon from '../../../assets/icons/list-disable.svg';
+import useUsdtPayment from '../../../hooks/useUsdtPayment';
 
 interface Props {
   item: IShopSkin;
@@ -50,6 +51,32 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
       console.error(error);
     }
   };
+
+  const { processPayment, isLoading: isUsdtLoading } = useUsdtPayment();
+
+  const handleUsdtPayment = async () => {
+    try {
+      await processPayment(Number(item.price_usdt), async (result) => {
+        if (result.success) {
+          const res = await buySkin({
+            id: item.id,
+            payment_method: 'usdt',
+            transaction_id: result.transactionHash,
+            sender_address: result.senderAddress
+          });
+
+          if (!res.error) {
+            openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
+          } else {
+            throw new Error(JSON.stringify(res.error));
+          }
+        }
+      });
+    } catch (err) {
+      console.error('Error in USDT payment flow:', err);
+    }
+  };
+
 
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
@@ -123,7 +150,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
           </Button>
         ) : mode === 'shop' ? (
           <>
-            <Button className={styles.button} onClick={() => openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' })}>
+            <Button className={styles.button} onClick={handleUsdtPayment}>
               {formatAbbreviation(item.price_usdt, 'currency', { locale: locale })}
             </Button>
             <Button className={styles.priceButton} onClick={handleBuySkin}>

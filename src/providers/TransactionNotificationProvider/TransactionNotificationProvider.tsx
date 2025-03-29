@@ -25,7 +25,7 @@
 //     type: 'progress',
 //     message: ''
 //   });
-  
+
 //   const [timeoutId, setTimeoutId] = useState<number | null>(null);
 //   const { userAddress } = useTonConnect();
 
@@ -82,136 +82,80 @@
 
 
 
+import React, { createContext, ReactNode } from 'react';
+import {useTransactionNotification} from '../../hooks/useTransactionNotification';
+import { TransactionNotification } from '../../components/TransactionNotification/TransactionNotification';
+import { useLocation } from 'react-router-dom';
 
+// Define the context type
+type TransactionNotificationContextType = ReturnType<typeof useTransactionNotification>;
 
+// Create the context with a default value
+export const TransactionNotificationContext = createContext<TransactionNotificationContextType>({
+  notificationType: null,
+  notificationMessage: '',
+  startTransaction: () => { },
+  failTransaction: () => { },
+  completeTransaction: () => { },
+  notEnoughFunds: () => { },
+  closeNotification: () => { },
+  handleRetry: () => { }
+});
 
+// Provider component
+interface TransactionNotificationProviderProps {
+  children: ReactNode;
+}
 
+export const TransactionNotificationProvider: React.FC<TransactionNotificationProviderProps> = ({ children }) => {
+  const notificationState = useTransactionNotification();
+  const {
+    notificationType,
+    notificationMessage,
+    closeNotification,
+    handleRetry
+  } = notificationState;
 
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux';
-import { useUsdtTransactions } from '../../hooks';
-import { TransactionNotification } from '../../components/';
-import { 
-  completeTransaction, 
-  failTransaction, 
-  hideNotification 
-} from '../../redux/slices';
+  const location = useLocation(); // Get the current location
+  const allowedRoutes = ['/', '/shop', '/shop/inventory']; // Define routes where notifications should appear
 
-export const TransactionNotificationProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
-  const dispatch = useDispatch();
-  const { transactions, checkTransaction, refreshTransactions } = useUsdtTransactions();
-  const { 
-    isVisible, 
-    type, 
-    message, 
-    currentTrxId, 
-    retryFunction 
-  } = useSelector((state: RootState) => state.transactionNotification);
-  
-  const [transactionCheckFailed, setTransactionCheckFailed] = useState(false);
+  const shouldShowNotification = allowedRoutes.includes(location.pathname);
 
-  // Auto-hide success notification after 5 seconds
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (isVisible && type === 'new_item') {
-      timer = setTimeout(() => {
-        dispatch(hideNotification());
-      }, 5000);
-    }
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [isVisible, type, dispatch]);
-
-  // Monitor transaction status from transactions list
-  useEffect(() => {
-    if (!currentTrxId || !isVisible || type !== 'progress') return;
-
-    const foundTransaction = transactions.find(tx => tx.orderId === currentTrxId);
-    if (foundTransaction) {
-      if (foundTransaction.status === 'succeeded') {
-        dispatch(completeTransaction({ message: 'Transaction completed successfully!' }));
-        console.log("Transaction completed:", foundTransaction);
-      } else if (foundTransaction.status === 'failed') {
-        dispatch(failTransaction({}));
-        console.log("Transaction failed:", foundTransaction);
-      }
-    }
-  }, [transactions, currentTrxId, dispatch, isVisible, type]);
-
-  // Directly check transaction status when not found in the transactions list
-  useEffect(() => {
-    if (!currentTrxId || !isVisible || type !== 'progress' || transactionCheckFailed) return;
-
-    const checkInterval = setInterval(async () => {
-      try {
-        console.log("Directly checking transaction status for:", currentTrxId);
-        const transaction = await checkTransaction(currentTrxId);
-        
-        if (transaction) {
-          clearInterval(checkInterval);
-          
-          if (transaction.status === 'succeeded') {
-            dispatch(completeTransaction({ message: 'Transaction completed successfully!' }));
-            console.log("Transaction completed:", transaction);
-          } else if (transaction.status === 'failed') {
-            dispatch(failTransaction({}));
-            console.log("Transaction failed:", transaction);
-          }
-        } else {
-          // Manual refresh after check
-          await refreshTransactions();
-        }
-      } catch (error) {
-        console.error("Error checking transaction:", error);
-        setTransactionCheckFailed(true);
-        clearInterval(checkInterval);
-      }
-    }, 5000); // Check every 5 seconds
-
-    // Clear the interval after 2 minutes if transaction is not found
-    const timeoutId = setTimeout(() => {
-      clearInterval(checkInterval);
-      setTransactionCheckFailed(true);
-    }, 2 * 60 * 1000);
-
-    return () => {
-      clearInterval(checkInterval);
-      clearTimeout(timeoutId);
-    };
-  }, [currentTrxId, isVisible, type, checkTransaction, refreshTransactions, dispatch, transactionCheckFailed]);
-
-  const handleRetry = () => {
-    setTransactionCheckFailed(false); // Reset the check failed state
-    if (retryFunction) {
-      retryFunction();
-    }
-  };
-
-  const handleClose = () => {
-    dispatch(hideNotification());
-  };
+  // for main page lift notification up
+  const styles: React.CSSProperties = location.pathname === '/' ? {
+    position: 'fixed',
+    top: 170,
+    right: 0,
+    left: 0,
+    zIndex: 200
+  } : {
+    position: 'fixed',
+    bottom: 110,
+    right: 0,
+    left: 0,
+    zIndex: 200
+  }
 
   return (
-    <>
+    <TransactionNotificationContext.Provider value={notificationState}>
       {children}
-      {isVisible && (
-        // <div style={{ 
-        //   position: 'fixed', 
-        //   bottom: '20px', 
-        //   left: '50%', 
-        //   transform: 'translateX(-50%)',
-        //   zIndex: 1000
-        // }}>
+
+      {/* Render the TransactionNotification directly in the provider */}
+      {notificationType && shouldShowNotification && (
+        <div style={styles}>
           <TransactionNotification
-            type={type}
-            message={message}
-            onClose={handleClose}
+            type={notificationType}
+            message={notificationMessage}
+            onClose={closeNotification}
             onRetry={handleRetry}
           />
-        // </div>
+        </div>
       )}
-    </>
+    </TransactionNotificationContext.Provider>
   );
+};
+
+// Optional: Create a hook for easy context access
+export const useTransactionNotificationContext = () => {
+  return React.useContext(TransactionNotificationContext);
 };

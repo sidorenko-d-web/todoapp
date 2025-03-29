@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
 import { useBuyItemMutation } from '../../../redux';
@@ -15,17 +15,18 @@ import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import CointsGrey from '@icons/cointsGrey.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { useModal, useSendTransaction, useTonConnect, useUsdtTransactions } from '../../../hooks';
+import { useModal, useSendTransaction, useTonConnect } from '../../../hooks';
 import { useTransactionNotification } from '../../../hooks/useTransactionNotification';
-import { buildMode, GUIDE_ITEMS, MODALS, svgHeadersString } from '../../../constants';
+import { GUIDE_ITEMS, MODALS, svgHeadersString, buildMode } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 import classNames from 'classnames';
-import { buildLink } from '../../../constants';
 import { useRoomItemsSlots } from '../../../../translate/items/items';
+import { buildLink } from '../../../constants/buildMode';
+import useUsdtPayment from '../../../hooks/useUsdtPayment';
 
 interface Props {
   disabled?: boolean;
@@ -86,92 +87,30 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     }
   };
 
-  //// for transactions
-  // const { walletAddress, connectWallet } = useTonConnect();
-  // const { startTransaction, failTransaction, completeTransaction } = useTransactionNotification();
-  // const handleUsdtPayment = async () => {
-
-  //   if (!walletAddress) {
-  //     const connected = await connectWallet();
-  //     if (!connected) {
-  //       setError('Wallet connection timed out');
-  //       failTransaction(handleUsdtPayment);
-  //       return;
-  //     }
-  //   }
-
-  //   try {
-  //     setError('');
-  //     startTransaction();
-  //     const trxId = await sendUSDT(1);
-  //     setCurrentTrxId(trxId || '');
-  //   } catch (error) {
-  //     console.log('Error while sending USDT transaction', error);
-  //     failTransaction(handleUsdtPayment);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const latestTransaction = usdtTransactions[0];
-  //   console.error('Transactions', latestTransaction);
-  //   console.warn("Trx id: ", currentTrxId)
-  //   if (!latestTransaction || latestTransaction.orderId !== currentTrxId) return;
-
-  //   if (latestTransaction.status === 'succeeded') {
-  //     completeTransaction();
-  //   } else {
-  //     failTransaction(handleUsdtPayment);
-  //   }
-  // }, [usdtTransactions, currentTrxId]);
-
-
-  const { 
-    startTransaction, 
-    failTransaction, 
-    setCurrentTrxId 
-  } = useTransactionNotification();
-  
-  // For transactions
-  const { sendUSDT } = useSendTransaction();
-  const { walletAddress, connectWallet } = useTonConnect();
+  const { processPayment, isLoading: isUsdtLoading } = useUsdtPayment();
 
   const handleUsdtPayment = async () => {
-    if (!walletAddress) {
-      try {
-        const connected = await connectWallet();
-        if (!connected) {
-          setError('Wallet connection timed out');
-          return;
-        }
-      } catch (error) {
-        console.error("Error connecting wallet:", error);
-        setError('Failed to connect wallet');
-        return;
-      }
-    }
-
     try {
-      setError('');
-      // Start the transaction notification
-      startTransaction('Processing your payment...');
-      
-      console.log("Initiating USDT payment...");
-      const trxId = await sendUSDT(1);
-      
-      if (trxId) {
-        console.log("Transaction initiated with ID:", trxId);
-        setCurrentTrxId(trxId);
-        
-        // After setting the transaction ID in the state, you could also manually
-        // push this "pending" transaction to your local state if needed
-      } else {
-        console.error("Failed to get transaction ID");
-        failTransaction(handleUsdtPayment);
-      }
-    } catch (error) {
-      console.error('Error while sending USDT transaction:', error);
-      setError('Transaction failed: ' + (error instanceof Error ? error.message : String(error)));
-      failTransaction(handleUsdtPayment);
+      await processPayment(Number(item.price_usdt), async (result) => {
+        if (result.success) {
+          console.warn("Transaction info:", "hash:", result.transactionHash, "senderAddress:", result.senderAddress);
+          const res = await buyItem({
+            id: item.id,
+            payment_method: 'usdt',
+            transaction_id: result.transactionHash,
+            sender_address: result.senderAddress
+          });
+
+          if (!res.error) {
+            openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
+          } else {
+            throw new Error(JSON.stringify(res.error));
+          }
+        }
+      });
+    } catch (err) {
+      console.error('Error in USDT payment flow:', err);
+      setError(err instanceof Error ? err.message : String(err));
     }
   };
 

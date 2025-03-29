@@ -117,6 +117,8 @@ export type UpgradeItemResponse = {
 export interface IBuyItemRequest {
   payment_method: 'internal_wallet' | 'usdt';
   id: string;
+  transaction_id?: string
+  sender_address?: string
 }
 
 export interface IAchievementBoost {

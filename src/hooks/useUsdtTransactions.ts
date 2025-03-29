@@ -168,7 +168,7 @@ function parseUsdtPayload(tx: Transaction): UsdtTransaction | undefined {
   }
 }
 
-// Direct method to check a specific transaction
+// // Direct method to check a specific transaction
 const checkSpecificTransaction = async (
   tonClient: TonClient,
   jettonMasterAddress: Address,

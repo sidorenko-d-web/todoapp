@@ -6,7 +6,7 @@ import Lottie from 'lottie-react';
 import { useTranslation } from 'react-i18next';
 
 interface TransactionNotificationProps {
-  type: 'progress' | 'error' | 'new_item';
+  type: 'progress' | 'error' | 'new_item' | "not_enough_funds";
   message: string;
   onClose?: () => void;
   onRetry?: () => void;
@@ -19,7 +19,9 @@ export const TransactionNotification: React.FC<TransactionNotificationProps> = (
     <div className={styles.transactionIndicator}>
       <div className={`${styles.transactionIndicator__content} 
         ${type === 'error' ? styles.error : ''} 
-        ${type === 'new_item' ? styles.success : ''}`}
+        ${type === 'new_item' ? styles.success : ''}
+        ${type === 'not_enough_funds' ? styles.error : ''}
+        `}
       >
         {type === 'error' ? (
           <>
@@ -28,12 +30,16 @@ export const TransactionNotification: React.FC<TransactionNotificationProps> = (
               <img src={refresh} alt="Retry transaction" />
             </button>
           </>
+        ) : type === 'not_enough_funds' ? (
+          <>
+            <span>{t('t4')}</span>
+          </>
         ) : type === 'new_item' ? (
           <>
             <div className={styles.checkIcon}>
               <TickCircle />
             </div>
-            <span>{message}</span>
+            <span>{t("t3")}</span>
           </>
         ) : (
           <>
@@ -43,7 +49,7 @@ export const TransactionNotification: React.FC<TransactionNotificationProps> = (
               autoplay={true}
               className={styles.lottie}
             />
-            <span>{message}</span>
+            <span>{t("t1")}</span>
           </>
         )}
       </div>

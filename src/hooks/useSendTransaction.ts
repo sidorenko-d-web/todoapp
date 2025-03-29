@@ -1,6 +1,6 @@
 import { CHAIN } from "@tonconnect/ui-react";
 import { useCallback } from "react";
-import { toNano, Transaction} from "@ton/core";
+import { toNano} from "@ton/core";
 
 import { JettonMaster } from "@ton/ton";
 import { JettonWallet } from "../utils/JettonWallet";
@@ -16,7 +16,6 @@ export const useSendTransaction = ():
 {
   sendTON: (amount: number) => void;
   sendUSDT: (amount: number) => Promise<string | undefined>;
-  getTransactions: () => Promise<Transaction[] | undefined>;
 } => {
 
   const {
@@ -57,7 +56,6 @@ export const useSendTransaction = ():
     }
   };
 
-
   const sendUSDT = useCallback(async (amount: number) => {
     try {
       if (!tonClient || !walletAddress) return;
@@ -66,7 +64,7 @@ export const useSendTransaction = ():
       const usersUsdtAddress = await jettonMaster.getWalletAddress(walletAddress);
 
       const jettonWallet = tonClient.open(JettonWallet.createFromAddress(usersUsdtAddress));
-
+      
       await jettonWallet.sendTransfer(sender, {
         fwdAmount: 1n,
         comment: orderId,
@@ -80,23 +78,8 @@ export const useSendTransaction = ():
     }
   }, [tonClient, walletAddress, sender]);
 
-  const getTransactions = async () => {
-    const transactions: Transaction[] | undefined = await tonClient?.getTransactions(
-      receiverAddress,
-      {
-        limit: 10
-      }
-    )
-
-    if (transactions) {
-      return transactions
-    }
-    return undefined
-  }
-
   return {
     sendTON,
     sendUSDT,
-    getTransactions
   };
 }
