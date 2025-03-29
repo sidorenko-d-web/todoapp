@@ -15,8 +15,7 @@ import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import CointsGrey from '@icons/cointsGrey.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { useModal, useSendTransaction, useTonConnect } from '../../../hooks';
-import { useTransactionNotification } from '../../../hooks/useTransactionNotification';
+import { useModal } from '../../../hooks';
 import { GUIDE_ITEMS, MODALS, svgHeadersString, buildMode } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../../utils';
@@ -46,10 +45,6 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const { data: pointsUser } = useGetProfileMeQuery();
 
   const buyButtonGlowing = useSelector((state: RootState) => state.guide.buyItemButtonGlowing);
-  //// for transactions
-  // const { sendUSDT } = useSendTransaction();
-  // const usdtTransactions = useUsdtTransactions();
-  // const [currentTrxId, setCurrentTrxId] = useState('');
 
   const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal;
 
@@ -87,7 +82,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     }
   };
 
-  const { processPayment, isLoading: isUsdtLoading } = useUsdtPayment();
+  const { processPayment } = useUsdtPayment();
 
   const handleUsdtPayment = async () => {
     try {
@@ -102,6 +97,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
           });
 
           if (!res.error) {
+            void handleEquipItem();
             openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
           } else {
             throw new Error(JSON.stringify(res.error));

@@ -108,7 +108,7 @@ const Layout = () => {
           <SettingsModal />
           <WalletConnectionModal />
           <LanguageSelectionModal />
-          {/* <AudioBg /> */}
+          <AudioBg />
         </main>
         <Footer />
       </div>

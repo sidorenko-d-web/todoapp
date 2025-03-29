@@ -144,6 +144,7 @@ import { useSendTransaction } from './useSendTransaction';
 import { useUsdtTransactions } from './useUsdtTransactions';
 import { useTransactionNotificationContext } from '../providers/TransactionNotificationProvider';
 import { MAINNET_USDT_MASTER_ADDRESS } from '../constants/addresses';
+import {v4 as uuidv4} from "uuid"
 
 interface PaymentResult {
   success: boolean;
@@ -212,13 +213,13 @@ export const useUsdtPayment = () => {
         // Send USDT transaction (with a small delay to ensure notification is visible)
         setTimeout(async () => {
           try {
-            const trxId = await sendUSDT(amount);
-
-            console.log('Transaction ID obtained:', trxId);
-            setCurrentTrxId(trxId || '');
+            const orderId = uuidv4()
+            await sendUSDT(amount, orderId);
+            console.log('Transaction ID obtained:', orderId);
+            setCurrentTrxId(orderId);
 
             // Check transaction status
-            checkTransactionStatus(trxId || '', onSuccess);
+            checkTransactionStatus(orderId, onSuccess);
           } catch (error) {
             console.error('Error while sending USDT transaction', error);
             failTransaction(() => processPayment(amount, onSuccess));

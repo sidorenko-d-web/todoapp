@@ -52,7 +52,7 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
     }
   };
 
-  const { processPayment, isLoading: isUsdtLoading } = useUsdtPayment();
+  const { processPayment } = useUsdtPayment();
 
   const handleUsdtPayment = async () => {
     try {
@@ -66,7 +66,8 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
           });
 
           if (!res.error) {
-            openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
+            shopApi.util.resetApiState();
+            openModal(MODALS.NEW_ITEM, { item: item, mode: 'skin' });
           } else {
             throw new Error(JSON.stringify(res.error));
           }

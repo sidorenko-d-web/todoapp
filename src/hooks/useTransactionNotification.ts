@@ -103,7 +103,9 @@ import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const useTransactionNotification = () => {
-  const [notificationType, setNotificationType] = useState<'progress' | 'error' | 'new_item' | "not_enough_funds" | null>(null);
+  const [notificationType, setNotificationType] = useState<
+    'progress' | 'error' | 'new_item' | 'not_enough_funds' | null
+  >(null);
   const [notificationMessage, setNotificationMessage] = useState<string>('');
   const [retryCallback, setRetryCallback] = useState<(() => void) | null>(null);
   const { t } = useTranslation('transaction');
@@ -120,6 +122,11 @@ export const useTransactionNotification = () => {
   const startTransaction = useCallback(() => {
     setNotificationType('progress');
     setNotificationMessage(t('t1') || 'Processing transaction...');
+
+    // Auto-hide not enough funds notification after 3 seconds
+    setTimeout(() => {
+      setNotificationType(null);
+    }, 60 * 1000);
   }, [t]);
 
   // Show transaction error
@@ -154,7 +161,7 @@ export const useTransactionNotification = () => {
     setTimeout(() => {
       setNotificationType(null);
     }, 3000);
-  }, [])
+  }, []);
 
   // Close notification
   const closeNotification = useCallback(() => {
@@ -179,5 +186,4 @@ export const useTransactionNotification = () => {
     handleRetry,
   };
 };
-
 

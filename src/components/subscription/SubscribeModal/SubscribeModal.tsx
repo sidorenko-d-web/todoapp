@@ -94,7 +94,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
     }
   };
 
-  const { processPayment, isLoading: isUsdtLoading } = useUsdtPayment();
+  const { processPayment } = useUsdtPayment();
 
   const handleUsdtPayment = async () => {
     try {
@@ -109,11 +109,13 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
             return;
           }
           setSubscriptionPurchased();
-          buySubscription({ payment_method: 'usdt', transaction_id: result.transactionHash, sender_address: result.senderAddress })
+          const res = await buySubscription({ payment_method: 'usdt', transaction_id: result.transactionHash, sender_address: result.senderAddress })
             .unwrap()
             .then(() => {
               onSuccess();
             });
+
+          console.warn("Buy response:", res)
           if (!isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN)) {
             openModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
           }
@@ -164,9 +166,8 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
             {formatAbbreviation(1, 'currency')}
           </Button>
           <Button
-            className={`${s.button} ${
-              !buyBtnGlowing && isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) ? s.glowing : ''
-            }`}
+            className={`${s.button} ${!buyBtnGlowing && isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) ? s.glowing : ''
+              }`}
             disabled={!!isSubscriptionPurchased || !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)}
             onClick={() => handleBuySubscription('internal_wallet')}
           >

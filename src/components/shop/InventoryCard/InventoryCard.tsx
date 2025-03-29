@@ -204,7 +204,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 
-  const { processPayment, isLoading: isUsdtLoading } = useUsdtPayment();
+  const { processPayment } = useUsdtPayment();
 
   const handleUsdtPayment = async () => {
     try {
@@ -219,7 +219,41 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           })
 
           if (!res.error) {
-            openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
+            try {
+              setIsUpdateLoading(true);
+              const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
+              localStorage.setItem('giftName', res.data?.chest.chest_name || '');
+        
+              if (!res.error) {
+                playLvlSound();
+                refetch();
+                refetchEquipped();
+                if (item.item_premium_level === 'pro') {
+                  openModal(MODALS.UPGRADED_SHOP, {
+                    item,
+                    isYellow: item.item_rarity === 'red',
+                  });
+                } else {
+                  if (res.data.level % 10 === 0) {
+                    localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
+                    localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
+                  }
+        
+                  openModal(MODALS.UPGRADED_ITEM, {
+                    item: res.data,
+                    mode: 'item',
+                    reward: 'reward of item',
+                  });
+                }
+              }
+            } catch (error) {
+              console.log(error);
+            } finally {
+              await refetchEquipped().then(() => {
+                setIsUpdateLoading(false);
+              });
+              //setIsUpdateLoading(false);
+            }
           } else {
             throw new Error(JSON.stringify(res.error));
           }
