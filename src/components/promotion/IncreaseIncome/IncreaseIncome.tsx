@@ -45,7 +45,8 @@ export const IncreaseIncome = () => {
       const profiles = profileQueries.map(query => query.data!);
       setProfilesData(profiles);
     }
-  }, [profileQueries]);
+  // }, [profileQueries]); couses react error
+}, []);
 
   const { totalSubscribers, subscribersForSecondLevel } = useMemo(() => {
     const totalSubscribers = profilesData.reduce((sum, profile) => sum + profile.subscribers, 0);

@@ -29,9 +29,11 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
 
   const dispatch = useDispatch();
 
+  const dpi = window.devicePixelRatio ?? 1;
+
   useEffect(() => {
     if (!sceneRef.current || character?.isLoading) return;
-    const width = sceneRef.current.offsetWidth;
+    const width = sceneRef.current.offsetWidth * dpi;
     const contextProps = { equipped_items: room?.equipped_items, center: width / 2 };
 
     class SpineScene extends SpineSceneBase {
@@ -101,14 +103,20 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
 
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
-      width: width,
-      height: sceneRef.current.offsetHeight,
+      width: window.innerWidth * window.devicePixelRatio,
+      height: window.innerHeight * window.devicePixelRatio,
       transparent: true,
       scene: [SpineScene],
+      canvasStyle: `width: ${window.innerWidth}px; height: ${window.innerHeight}px`,
+      autoRound: false, // Отключаем округление размеров
       plugins: {
         scene: [{ key: 'player', plugin: SpinePlugin, mapping: 'spine' }],
       },
       parent: 'player',
+      render: {
+        antialias: true,
+        antialiasGL: true,
+      },
     };
 
     gameRef.current = new Phaser.Game(config);

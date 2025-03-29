@@ -19,7 +19,7 @@ export const AudioBg = () => {
   };
 
   useEffect(() => {
-    if (!audioRef.current || audioRef.current.src) return;
+    if (!audioRef.current) return;
     audioRef.current.volume = volume;
     audioRef.current.src = track === 1 ? bgAudio1 : track === 2 ? bgAudio2 : bgAudio3;
   }, [volume, track]);
