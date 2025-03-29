@@ -23,12 +23,11 @@ import {
   useGetProfileMeWithPollingQuery,
 } from '../../../redux';
 import { setGuideShown } from '../../../utils';
-import { useEffect } from 'react';
 
 export default function RewardForIntegrationModal() {
   const { t, i18n } = useTranslation('integrations');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { closeModal, getModalState, openModal } = useModal();
+  const { closeModal, getModalState } = useModal();
   const { refetch } = useGetProfileMeWithPollingQuery(undefined, {
     pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
