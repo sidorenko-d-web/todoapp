@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import {
   AccelerateIntegtrationGuide,
   FinishTutorialGuide,
@@ -10,6 +10,7 @@ import {
   PublishIntegrationButton,
   Room,
   SubscrieGuide,
+  TrackedLink,
 } from '../../components';
 import s from './MainPage.module.scss';
 import { AppRoute, GUIDE_ITEMS, MODALS } from '../../constants';
@@ -32,6 +33,7 @@ import {
   useGetIntegrationsQuery,
   useGetInventoryItemsQuery,
   useGetProfileMeQuery,
+  useGetTreeInfoQuery,
   useGetUserQuery,
   useGetUserWelcomeBonusQuery,
 } from '../../redux';
@@ -42,6 +44,9 @@ import { useTranslation } from 'react-i18next';
 
 import { incrementAcceleration } from '../../redux/slices/integrationAcceleration.ts';
 import DaysInARowModal from '../DevModals/DaysInARowModal/DaysInARowModal.tsx';
+import Lottie from 'lottie-react';
+import { giftShake } from '../../assets/animations';
+import { hasAvailableTreeReward } from '../../helpers';
 
 export const MainPage: FC = () => {
   const { t } = useTranslation('guide');
@@ -304,6 +309,7 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(3));
   }, [location.pathname]);
 
+  const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
   useEffect(() => {
@@ -325,6 +331,13 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(3));
   }, []);
 
+  const { data: treeData } = useGetTreeInfoQuery();
+  const showAvailableReward = useMemo(() => {
+    if (treeData) {
+      return hasAvailableTreeReward(treeData.growth_tree_stages);
+    }
+  }, [treeData]);
+
   const isLoading =
     isAllIntegrationsLoading ||
     isCurrentUserProfileInfoLoading ||
@@ -343,6 +356,18 @@ export const MainPage: FC = () => {
 
   return (
     <main className={s.page} onClick={accelerateIntegration}>
+      {!isLoading && showAvailableReward && (
+        <TrackedLink
+          to={AppRoute.ProgressTree}
+          trackingData={{
+            eventType: 'button',
+            eventPlace: 'mainPage tree reward',
+          }}
+        >
+          <Lottie animationData={giftShake} className={s.treeReward} />
+        </TrackedLink>
+      )}
+
       <DaysInARowModal
         onClose={() => {
           if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
