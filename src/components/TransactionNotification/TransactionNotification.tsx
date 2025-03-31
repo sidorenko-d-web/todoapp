@@ -1,7 +1,7 @@
 import styles from './TransactionNotification.module.scss'
 import { coinLoadingAnimation } from '../../assets/animations';
 import refresh from "../../assets/Icons/refresh.svg"
-import { TickCircle } from "../../assets/Icons/tickCircle";
+import { TickCircle } from "../../assets/icons/tickCircle";
 import Lottie from 'lottie-react';
 import { useTranslation } from 'react-i18next';
 
