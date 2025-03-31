@@ -7,7 +7,6 @@ import classNames from 'classnames';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants';
 import { InviteFriend, UserReferrals } from '../Modal';
-
 import { ReferralCard } from '../ReferralCard/ReferralCard';
 import {
   useGetCurrentUsersReferralsQuery,
@@ -18,42 +17,51 @@ import { formatAbbreviation } from '../../../helpers';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
 
+// Вспомогательный хук для множественных запросов
+const useMultipleProfileQueries = (profileIds: string[]) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  return profileIds.map(profileId => useGetUserProfileInfoByIdQuery(profileId, { skip: !profileId }));
+};
+
 export const IncreaseIncome = () => {
   const { t, i18n } = useTranslation('promotion');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
-  const { data, isLoading, error } = useGetCurrentUsersReferralsQuery();
-  const [profilesData, setProfilesData] = useState<UserProfileInfoResponseDTO[]>([]);
 
-  const referrals = data?.referrals || [];
+  // Получаем данные о рефералах
+  const { data: referralsData, isLoading, error } = useGetCurrentUsersReferralsQuery();
+  const referrals = referralsData?.referrals || [];
   const visibleReferrals = referrals.slice(0, 3);
   const visibleReferralsAll = referrals;
   const hiddenReferralsCount = referrals.length - 3;
 
+  // Мемоизируем ID профилей
   const profileIdsAll = useMemo(
     () => visibleReferralsAll.map(referral => referral.character_data.profile_id),
     [visibleReferralsAll],
   );
 
-  const profileQueries = profileIdsAll.map(profileId => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useGetUserProfileInfoByIdQuery(profileId);
-  });
+  // Получаем данные профилей
+  const profileQueries = useMultipleProfileQueries(profileIdsAll);
+  const [profilesData, setProfilesData] = useState<UserProfileInfoResponseDTO[]>([]);
 
+  // Обновляем данные профилей когда все запросы завершены
   useEffect(() => {
-    if (profileQueries.every(query => !query.isLoading && query.data)) {
-      const profiles = profileQueries.map(query => query.data!);
+    const allLoaded = profileQueries.every(query => !query.isLoading && query.data);
+    if (allLoaded) {
+      const profiles = profileQueries.map(query => query.data!).filter(Boolean);
       setProfilesData(profiles);
     }
   }, [profileQueries]);
 
+  // Считаем подписчиков
   const { totalSubscribers, subscribersForFirstLevel, subscribersForSecondLevel } = useMemo(() => {
     const subscribersForFirstLevel = profilesData.reduce(
-      (sum, profile) => sum + profile.subscribers_for_first_level_referrals,
+      (sum, profile) => sum + (profile?.subscribers_for_first_level_referrals || 0),
       0,
     );
     const subscribersForSecondLevel = profilesData.reduce(
-      (sum, profile) => sum + profile.subscribers_for_second_level_referrals,
+      (sum, profile) => sum + (profile?.subscribers_for_second_level_referrals || 0),
       0,
     );
     const totalSubscribers = subscribersForFirstLevel + subscribersForSecondLevel;
@@ -100,9 +108,9 @@ export const IncreaseIncome = () => {
 
         {error && <p>{t('p19')}</p>}
 
-        {data && (
+        {referralsData && (
           <>
-            {data.referrals.length > 0 ? (
+            {referralsData.referrals.length > 0 ? (
               <div className={s.referralsList}>
                 {visibleReferrals.map((referral, index) => (
                   <ReferralCard
@@ -139,7 +147,7 @@ export const IncreaseIncome = () => {
           >
             {t('p6')}
           </TrackedButton>
-          {data && data.referrals.length > 1 && (
+          {referralsData && referralsData.referrals.length > 1 && (
             <TrackedButton
               trackingData={{
                 eventType: 'button',
@@ -158,10 +166,3 @@ export const IncreaseIncome = () => {
     </>
   );
 };
-/*function useQueries(arg0: { queryKey: string[]; queryFn: () => any }[]) {
-  throw new Error('Function not implemented.');
-}
-
-function fetchUserProfile(profile_id: never): any {
-  throw new Error('Function not implemented.');
-}*/
