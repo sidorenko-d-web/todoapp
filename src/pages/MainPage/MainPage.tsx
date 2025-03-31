@@ -356,7 +356,7 @@ export const MainPage: FC = () => {
 
   return (
     <main className={s.page} onClick={accelerateIntegration}>
-      {showAvailableReward && (
+      {!isLoading && showAvailableReward && (
         <TrackedLink to={AppRoute.ProgressTree} trackingData={{
           eventType: 'button',
           eventPlace: 'mainPage tree reward',
