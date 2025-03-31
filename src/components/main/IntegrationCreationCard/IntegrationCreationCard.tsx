@@ -25,7 +25,7 @@ const INTEGRATION_ID_KEY = 'integration_id';
 export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration, refetchIntegration }) => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
-
+  console.log(integration);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const accelerationRef = useRef(false);
   const lastUpdateRef = useRef(Date.now());
@@ -144,7 +144,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [getValidatedTimeLeft]);
+  }, []);
 
   const handleAccelerateClick = useCallback(() => {
     if (isExpired) return;

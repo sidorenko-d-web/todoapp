@@ -309,7 +309,6 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(3));
   }, [location.pathname]);
 
-  const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
   useEffect(() => {
@@ -321,6 +320,8 @@ export const MainPage: FC = () => {
   const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
   const { isLoading: isRoomLoading } = useGetEquipedQuery();
   const { data: allIntagration } = useGetAllIntegrationsQuery();
+
+  const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
 
   const hasCreatingIntegrations = !allIntagration?.integrations.some(
     integration =>
@@ -392,7 +393,11 @@ export const MainPage: FC = () => {
 
       <Room mode="me" />
 
-      {hasCreatingIntegrations ? <IntegrationCreation /> : <PublishIntegrationButton />}
+      {hasCreatingIntegrations || isIntegrationReadyForPublishing ? (
+        <IntegrationCreation />
+      ) : (
+        <PublishIntegrationButton />
+      )}
 
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) ||
