@@ -50,6 +50,8 @@ export const MainPage: FC = () => {
   const reduxDispatch = useDispatch();
   const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
 
+  const { data: profileData, isLoading: isCurrentUserProfileInfoLoading } = useGetProfileMeQuery();
+
   const location = useLocation();
 
 
@@ -79,7 +81,7 @@ export const MainPage: FC = () => {
 
 
   useEffect(() => {
-    if (itemsData && !isInventoryDataLoading) {
+    if (itemsData && !isInventoryDataLoading && profileData && !isCurrentUserProfileInfoLoading) {
 
       if (itemsData.count > 0) {
         setTypewriterFound(true);
@@ -100,17 +102,19 @@ export const MainPage: FC = () => {
         reduxDispatch(resetGuideState());
 
       } else {
-        setRerender((prev) => prev + 1);
-        Object.values(GUIDE_ITEMS).forEach(category => {
-          Object.values(category).forEach(value => {
-            localStorage.setItem(value, '0');
-            console.log('GUIDE... ', value)
+        if (profileData.subscription_integrations_left === 0) {
+          setRerender((prev) => prev + 1);
+          Object.values(GUIDE_ITEMS).forEach(category => {
+            Object.values(category).forEach(value => {
+              localStorage.setItem(value, '0');
+              console.log('GUIDE... ', value)
+            });
           });
-        });
-        setRerender((prev) => prev + 1);
+          setRerender((prev) => prev + 1);
+        }
       }
     }
-  }, [itemsData, isInventoryDataLoading, typewriterFound]);
+  }, [itemsData, isInventoryDataLoading, typewriterFound, profileData, isCurrentUserProfileInfoLoading]);
 
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
@@ -315,7 +319,6 @@ export const MainPage: FC = () => {
   }, [isPublishedModalClosed, isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)]);
 
 
-  const { isLoading: isCurrentUserProfileInfoLoading } = useGetProfileMeQuery();
   const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
   const { isLoading: isRoomLoading } = useGetEquipedQuery();
 
