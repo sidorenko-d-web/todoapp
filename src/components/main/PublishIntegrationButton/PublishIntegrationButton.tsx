@@ -29,6 +29,8 @@ export const PublishIntegrationButton: React.FC = () => {
   const { openModal } = useModal();
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
+  const isFirstIntegrationReady = useSelector((state: RootState) => state.guide.firstIntegrationReadyToPublish);
+
   const [publishIntegration] = usePublishIntegrationMutation();
   const { data: allIntegrations, refetch } = useGetAllIntegrationsQuery();
   const [isPublishing, setIsPublishing] = useState(false);
@@ -79,59 +81,85 @@ export const PublishIntegrationButton: React.FC = () => {
 
   const handlePublish = async () => {
     setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-    if (isPublishing || isTimeUpdating) return;
+    if (isPublishing || isTimeUpdating && !isFirstIntegrationReady) return;
 
     setIsPublishing(true);
 
     try {
 
-      await refetch().unwrap();
+      if (isFirstIntegrationReady) {
+        const firstIntegrationID = localStorage.getItem('firstIntegrationId');
 
-      const integrationToPublish = allIntegrations?.integrations.find(int => {
-        return int.status === 'created' || (int.status === 'creating' && int.time_left === 0);
-      });
+        const publishRes = await publishIntegration(firstIntegrationID!);
+        if (!publishRes.error) {
 
-      if (!integrationToPublish) {
-        console.error('No publishable integrations found');
-        setIsPublishing(false);
-        return;
-      }
+          const company = integrationData?.campaign;
+          if (company) {
+            const { base_income, base_views, base_subscribers } = publishRes.data;
 
-      const integrationIdToPublish = integrationToPublish.id;
-      dispatch(setLastIntegrationId(integrationIdToPublish));
-
-      if (integrationToPublish.status === 'creating' && integrationToPublish.time_left === 0) {
-        setIsTimeUpdating(true);
-        try {
-          await updateTimeLeft({
-            integrationId: integrationIdToPublish,
-            timeLeftDelta: 123,
-          }).unwrap();
-          await refetchIntegration();
-        } finally {
-          setIsTimeUpdating(false);
+            openModal(MODALS.INTEGRATION_REWARD, {
+              company,
+              base_income,
+              base_views,
+              base_subscribers,
+            });
+          }
         }
-      }
+      } else {
+        await refetch().unwrap();
 
-      dispatch(setIntegrationReadyForPublishing(false));
-      dispatch(setCreateIntegrationButtonGlowing(false));
+        dispatch(setIntegrationReadyForPublishing(false));
+        dispatch(setCreateIntegrationButtonGlowing(false));
 
-      dispatch(setFirstIntegrationReadyToPublish(false));
-      localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '0');
-      
-      const publishRes = await publishIntegration(integrationIdToPublish);
-      if (!publishRes.error) {
+        dispatch(setFirstIntegrationReadyToPublish(false));
+        localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '0');
+        
+        const integrationToPublish = allIntegrations?.integrations.find(int => {
+          return int.status === 'created' || (int.status === 'creating' && int.time_left === 0);
+        });
 
-        const company = integrationData?.campaign;
-        if (company) {
-          const { base_income, base_views, base_subscribers } = publishRes.data;
+        if (!integrationToPublish) {
+          console.error('No publishable integrations found');
+          setIsPublishing(false);
+          return;
+        }
 
-          openModal(MODALS.INTEGRATION_REWARD, {
-            company,
-            base_income,
-            base_views,
-            base_subscribers,
-          });
+        const integrationIdToPublish = integrationToPublish.id;
+        dispatch(setLastIntegrationId(integrationIdToPublish));
+
+        if (integrationToPublish.status === 'creating' && integrationToPublish.time_left === 0) {
+          setIsTimeUpdating(true);
+          try {
+            await updateTimeLeft({
+              integrationId: integrationIdToPublish,
+              timeLeftDelta: 123,
+            }).unwrap();
+            await refetchIntegration();
+          } finally {
+            setIsTimeUpdating(false);
+          }
+        }
+
+        dispatch(setIntegrationReadyForPublishing(false));
+        dispatch(setCreateIntegrationButtonGlowing(false));
+
+        dispatch(setFirstIntegrationReadyToPublish(false));
+        localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '0');
+
+        const publishRes = await publishIntegration(integrationIdToPublish);
+        if (!publishRes.error) {
+
+          const company = integrationData?.campaign;
+          if (company) {
+            const { base_income, base_views, base_subscribers } = publishRes.data;
+
+            openModal(MODALS.INTEGRATION_REWARD, {
+              company,
+              base_income,
+              base_views,
+              base_subscribers,
+            });
+          }
         }
       }
     } catch (error) {
