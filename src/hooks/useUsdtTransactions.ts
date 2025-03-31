@@ -173,7 +173,6 @@ const checkSpecificTransaction = async (
   tonClient: TonClient,
   jettonMasterAddress: Address,
   receiverAddress: Address,
-  walletAddress: Address,
   orderId: string
 ): Promise<UsdtTransaction | undefined> => {
   try {
@@ -224,7 +223,6 @@ export const useUsdtTransactions = (): {
         tonClient,
         jettonMasterAddress,
         receiverAddress,
-        walletAddress,
         orderId
       );
       

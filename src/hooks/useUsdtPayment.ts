@@ -160,7 +160,7 @@ export const useUsdtPayment = () => {
 
   const { walletAddress, connectWallet } = useTonConnect();
   const { sendUSDT } = useSendTransaction();
-  const { checkTransaction, refreshTransactions } = useUsdtTransactions();
+  const { checkTransaction } = useUsdtTransactions();
   const { startTransaction, failTransaction, completeTransaction, notEnoughFunds } =
     useTransactionNotificationContext();
 

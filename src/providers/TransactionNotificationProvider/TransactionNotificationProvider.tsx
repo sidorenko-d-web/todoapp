@@ -111,7 +111,6 @@ export const TransactionNotificationProvider: React.FC<TransactionNotificationPr
   const notificationState = useTransactionNotification();
   const {
     notificationType,
-    notificationMessage,
     closeNotification,
     handleRetry
   } = notificationState;
@@ -145,7 +144,6 @@ export const TransactionNotificationProvider: React.FC<TransactionNotificationPr
         <div style={styles}>
           <TransactionNotification
             type={notificationType}
-            message={notificationMessage}
             onClose={closeNotification}
             onRetry={handleRetry}
           />

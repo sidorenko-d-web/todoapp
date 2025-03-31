@@ -7,12 +7,11 @@ import { useTranslation } from 'react-i18next';
 
 interface TransactionNotificationProps {
   type: 'progress' | 'error' | 'new_item' | "not_enough_funds";
-  message: string;
   onClose?: () => void;
   onRetry?: () => void;
 }
 
-export const TransactionNotification: React.FC<TransactionNotificationProps> = ({ type, message, onRetry }) => {
+export const TransactionNotification: React.FC<TransactionNotificationProps> = ({ type, onRetry }) => {
   const {t} = useTranslation('transaction')
 
   return (

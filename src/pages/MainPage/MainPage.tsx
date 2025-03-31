@@ -309,7 +309,7 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(3));
   }, [location.pathname]);
 
-  const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
+  // const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
   useEffect(() => {
