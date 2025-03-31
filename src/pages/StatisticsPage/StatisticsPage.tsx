@@ -15,7 +15,7 @@ import { Loader } from '../../components';
 import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
 import { usePushLineStatus } from '../../hooks/usePushLineStatus.ts';
 
-const StatisticsPage: FC = () => {
+export const StatisticsPage: FC = () => {
   // Все хуки вызываются на верхнем уровне
   const { t, i18n } = useTranslation('statistics');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
@@ -110,4 +110,3 @@ const StatisticsPage: FC = () => {
   );
 };
 
-export default StatisticsPage;

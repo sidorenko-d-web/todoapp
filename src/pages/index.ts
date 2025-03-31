@@ -8,3 +8,5 @@ export * from './WardrobePage';
 export * from './StrangerRoomPage';
 export * from './StrangerProfilePage';
 export * from './ProgressTreePage';
+export * from './StatisticsPage';
+export * from './ShopPage';
