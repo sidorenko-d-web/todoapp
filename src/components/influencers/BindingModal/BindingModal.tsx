@@ -66,15 +66,15 @@ export const BindingModal = ({ modalId, onClose, binding, onNext }: BindingModal
           setValue('');
           onNext();
         } else {
-          setError(t('promotion:errors.invalid_phone')); // Можно добавить перевод
+          setError(t('p67'));
         }
       }
     } catch (err) {
       const error = err as { status: number; data?: { message?: string } };
       if (error.status === 409) {
-        setError(t('promotion:errors.email_already_used'));
+        setError(t('p69'));
       } else {
-        setError(error.data?.message || t('promotion:errors.confirmation_error'));
+        setError(error.data?.message || t('p68'));
       }
     }
   };
@@ -103,7 +103,7 @@ export const BindingModal = ({ modalId, onClose, binding, onNext }: BindingModal
             <label>{binding.inputLabel}</label>
             <div className={s.inputWrapper}>
               <input
-                type="tel"
+                type="text"
                 value={value}
                 onChange={e => {
                   setValue(e.target.value);

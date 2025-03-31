@@ -51,8 +51,8 @@ export const TopInfluencers = () => {
   const progressBar = userData?.is_email_verified
     ? '50%'
     : userData?.is_phone_verified && userData?.is_superuser
-      ? '100%'
-      : '0%';
+    ? '100%'
+    : '0%';
 
   return (
     <>
