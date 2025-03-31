@@ -33,6 +33,10 @@ interface GuideState {
   openDaysInARow: boolean;
 
   itemUpgraded: boolean;
+
+  firstIntegrationReadyToPublish: boolean;
+
+  firstIntegrationId: string
 }
 
 const initialState: GuideState = {
@@ -66,7 +70,11 @@ const initialState: GuideState = {
 
   openDaysInARow: false,
 
-  itemUpgraded: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED)
+  itemUpgraded: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED),
+
+  firstIntegrationReadyToPublish: localStorage.getItem('FIRST_INTEGRATION_READY_TO_PUBLISH') === '1',
+
+  firstIntegrationId: ''
 };
 
 const guideSlice = createSlice({
@@ -141,6 +149,14 @@ const guideSlice = createSlice({
     setItemUpgraded: (state, action: PayloadAction<boolean>) => {
       state.itemUpgraded = action.payload;
     },
+
+    setFirstIntegrationReadyToPublish: (state, action: PayloadAction<boolean>) => {
+      state.firstIntegrationReadyToPublish = action.payload;
+    },
+
+    setFirstIntegrationId: (state, action: PayloadAction<string>) => {
+      state.firstIntegrationId = action.payload;
+    },
     resetGuideState: (state) => {
       Object.assign(state, {
         subscribeGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN),
@@ -169,11 +185,11 @@ const guideSlice = createSlice({
 
 export const { setGetCoinsGuideShown, setSubscribeGuideShown,
     setShopStatsGlowing, 
-    setBuyItemButtonGlowing,
+    setBuyItemButtonGlowing, setFirstIntegrationId,
     setCreateIntegrationButtonGlowing, 
     setIntegrationCreated, setAccelerateIntegrationGuideClosed,
     setIsPublishedModalClosed, setIntegrationReadyForPublishing, 
-    setElevateIntegrationStats, setItemUpgraded,
+    setElevateIntegrationStats, setItemUpgraded, setFirstIntegrationReadyToPublish,
     setItemBought, setLastIntegrationId, setDimHeader, setGoToShopBtnGlowing, setFirstIntegrationCreating,
     setFooterActive, setActiveFooterItemId, setCommentGlow, resetGuideState, setOpenDaysInARow} = guideSlice.actions;
 export default guideSlice.reducer;

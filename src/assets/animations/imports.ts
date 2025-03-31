@@ -6,6 +6,7 @@ import coins from './coins.json';
 import blick from './treeSquareBlick.json';
 import lamp from './lampTable.json';
 import coin from './coinLoading.json';
+import gift from './gift-shake.json';
 
 
 export const blueLight = blue;
@@ -16,3 +17,4 @@ export const coinsAnim = coins;
 export const giftBlick = blick;
 export const lampTable = lamp;
 export const coinLoadingAnimation = coin;
+export const giftShake = gift;

@@ -15,6 +15,7 @@ import { isGuideShown, isIntegrationCreationButtonGlowing, setGuideShown } from 
 import s from './IntegrationCreation.module.scss';
 import { useTranslation } from 'react-i18next';
 import { UserGuideCreationCard } from '../GuideIntegrationCreationCard/GuideIntegrationCreationCard.tsx';
+import { useCallback } from 'react';
 
 export const IntegrationCreation = () => {
   const { t } = useTranslation('integrations');
@@ -26,17 +27,22 @@ export const IntegrationCreation = () => {
   const { data: profile } = useGetProfileMeQuery();
   const { data: integrations, isLoading } = useGetIntegrationsQuery(
     { status: 'creating' },
-    {
-      pollingInterval: 10 * 60 * 1000,
-    },
+    { pollingInterval: 10 * 60 * 1000 },
   );
 
   const { data: integration, refetch: refetchIntegration } = useGetIntegrationQuery(
     integrations?.integrations[0]?.id || '',
     {
       skip: !integrations?.integrations[0]?.id,
+      refetchOnMountOrArgChange: true,
     },
   );
+
+  const safeRefetchIntegration = useCallback(() => {
+    if (integrations?.integrations[0]?.id) {
+      refetchIntegration();
+    }
+  }, [integrations?.integrations, refetchIntegration]);
 
   const { openModal, closeModal } = useModal();
 
@@ -85,8 +91,12 @@ export const IntegrationCreation = () => {
             eventType: 'button',
             eventPlace: 'Создать интеграцию - Главный экран',
           }}
-          className={`${s.button} ${(isButtonGlowing || createIntegrationButtonGlowing || btnGlowing)
-             && !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) ? s.glowing : ''}`}
+          className={`${s.button} ${
+            (isButtonGlowing || createIntegrationButtonGlowing || btnGlowing) &&
+            !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)
+              ? s.glowing
+              : ''
+          }`}
           style={{ zIndex: '10000' }}
           disabled={!profile}
           onClick={handleIntegrationCreation}
@@ -103,7 +113,7 @@ export const IntegrationCreation = () => {
 
       {!isLoading && integration && integrations?.integrations?.[0]?.id && !firstIntegrationCreating && (
         <>
-          <IntegrationCreationCard integration={integration} refetchIntegration={refetchIntegration} />
+          <IntegrationCreationCard integration={integration!} refetchIntegration={safeRefetchIntegration} />
         </>
       )}
 

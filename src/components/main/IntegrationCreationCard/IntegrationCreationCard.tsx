@@ -1,8 +1,8 @@
-import { FC, useEffect, useState, useRef } from 'react';
+import { FC, useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
-import { IntegrationResponseDTO, integrationsApi, RootState, selectVolume, setIsWorking } from '../../../redux';
+import { IntegrationResponseDTO, integrationsApi, selectVolume, setIsWorking } from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration } from '../../../hooks';
 import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
@@ -24,93 +24,103 @@ const INTEGRATION_ID_KEY = 'integration_id';
 
 export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration, refetchIntegration }) => {
   const { t } = useTranslation('integrations');
-
   const dispatch = useDispatch();
 
-  const getSavedTimeLeft = () => {
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const accelerationRef = useRef(false);
+  const lastUpdateRef = useRef(Date.now());
+
+  const getValidatedTimeLeft = useCallback(() => {
     const savedIntegrationId = localStorage.getItem(INTEGRATION_ID_KEY);
     const savedTimeLeft = localStorage.getItem(TIME_LEFT_KEY);
-
-    if (savedIntegrationId === integration.id && savedTimeLeft) {
-      return parseInt(savedTimeLeft);
-    }
-    return integration.time_left;
-  };
-
-  const getSavedInitialTimeLeft = () => {
-    const savedIntegrationId = localStorage.getItem(INTEGRATION_ID_KEY);
     const savedInitialTimeLeft = localStorage.getItem(INITIAL_TIME_LEFT_KEY);
 
-    if (savedIntegrationId === integration.id && savedInitialTimeLeft) {
-      return parseInt(savedInitialTimeLeft);
+    if (savedIntegrationId === integration.id && savedTimeLeft && savedInitialTimeLeft) {
+      const initial = parseInt(savedInitialTimeLeft);
+      const current = parseInt(savedTimeLeft);
+
+      return Math.min(current, initial);
     }
     return integration.time_left;
-  };
+  }, [integration.id, integration.time_left]);
 
-  const [timeLeft, setTimeLeft] = useState(getSavedTimeLeft());
-  const [initialTimeLeft] = useState(getSavedInitialTimeLeft());
+  const [timeLeft, setTimeLeft] = useState(() => {
+    const savedTime = getValidatedTimeLeft();
+    return Math.max(savedTime, 0);
+  });
+
+  const [initialTimeLeft] = useState(() => {
+    const savedInitial = localStorage.getItem(INITIAL_TIME_LEFT_KEY);
+    return savedInitial ? parseInt(savedInitial) : integration.time_left;
+  });
+
   const [isExpired, setIsExpired] = useState(timeLeft <= 0);
   const [isAccelerated, setIsAccelerated] = useState(false);
-  const [playAccelerateIntegrationSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
+  const [playAccelerateIntegrationSound] = useSound(SOUNDS.speedUp, {
+    volume: useSelector(selectVolume),
+  });
 
-  const accelerationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const { accelerateIntegration, isAccelerating } = useAccelerateIntegration({
+  const { accelerateIntegration } = useAccelerateIntegration({
     integrationId: integration.id,
     onSuccess: () => {
-      setTimeLeft(integration.time_left);
-      localStorage.setItem(TIME_LEFT_KEY, integration.time_left.toString());
+      const newTimeLeft = integration.time_left;
+      setTimeLeft(newTimeLeft);
+      localStorage.setItem(TIME_LEFT_KEY, newTimeLeft.toString());
     },
   });
+
+  const progress = useMemo(() => {
+    return ((initialTimeLeft - timeLeft) / initialTimeLeft) * 100;
+  }, [initialTimeLeft, timeLeft]);
+
+  const formatTime = useCallback((seconds: number) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${hours}:${minutes < 10 ? `0${minutes}` : minutes}:${secs < 10 ? `0${secs}` : secs}`;
+  }, []);
+
+  const formattedTime = useMemo(() => formatTime(timeLeft), [formatTime, timeLeft]);
 
   useEffect(() => {
     localStorage.setItem(INTEGRATION_ID_KEY, integration.id);
     localStorage.setItem(INITIAL_TIME_LEFT_KEY, initialTimeLeft.toString());
-  }, []);
-
-  useEffect(() => {
-    dispatch(setIntegrationCreating(true));
-  }, []);
-
-  useEffect(() => {
     localStorage.setItem(TIME_LEFT_KEY, timeLeft.toString());
-  }, [timeLeft]);
 
-  const [acceleration, setAcceleration] = useState(0);
-  const reduxAcceleration = useSelector((state: RootState) => state.acceleration.acceleration);
+    dispatch(setIntegrationCreating(true));
+    dispatch(setIsWorking(true));
 
-  useEffect(() => {
-    if (acceleration != reduxAcceleration) {
-      handleAccelerateClick();
-      setAcceleration(reduxAcceleration);
-    }
-  }, [reduxAcceleration]);
+    const updateTimer = () => {
+      const now = Date.now();
+      const diff = Math.floor((now - lastUpdateRef.current) / 1000);
 
-  const calculateProgress = () => {
-    return ((initialTimeLeft - timeLeft) / initialTimeLeft) * 100;
-  };
-
-  const [progress, setProgress] = useState(calculateProgress());
-
-  useEffect(() => {
-    setProgress(calculateProgress());
-  }, [timeLeft]);
-
-  useEffect(() => {
-    return () => {
-      if (accelerationTimeoutRef.current) {
-        clearTimeout(accelerationTimeoutRef.current);
+      if (diff > 0) {
+        lastUpdateRef.current = now;
+        setTimeLeft(prev => {
+          const newTime = Math.max(prev - diff, 0);
+          localStorage.setItem(TIME_LEFT_KEY, newTime.toString());
+          return newTime;
+        });
       }
     };
-  }, []);
+
+    timerRef.current = setInterval(updateTimer, 1000);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      dispatch(setIntegrationCreating(false));
+      dispatch(setIsWorking(false));
+    };
+  }, [integration.id, initialTimeLeft, dispatch]);
 
   useEffect(() => {
-    if (timeLeft <= 0) {
-      if (!isExpired) void accelerateIntegration(3600);
+    if (timeLeft <= 0 && !isExpired) {
       setIsExpired(true);
-      dispatch(integrationsApi.util.invalidateTags(['Integrations']));
+      void accelerateIntegration(3600).finally(() => {
+        dispatch(integrationsApi.util.invalidateTags(['Integrations']));
+      });
     }
-  }, [timeLeft, accelerateIntegration, dispatch]);
+  }, [timeLeft, isExpired, accelerateIntegration, dispatch]);
 
   // useEffect(() => {
   //   if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET)) {
@@ -120,78 +130,61 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   // }, []);
 
   useEffect(() => {
-    dispatch(setIsWorking(true));
-    const timerId = setInterval(() => {
-      setTimeLeft(prevTime => {
-        const newTime = Math.max(prevTime - 1, 0);
-        // Save to localStorage on each tick
-        localStorage.setItem(TIME_LEFT_KEY, newTime.toString());
-        return newTime;
-      });
-    }, 1000);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        const savedTime = getValidatedTimeLeft();
+        const timePassed = Math.floor((Date.now() - lastUpdateRef.current) / 1000);
+        const correctedTime = Math.max(savedTime - timePassed, 0);
 
-    if (isExpired) {
-      dispatch(setIntegrationCreating(false));
-      dispatch(setIsWorking(false));
-      clearInterval(timerId);
-    }
-
-    return () => {
-      clearInterval(timerId);
+        setTimeLeft(correctedTime);
+        localStorage.setItem(TIME_LEFT_KEY, correctedTime.toString());
+        lastUpdateRef.current = Date.now();
+      }
     };
-  }, [isExpired, dispatch]);
 
-  const formatTime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return `${hours}:${minutes < 10 ? `0${minutes}` : minutes}:${secs < 10 ? `0${secs}` : secs}`;
-  };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [getValidatedTimeLeft]);
 
-  const handleAccelerateClick = () => {
-    if (!isExpired) {
-      playAccelerateIntegrationSound();
-      dispatch(setLastIntegrationId(integration.id));
-      void accelerateIntegration(1);
-      createParticles();
+  const handleAccelerateClick = useCallback(() => {
+    if (isExpired) return;
 
-      if (accelerationTimeoutRef.current) {
-        clearTimeout(accelerationTimeoutRef.current);
-      }
+    accelerationRef.current = true;
+    playAccelerateIntegrationSound();
+    dispatch(setLastIntegrationId(integration.id));
 
-      if (!isAccelerated) {
-        setIsAccelerated(true);
-      }
-
-      accelerationTimeoutRef.current = setTimeout(() => {
-        setIsAccelerated(false);
-        accelerationTimeoutRef.current = null;
-      }, 2000);
-
+    void accelerateIntegration(1).finally(() => {
       refetchIntegration();
-    }
-  };
+    });
 
-  const createParticles = () => {
+    setIsAccelerated(true);
+    createParticles();
+
+    const timeoutId = setTimeout(() => {
+      setIsAccelerated(false);
+      accelerationRef.current = false;
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, [isExpired, playAccelerateIntegrationSound, dispatch, integration.id, accelerateIntegration, refetchIntegration]);
+
+  const createParticles = useCallback(() => {
     const button = document.querySelector(`.${s.iconButton}`);
-    const progressBar = document.querySelector(`.${s.progressBar}`);
-
-    if (!button || !progressBar) return;
+    if (!button) return;
 
     for (let i = 0; i < 5; i++) {
       const particle = document.createElement('div');
       particle.classList.add(s.particle);
       button.appendChild(particle);
 
-      setTimeout(() => {
-        particle.remove();
-      }, 800);
+      setTimeout(() => particle.remove(), 800);
     }
-  };
+  }, []);
 
   if (isExpired) {
     dispatch(setIntegrationReadyForPublishing(true));
     dispatch(setLastIntegrationId(integration.id));
+
     if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
     }
@@ -211,7 +204,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
           <div className={s.infoHeader}>
             <span>{t('i11')}...</span>
             <span>
-              {t('i12')} {formatTime(timeLeft)}
+              {t('i12')} {formattedTime}
             </span>
           </div>
           <div className={s.progressBar}>
@@ -221,11 +214,11 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
         <TrackedButton
           trackingData={{
             eventType: 'button',
-            eventPlace: `Ускорить создание интеграции - Главный экран`,
+            eventPlace: 'Ускорить создание интеграции - Главный экран',
           }}
           className={s.iconButton}
           onClick={handleAccelerateClick}
-          disabled={isExpired || isAccelerating}
+          disabled={isExpired}
           aria-label={t('i24')}
         >
           <img src={rocketIcon} alt="rocket" />

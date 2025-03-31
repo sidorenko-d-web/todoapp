@@ -2,7 +2,20 @@ import { FC, useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
-import { integrationsApi, profileApi, RootState, selectVolume, setFirstIntegrationCreating, setIntegrationReadyForPublishing, setIsWorking, setLastIntegrationId, useCreateIntegrationMutation, useUpdateTimeLeftMutation } from '../../../redux';
+import {
+  integrationsApi,
+  profileApi,
+  RootState,
+  selectVolume,
+  setFirstIntegrationCreating,
+  setFirstIntegrationId,
+  setFirstIntegrationReadyToPublish,
+  setIntegrationReadyForPublishing,
+  setIsWorking,
+  setLastIntegrationId,
+  useCreateIntegrationMutation,
+  useUpdateTimeLeftMutation,
+} from '../../../redux';
 import s from './GuideIntegrationCreationCard.module.scss';
 import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
 
@@ -11,13 +24,12 @@ import { TrackedButton } from '../..';
 import { isGuideShown, setGuideShown } from '../../../utils';
 import { useTranslation } from 'react-i18next';
 
-
 export const UserGuideCreationCard: FC = () => {
   const dispatch = useDispatch();
   const [hasBorder, setHasBorder] = useState(false);
 
   const { t } = useTranslation('integrations');
-  
+
   const [timeLeft, setTimeLeft] = useState(20);
   const [isExpired, setIsExpired] = useState(false);
   const [isAccelerated, setIsAccelerated] = useState(false);
@@ -52,28 +64,36 @@ export const UserGuideCreationCard: FC = () => {
 
     const timerId = setInterval(() => {
       if (!isPaused) {
-        setTimeLeft((prevTime) => {
-          const newTime = (prevTime <= 10 && prevTime > 0) ? prevTime : Math.max(prevTime - 1, 0);
+        setTimeLeft(prevTime => {
+          const newTime = prevTime <= 10 && prevTime > 0 ? prevTime : Math.max(prevTime - 1, 0);
           if (newTime <= 10 && newTime > 0) setIsPaused(true);
           if (newTime === 0) {
             dispatch(setIsWorking(false));
             clearInterval(timerId);
 
-            if(!isGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED)) {
+            if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED)) {
               setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED);
-              createIntegration(localStorage.getItem('microsolve') || '909f329a-234f-4eca-87ab-0e29973cf8f3').unwrap().then((response) => {
-                if (response.id) {
-                  updateTimeLeft({ integrationId: response.id, timeLeftDelta: 36000 }).unwrap().then(() => {
-                    dispatch(setIntegrationReadyForPublishing(true));
-                    dispatch(setLastIntegrationId(response.id));
-                    dispatch(setFirstIntegrationCreating(false));
-                    dispatch(integrationsApi.util.invalidateTags(['Integrations']));
-                    dispatch(profileApi.util.invalidateTags(['Me']));
-                    setIsExpired(true); 
-                  })
-                }
-              });
-              
+              createIntegration(localStorage.getItem('microsolve') || '909f329a-234f-4eca-87ab-0e29973cf8f3')
+                .unwrap()
+                .then(response => {
+                  if (response.id) {
+                    updateTimeLeft({ integrationId: response.id, timeLeftDelta: 36000 })
+                      .unwrap()
+                      .then(() => {
+                        dispatch(setFirstIntegrationReadyToPublish(true));
+                        localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '1');
+                        dispatch(setFirstIntegrationId(response.id));
+                        localStorage.setItem('firstIntegrationId', response.id);
+
+                        dispatch(setIntegrationReadyForPublishing(true));
+                        dispatch(setLastIntegrationId(response.id));
+                        dispatch(setFirstIntegrationCreating(false));
+                        dispatch(integrationsApi.util.invalidateTags(['Integrations']));
+                        dispatch(profileApi.util.invalidateTags(['Me']));
+                        setIsExpired(true);
+                      });
+                  }
+                });
             }
           }
           return newTime;
@@ -86,15 +106,14 @@ export const UserGuideCreationCard: FC = () => {
     };
   }, [isExpired, isPaused, dispatch, createIntegration, updateTimeLeft]);
 
-  if(isExpired) {
+  if (isExpired) {
     return null;
   }
-
 
   const handleAccelerateClick = () => {
     if (!isExpired) {
       playAccelerateSound();
-      setTimeLeft((prev) => Math.max(prev - 1, 0));
+      setTimeLeft(prev => Math.max(prev - 1, 0));
       createParticles();
       setHasBorder(true);
 
@@ -136,11 +155,10 @@ export const UserGuideCreationCard: FC = () => {
     return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
   };
 
-  useEffect
   return (
     <div className={`${s.integration} ${isAccelerated ? s.accelerated : ''}`}>
       <div className={s.integrationHeader}>
-      <h2 className={s.title}>{t('i10')}</h2>
+        <h2 className={s.title}>{t('i10')}</h2>
         <span className={s.author}>
           Microsolve <img src={dotIcon} height={14} width={14} alt="dot" />
         </span>
@@ -148,8 +166,11 @@ export const UserGuideCreationCard: FC = () => {
       <div className={s.body}>
         <div className={s.info}>
           <div className={s.infoHeader}>
-          <span>{t('i11')}...</span>
-            <span> {t('i12')} {formatTime(timeLeft)}</span>
+            <span>{t('i11')}...</span>
+            <span>
+              {' '}
+              {t('i12')} {formatTime(timeLeft)}
+            </span>
           </div>
           <div className={s.progressBar} style={{ border: hasBorder ? '1px solid #2064C0' : 'none' }}>
             <div className={s.progressBarInner} style={{ width: `${progress}%` }} />

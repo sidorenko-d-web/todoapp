@@ -1,12 +1,13 @@
 @use "../../assets/styles/abstracts" as var;
 
 .transactionIndicator {
-    position: fixed;
-    bottom: 10px;
-    left: 0;
-    right: 0;
-    z-index: 50;
-    margin: 0px 10px 85px;
+    // position: fixed;
+    // bottom: 10px;
+    // left: 0;
+    // right: 0;
+    z-index: 200;
+    // margin: 0px 10px 100px;
+    margin: 0px 10px 0px;
 
     border-radius: 12px;
     border: 2px solid #282830;
@@ -18,7 +19,6 @@
     user-select: none; /* Prevents text selection */
     -webkit-user-select: none;
     -webkit-touch-callout: none; /* Prevents iOS callout */
-
 
     &__content {
         display: flex;
@@ -63,7 +63,7 @@
                 fill: #219653;
             }
         }
-        
+
         span {
             font-size: 16px;
         }

@@ -1,12 +1,11 @@
 import { CHAIN } from "@tonconnect/ui-react";
 import { useCallback } from "react";
-import { toNano, Transaction} from "@ton/core";
+import { toNano} from "@ton/core";
 
 import { JettonMaster } from "@ton/ton";
 import { JettonWallet } from "../utils/JettonWallet";
 
 import { useTonConnect } from "./useTonConnect";
-import { useGenerateId } from "./useGenerateId";
 import { TESTNET_USDT_MASTER_ADDRESS, TESTNET_RECEIVER_ADDRESS, MAINNET_RECEIVER_ADDRESS, MAINNET_USDT_MASTER_ADDRESS } from "../constants/addresses";
 import { calculateUsdtAmount } from "../helpers";
 
@@ -15,8 +14,7 @@ import { calculateUsdtAmount } from "../helpers";
 export const useSendTransaction = ():
 {
   sendTON: (amount: number) => void;
-  sendUSDT: (amount: number) => Promise<string | undefined>;
-  getTransactions: () => Promise<Transaction[] | undefined>;
+  sendUSDT: (amount: number, orderId: string) => Promise<string | undefined>;
 } => {
 
   const {
@@ -26,7 +24,6 @@ export const useSendTransaction = ():
     walletAddress,
     tonConnectUI
   } = useTonConnect()
-  const orderId = useGenerateId();
 
   const jettonMasterAddress = network === CHAIN.TESTNET ? TESTNET_USDT_MASTER_ADDRESS: MAINNET_USDT_MASTER_ADDRESS
   const receiverAddress = network === CHAIN.TESTNET ? TESTNET_RECEIVER_ADDRESS: MAINNET_RECEIVER_ADDRESS
@@ -57,16 +54,17 @@ export const useSendTransaction = ():
     }
   };
 
-
-  const sendUSDT = useCallback(async (amount: number) => {
+  const sendUSDT = useCallback(async (amount: number, orderId: string): Promise<string | undefined> => {
     try {
       if (!tonClient || !walletAddress) return;
+
+      console.warn("Ton client:", tonClient.parameters)
 
       const jettonMaster = tonClient.open(JettonMaster.create(jettonMasterAddress));
       const usersUsdtAddress = await jettonMaster.getWalletAddress(walletAddress);
 
       const jettonWallet = tonClient.open(JettonWallet.createFromAddress(usersUsdtAddress));
-
+      
       await jettonWallet.sendTransfer(sender, {
         fwdAmount: 1n,
         comment: orderId,
@@ -74,29 +72,13 @@ export const useSendTransaction = ():
         toAddress: receiverAddress,
         value: toNano('0.038'),
       });
-      return orderId
     } catch (error) {
       console.log('Error during transaction check:', error);
     }
   }, [tonClient, walletAddress, sender]);
 
-  const getTransactions = async () => {
-    const transactions: Transaction[] | undefined = await tonClient?.getTransactions(
-      receiverAddress,
-      {
-        limit: 10
-      }
-    )
-
-    if (transactions) {
-      return transactions
-    }
-    return undefined
-  }
-
   return {
     sendTON,
     sendUSDT,
-    getTransactions
   };
 }
