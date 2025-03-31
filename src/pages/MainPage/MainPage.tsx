@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import {
   AccelerateIntegtrationGuide,
   FinishTutorialGuide,
@@ -10,6 +10,7 @@ import {
   PublishIntegrationButton,
   Room,
   SubscrieGuide,
+  TrackedLink,
 } from '../../components';
 import s from './MainPage.module.scss';
 import { AppRoute, GUIDE_ITEMS, MODALS } from '../../constants';
@@ -32,6 +33,7 @@ import {
   useGetIntegrationsQuery,
   useGetInventoryItemsQuery,
   useGetProfileMeQuery,
+  useGetTreeInfoQuery,
   useGetUserQuery,
   useGetUserWelcomeBonusQuery,
 } from '../../redux';
@@ -42,6 +44,9 @@ import { useTranslation } from 'react-i18next';
 
 import { incrementAcceleration } from '../../redux/slices/integrationAcceleration.ts';
 import DaysInARowModal from '../DevModals/DaysInARowModal/DaysInARowModal.tsx';
+import Lottie from 'lottie-react';
+import { giftShake } from '../../assets/animations';
+import { hasAvailableTreeReward } from '../../helpers';
 
 export const MainPage: FC = () => {
   const { t } = useTranslation('guide');
@@ -49,6 +54,8 @@ export const MainPage: FC = () => {
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
   const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
+
+  const { data: profileData, isLoading: isCurrentUserProfileInfoLoading } = useGetProfileMeQuery();
 
   const location = useLocation();
 
@@ -65,7 +72,7 @@ export const MainPage: FC = () => {
   const setRerender = useState(0)[1];
   //не убирать, нужно, чтобы гайды правильно отображались
 
-  const [typewriterFound, setTypewriterFound] = useState(false);
+  const [ typewriterFound, setTypewriterFound ] = useState(false);
   const { data: itemsData, isLoading: isInventoryDataLoading } = useGetInventoryItemsQuery();
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
@@ -75,11 +82,11 @@ export const MainPage: FC = () => {
     if (integrationCurrentlyCreating) {
       reduxDispatch(setDimHeader(false));
     }
-  }, [integrationCurrentlyCreating]);
+  }, [ integrationCurrentlyCreating ]);
 
 
   useEffect(() => {
-    if (itemsData && !isInventoryDataLoading) {
+    if (itemsData && !isInventoryDataLoading && profileData && !isCurrentUserProfileInfoLoading) {
 
       if (itemsData.count > 0) {
         setTypewriterFound(true);
@@ -98,15 +105,21 @@ export const MainPage: FC = () => {
         setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
 
         reduxDispatch(resetGuideState());
+
       } else {
-        Object.entries(GUIDE_ITEMS).forEach(([items]) => {
-          Object.entries(items).forEach(([_, value]) => {
-            localStorage.setItem(value, '0');
+        if (profileData.subscription_integrations_left === 0) {
+          setRerender((prev) => prev + 1);
+          Object.values(GUIDE_ITEMS).forEach(category => {
+            Object.values(category).forEach(value => {
+              localStorage.setItem(value, '0');
+              console.log('GUIDE... ', value);
+            });
           });
-        });
+          setRerender((prev) => prev + 1);
+        }
       }
     }
-  }, [itemsData, isInventoryDataLoading, typewriterFound]);
+  }, [ itemsData, isInventoryDataLoading, typewriterFound, profileData, isCurrentUserProfileInfoLoading ]);
 
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
@@ -163,7 +176,33 @@ export const MainPage: FC = () => {
         }
       }
     }
-  }, [data, isInventoryDataLoading]);
+  }, [ data, isInventoryDataLoading ]);
+
+  useEffect(() => {
+    if (data) {
+      if (data.count === 0) {
+        if (itemsData) {
+          if (itemsData.count > 0) {
+            // MainPage items
+            setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT);
+            setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.mainPage.MAIN_PAGE_GUIDE_FINISHED);
+
+            // ShopPage items
+            setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
+            setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
+            setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+          }
+        }
+
+      }
+    }
+  }, [ data, isAllIntegrationsLoading, itemsData, isInventoryDataLoading ]);
 
   useEffect(() => {
     if (isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
@@ -194,7 +233,7 @@ export const MainPage: FC = () => {
         }
       }
     });
-  }, [data, isAllIntegrationsLoading]);
+  }, [ data, isAllIntegrationsLoading ]);
   // const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
   // const showAccelerateGuide = localStorage.getItem('integrationCreated') === 'true';
 
@@ -205,7 +244,7 @@ export const MainPage: FC = () => {
     if (creatingIntegrationModalState.isOpen) {
       closeModal(MODALS.SUBSCRIBE);
     }
-  }, [creatingIntegrationModalState.isOpen]);
+  }, [ creatingIntegrationModalState.isOpen ]);
 
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(3));
@@ -272,7 +311,7 @@ export const MainPage: FC = () => {
 
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(3));
-  }, [location.pathname]);
+  }, [ location.pathname ]);
 
 
   const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
@@ -282,16 +321,22 @@ export const MainPage: FC = () => {
     if (isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
       openModal(MODALS.DAYS_IN_A_ROW);
     }
-  }, [isPublishedModalClosed, isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)]);
+  }, [ isPublishedModalClosed, isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) ]);
 
 
-  const { isLoading: isCurrentUserProfileInfoLoading } = useGetProfileMeQuery();
   const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
   const { isLoading: isRoomLoading } = useGetEquipedQuery();
 
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(3));
   }, []);
+
+  const { data: treeData } = useGetTreeInfoQuery();
+  const showAvailableReward = useMemo(() => {
+    if (treeData) {
+      return hasAvailableTreeReward(treeData.growth_tree_stages);
+    }
+  }, [ treeData ]);
 
   const isLoading =
     isAllIntegrationsLoading ||
@@ -311,6 +356,15 @@ export const MainPage: FC = () => {
 
   return (
     <main className={s.page} onClick={accelerateIntegration}>
+      {showAvailableReward && (
+        <TrackedLink to={AppRoute.ProgressTree} trackingData={{
+          eventType: 'button',
+          eventPlace: 'mainPage tree reward',
+        }}>
+          <Lottie animationData={giftShake} className={s.treeReward} />
+        </TrackedLink>
+      )}
+
       <DaysInARowModal onClose={() => {
         if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
           closeModal(MODALS.DAYS_IN_A_ROW);
@@ -336,24 +390,24 @@ export const MainPage: FC = () => {
       {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) ||
+          !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) ||
         (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) ||
         (firstIntegrationCreating &&
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
-          <div
-            style={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              top: '0',
-              left: '0',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              pointerEvents: 'none',
-              zIndex: '500',
-            }}
-          />
-        )}
+        <div
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            top: '0',
+            left: '0',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            pointerEvents: 'none',
+            zIndex: '500',
+          }}
+        />
+      )}
 
       <InitialGuide
         onClose={() => {
