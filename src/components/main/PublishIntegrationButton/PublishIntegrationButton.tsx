@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
 import {
   setCreateIntegrationButtonGlowing,
+  setFirstIntegrationReadyToPublish,
   setIntegrationReadyForPublishing,
   setLastIntegrationId,
 } from '../../../redux/slices/guideSlice.ts';
@@ -83,6 +84,7 @@ export const PublishIntegrationButton: React.FC = () => {
     setIsPublishing(true);
 
     try {
+
       await refetch().unwrap();
 
       const integrationToPublish = allIntegrations?.integrations.find(int => {
@@ -114,8 +116,12 @@ export const PublishIntegrationButton: React.FC = () => {
       dispatch(setIntegrationReadyForPublishing(false));
       dispatch(setCreateIntegrationButtonGlowing(false));
 
+      dispatch(setFirstIntegrationReadyToPublish(false));
+      localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '0');
+      
       const publishRes = await publishIntegration(integrationIdToPublish);
       if (!publishRes.error) {
+
         const company = integrationData?.campaign;
         if (company) {
           const { base_income, base_views, base_subscribers } = publishRes.data;
