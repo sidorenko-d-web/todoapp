@@ -309,8 +309,10 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(3));
   }, [location.pathname]);
 
-  const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
+
+  const firstIntegrationReadyToPublish = useSelector((state: RootState) => state.guide.firstIntegrationReadyToPublish);
+
 
   useEffect(() => {
     if (isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
@@ -320,9 +322,8 @@ export const MainPage: FC = () => {
 
   const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
   const { isLoading: isRoomLoading } = useGetEquipedQuery();
-  const { data: allIntagration } = useGetAllIntegrationsQuery();
 
-  const hasCreatingIntegrations = !allIntagration?.integrations.some(
+  const hasCreatingIntegrations = !data?.integrations.some(
     integration =>
       integration.status === 'created' || (integration.status === 'creating' && integration.time_left === 0),
   );
@@ -392,7 +393,7 @@ export const MainPage: FC = () => {
 
       <Room mode="me" />
 
-      {hasCreatingIntegrations ? <IntegrationCreation /> : <PublishIntegrationButton />}
+      {hasCreatingIntegrations && !firstIntegrationReadyToPublish ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) ||

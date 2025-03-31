@@ -29,7 +29,9 @@ export const GUIDE_ITEMS = {
 
         FIRST_INTEGRATION_CREATED: 'firstIntegrationCreated',
 
-        PUSHLINE_MODAL_OPENED: 'pushlineModalOpened'
+        PUSHLINE_MODAL_OPENED: 'pushlineModalOpened',
+
+        FIRST_INTEGRATION_READY_TO_PUBLISH: 'firstIntegrationReadyToPublish'
     },
 
     integrationPage: {

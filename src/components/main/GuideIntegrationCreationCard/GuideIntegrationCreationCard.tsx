@@ -8,6 +8,8 @@ import {
   RootState,
   selectVolume,
   setFirstIntegrationCreating,
+  setFirstIntegrationId,
+  setFirstIntegrationReadyToPublish,
   setIntegrationReadyForPublishing,
   setIsWorking,
   setLastIntegrationId,
@@ -78,6 +80,11 @@ export const UserGuideCreationCard: FC = () => {
                     updateTimeLeft({ integrationId: response.id, timeLeftDelta: 36000 })
                       .unwrap()
                       .then(() => {
+                        dispatch(setFirstIntegrationReadyToPublish(true));
+                        setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_READY_TO_PUBLISH);
+                        dispatch(setFirstIntegrationId(response.id));
+                        localStorage.setItem('firstIntegrationId', response.id);
+
                         dispatch(setIntegrationReadyForPublishing(true));
                         dispatch(setLastIntegrationId(response.id));
                         dispatch(setFirstIntegrationCreating(false));

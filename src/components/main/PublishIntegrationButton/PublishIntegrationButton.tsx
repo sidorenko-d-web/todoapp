@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
 import {
   setCreateIntegrationButtonGlowing,
+  setFirstIntegrationReadyToPublish,
   setIntegrationReadyForPublishing,
   setLastIntegrationId,
 } from '../../../redux/slices/guideSlice.ts';
@@ -83,6 +84,9 @@ export const PublishIntegrationButton: React.FC = () => {
     setIsPublishing(true);
 
     try {
+      dispatch(setFirstIntegrationReadyToPublish(false));
+      localStorage.setItem(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_READY_TO_PUBLISH, '0');
+
       await refetch().unwrap();
 
       const integrationToPublish = allIntegrations?.integrations.find(int => {
