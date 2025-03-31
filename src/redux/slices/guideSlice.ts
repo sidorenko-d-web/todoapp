@@ -72,7 +72,7 @@ const initialState: GuideState = {
 
   itemUpgraded: isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED),
 
-  firstIntegrationReadyToPublish: isGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_READY_TO_PUBLISH),
+  firstIntegrationReadyToPublish: localStorage.getItem('FIRST_INTEGRATION_READY_TO_PUBLISH') === '1',
 
   firstIntegrationId: ''
 };

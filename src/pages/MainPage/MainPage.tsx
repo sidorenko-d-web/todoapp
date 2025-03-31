@@ -178,6 +178,7 @@ export const MainPage: FC = () => {
       if (data.count === 0) {
         if (itemsData) {
           if (itemsData.count > 0) {
+            setRerender((prev) => prev+1);
             // MainPage items
             setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
             setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
@@ -192,6 +193,7 @@ export const MainPage: FC = () => {
             setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
             setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
             setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+            setRerender((prev) => prev+1);
           }
         }
       }

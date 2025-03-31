@@ -81,7 +81,7 @@ export const UserGuideCreationCard: FC = () => {
                       .unwrap()
                       .then(() => {
                         dispatch(setFirstIntegrationReadyToPublish(true));
-                        setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_READY_TO_PUBLISH);
+                        localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '1');
                         dispatch(setFirstIntegrationId(response.id));
                         localStorage.setItem('firstIntegrationId', response.id);
 
