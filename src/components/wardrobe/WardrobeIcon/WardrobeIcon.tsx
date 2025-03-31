@@ -22,7 +22,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
   const { data: character, isLoading } = useGetCharacterQuery();
 
   const personScale = 0.15;
-
+  const dpi = window.devicePixelRatio ?? 1
   useLayoutEffect(() => {
     function updateSize() {
       setSize([window.innerWidth, window.innerHeight]);
@@ -34,7 +34,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
 
   useEffect(() => {
     if (!sceneRef.current || isLoading) return;
-    const width = sceneRef.current.offsetWidth;
+    const width = sceneRef.current.offsetWidth * dpi;
 
     class SpineScene extends WardrobeSpineScene {
       create() {
@@ -47,7 +47,7 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
         }
         spineSceneRef.current = this;
         this.changeSkin(personScale, character);
-        setIsLoaded(true)
+        setIsLoaded(true);
       }
     }
 

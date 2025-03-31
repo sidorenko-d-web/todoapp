@@ -52,7 +52,8 @@ export const IncreaseIncome = () => {
       const profiles = profileQueries.map(query => query.data!).filter(Boolean);
       setProfilesData(profiles);
     }
-  }, [profileQueries]);
+  // }, [profileQueries]); couses react error
+}, []);
 
   // Считаем подписчиков
   const { totalSubscribers, subscribersForFirstLevel, subscribersForSecondLevel } = useMemo(() => {

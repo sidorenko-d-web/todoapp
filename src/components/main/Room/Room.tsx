@@ -1,20 +1,17 @@
 import {
   useGetEquipedByIdQuery,
   useGetEquipedQuery,
-  useGetProfileMeQuery,
   useGetCharacterQuery,
   useGetCharacterByIdQuery,
 } from '../../../redux';
-import { AnimationScene, Floor, Walls } from './partials';
+import { AnimationScene, Coin, Floor, Walls } from './partials';
 import styles from './partials/Partials.module.scss';
 import TreshinaRight from '../../../assets/images/start-room/treshina-right.svg';
 import TreshinaLeft from '../../../assets/images/start-room/treshina-left.svg';
 import Shelf from '../../../assets/images/start-room/shelf.svg';
-import CoinIcon from '../../../assets/icons/coin.png';
 import { getAchivementType } from '../../../helpers';
 import { useRoomItemsSlots } from '../../../../translate/items/items.ts';
-import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfileStats.ts';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Loader } from '../../index.ts';
 import { useLocation } from 'react-router-dom';
 import clsx from 'clsx';
@@ -27,19 +24,8 @@ interface props {
 export const Room = ({ mode, strangerId }: props) => {
   const { data: room, isLoading: isRoomLoading } = useGetEquipedQuery(undefined, { skip: mode === 'stranger' });
   const character = useGetCharacterQuery(undefined, { skip: mode === 'stranger' });
-  const { data } = useGetProfileMeQuery(undefined, {});
 
   const [isLoaded, setIsLoaded] = useState(false);
-
-  const { points: displayedPoints } = useIncrementingProfileStats({
-    profileId: data?.id || '',
-    basePoints: data?.points || '0',
-    baseSubscribers: data?.subscribers || 0,
-    baseTotalViews: data?.total_views || 0,
-    baseTotalEarned: data?.total_earned || '0',
-    futureStatistics: data?.future_statistics,
-    lastUpdatedAt: data?.updated_at,
-  });
 
   const { data: strangerRoom, isLoading: isStrangerLoading } = useGetEquipedByIdQuery(
     { id: strangerId! },
@@ -55,20 +41,6 @@ export const Room = ({ mode, strangerId }: props) => {
 
   const isDefaultWall = !(room ?? strangerRoom)?.equipped_items.find(item => item.slot === RoomItemsSlots.wall.slot);
 
-  const [didIncreased, setDidIncreased] = useState(false);
-
-  const playCoin = useCallback(() => {
-    if (didIncreased && isLoaded) return;
-    setDidIncreased(true);
-    setTimeout(() => {
-      setDidIncreased(false);
-    }, 1150);
-  }, [didIncreased, isLoaded]);
-
-  useEffect(() => {
-    playCoin();
-  }, [displayedPoints]);
-
   const isLoading = useMemo(
     () => !isLoaded || isStrangerLoading || isRoomLoading,
     [isLoaded, isStrangerLoading, isRoomLoading],
@@ -78,8 +50,7 @@ export const Room = ({ mode, strangerId }: props) => {
 
   return (
     <div className={styles.room}>
-      {
-      isLoading && <Loader className={clsx(styles.loader, isIntegrationPage && styles.upper)} />}
+      {isLoading && <Loader className={clsx(styles.loader, isIntegrationPage && styles.upper)} />}
       <AnimationScene
         setIsLoaded={setIsLoaded}
         room={room ?? strangerRoom}
@@ -94,12 +65,11 @@ export const Room = ({ mode, strangerId }: props) => {
           {isDefaultWall && <img className={styles.treshinaRight} src={TreshinaRight} alt="treshina-left" />}
 
           <img className={styles.shelf} src={Shelf} alt="shelf" />
-          {didIncreased && !strangerRoom && <img className={styles.coin} src={CoinIcon} alt="shelf" />}
-
+          <Coin isLoaded={isLoaded} strangerRoom={!!strangerRoom} />
           {achivementType && <img className={styles.reward} src={achivementType?.image} alt="reward" />}
-          <Floor room={room ?? strangerRoom} />
         </>
       )}
+      <Floor room={room ?? strangerRoom} />
     </div>
   );
 };

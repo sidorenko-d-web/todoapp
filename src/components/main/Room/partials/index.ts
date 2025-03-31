@@ -5,3 +5,4 @@ export * from './Chair';
 export * from './Table';
 export * from './Window';
 export * from './AnimationScene';
+export * from './Coin';

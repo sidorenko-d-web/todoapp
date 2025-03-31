@@ -15,7 +15,7 @@
   // inset: auto 0 0 0;
 
   // For telegram
-  bottom: calc(var(--tg-content-safe-area-inset-bottom));
+  bottom: calc(0);
   left: var(--tg-content-safe-area-inset-left);
   right: var(--tg-content-safe-area-inset-right);
 

@@ -52,7 +52,7 @@ export const useRoomItemsSlots = (): RoomItemsSlots => {
     },
     window: {
       slot: 5,
-      name: ['Деревянное окно', 'Окно', 'Двойное окно'],
+      name: ['Деревянное окно', 'Панорамное окно', 'Двухстворчатое окно'],
     },
     poster: {
       slot: 6,
@@ -88,7 +88,7 @@ export const useRoomItemsSlots = (): RoomItemsSlots => {
     },
     mic: {
       slot: 14,
-      name: ['Микрофон петличный', 'Конденсаторный микрофон', 'Микрофон беспроводной'],
+      name: ['Микрофон петличный', 'Микрофон конденсаторный', 'Микрофон беспроводной'],
     },
     photograph: {
       slot: 15,

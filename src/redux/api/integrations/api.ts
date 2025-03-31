@@ -18,6 +18,7 @@ export const integrationsApi = createApi({
         url: `/integrations/${integrationId}`,
         method: 'GET',
       }),
+      keepUnusedDataFor: 5,
     }),
     createIntegration: builder.mutation<IntegrationResponseDTO, string>({
       query: (campaign_id) => ({
