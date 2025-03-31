@@ -15,69 +15,69 @@ export class AccountSubscriptionService {
   /**
    * Get transactions batch (100 transactions). If there is no transactions left returns `hasMore=false` to stop iteration.
    */
-  // async getTransactionsBatch(toLt?: string, lt?: string, hash?: string) {
-  //   const transactions = await retry(() => this.client.getTransactions(this.accountAddress, {
-  //     lt,
-  //     limit: 100,
-  //     hash,
-  //     to_lt: toLt,
-  //     inclusive: false,
-  //     archival: true,
-  //   }), { retries: 10, delay: 1000 });
-
-  //   if (transactions.length === 0) {
-  //     return { hasMore: false, transactions };
-  //   }
-
-  //   const lastTransaction = transactions.at(-1)!;
-
-  //   return {
-  //     hasMore: true,
-  //     transactions,
-  //     lt: lastTransaction.lt.toString(),
-  //     hash: lastTransaction.hash().toString('base64'),
-  //   };
-  // }
-
-  private isErrorState = false;
-  private errorTimeout: NodeJS.Timeout | null = null;
-  
   async getTransactionsBatch(toLt?: string, lt?: string, hash?: string) {
-    if (this.isErrorState) {
-      return { hasMore: false, transactions: [] };
+    const transactions = await retry(() => this.client.getTransactions(this.accountAddress, {
+      lt,
+      limit: 100,
+      hash,
+      to_lt: toLt,
+      inclusive: false,
+      archival: true,
+    }), { retries: 10, delay: 1000 });
+
+    if (transactions.length === 0) {
+      return { hasMore: false, transactions };
     }
-  
-    try {
-      const transactions = await retry(() => this.client.getTransactions(this.accountAddress, {
-        lt,
-        limit: 100,
-        hash,
-        to_lt: toLt,
-        inclusive: false,
-        archival: true,
-      }), { retries: 3, delay: 1000 }); // Reduced retries from 10 to 3
-  
-      return {
-        hasMore: transactions.length > 0,
-        transactions,
-        lt: transactions.at(-1)?.lt.toString(),
-        hash: transactions.at(-1)?.hash().toString('base64'),
-      };
-    } catch (error) {
-      // Enter error state for 1 minute to prevent constant retries
-      this.isErrorState = true;
-      if (this.errorTimeout) {
-        clearTimeout(this.errorTimeout);
-      }
-  
-      this.errorTimeout = setTimeout(() => {
-        this.isErrorState = false;
-      }, 60000);
-  
-      console.warn('Transaction fetch failed, will retry in 1 minute:', error);
-      return { hasMore: false, transactions: [] };
-    }
+
+    const lastTransaction = transactions.at(-1)!;
+
+    return {
+      hasMore: true,
+      transactions,
+      lt: lastTransaction.lt.toString(),
+      hash: lastTransaction.hash().toString('base64'),
+    };
   }
+
+  // private isErrorState = false;
+  // private errorTimeout: NodeJS.Timeout | null = null;
+  
+  // async getTransactionsBatch(toLt?: string, lt?: string, hash?: string) {
+  //   if (this.isErrorState) {
+  //     return { hasMore: false, transactions: [] };
+  //   }
+  
+  //   try {
+  //     const transactions = await retry(() => this.client.getTransactions(this.accountAddress, {
+  //       lt,
+  //       limit: 100,
+  //       hash,
+  //       to_lt: toLt,
+  //       inclusive: false,
+  //       archival: true,
+  //     }), { retries: 3, delay: 1000 }); // Reduced retries from 10 to 3
+  
+  //     return {
+  //       hasMore: transactions.length > 0,
+  //       transactions,
+  //       lt: transactions.at(-1)?.lt.toString(),
+  //       hash: transactions.at(-1)?.hash().toString('base64'),
+  //     };
+  //   } catch (error) {
+  //     // Enter error state for 1 minute to prevent constant retries
+  //     this.isErrorState = true;
+  //     if (this.errorTimeout) {
+  //       clearTimeout(this.errorTimeout);
+  //     }
+  
+  //     this.errorTimeout = setTimeout(() => {
+  //       this.isErrorState = false;
+  //     }, 60000);
+  
+  //     console.warn('Transaction fetch failed, will retry in 1 minute:', error);
+  //     return { hasMore: false, transactions: [] };
+  //   }
+  // }
 
   async subscribeToTransactionUpdate(): Promise<void> {
     let iterationStartLt: string = '';

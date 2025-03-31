@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
 import { useBuyItemMutation } from '../../../redux';
@@ -15,17 +15,17 @@ import SubscriberCoin from '../../../assets/icons/subscriber_coin.svg';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import CointsGrey from '@icons/cointsGrey.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { useModal, useSendTransaction, useTonConnect, useUsdtTransactions } from '../../../hooks';
-import { useTransactionNotification } from '../../../hooks/useTransactionNotification';
-import { buildMode, GUIDE_ITEMS, MODALS, svgHeadersString } from '../../../constants';
+import { useModal } from '../../../hooks';
+import { GUIDE_ITEMS, MODALS, svgHeadersString, buildMode } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 import classNames from 'classnames';
-import { buildLink } from '../../../constants';
 import { useRoomItemsSlots } from '../../../../translate/items/items';
+import { buildLink } from '../../../constants/buildMode';
+import useUsdtPayment from '../../../hooks/useUsdtPayment';
 
 interface Props {
   disabled?: boolean;
@@ -45,10 +45,6 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const { data: pointsUser } = useGetProfileMeQuery();
 
   const buyButtonGlowing = useSelector((state: RootState) => state.guide.buyItemButtonGlowing);
-  // for transactions
-  const { sendUSDT } = useSendTransaction();
-  const usdtTransactions = useUsdtTransactions();
-  const [currentTrxId, setCurrentTrxId] = useState('');
 
   const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal;
 
@@ -86,38 +82,33 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     }
   };
 
-  // for transactions
-  const { walletAddress, connectWallet } = useTonConnect();
-  const { startTransaction, failTransaction, completeTransaction } = useTransactionNotification();
+  const { processPayment } = useUsdtPayment();
+
   const handleUsdtPayment = async () => {
-    if (!walletAddress) {
-      connectWallet();
-      return;
-    }
-
-    openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
-
     try {
-      setError('');
-      startTransaction();
-      const trxId = await sendUSDT(Number(item.price_usdt));
-      setCurrentTrxId(trxId || '');
-    } catch (error) {
-      failTransaction(handleUsdtPayment);
+      await processPayment(Number(item.price_usdt), async (result) => {
+        if (result.success) {
+          console.warn("Transaction info:", "hash:", result.transactionHash, "senderAddress:", result.senderAddress);
+          const res = await buyItem({
+            id: item.id,
+            payment_method: 'usdt',
+            transaction_id: result.transactionHash,
+            sender_address: result.senderAddress
+          });
+
+          if (!res.error) {
+            void handleEquipItem();
+            openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
+          } else {
+            throw new Error(JSON.stringify(res.error));
+          }
+        }
+      });
+    } catch (err) {
+      console.error('Error in USDT payment flow:', err);
+      setError(err instanceof Error ? err.message : String(err));
     }
   };
-
-  useEffect(() => {
-    const latestTransaction = usdtTransactions[0];
-
-    if (!latestTransaction || latestTransaction.orderId !== currentTrxId) return;
-
-    if (latestTransaction.status === 'succeeded') {
-      completeTransaction();
-    } else {
-      failTransaction(handleUsdtPayment);
-    }
-  }, [usdtTransactions, currentTrxId]);
 
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 

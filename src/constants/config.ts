@@ -1,5 +1,5 @@
 // const init_data = window.Telegram.WebApp.initData;
-// const init_data = window.Telegram.WebApp.initDataUnsafe
+const init_data = window.Telegram.WebApp.initDataUnsafe
 // const init_data = WebApp.initData;
 // Андрей dehopen 1301940582
 // const init_data =
@@ -20,11 +20,10 @@
 // Дмитрий
 // const init_data = 'query_id=AAEVZgYoAwAAABVmBihdMq7a&user=%7B%22id%22%3A7113958933%2C%22first_name%22%3A%22%D0%94%D0%BC%D0%B8%D1%82%D1%80%D0%B8%D0%B9%22%2C%22last_name%22%3A%22%D0%A1%D0%B8%D0%B4%D0%BE%D1%80%D0%B5%D0%BD%D0%BA%D0%BE%22%2C%22username%22%3A%22dm1trysidorenko%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FlNf1XkHWreKgWszEAkIC2e7JIdfHmoLxyGKt0kODWIy8iXx4pJuhDZrQ8Xb4BJeU.svg%22%7D&auth_date=1741958671&signature=hE7B0MB41j4Bzx3BovD9OSA8rBrtE2fKckvzYIfdt6SMqWb-c-oJkMp434hu3rx3ePvNWSC35nlrGaoekkFGDw&hash=aee1d7c2c74cd08795ae7e6ed5de5b996099e20851b1705bbe0c1cb95fda7fcc';
 // de geras 6475086298
-const init_data =
-  'query_id%3DAAHa-fEBAwAAANr58QFFg6SM%26user%3D%257B%2522id%2522%253A6475086298%252C%2522first_name%2522%253A%2522%25D0%2590%25D0%25BD%25D0%25B4%25D1%2580%25D0%25B5%25D0%25B9%2522%252C%2522last_name%2522%253A%2522%25D0%2593%25D0%25B5%25D1%2580%25D0%25B0%25D1%2581%25D0%25B8%25D0%25BC%25D0%25BE%25D0%25B2%2522%252C%2522username%2522%253A%2522De_Geras%2522%252C%2522language_code%2522%253A%2522en%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FGzJ9TEsOx7Oc1JJcHr-lzeFQB6alew8O_qoBdhO-6gGt7kZEiGJ6urTqgGlF9_Ye.svg%2522%257D%26auth_date%3D1739263999%26signature%3D6Nc44J8mpAyftuBwiEXHF3YyBtkbAptwj1YO0P99Dhmkpy1G1Nw8wxfR48B22hnqfGPnxxrf9vcSenT5ylpACg%26hash%3D90880b7f94adbd34cac6cd5d023fc5822c26b6d3036709f5dd60f547d2889a2c&tgWebAppVersion=7.2&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22button_text_color%22%3A%22%23ffffff%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22link_color%22%3A%22%23007aff%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22button_color%22%3A%22%23007aff%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22bg_color%22%3A%22%23282828%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%2C%22destructive_text_color%22%3A%22%23ff453a%22%2C%22header_bg_color%22%3A%22%231c1c1c%22%2C%22section_bg_color%22%3A%22%23282828%22%2C%22hint_color%22%3A%22%23ffffff%22%7D';
+// const init_data = 'query_id%3DAAHa-fEBAwAAANr58QFFg6SM%26user%3D%257B%2522id%2522%253A6475086298%252C%2522first_name%2522%253A%2522%25D0%2590%25D0%25BD%25D0%25B4%25D1%2580%25D0%25B5%25D0%25B9%2522%252C%2522last_name%2522%253A%2522%25D0%2593%25D0%25B5%25D1%2580%25D0%25B0%25D1%2581%25D0%25B8%25D0%25BC%25D0%25BE%25D0%25B2%2522%252C%2522username%2522%253A%2522De_Geras%2522%252C%2522language_code%2522%253A%2522en%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FGzJ9TEsOx7Oc1JJcHr-lzeFQB6alew8O_qoBdhO-6gGt7kZEiGJ6urTqgGlF9_Ye.svg%2522%257D%26auth_date%3D1739263999%26signature%3D6Nc44J8mpAyftuBwiEXHF3YyBtkbAptwj1YO0P99Dhmkpy1G1Nw8wxfR48B22hnqfGPnxxrf9vcSenT5ylpACg%26hash%3D90880b7f94adbd34cac6cd5d023fc5822c26b6d3036709f5dd60f547d2889a2c&tgWebAppVersion=7.2&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22button_text_color%22%3A%22%23ffffff%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22link_color%22%3A%22%23007aff%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22button_color%22%3A%22%23007aff%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22bg_color%22%3A%22%23282828%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%2C%22destructive_text_color%22%3A%22%23ff453a%22%2C%22header_bg_color%22%3A%22%231c1c1c%22%2C%22section_bg_color%22%3A%22%23282828%22%2C%22hint_color%22%3A%22%23ffffff%22%7D';
 
 // const referral_id= WebApp.initDataUnsafe.user?.id ?? 0
-// const referral_id = window.Telegram.WebApp.initDataUnsafe.user.id;
+const referral_id = window.Telegram.WebApp.initDataUnsafe.user.id;
 // const referral_id = 1259832544; //Марго
 // const referral_id = 1301940582; //Андрей dehopen
 // const referral_id = 6547551264; //Кирилл А
@@ -32,7 +31,7 @@ const init_data =
 // const referral_id = 6983657401; //Еще акк для тестов
 // const referral_id = 563486774; //Тимур
 // const referral_id = 7113958933;
-const referral_id = 6475086298; //de geras
+// const referral_id = 6475086298; //de geras
 
 const buildMode: 'testDev' | 'test' | 'prodDev' | 'production' = 'test'; //change type of building here
 
