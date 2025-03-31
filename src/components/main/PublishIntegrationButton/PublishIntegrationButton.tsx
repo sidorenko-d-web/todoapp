@@ -93,6 +93,12 @@ export const PublishIntegrationButton: React.FC = () => {
         const publishRes = await publishIntegration(firstIntegrationID!);
         if (!publishRes.error) {
 
+          dispatch(setIntegrationReadyForPublishing(false));
+          dispatch(setCreateIntegrationButtonGlowing(false));
+
+          dispatch(setFirstIntegrationReadyToPublish(false));
+          localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '0');
+
           const company = integrationData?.campaign;
           if (company) {
             const { base_income, base_views, base_subscribers } = publishRes.data;
@@ -108,12 +114,6 @@ export const PublishIntegrationButton: React.FC = () => {
       } else {
         await refetch().unwrap();
 
-        dispatch(setIntegrationReadyForPublishing(false));
-        dispatch(setCreateIntegrationButtonGlowing(false));
-
-        dispatch(setFirstIntegrationReadyToPublish(false));
-        localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '0');
-        
         const integrationToPublish = allIntegrations?.integrations.find(int => {
           return int.status === 'created' || (int.status === 'creating' && int.time_left === 0);
         });
