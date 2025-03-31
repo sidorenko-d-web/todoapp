@@ -3,7 +3,7 @@ import { CHAIN } from '@tonconnect/ui-react';
 import { TonClient } from '@ton/ton';
 import { useTonConnect } from '../../hooks/useTonConnect';
 import { useAsyncInitialize } from '../../hooks/useAsyncInitialize';
-import { getHttpEndpoint } from '@orbs-network/ton-access';
+import { getHttpEndpoint } from "@orbs-network/ton-access"
 
 
 type TonClientProvider = {
@@ -31,7 +31,7 @@ export const TonClientProvider = ({ children }: TonClientProvider) => {
       network: network === CHAIN.MAINNET ? 'mainnet' : 'testnet',
     });
 
-    const tonClient = new TonClient({ endpoint });
+    const tonClient = new TonClient({ endpoint: endpoint });
     setClient(tonClient);
   }, [network]);
 

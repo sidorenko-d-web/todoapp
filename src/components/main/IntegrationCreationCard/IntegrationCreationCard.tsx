@@ -2,7 +2,7 @@ import { FC, useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
-import { IntegrationResponseDTO, integrationsApi, RootState, selectVolume, setIsWorking } from '../../../redux';
+import { IntegrationResponseDTO, integrationsApi, selectVolume, setIsWorking } from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration } from '../../../hooks';
 import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
@@ -83,6 +83,10 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   const formattedTime = useMemo(() => formatTime(timeLeft), [formatTime, timeLeft]);
 
   useEffect(() => {
+    setTimeLeft(integration.time_left);
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem(INTEGRATION_ID_KEY, integration.id);
     localStorage.setItem(INITIAL_TIME_LEFT_KEY, initialTimeLeft.toString());
     localStorage.setItem(TIME_LEFT_KEY, timeLeft.toString());
@@ -153,7 +157,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     playAccelerateIntegrationSound();
     dispatch(setLastIntegrationId(integration.id));
 
-    void accelerateIntegration(1).finally(() => {
+    void accelerateIntegration(1000).finally(() => {
       refetchIntegration();
     });
 

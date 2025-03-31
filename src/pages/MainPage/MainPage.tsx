@@ -178,6 +178,7 @@ export const MainPage: FC = () => {
       if (data.count === 0) {
         if (itemsData) {
           if (itemsData.count > 0) {
+            setRerender(prev => prev + 1);
             // MainPage items
             setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
             setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
@@ -192,6 +193,7 @@ export const MainPage: FC = () => {
             setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
             setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
             setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+            setRerender(prev => prev + 1);
           }
         }
       }
@@ -309,7 +311,10 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(3));
   }, [location.pathname]);
 
+  // const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
+
+  const firstIntegrationReadyToPublish = useSelector((state: RootState) => state.guide.firstIntegrationReadyToPublish);
 
   useEffect(() => {
     if (isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
@@ -319,11 +324,8 @@ export const MainPage: FC = () => {
 
   const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
   const { isLoading: isRoomLoading } = useGetEquipedQuery();
-  const { data: allIntagration } = useGetAllIntegrationsQuery();
 
-  const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
-
-  const hasCreatingIntegrations = !allIntagration?.integrations.some(
+  const hasCreatingIntegrations = !data?.integrations.some(
     integration =>
       integration.status === 'created' || (integration.status === 'creating' && integration.time_left === 0),
   );
@@ -393,7 +395,7 @@ export const MainPage: FC = () => {
 
       <Room mode="me" />
 
-      {hasCreatingIntegrations || isIntegrationReadyForPublishing ? (
+      {hasCreatingIntegrations && !firstIntegrationReadyToPublish ? (
         <IntegrationCreation />
       ) : (
         <PublishIntegrationButton />

@@ -1,5 +1,5 @@
 export type SignInDTO = {
-  init_data: string,
+  init_data: string;
 };
 
 export type SignInResponseDTO = {

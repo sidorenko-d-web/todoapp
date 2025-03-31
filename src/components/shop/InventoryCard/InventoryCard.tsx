@@ -23,7 +23,7 @@ import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
 import { GUIDE_ITEMS, itemStoreString, localStorageConsts, MODALS, SOUNDS } from '../../../constants';
-import { useModal, useTonConnect } from '../../../hooks';
+import { useModal } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import useSound from 'use-sound';
@@ -33,6 +33,7 @@ import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 import { useRoomItemsSlots } from '../../../../translate/items/items.ts';
 import { isGuideShown } from '../../../utils';
 import classNames from 'classnames';
+import useUsdtPayment from '../../../hooks/useUsdtPayment.ts';
 
 interface Props {
   disabled?: boolean;
@@ -51,7 +52,7 @@ const getPremiumLevelOrder = (level: TypeItemQuality) =>
   })[level];
 
 function sortByPremiumLevel(items: IShopItem[]) {
-  return [ ...items ].sort(
+  return [...items].sort(
     (a, b) => getPremiumLevelOrder(a.item_premium_level) - getPremiumLevelOrder(b.item_premium_level),
   );
 }
@@ -61,11 +62,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
   const itemLevel = item.item_premium_level === 'advanced' ? item.level + 50 : item.item_premium_level === 'pro' ? item.level + 100 : item.level;
 
-  const { walletAddress, connectWallet } = useTonConnect();
   const [ idDisabled ] = useState(true);
   const { t, i18n } = useTranslation('shop');
   const { data: pointsUser } = useGetProfileMeQuery();
-  const [ upgradeItem, { isLoading } ] = useUpgradeItemMutation();
+  const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const { data, isLoading: isItemsLoading } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
@@ -87,16 +87,16 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       const desiredItem = data.items.find(item_ => item_.item_premium_level === item.item_premium_level);
       setPrice('' + desiredItem?.price_internal);
     }
-  }, [ data, isItemsLoading ]);
+  }, [data, isItemsLoading]);
 
-  const [ equipItem ] = useAddItemToRoomMutation();
-  const [ removeItem ] = useRemoveItemFromRoomMutation();
+  const [equipItem] = useAddItemToRoomMutation();
+  const [removeItem] = useRemoveItemFromRoomMutation();
   const { data: equipedItems, refetch: refetchEquipped } = useGetEquipedQuery();
   const { openModal } = useModal();
 
   const { data: profile, refetch } = useGetProfileMeQuery();
 
-  const [ playLvlSound ] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
+  const [playLvlSound] = useSound(SOUNDS.levelUp, { volume: useSelector(selectVolume) });
 
   const prevLvl = useRef<number | null>(null);
 
@@ -200,16 +200,68 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   )?.slot;
   const isEquipped = equipedItems?.equipped_items.find(_item => _item.id === item.id);
 
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
-  const [ isUpdateLoading, setIsUpdateLoading ] = useState(false);
+  const [isUpdateLoading, setIsUpdateLoading] = useState(false);
+
+  const { processPayment } = useUsdtPayment();
 
   const handleUsdtPayment = async () => {
-    if (!walletAddress) {
-      connectWallet();
-      return;
+    try {
+      await processPayment(Number(item.price_usdt), async (result) => {
+        if (result.success) {
+          console.warn("Transaction info:", "hash:", result.transactionHash, "senderAddress:", result.senderAddress);
+          const res = await upgradeItem({
+            id: item.id,
+            payment_method: 'usdt',
+            transaction_id: result.transactionHash,
+            sender_address: result.senderAddress,
+          })
+
+          if (!res.error) {
+            try {
+              setIsUpdateLoading(true);
+              const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
+              localStorage.setItem('giftName', res.data?.chest.chest_name || '');
+        
+              if (!res.error) {
+                playLvlSound();
+                refetch();
+                refetchEquipped();
+                if (item.item_premium_level === 'pro') {
+                  openModal(MODALS.UPGRADED_SHOP, {
+                    item,
+                    isYellow: item.item_rarity === 'red',
+                  });
+                } else {
+                  if (res.data.level % 10 === 0) {
+                    localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
+                    localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
+                  }
+        
+                  openModal(MODALS.UPGRADED_ITEM, {
+                    item: res.data,
+                    mode: 'item',
+                    reward: 'reward of item',
+                  });
+                }
+              }
+            } catch (error) {
+              console.log(error);
+            } finally {
+              await refetchEquipped().then(() => {
+                setIsUpdateLoading(false);
+              });
+              //setIsUpdateLoading(false);
+            }
+          } else {
+            throw new Error(JSON.stringify(res.error));
+          }
+        }
+      });
+    } catch (err) {
+      console.error('Error in USDT payment flow:', err);
     }
-    openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
   };
 
   useEffect(() => {
@@ -222,7 +274,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     } else {
       setShowEquipButton(false); // Hide the button if the item is equipped or the upgrade is in progress
     }
-  }, [ isUpdateLoading, isEquipped ]);
+  }, [isUpdateLoading, isEquipped]);
 
   const levelCap =
     itemLevel < 10

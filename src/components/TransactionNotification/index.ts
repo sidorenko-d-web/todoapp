@@ -1,1 +1,1 @@
-export * from './TransactionNotifcation'
+export * from './TransactionNotification'

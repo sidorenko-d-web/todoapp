@@ -1,5 +1,6 @@
 {
     "t1": "Processing transaction...",
     "t2": "Transaction failed!",
-    "t3": "You got a new item!"
+    "t3": "You got a new item!",
+    "t4": "Not enough balance!"
 }

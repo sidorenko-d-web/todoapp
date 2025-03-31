@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
 import {
   setCreateIntegrationButtonGlowing,
+  setFirstIntegrationReadyToPublish,
   setIntegrationReadyForPublishing,
   setLastIntegrationId,
 } from '../../../redux/slices/guideSlice.ts';
@@ -26,6 +27,7 @@ export const PublishIntegrationButton: React.FC = () => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const { openModal } = useModal();
+  const isVibrationSupported = 'vibrate' in navigator;
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
   const [publishIntegration] = usePublishIntegrationMutation();
@@ -77,7 +79,7 @@ export const PublishIntegrationButton: React.FC = () => {
   })();
 
   const handlePublish = async () => {
-    setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+    if (isVibrationSupported) navigator.vibrate(200);
     if (isPublishing || isTimeUpdating) return;
 
     setIsPublishing(true);
@@ -103,9 +105,22 @@ export const PublishIntegrationButton: React.FC = () => {
         try {
           await updateTimeLeft({
             integrationId: integrationIdToPublish,
-            timeLeftDelta: 123,
+            timeLeftDelta: 1,
           }).unwrap();
-          await refetchIntegration();
+
+          let isCreated = false;
+          let retries = 0;
+          const maxRetries = 10;
+          while (!isCreated && retries < maxRetries) {
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            const { data: updatedIntegration } = await refetchIntegration();
+            isCreated = updatedIntegration?.status === 'created';
+            retries++;
+          }
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+          if (!isCreated) {
+            throw new Error('Integration did not switch to "created" status');
+          }
         } finally {
           setIsTimeUpdating(false);
         }
@@ -113,13 +128,14 @@ export const PublishIntegrationButton: React.FC = () => {
 
       dispatch(setIntegrationReadyForPublishing(false));
       dispatch(setCreateIntegrationButtonGlowing(false));
+      dispatch(setFirstIntegrationReadyToPublish(false));
+      localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '0');
 
       const publishRes = await publishIntegration(integrationIdToPublish);
       if (!publishRes.error) {
         const company = integrationData?.campaign;
         if (company) {
           const { base_income, base_views, base_subscribers } = publishRes.data;
-
           openModal(MODALS.INTEGRATION_REWARD, {
             company,
             base_income,
@@ -145,7 +161,12 @@ export const PublishIntegrationButton: React.FC = () => {
   };
 
   return (
-    <section className={s.integrationsControls} onClick={handlePublish}>
+    <section
+      className={s.integrationsControls}
+      onClick={e => {
+        if (!isPublishing && !isTimeUpdating) handlePublish(e);
+      }}
+    >
       <button
         className={`${s.button}`}
         disabled={isPublishing || isTimeUpdating}
