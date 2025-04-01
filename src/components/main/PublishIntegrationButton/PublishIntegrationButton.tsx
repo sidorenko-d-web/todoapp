@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants/modals.ts';
 import {
   RootState,
-  useGetAllIntegrationsQuery,
   useGetIntegrationQuery,
   useGetIntegrationsQuery,
   usePublishIntegrationMutation,
@@ -30,7 +29,7 @@ export const PublishIntegrationButton: React.FC = () => {
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
   const [publishIntegration] = usePublishIntegrationMutation();
-  const { data: allIntegrations, refetch } = useGetAllIntegrationsQuery();
+  const { data: allIntegrations, refetch } = useGetIntegrationsQuery();
   const [isPublishing, setIsPublishing] = useState(false);
   const [isTimeUpdating, setIsTimeUpdating] = useState(false);
   const [updateTimeLeft] = useUpdateTimeLeftMutation();
