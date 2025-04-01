@@ -10,6 +10,7 @@ import GiftIcon from '../../../assets/icons/gift.svg';
 import {
   IShopItem,
   selectVolume,
+  setItemUpgraded,
   TypeItemQuality,
   useAddItemToRoomMutation,
   useGetEquipedQuery,
@@ -27,11 +28,11 @@ import { useModal } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import useSound from 'use-sound';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../shared';
 import GetGift from '../../../pages/DevModals/GetGift/GetGift';
 import { useRoomItemsSlots } from '../../../../translate/items/items.ts';
-import { isGuideShown } from '../../../utils';
+import { isGuideShown, setGuideShown } from '../../../utils';
 import classNames from 'classnames';
 import useUsdtPayment from '../../../hooks/useUsdtPayment.ts';
 
@@ -77,6 +78,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     item_rarity: item.item_rarity,
   });
   const [ showEquipButton, setShowEquipButton ] = useState(false);
+
+  const dispatch = useDispatch();
+
 
   const [ price, setPrice ] = useState('');
 
@@ -135,6 +139,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     if (profile && +profile?.points < +itemPoints) return;
 
     try {
+      dispatch(setItemUpgraded(true));
+      setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED);
+
       setIsUpdateLoading(true);
       const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
       localStorage.setItem('giftName', res.data?.chest.chest_name || '');
