@@ -157,7 +157,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     playAccelerateIntegrationSound();
     dispatch(setLastIntegrationId(integration.id));
 
-    void accelerateIntegration(1000).finally(() => {
+    void accelerateIntegration(10).finally(() => {
       refetchIntegration();
     });
 
@@ -185,13 +185,9 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     }
   }, []);
 
-  if (isExpired) {
+  if (timeLeft <= 0) {
     dispatch(setIntegrationReadyForPublishing(true));
     dispatch(setLastIntegrationId(integration.id));
-
-    if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
-      setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-    }
     return null;
   }
 

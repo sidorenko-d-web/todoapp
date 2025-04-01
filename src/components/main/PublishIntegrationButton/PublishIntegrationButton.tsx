@@ -96,7 +96,7 @@ export const PublishIntegrationButton: React.FC = () => {
         setIsPublishing(false);
         return;
       }
-
+      setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
       const integrationIdToPublish = integrationToPublish.id;
       dispatch(setLastIntegrationId(integrationIdToPublish));
 
@@ -117,7 +117,6 @@ export const PublishIntegrationButton: React.FC = () => {
             isCreated = updatedIntegration?.status === 'created';
             retries++;
           }
-          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
           if (!isCreated) {
             throw new Error('Integration did not switch to "created" status');
           }
@@ -163,8 +162,8 @@ export const PublishIntegrationButton: React.FC = () => {
   return (
     <section
       className={s.integrationsControls}
-      onClick={e => {
-        if (!isPublishing && !isTimeUpdating) handlePublish(e);
+      onClick={() => {
+        if (!isPublishing && !isTimeUpdating) handlePublish();
       }}
     >
       <button

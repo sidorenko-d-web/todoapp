@@ -314,7 +314,7 @@ export const MainPage: FC = () => {
   // const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
-  const firstIntegrationReadyToPublish = useSelector((state: RootState) => state.guide.firstIntegrationReadyToPublish);
+  const firstIntegrationReadyToPublish = useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
 
   useEffect(() => {
     if (isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
@@ -352,7 +352,7 @@ export const MainPage: FC = () => {
 
   const accelerateIntegration = () => {
     console.log('_acceleration');
-    if (integrationCurrentlyCreating || firstIntegrationCreating) {
+    if (integrationCurrentlyCreating || firstIntegrationReadyToPublish) {
       reduxDispatch(incrementAcceleration());
     }
   };
@@ -379,7 +379,7 @@ export const MainPage: FC = () => {
         }}
       />
 
-      {(integrationCurrentlyCreating || firstIntegrationCreating) && (
+      {(integrationCurrentlyCreating || firstIntegrationReadyToPublish) && (
         <div
           style={{
             position: 'absolute',
