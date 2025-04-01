@@ -25,7 +25,7 @@ const INTEGRATION_ID_KEY = 'integration_id';
 export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration, refetchIntegration }) => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
-
+  console.log(integration);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const accelerationRef = useRef(false);
   const lastUpdateRef = useRef(Date.now());
@@ -81,6 +81,10 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   }, []);
 
   const formattedTime = useMemo(() => formatTime(timeLeft), [formatTime, timeLeft]);
+
+  useEffect(() => {
+    setTimeLeft(integration.time_left);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem(INTEGRATION_ID_KEY, integration.id);
@@ -144,7 +148,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [getValidatedTimeLeft]);
+  }, []);
 
   const handleAccelerateClick = useCallback(() => {
     if (isExpired) return;
@@ -181,13 +185,9 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     }
   }, []);
 
-  if (isExpired) {
+  if (timeLeft <= 0) {
     dispatch(setIntegrationReadyForPublishing(true));
     dispatch(setLastIntegrationId(integration.id));
-
-    if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
-      setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-    }
     return null;
   }
 

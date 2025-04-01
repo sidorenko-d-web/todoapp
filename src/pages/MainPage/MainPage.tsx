@@ -183,7 +183,7 @@ export const MainPage: FC = () => {
       if (data.count === 0) {
         if (itemsData) {
           if (itemsData.count > 0) {
-            setRerender((prev) => prev+1);
+            setRerender(prev => prev + 1);
             // MainPage items
             setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
             setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
@@ -198,7 +198,7 @@ export const MainPage: FC = () => {
             setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
             setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
             setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
-            setRerender((prev) => prev+1);
+            setRerender(prev => prev + 1);
           }
         }
       }
@@ -320,8 +320,7 @@ export const MainPage: FC = () => {
   // const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
-  const firstIntegrationReadyToPublish = useSelector((state: RootState) => state.guide.firstIntegrationReadyToPublish);
-
+  const firstIntegrationReadyToPublish = useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
 
   useEffect(() => {
     if (isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
@@ -366,7 +365,7 @@ export const MainPage: FC = () => {
 
   const accelerateIntegration = () => {
     console.log('_acceleration');
-    if (integrationCurrentlyCreating || firstIntegrationCreating) {
+    if (integrationCurrentlyCreating || firstIntegrationReadyToPublish) {
       reduxDispatch(incrementAcceleration());
     }
   };
@@ -393,7 +392,7 @@ export const MainPage: FC = () => {
         }}
       />
 
-      {(integrationCurrentlyCreating || firstIntegrationCreating) && (
+      {(integrationCurrentlyCreating || firstIntegrationReadyToPublish) && (
         <div
           style={{
             position: 'absolute',
@@ -409,7 +408,11 @@ export const MainPage: FC = () => {
 
       <Room mode="me" />
 
-      {hasCreatingIntegrations && !firstIntegrationReadyToPublish ? <IntegrationCreation /> : <PublishIntegrationButton />}
+      {hasCreatingIntegrations && !firstIntegrationReadyToPublish ? (
+        <IntegrationCreation />
+      ) : (
+        <PublishIntegrationButton />
+      )}
 
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && !getModalState(MODALS.SUBSCRIBE).isOpen) ||
