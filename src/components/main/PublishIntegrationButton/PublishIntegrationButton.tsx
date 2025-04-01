@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import integrationIcon from '../../../assets/icons/integration.svg';
 import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants/modals.ts';
 import {
   RootState,
-  useGetAllIntegrationsQuery,
   useGetIntegrationQuery,
   useGetIntegrationsQuery,
   usePublishIntegrationMutation,
@@ -12,11 +11,7 @@ import {
 } from '../../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
-import {
-  setCreateIntegrationButtonGlowing,
-  setIntegrationReadyForPublishing,
-  setLastIntegrationId,
-} from '../../../redux/slices/guideSlice.ts';
+import { setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
 import { getCompanyStars, getIntegrationRewardImageUrl, setGuideShown } from '../../../utils/index.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { useTranslation } from 'react-i18next';
@@ -26,17 +21,16 @@ export const PublishIntegrationButton: React.FC = () => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const { openModal } = useModal();
+  const isVibrationSupported = 'vibrate' in navigator;
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
   const [publishIntegration] = usePublishIntegrationMutation();
-
-  const { data, refetch } = useGetAllIntegrationsQuery();
+  const { data: allIntegrations, refetch } = useGetIntegrationsQuery();
   const [isPublishing, setIsPublishing] = useState(false);
-
+  const [isTimeUpdating, setIsTimeUpdating] = useState(false);
   const [updateTimeLeft] = useUpdateTimeLeftMutation();
 
   const lastIntId = useSelector((state: RootState) => state.guide.lastIntegrationId);
-
   const { data: integrationData, refetch: refetchIntegration } = useGetIntegrationQuery(lastIntId, {});
   const { data: companyData } = useGetIntegrationsQuery({ company_name: integrationData?.campaign.company_name }, {});
 
@@ -44,6 +38,18 @@ export const PublishIntegrationButton: React.FC = () => {
     integrationData?.campaign.company_name ?? '',
     getCompanyStars(companyData?.count ?? 0),
   );
+
+  const hasCreatingIntegrationWithTime = allIntegrations?.integrations.some(
+    int => int.status === 'creating' && int.time_left > 0,
+  );
+
+  useEffect(() => {
+    if (hasCreatingIntegrationWithTime) {
+      setIsTimeUpdating(true);
+    } else {
+      setIsTimeUpdating(false);
+    }
+  }, [hasCreatingIntegrationWithTime]);
 
   const openCongratsModal = () => {
     openModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS, {
@@ -67,59 +73,54 @@ export const PublishIntegrationButton: React.FC = () => {
   })();
 
   const handlePublish = async () => {
-    if (isPublishing) return;
+    if (isVibrationSupported) navigator.vibrate(200);
+    if (isPublishing || isTimeUpdating) return;
 
     setIsPublishing(true);
 
     try {
-      setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+      await refetch().unwrap();
 
-      let integrationIdToPublish = lastIntId;
+      const integrationToPublish = allIntegrations?.integrations.find(
+        int => int.status === 'created' || (int.status === 'creating' && int.time_left === 0),
+      );
 
-      if (integrationData?.status === 'creating') {
-        await updateTimeLeft({
-          integrationId: integrationIdToPublish,
-          timeLeftDelta: 123214,
-        });
-        refetchIntegration();
+      if (!integrationToPublish) {
+        console.error('No publishable integrations found');
+        return;
       }
 
-      if (!lastIntId) {
-        await refetch().unwrap();
-        if (data?.integrations && data.integrations.length > 0) {
-          integrationIdToPublish = data.integrations[0].id;
-          if (data.integrations[0].status !== 'created') {
-            if (data.integrations[0].status === 'creating') {
-              dispatch(setLastIntegrationId(integrationIdToPublish));
+      setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+      const integrationIdToPublish = integrationToPublish.id;
+      dispatch(setLastIntegrationId(integrationIdToPublish));
 
-              await updateTimeLeft({
-                integrationId: integrationIdToPublish,
-                timeLeftDelta: 123,
-              }).unwrap();
-              refetchIntegration();
-            } else {
-              dispatch(setIntegrationReadyForPublishing(false));
-            }
+      if (integrationToPublish.status === 'creating' && integrationToPublish.time_left === 0) {
+        setIsTimeUpdating(true);
+        try {
+          await updateTimeLeft({
+            integrationId: integrationIdToPublish,
+            timeLeftDelta: 1,
+          }).unwrap();
+
+          // Ждём, пока статус не обновится
+          let retries = 0;
+          while (retries < 10) {
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            const { data: updatedIntegration } = await refetchIntegration();
+            if (updatedIntegration?.status === 'created') break;
+            retries++;
           }
-        } else {
-          console.error('No integrations found after refetch.');
-          setIsPublishing(false);
-          return;
+        } finally {
+          setIsTimeUpdating(false);
         }
       }
 
-      dispatch(setIntegrationReadyForPublishing(false));
-      dispatch(setCreateIntegrationButtonGlowing(false));
-
+      // Публикуем интеграцию
       const publishRes = await publishIntegration(integrationIdToPublish);
       if (!publishRes.error) {
-        //const rewardRes = await claimRewardForIntegration(integrationIdToPublish);
-
         const company = integrationData?.campaign;
-        if (true) {
-          // const company = publishRes.data.campaign;
+        if (company) {
           const { base_income, base_views, base_subscribers } = publishRes.data;
-
           openModal(MODALS.INTEGRATION_REWARD, {
             company,
             base_income,
@@ -128,20 +129,36 @@ export const PublishIntegrationButton: React.FC = () => {
           });
         }
       }
-    } catch (error) {
-      console.error('Failed to publish integration:', error);
-    } finally {
+
       if (canShowIntegrationReward && isPublishedModalClosed) {
         openCongratsModal();
       }
+    } catch (error) {
+      console.error('Failed to publish integration:', error);
+    } finally {
       setIsPublishing(false);
     }
   };
 
+  const getButtonText = () => {
+    if (isPublishing) return t('i40');
+    if (isTimeUpdating) return t('integration.time_updating');
+    return t('i25');
+  };
+
   return (
-    <section className={s.integrationsControls} onClick={handlePublish}>
-      <button className={`${s.button}`} disabled={isPublishing}>
-        {isPublishing ? t('i40') : t('i25')}
+    <section
+      className={s.integrationsControls}
+      onClick={() => {
+        handlePublish();
+      }}
+    >
+      <button
+        className={`${s.button}`}
+        disabled={isPublishing || isTimeUpdating}
+        title={isTimeUpdating ? t('integration.wait_time_completion') : undefined}
+      >
+        {getButtonText()}
         <span className={s.buttonBadge}>
           {t('i26')}
           <img src={integrationIcon} height={12} width={12} alt="integration" />

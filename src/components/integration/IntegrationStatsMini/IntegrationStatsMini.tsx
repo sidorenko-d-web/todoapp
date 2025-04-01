@@ -10,49 +10,35 @@ import { AppRoute } from '../../../constants';
 import { formatAbbreviation } from '../../../helpers';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
-import { useIncrementingIntegrationStats } from '../../../hooks/useIncrementingIntegrationStats.ts';
 import { usePushLineStatus } from '../../../hooks';
+import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfileStats.ts';
+import { useGetProfileMeQuery } from '../../../redux/index.ts';
 
-interface IntegrationStatsMiniProps {
-  views: number;
-  subscribers: number;
-  income: string;
-  futureStatistics?: {
-    subscribers: number;
-    views: number;
-    income: string;
-  };
-  lastUpdatedAt?: string;
-}
-
-export const IntegrationStatsMini: React.FC<IntegrationStatsMiniProps> = ({
-                                                                            subscribers: initialSubscribers,
-                                                                            views: initialViews,
-                                                                            income: initialIncome,
-                                                                            futureStatistics,
-                                                                            lastUpdatedAt
-                                                                          }) => {
-
+export const IntegrationStatsMini = () => {
   const navigate = useNavigate();
   const { i18n } = useTranslation('integrations');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const integrationId = window.location.pathname.split('/').pop() || '';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const { data: userProfileData } = useGetProfileMeQuery();
 
-  const {in_streak} = usePushLineStatus()
-
-  const { subscribers: displayedSubscribers, views: displayedViews, income: displayedIncome } = useIncrementingIntegrationStats({
-    integrationId,
-    baseSubscribers: initialSubscribers,
-    baseViews: initialViews,
-    baseIncome: initialIncome,
-    futureStatistics,
-    lastUpdatedAt
+  const {
+    points: displayedPoints,
+    subscribers: displayedSubscribers,
+    totalViews: displayedTotalViews,
+  } = useIncrementingProfileStats({
+    profileId: userProfileData?.id || '',
+    basePoints: userProfileData?.points || '0',
+    baseSubscribers: userProfileData?.subscribers || 0,
+    baseTotalViews: userProfileData?.total_views || 0,
+    baseTotalEarned: userProfileData?.total_earned || '0',
+    futureStatistics: userProfileData?.future_statistics,
+    lastUpdatedAt: userProfileData?.updated_at,
   });
 
-  const subscribers = in_streak ? displayedSubscribers : initialSubscribers;
-  const views = in_streak ? displayedViews : initialViews;
-  const income = in_streak ? displayedIncome : initialIncome;
+  const { in_streak } = usePushLineStatus();
 
+  const points = in_streak ? displayedPoints : userProfileData?.points || '0';
+  const subscribers = in_streak ? displayedSubscribers : userProfileData?.subscribers || 0;
+  const totalViews = in_streak ? displayedTotalViews : userProfileData?.total_views || 0;
 
   return (
     <div className={styles.statsUnderTitleWrp}>
@@ -60,7 +46,7 @@ export const IntegrationStatsMini: React.FC<IntegrationStatsMiniProps> = ({
       <div className={styles.statsUnderTitle}>
         <div className={styles.topStats}>
           <div className={styles.statWrp}>
-            <p className={styles.stat}>{formatAbbreviation(views, 'number', { locale: locale })}</p>
+            <p className={styles.stat}>{formatAbbreviation(totalViews, 'number', { locale: locale })}</p>
             <img src={viewsIcon} height={18} width={18} alt="" />
           </div>
           <div className={styles.statWrp}>
@@ -68,13 +54,16 @@ export const IntegrationStatsMini: React.FC<IntegrationStatsMiniProps> = ({
             <img src={subscribersIcon} height={18} width={18} alt="" />
           </div>
           <div className={styles.statWrp}>
-          <p className={styles.stat}>+ {formatAbbreviation(income, 'number', { locale: locale })}</p>
-          <img src={coin} height={18} width={18} alt="" />
-        </div>
+            <p className={styles.stat}>+ {formatAbbreviation(points, 'number', { locale: locale })}</p>
+            <img src={coin} height={18} width={18} alt="" />
+          </div>
         </div>
       </div>
-      <TrackedButton trackingData={{ eventType: 'button', eventPlace: 'К статистике - Интеграции' }}
-                     onClick={() => navigate(AppRoute.Statistics)} className={styles.seeStatsButton}></TrackedButton>
+      <TrackedButton
+        trackingData={{ eventType: 'button', eventPlace: 'К статистике - Интеграции' }}
+        onClick={() => navigate(AppRoute.Statistics)}
+        className={styles.seeStatsButton}
+      ></TrackedButton>
     </div>
   );
 };

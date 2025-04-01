@@ -7,7 +7,7 @@ import {
 } from "@tonconnect/ui-react";
 import { Address, Sender, SenderArguments } from "@ton/core";
 import { TonClient } from "@ton/ton";
-import { useContext } from "react";
+import { useContext, useCallback } from "react";
 import { TonClientContext } from "../providers/TonClientProvider";
 
 export const useTonConnect = (): {
@@ -19,27 +19,65 @@ export const useTonConnect = (): {
   network: CHAIN | null;
   tonConnectUI: TonConnectUI;
   tonClient: TonClient | undefined;
-  connectWallet: () => void
-  disconnectWallet: () => void
+  connectWallet: () => Promise<boolean>;
+  disconnectWallet: () => void;
+  waitForConnection: (timeout?: number) => Promise<boolean>;
 } => {
   const [tonConnectUI] = useTonConnectUI();
   const wallet = useTonWallet();
   const { tonClient } = useContext(TonClientContext);
-  const userAddress = useTonAddress()
+  const userAddress = useTonAddress();
 
   const walletAddress = wallet?.account?.address ? Address.parse(wallet.account.address) : undefined;
 
-  const connectWallet = () => {
-    if (!wallet) {
-      tonConnectUI.openModal()
+  // Promise that resolves when wallet is connected
+  const waitForConnection = useCallback(async (timeout = 60000): Promise<boolean> => {
+    if (wallet?.account?.address) {
+      return true; // Already connected
     }
-  };
 
-  const disconnectWallet = () => {
+    return new Promise((resolve) => {
+      const checkInterval = 500; // Check every 500ms
+      let elapsed = 0;
+      
+      // Store current connection state to detect changes
+      const initialConnectionState = !!wallet?.account?.address;
+      
+      const intervalId = setInterval(() => {
+        elapsed += checkInterval;
+        
+        // Check if wallet connection state has changed
+        const currentConnectionState = !!wallet?.account?.address;
+        
+        if (currentConnectionState && !initialConnectionState) {
+          clearInterval(intervalId);
+          resolve(true);
+        }
+        
+        // Timeout after specified duration
+        if (elapsed >= timeout) {
+          clearInterval(intervalId);
+          resolve(false);
+        }
+      }, checkInterval);
+    });
+  }, [wallet]);
+
+  // Enhanced connectWallet function that returns a promise
+  const connectWallet = useCallback(async (): Promise<boolean> => {
+    if (wallet?.account?.address) {
+      return true; // Already connected
+    }
+    
+    tonConnectUI.openModal();
+    return waitForConnection();
+  }, [tonConnectUI, waitForConnection, wallet]);
+
+  const disconnectWallet = useCallback(() => {
     if (wallet) {
       tonConnectUI.disconnect();
     }
-  };
+  }, [tonConnectUI, wallet]);
 
   return {
     sender: {
@@ -65,7 +103,8 @@ export const useTonConnect = (): {
     userAddress: userAddress,
     tonConnectUI,
     tonClient,
-    connectWallet: connectWallet,
-    disconnectWallet: disconnectWallet
+    connectWallet,
+    disconnectWallet,
+    waitForConnection
   };
 };
