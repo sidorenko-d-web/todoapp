@@ -166,13 +166,15 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
             {formatAbbreviation(1, 'currency')}
           </Button>
           <Button
+            style={{zIndex: '20000'}}
             className={`${s.button} ${!buyBtnGlowing && isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) ? s.glowing : ''
               }`}
             disabled={!!isSubscriptionPurchased || !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)}
             onClick={() => handleBuySubscription('internal_wallet')}
           >
             {formatAbbreviation(point_integration)}{' '}
-            <img src={isSubscriptionPurchased ? DisableCoin : coinIcon} height={14} width={14} alt={'Coin'} />
+            <img src={(isSubscriptionPurchased 
+              || !isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN)) ? DisableCoin : coinIcon} height={14} width={14} alt={'Coin'} />
           </Button>
           <Button className={s.button + ' ' + s.gray} disabled={idDisabled || !!isSubscriptionPurchased}>
             <img src={idDisabled ? ListDisableIcon : list} height={16} width={16} alt={'list'} />

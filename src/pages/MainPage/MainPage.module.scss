@@ -20,9 +20,13 @@
   height: 54.545px;
   position: absolute;
   left: 25px;
-  bottom: 87px;
+  bottom: 25px;
   z-index: 1000;
   animation: moveUpDown 2s ease-in-out infinite;
+
+  &.up {
+    bottom: 87px;
+  }
 }
 
 @keyframes moveUpDown {

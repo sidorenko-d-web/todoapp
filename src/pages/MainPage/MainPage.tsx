@@ -28,7 +28,6 @@ import {
   setIntegrationReadyForPublishing,
   setLastIntegrationId,
   setSubscribeGuideShown,
-  useGetAllIntegrationsQuery,
   useGetEquipedQuery,
   useGetIntegrationsQuery,
   useGetInventoryItemsQuery,
@@ -47,13 +46,14 @@ import DaysInARowModal from '../DevModals/DaysInARowModal/DaysInARowModal.tsx';
 import Lottie from 'lottie-react';
 import { giftShake } from '../../assets/animations';
 import { hasAvailableTreeReward } from '../../helpers';
+import clsx from 'clsx';
 
 export const MainPage: FC = () => {
   const { t } = useTranslation('guide');
   const { getModalState, openModal, closeModal } = useModal();
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
-  const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
+  const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetIntegrationsQuery();
 
   const { data: profileData, isLoading: isCurrentUserProfileInfoLoading } = useGetProfileMeQuery();
 
@@ -341,7 +341,14 @@ export const MainPage: FC = () => {
     }
   }, [treeData]);
 
+  const { data: creatingIntegrations, isLoading: isCreatingIntegrationsLoading } = useGetIntegrationsQuery(
+    { status: 'creating' },
+  );
+
+  const isCreatingIntegration = creatingIntegrations && creatingIntegrations.count > 0;
+
   const isLoading =
+    isCreatingIntegrationsLoading ||
     isAllIntegrationsLoading ||
     isCurrentUserProfileInfoLoading ||
     isIntegrationsLoading ||
@@ -367,7 +374,7 @@ export const MainPage: FC = () => {
             eventPlace: 'mainPage tree reward',
           }}
         >
-          <Lottie animationData={giftShake} className={s.treeReward} />
+          <Lottie animationData={giftShake} className={clsx(s.treeReward, {[s.up]: isCreatingIntegration})} />
         </TrackedLink>
       )}
 
@@ -402,7 +409,7 @@ export const MainPage: FC = () => {
       )}
 
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) ||
+        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && !getModalState(MODALS.SUBSCRIBE).isOpen) ||
         (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) ||
         (firstIntegrationCreating &&
