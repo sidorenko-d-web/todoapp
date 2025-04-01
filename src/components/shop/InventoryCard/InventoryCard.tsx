@@ -27,7 +27,6 @@ import {
   buildLink,
   buildMode,
   GUIDE_ITEMS,
-  itemStoreString,
   localStorageConsts,
   MODALS,
   SOUNDS,
