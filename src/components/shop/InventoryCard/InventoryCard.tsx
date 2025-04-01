@@ -307,12 +307,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         : itemLevel + 10
       : Math.ceil(itemLevel / 10) * 10;
 
-
-
-      const getImage = (url: string) =>
-        buildMode === 'production'
-          ? buildLink()?.svgShop(url).replace('https://', 'https://storage.yandexcloud.net/')
-          : buildLink()?.svgShop(url);
+  const getImage = (url: string) =>
+    buildMode === 'production'
+      ? buildLink()?.svgShop(url).replace('https://', 'https://storage.yandexcloud.net/')
+      : buildLink()?.svgShop(url);
 
   return (
     <div
@@ -328,7 +326,11 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             item.item_rarity === 'yellow' ? styles.purpleImage : item.item_rarity === 'green' && styles.redImage,
           )}
         >
-          <img src={getImage(item.image_url) + svgHeadersString} className={clsx(isBlocked && styles.disabledImage)} alt="" />
+          <img
+            src={getImage(item.image_url) + svgHeadersString}
+            className={clsx(isBlocked && styles.disabledImage)}
+            alt=""
+          />
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
           {!isBlocked && <p>{item.item_premium_level === 'advanced' ? 'adv' : item.item_premium_level}</p>}
         </div>
@@ -462,7 +464,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                           : undefined
                       }
                     >
-                      <img src={getImage(_item.image_url)} className={styles.itemImage} alt="" />
+                      <img src={getImage(_item.image_url) + svgHeadersString} className={styles.itemImage} alt="" />
 
                       {item.item_premium_level === 'base' &&
                         _item.item_premium_level === 'advanced' &&
