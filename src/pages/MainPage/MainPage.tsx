@@ -104,18 +104,23 @@ export const MainPage: FC = () => {
         reduxDispatch(resetGuideState());
       } else {
         if (profileData.subscription_integrations_left === 0) {
-          setRerender(prev => prev + 1);
-          Object.values(GUIDE_ITEMS).forEach(category => {
-            Object.values(category).forEach(value => {
-              localStorage.setItem(value, '0');
-              console.log('GUIDE... ', value);
-            });
-          });
-          setRerender(prev => prev + 1);
+          // setRerender(prev => prev + 1);
+          // Object.values(GUIDE_ITEMS).forEach(category => {
+          //   Object.values(category).forEach(value => {
+          //     localStorage.setItem(value, '0');
+          //     console.log('GUIDE... ', value);
+          //   });
+          // });
+          // setRerender(prev => prev + 1);
         }
       }
     }
   }, [itemsData, isInventoryDataLoading, typewriterFound, profileData, isCurrentUserProfileInfoLoading]);
+
+  useEffect(() => {
+    console.log('FETCHING PROFILE')
+  }, [profileData, isCurrentUserProfileInfoLoading]);
+
 
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
