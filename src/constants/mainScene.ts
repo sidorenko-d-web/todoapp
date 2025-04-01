@@ -141,7 +141,7 @@ export class SpineSceneBase extends Phaser.Scene {
 
   loadBaseItems() {
     baseItems.forEach(item => {
-      this.load.image(item.name, createLink(item.name, 'png'));
+      this.load.image(item.name, createLink(item.name, 'base'));
     });
   }
 

@@ -23,7 +23,16 @@ import CoinIcon from '../../../assets/icons/coin.png';
 import SubscriberCoin from '../../../assets/icons/subscribers.png';
 import LockIcon from '../../../assets/icons/lock_icon.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
-import { GUIDE_ITEMS, itemStoreString, localStorageConsts, MODALS, SOUNDS } from '../../../constants';
+import {
+  buildLink,
+  buildMode,
+  GUIDE_ITEMS,
+  itemStoreString,
+  localStorageConsts,
+  MODALS,
+  SOUNDS,
+  svgHeadersString,
+} from '../../../constants';
 import { useModal } from '../../../hooks';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
@@ -50,7 +59,7 @@ const getPremiumLevelOrder = (level: TypeItemQuality) =>
     base: 0,
     advanced: 1,
     pro: 2,
-  })[level];
+  }[level]);
 
 function sortByPremiumLevel(items: IShopItem[]) {
   return [...items].sort(
@@ -61,9 +70,14 @@ function sortByPremiumLevel(items: IShopItem[]) {
 export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled = true, item, isB }) => {
   const RoomItemsSlots = useRoomItemsSlots();
 
-  const itemLevel = item.item_premium_level === 'advanced' ? item.level + 50 : item.item_premium_level === 'pro' ? item.level + 100 : item.level;
+  const itemLevel =
+    item.item_premium_level === 'advanced'
+      ? item.level + 50
+      : item.item_premium_level === 'pro'
+      ? item.level + 100
+      : item.level;
 
-  const [ idDisabled ] = useState(true);
+  const [idDisabled] = useState(true);
   const { t, i18n } = useTranslation('shop');
   const { data: pointsUser } = useGetProfileMeQuery();
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
@@ -77,14 +91,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     level: 1,
     item_rarity: item.item_rarity,
   });
-  const [ showEquipButton, setShowEquipButton ] = useState(false);
+  const [showEquipButton, setShowEquipButton] = useState(false);
 
   const dispatch = useDispatch();
 
+  const [price, setPrice] = useState('');
 
-  const [ price, setPrice ] = useState('');
-
-  const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal
+  const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal;
 
   useEffect(() => {
     if (data) {
@@ -133,7 +146,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     }
 
     prevLvl.current = itemLevel;
-  }, [ itemLevel ]);
+  }, [itemLevel]);
 
   const handleBuyItem = async (itemPoints: string) => {
     if (profile && +profile?.points < +itemPoints) return;
@@ -185,9 +198,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
     try {
       if (isSlotNotEmpty) {
-        await removeItem({ items_to_remove: [ { id: isSlotNotEmpty.id } ] });
+        await removeItem({ items_to_remove: [{ id: isSlotNotEmpty.id }] });
       }
-      await equipItem({ equipped_items: [ { id: item.id, slot } ] });
+      await equipItem({ equipped_items: [{ id: item.id, slot }] });
     } catch (error) {
       console.error(error);
     }
@@ -215,22 +228,22 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
   const handleUsdtPayment = async () => {
     try {
-      await processPayment(Number(item.price_usdt), async (result) => {
+      await processPayment(Number(item.price_usdt), async result => {
         if (result.success) {
-          console.warn("Transaction info:", "hash:", result.transactionHash, "senderAddress:", result.senderAddress);
+          console.warn('Transaction info:', 'hash:', result.transactionHash, 'senderAddress:', result.senderAddress);
           const res = await upgradeItem({
             id: item.id,
             payment_method: 'usdt',
             transaction_id: result.transactionHash,
             sender_address: result.senderAddress,
-          })
+          });
 
           if (!res.error) {
             try {
               setIsUpdateLoading(true);
               const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
               localStorage.setItem('giftName', res.data?.chest.chest_name || '');
-        
+
               if (!res.error) {
                 playLvlSound();
                 refetch();
@@ -245,7 +258,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                     localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
                     localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
                   }
-        
+
                   openModal(MODALS.UPGRADED_ITEM, {
                     item: res.data,
                     mode: 'item',
@@ -287,13 +300,24 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     itemLevel < 10
       ? 10
       : itemLevel > 150
-        ? 150
-        : itemLevel % 10 === 0
-          ? (itemLevel === 50 || itemLevel === 100 || itemLevel === 150 ? itemLevel : itemLevel + 10)
-          : Math.ceil(itemLevel / 10) * 10;
+      ? 150
+      : itemLevel % 10 === 0
+      ? itemLevel === 50 || itemLevel === 100 || itemLevel === 150
+        ? itemLevel
+        : itemLevel + 10
+      : Math.ceil(itemLevel / 10) * 10;
+
+  const imageString =
+    buildMode === 'production'
+      ? buildLink()?.svgShop(item.image_url).replace('https://', 'https://storage.yandexcloud.net/')
+      : buildLink()?.svgShop(item.image_url);
 
   return (
-    <div className={`${styles.storeCard} ${!isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) ? styles.animated : ''}`}>
+    <div
+      className={`${styles.storeCard} ${
+        !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) ? styles.animated : ''
+      }`}
+    >
       {<GetGift giftColor={localStorage.getItem('giftName') ?? ''} />}
       <div className={styles.header}>
         <div
@@ -302,7 +326,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             item.item_rarity === 'yellow' ? styles.purpleImage : item.item_rarity === 'green' && styles.redImage,
           )}
         >
-          <img src={itemStoreString(item.image_url)} className={clsx(isBlocked && styles.disabledImage)} alt="" />
+          <img src={imageString + svgHeadersString} className={clsx(isBlocked && styles.disabledImage)} alt="" />
           {isBlocked && <LockIconSvg className={styles.disabledImageIcon} />}
           {!isBlocked && <p>{item.item_premium_level === 'advanced' ? 'adv' : item.item_premium_level}</p>}
         </div>
@@ -329,8 +353,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                ? styles.colorPurple
+                : styles.level
             }
           >
             {t('s20')} {itemLevel} {isB && t('s21')}
@@ -376,12 +400,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               {
                 <div className={styles.goal}>
                   <p>{locale === 'ru' ? item.chest.chest_name : item.chest.chest_name_eng}</p>
-                  <img
-                    src={
-                      item.chest.chest_image_url || GiftIcon
-                    }
-                    alt="Reward"
-                  />
+                  <img src={item.chest.chest_image_url || GiftIcon} alt="Reward" />
                 </div>
               }
             </div>
@@ -392,8 +411,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                   item.item_rarity === 'red'
                     ? styles.done
                     : item.item_rarity === 'yellow'
-                      ? styles.donePurple
-                      : styles.doneRed
+                    ? styles.donePurple
+                    : styles.doneRed
                 }
                 style={{
                   width: `${Math.min(((itemLevel % 10) / 10) * 100, 100)}%`,
@@ -406,54 +425,62 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 sortByPremiumLevel(itemsForImages?.items)
                   .filter(_item => _item.name === item.name)
                   .map((_item, index) => (
-                      <div
-                        className={clsx(
-                          styles.item,
-                          index === 0 && (itemLevel < 50 || item.item_premium_level === 'base') && styles.blue,
-                          index === 1 && (itemLevel >= 50 && itemLevel < 100 && item.item_premium_level !== 'base' || item.item_premium_level === 'advanced') && styles.purple,
-                          index === 2 && (itemLevel >= 100 && ![ 'base', 'advanced' ].includes(item.item_premium_level) || item.item_premium_level === 'pro') && styles.red,
-                          !(
-                            (index === 0 && (itemLevel < 50 || item.item_premium_level === 'base')) ||
-                            (index === 1 && (itemLevel >= 50 && itemLevel < 100 && item.item_premium_level !== 'base' || item.item_premium_level === 'advanced')) ||
-                            (index === 2 && (itemLevel >= 100 && ![ 'base', 'advanced' ].includes(item.item_premium_level) || item.item_premium_level === 'pro'))
-                          ) && styles.noBorder,
-                        )}
-
-                        key={_item.id}
-                        style={
-                          itemLevel < 50 && index === 1
-                            ? ({
+                    <div
+                      className={clsx(
+                        styles.item,
+                        index === 0 && (itemLevel < 50 || item.item_premium_level === 'base') && styles.blue,
+                        index === 1 &&
+                          ((itemLevel >= 50 && itemLevel < 100 && item.item_premium_level !== 'base') ||
+                            item.item_premium_level === 'advanced') &&
+                          styles.purple,
+                        index === 2 &&
+                          ((itemLevel >= 100 && !['base', 'advanced'].includes(item.item_premium_level)) ||
+                            item.item_premium_level === 'pro') &&
+                          styles.red,
+                        !(
+                          (index === 0 && (itemLevel < 50 || item.item_premium_level === 'base')) ||
+                          (index === 1 &&
+                            ((itemLevel >= 50 && itemLevel < 100 && item.item_premium_level !== 'base') ||
+                              item.item_premium_level === 'advanced')) ||
+                          (index === 2 &&
+                            ((itemLevel >= 100 && !['base', 'advanced'].includes(item.item_premium_level)) ||
+                              item.item_premium_level === 'pro'))
+                        ) && styles.noBorder,
+                      )}
+                      key={_item.id}
+                      style={
+                        itemLevel < 50 && index === 1
+                          ? ({
                               '--lvl-height': `${(itemLevel / 50) * 100}%`,
                             } as React.CSSProperties)
-                            : itemLevel >= 50 && index === 2
-                              ? ({
-                                '--lvl-height': `${((itemLevel - 50) / 50) * 100}%`,
-                              } as React.CSSProperties)
-                              : undefined
-                        }
-                      >
-                        <img src={itemStoreString(_item.image_url)} className={styles.itemImage} alt="" />
+                          : itemLevel >= 50 && index === 2
+                          ? ({
+                              '--lvl-height': `${((itemLevel - 50) / 50) * 100}%`,
+                            } as React.CSSProperties)
+                          : undefined
+                      }
+                    >
+                      <img src={itemStoreString(_item.image_url)} className={styles.itemImage} alt="" />
 
-                        {item.item_premium_level === 'base' &&
-                          _item.item_premium_level === 'advanced' &&
-                          !item.is_bought && (
-                            <>
-                              <div className={styles.lockedOverlay50}></div>
-                              <span className={styles.itemLevel}>50</span>
-                              <img src={LockIcon} alt="" className={styles.lockIcon} />
-                            </>
-                          )}
-
-                        {item.item_premium_level !== 'pro' && _item.item_premium_level === 'pro' && !item.is_bought && (
+                      {item.item_premium_level === 'base' &&
+                        _item.item_premium_level === 'advanced' &&
+                        !item.is_bought && (
                           <>
-                            <div className={styles.lockedOverlay100}></div>
-                            <span className={styles.itemLevel}>100</span>
+                            <div className={styles.lockedOverlay50}></div>
+                            <span className={styles.itemLevel}>50</span>
                             <img src={LockIcon} alt="" className={styles.lockIcon} />
                           </>
                         )}
-                      </div>
-                    ),
-                  )}
+
+                      {item.item_premium_level !== 'pro' && _item.item_premium_level === 'pro' && !item.is_bought && (
+                        <>
+                          <div className={styles.lockedOverlay100}></div>
+                          <span className={styles.itemLevel}>100</span>
+                          <img src={LockIcon} alt="" className={styles.lockIcon} />
+                        </>
+                      )}
+                    </div>
+                  ))}
             </div>
           </div>
         ))}
@@ -511,7 +538,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           <Button
             disabled={idDisabled}
             onClick={() => {
-              removeItem({ items_to_remove: [ { id: item.id } ] });
+              removeItem({ items_to_remove: [{ id: item.id }] });
             }}
           >
             <img src={idDisabled ? ListDisableIcon : ListIcon} alt="Tasks" />
