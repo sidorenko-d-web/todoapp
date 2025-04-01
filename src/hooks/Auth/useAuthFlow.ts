@@ -78,12 +78,12 @@ export const useAuthFlow = () => {
   // Запрос fullscreen для Telegram WebApp
   useEffect(() => {
     if (
-      window.Telegram &&
-      window.Telegram.WebApp &&
-      typeof window.Telegram.WebApp.requestFullscreen === 'function' &&
-      !buildMode.includes('Dev')
+      window?.Telegram &&
+      window?.Telegram?.WebApp &&
+      typeof window?.Telegram?.WebApp?.requestFullscreen === 'function'
+      // !buildMode.includes('Dev')
     ) {
-      window.Telegram.WebApp.requestFullscreen();
+      window?.Telegram?.WebApp?.requestFullscreen();
     }
   }, []);
 
