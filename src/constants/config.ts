@@ -1,5 +1,5 @@
-// const init_data = window.Telegram.WebApp.initData;
-const init_data = window.Telegram.WebApp.initDataUnsafe
+const init_data = window.Telegram.WebApp.initData;
+// const init_data = window.Telegram.WebApp.initDataUnsafe
 // const init_data = WebApp.initData;
 // Андрей dehopen 1301940582
 // const init_data =
