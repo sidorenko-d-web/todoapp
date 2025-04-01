@@ -166,6 +166,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
             {formatAbbreviation(1, 'currency')}
           </Button>
           <Button
+            style={{zIndex: '20000'}}
             className={`${s.button} ${!buyBtnGlowing && isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) ? s.glowing : ''
               }`}
             disabled={!!isSubscriptionPurchased || !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)}
