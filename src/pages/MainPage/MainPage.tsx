@@ -399,7 +399,7 @@ export const MainPage: FC = () => {
       {hasCreatingIntegrations && !firstIntegrationReadyToPublish ? <IntegrationCreation /> : <PublishIntegrationButton />}
 
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) ||
+        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && !getModalState(MODALS.SUBSCRIBE).isOpen) ||
         (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) ||
         (firstIntegrationCreating &&

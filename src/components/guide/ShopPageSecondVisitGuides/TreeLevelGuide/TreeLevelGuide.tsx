@@ -41,6 +41,7 @@ export const TreeLevelGuide: React.FC<TreeLevelGuideProps> = ({ onClose, item })
 
     useEffect(() => {
         if (itemUpgraded) {
+            console.log('ITEM UPGRADED!!')
             const timer = setTimeout(() => {
                 handleClose();
             }, 500);
