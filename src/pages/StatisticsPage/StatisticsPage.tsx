@@ -7,7 +7,7 @@ import logo from '../../assets/icons/dot.png';
 import back from '../../assets/icons/arrow-back.svg';
 import StatisticsCard from '../../components/statistics/statisticsCard/StatisticsCard';
 import coin from '../../assets/icons/coin.png';
-import { useGetAllIntegrationsQuery, useGetProfileMeQuery } from '../../redux';
+import { useGetIntegrationsQuery, useGetProfileMeQuery } from '../../redux';
 import { formatAbbreviation } from '../../helpers';
 import { Button } from '../../components/shared';
 import { useTranslation } from 'react-i18next';
@@ -16,11 +16,10 @@ import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileS
 import { usePushLineStatus } from '../../hooks/usePushLineStatus.ts';
 
 const StatisticsPage: FC = () => {
-  // Все хуки вызываются на верхнем уровне
   const { t, i18n } = useTranslation('statistics');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const navigate = useNavigate();
-  const { data: statisticData, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
+  const { data: statisticData, isLoading: isAllIntegrationsLoading } = useGetIntegrationsQuery();
   const { data: userProfileData, isLoading: isUserLoading } = useGetProfileMeQuery();
   const {
     points: displayedPoints,

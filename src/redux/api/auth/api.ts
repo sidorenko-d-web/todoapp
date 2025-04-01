@@ -19,5 +19,4 @@ export const authApi = createApi({
   }),
 });
 
-export const { useSignInMutation } =
-  authApi;
+export const { useSignInMutation } = authApi;

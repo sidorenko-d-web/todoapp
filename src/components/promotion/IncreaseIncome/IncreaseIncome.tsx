@@ -45,19 +45,26 @@ export const IncreaseIncome = () => {
       const profiles = profileQueries.map(query => query.data!);
       setProfilesData(profiles);
     }
-  // }, [profileQueries]); couses react error
-}, []);
+    // }, [profileQueries]); couses react error
+  }, []);
 
-  const { totalSubscribers, subscribersForSecondLevel } = useMemo(() => {
-    const totalSubscribers = profilesData.reduce((sum, profile) => sum + profile.subscribers, 0);
-    const subscribersForSecondLevel = profilesData.reduce(
-      (sum, profile) => sum + profile.subscribers_for_second_level_referrals,
+  const { firstLevelSubscribers, secondLevelSubscribers } = useMemo(() => {
+    const firstLevel = profilesData.reduce(
+      (sum, profile) => sum + (profile?.subscribers_for_first_level_referrals || 0),
       0,
     );
-    return { totalSubscribers, subscribersForSecondLevel };
+    const secondLevel = profilesData.reduce(
+      (sum, profile) => sum + (profile?.subscribers_for_second_level_referrals || 0),
+      0,
+    );
+    return {
+      totalSubscribers: firstLevel + secondLevel,
+      firstLevelSubscribers: firstLevel,
+      secondLevelSubscribers: secondLevel,
+    };
   }, [profilesData]);
 
-  const sumSubscribers = totalSubscribers + subscribersForSecondLevel;
+  const sumSubscribers = firstLevelSubscribers + secondLevelSubscribers;
 
   return (
     <>
@@ -76,7 +83,7 @@ export const IncreaseIncome = () => {
               <li className={s.listBadge}>
                 <span className={s.badge}>
                   +
-                  {formatAbbreviation(totalSubscribers, 'number', {
+                  {formatAbbreviation(firstLevelSubscribers, 'number', {
                     locale: locale,
                   })}{' '}
                   <img src={subscribersIcon} alt="Подписчики" />
@@ -85,7 +92,7 @@ export const IncreaseIncome = () => {
               </li>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +{formatAbbreviation(subscribersForSecondLevel, 'number', { locale: locale })}{' '}
+                  +{formatAbbreviation(secondLevelSubscribers, 'number', { locale: locale })}{' '}
                   <img src={subscribersIcon} alt="Подписчики" />
                 </span>
                 <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>

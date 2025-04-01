@@ -1,5 +1,5 @@
 import { Action, combineReducers } from 'redux';
-import { animationStateReducer, audioReducer, authReducer, mainReducer, shopReducer } from './slices';
+import { animationStateReducer, audioReducer, authReducer, mainReducer, shopReducer, transactionNotificationReducer } from './slices';
 import {
   authApi,
   chestApi,
@@ -34,6 +34,7 @@ const appReducer = combineReducers({
   confirmation: confirmationReducer,
   acceleration: accelerationReducer,
   animationStateSlice: animationStateReducer,
+  transactionNotification: transactionNotificationReducer,
   [authApi.reducerPath]: authApi.reducer,
   [shopApi.reducerPath]: shopApi.reducer,
   [treeApi.reducerPath]: treeApi.reducer,

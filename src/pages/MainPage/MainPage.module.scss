@@ -15,6 +15,29 @@
   animation: fadeIn 0.5s ease-out forwards 0.3s;
 }
 
+.treeReward {
+  width: 54.545px;
+  height: 54.545px;
+  position: absolute;
+  left: 25px;
+  bottom: 25px;
+  z-index: 1000;
+  animation: moveUpDown 2s ease-in-out infinite;
+
+  &.up {
+    bottom: 87px;
+  }
+}
+
+@keyframes moveUpDown {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
 
 @keyframes fadeIn {
   from {

@@ -47,4 +47,6 @@ export type UpdateProfileRequestDTO = {
 
 export type BuySubscriptionRequestDTO = {
   payment_method: 'internal_wallet' | 'usdt' | string;
+  transaction_id?: string
+  sender_address?: string;
 };

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import {
   AccelerateIntegtrationGuide,
   FinishTutorialGuide,
@@ -10,6 +10,7 @@ import {
   PublishIntegrationButton,
   Room,
   SubscrieGuide,
+  TrackedLink,
 } from '../../components';
 import s from './MainPage.module.scss';
 import { AppRoute, GUIDE_ITEMS, MODALS } from '../../constants';
@@ -27,11 +28,11 @@ import {
   setIntegrationReadyForPublishing,
   setLastIntegrationId,
   setSubscribeGuideShown,
-  useGetAllIntegrationsQuery,
   useGetEquipedQuery,
   useGetIntegrationsQuery,
   useGetInventoryItemsQuery,
   useGetProfileMeQuery,
+  useGetTreeInfoQuery,
   useGetUserQuery,
   useGetUserWelcomeBonusQuery,
 } from '../../redux';
@@ -42,16 +43,21 @@ import { useTranslation } from 'react-i18next';
 
 import { incrementAcceleration } from '../../redux/slices/integrationAcceleration.ts';
 import DaysInARowModal from '../DevModals/DaysInARowModal/DaysInARowModal.tsx';
+import Lottie from 'lottie-react';
+import { giftShake } from '../../assets/animations';
+import { hasAvailableTreeReward } from '../../helpers';
+import clsx from 'clsx';
 
 export const MainPage: FC = () => {
   const { t } = useTranslation('guide');
   const { getModalState, openModal, closeModal } = useModal();
   const navigate = useNavigate();
   const reduxDispatch = useDispatch();
-  const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetAllIntegrationsQuery();
+  const { data, refetch, isLoading: isAllIntegrationsLoading } = useGetIntegrationsQuery();
+
+  const { data: profileData, isLoading: isCurrentUserProfileInfoLoading } = useGetProfileMeQuery();
 
   const location = useLocation();
-
 
   const { data: userData } = useGetUserQuery();
 
@@ -77,10 +83,8 @@ export const MainPage: FC = () => {
     }
   }, [integrationCurrentlyCreating]);
 
-
   useEffect(() => {
-    if (itemsData && !isInventoryDataLoading) {
-
+    if (itemsData && !isInventoryDataLoading && profileData && !isCurrentUserProfileInfoLoading) {
       if (itemsData.count > 0) {
         setTypewriterFound(true);
 
@@ -98,19 +102,25 @@ export const MainPage: FC = () => {
         setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
 
         reduxDispatch(resetGuideState());
-
       } else {
-        setRerender((prev) => prev + 1);
-        Object.values(GUIDE_ITEMS).forEach(category => {
-          Object.values(category).forEach(value => {
-            localStorage.setItem(value, '0');
-            console.log('GUIDE... ', value)
-          });
-        });
-        setRerender((prev) => prev + 1);
+        if (profileData.subscription_integrations_left === 0) {
+          // setRerender(prev => prev + 1);
+          // Object.values(GUIDE_ITEMS).forEach(category => {
+          //   Object.values(category).forEach(value => {
+          //     localStorage.setItem(value, '0');
+          //     console.log('GUIDE... ', value);
+          //   });
+          // });
+          // setRerender(prev => prev + 1);
+        }
       }
     }
-  }, [itemsData, isInventoryDataLoading, typewriterFound]);
+  }, [itemsData, isInventoryDataLoading, typewriterFound, profileData, isCurrentUserProfileInfoLoading]);
+
+  useEffect(() => {
+    console.log('FETCHING PROFILE')
+  }, [profileData, isCurrentUserProfileInfoLoading]);
+
 
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
@@ -159,7 +169,6 @@ export const MainPage: FC = () => {
 
           setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
 
-
           reduxDispatch(resetGuideState());
 
           reduxDispatch(setFooterActive(true));
@@ -174,6 +183,7 @@ export const MainPage: FC = () => {
       if (data.count === 0) {
         if (itemsData) {
           if (itemsData.count > 0) {
+            setRerender(prev => prev + 1);
             // MainPage items
             setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
             setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
@@ -188,12 +198,12 @@ export const MainPage: FC = () => {
             setGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN);
             setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
             setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
+            setRerender(prev => prev + 1);
           }
         }
-
       }
     }
-  }, [data, isAllIntegrationsLoading, itemsData, isInventoryDataLoading])
+  }, [data, isAllIntegrationsLoading, itemsData, isInventoryDataLoading]);
 
   useEffect(() => {
     if (isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
@@ -260,6 +270,7 @@ export const MainPage: FC = () => {
       isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
       !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
       !getSubscriptionPurchased() &&
+      getModalState(MODALS.SUBSCRIBE).isOpen &&
       data?.count === 0
     ) {
       openModal(MODALS.SUBSCRIBE);
@@ -292,10 +303,12 @@ export const MainPage: FC = () => {
       navigate(AppRoute.ShopInventory);
     }
 
-    if (isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED)
-      && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)
-      && !getModalState(MODALS.DAYS_IN_A_ROW).isOpen
-      && !getModalState(MODALS.DAYS_IN_A_ROW).isOpen) {
+    if (
+      isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED) &&
+      !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+      !getModalState(MODALS.DAYS_IN_A_ROW).isOpen &&
+      !getModalState(MODALS.DAYS_IN_A_ROW).isOpen
+    ) {
       openModal(MODALS.DAYS_IN_A_ROW);
     }
   }, []);
@@ -304,9 +317,10 @@ export const MainPage: FC = () => {
     reduxDispatch(setActiveFooterItemId(3));
   }, [location.pathname]);
 
-
-  const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
+  // const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
+
+  const firstIntegrationReadyToPublish = useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
 
   useEffect(() => {
     if (isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
@@ -314,16 +328,33 @@ export const MainPage: FC = () => {
     }
   }, [isPublishedModalClosed, isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)]);
 
-
-  const { isLoading: isCurrentUserProfileInfoLoading } = useGetProfileMeQuery();
   const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
   const { isLoading: isRoomLoading } = useGetEquipedQuery();
+
+  const hasCreatingIntegrations = !data?.integrations.some(
+    integration =>
+      integration.status === 'created' || (integration.status === 'creating' && integration.time_left === 0),
+  );
 
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(3));
   }, []);
 
+  const { data: treeData } = useGetTreeInfoQuery();
+  const showAvailableReward = useMemo(() => {
+    if (treeData) {
+      return hasAvailableTreeReward(treeData.growth_tree_stages);
+    }
+  }, [treeData]);
+
+  const { data: creatingIntegrations, isLoading: isCreatingIntegrationsLoading } = useGetIntegrationsQuery(
+    { status: 'creating' },
+  );
+
+  const isCreatingIntegration = creatingIntegrations && creatingIntegrations.count > 0;
+
   const isLoading =
+    isCreatingIntegrationsLoading ||
     isAllIntegrationsLoading ||
     isCurrentUserProfileInfoLoading ||
     isIntegrationsLoading ||
@@ -334,20 +365,34 @@ export const MainPage: FC = () => {
 
   const accelerateIntegration = () => {
     console.log('_acceleration');
-    if (integrationCurrentlyCreating || firstIntegrationCreating) {
+    if (integrationCurrentlyCreating || firstIntegrationReadyToPublish) {
       reduxDispatch(incrementAcceleration());
     }
   };
 
   return (
     <main className={s.page} onClick={accelerateIntegration}>
-      <DaysInARowModal onClose={() => {
-        if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
-          closeModal(MODALS.DAYS_IN_A_ROW);
-        }
-      }} />
+      {!isLoading && showAvailableReward && (
+        <TrackedLink
+          to={AppRoute.ProgressTree}
+          trackingData={{
+            eventType: 'button',
+            eventPlace: 'mainPage tree reward',
+          }}
+        >
+          <Lottie animationData={giftShake} className={clsx(s.treeReward, {[s.up]: isCreatingIntegration})} />
+        </TrackedLink>
+      )}
 
-      {(integrationCurrentlyCreating || firstIntegrationCreating) && (
+      <DaysInARowModal
+        onClose={() => {
+          if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+            closeModal(MODALS.DAYS_IN_A_ROW);
+          }
+        }}
+      />
+
+      {(integrationCurrentlyCreating || firstIntegrationReadyToPublish) && (
         <div
           style={{
             position: 'absolute',
@@ -363,27 +408,31 @@ export const MainPage: FC = () => {
 
       <Room mode="me" />
 
-      {isIntegrationReadyForPublishing ? <IntegrationCreation /> : <PublishIntegrationButton />}
+      {hasCreatingIntegrations && !firstIntegrationReadyToPublish ? (
+        <IntegrationCreation />
+      ) : (
+        <PublishIntegrationButton />
+      )}
 
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) ||
+        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && !getModalState(MODALS.SUBSCRIBE).isOpen) ||
         (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) ||
         (firstIntegrationCreating &&
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
-          <div
-            style={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              top: '0',
-              left: '0',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              pointerEvents: 'none',
-              zIndex: '500',
-            }}
-          />
-        )}
+        <div
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            top: '0',
+            left: '0',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            pointerEvents: 'none',
+            zIndex: '500',
+          }}
+        />
+      )}
 
       <InitialGuide
         onClose={() => {
@@ -436,7 +485,6 @@ export const MainPage: FC = () => {
             }}
           />
         )}
-
 
       {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (

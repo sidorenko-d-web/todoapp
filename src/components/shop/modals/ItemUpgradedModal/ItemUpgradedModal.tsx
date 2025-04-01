@@ -45,7 +45,7 @@ export const ItemUpgradedModal = () => {
   if (!newItem) return <></>;
   return (
     <CentralModal
-      title={t('s43')}
+      title={t('s62')}
       onClose={handleOpenChest}
       modalId={MODALS.UPGRADED_ITEM}
     >
