@@ -2,23 +2,22 @@ import { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { AppRoute } from '../constants';
 
-import ShopPage from '../pages/ShopPage/ShopPage.tsx';
 import {
   IntegrationPage,
   MainPage,
   ProfilePage,
   ProgressTreePage,
   PromotionPage,
+  StatisticsPage,
   StrangerProfilePage,
   StrangerRoomPage,
   TasksPage,
   WardrobePage,
 } from '../pages';
 import Layout from '../layout/Layout.tsx';
-import StatisticsPage from '../pages/StatisticsPage/StatisticsPage';
 
 import DevModals from '../pages/DevModals/DevModals.tsx';
-import { ShopInventoryPage } from '../pages/ShopPage';
+import { ShopInventoryPage, ShopPage } from '../pages/ShopPage';
 
 function AppRouter(): JSX.Element | null {
   const location = useLocation();

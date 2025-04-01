@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 
 type TypeTab<T> = { title: string; value: T };
 
-const StorePage: FC = () => {
+export const ShopPage: FC = () => {
   const { t } = useTranslation('shop');
   const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
   const [itemsRarity, setItemsQuality] = useState<TypeTab<TypeItemRarity>>();
@@ -63,4 +63,3 @@ const StorePage: FC = () => {
   );
 };
 
-export default StorePage;

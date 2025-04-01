@@ -10,7 +10,7 @@ export const itemsInSlots = {
   3: { width: 120, height: 120, x: -45, y: 415, z: 2 }, //chair
   4: { width: 150, height: 150, x: 60, y: 320, z: 0 }, //sofa
   5: { width: 150, height: 150, x: -135, y: 260, z: 0 }, //window
-  6: { width: 35, height: 35, x: -70, y: 223, z: 0 }, //poster
+  6: { width: 35, height: 35, x: -60, y: 203, z: 0 }, //poster
   7: { width: 35, height: 35, x: 107, y: 243, z: 0 }, //lens
   8: { width: 40, height: 40, x: 60, y: 228, z: 0 }, //note
   9: { width: 100, height: 100, x: 80, y: 205, z: 100 }, //light portable
@@ -77,6 +77,7 @@ const proxyImageUrl = buildLink()?.proxy!;
 const dpi = window.devicePixelRatio;
 
 export const itemsBaseUrl = buildLink()?.itemBaseUrl;
+
 interface contextProps {
   equipped_items?: IRoomItem[];
   center: number;
@@ -109,25 +110,38 @@ export class SpineSceneBase extends Phaser.Scene {
   loadSvgItem(item: IShopItem, { equipped_items }: Pick<contextProps, 'equipped_items'>) {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const { width, height } = itemsInSlots[slot];
-    if (item.name === 'Кресло') {
+
+    if ('Постер в рамке' === item.name) {
+      this.load.svg('item' + item.id, createLink(`${item.name}${item.item_premium_level}`, 'base'), {
+        width: (width + 50) * dpi,
+        height: (height + 50) * dpi,
+      });
+    } else if ('Картина LED' === item.name) {
+      this.load.svg('item' + item.id, createLink(`Картины LED${item.item_premium_level}`, 'base'), {
+        width: (width + 50) * dpi,
+        height: (height + 50) * dpi,
+      });
+    } else if (item.name === 'Кресло') {
       this.load.svg('item' + item.id, buildLink()?.svgLink(item.image_url), {
         width: (width + 80) * dpi,
         height: (height + 80) * dpi,
       });
-    }else if (item.name === 'Стол массив') {
+    } else if (item.name === 'Стол массив') {
       this.load.svg('item' + item.id, buildLink()?.svgLink(item.image_url), {
-        width: (width + 20) * dpi,  
+        width: (width + 20) * dpi,
         height: (height + 20) * dpi,
       });
-    }else{
-          
-      this.load.svg('item' + item.id, buildLink()?.svgLink(item.image_url), { width: width * dpi, height: height * dpi });
+    } else {
+      this.load.svg('item' + item.id, buildLink()?.svgLink(item.image_url), {
+        width: width * dpi,
+        height: height * dpi,
+      });
     }
   }
 
   loadBaseItems() {
     baseItems.forEach(item => {
-      this.load.image(item.name, createLink(item.name, 'png'));
+      this.load.image(item.name, createLink(item.name, 'base'));
     });
   }
 
@@ -171,19 +185,19 @@ export class SpineSceneBase extends Phaser.Scene {
     const slot = equipped_items?.find(_item => _item.id === item.id)!.slot! as keyof typeof itemsInSlots;
     const _item = itemsInSlots[slot];
     let imageObject;
-    if (item.name === 'Штатив регулируемый') {
+    if (item.name === 'Кинокамера' && equipped_items?.find(item => item.slot === 12)) {
+      imageObject = this.add.image(center + (_item.x + 65) * dpi, (_item.y + 50) * dpi, 'item' + item.id);
+    } else if (item.name === 'Штатив регулируемый') {
       imageObject = this.add.image(center + _item.x * dpi, (_item.y + 50 - 15) * dpi, 'item' + item.id);
     } else if (item.name === 'Кинокамера' && equipped_items?.find(item => item.slot === 12)) {
-      imageObject = this.add.image(center + (_item.x + 65) * dpi, (_item.y + 50) * dpi, 'item' + item.id);
+      imageObject = this.add.image(center + (_item.x + 65) * dpi, (_item.y + 50 + 5) * dpi, 'item' + item.id);
     } else if (item.name === 'Лампа кольцевая' && equipped_items?.find(item => item.slot === 12)) {
       imageObject = this.add.image(center + (_item.x + 23) * dpi, (_item.y + 50 - 10) * dpi, 'item' + item.id);
       imageObject.scale = 1.2;
     } else if (item.name === 'ПК' && equipped_items?.find(item => item.slot === 12)) {
       imageObject = this.add.image(center + (_item.x + 10) * dpi, (_item.y + 50 - 10) * dpi, 'item' + item.id);
-      imageObject.scale = 1.2;
     } else if (item.name === 'Кресло' && equipped_items?.find(item => item.slot === 12)) {
       imageObject = this.add.image(center + (_item.x - 30) * dpi, (_item.y + 50) * dpi, 'item' + item.id);
-      imageObject.scale = 1.2;
     } else {
       imageObject = this.add.image(center + _item.x * dpi, (_item.y + 50) * dpi, 'item' + item.id);
     }
