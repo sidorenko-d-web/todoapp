@@ -12,12 +12,7 @@ import {
 } from '../../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
-import {
-  setCreateIntegrationButtonGlowing,
-  setFirstIntegrationReadyToPublish,
-  setIntegrationReadyForPublishing,
-  setLastIntegrationId,
-} from '../../../redux/slices/guideSlice.ts';
+import { setLastIntegrationId } from '../../../redux/slices/guideSlice.ts';
 import { getCompanyStars, getIntegrationRewardImageUrl, setGuideShown } from '../../../utils/index.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { useTranslation } from 'react-i18next';
@@ -87,15 +82,15 @@ export const PublishIntegrationButton: React.FC = () => {
     try {
       await refetch().unwrap();
 
-      const integrationToPublish = allIntegrations?.integrations.find(int => {
-        return int.status === 'created' || (int.status === 'creating' && int.time_left === 0);
-      });
+      const integrationToPublish = allIntegrations?.integrations.find(
+        int => int.status === 'created' || (int.status === 'creating' && int.time_left === 0),
+      );
 
       if (!integrationToPublish) {
         console.error('No publishable integrations found');
-        setIsPublishing(false);
         return;
       }
+
       setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
       const integrationIdToPublish = integrationToPublish.id;
       dispatch(setLastIntegrationId(integrationIdToPublish));
@@ -108,28 +103,20 @@ export const PublishIntegrationButton: React.FC = () => {
             timeLeftDelta: 1,
           }).unwrap();
 
-          let isCreated = false;
+          // Ждём, пока статус не обновится
           let retries = 0;
-          const maxRetries = 10;
-          while (!isCreated && retries < maxRetries) {
+          while (retries < 10) {
             await new Promise(resolve => setTimeout(resolve, 1500));
             const { data: updatedIntegration } = await refetchIntegration();
-            isCreated = updatedIntegration?.status === 'created';
+            if (updatedIntegration?.status === 'created') break;
             retries++;
-          }
-          if (!isCreated) {
-            throw new Error('Integration did not switch to "created" status');
           }
         } finally {
           setIsTimeUpdating(false);
         }
       }
 
-      dispatch(setIntegrationReadyForPublishing(false));
-      dispatch(setCreateIntegrationButtonGlowing(false));
-      dispatch(setFirstIntegrationReadyToPublish(false));
-      localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '0');
-
+      // Публикуем интеграцию
       const publishRes = await publishIntegration(integrationIdToPublish);
       if (!publishRes.error) {
         const company = integrationData?.campaign;
@@ -143,13 +130,14 @@ export const PublishIntegrationButton: React.FC = () => {
           });
         }
       }
-    } catch (error) {
-      console.error('Failed to publish integration:', error);
-    } finally {
+
       if (canShowIntegrationReward && isPublishedModalClosed) {
         openCongratsModal();
       }
-      setIsPublishing(false);
+    } catch (error) {
+      console.error('Failed to publish integration:', error);
+    } finally {
+      setIsPublishing(false); // Всегда сбрасываем состояние
     }
   };
 
@@ -163,7 +151,7 @@ export const PublishIntegrationButton: React.FC = () => {
     <section
       className={s.integrationsControls}
       onClick={() => {
-        if (!isPublishing && !isTimeUpdating) handlePublish();
+        handlePublish();
       }}
     >
       <button

@@ -27,7 +27,6 @@ import { GUIDE_ITEMS } from '../../constants';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-
 export const IntegrationPage: React.FC = () => {
   const { t } = useTranslation('integrations');
   const { integrationId: queryIntegrationId } = useParams<{
@@ -96,15 +95,15 @@ export const IntegrationPage: React.FC = () => {
   }, []);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
-    if (isVoting) return;
+    if (isVoting || localCommentsGenerated >= 20) return;
     setIsVoting(true);
 
     try {
       // Оптимистичное обновление
       const wasCorrect = isThumbsUp === !commentData?.is_hate;
-      if (wasCorrect) {
-        setLocalProgress(prev => (prev + 1) % 5);
-      }
+      const newProgress = wasCorrect ? (localProgress + 1) % 5 : localProgress;
+
+      setLocalProgress(newProgress);
       setLocalCommentsGenerated(prev => prev + 1);
 
       await postComment({ commentId, isHate: !isThumbsUp }).unwrap();
@@ -119,10 +118,11 @@ export const IntegrationPage: React.FC = () => {
     } catch (error) {
       console.error('Error handling vote:', error);
       // Откат оптимистичного обновления
-      if (isThumbsUp === !commentData?.is_hate) {
-        setLocalProgress(prev => (prev - 1) % 5);
+      const wasCorrect = isThumbsUp === !commentData?.is_hate;
+      if (wasCorrect) {
+        setLocalProgress(prev => Math.max(0, prev - 1));
       }
-      setLocalCommentsGenerated(prev => prev - 1);
+      setLocalCommentsGenerated(prev => Math.max(0, prev - 1));
     } finally {
       setIsVoting(false);
     }
@@ -188,9 +188,9 @@ export const IntegrationPage: React.FC = () => {
                   <IntegrationComment
                     progres={localProgress}
                     {...comments[currentCommentIndex]}
+                    finished={localCommentsGenerated >= 20 || !(commentData && isSuccess)}
                     onVote={handleVote}
                     hateText={commentData?.is_hate}
-                    finished={localCommentsGenerated >= 20 || !(commentData && isSuccess)}
                     isVoting={isVoting}
                   />
                 </>
@@ -201,32 +201,33 @@ export const IntegrationPage: React.FC = () => {
       {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && showGuide && (
         <IntegrationPageGuide
           onClose={() => {
-            setRerender((prev) => prev+1);
+            setRerender(prev => prev + 1);
             setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
             dispatch(setFooterActive(true));
             dispatch(setCommentGlow(false));
             dispatch(setActiveFooterItemId(2));
             dispatch(setElevateIntegrationStats(false));
             dispatch(setDimHeader(false));
-            setRerender((prev) => prev+1);
+            setRerender(prev => prev + 1);
           }}
         />
       )}
 
-      {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN)
-       && isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && <IntegrationStatsGuide
-        onClose={() => {
-          setRerender((prev) => prev+1);
-          setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN);
-          dispatch(setFooterActive(true));
-          dispatch(setCommentGlow(false));
-          dispatch(setActiveFooterItemId(2));
-          dispatch(setElevateIntegrationStats(false));
-          dispatch(setDimHeader(false));
-          setRerender((prev) => prev+1);
-        }}
-      >
-      </IntegrationStatsGuide>}
+      {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN) &&
+        isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
+          <IntegrationStatsGuide
+            onClose={() => {
+              setRerender(prev => prev + 1);
+              setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN);
+              dispatch(setFooterActive(true));
+              dispatch(setCommentGlow(false));
+              dispatch(setActiveFooterItemId(2));
+              dispatch(setElevateIntegrationStats(false));
+              dispatch(setDimHeader(false));
+              setRerender(prev => prev + 1);
+            }}
+          ></IntegrationStatsGuide>
+        )}
     </div>
   );
 };
