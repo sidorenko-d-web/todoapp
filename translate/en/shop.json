@@ -6,7 +6,7 @@
   "s5": "Decor",
   "s6": "You",
   "s7": "Top",
-  "s8": "Bottomwear",
+  "s8": "Bottom wear",
   "s9": "VIP skins",
   "s10": "left",
   "s11": "tgs",
@@ -62,5 +62,6 @@
   "s58": "Open store",
   "s59": "Loading...",
   "s60": "Loading",
-  "s61": "Error occured while getting data"
+  "s61": "Error occurred while getting data",
+  "s62": "Item upgraded!"
 }
