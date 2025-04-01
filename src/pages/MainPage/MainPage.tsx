@@ -270,6 +270,7 @@ export const MainPage: FC = () => {
       isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
       !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
       !getSubscriptionPurchased() &&
+      getModalState(MODALS.SUBSCRIBE).isOpen &&
       data?.count === 0
     ) {
       openModal(MODALS.SUBSCRIBE);
