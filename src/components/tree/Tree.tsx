@@ -157,16 +157,7 @@ export const Tree = () => {
 
   return (
     <div className={s.containerGlobal}>
-      {!isGuide && (
-        <div className={s.progressBarContainer}>
-          <div
-            className={s.progressBar}
-            style={{ height: `${150 + (treeData ? (treeData.growth_tree_stages.length - 1) * 300 : 0) + 25}px` }}
-          >
-            <div className={s.progressFill} style={{ height: `${progressPercent}%` }} ref={progressBarContainerRef} />
-          </div>
-        </div>
-      )}
+
 
       <div className={s.progressBarContainer}>
         <List

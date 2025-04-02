@@ -1,5 +1,5 @@
 import styles from './ItemUpgradedModal.module.scss';
-import { itemStoreString, localStorageConsts, MODALS } from '../../../../constants';
+import { buildLink, buildMode, itemStoreString, localStorageConsts, MODALS, svgHeadersString } from '../../../../constants';
 import { useAutoPlaySound, useModal } from '../../../../hooks';
 import { IShopItem, useGetShopItemsQuery } from '../../../../redux';
 import Button from '../partials/Button';
@@ -42,6 +42,13 @@ export const ItemUpgradedModal = () => {
     }
   };
 
+  
+  const getImage = (url: string) =>
+    buildMode === 'production'
+      ? buildLink()?.svgShop(url).replace('https://', 'https://storage.yandexcloud.net/')
+      : buildLink()?.svgShop(url);
+
+
   if (!newItem) return <></>;
   return (
     <CentralModal
@@ -64,12 +71,12 @@ export const ItemUpgradedModal = () => {
         >
           {/* <img src={state.args?.item.image_url} alt="item-image" /> */}
           <img
-            src={itemStoreString(state.args?.item.image_url ?? '')}
+            src={getImage(state.args?.item.image_url ?? '') + svgHeadersString}
             alt="item-image"
             className={styles.imageOld}
           />
           <img
-            src={itemStoreString(newItem?.items?.[0].image_url ?? '')}
+            src={getImage(newItem?.items?.[0].image_url ?? '') + svgHeadersString}
             alt="item-image"
             className={styles.imageNew}
           />

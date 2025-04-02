@@ -9,22 +9,6 @@
   color: white;
 }
 
-.progressBar {
-  position: absolute;
-  width: 30px;
-  height: 100%;
-  border: 2px solid var.$color-dark-gray-stroke;
-  background: var.$color-gray;
-  border-bottom: none;
-  border-top: none;
-}
-
-
-
-
-
-
-
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -51,10 +35,6 @@
   }
 }
 
-
-
-
-
 .blickAnimation {
   position: absolute;
   width: 50px;
@@ -64,8 +44,6 @@
   pointer-events: none;
   scale: 1.1;
 }
-
-
 
 .progressBarContainer {
   position: relative;
@@ -97,7 +75,6 @@
     display: flex;
     justify-content: center;
     position: relative;
-    overflow: unset;
 
     &.guide {
       &::before {
@@ -181,11 +158,15 @@
       z-index: 1000;
       left: 25px;
       bottom: 0;
-      transform: translateY(35%);
+      transform: translateY(15%);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 5px;
+      width: 120px;
+      overflow: hidden;
+      height: 190px;
+      padding-top: 100px ;
 
       &.right {
         right: 25px;
@@ -233,7 +214,7 @@
         position: absolute;
         animation: spin 6s linear infinite;
         z-index: 1;
-        top: -70px;
+        top: 25px;
         width: 190px;
         height: 190px;
 
