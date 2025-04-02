@@ -17,20 +17,21 @@ export const Button = ({
   volumeMultiplier = 7,
   ...props
 }: Props) => {
-  const isVibrationSupported = 'vibrate' in navigator;
-  
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
+
   // Используем новый хук для звука кнопки
   const handleSoundClick = useButtonSound({
     sound: soundType,
     enabled: soundEnabled,
-    volumeMultiplier
+    volumeMultiplier,
   });
 
   const handleOnClick = () => {
     if (isVibrationSupported) {
       navigator.vibrate(200);
     }
-    
+
     // Используем обработчик звука с колбэком
     handleSoundClick(onClick);
   };

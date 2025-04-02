@@ -32,14 +32,16 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
   children,
   titleWrapperStyles,
   headerStyles,
-                                                                titleIcon,
-                                                                isCopiedLink,
+  titleIcon,
+  isCopiedLink,
 }) => {
   const { getModalState } = useModal();
   const { isOpen } = getModalState(modalId);
   const [isClosing, setIsClosing] = useState(false);
   const { t } = useTranslation('promotion');
 
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
 
   // Handle scroll lock
   useEffect(() => {
@@ -52,6 +54,9 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
 
   // Handle close with animation
   const handleClose = () => {
+    if (isVibrationSupported) {
+      navigator.vibrate(200);
+    }
     setIsClosing(true);
     setTimeout(() => {
       onClose();
@@ -69,14 +74,10 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
     >
       {isCopiedLink && <div className={s.save}>{t('p59')}</div>}
       <div
-        className={classNames(
-          s.modal,
-          modalStyles,
-          {
-            [s.opening]: isOpen && !isClosing,
-            [s.closing]: isClosing
-          }
-        )}
+        className={classNames(s.modal, modalStyles, {
+          [s.opening]: isOpen && !isClosing,
+          [s.closing]: isClosing,
+        })}
         onClick={e => e.stopPropagation()}
       >
         <div className={classNames({ [s.disabled]: disabled })}>
@@ -92,13 +93,11 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
               </button>
             </div>
           </header>
-          <div className={classNames(s.content, { [s.topUsers]: title === 'Топ 10 000 инфлюенсеров' })}>
-            {children}
-          </div>
+          <div className={classNames(s.content, { [s.topUsers]: title === 'Топ 10 000 инфлюенсеров' })}>{children}</div>
         </div>
       </div>
     </Overlay>
   );
 };
 
-export default BottomModal
+export default BottomModal;

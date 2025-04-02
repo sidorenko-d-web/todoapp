@@ -87,8 +87,6 @@ export const IntegrationPage: React.FC = () => {
       setLocalProgress(calculatedProgress);
       setCurrentCommentIndex(calculatedIndex);
       setLocalCommentsGenerated(data.comments_generated);
-
-      console.log(`Server: ${serverProgress}, Progress: ${calculatedProgress}, Index: ${calculatedIndex}`);
     }
   }, [data, comments.length]);
 
@@ -96,7 +94,6 @@ export const IntegrationPage: React.FC = () => {
     const interval = setInterval(() => {
       const now = Date.now();
       if (now - lastRefetchTime >= REFETCH_INTERVAL) {
-        console.log('Auto-refreshing data and comments...');
         refetchCurrentIntegration();
         refetchComments();
         setLastRefetchTime(now);
@@ -108,22 +105,18 @@ export const IntegrationPage: React.FC = () => {
 
   useEffect(() => {
     if (!data) return;
-    const timer = setTimeout(() => {
+    const refetchInterval = setInterval(() => {
       refetchCurrentIntegration();
-      refetchComments();
     }, REFETCH_INTERVAL);
-    return () => clearTimeout(timer);
-  }, [data, refetchCurrentIntegration, refetchComments]);
+
+    return () => clearInterval(refetchInterval);
+  }, [data, refetchCurrentIntegration]);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     if (isVoting || localCommentsGenerated >= 20) return;
     setIsVoting(true);
 
     try {
-      const tempProgress = (localProgress + 1) % 5;
-      setLocalProgress(tempProgress);
-      setLocalCommentsGenerated(prev => prev + 1);
-
       await postComment({ commentId, isHate: !isThumbsUp }).unwrap();
 
       const { data: updatedData } = await refetchCurrentIntegration();
@@ -141,11 +134,6 @@ export const IntegrationPage: React.FC = () => {
       }
     } catch (error) {
       console.error('Vote failed:', error);
-      // Откат при ошибке
-      if (data) {
-        setLocalProgress(data.comments_answered_correctly % 5);
-        setLocalCommentsGenerated(data.comments_generated);
-      }
     } finally {
       setIsVoting(false);
     }
@@ -198,10 +186,6 @@ export const IntegrationPage: React.FC = () => {
                 <div className={styles.commentsSectionTitleWrp}>
                   <p className={styles.commentsSectionTitle}>{t('i4')}</p>
                   <p className={styles.commentsAmount}>{localCommentsGenerated}/20</p>
-                  <p className={styles.refreshInfo}>
-                    {t('commentsRefreshIn')} {Math.floor((REFETCH_INTERVAL - (Date.now() - lastRefetchTime)) / 60000)}{' '}
-                    {t('minutes')}
-                  </p>
                 </div>
 
                 {comments.length > 0 && currentCommentIndex < comments.length && (

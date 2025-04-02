@@ -24,7 +24,7 @@ const INTEGRATION_ID_KEY = 'integration_id';
 export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ integration, refetchIntegration }) => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
-  console.log(integration);
+
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const accelerationRef = useRef(false);
   const lastUpdateRef = useRef(Date.now());
@@ -156,7 +156,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     playAccelerateIntegrationSound();
     dispatch(setLastIntegrationId(integration.id));
 
-    void accelerateIntegration(1).finally(() => {
+    void accelerateIntegration(100).finally(() => {
       refetchIntegration();
     });
 
