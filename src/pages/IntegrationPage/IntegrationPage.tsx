@@ -94,7 +94,6 @@ export const IntegrationPage: React.FC = () => {
     const interval = setInterval(() => {
       const now = Date.now();
       if (now - lastRefetchTime >= REFETCH_INTERVAL) {
-        console.log('Auto-refreshing data and comments...');
         refetchCurrentIntegration();
         refetchComments();
         setLastRefetchTime(now);
@@ -106,22 +105,18 @@ export const IntegrationPage: React.FC = () => {
 
   useEffect(() => {
     if (!data) return;
-    const timer = setTimeout(() => {
+    const refetchInterval = setInterval(() => {
       refetchCurrentIntegration();
-      refetchComments();
     }, REFETCH_INTERVAL);
-    return () => clearTimeout(timer);
-  }, [data, refetchCurrentIntegration, refetchComments]);
+
+    return () => clearInterval(refetchInterval);
+  }, [data, refetchCurrentIntegration]);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     if (isVoting || localCommentsGenerated >= 20) return;
     setIsVoting(true);
 
     try {
-      const tempProgress = (localProgress + 1) % 5;
-      setLocalProgress(tempProgress);
-      setLocalCommentsGenerated(prev => prev + 1);
-
       await postComment({ commentId, isHate: !isThumbsUp }).unwrap();
 
       const { data: updatedData } = await refetchCurrentIntegration();
@@ -139,11 +134,6 @@ export const IntegrationPage: React.FC = () => {
       }
     } catch (error) {
       console.error('Vote failed:', error);
-      // Откат при ошибке
-      if (data) {
-        setLocalProgress(data.comments_answered_correctly % 5);
-        setLocalCommentsGenerated(data.comments_generated);
-      }
     } finally {
       setIsVoting(false);
     }
