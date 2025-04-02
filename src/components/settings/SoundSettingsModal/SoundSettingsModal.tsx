@@ -1,18 +1,19 @@
 import { MODALS } from "../../../constants/modals";
 import { useModal } from "../../../hooks/useModal";
 import styles from "./SoundSettingsModal.module.scss";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import tick from "../../../assets/icons/input-tick.svg";
 import circle from "../../../assets/icons/circle-blue.svg";
 import { useTranslation } from 'react-i18next';
 import { CentralModal } from "../../shared";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectVolume, setButtonVolume, setVolume } from '../../../redux';
+import { selectButtonVolume, selectVolume, setButtonVolume, setVolume } from '../../../redux';
 
 // Ключи для localStorage
 const MUSIC_ENABLED_KEY = 'musicEnabled';
 const SOUND_EFFECTS_ENABLED_KEY = 'soundEffectsEnabled';
 const MUSIC_VOLUME_KEY = 'musicVolume';
+const BUTTON_VOLUME_KEY = 'buttonVolume';
 
 interface SoundOptionProps {
     title: string;
@@ -21,6 +22,7 @@ interface SoundOptionProps {
     showVolumeSlider?: boolean;
     volumeValue?: number;
     onVolumeChange?: (value: number) => void;
+    onVolumeChangeComplete?: () => void;
 }
 
 const SoundOption = ({ 
@@ -29,7 +31,8 @@ const SoundOption = ({
     onToggle, 
     showVolumeSlider,
     volumeValue = 0.5,
-    onVolumeChange
+    onVolumeChange,
+    onVolumeChangeComplete
 }: SoundOptionProps) => {
     const { t } = useTranslation('settings');
     const sliderRef = useRef<HTMLInputElement>(null);
@@ -45,6 +48,12 @@ const SoundOption = ({
         if (onVolumeChange) {
             const newValue = parseFloat(e.target.value);
             onVolumeChange(newValue);
+        }
+    };
+    
+    const handleVolumeChangeComplete = () => {
+        if (onVolumeChangeComplete) {
+            onVolumeChangeComplete();
         }
     };
     
@@ -76,6 +85,8 @@ const SoundOption = ({
                         step="0.01"
                         value={volumeValue}
                         onChange={handleVolumeChange}
+                        onMouseUp={handleVolumeChangeComplete}
+                        onTouchEnd={handleVolumeChangeComplete}
                         className={styles.volumeSlider}
                     />
                 </div>
@@ -89,6 +100,7 @@ export const SoundSettingsModal = () => {
     const { closeModal } = useModal();
     const dispatch = useDispatch();
     const currentVolume = useSelector(selectVolume);
+    const currentButtonVolume = useSelector(selectButtonVolume);
     
     // Инициализация с сохраненными значениями из localStorage
     const [isMusicEnabled, setIsMusicEnabled] = useState(() => {
@@ -103,8 +115,18 @@ export const SoundSettingsModal = () => {
     
     const [isSoundEnabled, setIsSoundEnabled] = useState(() => {
         const saved = localStorage.getItem(SOUND_EFFECTS_ENABLED_KEY);
-        return saved !== null ? saved === 'true' : true;
+        return saved !== null ? saved === 'true' : currentButtonVolume > 0;
     });
+
+    // Инициализация громкости звуковых эффектов кнопок
+    const [buttonVolume, setButtonVolumeState] = useState(() => {
+        const saved = localStorage.getItem(BUTTON_VOLUME_KEY);
+        return saved !== null ? parseFloat(saved) : 2.1;
+    });
+    
+    // Используем локальное состояние для плавного изменения громкости
+    const [tempMusicVolume, setTempMusicVolume] = useState(musicVolume);
+    const [tempButtonVolume, setTempButtonVolume] = useState(buttonVolume);
 
     // При первом рендере применяем сохраненные настройки
     useEffect(() => {
@@ -113,7 +135,14 @@ export const SoundSettingsModal = () => {
         } else {
             dispatch(setVolume(0));
         }
-        dispatch(setButtonVolume(isSoundEnabled ? 2.1 : 0));
+        
+        // Устанавливаем громкость кнопок в зависимости от того, включены звуки или нет
+        dispatch(setButtonVolume(isSoundEnabled ? buttonVolume : 0));
+        
+        // Если значение еще не сохранено в localStorage, сохраняем его
+        if (!localStorage.getItem(BUTTON_VOLUME_KEY)) {
+            localStorage.setItem(BUTTON_VOLUME_KEY, String(buttonVolume));
+        }
     }, []);
 
     const handleCloseModal = () => {
@@ -125,29 +154,56 @@ export const SoundSettingsModal = () => {
         setIsMusicEnabled(newValue);
         
         // Сразу применяем настройки звука
-        dispatch(setVolume(newValue ? musicVolume : 0));
+        dispatch(setVolume(newValue ? tempMusicVolume : 0));
         // Сохраняем в localStorage
         localStorage.setItem(MUSIC_ENABLED_KEY, String(newValue));
     };
     
-    const handleMusicVolumeChange = (value: number) => {
-        setMusicVolume(value);
+    // Функция для временного изменения громкости музыки без сохранения
+    const handleTempMusicVolumeChange = useCallback((value: number) => {
+        setTempMusicVolume(value);
         
-        // Сразу применяем настройки громкости
-        dispatch(setVolume(value));
-        // Сохраняем в localStorage
-        localStorage.setItem(MUSIC_VOLUME_KEY, String(value));
-    };
+        // Обновляем громкость в Redux, но не сохраняем в localStorage
+        if (isMusicEnabled) {
+            dispatch(setVolume(value));
+        }
+    }, [isMusicEnabled, dispatch]);
+    
+    // Функция для окончательного сохранения громкости музыки
+    const handleMusicVolumeChangeComplete = useCallback(() => {
+        setMusicVolume(tempMusicVolume);
+        
+        // Сохраняем в localStorage только после завершения изменения
+        localStorage.setItem(MUSIC_VOLUME_KEY, String(tempMusicVolume));
+    }, [tempMusicVolume]);
 
     const toggleSoundEffects = () => {
         const newValue = !isSoundEnabled;
         setIsSoundEnabled(newValue);
         
         // Сразу применяем настройки звуковых эффектов
-        dispatch(setButtonVolume(newValue ? 2.1 : 0));
-        // Сохраняем в localStorage
+        dispatch(setButtonVolume(newValue ? tempButtonVolume : 0));
+        // Сохраняем в localStorage состояние (включено/выключено)
         localStorage.setItem(SOUND_EFFECTS_ENABLED_KEY, String(newValue));
     };
+    
+    // Функция для временного изменения громкости звуков кнопок без сохранения
+    const handleTempButtonVolumeChange = useCallback((value: number) => {
+        setTempButtonVolume(value);
+        
+        // Применяем новую громкость только если звуки включены
+        if (isSoundEnabled) {
+            dispatch(setButtonVolume(value));
+        }
+    }, [isSoundEnabled, dispatch]);
+    
+    // Функция для окончательного сохранения громкости звуков кнопок
+    const handleButtonVolumeChangeComplete = useCallback(() => {
+        setButtonVolumeState(tempButtonVolume);
+        
+        // Сохраняем значение громкости в localStorage
+        localStorage.setItem(BUTTON_VOLUME_KEY, String(tempButtonVolume));
+    }, [tempButtonVolume]);
 
     return (
         <CentralModal
@@ -164,13 +220,18 @@ export const SoundSettingsModal = () => {
                         isEnabled={isMusicEnabled}
                         onToggle={toggleMusic}
                         showVolumeSlider={true}
-                        volumeValue={musicVolume}
-                        onVolumeChange={handleMusicVolumeChange}
+                        volumeValue={tempMusicVolume}
+                        onVolumeChange={handleTempMusicVolumeChange}
+                        onVolumeChangeComplete={handleMusicVolumeChangeComplete}
                     />
                     <SoundOption
                         title={t('s10')}
                         isEnabled={isSoundEnabled}
                         onToggle={toggleSoundEffects}
+                        showVolumeSlider={true}
+                        volumeValue={tempButtonVolume}
+                        onVolumeChange={handleTempButtonVolumeChange}
+                        onVolumeChangeComplete={handleButtonVolumeChangeComplete}
                     />
                 </div>
 
