@@ -1,7 +1,6 @@
 @use '../../assets/styles/index.scss' as var;
 
-.container {
-  margin-top: 250px;
+.containerGlobal {
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -20,92 +19,11 @@
   border-top: none;
 }
 
-.progressBarAdditional {
-  position: absolute;
-  width: 30px;
-  height: 230px;
-  border: 2px solid var.$color-dark-gray-stroke;
-  background: var.$color-gray;
-  border-bottom: none;
-  border-top: none;
-  bottom: 0;
-  left: 50%;
-}
 
-.progressFill {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: var.$gradient-progress-tree;
-  transition: height 0.3s ease;
-}
 
-.levelMarker {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
 
-.levelCircle {
-  width: 55px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  position: relative;
-  transition: background 0.3s, border 0.3s;
-  background: var.$color-card-bg;
-  border: 2px solid var.$color-dark-gray-stroke;
-}
 
-.active {
-  background: var.$gradient-progress-tree;
-  border: 2px solid var.$color-border-primary;
-}
 
-.rewardsIconsWrapper {
-  display: flex;
-  gap: 5px
-}
-
-.prize,
-.priseSubscribers,
-.prizeRight {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  position: absolute;
-  top: -20px;
-  right: 80px;
-  min-width: 120px;
-  width: auto;
-  height: auto;
-  min-height: 42px;
-  align-items: center;
-  justify-content: center;
-}
-
-.priseSubscribers {
-  top: 0;
-}
-
-.prizeRight {
-  right: -130px;
-}
-
-.spiner {
-  position: absolute;
-  top: -290%;
-  left: -135%;
-  transform: translate(-50%, -50%) rotate(0deg);
-  width: 190px;
-  height: 190px;
-  z-index: -2;
-  animation: spin 6s linear infinite;
-}
 
 @keyframes spin {
   from {
@@ -133,128 +51,233 @@
   }
 }
 
-.imgPrize,
-.imgPrizeActive {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 44px;
-  aspect-ratio: 1;
-  border-radius: 4px;
-  padding: 3px 6px;
-  background: var.$color-card-bg;
-  border: 2px solid var.$color-dark-gray-stroke;
 
-  .giftStatus {
-    position: absolute;
-    top: -9px;
 
-    width: 16px;
-    height: 16px;
-    border-radius: 2px;
-    border: 1px solid var.$color-gray;
 
-    background: var.$footer-bg no-repeat center;
-    background-size: 85%;
-
-    &.notAchieved {
-      background-image: url('../../assets/icons/question.svg');
-    }
-
-    &.notTaken {
-      background-image: url('../../assets/icons/gift-ready.svg');
-    }
-
-    &.arrowsPurple {
-      background-image: url('../../assets/icons/arrows-up-purple.svg');
-    }
-
-    &.arrowsRed {
-      background-image: url('../../assets/icons/arrows-up-red.svg');
-    }
-  }
-}
-
-.imgPrizeActive {
-  position: absolute;
-  width: 190px;
-  height: 190px;
-  z-index: -2;
-  animation: spin 6s linear infinite;
-  background-color: transparent;
-  border: none;
-}
-
-.questionWrapper {
-  aspect-ratio: 1;
-  width: 18px;
-  position: absolute;
-  top: -12px;
-  padding: 1px;
-  border-radius: 2px;
-  background-color: var.$footer-bg;
-  outline: 1px solid var.$color-gray;
-}
-
-.blur {
-  aspect-ratio: 1;
-  position: absolute;
-  top: -1px;
-  width: 44px;
-  border-radius: 4px;
-  padding: 3px 6px;
-  opacity: 0.6;
-  background: var.$color-gray;
-}
-
-.text {
-  border-radius: 4px;
-  padding: 3px 6px;
-  background: var.$color-card-bg;
-  border: 2px solid var.$color-dark-gray-stroke;
-
-  display: flex;
-  flex-direction: column;
-  font-size: 16px;
-  font-weight: 500;
-  gap: 6px;
-  line-height: 13.2px;
-  letter-spacing: -0.05em;
-  text-align: center;
-  overflow: hidden;
-
-  span {
-    color: var.$color-text-semi-transparent;
-
-    &.inactive {
-      color: var.$color-pale-semi-transparent;
-    }
-  }
-}
-
-.textActive {
-  color: var.$color-text-semi-transparent;
-}
 
 .blickAnimation {
   position: absolute;
   width: 50px;
   height: 50px;
-  bottom: -5px;
+  top: -7px;
+  left: -5px;
   pointer-events: none;
+  scale: 1.1;
 }
 
-.progressBarWithGuide {
-  z-index: 30000;
-  background-color: transparent;
-  border: none;
+
+
+.progressBarContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
 
-.progressFillWithGuide {
-  visibility: hidden;
-}
+.list {
+  width: 100%;
+  scrollbar-width: 0;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  position: relative;
 
-.bordered {
-  border: 2px solid var.$color-border-primary;
+  &::-webkit-scrollbar {
+    width: 1px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+
+  .container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    overflow: unset;
+
+    &.guide {
+      &::before {
+        content: '';
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.85);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 100;
+      }
+    }
+
+    &.startingRow {
+      .badge {
+        opacity: 0;
+      }
+      .reward {
+        opacity: 0;
+      }
+      .buttonSpinner {
+        display: none;
+      }
+    }
+
+    .line {
+      background: var.$color-gray;
+      border: 2px solid var.$color-dark-gray-stroke;
+      box-sizing: content-box;
+      border-top: none;
+      border-bottom: none;
+      width: 30px;
+      height: 100%;
+
+      &.completed {
+        background: var.$color-blue-primary;
+      }
+    }
+
+    .badge {
+      display: flex;
+      gap: 6px;
+      position: absolute;
+      bottom: 0;
+      background: var.$color-dark-gray-stroke;
+      border: 2px solid var.$color-gray;
+      width: 55px;
+      height: 32px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+      z-index: 10;
+
+      &.completed {
+        background: linear-gradient(360deg, #2f80ed 0%, #9747ff 243.79%);
+        border: 2px solid var.$color-border-primary;
+      }
+    }
+
+    .takeRewardBtn {
+      position: absolute;
+      bottom: 0;
+      transform: translate(-50%, 110%);
+      font-size: 16px;
+      padding: 6px 3px;
+      border-radius: 6px;
+      background: linear-gradient(360deg, #2f80ed 0%, #9747ff 243.79%);
+      border: 2px solid var.$color-border-primary;
+      z-index: 10;
+    }
+
+    .rewardsWrapper {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .reward {
+      position: absolute;
+      z-index: 1000;
+      left: 25px;
+      bottom: 0;
+      transform: translateY(35%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+
+      &.right {
+        right: 25px;
+        left: unset;
+      }
+
+      .gift {
+        background: var.$color-card-bg;
+        border: 2px solid var.$color-dark-gray-stroke;
+        padding: 10px;
+        border-radius: 4px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        z-index: 10;
+
+        &.guide {
+          border: 2px solid var.$color-border-primary;
+        }
+
+        &.inactive {
+          opacity: 0.85;
+        }
+
+        .giftImage {
+          width: 20px;
+          position: relative;
+          z-index: 10;
+        }
+        .upperImage {
+          top: 0;
+          transform: translateY(-60%);
+          position: absolute;
+          z-index: 10;
+          padding: 1px;
+          width: 16px;
+          height: 16px;
+          border-radius: 2px;
+          background-color: var.$footer-bg;
+          outline: 2px solid var.$color-gray;
+          z-index: 10;
+        }
+      }
+      .rewardSpinner {
+        position: absolute;
+        animation: spin 6s linear infinite;
+        z-index: 1;
+        top: -70px;
+        width: 190px;
+        height: 190px;
+
+        &.spinnerMoved {
+          left: -62px;
+        }
+      }
+      .text {
+        border-radius: 4px;
+        padding: 3px 6px;
+        background: var.$color-card-bg;
+        border: 2px solid var.$color-dark-gray-stroke;
+        z-index: 10;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        font-size: 16px;
+        font-weight: 500;
+        gap: 6px;
+        line-height: 15.2px;
+        letter-spacing: -0.05em;
+        text-align: center;
+        overflow: hidden;
+
+        &.guide {
+          border: 2px solid var.$color-border-primary;
+        }
+
+        span {
+          color: var.$color-text-semi-transparent;
+
+          &.inactive {
+            color: var.$color-pale-semi-transparent;
+          }
+        }
+      }
+    }
+    .buttonSpinner {
+      position: absolute;
+      animation: spin 6s linear infinite;
+      bottom: -85px;
+      z-index: 1;
+      width: 200px;
+      height: 200px;
+    }
+  }
 }

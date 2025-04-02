@@ -35,8 +35,10 @@ export const NewItemModal: React.FC = () => {
 
   useAutoPlaySound(MODALS.NEW_ITEM, SOUNDS.upgradeOrBuyItem);
 
-  
-  const getImage = (url: string) => buildMode === 'production' ? buildLink()?.svgShop(url).replace('https://', 'https://storage.yandexcloud.net/') : buildLink()?.svgShop(url)  + svgHeadersString
+  const getImage = (url: string) =>
+    buildMode === 'production'
+      ? buildLink()?.svgShop(url).replace('https://', 'https://storage.yandexcloud.net/')
+      : buildLink()?.svgShop(url);
 
   return (
     <CentralModal title={t('s43')} onClose={() => closeModal(MODALS.NEW_ITEM)} modalId={MODALS.NEW_ITEM}>
@@ -51,7 +53,7 @@ export const NewItemModal: React.FC = () => {
           <img
             src={
               state.args?.mode === 'item'
-                ? getImage(state.args?.item.image_url ?? '')
+                ? getImage(state.args?.item.image_url ?? '') + svgHeadersString
                 : state.args?.item.image_url + svgHeadersString
             }
             alt="item-image"
