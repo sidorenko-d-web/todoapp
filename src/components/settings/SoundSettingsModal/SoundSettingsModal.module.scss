@@ -1,15 +1,8 @@
 @use "../../../assets/styles/abstracts" as var;
 
-// Variables for colors
-$border-default: #282830;
-$border-selected: #2F80ED;
-$text-default: #FFF;
-$text-selected: #2F80ED;
-$background-icon: #373A43;
-
 .titleStyles {
     display: flex;
-    padding: 10px 12px 10px 12px;
+    padding: 10px 12px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -26,34 +19,39 @@ $background-icon: #373A43;
     padding-top: 23px;
 }
 
-.languageSection {
+.soundSection {
     display: flex;
     flex-direction: column;
     gap: 10px;
     width: 100%;
 }
 
-.languageWrapper {
+.soundWrapper {
     display: flex;
-    padding: 6px;
+    padding: 10px;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
     gap: 10px;
     border-radius: 12px;
-    border: 1px solid $border-default;
-    cursor: pointer;
+    border: 1px solid #282830;
     transition: all 0.2s ease;
 
-
     &.selected {
-        border-color: $border-selected;
+        border-color: #2F80ED;
     }
 }
 
+.mainContent {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
 
-
-.languageAndIcon {
+.soundAndIcon {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -62,8 +60,6 @@ $background-icon: #373A43;
     font-family: Inter;
     font-size: 14px;
     font-weight: 500;
-    padding: 6px;
-    padding-left: 8px;
     transition: all 0.2s ease;
 }
 
@@ -92,21 +88,21 @@ $background-icon: #373A43;
     }
 }
 
-.countryIconWrapper {
+.selectionIconWrapper {
     display: flex;
-    padding: 8px 10px;
+    width: 26px;
+    height: 26px;
+    padding: 5px;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    flex: 1 0 0;
-    align-self: stretch;
-    border-radius: 6px;
-    background: $background-icon;
-}
+    border-radius: 8px;
+    background: #282830;
 
-.countryIcon {
-    height: 18px;
-    width: 18px;
+    .selectionIcon {
+        width: 16px;
+        height: 16px;
+    }
 }
 
 .applyButton {
@@ -127,19 +123,56 @@ $background-icon: #373A43;
     cursor: pointer;
 }
 
-.selectionIconWrapper {
-    display: flex;
-    width: 26px;
-    height: 26px;
-    padding: 5px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    background: #282830;
+.volumeSliderContainer {
+    width: 100%;
+    padding: 5px 0;
+}
 
-    .selectionIcon {
+.volumeSlider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 19px;
+    background: #505B78;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    
+    &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
         width: 16px;
         height: 16px;
+        border-radius: 50%;
+        background: #2F80ED;
+        cursor: pointer;
+        margin-top: -4px; /* приподнимаем ползунок */
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
     }
-}   
+    
+    &::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #2F80ED;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    }
+    
+    &::-webkit-slider-runnable-track {
+        height: 8px;
+        border-radius: 19px;
+    }
+    
+    &::-moz-range-track {
+        height: 8px;
+        border-radius: 19px;
+    }
+}
+
+/* Стилизация заполненной части ползунка с помощью переменной CSS */
+.volumeSlider {
+    background: linear-gradient(to right, #2F80ED 0%, #2F80ED var(--value-percent, 50%), #282830 var(--value-percent, 50%), #282830 100%);
+} 

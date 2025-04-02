@@ -11,11 +11,11 @@ import { CentralModal } from "../../shared"
 const LANGUAGES = [
     {
         code: 'en',
-        name: 'English language',
+        name: 'English',
     },
     {
         code: 'ru',
-        name: 'Русский язык',
+        name: 'Русский',
     },
 ];
 
@@ -27,28 +27,35 @@ interface LanguageOptionProps {
     onSelect: (code: LanguageCode) => void;
 }
 
-const LanguageOption = ({ language, isSelected, onSelect }: LanguageOptionProps) => (
-    <div
-        className={`${styles.languageWrapper} ${isSelected ? styles.selected : ''}`}
-        onClick={() => onSelect(language.code)}
-    >
-        <div className={`${styles.languageAndIcon} ${isSelected ? styles.selectedText : ''}`}>
-            <span> {language.name} </span>
-        </div>
-        <div className={styles.selectionIconWrapper}>
-            <img
-                src={isSelected ? tick : circle}
-                alt={isSelected ? "Selected" : "Not selected"}
-                className={styles.selectionIcon}
+const LanguageOption = ({ language, isSelected, onSelect }: LanguageOptionProps) => {
+    const { t } = useTranslation('settings');
+    
+    return (
+        <div
+            className={`${styles.languageWrapper} ${isSelected ? styles.selected : ''}`}
+            onClick={() => onSelect(language.code)}
+        >
+            <div className={styles.languageAndIcon}>
+                <span>{language.name}</span>
+                <span className={`${styles.status} ${isSelected ? styles.statusEnabled : styles.statusDisabled}`}>
+                    {isSelected ? t('s11') : t('s12')}
+                </span>
+            </div>
+            <div className={styles.selectionIconWrapper}>
+                <img
+                    src={isSelected ? tick : circle}
+                    alt={isSelected ? "Selected" : "Not selected"}
+                    className={styles.selectionIcon}
                 />
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export const LanguageSelectionModal = () => {
-    const {  i18n } = useTranslation();
+    const { i18n } = useTranslation();
     const { closeModal } = useModal();
-    const [selectedLanguage, setSelectedLanguage] = useState<LanguageCode | null>(null);
+    const [selectedLanguage, setSelectedLanguage] = useState<LanguageCode>(i18n.language as LanguageCode);
 
     const handleCloseModal = () => {
         closeModal(MODALS.LANGUAGE_SELECTION);

@@ -27,6 +27,7 @@ export const MODALS = {
   BINDING_SUCCESS: 'binding-success',
   INTEGRATION_REWARD_CONGRATULATIONS: "integrationRewardCongratulations",
   GET_GIFT_DAILY: 'get-gift-daily',
+  SOUND_SETTINGS: 'soundSettings',
 };
 
 
