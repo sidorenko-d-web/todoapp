@@ -161,7 +161,7 @@ export const Header = () => {
                       to={AppRoute.ProgressTree}
                       className={styles.levelNumber}
                     >
-                      {lastActiveStage}
+                      {profile?.growth_tree_stage_id}
                     </TrackedLink>
                   ) : (
                     <span className={styles.levelNumber}>{lastActiveStage}</span>

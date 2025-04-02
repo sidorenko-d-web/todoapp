@@ -42,7 +42,7 @@ export const Tree = () => {
   const { data: userProfileData } = useGetProfileMeQuery();
   const [currentBoost, setCurrentBoost] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
-
+  console.log(userProfileData);
   const isGuide = !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
   const userSubscribers = userProfileData?.subscribers || 0;
