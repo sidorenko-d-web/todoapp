@@ -11,16 +11,21 @@ type WithTrackingProps = {
 };
 
 export function withTracking<P extends { onClick?: (e: ReactMouseEvent<HTMLAnchorElement>) => void }>(
-  Wrapped: ComponentType<P>
+  Wrapped: ComponentType<P>,
 ) {
   return (props: P & WithTrackingProps) => {
     const [trackClickMutation] = usePostEventMutation();
     const { trackingData, ...rest } = props;
+    const isVibrationSupported =
+      typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
 
     const handleClick = (e: ReactMouseEvent<HTMLAnchorElement>) => {
+      if (isVibrationSupported) {
+        navigator.vibrate(200);
+      }
       trackClickMutation({
         event: trackingData.eventType,
-        description: trackingData.eventPlace
+        description: trackingData.eventPlace,
       });
       props.onClick?.(e);
     };

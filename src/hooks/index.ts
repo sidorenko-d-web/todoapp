@@ -4,6 +4,8 @@ export * from './useInventoryItemsFilter'
 export * from './useAccelerateIntegration'
 export * from './AudioBg'
 export * from './useAutoPlaySound'
+export * from './useButtonSound'
+export * from './useAppSound'
 export * from './useWebApp'
 export * from "./useTonConnect"
 export * from './useSendTransaction'

@@ -26,13 +26,7 @@ interface ModalDailyTasksProps {
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
-export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
-  modalId,
-  onClose,
-  onStateChange,
-  taskId,
-  task,
-}) => {
+export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({ modalId, onClose, onStateChange, taskId, task }) => {
   const { t, i18n } = useTranslation('quests');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const [updateTask] = useUpdateTaskMutation();
@@ -44,7 +38,8 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   const [correct, setCorrect] = useState(false);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
   const [channelLink] = useState(locale === 'en' ? task.external_link_eng || task.external_link : task.external_link);
-  const isVibrationSupported = 'vibrate' in navigator;
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
 
   useEffect(() => {
     setAnsweredQuestions(
@@ -150,11 +145,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
   };
 
   return (
-    <BottomModal
-      modalId={modalId}
-      title={t('q2')}
-      onClose={onClose}
-    >
+    <BottomModal modalId={modalId} title={t('q2')} onClose={onClose}>
       <div className={s.container}>
         {/* Награды */}
         <div className={s.rewards}>
@@ -170,15 +161,13 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
 
         {/* Progress indicator using question states */}
         <div className={s.progress}>
-          <span className={s.step}>{currentQuestionIndex + 1}/{questions.length}</span>
+          <span className={s.step}>
+            {currentQuestionIndex + 1}/{questions.length}
+          </span>
           <div className={s.dots}>
             {questions.map((_, index) => {
               const state = getQuestionStates()[index];
-              const iconSrc = state === 'solved'
-                ? checkIcon
-                : state === 'current'
-                  ? circleWhiteIcon
-                  : circleIcon;
+              const iconSrc = state === 'solved' ? checkIcon : state === 'current' ? circleWhiteIcon : circleIcon;
 
               return (
                 <img
@@ -195,13 +184,10 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
           </div>
         </div>
 
-
         {/* Вопрос */}
         <div className={s.question}>
           <h3 className={s.questionText}>
-            {locale === 'en' 
-              ? currentQuestion.question_text_eng 
-              : currentQuestion.question_text}
+            {locale === 'en' ? currentQuestion.question_text_eng : currentQuestion.question_text}
           </h3>
 
           <div className={s.options}>
@@ -221,19 +207,17 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
                   })}
                   onClick={() => handleSelectOption(option.id)}
                 >
-                  <span className={classNames({
-                    [s.selectedText]: isSelected && !isWrong,
-                    [s.wrongText]: isWrong,
-                  })}>
+                  <span
+                    className={classNames({
+                      [s.selectedText]: isSelected && !isWrong,
+                      [s.wrongText]: isWrong,
+                    })}
+                  >
                     {locale === 'en' ? option.answer_text_eng : option.answer_text}
                   </span>
                   <div className={s.selectWrapper}>
                     <img
-                      src={
-                        isSelected || isCorrect
-                          ? (showResult && isWrong ? CrossRedIcon : checkIcon)
-                          : circleIcon
-                      }
+                      src={isSelected || isCorrect ? (showResult && isWrong ? CrossRedIcon : checkIcon) : circleIcon}
                       className={s.icon}
                       alt=""
                     />
@@ -246,10 +230,7 @@ export const ModalDailyTasks: FC<ModalDailyTasksProps> = ({
 
         {/* Кнопки */}
         <div className={s.buttons}>
-          <Button
-            className={s.answerButton}
-            onClick={handleOpenGuide}
-          >
+          <Button className={s.answerButton} onClick={handleOpenGuide}>
             {t('q27')}
             <img src={bookIcon} alt="" className={s.buttonIcon} />
           </Button>

@@ -4,8 +4,8 @@ import { ICharacterResponse } from '../redux';
 import { buildLink } from './buildMode';
 const proxyImageUrl = buildLink()?.proxy!;
 
-const jsonUrl = new URL(`${buildLink()?.itemBaseUrl}anfas_happy1.json`).href;
-const atlasUrl = new URL(`${buildLink()?.itemBaseUrl}anfas_happyatlas1.txt`).href;
+const jsonUrl = new URL(`${buildLink()?.itemBaseUrl}anfas_happy.json`).href;
+const atlasUrl = new URL(`${buildLink()?.itemBaseUrl}anfas_happyatlas.txt`).href;
 
 const dpi = window.devicePixelRatio;
 export class WardrobeSpineScene extends Phaser.Scene {

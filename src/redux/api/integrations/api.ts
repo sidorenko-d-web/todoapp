@@ -58,12 +58,6 @@ export const integrationsApi = createApi({
       },
       providesTags: ['Integrations'],
     }),
-    getAllIntegrations: builder.query<IntegrationsResponseDTO, void>({
-      query: () => ({
-        url: '/integrations',
-        method: 'GET',
-      }),
-    }),
     updateTimeLeft: builder.mutation<IntegrationResponseDTO, IntegrationUpdateRequestDTO>({
       query: ({ integrationId, timeLeftDelta }) => ({
         url: `/integrations/${integrationId}/time_left`,
@@ -86,7 +80,6 @@ export const {
   useGetIntegrationQuery,
   useCreateIntegrationMutation,
   useGetIntegrationsQuery,
-  useGetAllIntegrationsQuery,
   usePostCommentIntegrationsMutation,
   useGetUnansweredIntegrationCommentQuery,
   useUpdateTimeLeftMutation,

@@ -5,9 +5,8 @@ import rocketIcon from '../../../assets/icons/rocket.svg';
 import { IntegrationResponseDTO, integrationsApi, selectVolume, setIsWorking } from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration } from '../../../hooks';
-import { GUIDE_ITEMS, SOUNDS } from '../../../constants';
-import { isGuideShown, setGuideShown } from '../../../utils';
-import { setIntegrationReadyForPublishing, setLastIntegrationId } from '../../../redux/slices/guideSlice';
+import { SOUNDS } from '../../../constants';
+import { setIntegrationReadyForPublishing, setLastIntegrationId } from '../../../redux';
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
@@ -83,6 +82,10 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   const formattedTime = useMemo(() => formatTime(timeLeft), [formatTime, timeLeft]);
 
   useEffect(() => {
+    setTimeLeft(integration.time_left);
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem(INTEGRATION_ID_KEY, integration.id);
     localStorage.setItem(INITIAL_TIME_LEFT_KEY, initialTimeLeft.toString());
     localStorage.setItem(TIME_LEFT_KEY, timeLeft.toString());
@@ -144,7 +147,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-  }, [getValidatedTimeLeft]);
+  }, []);
 
   const handleAccelerateClick = useCallback(() => {
     if (isExpired) return;
@@ -153,7 +156,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     playAccelerateIntegrationSound();
     dispatch(setLastIntegrationId(integration.id));
 
-    void accelerateIntegration(1).finally(() => {
+    void accelerateIntegration(100).finally(() => {
       refetchIntegration();
     });
 
@@ -181,13 +184,9 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     }
   }, []);
 
-  if (isExpired) {
+  if (timeLeft <= 0) {
     dispatch(setIntegrationReadyForPublishing(true));
     dispatch(setLastIntegrationId(integration.id));
-
-    if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED)) {
-      setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-    }
     return null;
   }
 

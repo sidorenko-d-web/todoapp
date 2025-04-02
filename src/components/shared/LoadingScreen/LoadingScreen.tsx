@@ -5,7 +5,7 @@ import loadingVid from '../../../assets/gif/loading.mp4';
 // import { coinsAnim } from '../../../assets/animations';
 import { LoadingScreenBar, LoadingScreenBarRef } from '../../loadingScreen/LoadingScreenBar/LoadingScreenBar';
 import useSound from 'use-sound';
-import { SOUNDS, buildMode } from '../../../constants';
+import { buildMode, SOUNDS } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
 
