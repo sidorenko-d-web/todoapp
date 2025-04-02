@@ -39,7 +39,7 @@ const SoundOption = ({
             const percent = volumeValue * 100;
             sliderRef.current.style.setProperty('--value-percent', `${percent}%`);
         }
-    }, [volumeValue]);
+    }, [volumeValue, isEnabled]);
     
     const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (onVolumeChange) {
