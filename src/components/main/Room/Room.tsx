@@ -1,8 +1,8 @@
 import {
+  useGetCharacterByIdQuery,
+  useGetCharacterQuery,
   useGetEquipedByIdQuery,
   useGetEquipedQuery,
-  useGetCharacterQuery,
-  useGetCharacterByIdQuery,
 } from '../../../redux';
 import { AnimationScene, Coin, Floor, Walls } from './partials';
 import styles from './partials/Partials.module.scss';
@@ -19,9 +19,10 @@ import clsx from 'clsx';
 interface props {
   mode: 'me' | 'stranger';
   strangerId?: string;
+  setIsRoomLoaded?: (value: boolean) => void;
 }
 
-export const Room = ({ mode, strangerId }: props) => {
+export const Room = ({ mode, strangerId, setIsRoomLoaded }: props) => {
   const { data: room, isLoading: isRoomLoading } = useGetEquipedQuery(undefined, { skip: mode === 'stranger' });
   const character = useGetCharacterQuery(undefined, { skip: mode === 'stranger' });
 
@@ -48,11 +49,16 @@ export const Room = ({ mode, strangerId }: props) => {
 
   const isIntegrationPage = useLocation().pathname.includes('integrations');
 
+  const handleSetIsRoomLoaded = (value: boolean) => {
+    setIsLoaded(value)
+    setIsRoomLoaded?.(value);
+  };
+
   return (
     <div className={styles.room}>
       {isLoading && <Loader className={clsx(styles.loader, isIntegrationPage && styles.upper)} />}
       <AnimationScene
-        setIsLoaded={setIsLoaded}
+        setIsLoaded={handleSetIsRoomLoaded}
         room={room ?? strangerRoom}
         character={mode === 'me' ? character : strangerCharacter}
       />
