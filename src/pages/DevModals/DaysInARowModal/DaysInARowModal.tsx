@@ -90,7 +90,7 @@ export default function DaysInARowModal({ onClose }: Props) {
 
     setFrozenDays(frozen);
     setStreakDays(streak);
-  }, [data, isLoading, openModal]);
+  }, [data?.current_status, isLoading, openModal]);
 
   // Get the reliable streak count
   const streakCount = useMemo(() => {

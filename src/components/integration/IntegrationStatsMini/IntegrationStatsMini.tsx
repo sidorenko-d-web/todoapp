@@ -1,7 +1,4 @@
-import React from 'react';
-
 import styles from './IntegrationStatsMini.module.scss';
-
 import coin from '../../../assets/icons/coin.png';
 import viewsIcon from '../../../assets/icons/views.png';
 import subscribersIcon from '../../../assets/icons/subscribers.png';
@@ -12,7 +9,7 @@ import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
 import { usePushLineStatus } from '../../../hooks';
 import { useIncrementingProfileStats } from '../../../hooks/useIncrementingProfileStats.ts';
-import { useGetProfileMeQuery } from '../../../redux/index.ts';
+import { useGetProfileMeQuery } from '../../../redux';
 
 export const IntegrationStatsMini = () => {
   const navigate = useNavigate();

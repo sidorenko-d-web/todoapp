@@ -15,9 +15,10 @@ import { Loader } from '../../components';
 import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileStats.ts';
 import { usePushLineStatus } from '../../hooks/usePushLineStatus.ts';
 
-const StatisticsPage: FC = () => {
+export const StatisticsPage: FC = () => {
+  // Все хуки вызываются на верхнем уровне
   const { t, i18n } = useTranslation('statistics');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const navigate = useNavigate();
   const { data: statisticData, isLoading: isAllIntegrationsLoading } = useGetIntegrationsQuery();
   const { data: userProfileData, isLoading: isUserLoading } = useGetProfileMeQuery();
@@ -46,6 +47,8 @@ const StatisticsPage: FC = () => {
 
   // Условный рендеринг после всех хуков
   if (isLoading) return <Loader />;
+
+  const integrations = statisticData?.integrations.filter(item => item.status === 'published');
 
   return (
     <div className={styles.wrapper}>
@@ -77,36 +80,34 @@ const StatisticsPage: FC = () => {
       <div className={styles.sectionHeader}>
         <h2 className={styles.sectionTitle}>{t('s2')}</h2>
         <div className={styles.sectionCount}>
-          <p>{statisticData?.count || 0}</p>
+          <p>{integrations?.length || 0}</p>
           <img src={logo} alt="logo" width={18} height={18} />
         </div>
       </div>
       <div className={styles.integrationsWrapper}>
         {isLoading && isUserLoading ? (
           <p className={styles.info}>{t('s3')}</p>
-        ) : statisticData?.count != 0 ? (
-          statisticData?.integrations
-            .filter(item => item.status === 'published')
-            .map(integration => (
-              <StatisticsCard
-                key={integration.id}
-                id={integration.id}
-                views={integration.views}
-                campaign={integration.campaign}
-                points={integration.income}
-                futureStatistics={integration.future_statistics}
-                lastUpdatedAt={integration.updated_at}
-                companyName={integration.campaign.company_name}
-                number={integration?.number}
-                onClick={() => navigate(`/integrations/${integration.id}`)}
-              />
-            ))
-        ) : (
+        ) : integrations && integrations.length > 0 ? (
+          integrations?.map(integration => (
+            <StatisticsCard
+              key={integration.id}
+              id={integration.id}
+              views={integration.views}
+              campaign={integration.campaign}
+              points={integration.income}
+              futureStatistics={integration.future_statistics}
+              lastUpdatedAt={integration.updated_at}
+              companyName={integration.campaign.company_name}
+              number={integration?.number}
+              onClick={() => navigate(`/integrations/${integration.id}`)}
+            />
+          ))
+          ) : (
           <p className={styles.info}>{t('s3')}</p>
-        )}
-      </div>
+      )}
     </div>
-  );
+</div>
+)
+  ;
 };
 
-export default StatisticsPage;

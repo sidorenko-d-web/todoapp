@@ -87,8 +87,6 @@ export const IntegrationPage: React.FC = () => {
       setLocalProgress(calculatedProgress);
       setCurrentCommentIndex(calculatedIndex);
       setLocalCommentsGenerated(data.comments_generated);
-
-      console.log(`Server: ${serverProgress}, Progress: ${calculatedProgress}, Index: ${calculatedIndex}`);
     }
   }, [data, comments.length]);
 
@@ -198,10 +196,6 @@ export const IntegrationPage: React.FC = () => {
                 <div className={styles.commentsSectionTitleWrp}>
                   <p className={styles.commentsSectionTitle}>{t('i4')}</p>
                   <p className={styles.commentsAmount}>{localCommentsGenerated}/20</p>
-                  <p className={styles.refreshInfo}>
-                    {t('commentsRefreshIn')} {Math.floor((REFETCH_INTERVAL - (Date.now() - lastRefetchTime)) / 60000)}{' '}
-                    {t('minutes')}
-                  </p>
                 </div>
 
                 {comments.length > 0 && currentCommentIndex < comments.length && (

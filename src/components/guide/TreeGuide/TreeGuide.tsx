@@ -34,6 +34,7 @@ export const TreeGuide: React.FC<TreeGuideProps> = ({ onClose }) => {
         <Guide align="right"
             zIndex={110}
             top={'59%'}
+            dimBackground={false}
             description={
                 <>
                     <span style={{ color: '#E0B01D' }}>{t('g65')}</span> {t('g66')}

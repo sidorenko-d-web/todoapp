@@ -21,7 +21,8 @@ export const PublishIntegrationButton: React.FC = () => {
   const { t } = useTranslation('integrations');
   const dispatch = useDispatch();
   const { openModal } = useModal();
-  const isVibrationSupported = 'vibrate' in navigator;
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
   const [publishIntegration] = usePublishIntegrationMutation();

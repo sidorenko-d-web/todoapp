@@ -353,6 +353,8 @@ export const MainPage: FC = () => {
 
   const isCreatingIntegration = creatingIntegrations && creatingIntegrations.count > 0;
 
+  const [isRoomLoaded, setIsRoomLoaded] = useState(false);
+
   const isLoading =
     isCreatingIntegrationsLoading ||
     isAllIntegrationsLoading ||
@@ -372,7 +374,7 @@ export const MainPage: FC = () => {
 
   return (
     <main className={s.page} onClick={accelerateIntegration}>
-      {!isLoading && showAvailableReward && (
+      {!isLoading && isRoomLoaded && showAvailableReward && (
         <TrackedLink
           to={AppRoute.ProgressTree}
           trackingData={{
@@ -406,13 +408,13 @@ export const MainPage: FC = () => {
         />
       )}
 
-      <Room mode="me" />
+      <Room mode="me" setIsRoomLoaded={setIsRoomLoaded} />
 
-      {hasCreatingIntegrations && !firstIntegrationReadyToPublish ? (
+      {isRoomLoaded && (hasCreatingIntegrations && !firstIntegrationReadyToPublish ? (
         <IntegrationCreation />
       ) : (
         <PublishIntegrationButton />
-      )}
+      ))}
 
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && !getModalState(MODALS.SUBSCRIBE).isOpen) ||

@@ -31,6 +31,10 @@ export const SettingsModal = () => {
     }
   };
 
+  const handleOpenSoundSettings = () => {
+    openModal(MODALS.SOUND_SETTINGS);
+  };
+
   return (
     <CentralModal
       modalId={MODALS.SETTINGS}
@@ -46,6 +50,11 @@ export const SettingsModal = () => {
 
         <div className={styles.childModalWrapper} onClick={handleOpenWalletConnectionModal}>
           <div className={styles.titleAndIcon}>{t('s3')}</div>
+          <img className={styles.arrow} src={ArrowRight} alt="" />
+        </div>
+
+        <div className={styles.childModalWrapper} onClick={handleOpenSoundSettings}>
+          <div className={styles.titleAndIcon}>{t('s8')}</div>
           <img className={styles.arrow} src={ArrowRight} alt="" />
         </div>
 
