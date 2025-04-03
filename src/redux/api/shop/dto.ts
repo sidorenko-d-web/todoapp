@@ -12,12 +12,6 @@ export interface IShopItem {
   image_url: string;
   item_premium_level: TypeItemQuality;
   is_bought: boolean;
-  chest: {
-    id: string,
-    chest_name: string,
-    chest_name_eng: string,
-    chest_image_url: null | string
-  };
 }
 
 export interface IShopItemsResponse {
@@ -111,7 +105,6 @@ export type UpgradeItemResponse = {
   is_reward_given: boolean;
   name_eng: string;
   id: string;
-  chest: Chest;
 }
 
 export interface IBuyItemRequest {
