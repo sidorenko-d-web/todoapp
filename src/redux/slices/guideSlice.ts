@@ -36,7 +36,9 @@ interface GuideState {
 
   firstIntegrationReadyToPublish: boolean;
 
-  firstIntegrationId: string
+  firstIntegrationId: string,
+
+  showFreezeGuide: boolean
 }
 
 const initialState: GuideState = {
@@ -74,7 +76,10 @@ const initialState: GuideState = {
 
   firstIntegrationReadyToPublish: localStorage.getItem('FIRST_INTEGRATION_READY_TO_PUBLISH') === '1',
 
-  firstIntegrationId: ''
+  firstIntegrationId: '',
+
+  showFreezeGuide:
+   isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN)
 };
 
 const guideSlice = createSlice({
@@ -157,6 +162,11 @@ const guideSlice = createSlice({
     setFirstIntegrationId: (state, action: PayloadAction<string>) => {
       state.firstIntegrationId = action.payload;
     },
+
+    setShowFreezeGuide: (state, action: PayloadAction<boolean>) => {
+      state.firstIntegrationReadyToPublish = action.payload;
+    },
+
     resetGuideState: (state) => {
       Object.assign(state, {
         subscribeGuideShown: isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN),
@@ -186,7 +196,7 @@ const guideSlice = createSlice({
 export const { setGetCoinsGuideShown, setSubscribeGuideShown,
     setShopStatsGlowing, 
     setBuyItemButtonGlowing, setFirstIntegrationId,
-    setCreateIntegrationButtonGlowing, 
+    setCreateIntegrationButtonGlowing, setShowFreezeGuide,
     setIntegrationCreated, setAccelerateIntegrationGuideClosed,
     setIsPublishedModalClosed, setIntegrationReadyForPublishing, 
     setElevateIntegrationStats, setItemUpgraded, setFirstIntegrationReadyToPublish,

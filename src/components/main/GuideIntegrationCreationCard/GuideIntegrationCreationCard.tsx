@@ -36,6 +36,9 @@ export const UserGuideCreationCard: FC = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [playAccelerateSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
 
+  const [isCreatingIntegration, setIsCreatingIntegration] = useState(false);
+
+
   const accelerationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [createIntegration] = useCreateIntegrationMutation();
@@ -68,8 +71,11 @@ export const UserGuideCreationCard: FC = () => {
           const newTime = prevTime <= 10 && prevTime > 0 ? prevTime : Math.max(prevTime - 1, 0);
           if (newTime <= 10 && newTime > 0) setIsPaused(true);
           if (newTime === 0) {
+            setIsCreatingIntegration(true);
+            
             dispatch(setIsWorking(false));
             clearInterval(timerId);
+            
 
             if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED)) {
               setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED);
@@ -91,6 +97,7 @@ export const UserGuideCreationCard: FC = () => {
                         dispatch(integrationsApi.util.invalidateTags(['Integrations']));
                         dispatch(profileApi.util.invalidateTags(['Me']));
                         setIsExpired(true);
+                        setIsCreatingIntegration(false);
                       });
                   }
                 });
@@ -165,16 +172,19 @@ export const UserGuideCreationCard: FC = () => {
       </div>
       <div className={s.body}>
         <div className={s.info}>
-          <div className={s.infoHeader}>
+          {!isCreatingIntegration && <div className={s.infoHeader}>
             <span>{t('i11')}...</span>
             <span>
               {' '}
               {t('i12')} {formatTime(timeLeft)}
             </span>
-          </div>
-          <div className={s.progressBar} style={{ border: hasBorder ? '1px solid #2064C0' : 'none' }}>
+          </div>}
+          
+          {!isCreatingIntegration && <div className={s.progressBar} style={{ border: hasBorder ? '1px solid #2064C0' : 'none' }}>
             <div className={s.progressBarInner} style={{ width: `${progress}%` }} />
-          </div>
+          </div>}
+
+          {isCreatingIntegration && <span>Creating integration...</span>}
         </div>
         <TrackedButton
           trackingData={{

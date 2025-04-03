@@ -88,7 +88,10 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
       .unwrap()
       .then(() => {
         onSuccess();
-      });
+      })
+      // .catch((err) => {
+      //   onSuccess();
+      // });
     // if (!isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) && !getModalState(MODALS.SUCCESSFULLY_SUBSCRIBED).isOpen) {
     //   openModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
     // }
@@ -162,7 +165,8 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
           <span className={s.description}>{isSubscriptionPurchased ? t('g86') : t('g75')}</span>
         </div>
         <div className={s.buttons}>
-          <Button className={s.button} disabled={!!isSubscriptionPurchased} onClick={handleUsdtPayment}>
+          <Button className={s.button} disabled={!!isSubscriptionPurchased 
+            || !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)} onClick={handleUsdtPayment}>
             {formatAbbreviation(1, 'currency')}
           </Button>
           <Button

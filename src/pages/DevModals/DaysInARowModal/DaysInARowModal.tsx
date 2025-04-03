@@ -82,10 +82,10 @@ export default function DaysInARowModal({ onClose }: Props) {
         (entry) => entry.creation_date === todayDate && entry.push_line_data?.status === 'passed'
       );
 
-      if (isTodayPassed && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
-        openModal(MODALS.DAYS_IN_A_ROW);
-        localStorage.setItem('modalShownToday', todayDate);
-      }
+      // if (isTodayPassed && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
+      //   openModal(MODALS.DAYS_IN_A_ROW);
+      //   localStorage.setItem('modalShownToday', todayDate);
+      // }
     }
 
     setFrozenDays(frozen);
@@ -222,23 +222,25 @@ export default function DaysInARowModal({ onClose }: Props) {
             color={color}
           />
         </div>
-        <Button
-          onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))}
-          variant={color}
-        >
-          {t('p22')}
-        </Button>
+        {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+          <Button
+            onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))}
+            variant={color}
+          >
+            {t('p22')}
+          </Button>
+        }
 
         {
           !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
           <IntegrationCreatedGuide
-          onClose={() => {
-            closeModal(MODALS.DAYS_IN_A_ROW);
-            setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-            navigate(AppRoute.Integration.replace(':integrationId', integrationId));
-            //setRerender((prev) => prev + 1);
-          }}
-        />
+            onClose={() => {
+              closeModal(MODALS.DAYS_IN_A_ROW);
+              setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              navigate('integrations/undefined');
+              //setRerender((prev) => prev + 1);
+            }}
+          />
         }
       </CentralModal>
 

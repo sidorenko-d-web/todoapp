@@ -42,6 +42,10 @@ export const Footer = () => {
     if (location.pathname === '/') {
       setActiveButton(3);
     }
+
+    if(location.pathname.includes('shop')) {
+      setActiveButton(1);
+    }
   }, [location.pathname]);
 
   const handleFooterItemClick = (id: number, redirectTo: string) => {

@@ -5,7 +5,7 @@ import img1 from '../../../../assets/gif/guide1.gif';
 import { Guide } from "../../Guide/Guide";
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from "react-redux";
-import { setDimHeader } from "../../../../redux";
+import { setDimHeader, setShowFreezeGuide } from "../../../../redux";
 
 interface PushLineGuideProps {
   onClose: () => void;
@@ -22,6 +22,7 @@ export const PushLineGuide: React.FC<PushLineGuideProps> = ({ onClose }) => {
 
   const handleClose = () => {
     //dispatch(setDimHeader(false));
+    dispatch(setShowFreezeGuide(true));
     onClose();
     setIsOpen(false);
   };

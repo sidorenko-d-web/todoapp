@@ -5,7 +5,7 @@ import img1 from '../../../../assets/gif/guide4.gif';
 import { Guide } from "../../Guide/Guide";
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from "react-redux";
-import { setDimHeader } from "../../../../redux";
+import { setDimHeader, setShowFreezeGuide } from "../../../../redux";
 
 interface FreezeGuideProps {
     onClose: () => void;
@@ -22,6 +22,7 @@ export const FreezeGuide: React.FC<FreezeGuideProps> = ({ onClose }) => {
 
     const handleClose = () => {
         dispatch(setDimHeader(false));
+        dispatch(setShowFreezeGuide(false));
         onClose();
         setIsOpen(false);
     };

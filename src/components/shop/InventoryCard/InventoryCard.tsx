@@ -488,7 +488,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           </div>
         ))}
 
-      {isBlocked ? (
+      {(isBlocked || !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN)) ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>{t('s26')}</p>
