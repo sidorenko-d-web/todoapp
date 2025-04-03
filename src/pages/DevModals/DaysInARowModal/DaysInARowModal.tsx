@@ -41,12 +41,11 @@ export default function DaysInARowModal({ onClose }: Props) {
   const rerenderAfterPublish = useSelector((state: RootState) => state.guide.refetchAfterPublish);
   const [rerender, setRerender] = useState(0);
 
-  
   useEffect(() => {
-    if(rerenderAfterPublish > rerender) {
+    if (rerenderAfterPublish > rerender) {
       refetch().then(() => {
         setRerender(rerenderAfterPublish);
-      })
+      });
     }
   }, [rerenderAfterPublish]);
 
@@ -84,7 +83,7 @@ export default function DaysInARowModal({ onClose }: Props) {
         frozen.push(dayDate);
       }
     });
-    
+
     setFrozenDays(frozen);
     setStreakDays(streak);
   }, [data?.current_status, isLoading, openModal]);
@@ -155,8 +154,6 @@ export default function DaysInARowModal({ onClose }: Props) {
     return ChestBlue;
   }, [streakCount]);
 
- 
-
   return (
     <>
       <CentralModal
@@ -204,14 +201,11 @@ export default function DaysInARowModal({ onClose }: Props) {
         <div className={styles.progress}>
           <ProgressLine level={calculateLevel} color={color} />
         </div>
-        {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
-          <Button
-            onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))}
-            variant={color}
-          >
+        {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
+          <Button onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))} variant={color}>
             {t('p22')}
           </Button>
-        }
+        )}
 
         {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
           <IntegrationCreatedGuide
@@ -222,7 +216,7 @@ export default function DaysInARowModal({ onClose }: Props) {
               //setRerender((prev) => prev + 1);
             }}
           />
-        }
+        )}
       </CentralModal>
     </>
   );
