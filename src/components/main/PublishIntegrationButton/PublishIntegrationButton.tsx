@@ -42,11 +42,11 @@ export const PublishIntegrationButton: React.FC = () => {
 
   const lastIntId = useSelector((state: RootState) => state.guide.lastIntegrationId);
   const { data: integrationData, refetch: refetchIntegration } = useGetIntegrationQuery(lastIntId, {
-    skip: !lastIntId
+    skip: !lastIntId,
   });
   const { data: companyData } = useGetIntegrationsQuery(
     { company_name: integrationData?.campaign.company_name },
-    { skip: !integrationData?.campaign.company_name }
+    { skip: !integrationData?.campaign.company_name },
   );
 
   const isFirstIntegrationReady = useSelector((state: RootState) => state.guide.firstIntegrationReadyToPublish);
@@ -58,7 +58,7 @@ export const PublishIntegrationButton: React.FC = () => {
 
   const hasPublishableIntegration = useCallback(() => {
     return allIntegrations?.integrations.some(
-      int => (int.status === 'created' || (int.status === 'creating' && int.time_left === 0))
+      int => (int.status === 'created' || (int.status === 'creating' && int.time_left === 0)),
     );
   }, [allIntegrations?.integrations]);
 
@@ -93,109 +93,111 @@ export const PublishIntegrationButton: React.FC = () => {
   }, [companyData?.count]);
 
   const handlePublish = async () => {
-    if (isVibrationSupported) navigator.vibrate(200);
-    if (isPublishing || isTimeUpdating) return;
+      if (isVibrationSupported) navigator.vibrate(200);
+      if (isPublishing || isTimeUpdating) return;
 
-    setIsPublishing(true);
+      setIsPublishing(true);
 
-    setShouldRender(false);
+      setShouldRender(false);
 
-    try {
-      if (isFirstIntegrationReady) {
-        // публикация первой интеграции немного по-другому идёт,
-        //  почему то приходится несколько раз кликнуть, просьба не убирать этот кейс
-        const firstIntegrationID = localStorage.getItem('firstIntegrationId');
+      try {
+        if (isFirstIntegrationReady) {
+          // публикация первой интеграции немного по-другому идёт,
+          //  почему то приходится несколько раз кликнуть, просьба не убирать этот кейс
+          const firstIntegrationID = localStorage.getItem('firstIntegrationId');
 
-        const publishRes = await publishIntegration(firstIntegrationID!);
-        if (!publishRes.error) {
-          dispatch(setIntegrationReadyForPublishing(false));
-          dispatch(setCreateIntegrationButtonGlowing(false));
+          const publishRes = await publishIntegration(firstIntegrationID!);
+          if (!publishRes.error) {
+            dispatch(setIntegrationReadyForPublishing(false));
+            dispatch(setCreateIntegrationButtonGlowing(false));
 
-          dispatch(setFirstIntegrationReadyToPublish(false));
-          localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '0');
+            dispatch(setFirstIntegrationReadyToPublish(false));
+            localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '0');
 
-          dispatch(setRefetchAfterPublish());
+            dispatch(setRefetchAfterPublish());
 
-          const company = integrationData?.campaign;
-          if (company) {
-            const { base_income, base_views, base_subscribers } = publishRes.data;
+            const company = integrationData?.campaign;
+            if (company) {
+              const { base_income, base_views, base_subscribers } = publishRes.data;
 
-            openModal(MODALS.INTEGRATION_REWARD, {
-              company,
-              base_income,
-              base_views,
-              base_subscribers,
-            });
-          }
-        }
-      } else {
-        await refetch().unwrap();
-
-        const integrationToPublish = allIntegrations?.integrations.find(
-          int => int.status === 'created' || (int.status === 'creating' && int.time_left === 0),
-        );
-
-      if (!integrationToPublish) {
-        console.error('No publishable integrations found');
-        setShouldRender(true);
-        setIsPublishing(false);
-        return;
-      }
-
-        setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
-        const integrationIdToPublish = integrationToPublish.id;
-        dispatch(setLastIntegrationId(integrationIdToPublish));
-
-        if (integrationToPublish.status === 'creating' && integrationToPublish.time_left === 0) {
-          setIsTimeUpdating(true);
-          try {
-            await updateTimeLeft({
-              integrationId: integrationIdToPublish,
-              timeLeftDelta: 1,
-            }).unwrap();
-
-            // Ждём, пока статус не обновится
-            let retries = 0;
-            while (retries < 10) {
-              await new Promise(resolve => setTimeout(resolve, 1500));
-              const { data: updatedIntegration } = await refetchIntegration();
-              if (updatedIntegration?.status === 'created') break;
-              retries++;
+              openModal(MODALS.INTEGRATION_REWARD, {
+                company,
+                base_income,
+                base_views,
+                base_subscribers,
+              });
             }
-          } finally {
-            setIsTimeUpdating(false);
+          }
+        } else {
+          await refetch().unwrap();
+
+          const integrationToPublish = allIntegrations?.integrations.find(
+            int => int.status === 'created' || (int.status === 'creating' && int.time_left === 0),
+          );
+
+          if (!integrationToPublish) {
+            console.error('No publishable integrations found');
+            setShouldRender(true);
+            setIsPublishing(false);
+            return;
+          }
+
+          setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
+          const integrationIdToPublish = integrationToPublish.id;
+          dispatch(setLastIntegrationId(integrationIdToPublish));
+          dispatch(setIntegrationCreating(false));
+
+          if (integrationToPublish.status === 'creating' && integrationToPublish.time_left === 0) {
+            setIsTimeUpdating(true);
+            try {
+              await updateTimeLeft({
+                integrationId: integrationIdToPublish,
+                timeLeftDelta: 1,
+              }).unwrap();
+
+              // Ждём, пока статус не обновится
+              let retries = 0;
+              while (retries < 10) {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                const { data: updatedIntegration } = await refetchIntegration();
+                if (updatedIntegration?.status === 'created') break;
+                retries++;
+              }
+            } finally {
+              setIsTimeUpdating(false);
+            }
+          }
+
+          // Публикуем интеграцию
+          const publishRes = await publishIntegration(integrationIdToPublish);
+          if (!publishRes.error) {
+            const company = integrationData?.campaign;
+            if (company) {
+              const { base_income, base_views, base_subscribers } = publishRes.data;
+              openModal(MODALS.INTEGRATION_REWARD, {
+                company,
+                base_income,
+                base_views,
+                base_subscribers,
+              });
+            }
+          }
+
+          setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
+          if (canShowIntegrationReward() && isPublishedModalClosed) {
+            openCongratsModal();
           }
         }
-
-        // Публикуем интеграцию
-        const publishRes = await publishIntegration(integrationIdToPublish);
-        if (!publishRes.error) {
-          const company = integrationData?.campaign;
-          if (company) {
-            const { base_income, base_views, base_subscribers } = publishRes.data;
-            openModal(MODALS.INTEGRATION_REWARD, {
-              company,
-              base_income,
-              base_views,
-              base_subscribers,
-            });
-          }
+      } catch (error) {
+        console.error('Failed to publish integration:', error);
+        setShouldRender(true); // Restore button on error
+      } finally {
+        if (canShowIntegrationReward() && isPublishedModalClosed) {
+          openCongratsModal();
         }
-
-        setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
-      if (canShowIntegrationReward() && isPublishedModalClosed) {
-        openCongratsModal();
+        setIsPublishing(false);
       }
-    } catch (error) {
-      console.error('Failed to publish integration:', error);
-      setShouldRender(true); // Restore button on error
-    } finally {
-      if (canShowIntegrationReward() && isPublishedModalClosed) {
-        openCongratsModal();
-      }
-      setIsPublishing(false);
     }
-  };
 
   const getButtonText = () => {
     if (isPublishing) return t('i40');
