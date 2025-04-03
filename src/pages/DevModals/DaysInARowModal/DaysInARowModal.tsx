@@ -38,7 +38,6 @@ export default function DaysInARowModal({ onClose }: Props) {
 
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const today = new Date();
     const dayOfWeek = today.getDay();
@@ -57,7 +56,7 @@ export default function DaysInARowModal({ onClose }: Props) {
     const frozen: number[] = [];
     const streak: number[] = [];
 
-    data?.week_information?.forEach((day) => {
+    data?.week_information?.forEach(day => {
       const dayDate = new Date(day.creation_date).getDate();
       const hasNotification =
         day.push_line_data?.is_notified_at_morning ||
@@ -79,7 +78,7 @@ export default function DaysInARowModal({ onClose }: Props) {
 
     if (modalShownToday !== todayDate && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
       const isTodayPassed = data?.week_information?.some(
-        (entry) => entry.creation_date === todayDate && entry.push_line_data?.status === 'passed'
+        entry => entry.creation_date === todayDate && entry.push_line_data?.status === 'passed',
       );
 
       if (isTodayPassed && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
@@ -168,16 +167,8 @@ export default function DaysInARowModal({ onClose }: Props) {
         onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)}
       >
         <div className={styles.images}>
-          <Lottie
-            animationData={animationData}
-            loop={true}
-            className={styles.light}
-          />
-          <img
-            className={styles.fire}
-            src={fireIcon}
-            alt="Fire Icon"
-          />
+          <Lottie animationData={animationData} loop={true} className={styles.light} />
+          <img className={styles.fire} src={fireIcon} alt="Fire Icon" />
           <div className={styles.days}>
             <p>{streakCount}</p>
           </div>
@@ -209,39 +200,27 @@ export default function DaysInARowModal({ onClose }: Props) {
           </span>
           <div className={styles.chest}>
             <span>{locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}</span>
-            <img
-              src={chestImage}
-              className={styles.chestImg}
-              alt="Chest Icon"
-            />
+            <img src={chestImage} className={styles.chestImg} alt="Chest Icon" />
           </div>
         </div>
         <div className={styles.progress}>
-          <ProgressLine
-            level={calculateLevel}
-            color={color}
-          />
+          <ProgressLine level={calculateLevel} color={color} />
         </div>
-        <Button
-          onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))}
-          variant={color}
-        >
+        <Button onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))} variant={color}>
           {t('p22')}
         </Button>
 
-        {
-          !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+        {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
           <IntegrationCreatedGuide
-          onClose={() => {
-            closeModal(MODALS.DAYS_IN_A_ROW);
-            setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-            navigate(AppRoute.Integration.replace(':integrationId', integrationId));
-            //setRerender((prev) => prev + 1);
-          }}
-        />
-        }
+            onClose={() => {
+              closeModal(MODALS.DAYS_IN_A_ROW);
+              setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              navigate(AppRoute.Integration.replace(':integrationId', integrationId));
+              //setRerender((prev) => prev + 1);
+            }}
+          />
+        )}
       </CentralModal>
-
     </>
   );
 }

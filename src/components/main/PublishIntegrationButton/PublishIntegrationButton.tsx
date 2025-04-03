@@ -130,7 +130,7 @@ export const PublishIntegrationButton: React.FC = () => {
           });
         }
       }
-
+      setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
       if (canShowIntegrationReward && isPublishedModalClosed) {
         openCongratsModal();
       }

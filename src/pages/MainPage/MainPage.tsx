@@ -118,9 +118,8 @@ export const MainPage: FC = () => {
   }, [itemsData, isInventoryDataLoading, typewriterFound, profileData, isCurrentUserProfileInfoLoading]);
 
   useEffect(() => {
-    console.log('FETCHING PROFILE')
+    console.log('FETCHING PROFILE');
   }, [profileData, isCurrentUserProfileInfoLoading]);
-
 
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
@@ -347,9 +346,9 @@ export const MainPage: FC = () => {
     }
   }, [treeData]);
 
-  const { data: creatingIntegrations, isLoading: isCreatingIntegrationsLoading } = useGetIntegrationsQuery(
-    { status: 'creating' },
-  );
+  const { data: creatingIntegrations, isLoading: isCreatingIntegrationsLoading } = useGetIntegrationsQuery({
+    status: 'creating',
+  });
 
   const isCreatingIntegration = creatingIntegrations && creatingIntegrations.count > 0;
 
@@ -382,17 +381,9 @@ export const MainPage: FC = () => {
             eventPlace: 'mainPage tree reward',
           }}
         >
-          <Lottie animationData={giftShake} className={clsx(s.treeReward, {[s.up]: isCreatingIntegration})} />
+          <Lottie animationData={giftShake} className={clsx(s.treeReward, { [s.up]: isCreatingIntegration })} />
         </TrackedLink>
       )}
-
-      <DaysInARowModal
-        onClose={() => {
-          if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
-            closeModal(MODALS.DAYS_IN_A_ROW);
-          }
-        }}
-      />
 
       {(integrationCurrentlyCreating || firstIntegrationReadyToPublish) && (
         <div
@@ -410,14 +401,25 @@ export const MainPage: FC = () => {
 
       <Room mode="me" setIsRoomLoaded={setIsRoomLoaded} />
 
-      {isRoomLoaded && (hasCreatingIntegrations && !firstIntegrationReadyToPublish ? (
-        <IntegrationCreation />
-      ) : (
-        <PublishIntegrationButton />
-      ))}
+      {isRoomLoaded &&
+        (hasCreatingIntegrations && !firstIntegrationReadyToPublish ? (
+          <IntegrationCreation />
+        ) : (
+          <>
+            <DaysInARowModal
+              onClose={() => {
+                if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+                  closeModal(MODALS.DAYS_IN_A_ROW);
+                }
+              }}
+            />
+            <PublishIntegrationButton />
+          </>
+        ))}
 
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && !getModalState(MODALS.SUBSCRIBE).isOpen) ||
+        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) &&
+        !getModalState(MODALS.SUBSCRIBE).isOpen) ||
         (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) ||
         (firstIntegrationCreating &&
