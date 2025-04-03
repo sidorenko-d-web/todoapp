@@ -7,7 +7,6 @@ const proxyImageUrl = buildLink()?.proxy!;
 const jsonUrl = new URL(`${buildLink()?.itemBaseUrl}anfas_happy.json`).href;
 const atlasUrl = new URL(`${buildLink()?.itemBaseUrl}anfas_happyatlas.txt`).href;
 
-const dpi = window.devicePixelRatio;
 export class WardrobeSpineScene extends Phaser.Scene {
   jsonUrl: string | undefined;
   atlasUrl: string | undefined;
@@ -33,7 +32,7 @@ export class WardrobeSpineScene extends Phaser.Scene {
   }
 
   createPerson(scale: number) {
-    const width = this.sys.game.config.width as number * dpi;
+    const width = this.sys.game.config.width as number;
     const center = width / 2;
     if (!this.add.spine) throw new Error('add.spine');
     this.spineObject = this.add.spine(center, center, 'data', 'atlas');
