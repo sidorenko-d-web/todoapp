@@ -92,7 +92,7 @@ export const Footer = () => {
     (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
       !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED));
 
-  const notDarken = integrationCurrentlyCreating && accelerateGuideShown;
+  const notDarken = integrationCurrentlyCreating && accelerateGuideShown || getModalState(MODALS.SUBSCRIBE).isOpen;;
 
   return (
     <div

@@ -83,6 +83,8 @@ export const PublishIntegrationButton: React.FC = () => {
 
     try {
       if (isFirstIntegrationReady) {
+        // публикация первой интеграции немного по-другому идёт,
+        //  почему то приходится несколько раз кликнуть, просьба не убирать этот кейс
         const firstIntegrationID = localStorage.getItem('firstIntegrationId');
 
         const publishRes = await publishIntegration(firstIntegrationID!);

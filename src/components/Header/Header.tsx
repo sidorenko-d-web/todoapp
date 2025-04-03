@@ -130,7 +130,7 @@ export const Header = () => {
     isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
     !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
 
-  const notDarken = integrationCurrentlyCreating && accelerateGuideShown;
+  const notDarken = integrationCurrentlyCreating && accelerateGuideShown || getModalState(MODALS.SUBSCRIBE).isOpen;
 
   return (
     <>
