@@ -17,6 +17,7 @@ export const PushLineGuide: React.FC<PushLineGuideProps> = ({ onClose }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(setShowFreezeGuide(false));
     dispatch(setDimHeader(true));
   }, []);
 

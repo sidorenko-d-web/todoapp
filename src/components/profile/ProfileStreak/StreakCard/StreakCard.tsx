@@ -133,12 +133,12 @@ export const StreakCard: React.FC<StreakCardProps> = ({
 
             style={showFreezeGuide ? { filter: 'grayscale(100%)'} : undefined}
           >
-            {showFreezeGuide ? status : t('p12_5')}
+            {!showFreezeGuide ? status : t('p12_5')}
           </span>
 
           <div className={styles.title}>
             <span className={clsx(styles.daysInARow, strangerId && styles.stranger)}>
-              {showFreezeGuide ? reliableStreakDays : '0'} {t('p13').replace('в ', 'в\u00A0')}
+              {!showFreezeGuide ? reliableStreakDays : '0'} {t('p13').replace('в ', 'в\u00A0')}
             </span>
             {!strangerId && !onlyStreak && (
               <div className={`${styles.freezeCount} ${elevatedFreeze ? styles.elevatedFreeze : ''}
@@ -163,7 +163,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
                   key={day}
                   streakDays={reliableStreakDays}
                   dayNumber={day}
-                  type={type}
+                  type={showFreezeGuide ? 'regular' : type}
                   weekIndex={index}
                   weekData={weekData ?? []}
                 />
@@ -174,7 +174,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
           <div className={styles.progressContainer}>
             <div className={`${styles['progressBarTextWrp']} ${styles['progressText']}`}>
               <span>
-                {showFreezeGuide ? reliableStreakDays : 0}/{t(p14Key)}
+                {!showFreezeGuide ? reliableStreakDays : 0}/{t(p14Key)}
               </span>
               <span className={styles.reward}>
                 {chest}
@@ -184,7 +184,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
               </span>
             </div>
 
-            <ProgressLine level={showFreezeGuide ? level : 0} color={color} />
+            <ProgressLine level={!showFreezeGuide ? level : 0} color={color} />
           </div>
         </>
       )}

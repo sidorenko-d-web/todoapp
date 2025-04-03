@@ -19,7 +19,7 @@ export const ProgressTreePage = () => {
   
   return (
     <>
-
+      
       <Tree />
       {(!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) && showGuide) && (
         <TreeGuide

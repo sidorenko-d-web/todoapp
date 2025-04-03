@@ -168,7 +168,7 @@ const guideSlice = createSlice({
     },
 
     setShowFreezeGuide: (state, action: PayloadAction<boolean>) => {
-      state.firstIntegrationReadyToPublish = action.payload;
+      state.showFreezeGuide = action.payload;
     },
 
     setRefetchAfterPublish: (state) => {

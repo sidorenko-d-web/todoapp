@@ -50,6 +50,8 @@ export const Guide = ({
             className={`${styles.wrp} ${dimBackground ? (treeGuideDisplaying ?  styles.dimmedTree :  styles.dimmed) : ''}`}
             style={{ zIndex }}
         >
+
+            <div style={{background: 'red', position: 'absolute', height: '300px', zIndex: '10000', top: '-10%'}}></div>
             <div
                 ref={contentRef}
                 className={`${styles.content} ${align === 'left' ? styles.left : styles.right}`}
