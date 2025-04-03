@@ -43,6 +43,7 @@ export const PushLineGuide: React.FC<PushLineGuideProps> = ({ onClose }) => {
             {t('g94')}<span style={{ color: '#EC7913' }}>{t('g94_2')}</span>
             <br/>
             <br/>
+            <br/>
             {t('g95')}<span style={{ color: '#2F80ED' }}>{t('g96')}</span>
           </>
         }
