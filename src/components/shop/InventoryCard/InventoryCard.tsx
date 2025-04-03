@@ -241,7 +241,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             try {
               setIsUpdateLoading(true);
               const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
-              localStorage.setItem('giftName', res.data?.chest.chest_name || '');
+              localStorage.setItem('giftName', res.data?.chest?.chest_name || '');
 
               if (!res.error) {
                 playLvlSound();
@@ -402,8 +402,12 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               </p>
               {
                 <div className={styles.goal}>
-                  <p>{locale === 'ru' ? item.chest.chest_name : item.chest.chest_name_eng}</p>
-                  <img src={item.chest.chest_image_url || GiftIcon} alt="Reward" />
+                  {item.chest && (
+                    <>
+                      <p>{locale === 'ru' ? item.chest.chest_name : item.chest.chest_name_eng}</p>
+                      <img src={item.chest.chest_image_url || GiftIcon} alt="Reward" />
+                    </>
+                  )}
                 </div>
               }
             </div>

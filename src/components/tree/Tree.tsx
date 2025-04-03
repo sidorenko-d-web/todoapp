@@ -80,7 +80,6 @@ export const Tree = () => {
   const Reward = memo(
     ({ isUnlocked, index, stage }: { isUnlocked: boolean; index: number; stage: GrowthTreeStage }) => {
       const isEven = index % 2 === 0;
-      index === 4 && console.log(stage);
 
       const giftColors = [giftPurple, giftRed, giftBlue];
 
