@@ -73,7 +73,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
 
   useEffect(() => {
     companies?.forEach(company => {
-      if(company.company_name.toLowerCase() === 'microsolve') {
+      if(company.company_name.toLowerCase() === 'gloogle') {
         console.log('SOLVE MICRO')
         localStorage.setItem('microsolve', company.id);
       }

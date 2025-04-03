@@ -1,13 +1,13 @@
 import { useEffect, useState, useMemo } from 'react';
 import Lottie from 'lottie-react';
-import { AppRoute, GUIDE_ITEMS, MODALS } from '../../../constants';
+import { GUIDE_ITEMS, MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import FireBlue from '../../../assets/icons/fire-blue.svg';
 import FireRed from '../../../assets/icons/fire-red.svg';
 import FirePurple from '../../../assets/icons/fire-purple.svg';
 import styles from './DaysInARowModal.module.scss';
 import Button from '../partials/Button';
-import { RootState, useGetPushLineQuery } from '../../../redux';
+import { useGetPushLineQuery } from '../../../redux';
 import ChestBlue from '../../../assets/icons/chest-blue.svg';
 import ChestPurple from '../../../assets/icons/chest-purple.svg';
 import chestIcon from '../../../assets/icons/chest-red.svg';
@@ -20,7 +20,6 @@ import { StreakDay } from '../../../components/profile/ProfileStreak/StreakCard/
 import { isGuideShown, setGuideShown } from '../../../utils';
 import { IntegrationCreatedGuide } from '../../../components';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 interface Props {
   days?: number;
@@ -73,21 +72,7 @@ export default function DaysInARowModal({ onClose }: Props) {
         frozen.push(dayDate);
       }
     });
-
-    const modalShownToday = localStorage.getItem('modalShownToday');
-    const todayDate = new Date().toISOString().split('T')[0];
-
-    if (modalShownToday !== todayDate && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
-      const isTodayPassed = data?.week_information?.some(
-        (entry) => entry.creation_date === todayDate && entry.push_line_data?.status === 'passed'
-      );
-
-      // if (isTodayPassed && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
-      //   openModal(MODALS.DAYS_IN_A_ROW);
-      //   localStorage.setItem('modalShownToday', todayDate);
-      // }
-    }
-
+    
     setFrozenDays(frozen);
     setStreakDays(streak);
   }, [data?.current_status, isLoading, openModal]);
@@ -158,7 +143,7 @@ export default function DaysInARowModal({ onClose }: Props) {
     return ChestBlue;
   }, [streakCount]);
 
-  const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
+ 
 
   return (
     <>

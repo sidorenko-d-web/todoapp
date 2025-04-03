@@ -70,6 +70,17 @@ export default function RewardForIntegrationModal() {
   const blueStarCount = getBlueStarCount(integrationCount);
   const progressPercentage = getProgressBarPercentage(integrationCount);
 
+  function openModalIfNotOpenedToday() {
+    const today = new Date().toISOString().split('T')[0];
+    
+    const lastOpenedDate = localStorage.getItem('lastModalOpenedDate');
+    
+    if (lastOpenedDate !== today) {
+      openModal(MODALS.DAYS_IN_A_ROW);
+      localStorage.setItem('lastModalOpenedDate', today);
+    }
+  }
+  
   return (
     <CentralModal
       onClose={() => {
@@ -77,7 +88,6 @@ export default function RewardForIntegrationModal() {
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
         dispatch(setIsPublishedModalClosed(true));
         dispatch(setNeedToPlayHappy(true));
-        openModal(MODALS.DAYS_IN_A_ROW);
         closeModal(MODALS.INTEGRATION_REWARD);
       }}
       modalId={MODALS.INTEGRATION_REWARD}
@@ -142,7 +152,7 @@ export default function RewardForIntegrationModal() {
             setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
             dispatch(setIsPublishedModalClosed(true));
             dispatch(setNeedToPlayHappy(true));
-            openModal(MODALS.DAYS_IN_A_ROW);
+            openModalIfNotOpenedToday();
             closeModal(MODALS.INTEGRATION_REWARD);
           }}
         >
