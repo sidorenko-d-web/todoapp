@@ -76,7 +76,7 @@ export const Header = () => {
   useEffect(() => {
     if(rerenderAfterPublish > rerender) {
       refetch().then(() => {
-        setRerender(rerender);
+        setRerender(rerenderAfterPublish);
       })
     }
   }, [rerenderAfterPublish]);
