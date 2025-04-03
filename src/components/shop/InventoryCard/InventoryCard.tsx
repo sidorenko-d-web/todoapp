@@ -402,8 +402,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               </p>
               {
                 <div className={styles.goal}>
-                  <p>{locale === 'ru' ? item.chest.chest_name : item.chest.chest_name_eng}</p>
-                  <img src={item.chest.chest_image_url || GiftIcon} alt="Reward" />
+                  <p>{locale === 'ru' ? item?.chest?.chest_name : item?.chest?.chest_name_eng}</p>
+                  <img src={item?.chest?.chest_image_url || GiftIcon} alt="Reward" />
                 </div>
               }
             </div>

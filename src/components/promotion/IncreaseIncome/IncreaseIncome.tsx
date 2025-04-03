@@ -31,7 +31,7 @@ export const IncreaseIncome = () => {
   const hiddenReferralsCount = referrals.length - 3;
 
   const profileIdsAll = useMemo(
-    () => visibleReferralsAll.map(referral => referral.character_data.profile_id),
+    () => visibleReferralsAll.map(referral => referral?.character_data?.profile_id),
     [visibleReferralsAll],
   );
 
@@ -116,7 +116,7 @@ export const IncreaseIncome = () => {
                     name={referral.username}
                     reminded_time={referral.reminded_at}
                     id_referral={referral.id}
-                    profile_id={referral.character_data.profile_id}
+                    profile_id={referral?.character_data?.profile_id}
                     total_invited={referral.total_invited}
                     streak={referral.push_line_data.in_streak_days}
                     days_missed={referral.push_line_data.failed_days_ago}

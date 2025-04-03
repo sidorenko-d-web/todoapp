@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
 
 import qr from '../../../assets/icons/qr.png';
+import WhiteNoiseCanvas from '../../WhiteNoise/WhiteNoise';
 
 interface LoadingScreenProps {
   onAnimationComplete: () => void;
@@ -119,6 +120,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
 
   return (
     <>
+    <WhiteNoiseCanvas />
       {isMobile === 1 && (
         <div className={styles.root} onClick={handleAccelerate}>
           <div />

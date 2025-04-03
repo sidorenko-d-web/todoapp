@@ -209,7 +209,7 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
     ],
   };*/
   useEffect(() => {
-    const ids = data?.referrals.map(referral => referral.character_data.profile_id);
+    const ids = data?.referrals.map(referral => referral?.character_data?.profile_id);
     if (ids){
       setProfileIds(ids);
     }
@@ -261,7 +261,7 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
             <ReferralCard
               key={index}
               id_referral={referral.id}
-              profile_id={referral.character_data.profile_id}
+              profile_id={referral?.character_data?.profile_id}
               position={index + 1}
               name={referral.username}
               reminded_time={referral.reminded_at}
