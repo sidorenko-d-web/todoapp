@@ -4,3 +4,4 @@ export * from './formatAbbreviation';
 export * from './getAchivementType';
 export * from './getPlanStageByUsersCount';
 export * from './hasAvailableTreeReward';
+export * from './getNextLevelReward';

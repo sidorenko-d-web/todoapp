@@ -23,7 +23,7 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const spineSceneRef = useRef<SpineSceneBase | null>(null);
 
-  const [ size, setSize ] = useState([ 0, 0 ]);
+  const [size, setSize] = useState([0, 0]);
   const isWorking = useSelector(selectIsWorking);
   const isNeedToPlayHappy = useSelector(selectIsNeedToPlayHappy);
 
@@ -56,11 +56,14 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
 
       create() {
         try {
+          setTimeout(() => {
+            console.log('a');
+          }, 1000);
           this.createPerson(contextProps, isWorking);
         } catch (error: any) {
           if (error.message === 'add.spine') {
             console.log('avoid err');
-            setSize(prev => [ prev[0] + 1, prev[1] ]);
+            setSize(prev => [prev[0] + 1, prev[1]]);
           }
         }
         // Разделение создания анимированных и статичных предметов
@@ -106,11 +109,11 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
       width: window.innerWidth * window.devicePixelRatio,
       height: window.innerHeight * window.devicePixelRatio,
       transparent: true,
-      scene: [ SpineScene ],
+      scene: [SpineScene],
       canvasStyle: `width: ${window.innerWidth}px; height: ${window.innerHeight}px`,
       autoRound: false, // Отключаем округление размеров
       plugins: {
-        scene: [ { key: 'player', plugin: SpinePlugin, mapping: 'spine' } ],
+        scene: [{ key: 'player', plugin: SpinePlugin, mapping: 'spine' }],
       },
       parent: 'player',
       render: {
@@ -130,13 +133,13 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
         spineSceneRef.current = null;
       }
     };
-  }, [ sceneRef, size, character?.isLoading ]);
+  }, [sceneRef, size, character?.isLoading]);
 
   const getSkin = useCallback(
     (wear_location: TypeWearLocation) => {
       return character?.data?.skins.find(item => item.wear_location === wear_location)?.name.toLowerCase();
     },
-    [ character?.data ],
+    [character?.data],
   );
 
   const findAnimatedItem = useCallback((item: IShopItem) => {
@@ -148,7 +151,7 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
   useEffect(() => {
     if (!spineSceneRef.current) return;
     spineSceneRef.current?.setCurrentLoopedAnimation(isWorking);
-  }, [ isWorking ]);
+  }, [isWorking]);
 
   useEffect(() => {
     if (!spineSceneRef.current) return;
@@ -159,7 +162,7 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
         if (isNeedToPlayHappy) spineSceneRef.current?.setIdle();
       }, 4000);
     }
-  }, [ isNeedToPlayHappy, dispatch ]);
+  }, [isNeedToPlayHappy, dispatch]);
 
   return (
     <>
