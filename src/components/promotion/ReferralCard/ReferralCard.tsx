@@ -6,6 +6,7 @@ import fireBlueIcon from '../../../assets/icons/fire-blue.svg';
 import fireGrayIcon from '../../../assets/icons/fire-gray.svg';
 import infoIcon from '../../../assets/icons/info.svg';
 import infoRedIcon from '../../../assets/icons/info-red.svg';
+import goldCoinIcon from '../../../assets/icons/coin.png';
 import { useGetUserProfileInfoByIdQuery, useMarkPushReminderSentMutation } from '../../../redux';
 import { formatAbbreviation } from '../../../helpers';
 import { Button } from '../../shared';
@@ -17,26 +18,27 @@ interface ReferralCardProps {
   total_invited: number;
   streak: number;
   days_missed: number;
-  id_referral?: number;
+  id_referral: number;
   reminded_time?: string;
-  profile_id?: string;
+  subscribers_for_referrer: number
+  points_for_referrer: number
 }
 
 export const ReferralCard: React.FC<ReferralCardProps> = ({
-                                                            id_referral,
-                                                            position,
-                                                            name,
-                                                            total_invited,
-                                                            streak,
-                                                            days_missed,
-                                                            reminded_time,
-                                                            profile_id,
-                                                          }) => {
+  id_referral,
+  position,
+  name,
+  total_invited,
+  streak,
+  days_missed,
+  reminded_time,
+  subscribers_for_referrer,
+  points_for_referrer
+}) => {
   const { t, i18n } = useTranslation('promotion');
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { data } = useGetUserProfileInfoByIdQuery(String(profile_id));
-  const [ markPushReminderSent ] = useMarkPushReminderSentMutation();
-
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const { data } = useGetUserProfileInfoByIdQuery(id_referral.toString());
+  const [markPushReminderSent] = useMarkPushReminderSentMutation();
   const handleSendMessage = async () => {
     try {
       await markPushReminderSent(Number(id_referral)).unwrap();
@@ -76,30 +78,39 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
           </div>
           <div className={classNames(s.userCardRank, s.text)}>{`#${position}`}</div>
         </div>
-        <div className={s.userCardBottom}>
+
+        <section className={s.userCardStats}>
+          <div className={s.userCardBottom}>
+            <div className={s.userCardBonus}>
+              <span className={s.badge}>
+                +
+                {subscribers_for_referrer !== undefined
+                  ? formatAbbreviation(subscribers_for_referrer, 'number', { locale: locale })
+                  : 'N/A'}{' '}
+                <img src={subscribersIcon} alt="Подписчики" />
+              </span>
+              <span className={classNames(s.level, s.text)}>1{t('p4')}.</span>
+            </div>
+            {subscribers_for_referrer !== undefined &&
+              <div className={s.userCardBonus}>
+                <span className={s.badge}>
+                  +{formatAbbreviation(total_invited * 150, 'number', { locale: locale })}
+                  <img src={subscribersIcon} alt="Подписчики" />
+                </span>
+                <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
+              </div>
+            }
+            {data?.subscribers_for_second_level_referrals === undefined && <Button className={classNames(s.userCardRefs, s.text)}>
+              {`(${t('p54')} ${total_invited} ${t('p55')}.)`}
+            </Button>}
+          </div>
           <div className={s.userCardBonus}>
             <span className={s.badge}>
-              +
-              {data?.subscribers !== undefined
-                ? formatAbbreviation(data.subscribers_for_first_level_referrals, 'number', { locale: locale })
-                : 'N/A'}{' '}
-              <img src={subscribersIcon} alt="Подписчики" />
+              +{formatAbbreviation(points_for_referrer, 'number', { locale: locale })}
+              <img src={goldCoinIcon} alt="поинты" />
             </span>
-            <span className={classNames(s.level, s.text)}>1{t('p4')}.</span>
           </div>
-          {data?.subscribers_for_second_level_referrals !== undefined &&
-            <div className={s.userCardBonus}>
-            <span className={s.badge}>
-                <>+{formatAbbreviation(data.subscribers_for_second_level_referrals, 'number', { locale: locale })}
-                  <img src={subscribersIcon} alt="Подписчики" /></>
-            </span>
-              <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
-            </div>
-          }
-          {data?.subscribers_for_second_level_referrals === undefined && <Button className={classNames(s.userCardRefs, s.text)}>
-            {`(${t('p54')} ${total_invited} ${t('p55')}.)`}
-          </Button>}
-        </div>
+        </section>
         {days_missed > 1 && reminded_time === null ? (
           <div className={s.streakWarningWrapper}>
             <span className={classNames(s.streakBadge, s.warning)}>

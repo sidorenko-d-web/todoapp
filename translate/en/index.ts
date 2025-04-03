@@ -11,3 +11,4 @@ export { default as tree } from './tree.json';
 export { default as guide } from './guide.json';
 export { default as referral } from './referral.json';
 export { default as gift } from './gift.json';
+export { default as reward } from './reward.json'
