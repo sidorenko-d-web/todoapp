@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import Lottie from 'lottie-react';
-import { AppRoute, GUIDE_ITEMS, MODALS } from '../../../constants';
+import { GUIDE_ITEMS, MODALS } from '../../../constants';
 import { useModal } from '../../../hooks';
 import FireBlue from '../../../assets/icons/fire-blue.svg';
 import FireRed from '../../../assets/icons/fire-red.svg';
@@ -31,13 +31,24 @@ export default function DaysInARowModal({ onClose }: Props) {
   const { t, i18n } = useTranslation('profile');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal, openModal } = useModal();
-  const { data, isLoading } = useGetPushLineQuery();
+  const { data, isLoading, refetch } = useGetPushLineQuery();
   const [dayNumbers, setDayNumbers] = useState<number[]>([]);
   const [frozenDays, setFrozenDays] = useState<number[]>([]);
   const [streakDays, setStreakDays] = useState<number[]>([]);
 
   const navigate = useNavigate();
 
+  const rerenderAfterPublish = useSelector((state: RootState) => state.guide.refetchAfterPublish);
+  const [rerender, setRerender] = useState(0);
+
+  
+  useEffect(() => {
+    if(rerenderAfterPublish > rerender) {
+      refetch().then(() => {
+        setRerender(rerenderAfterPublish);
+      })
+    }
+  }, [rerenderAfterPublish]);
 
   useEffect(() => {
     const today = new Date();
@@ -73,21 +84,7 @@ export default function DaysInARowModal({ onClose }: Props) {
         frozen.push(dayDate);
       }
     });
-
-    const modalShownToday = localStorage.getItem('modalShownToday');
-    const todayDate = new Date().toISOString().split('T')[0];
-
-    if (modalShownToday !== todayDate && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
-      const isTodayPassed = data?.week_information?.some(
-        (entry) => entry.creation_date === todayDate && entry.push_line_data?.status === 'passed'
-      );
-
-      if (isTodayPassed && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
-        openModal(MODALS.DAYS_IN_A_ROW);
-        localStorage.setItem('modalShownToday', todayDate);
-      }
-    }
-
+    
     setFrozenDays(frozen);
     setStreakDays(streak);
   }, [data?.current_status, isLoading, openModal]);
@@ -158,7 +155,7 @@ export default function DaysInARowModal({ onClose }: Props) {
     return ChestBlue;
   }, [streakCount]);
 
-  const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
+ 
 
   return (
     <>
@@ -222,23 +219,25 @@ export default function DaysInARowModal({ onClose }: Props) {
             color={color}
           />
         </div>
-        <Button
-          onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))}
-          variant={color}
-        >
-          {t('p22')}
-        </Button>
+        {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+          <Button
+            onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))}
+            variant={color}
+          >
+            {t('p22')}
+          </Button>
+        }
 
         {
           !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
           <IntegrationCreatedGuide
-          onClose={() => {
-            closeModal(MODALS.DAYS_IN_A_ROW);
-            setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
-            navigate(AppRoute.Integration.replace(':integrationId', integrationId));
-            //setRerender((prev) => prev + 1);
-          }}
-        />
+            onClose={() => {
+              closeModal(MODALS.DAYS_IN_A_ROW);
+              setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
+              navigate('integrations/undefined');
+              //setRerender((prev) => prev + 1);
+            }}
+          />
         }
       </CentralModal>
 

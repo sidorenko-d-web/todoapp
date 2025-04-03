@@ -158,6 +158,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     if (mode === 'inventory') {
+      dispatch(setActiveFooterItemId(1));
       const timer = setTimeout(() => {
         setShowBackToMainGuide(true);
       }, 1000);

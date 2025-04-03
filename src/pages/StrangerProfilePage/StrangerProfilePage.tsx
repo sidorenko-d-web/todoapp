@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import GetRewardChestModal from '../DevModals/GetRewardChestModal/GetRewardChestModal';
 import styles from './StrangerProfilePage.module.scss';
@@ -54,17 +54,10 @@ export const StrangerProfilePage: React.FC = () => {
     isLoading: isTopProfilesLoading,
   } = useGetTopProfilesQuery({ ids: [strangerId] });
 
-  const [, setIsModalShown] = useState(false);
 
   const streaks = data?.week_information.filter(day => day.push_line_data?.status === 'passed').length;
 
-  useEffect(() => {
-    if (!sessionStorage.getItem('daysInARowModalShown')) {
-      openModal(MODALS.DAYS_IN_A_ROW);
-      sessionStorage.setItem('daysInARowModalShown', 'true');
-      setIsModalShown(true);
-    }
-  }, [openModal]);
+ 
 
   useEffect(() => {
     if (streaks === 30 || streaks === 60 || streaks === 120) {
