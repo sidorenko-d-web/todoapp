@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setDimHeader } from '../../../../redux';
 import { IntegrationComment, IntegrationStats } from '../../../integration';
+import { setGuideShown } from '../../../../utils';
+import { GUIDE_ITEMS } from '../../../../constants';
 
 interface IntegrationPageGuideProps {
   onClose: () => void;
@@ -22,6 +24,7 @@ export const IntegrationPageGuide: React.FC<IntegrationPageGuideProps> = ({ onCl
   }, []);
 
   const handleClose = () => {
+    setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
     //dispatch(setDimHeader(false));
     onClose();
     setIsOpen(false);

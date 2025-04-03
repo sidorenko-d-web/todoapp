@@ -49,18 +49,16 @@ export const ProfilePage: React.FC = () => {
     isLoading: isTopProfilesLoading,
   } = useGetTopProfilesQuery({});
 
-  const [, setIsModalShown] = useState(false);
 
   const streaks = pushLineData?.week_information.filter(day => day.push_line_data?.status === 'passed').length;
 
   // Handle one-time modal display
-  useEffect(() => {
-    if (!sessionStorage.getItem('daysInARowModalShown')) {
-      openModal(MODALS.DAYS_IN_A_ROW);
-      sessionStorage.setItem('daysInARowModalShown', 'true');
-      setIsModalShown(true);
-    }
-  }, [openModal]);
+  // useEffect(() => {
+  //   if (!sessionStorage.getItem('daysInARowModalShown')) {
+  //     sessionStorage.setItem('daysInARowModalShown', 'true');
+  //     setIsModalShown(true);
+  //   }
+  // }, [openModal]);
 
   // Handle streak milestone rewards
   useEffect(() => {
@@ -150,7 +148,8 @@ export const ProfilePage: React.FC = () => {
       {userProfileData && topProfilesData && (
         <div className={styles.wrp}>
           <div>
-            <h1 className={styles.pageTitle}>{t('p1')}</h1>
+            <h1 className={`${styles.pageTitle} 
+              ${!isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) ? styles.elevated : ''}`}>{t('p1')}</h1>
 
             <ProfileStatsMini position={position} daysInARow={streaks} />
           </div>

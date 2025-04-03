@@ -14,7 +14,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AppRoute, GUIDE_ITEMS, MODALS, PROFILE_ME_POLLING_INTERVAL, TREE_POLLING_INTERVAL } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { TrackedLink } from '../withTracking';
@@ -58,6 +58,9 @@ export const Header = () => {
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const platform = getOS();
 
+  
+  const [rerender, setRerender] = useState(0);
+
   const { getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
 
@@ -68,6 +71,17 @@ export const Header = () => {
     }
   }, [isOpen]);
 
+  const rerenderAfterPublish = useSelector((state: RootState) => state.guide.refetchAfterPublish);
+
+  useEffect(() => {
+    if(rerenderAfterPublish > rerender) {
+      refetch().then(() => {
+        setRerender(rerenderAfterPublish);
+      })
+    }
+  }, [rerenderAfterPublish]);
+
+  
   const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
   const userSubscribers = data?.subscribers || 0;
@@ -116,7 +130,7 @@ export const Header = () => {
     isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
     !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
 
-  const notDarken = integrationCurrentlyCreating && accelerateGuideShown;
+  const notDarken = integrationCurrentlyCreating && accelerateGuideShown || getModalState(MODALS.SUBSCRIBE).isOpen;
 
   return (
     <>

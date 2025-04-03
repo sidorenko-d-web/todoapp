@@ -118,10 +118,6 @@ export const MainPage: FC = () => {
   }, [itemsData, isInventoryDataLoading, typewriterFound, profileData, isCurrentUserProfileInfoLoading]);
 
   useEffect(() => {
-    console.log('FETCHING PROFILE');
-  }, [profileData, isCurrentUserProfileInfoLoading]);
-
-  useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
       if (data?.count > 2) {
         Object.values(GUIDE_ITEMS).forEach(category => {
@@ -308,7 +304,7 @@ export const MainPage: FC = () => {
       !getModalState(MODALS.DAYS_IN_A_ROW).isOpen &&
       !getModalState(MODALS.DAYS_IN_A_ROW).isOpen
     ) {
-      openModal(MODALS.DAYS_IN_A_ROW);
+      //openModal(MODALS.DAYS_IN_A_ROW);
     }
   }, []);
 
@@ -319,11 +315,11 @@ export const MainPage: FC = () => {
   // const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
-  const firstIntegrationReadyToPublish = useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
+  const firstIntegrationReadyToPublish = useSelector((state: RootState) => state.guide.firstIntegrationReadyToPublish);
 
   useEffect(() => {
     if (isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
-      openModal(MODALS.DAYS_IN_A_ROW);
+      //openModal(MODALS.DAYS_IN_A_ROW);
     }
   }, [isPublishedModalClosed, isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)]);
 
@@ -366,7 +362,7 @@ export const MainPage: FC = () => {
 
   const accelerateIntegration = () => {
     console.log('_acceleration');
-    if (integrationCurrentlyCreating || firstIntegrationReadyToPublish) {
+    if (integrationCurrentlyCreating || firstIntegrationCreating || hasCreatingIntegrations) {
       reduxDispatch(incrementAcceleration());
     }
   };
@@ -385,7 +381,15 @@ export const MainPage: FC = () => {
         </TrackedLink>
       )}
 
-      {(integrationCurrentlyCreating || firstIntegrationReadyToPublish) && (
+      <DaysInARowModal
+        onClose={() => {
+          if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+            closeModal(MODALS.DAYS_IN_A_ROW);
+          }
+        }}
+      />
+
+      {(integrationCurrentlyCreating || firstIntegrationCreating) && (
         <div
           style={{
             position: 'absolute',
@@ -422,8 +426,7 @@ export const MainPage: FC = () => {
         !getModalState(MODALS.SUBSCRIBE).isOpen) ||
         (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) ||
-        (firstIntegrationCreating &&
-          !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
+        firstIntegrationCreating) && (
         <div
           style={{
             position: 'absolute',

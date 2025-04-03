@@ -5,7 +5,7 @@ import styles from './ProfileStatsMini.module.scss';
 import clanIcon from '../../../assets/icons/clan-red.svg';
 import subscriberIcon from '../../../assets/icons/subscribers.png';
 import viewsIcon from '../../../assets/icons/views.png';
-import fireIcon from '../../../assets/icons/fire-red.svg';
+import fireIcon from '../../../assets/icons/fire-blue.svg';
 import { Link } from 'react-router-dom';
 import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';

@@ -157,6 +157,18 @@ export const Tree = () => {
   return (
     <div className={s.containerGlobal}>
 
+      {
+        !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) &&
+        <>
+          <div
+            style={{ position: 'fixed', bottom: '85px', left: '0', width: '100vh', height: '30px', backgroundColor: 'rgba(0, 0, 0, 0.91)' }}
+          />
+
+          <div
+            style={{ position: 'fixed', top: '0', left: '0', width: '100vh', height: '165px', backgroundColor: 'rgba(0, 0, 0, 0.91)' }}
+          />
+        </>
+      }
 
       <div className={s.progressBarContainer}>
         <List

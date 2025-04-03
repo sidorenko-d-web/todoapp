@@ -21,12 +21,12 @@
   }
 
   .pageTitle {
+    position: relative;
     color: #fff;
     text-align: center;
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 5px;
-
     @media (min-width: var.$breakpoint-md) {
       font-size: 24px;
     }
@@ -42,4 +42,8 @@
       font-size: 16px;
     }
   }
+}
+
+.elevated {
+  z-index: 200;
 }
