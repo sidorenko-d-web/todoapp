@@ -33,7 +33,7 @@ import {
   svgHeadersString,
 } from '../../../constants';
 import { useModal } from '../../../hooks';
-import { formatAbbreviation } from '../../../helpers';
+import { formatAbbreviation, getNextLevelReward } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import useSound from 'use-sound';
 import { useDispatch, useSelector } from 'react-redux';
@@ -68,6 +68,7 @@ function sortByPremiumLevel(items: IShopItem[]) {
 
 export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled = true, item, isB }) => {
   const RoomItemsSlots = useRoomItemsSlots();
+  const { t, i18n } = useTranslation('shop');
 
   const itemLevel =
     item.item_premium_level === 'advanced'
@@ -76,8 +77,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
       ? item.level + 100
       : item.level;
 
+  const upgradeReward = getNextLevelReward(itemLevel, i18n.language as 'ru' | 'en');
+
   const [idDisabled] = useState(true);
-  const { t, i18n } = useTranslation('shop');
   const { data: pointsUser } = useGetProfileMeQuery();
   const [upgradeItem, { isLoading }] = useUpgradeItemMutation();
   const { data, isLoading: isItemsLoading } = useGetShopItemsQuery({
@@ -156,7 +158,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
       setIsUpdateLoading(true);
       const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
-      localStorage.setItem('giftName', res.data?.chest.chest_name || '');
+      localStorage.setItem('giftName', upgradeReward?.name || '');
 
       if (!res.error) {
         playLvlSound();
@@ -241,7 +243,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             try {
               setIsUpdateLoading(true);
               const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
-              localStorage.setItem('giftName', res.data?.chest.chest_name || '');
+              localStorage.setItem('giftName', upgradeReward?.name || '');
 
               if (!res.error) {
                 playLvlSound();
@@ -400,12 +402,12 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               <p>
                 {itemLevel}/{levelCap} {t('s24')}{' '}
               </p>
-              {
+              {itemLevel % 50 !== 0 && (
                 <div className={styles.goal}>
-                  <p>{locale === 'ru' ? item?.chest?.chest_name : item?.chest?.chest_name_eng}</p>
-                  <img src={item?.chest?.chest_image_url || GiftIcon} alt="Reward" />
+                  <p>{upgradeReward?.name}</p>
+                  <img src={upgradeReward?.icon || GiftIcon} alt="Reward" />
                 </div>
-              }
+              )}
             </div>
 
             <div className={styles.progressBar}>
@@ -488,7 +490,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           </div>
         ))}
 
-      {isBlocked ? (
+      {(isBlocked || !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN)) ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>{t('s26')}</p>

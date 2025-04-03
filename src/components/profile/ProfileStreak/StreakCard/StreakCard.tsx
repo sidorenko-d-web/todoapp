@@ -14,6 +14,8 @@ import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { isGuideShown } from '../../../../utils';
 import { GUIDE_ITEMS } from '../../../../constants';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../redux';
 
 interface WeekData {
   date: string;
@@ -51,6 +53,8 @@ export const StreakCard: React.FC<StreakCardProps> = ({
 }) => {
   const { t } = useTranslation('profile');
 
+  const showFreezeGuide = useSelector((state: RootState) => state.guide.showFreezeGuide);
+  
   // Get the most reliable streak count
   const reliableStreakDays = useMemo(() => {
     // First check if in_streak_days exists in weekData
@@ -126,13 +130,15 @@ export const StreakCard: React.FC<StreakCardProps> = ({
             className={
               reliableStreakDays >= 60 ? styles.badgeRed : reliableStreakDays >= 30 ? styles.badgePurple : styles.badge
             }
+
+            style={showFreezeGuide ? { filter: 'grayscale(100%)'} : undefined}
           >
-            {status}
+            {!showFreezeGuide ? status : t('p12_5')}
           </span>
 
           <div className={styles.title}>
             <span className={clsx(styles.daysInARow, strangerId && styles.stranger)}>
-              {reliableStreakDays} {t('p13').replace('в ', 'в\u00A0')}
+              {!showFreezeGuide ? reliableStreakDays : '0'} {t('p13').replace('в ', 'в\u00A0')}
             </span>
             {!strangerId && !onlyStreak && (
               <div className={`${styles.freezeCount} ${elevatedFreeze ? styles.elevatedFreeze : ''}
@@ -144,7 +150,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
           </div>
         </div>
         <div className={clsx(styles.fire, styles.stranger)}>
-          <img src={fireIcon} alt="Fire Icon" />
+          <img src={fireIcon} alt="Fire Icon"  style={showFreezeGuide ? { filter: 'grayscale(100%)'} : undefined}/>
         </div>
       </div>
 
@@ -157,7 +163,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
                   key={day}
                   streakDays={reliableStreakDays}
                   dayNumber={day}
-                  type={type}
+                  type={showFreezeGuide ? 'regular' : type}
                   weekIndex={index}
                   weekData={weekData ?? []}
                 />
@@ -168,7 +174,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
           <div className={styles.progressContainer}>
             <div className={`${styles['progressBarTextWrp']} ${styles['progressText']}`}>
               <span>
-                {reliableStreakDays}/{t(p14Key)}
+                {!showFreezeGuide ? reliableStreakDays : 0}/{t(p14Key)}
               </span>
               <span className={styles.reward}>
                 {chest}
@@ -178,7 +184,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
               </span>
             </div>
 
-            <ProgressLine level={level} color={color} />
+            <ProgressLine level={!showFreezeGuide ? level : 0} color={color} />
           </div>
         </>
       )}

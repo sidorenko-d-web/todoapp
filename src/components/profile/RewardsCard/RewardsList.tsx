@@ -18,7 +18,6 @@ const RewardsList: React.FC = () => {
   const { t } = useTranslation('profile');
   const { data: awardsData, error: awardsError, isLoading: awardsLoading } = useGetInventoryAchievementsQuery();
   const { data: roomData, isLoading: roomLoading } = useGetEquipedQuery();
-
   const mappedRewards: RewardItem[] = React.useMemo(() => {
     if (!awardsData || !awardsData.achievements) return [];
 
@@ -27,7 +26,6 @@ const RewardsList: React.FC = () => {
       .map((achievement: IAchievement): RewardItem => {
         const medal: 'gold' | 'silver' | 'bronze' =
           achievement.level === 3 ? 'gold' : achievement.level === 2 ? 'silver' : 'bronze';
-
         return {
           name: achievement.name,
           name_eng: achievement.name_eng,

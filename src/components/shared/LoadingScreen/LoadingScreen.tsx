@@ -23,7 +23,10 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   const [progress, setProgress] = useState(0);
   const [speedMultiplier, setSpeedMultiplier] = useState(1);
   const [forceLoadingTimePassed, setForceLoadingTimePassed] = useState(false);
-  const [playAccelerateSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
+  const currentVolumeEnabled = localStorage.getItem("soundEffectsEnabled") === "true"
+  const currentVolumeNumber = localStorage.getItem("buttonVolume")
+  const currenSetupStepIsNotCompleted = localStorage.getItem('currentSetupStep') !== "completed"
+  const [playAccelerateSound] = useSound(SOUNDS.speedUp, { volume: currenSetupStepIsNotCompleted ? useSelector(selectVolume) : ( currentVolumeEnabled ? Number(currentVolumeNumber) : 0)  });
   const loadingScreenBarRef = useRef<LoadingScreenBarRef>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -31,6 +34,14 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   //   Object.values(GUIDE_ITEMS).forEach(category => {
   //     Object.values(category).forEach(value => {
   //       localStorage.setItem(value, '1');
+  //     });
+  //   });
+  // }, []);
+
+  // useEffect(() => {
+  //   Object.values(GUIDE_ITEMS).forEach(category => {
+  //     Object.values(category).forEach(value => {
+  //       localStorage.setItem(value, '0');
   //     });
   //   });
   // }, []);

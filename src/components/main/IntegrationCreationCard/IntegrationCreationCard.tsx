@@ -148,7 +148,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
-
+  
   const handleAccelerateClick = useCallback(() => {
     if (isExpired) return;
 
@@ -156,7 +156,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     playAccelerateIntegrationSound();
     dispatch(setLastIntegrationId(integration.id));
 
-    void accelerateIntegration(100).finally(() => {
+    void accelerateIntegration(1).finally(() => {
       refetchIntegration();
     });
 
@@ -166,7 +166,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     const timeoutId = setTimeout(() => {
       setIsAccelerated(false);
       accelerationRef.current = false;
-    }, 2000);
+    }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [isExpired, playAccelerateIntegrationSound, dispatch, integration.id, accelerateIntegration, refetchIntegration]);

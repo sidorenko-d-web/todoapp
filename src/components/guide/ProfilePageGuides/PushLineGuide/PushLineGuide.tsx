@@ -5,7 +5,7 @@ import img1 from '../../../../assets/gif/guide1.gif';
 import { Guide } from "../../Guide/Guide";
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from "react-redux";
-import { setDimHeader } from "../../../../redux";
+import { setDimHeader, setShowFreezeGuide } from "../../../../redux";
 
 interface PushLineGuideProps {
   onClose: () => void;
@@ -17,11 +17,13 @@ export const PushLineGuide: React.FC<PushLineGuideProps> = ({ onClose }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(setShowFreezeGuide(false));
     dispatch(setDimHeader(true));
   }, []);
 
   const handleClose = () => {
     //dispatch(setDimHeader(false));
+    dispatch(setShowFreezeGuide(true));
     onClose();
     setIsOpen(false);
   };
@@ -39,6 +41,7 @@ export const PushLineGuide: React.FC<PushLineGuideProps> = ({ onClose }) => {
           <>
             {t('g92')}<span style={{ color: '#2F80ED' }}>{t('g93')}</span>
             {t('g94')}<span style={{ color: '#EC7913' }}>{t('g94_2')}</span>
+            <br/>
             <br/>
             <br/>
             {t('g95')}<span style={{ color: '#2F80ED' }}>{t('g96')}</span>

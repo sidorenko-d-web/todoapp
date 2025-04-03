@@ -27,7 +27,7 @@ import { setGuideShown } from '../../../utils';
 export default function RewardForIntegrationModal() {
   const { t, i18n } = useTranslation('integrations');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { closeModal, getModalState } = useModal();
+  const { openModal, closeModal, getModalState } = useModal();
   const { refetch } = useGetProfileMeWithPollingQuery(undefined, {
     pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
@@ -70,9 +70,21 @@ export default function RewardForIntegrationModal() {
   const blueStarCount = getBlueStarCount(integrationCount);
   const progressPercentage = getProgressBarPercentage(integrationCount);
 
+  function openModalIfNotOpenedToday() {
+    const today = new Date().toISOString().split('T')[0];
+    
+    const lastOpenedDate = localStorage.getItem('lastModalOpenedDate');
+    
+    if (lastOpenedDate !== today) {
+      openModal(MODALS.DAYS_IN_A_ROW);
+      localStorage.setItem('lastModalOpenedDate', today);
+    }
+  }
+  
   return (
     <CentralModal
       onClose={() => {
+        refetch();
         setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
         dispatch(setIsPublishedModalClosed(true));
         dispatch(setNeedToPlayHappy(true));
@@ -130,9 +142,17 @@ export default function RewardForIntegrationModal() {
         </div>
         <Button
           variant={'blue'}
+          // onClick={() => {
+          //   refetch();
+          //   dispatch(setIsPublishedModalClosed(true));
+          //   closeModal(MODALS.INTEGRATION_REWARD);
+          // }}
           onClick={() => {
             refetch();
+            setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
             dispatch(setIsPublishedModalClosed(true));
+            dispatch(setNeedToPlayHappy(true));
+            openModalIfNotOpenedToday();
             closeModal(MODALS.INTEGRATION_REWARD);
           }}
         >

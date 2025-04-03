@@ -185,7 +185,14 @@ export const IntegrationPage: React.FC = () => {
 
                 <div className={styles.commentsSectionTitleWrp}>
                   <p className={styles.commentsSectionTitle}>{t('i4')}</p>
-                  <p className={styles.commentsAmount}>{localCommentsGenerated}/20</p>
+                  <p className={styles.commentsAmount}>
+                    {localCommentsGenerated > 20
+                      ? 20
+                      : localCommentsGenerated === undefined
+                      ? 0
+                      : localCommentsGenerated}
+                    /20
+                  </p>
                 </div>
 
                 {comments.length > 0 && currentCommentIndex < comments.length && (
