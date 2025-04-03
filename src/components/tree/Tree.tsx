@@ -162,7 +162,7 @@ export const Tree = () => {
         !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) &&
         <>
           <div
-            style={{ position: 'fixed', bottom: '0', left: '0', width: '100vh', height: '30px', backgroundColor: 'rgba(0, 0, 0, 0.91)' }}
+            style={{ position: 'fixed', bottom: '85px', left: '0', width: '100vh', height: '30px', backgroundColor: 'rgba(0, 0, 0, 0.91)' }}
           />
 
           <div
