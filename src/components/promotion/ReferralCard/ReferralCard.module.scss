@@ -105,12 +105,19 @@
   }
 }
 
+.userCardStats {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
 .userCardBonus {
   display: flex;
   align-items: center;
   flex-direction: row;
   gap: 20px;
   position: relative;
+  padding: 0px 4px;
 }
 
 .text {
