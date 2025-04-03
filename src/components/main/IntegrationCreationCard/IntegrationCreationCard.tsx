@@ -156,7 +156,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     playAccelerateIntegrationSound();
     dispatch(setLastIntegrationId(integration.id));
 
-    void accelerateIntegration(100).finally(() => {
+    void accelerateIntegration(1).finally(() => {
       refetchIntegration();
     });
 

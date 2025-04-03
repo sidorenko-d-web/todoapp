@@ -41,12 +41,11 @@ export default function DaysInARowModal({ onClose }: Props) {
   const rerenderAfterPublish = useSelector((state: RootState) => state.guide.refetchAfterPublish);
   const [rerender, setRerender] = useState(0);
 
-  
   useEffect(() => {
-    if(rerenderAfterPublish > rerender) {
+    if (rerenderAfterPublish > rerender) {
       refetch().then(() => {
         setRerender(rerenderAfterPublish);
-      })
+      });
     }
   }, [rerenderAfterPublish]);
 
@@ -68,7 +67,7 @@ export default function DaysInARowModal({ onClose }: Props) {
     const frozen: number[] = [];
     const streak: number[] = [];
 
-    data?.week_information?.forEach((day) => {
+    data?.week_information?.forEach(day => {
       const dayDate = new Date(day.creation_date).getDate();
       const hasNotification =
         day.push_line_data?.is_notified_at_morning ||
@@ -84,7 +83,7 @@ export default function DaysInARowModal({ onClose }: Props) {
         frozen.push(dayDate);
       }
     });
-    
+
     setFrozenDays(frozen);
     setStreakDays(streak);
   }, [data?.current_status, isLoading, openModal]);
@@ -155,8 +154,6 @@ export default function DaysInARowModal({ onClose }: Props) {
     return ChestBlue;
   }, [streakCount]);
 
- 
-
   return (
     <>
       <CentralModal
@@ -165,16 +162,8 @@ export default function DaysInARowModal({ onClose }: Props) {
         onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)}
       >
         <div className={styles.images}>
-          <Lottie
-            animationData={animationData}
-            loop={true}
-            className={styles.light}
-          />
-          <img
-            className={styles.fire}
-            src={fireIcon}
-            alt="Fire Icon"
-          />
+          <Lottie animationData={animationData} loop={true} className={styles.light} />
+          <img className={styles.fire} src={fireIcon} alt="Fire Icon" />
           <div className={styles.days}>
             <p>{streakCount}</p>
           </div>
@@ -206,30 +195,19 @@ export default function DaysInARowModal({ onClose }: Props) {
           </span>
           <div className={styles.chest}>
             <span>{locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}</span>
-            <img
-              src={chestImage}
-              className={styles.chestImg}
-              alt="Chest Icon"
-            />
+            <img src={chestImage} className={styles.chestImg} alt="Chest Icon" />
           </div>
         </div>
         <div className={styles.progress}>
-          <ProgressLine
-            level={calculateLevel}
-            color={color}
-          />
+          <ProgressLine level={calculateLevel} color={color} />
         </div>
-        {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
-          <Button
-            onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))}
-            variant={color}
-          >
+        {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
+          <Button onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))} variant={color}>
             {t('p22')}
           </Button>
-        }
+        )}
 
-        {
-          !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+        {!isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
           <IntegrationCreatedGuide
             onClose={() => {
               closeModal(MODALS.DAYS_IN_A_ROW);
@@ -238,9 +216,8 @@ export default function DaysInARowModal({ onClose }: Props) {
               //setRerender((prev) => prev + 1);
             }}
           />
-        }
+        )}
       </CentralModal>
-
     </>
   );
 }

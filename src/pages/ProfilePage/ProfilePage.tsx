@@ -27,7 +27,7 @@ export const ProfilePage: React.FC = () => {
 
   // Query for push line data
   const { data: pushLineData, isLoading: isPushLineLoading } = useGetPushLineQuery();
-  console.log(pushLineData)
+
   const [claimChestReward] = useClaimChestRewardMutation();
 
   const [_, setRerender] = useState(0);
@@ -86,12 +86,9 @@ export const ProfilePage: React.FC = () => {
   useEffect(() => {
     if (!userProfileData) return;
 
-    const refetchInterval = setInterval(
-      () => {
-        refetchCurrentProfile();
-      },
-      5 * 60 * 1000,
-    ); // 5 minutes
+    const refetchInterval = setInterval(() => {
+      refetchCurrentProfile();
+    }, 5 * 60 * 1000); // 5 minutes
 
     return () => clearInterval(refetchInterval);
   }, [userProfileData, refetchCurrentProfile]);
@@ -127,14 +124,14 @@ export const ProfilePage: React.FC = () => {
   const isLoading = isUserLoading || isTopProfilesLoading || awardsLoading || isPushLineLoading;
 
   useEffect(() => {
-      if (initialDataLoaded && !isLoading) {
-        const timer = setTimeout(() => {
-          setShowGuide(true);
-        }, 1000);
-  
-        return () => clearTimeout(timer);
-      }
-    }, [initialDataLoaded, isLoading]);
+    if (initialDataLoaded && !isLoading) {
+      const timer = setTimeout(() => {
+        setShowGuide(true);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [initialDataLoaded, isLoading]);
 
   if (isLoading) {
     return <Loader />;
@@ -205,31 +202,34 @@ export const ProfilePage: React.FC = () => {
         </div>
       )}
 
-      {
-        !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) && showGuide && 
-        <ProfileFirstGuide onClose={() => {
-          setGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE);
-          setRerender((prev) => prev+1);
-        }} />
-      }
+      {!isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) && showGuide && (
+        <ProfileFirstGuide
+          onClose={() => {
+            setGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE);
+            setRerender(prev => prev + 1);
+          }}
+        />
+      )}
 
-      {
-        isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) && !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN ) &&
-        <PushLineGuide onClose={
-          () => {
-            setGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN);
-            setRerender((prev) => prev+1);
-          }
-        }/>
-      }
+      {isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) &&
+        !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN) && (
+          <PushLineGuide
+            onClose={() => {
+              setGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN);
+              setRerender(prev => prev + 1);
+            }}
+          />
+        )}
 
-      {
-        isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN) &&
-        <FreezeGuide onClose={() => {
-          setGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN);
-          setRerender((prev) => prev+1);
-        }}/>
-      }
+      {isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN) &&
+        !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN) && (
+          <FreezeGuide
+            onClose={() => {
+              setGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN);
+              setRerender(prev => prev + 1);
+            }}
+          />
+        )}
     </>
   );
 };

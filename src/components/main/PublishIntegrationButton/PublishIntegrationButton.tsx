@@ -11,7 +11,13 @@ import {
 } from '../../../redux';
 import { useDispatch, useSelector } from 'react-redux';
 import s from './PublishIntegrationButton.module.scss';
-import { setCreateIntegrationButtonGlowing, setFirstIntegrationReadyToPublish, setIntegrationReadyForPublishing, setLastIntegrationId, setRefetchAfterPublish } from '../../../redux/slices/guideSlice.ts';
+import {
+  setCreateIntegrationButtonGlowing,
+  setFirstIntegrationReadyToPublish,
+  setIntegrationReadyForPublishing,
+  setLastIntegrationId,
+  setRefetchAfterPublish,
+} from '../../../redux/slices/guideSlice.ts';
 import { getCompanyStars, getIntegrationRewardImageUrl, setGuideShown } from '../../../utils/index.ts';
 import { GUIDE_ITEMS } from '../../../constants/guidesConstants.ts';
 import { useTranslation } from 'react-i18next';
@@ -89,7 +95,6 @@ export const PublishIntegrationButton: React.FC = () => {
 
         const publishRes = await publishIntegration(firstIntegrationID!);
         if (!publishRes.error) {
-
           dispatch(setIntegrationReadyForPublishing(false));
           dispatch(setCreateIntegrationButtonGlowing(false));
 
@@ -97,7 +102,7 @@ export const PublishIntegrationButton: React.FC = () => {
           localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '0');
 
           dispatch(setRefetchAfterPublish());
-          
+
           const company = integrationData?.campaign;
           if (company) {
             const { base_income, base_views, base_subscribers } = publishRes.data;
@@ -162,6 +167,7 @@ export const PublishIntegrationButton: React.FC = () => {
           }
         }
 
+        setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
         if (canShowIntegrationReward && isPublishedModalClosed) {
           openCongratsModal();
         }
