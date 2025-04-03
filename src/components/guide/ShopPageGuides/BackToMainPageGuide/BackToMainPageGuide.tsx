@@ -31,7 +31,7 @@ export const BackToMainPageGuide: React.FC<BackToMainPageGuideProps> = ({ onClos
     const handleClose = () => {
         setGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE);
         dispatch(setCreateIntegrationButtonGlowing(true));
-        dispatch(setActiveFooterItemId(2));
+        dispatch(setActiveFooterItemId(3));
         //dispatch(setDimHeader(false));
         onClose();
         setIsOpen(false);

@@ -184,7 +184,7 @@ export const UserGuideCreationCard: FC = () => {
             <div className={s.progressBarInner} style={{ width: `${progress}%` }} />
           </div>}
 
-          {isCreatingIntegration && <span>Creating integration...</span>}
+          {isCreatingIntegration && <span>{t('i35')}</span>}
         </div>
         <TrackedButton
           trackingData={{
