@@ -54,7 +54,7 @@ export const UserGuideCreationCard: FC = () => {
   useEffect(() => {
     if (acceleration != reduxAcceleration) {
       handleAccelerateClick();
-      setAcceleration(reduxAcceleration + 20);
+      setAcceleration(reduxAcceleration);
     }
   }, [reduxAcceleration]);
 

@@ -120,11 +120,11 @@ export const MainPage: FC = () => {
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
       if (data?.count > 2) {
-        Object.values(GUIDE_ITEMS).forEach(category => {
-          Object.values(category).forEach(value => {
-            localStorage.setItem(value, '1');
-          });
-        });
+        // Object.values(GUIDE_ITEMS).forEach(category => {
+        //   Object.values(category).forEach(value => {
+        //     localStorage.setItem(value, '1');
+        //   });
+        // });
       }
       if (data?.count > 1) {
         setGuideShown(GUIDE_ITEMS.creatingIntegration.GO_TO_INTEGRATION_GUIDE_SHOWN);
@@ -362,7 +362,7 @@ export const MainPage: FC = () => {
 
   const accelerateIntegration = () => {
     console.log('_acceleration');
-    if (integrationCurrentlyCreating || firstIntegrationReadyToPublish) {
+    if (integrationCurrentlyCreating || firstIntegrationCreating || hasCreatingIntegrations) {
       reduxDispatch(incrementAcceleration());
     }
   };
@@ -389,7 +389,7 @@ export const MainPage: FC = () => {
         }}
       />
 
-      {(integrationCurrentlyCreating || firstIntegrationReadyToPublish) && (
+      {(integrationCurrentlyCreating || firstIntegrationCreating) && (
         <div
           style={{
             position: 'absolute',

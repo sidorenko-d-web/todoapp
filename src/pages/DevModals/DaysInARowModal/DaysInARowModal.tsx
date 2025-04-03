@@ -7,7 +7,7 @@ import FireRed from '../../../assets/icons/fire-red.svg';
 import FirePurple from '../../../assets/icons/fire-purple.svg';
 import styles from './DaysInARowModal.module.scss';
 import Button from '../partials/Button';
-import { useGetPushLineQuery } from '../../../redux';
+import { RootState, useGetPushLineQuery } from '../../../redux';
 import ChestBlue from '../../../assets/icons/chest-blue.svg';
 import ChestPurple from '../../../assets/icons/chest-purple.svg';
 import chestIcon from '../../../assets/icons/chest-red.svg';
@@ -20,6 +20,7 @@ import { StreakDay } from '../../../components/profile/ProfileStreak/StreakCard/
 import { isGuideShown, setGuideShown } from '../../../utils';
 import { IntegrationCreatedGuide } from '../../../components';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 interface Props {
   days?: number;
@@ -30,13 +31,24 @@ export default function DaysInARowModal({ onClose }: Props) {
   const { t, i18n } = useTranslation('profile');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { closeModal, openModal } = useModal();
-  const { data, isLoading } = useGetPushLineQuery();
+  const { data, isLoading, refetch } = useGetPushLineQuery();
   const [dayNumbers, setDayNumbers] = useState<number[]>([]);
   const [frozenDays, setFrozenDays] = useState<number[]>([]);
   const [streakDays, setStreakDays] = useState<number[]>([]);
 
   const navigate = useNavigate();
 
+  const rerenderAfterPublish = useSelector((state: RootState) => state.guide.refetchAfterPublish);
+  const [rerender, setRerender] = useState(0);
+
+  
+  useEffect(() => {
+    if(rerenderAfterPublish > rerender) {
+      refetch().then(() => {
+        setRerender(rerenderAfterPublish);
+      })
+    }
+  }, [rerenderAfterPublish]);
 
   useEffect(() => {
     const today = new Date();
