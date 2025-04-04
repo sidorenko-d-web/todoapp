@@ -1,27 +1,28 @@
 @use '../../../assets/styles' as var;
 
-.overlay {
-  display: flex;
-  justify-content: center;
-  align-items: end;
+
+.backdropContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: rgba(0, 0, 0, 0.85);
-  height: 100svh;
-  overflow-y: auto;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  touch-action: none; /* Prevent scrolling on touch devices */
 }
 
-.modal {
-  max-height: 90svh;
-  background-color: var.$color-bg;
-  border: 1px solid var.$color-dark-gray;
-  border-bottom: none;
-  border-radius: 12px 12px 0 0;
+/* Wrapper for the modal to handle animations */
+.modalWrapper {
   width: 100%;
-  overflow-y: auto;
-  transform: translateY(100%); /* Start offscreen below viewport */
-  @include var.hide-scroll;
+  transform: translateY(100%); /* Start offscreen */
+  will-change: transform;
   
   &.opening {
-    animation: slideUp 0.3s forwards;
+    animation: slideUp 0.3s  forwards;
   }
   
   &.closing {
@@ -29,35 +30,51 @@
   }
 }
 
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+/* The actual modal content */
+.modal {
+  background-color: var.$color-bg;
+  border: 1px solid var.$color-dark-gray;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  width: 100%;
+  max-height: 90vh; /* Limit height to prevent overflow */
+  overflow-y: auto; /* Allow scrolling within modal */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  overscroll-behavior: contain; /* Prevent scroll chaining */
 }
 
-@keyframes slideDown {
-  from { transform: translateY(0); }
-  to { transform: translateY(100%); }
+/* Grip container for better UX */
+.gripContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+  padding-bottom: 4px;
 }
 
-.disabled {
+.gripIcon {
   opacity: 0.7;
-  pointer-events: none;
 }
 
+/* Header section that stays fixed while content scrolls */
 .header {
   position: sticky;
   top: 0;
   left: 0;
   z-index: 50;
   width: 100%;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  gap: 5px;
-
-  padding: 5px 12px 10px;
+  background-color: var.$color-bg;
+  padding: 0 12px 10px;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(60, 57, 55, 0.2), transparent);
+  }
 }
 
 .titleWrapper {
@@ -65,18 +82,19 @@
   position: relative;
   width: 100%;
   justify-content: center;
+  align-items: center;
+  margin-top: 5px;
 }
 
 .title {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 5px;
-
   color: var.$color-text;
   font-size: 14px;
   font-weight: 500;
   line-height: 100%;
-
   margin: 0;
 
   @media (min-width: var.$breakpoint-md) {
@@ -89,25 +107,20 @@
   border: none;
   position: absolute;
   right: 0;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.closeIcon {
-  @include var.transition(color);
-  color: #3c3937;
-
-  background-color: transparent;
-  border: none;
-
-  fill: currentcolor;
-
-  &:hover {
-    color: var.$color-black;
-  }
+.disabled {
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 .content {
-  padding: 10px 15px 40px 15px;
-
+  padding: 16px 15px 40px 15px;
+  
   &.topUsers {
     padding-top: 0;
   }
@@ -122,5 +135,15 @@
   background: var.$color-blue-primary;
   padding: 8px;
   border-radius: 8px;
-  z-index: 9;
+  z-index: 100;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
 }
