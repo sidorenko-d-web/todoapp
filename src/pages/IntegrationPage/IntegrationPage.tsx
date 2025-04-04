@@ -162,7 +162,7 @@ export const IntegrationPage: React.FC = () => {
               </div>
             </div>
 
-            <Integration />
+            <Integration compaignImage={data.campaign.image_url}/>
 
             {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN) && (
               <>
