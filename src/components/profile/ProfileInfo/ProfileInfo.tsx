@@ -51,7 +51,6 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
   const { data: strangerCharacter } = useGetCharacterByIdQuery({ id: strangerId! }, { skip: !strangerId });
 
   const personScale = 0.085;
-  const dpi = window.devicePixelRatio;
 
   useLayoutEffect(() => {
     function updateSize() {
@@ -72,6 +71,10 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
       create() {
         try {
           setLoading(false);
+
+          setTimeout(() => {
+            console.log('a');
+          }, 1000);
           this.createPerson(personScale);
         } catch (error: any) {
           if (error.message === 'add.spine') {
@@ -87,8 +90,8 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
     const createAnimation = () => {
       const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
-        width: 118 * dpi,
-        height: 140 * dpi,
+        width: 118,
+        height: 140,
         scene: [SpineScene],
         transparent: true,
         plugins: {
@@ -109,7 +112,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         spineSceneRef.current = null;
       }
     };
-  }, [isCharacterLoading, size]);
+  }, [isCharacterLoading, size[0], window.devicePixelRatio]);
 
   return (
     <div className={clsx(styles.wrp, { [styles.showTreeLink]: showTreeLink })}>
