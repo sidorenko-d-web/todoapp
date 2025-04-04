@@ -4,8 +4,8 @@ import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
 import { IntegrationResponseDTO, integrationsApi, RootState, selectVolume, setIsWorking } from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
-import { useAccelerateIntegration } from '../../../hooks';
-import { SOUNDS } from '../../../constants';
+import { useAccelerateIntegration, useModal } from '../../../hooks';
+import { MODALS, SOUNDS } from '../../../constants';
 import { setIntegrationReadyForPublishing, setLastIntegrationId } from '../../../redux';
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
@@ -126,6 +126,11 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       dispatch(setIsWorking(false));
     };
   }, [integration.id, initialTimeLeft, dispatch]);
+
+  const {closeModal} = useModal();
+  useEffect(() => {
+    closeModal(MODALS.CREATING_INTEGRATION);  
+  }, []);
 
   useEffect(() => {
     if (timeLeft <= 0 && !isExpired) {
