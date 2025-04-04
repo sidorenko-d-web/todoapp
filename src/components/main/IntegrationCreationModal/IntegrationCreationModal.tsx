@@ -15,7 +15,7 @@ import {
 } from '../../../redux';
 import { CompanyCard, SpecialIntegration } from '../';
 import { useDispatch, useSelector } from 'react-redux';
-import { useInventoryItemsFilter } from '../../../hooks';
+import { useInventoryItemsFilter, useModal } from '../../../hooks';
 
 import s from './IntegrationCreationModal.module.scss';
 import { useNavigate } from 'react-router-dom';
@@ -23,11 +23,12 @@ import {
   isGuideShown,
   setGuideShown,
 } from '../../../utils';
-import {  GUIDE_ITEMS, total_users } from '../../../constants';
+import {  GUIDE_ITEMS, MODALS, total_users } from '../../../constants';
 import { CreatingIntegrationGuide, Loader, TrackedButton } from '../../';
 import { useTranslation } from 'react-i18next';
 import { CentralModal } from '../../shared/';
 import { getPlanStageByUsersCount } from '../../../helpers';
+import { setIntegrationCreating } from '../../../redux/slices/integrationAcceleration';
 
 
 interface CreatingIntegrationModalProps {
@@ -65,6 +66,9 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
   });
   const companies = data?.campaigns;
 
+  const { closeModal } = useModal();
+  
+  
   // const integrationPublished = isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED);
 
   const goToShopButtonGlowing = useSelector((state: RootState) => state.guide.goToShopBtnGlowing);
@@ -131,9 +135,14 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
     createIntegration(selectedCompanyId)
       .unwrap()
       .then((data) => {
+
+        dispatch(setIntegrationCreating(true));
+
+        
         dispatch(setIntegrationCreated(true));
         dispatch(setLastIntegrationId(data.id));
         onClose();
+        
         localStorage.setItem('integration_id', data.id);
         localStorage.setItem('integration_time_left', ''+data.time_left);
         localStorage.setItem('integration_initial_time_left', ''+data.time_left);
@@ -190,6 +199,7 @@ export const IntegrationCreationModal: FC<CreatingIntegrationModalProps> = ({
             setGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN);
             //navigate(AppRoute.Shop);
           }
+          closeModal(MODALS.CREATING_INTEGRATION);
         }}
       headerStyles={s.headerStyles}
       titleIcon={integrationWhiteIcon}
