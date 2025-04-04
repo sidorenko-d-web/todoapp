@@ -1,13 +1,17 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import styles from './Integration.module.scss';
-import { IShopItem, TypeWearLocation, useGetCharacterQuery, useGetEquipedQuery } from '../../../redux';
-import { SpineSceneBase, buildLink } from '../../../constants';
+import { TypeWearLocation, useGetCharacterQuery, useGetEquipedQuery } from '../../../redux';
+import { SpineSceneBase, buildLink, walls } from '../../../constants';
 import { Skin, SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { Loader } from '../../Loader';
 import { useRoomItemsSlots } from '../../../../translate/items/items';
 
-export const Integration: React.FC = () => {
+interface props{
+  compaignImage?: string
+}
+
+export const Integration: React.FC<props> = ({compaignImage}) => {
   const gameRef = useRef<Phaser.Game | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const spineSceneRef = useRef<SpineSceneBase | null>(null);
@@ -17,14 +21,16 @@ export const Integration: React.FC = () => {
   const [size, setSize] = useState([0, 0]);
   const [isLoaded, setIsLoaded] = useState(false);
   const character = useGetCharacterQuery(undefined);
-  const { desc, pc, chair } = useRoomItemsSlots();
+  const { desc, pc, chair, wall } = useRoomItemsSlots();
 
   const dpi = window.devicePixelRatio ?? 1;
 
   useEffect(() => {
     if (!sceneRef.current || character?.isLoading || !room) return;
     console.log('object');
-    const contextProps = { equipped_items: room?.equipped_items, center: 170 * dpi };
+
+    const center = ((window.innerWidth - 30) * dpi) / 2;
+    const contextProps = { equipped_items: room?.equipped_items, center: center - 10 * dpi };
 
     class SpineScene extends SpineSceneBase {
       preload() {
@@ -62,7 +68,7 @@ export const Integration: React.FC = () => {
           }, 1000);
           this.createPerson(contextProps, true, 50 * dpi);
           if (this.person) {
-            this.person.scale = 0.18;
+            this.person.scale = 0.09 * dpi;
           }
         } catch (error: any) {
           if (error.message === 'add.spine') {
@@ -90,7 +96,7 @@ export const Integration: React.FC = () => {
 
         spineSceneRef.current = this;
         this.changeSkin();
-        setTimeout(() => setIsLoaded(true), 5000);
+        setTimeout(() => setIsLoaded(true), 1);
       }
 
       changeSkin() {
@@ -119,13 +125,13 @@ export const Integration: React.FC = () => {
       width: (window.innerWidth - 30) * dpi,
       height: 200 * dpi,
       scene: [SpineScene],
-      backgroundColor: '#bbc2d4',
       canvasStyle: `width: ${window.innerWidth - 30}px; height: ${200}px`,
       autoRound: false, // Отключаем округление размеров
       plugins: {
         scene: [{ key: 'player', plugin: SpinePlugin, mapping: 'spine' }],
       },
       parent: 'player',
+      transparent: true,
       render: {
         antialias: true,
         antialiasGL: true,
@@ -152,8 +158,14 @@ export const Integration: React.FC = () => {
     [character?.data],
   );
 
+  const _wall = room?.items.find(item => wall.name.includes(item.name));
+
+  const currentWall = walls[(_wall?.item_rarity! + _wall?.item_premium_level) as keyof typeof walls] ?? walls.redbase;
+
   return (
-    <div className={styles.integration}>
+    <div className={styles.integration} style={{ backgroundImage: `url(${currentWall})` }}>
+      <img src={currentWall.image} className={styles.background} />
+      <img src={compaignImage} className={styles.compaign} />
       {(!isLoaded || isRoomLoading) && (
         <div
           style={{
@@ -162,7 +174,6 @@ export const Integration: React.FC = () => {
             left: 0,
             width: '100%',
             height: '100%',
-            backgroundColor: 'red',
             zIndex: 100001,
           }}
         >

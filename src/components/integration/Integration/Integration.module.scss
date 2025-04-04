@@ -3,7 +3,6 @@
 .integration {
     width: 100%;
     height: 155px;
-    background-color: var.$footer-bg;
     border: 1px solid var.$color-dark-gray-stroke;
     border-radius: 12px;
     overflow: hidden;
@@ -11,4 +10,20 @@
     align-items: center;
     justify-content: center;
     position: relative;
+
+    .background{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .compaign{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 70px;
+    }
 }
