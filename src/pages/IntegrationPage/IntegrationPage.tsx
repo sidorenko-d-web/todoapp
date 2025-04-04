@@ -39,6 +39,7 @@ export const IntegrationPage: React.FC = () => {
   const [_, setRerender] = useState(0);
   const [localProgress, setLocalProgress] = useState(0);
   const [localCommentsGenerated, setLocalCommentsGenerated] = useState(0);
+  const [isEndComment, setIsEndComment] = useState(false);
 
   const integrationId =
     queryIntegrationId !== 'undefined'
@@ -57,7 +58,6 @@ export const IntegrationPage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      setLocalProgress(data.comments_answered_correctly % 5);
       setLocalCommentsGenerated(data.comments_answered_correctly);
     }
   }, [data]);
@@ -80,7 +80,7 @@ export const IntegrationPage: React.FC = () => {
   });
 
   const [postComment] = usePostCommentIntegrationsMutation();
-  console.log(commentData, 'comentdaat');
+
   const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
   const [isVoting, setIsVoting] = useState(false);
 
@@ -93,6 +93,12 @@ export const IntegrationPage: React.FC = () => {
   useEffect(() => {
     dispatch(setActiveFooterItemId(2));
   }, []);
+  console.log(comments);
+  useEffect(() => {
+    if (data && !isUnansweredIntegrationCommentLoading && !isEndComment) {
+      setIsEndComment(comments.length === 0);
+    }
+  }, [data, comments, isUnansweredIntegrationCommentLoading]);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     if (isVoting) return;
@@ -104,9 +110,19 @@ export const IntegrationPage: React.FC = () => {
       if (wasCorrect) {
         setLocalProgress(prev => (prev + 1) % 5);
       }
-      setLocalCommentsGenerated(prev => prev + 1);
 
-      await postComment({ commentId, isHate: !isThumbsUp }).unwrap();
+      const response = await postComment({ commentId, isHate: !isThumbsUp });
+
+      if (response.error) {
+        setIsEndComment(true);
+        throw new Error('Vote failed');
+      }
+
+      const answer = response.data;
+      if (!answer) {
+        setLocalProgress(0);
+      }
+
       await refetchCurrentIntegration();
 
       if (currentCommentIndex + 1 < comments.length) {
@@ -117,11 +133,7 @@ export const IntegrationPage: React.FC = () => {
       }
     } catch (error) {
       console.error('Error handling vote:', error);
-      // Откат оптимистичного обновления
-      if (isThumbsUp === !commentData?.is_hate) {
-        setLocalProgress(prev => (prev - 1) % 5);
-      }
-      setLocalCommentsGenerated(prev => prev - 1);
+      setIsEndComment(true);
     } finally {
       setIsVoting(false);
     }
@@ -162,7 +174,7 @@ export const IntegrationPage: React.FC = () => {
               </div>
             </div>
 
-            <Integration compaignImage={data.campaign.image_url}/>
+            <Integration compaignImage={data.campaign.image_url} />
 
             {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_STATS_GUIDE_SHOWN) && (
               <>
@@ -181,17 +193,14 @@ export const IntegrationPage: React.FC = () => {
                     /20
                   </p>
                 </div>
-
-                {comments.length > 0 && currentCommentIndex < comments.length && (
-                  <IntegrationComment
-                    progres={localProgress}
-                    {...comments[currentCommentIndex]}
-                    onVote={handleVote}
-                    hateText={comments[currentCommentIndex]?.is_hate}
-                    finished={localCommentsGenerated >= 20}
-                    isVoting={isVoting}
-                  />
-                )}
+                <IntegrationComment
+                  progres={localProgress}
+                  {...comments[currentCommentIndex]}
+                  onVote={handleVote}
+                  hateText={comments[currentCommentIndex]?.is_hate}
+                  finished={localCommentsGenerated >= 20 || isEndComment}
+                  isVoting={isVoting}
+                />
               </>
             )}
           </div>

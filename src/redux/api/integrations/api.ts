@@ -21,7 +21,7 @@ export const integrationsApi = createApi({
       keepUnusedDataFor: 5,
     }),
     createIntegration: builder.mutation<IntegrationResponseDTO, string>({
-      query: (campaign_id) => ({
+      query: campaign_id => ({
         url: `/integrations?campaign_id=${campaign_id}`,
         method: 'POST',
       }),
@@ -31,6 +31,7 @@ export const integrationsApi = createApi({
         url: `/integrations/comments/${commentId}`,
         method: 'POST',
         body: { is_hate: isHate },
+        validateStatus: response => response.status < 400,
       }),
     }),
 
