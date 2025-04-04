@@ -23,10 +23,16 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   const [progress, setProgress] = useState(0);
   const [speedMultiplier, setSpeedMultiplier] = useState(1);
   const [forceLoadingTimePassed, setForceLoadingTimePassed] = useState(false);
-  const currentVolumeEnabled = localStorage.getItem("soundEffectsEnabled") === "true"
-  const currentVolumeNumber = localStorage.getItem("buttonVolume")
-  const currenSetupStepIsNotCompleted = localStorage.getItem('currentSetupStep') !== "completed"
-  const [playAccelerateSound] = useSound(SOUNDS.speedUp, { volume: currenSetupStepIsNotCompleted ? useSelector(selectVolume) : ( currentVolumeEnabled ? Number(currentVolumeNumber) : 0)  });
+  const currentVolumeEnabled = localStorage.getItem('soundEffectsEnabled') === 'true';
+  const currentVolumeNumber = localStorage.getItem('buttonVolume');
+  const currenSetupStepIsNotCompleted = localStorage.getItem('currentSetupStep') !== 'completed';
+  const [playAccelerateSound] = useSound(SOUNDS.speedUp, {
+    volume: currenSetupStepIsNotCompleted
+      ? useSelector(selectVolume)
+      : currentVolumeEnabled
+      ? Number(currentVolumeNumber)
+      : 0,
+  });
   const loadingScreenBarRef = useRef<LoadingScreenBarRef>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -48,7 +54,6 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
 
   const [isMobile, setIsMobile] = useState(buildMode.includes('Dev') ? 1 : 0);
   // const [isMobile, setIsMobile] = useState(1);
-
 
   useEffect(() => {
     if (buildMode.includes('Dev')) return;
@@ -131,7 +136,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
 
   return (
     <>
-    <WhiteNoiseCanvas />
+      <WhiteNoiseCanvas />
       {isMobile === 1 && (
         <div className={styles.root} onClick={handleAccelerate}>
           <div />
