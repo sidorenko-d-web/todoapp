@@ -398,7 +398,7 @@ export const MainPage: FC = () => {
             bottom: '0',
             left: '0',
             zIndex: '1000',
-            height: '90%',
+            height: '100vh',
             width: '100%',
             background: 'transparent',
           }}
