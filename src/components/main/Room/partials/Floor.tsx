@@ -39,11 +39,11 @@ export const Floor = ({ room }: props) => {
 
   console.log(equipedFloor);
 
-  // const floor =  equipedFloor
-  // ? `url("${floors[(equipedFloor.item_rarity + equipedFloor.item_premium_level) as keyof typeof floors]}")`
-  // : 'gray',
+  const floor =  equipedFloor
+  ? `url("${floors[(equipedFloor.item_rarity + equipedFloor.item_premium_level) as keyof typeof floors]}")`
+  : 'gray'
 
-  const floor = `url("${floors.yellowpro}")`;
+  // const floor = `url("${floors.yellowpro}")`;
   return (
     <>
       <div
