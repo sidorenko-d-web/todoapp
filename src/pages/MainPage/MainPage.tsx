@@ -377,7 +377,9 @@ export const MainPage: FC = () => {
             eventPlace: 'mainPage tree reward',
           }}
         >
-          <Lottie animationData={giftShake} className={clsx(s.treeReward, { [s.up]: isCreatingIntegration })} />
+          <Lottie
+          style={integrationCurrentlyCreating ? {marginBottom: '45px', zIndex: '1001'} : {zIndex: '1001'}}
+          animationData={giftShake} className={clsx(s.treeReward, { [s.up]: isCreatingIntegration })} />
         </TrackedLink>
       )}
 
@@ -389,15 +391,16 @@ export const MainPage: FC = () => {
         }}
       />
 
-      {(integrationCurrentlyCreating || firstIntegrationCreating) && (
+      {(integrationCurrentlyCreating || firstIntegrationCreating || hasCreatingIntegrations) && (
         <div
           style={{
             position: 'absolute',
-            top: '0',
-            zIndex: '15000',
-            height: '70%',
+            bottom: '0',
+            left: '0',
+            zIndex: '1000',
+            height: '50%',
             width: '100%',
-            backgroundColor: 'transparent',
+            background: 'transparent',
           }}
           onClick={accelerateIntegration}
         />

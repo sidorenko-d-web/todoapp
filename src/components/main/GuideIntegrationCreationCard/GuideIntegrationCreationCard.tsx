@@ -86,6 +86,7 @@ export const UserGuideCreationCard: FC = () => {
                     updateTimeLeft({ integrationId: response.id, timeLeftDelta: 36000 })
                       .unwrap()
                       .then(() => {
+                        setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED);
                         dispatch(setFirstIntegrationReadyToPublish(true));
                         localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '1');
                         dispatch(setFirstIntegrationId(response.id));
