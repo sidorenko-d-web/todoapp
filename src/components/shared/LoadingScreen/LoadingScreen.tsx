@@ -10,7 +10,6 @@ import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
 
 import qr from '../../../assets/icons/qr.png';
-import WhiteNoiseCanvas from '../../WhiteNoise/WhiteNoise';
 
 interface LoadingScreenProps {
   onAnimationComplete: () => void;
@@ -55,19 +54,19 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   const [isMobile, setIsMobile] = useState(buildMode.includes('Dev') ? 1 : 0);
   // const [isMobile, setIsMobile] = useState(1);
 
-  // useEffect(() => {
-  //   if (buildMode.includes('Dev')) return;
-  //   if (window.Telegram?.WebApp?.platform) {
-  //     const platform = window.Telegram.WebApp.platform.toLowerCase();
-  //     if (platform.includes('android') || platform.includes('ios')) {
-  //       setIsMobile(1);
-  //     } else {
-  //       setIsMobile(-1);
-  //     }
-  //   } else {
-  //     setIsMobile(-1);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (buildMode.includes('Dev')) return;
+    if (window.Telegram?.WebApp?.platform) {
+      const platform = window.Telegram.WebApp.platform.toLowerCase();
+      if (platform.includes('android') || platform.includes('ios')) {
+        setIsMobile(1);
+      } else {
+        setIsMobile(-1);
+      }
+    } else {
+      setIsMobile(-1);
+    }
+  }, []);
 
   useEffect(() => {
     const minLoadingTimeout = setTimeout(() => {
