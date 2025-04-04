@@ -23,27 +23,26 @@ export type WeekInformation = {
 };
 
 export type PushLineProfileStatus = {
-  status_name: string
-  status_name_eng: string
-}
+  status_name: string;
+  status_name_eng: string;
+};
 
 export type PushLineData = {
-  current_status: string
-  push_line_profile_status: PushLineProfileStatus
-  in_streak_days: number
-  failed_at: string
-  failed_days_ago: number
+  current_status: string;
+  push_line_profile_status: PushLineProfileStatus;
+  in_streak_days: number;
+  failed_at: string;
+  failed_days_ago: number;
 };
 
 export type ReferralDTO = {
   id: number;
   username: string;
   reminded_at: string;
-  total_invited: number;
-  invited_count: number
-  subscribers_for_referrer: number
-  points_for_referrer: number
-  push_line_data: PushLineData
+  invited_count: number;
+  subscribers_for_referrer: number;
+  points_for_referrer: number;
+  push_line_data: PushLineData;
 };
 
 export type ReferralCodeDTO = {
@@ -59,7 +58,15 @@ export type NewReferrerRequestDTO = {
   reward_for_invited: number;
 };
 
-export type GetReferralsDTO = {
-  referrals: ReferralDTO[];
-  count: number
+export type MainStatistics = {
+  subscribers_from_first_level: number;
+  subscribers_from_second_level: number;
+  points_from_first_level: string;
 };
+
+export type GetReferralsDTO = {
+  count: number;
+  main_statistics: MainStatistics;
+  referrals: ReferralDTO[];
+};
+

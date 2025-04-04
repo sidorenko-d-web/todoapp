@@ -19,6 +19,7 @@ import {
 } from '../../../redux';
 import { useDispatch } from 'react-redux';
 import { setGuideShown } from '../../../utils';
+import { useState } from 'react';
 
 export const IntegrationRewardModal = () => {
   const { getModalState, closeModal } = useModal();
@@ -32,6 +33,7 @@ export const IntegrationRewardModal = () => {
   const { refetch } = useGetInventoryAchievementsQuery();
   const [addAchivement] = useAddItemToRoomMutation();
   const [removeAchivement] = useRemoveItemFromRoomMutation();
+  const [isEquipping, setIsEquipping] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -50,22 +52,33 @@ export const IntegrationRewardModal = () => {
 
   const handleEquipAchivement = async () => {
     if (!equipped_items) return;
-    try {
-      if (equipped_items.achievements.length > 0) {
-        await removeAchivement({ achievements_to_remove: [{ id: equipped_items?.achievements?.[0].id }] });
-      }
 
-      const achievementId = achievementsData?.achievements[achievementsData.count - 1]?.id;
-      if (achievementId) {
-        await addAchivement({ equipped_achievements: [{ id: achievementId, slot: 100 }] });
-      } else {
-        console.error('Achievement ID is undefined');
+    setIsEquipping(true);
+
+    closeModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS);
+    setTimeout(async () => {
+      try {
+
+        await refetch()
+
+        if (equipped_items.achievements.length > 0) {
+          await removeAchivement({ achievements_to_remove: [{ id: equipped_items?.achievements?.[0].id }] });
+        }
+        const lastAchievement = achievementsData?.achievements[achievementsData.count - 1]
+
+        if (lastAchievement?.id) {
+          await addAchivement({ equipped_achievements: [{ id: lastAchievement.id, slot: 100 }] });
+        } else {
+          console.error('Achievement ID is undefined');
+        }
+        refetch();
+        closeModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsEquipping(false);
       }
-      refetch();
-      closeModal(MODALS.INTEGRATION_REWARD_CONGRATULATIONS);
-    } catch (error) {
-      console.log(error);
-    }
+    }, 5000)
   };
 
   const getModalIcon = () => {
@@ -79,12 +92,10 @@ export const IntegrationRewardModal = () => {
     return i18n.language === 'ru' ? 'бронзовую медаль' : 'bronze medal';
   };
 
-  const ruText = `Поздравляем! Вы получили награду и ${getMedalTypeText()} за ${
-    args?.integrationsCount ?? 0
-  } интеграций с компанией ${args?.companyName ?? ''}!`;
-  const enText = `Congratulations! You received a reward and ${getMedalTypeText()} for ${
-    args?.integrationsCount ?? 0
-  } integrations with company ${args?.companyName ?? ''}!`;
+  const ruText = `Поздравляем! Вы получили награду и ${getMedalTypeText()} за ${args?.integrationsCount ?? 0
+    } интеграций с компанией ${args?.companyName ?? ''}!`;
+  const enText = `Congratulations! You received a reward and ${getMedalTypeText()} for ${args?.integrationsCount ?? 0
+    } integrations with company ${args?.companyName ?? ''}!`;
 
   return (
     <CentralModal
@@ -97,7 +108,7 @@ export const IntegrationRewardModal = () => {
       }}
       headerStyles={styles.headerStyles}
     >
-      <div className={styles.wrapper}>
+      <section className={styles.wrapper}>
         <main className={styles.mainContent}>
           <div className={styles.imageAndAnimation}>
             <img className={styles.image} src={args?.image_url} alt="Image" />
@@ -120,10 +131,10 @@ export const IntegrationRewardModal = () => {
           <span className={styles.text}> {i18n.language === 'ru' ? ruText : enText} </span>
         </main>
 
-        <button className={styles.button} onClick={handleEquipAchivement}>
+        <button className={styles.button} disabled={isEquipping} onClick={handleEquipAchivement}>
           {t('i34')}
         </button>
-      </div>
+      </section>
     </CentralModal>
   );
 };
