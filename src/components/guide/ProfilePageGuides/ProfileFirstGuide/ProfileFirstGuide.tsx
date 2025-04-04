@@ -39,6 +39,7 @@ export const ProfileFirstGuide: React.FC<ProfileFirstGuideProps> = ({ onClose })
           <>
             {t('g89')} 
             <br/>
+            <br/>
             {t('g89_2')} 
             <span style={{ color: '#FF6480' }}>{t('g90')}</span> 
             {t('g39')} 

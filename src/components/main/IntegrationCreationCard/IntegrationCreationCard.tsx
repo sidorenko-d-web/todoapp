@@ -2,7 +2,7 @@ import { FC, useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
-import { IntegrationResponseDTO, integrationsApi, selectVolume, setIsWorking } from '../../../redux';
+import { IntegrationResponseDTO, integrationsApi, RootState, selectVolume, setIsWorking } from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration } from '../../../hooks';
 import { SOUNDS } from '../../../constants';
@@ -29,6 +29,17 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   const accelerationRef = useRef(false);
   const lastUpdateRef = useRef(Date.now());
 
+  const reduxAcceleration = useSelector((state: RootState) => state.acceleration.acceleration);
+  const [acceleration, setAcceleration] = useState(0);
+  
+  useEffect(() => {
+    if (acceleration != reduxAcceleration) {
+      handleAccelerateClick();
+      setAcceleration(reduxAcceleration);
+    }
+  }, [reduxAcceleration]);
+  
+    
   const getValidatedTimeLeft = useCallback(() => {
     const savedIntegrationId = localStorage.getItem(INTEGRATION_ID_KEY);
     const savedTimeLeft = localStorage.getItem(TIME_LEFT_KEY);

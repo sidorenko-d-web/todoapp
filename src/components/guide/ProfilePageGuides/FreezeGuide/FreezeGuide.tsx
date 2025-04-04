@@ -34,14 +34,13 @@ export const FreezeGuide: React.FC<FreezeGuideProps> = ({ onClose }) => {
         <>
             <Guide align="right"
                 noButton={true}
-                zIndex={110}
-                top={'18%'}
+                zIndex={1}
+                top={'19.5%'}
                 description={
                     <>
                     {t('g97')}
                     <span style={{ color: '#2F80ED' }}>{t('g98')}</span> 
                     {t('g99')}
-                    <br/>
                     <br/>
                     {t('g100')}
                     <span style={{ color: '#56CCF2' }}>{t('g101')}</span> 
