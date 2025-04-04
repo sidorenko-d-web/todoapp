@@ -389,15 +389,16 @@ export const MainPage: FC = () => {
         }}
       />
 
-      {(integrationCurrentlyCreating || firstIntegrationCreating) && (
+      {(integrationCurrentlyCreating || firstIntegrationCreating || hasCreatingIntegrations) && (
         <div
           style={{
             position: 'absolute',
-            top: '0',
-            zIndex: '15000',
+            bottom: '0',
+            left: '0',
+            zIndex: '1151000',
             height: '70%',
             width: '100%',
-            backgroundColor: 'transparent',
+            background: 'transparent',
           }}
           onClick={accelerateIntegration}
         />
