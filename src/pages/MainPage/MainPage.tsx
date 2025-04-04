@@ -377,7 +377,9 @@ export const MainPage: FC = () => {
             eventPlace: 'mainPage tree reward',
           }}
         >
-          <Lottie animationData={giftShake} className={clsx(s.treeReward, { [s.up]: isCreatingIntegration })} />
+          <Lottie
+          style={integrationCurrentlyCreating ? {marginBottom: '45px', zIndex: '1001'} : {zIndex: '1001'}}
+          animationData={giftShake} className={clsx(s.treeReward, { [s.up]: isCreatingIntegration })} />
         </TrackedLink>
       )}
 
@@ -395,8 +397,8 @@ export const MainPage: FC = () => {
             position: 'absolute',
             bottom: '0',
             left: '0',
-            zIndex: '1151000',
-            height: '70%',
+            zIndex: '1000',
+            height: '50%',
             width: '100%',
             background: 'transparent',
           }}
