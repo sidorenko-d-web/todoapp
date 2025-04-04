@@ -30,7 +30,6 @@ export const PublishIntegrationButton: React.FC = () => {
   const { openModal } = useModal();
   const isVibrationSupported =
     typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
-  const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
   const integrationCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
   const [publishIntegration] = usePublishIntegrationMutation();
@@ -82,15 +81,18 @@ export const PublishIntegrationButton: React.FC = () => {
     });
   }, [openModal, integrationData?.campaign.company_name, companyData?.count, imageUrl]);
 
-  const canShowIntegrationReward = useCallback(() => {
-    if (!companyData?.count) return false;
-
-    return (
-      companyData.count === starsThresholds.firstStar ||
-      companyData.count === starsThresholds.secondStar ||
-      companyData.count === starsThresholds.thirdStar
-    );
-  }, [companyData?.count]);
+  const canShowIntegrationReward = (function () {
+    if (companyData?.count === starsThresholds.firstStar) {
+      return true;
+    }
+    if (companyData?.count === starsThresholds.secondStar) {
+      return true;
+    }
+    if (companyData?.count === starsThresholds.thirdStar) {
+      return true;
+    }
+    return false;
+  })();
 
   const handlePublish = async () => {
       if (isVibrationSupported) navigator.vibrate(200);
@@ -183,8 +185,10 @@ export const PublishIntegrationButton: React.FC = () => {
             }
           }
 
+          console.warn("Integrations ", companyData?.count);
+          console.warn("Can show congrats:", canShowIntegrationReward);
           setGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN);
-          if (canShowIntegrationReward() && isPublishedModalClosed) {
+          if (canShowIntegrationReward) {
             openCongratsModal();
           }
         }
@@ -192,7 +196,7 @@ export const PublishIntegrationButton: React.FC = () => {
         console.error('Failed to publish integration:', error);
         setShouldRender(true); // Restore button on error
       } finally {
-        if (canShowIntegrationReward() && isPublishedModalClosed) {
+        if (canShowIntegrationReward) {
           openCongratsModal();
         }
         setIsPublishing(false);
