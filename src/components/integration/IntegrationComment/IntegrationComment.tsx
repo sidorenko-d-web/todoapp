@@ -45,7 +45,6 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
 
   const handleVoteRight = () => {
     if (!isVoting && !finished) {
-      console.log(id);
       onVote(true, id);
       voteRightSound();
     }

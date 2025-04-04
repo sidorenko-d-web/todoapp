@@ -55,8 +55,6 @@ export const IntegrationPage: React.FC = () => {
     pollingInterval: 5 * 60 * 1000,
   });
 
-  console.log(data, 'integrathiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
-
   useEffect(() => {
     if (data) {
       setLocalProgress(data.comments_answered_correctly % 5);
@@ -99,8 +97,7 @@ export const IntegrationPage: React.FC = () => {
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     if (isVoting) return;
     setIsVoting(true);
-    console.log(commentId, 'idddddddddddddddddddddddddddddddddd');
-    console.log(commentData?.id, 'comentIddddddddddddddddddddddddddddddddddddd');
+
     try {
       // Оптимистичное обновление
       const wasCorrect = isThumbsUp === !commentData?.is_hate;

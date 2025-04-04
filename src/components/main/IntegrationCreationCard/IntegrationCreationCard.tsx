@@ -31,15 +31,14 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
 
   const reduxAcceleration = useSelector((state: RootState) => state.acceleration.acceleration);
   const [acceleration, setAcceleration] = useState(0);
-  
+
   useEffect(() => {
     if (acceleration != reduxAcceleration) {
       handleAccelerateClick();
       setAcceleration(reduxAcceleration);
     }
   }, [reduxAcceleration]);
-  
-    
+
   const getValidatedTimeLeft = useCallback(() => {
     const savedIntegrationId = localStorage.getItem(INTEGRATION_ID_KEY);
     const savedTimeLeft = localStorage.getItem(TIME_LEFT_KEY);
@@ -127,9 +126,9 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     };
   }, [integration.id, initialTimeLeft, dispatch]);
 
-  const {closeModal} = useModal();
+  const { closeModal } = useModal();
   useEffect(() => {
-    closeModal(MODALS.CREATING_INTEGRATION);  
+    closeModal(MODALS.CREATING_INTEGRATION);
   }, []);
 
   useEffect(() => {
@@ -164,7 +163,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
-  
+
   const handleAccelerateClick = useCallback(() => {
     if (isExpired) return;
 
@@ -172,7 +171,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     playAccelerateIntegrationSound();
     dispatch(setLastIntegrationId(integration.id));
 
-    void accelerateIntegration(1).finally(() => {
+    void accelerateIntegration(1000).finally(() => {
       refetchIntegration();
     });
 

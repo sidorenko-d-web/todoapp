@@ -158,14 +158,14 @@ export default function DaysInARowModal({ onClose }: Props) {
     <>
       <CentralModal
         modalId={MODALS.DAYS_IN_A_ROW}
-        title={`${streakCount} ${t('p21')}`}
+        title={`${streakDays.length} ${t('p21')}`}
         onClose={() => closeModal(MODALS.DAYS_IN_A_ROW)}
       >
         <div className={styles.images}>
           <Lottie animationData={animationData} loop={true} className={styles.light} />
           <img className={styles.fire} src={fireIcon} alt="Fire Icon" />
           <div className={styles.days}>
-            <p>{streakCount}</p>
+            <p>{streakDays.length}</p>
           </div>
         </div>
 
@@ -191,7 +191,7 @@ export default function DaysInARowModal({ onClose }: Props) {
 
         <div className={styles.progressTitle}>
           <span>
-            {streakCount}/{t(p14Key)}
+            {streakDays.length}/{t(p14Key)}
           </span>
           <div className={styles.chest}>
             <span>{locale === 'ru' ? data?.next_chest.chest_name : data?.next_chest.chest_name_eng}</span>
