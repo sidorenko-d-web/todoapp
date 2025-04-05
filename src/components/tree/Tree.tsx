@@ -42,7 +42,6 @@ export const Tree = () => {
   const { data: userProfileData } = useGetProfileMeQuery();
   const [currentBoost, setCurrentBoost] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
-  console.log(userProfileData);
   const isGuide = !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
   const userSubscribers = userProfileData?.subscribers || 0;
@@ -70,8 +69,8 @@ export const Tree = () => {
     try {
       await unlockAchievement({ achievement_id: id }).unwrap();
       setCurrentBoost(boost);
+      await refetch();
       openModal(MODALS.GET_GIFT);
-      refetch();
     } catch (err) {
       alert('Failed to unlock achievement.');
     }
@@ -156,19 +155,31 @@ export const Tree = () => {
 
   return (
     <div className={s.containerGlobal}>
-
-      {
-        !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) &&
+      {!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) && (
         <>
           <div
-            style={{ position: 'fixed', bottom: '85px', left: '0', width: '100vh', height: '30px', backgroundColor: 'rgba(0, 0, 0, 0.91)' }}
+            style={{
+              position: 'fixed',
+              bottom: '85px',
+              left: '0',
+              width: '100vh',
+              height: '30px',
+              backgroundColor: 'rgba(0, 0, 0, 0.91)',
+            }}
           />
 
           <div
-            style={{ position: 'fixed', top: '0', left: '0', width: '100vh', height: '165px', backgroundColor: 'rgba(0, 0, 0, 0.91)' }}
+            style={{
+              position: 'fixed',
+              top: '0',
+              left: '0',
+              width: '100vh',
+              height: '165px',
+              backgroundColor: 'rgba(0, 0, 0, 0.91)',
+            }}
           />
         </>
-      }
+      )}
 
       <div className={s.progressBarContainer}>
         <List
