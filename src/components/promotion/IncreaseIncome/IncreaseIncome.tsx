@@ -43,8 +43,7 @@ export const IncreaseIncome = () => {
             <ul className={s.subscribers}>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +
-                  {formatAbbreviation(referralData?.main_statistics.subscribers_from_first_level, 'number', {
+                  +{formatAbbreviation(referralData?.main_statistics.subscribers_from_first_level, 'number', {
                     locale: locale,
                   })}{' '}
                   <img src={subscribersIcon} alt="Подписчики" />
@@ -71,7 +70,7 @@ export const IncreaseIncome = () => {
         {isLoading && <p>{t('p18')}</p>}
 
         {error && <p>{t('p19')}</p>}
-        
+
         {referralData && (
           <>
             {referralData.referrals.length > 0 ? (
