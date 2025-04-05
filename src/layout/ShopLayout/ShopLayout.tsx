@@ -106,14 +106,13 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     return () => {
-      dispatch(setSelectedIntegrationCategory(null));
+      dispatch(setSelectedIntegrationCategory(shopItemCategories[0]));
     };
   }, [dispatch]);
 
   const navigate = useNavigate();
 
   const itemsInTabs = useMemo(() => {
-    console.log(shop?.items);
     return shop?.items && inventory?.items && itemsInTab(shop?.items);
   }, [shop?.count, inventory?.count]);
 

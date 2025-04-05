@@ -100,8 +100,8 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     localStorage.setItem(INITIAL_TIME_LEFT_KEY, initialTimeLeft.toString());
     localStorage.setItem(TIME_LEFT_KEY, timeLeft.toString());
 
-    dispatch(setIntegrationCreating(true));
-    dispatch(setIsWorking(true));
+    // dispatch(setIntegrationCreating(true));
+    // dispatch(setIsWorking(true));
 
     const updateTimer = () => {
       const now = Date.now();
