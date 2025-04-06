@@ -1,7 +1,7 @@
 import styles from './ItemUpgradedModal.module.scss';
-import { buildLink, buildMode, itemStoreString, localStorageConsts, MODALS, svgHeadersString } from '../../../../constants';
+import { buildLink, buildMode, localStorageConsts, MODALS, svgHeadersString } from '../../../../constants';
 import { useAutoPlaySound, useModal } from '../../../../hooks';
-import { IShopItem, useGetShopItemsQuery } from '../../../../redux';
+import { IShopItem } from '../../../../redux';
 import Button from '../partials/Button';
 import ViewsIcon from '../../../../assets/icons/views.png';
 import SubsIcon from '../../../../assets/icons/subscriber_coin.svg';
@@ -24,13 +24,6 @@ export const ItemUpgradedModal = () => {
   const isPrem = state.args?.item.item_rarity === 'yellow';
   const isPro = state.args?.item.item_rarity === 'green';
 
-  const { data: newItem } = useGetShopItemsQuery({
-    name: state.args?.item.name,
-    level: 1,
-    item_premium_level:
-      state.args?.item.item_premium_level === 'base' ? 'advanced' : 'pro',
-  });
-
   useAutoPlaySound(MODALS.UPGRADED_ITEM, SOUNDS.upgradeOrBuyItem);
 
   const handleOpenChest = () => {
@@ -42,14 +35,12 @@ export const ItemUpgradedModal = () => {
     }
   };
 
-  
+
   const getImage = (url: string) =>
     buildMode === 'production'
       ? buildLink()?.svgShop(url).replace('https://', 'https://storage.yandexcloud.net/')
       : buildLink()?.svgShop(url);
 
-
-  if (!newItem) return <></>;
   return (
     <CentralModal
       title={t('s62')}
@@ -69,21 +60,17 @@ export const ItemUpgradedModal = () => {
             isPro && styles.itemImageRed,
           )}
         >
-          {/* <img src={state.args?.item.image_url} alt="item-image" /> */}
           <img
             src={getImage(state.args?.item.image_url ?? '') + svgHeadersString}
-            alt="item-image"
-            className={styles.imageOld}
-          />
-          <img
-            src={getImage(newItem?.items?.[0].image_url ?? '') + svgHeadersString}
             alt="item-image"
             className={styles.imageNew}
           />
           <p className={isPrem ? styles.purple : isPro ? styles.red : styles.blue}>
-            {newItem?.items?.[0].item_premium_level === 'advanced'
-              ? 'Adv'
-              : newItem?.items?.[0].item_premium_level}
+            {state.args?.item.item_premium_level === 'base'
+              ? 'Base'
+              : state.args?.item.item_premium_level === 'advanced'
+                ? 'Adv'
+                : 'Pro'}
           </p>
         </div>
       </div>
