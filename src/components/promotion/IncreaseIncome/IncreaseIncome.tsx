@@ -11,7 +11,6 @@ import { InviteFriend, UserReferrals } from '../Modal';
 import { ReferralCard } from '../ReferralCard/ReferralCard';
 import {
   useGetCurrentUsersReferralsQuery,
-  useGetProfileMeQuery,
 } from '../../../redux';
 import { formatAbbreviation } from '../../../helpers';
 import { TrackedButton } from '../..';
@@ -21,15 +20,13 @@ export const IncreaseIncome = () => {
   const { t, i18n } = useTranslation('promotion');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
-  const { data, isLoading, error } = useGetCurrentUsersReferralsQuery();
-  const {data: profileData} = useGetProfileMeQuery()
+  const { data: referralData, isLoading, error } = useGetCurrentUsersReferralsQuery();
 
-  const referrals = data?.referrals || [];
+  const referrals = referralData?.referrals || [];
   const visibleReferrals = referrals.slice(0, 3);
   const hiddenReferralsCount = referrals.length - 3;
 
-  const sumSubscribers = (profileData?.subscribers_for_first_level_referrals ?? 0) + (profileData?.subscribers_for_second_level_referrals ?? 0)
-  const sumPoints = referrals.reduce((sum, curr) => sum + curr.points_for_referrer, 0);
+  const sumSubscribers = (referralData?.main_statistics.subscribers_from_first_level ?? 0) + (referralData?.main_statistics.subscribers_from_second_level ?? 0)
   return (
     <>
       <h2 className={s.headerIncrease}>
@@ -46,8 +43,7 @@ export const IncreaseIncome = () => {
             <ul className={s.subscribers}>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +
-                  {formatAbbreviation(profileData?.subscribers_for_first_level_referrals, 'number', {
+                  +{formatAbbreviation(referralData?.main_statistics.subscribers_from_first_level, 'number', {
                     locale: locale,
                   })}{' '}
                   <img src={subscribersIcon} alt="Подписчики" />
@@ -56,14 +52,14 @@ export const IncreaseIncome = () => {
               </li>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +{formatAbbreviation(profileData?.subscribers_for_second_level_referrals, 'number', { locale: locale })}{' '}
+                  +{formatAbbreviation(referralData?.main_statistics.subscribers_from_second_level, 'number', { locale: locale })}{' '}
                   <img src={subscribersIcon} alt="Подписчики" />
                 </span>
                 <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
               </li>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +{formatAbbreviation(sumPoints, 'number', { locale: locale })}{' '}
+                  +{formatAbbreviation(referralData?.main_statistics.points_from_first_level, 'number', { locale: locale })}{' '}
                   <img src={goldCoinIcon} alt="Поинты" />
                 </span>
               </li>
@@ -75,9 +71,9 @@ export const IncreaseIncome = () => {
 
         {error && <p>{t('p19')}</p>}
 
-        {data && (
+        {referralData && (
           <>
-            {data.referrals.length > 0 ? (
+            {referralData.referrals.length > 0 ? (
               <div className={s.referralsList}>
                 {visibleReferrals.map((referral, index) => (
                   <ReferralCard
@@ -115,7 +111,7 @@ export const IncreaseIncome = () => {
           >
             {t('p6')}
           </TrackedButton>
-          {data && data.referrals.length > 1 && (
+          {referralData && referralData.referrals.length > 1 && (
             <TrackedButton
               trackingData={{
                 eventType: 'button',

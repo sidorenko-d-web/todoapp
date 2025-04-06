@@ -54,7 +54,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
   const { t } = useTranslation('profile');
 
   const showFreezeGuide = useSelector((state: RootState) => state.guide.showFreezeGuide);
-  
+
   // Get the most reliable streak count
   const reliableStreakDays = useMemo(() => {
     // First check if in_streak_days exists in weekData
@@ -115,12 +115,15 @@ export const StreakCard: React.FC<StreakCardProps> = ({
     return FireBlue;
   }, [reliableStreakDays]);
 
-  const elevateCard = 
-    (isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) && !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN)) ||
-    (isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN));
+  const elevateCard =
+    (isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) &&
+      !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN)) ||
+    (isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN));
 
-  const elevatedFreeze = 
-    (isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN) && !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN));
+  const elevatedFreeze =
+    isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN) &&
+    !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN);
 
   return (
     <div className={`${styles.wrp} ${elevateCard ? styles.elevated : ''} ${elevatedFreeze ? styles.noBorder : ''}`}>
@@ -130,8 +133,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
             className={
               reliableStreakDays >= 60 ? styles.badgeRed : reliableStreakDays >= 30 ? styles.badgePurple : styles.badge
             }
-
-            style={showFreezeGuide ? { filter: 'grayscale(100%)'} : undefined}
+            style={showFreezeGuide ? { filter: 'grayscale(100%)' } : undefined}
           >
             {!showFreezeGuide ? status : t('p12_5')}
           </span>
@@ -141,8 +143,10 @@ export const StreakCard: React.FC<StreakCardProps> = ({
               {!showFreezeGuide ? reliableStreakDays : '0'} {t('p13').replace('в ', 'в\u00A0')}
             </span>
             {!strangerId && !onlyStreak && (
-              <div className={`${styles.freezeCount} ${elevatedFreeze ? styles.elevatedFreeze : ''}
-               ${elevatedFreeze ? styles.border12 : ''}`}>
+              <div
+                className={`${styles.freezeCount} ${elevatedFreeze ? styles.elevatedFreeze : ''}
+               ${elevatedFreeze ? styles.border12 : ''}`}
+              >
                 <span>{streakDays}</span>
                 <img src={snowflake} alt="Freeze Icon" />
               </div>
@@ -150,7 +154,7 @@ export const StreakCard: React.FC<StreakCardProps> = ({
           </div>
         </div>
         <div className={clsx(styles.fire, styles.stranger)}>
-          <img src={fireIcon} alt="Fire Icon"  style={showFreezeGuide ? { filter: 'grayscale(100%)'} : undefined}/>
+          <img src={fireIcon} alt="Fire Icon" style={showFreezeGuide ? { filter: 'grayscale(100%)' } : undefined} />
         </div>
       </div>
 
