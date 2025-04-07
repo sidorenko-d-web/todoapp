@@ -34,6 +34,9 @@ export const Integration: React.FC<props> = ({ compaignImage }) => {
     const center = ((window.innerWidth - 30) * dpi) / 2;
     const contextProps = { equipped_items: room?.equipped_items, center: center - 10 * dpi };
 
+    const equippedDesc = room?.items.find(item => desc.name.includes(item.name));
+    const equippedPc = room?.items.find(item => pc.name.includes(item.name));
+
     class SpineScene extends SpineSceneBase {
       preload() {
         if (typeof this.add.spine !== 'function') {
@@ -43,7 +46,6 @@ export const Integration: React.FC<props> = ({ compaignImage }) => {
           if (!(sceneRef.current && gameRef.current)) return;
 
           this.loadPerson();
-          const equippedDesc = room?.items.find(item => desc.name.includes(item.name));
           if (equippedDesc) {
             this.load.svg('desc', buildLink()?.svgLink(equippedDesc.image_url), {
               width: 190 * dpi,
@@ -53,7 +55,6 @@ export const Integration: React.FC<props> = ({ compaignImage }) => {
             this.load.svg('desc', this.createLink('table', 'base'), { width: 190 * dpi, height: 190 * dpi });
           }
 
-          const equippedPc = room?.items.find(item => pc.name.includes(item.name));
           if (equippedPc) {
             this.load.svg('pc', buildLink()?.svgLink(equippedPc.image_url), { width: 80 * dpi, height: 80 * dpi });
           }
@@ -71,11 +72,16 @@ export const Integration: React.FC<props> = ({ compaignImage }) => {
           }
 
           const center = ((window.innerWidth - 30) * dpi) / 2;
-          const desc = this.add.image(center - 10, 180 * dpi, 'desc');
-          const pc = this.add.image(center - 20 * dpi, 135 * dpi, 'pc');
+          
+          if (equippedDesc) {
+            const desc = this.add.image(center - 10, 180 * dpi, 'desc');
+            desc.setDepth(3);
+          }
 
-          desc.setDepth(3);
-          pc.setDepth(4);
+          if (equippedPc) {
+            const pc = this.add.image(center - 20 * dpi, 135 * dpi, 'pc');
+            pc.setDepth(4);
+          }
 
           this.person?.setDepth(2);
 
