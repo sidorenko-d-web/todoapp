@@ -28,9 +28,9 @@ export const Button = ({
   });
 
   const handleOnClick = () => {
-    if (isVibrationSupported) {
-      navigator.vibrate(200);
-    }
+    // if (isVibrationSupported) {
+    //   navigator.vibrate(200);
+    // }
 
     // Используем обработчик звука с колбэком
     handleSoundClick(onClick);

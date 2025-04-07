@@ -100,6 +100,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
 
   const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal;
 
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
+
   useEffect(() => {
     if (data) {
       const desiredItem = data.items.find(item_ => item_.item_premium_level === item.item_premium_level);
@@ -150,6 +153,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   }, [itemLevel]);
 
   const handleBuyItem = async (itemPoints: string) => {
+    if (isVibrationSupported) {
+      navigator.vibrate(200);
+    }
     if (profile && +profile?.points < +itemPoints) return;
 
     try {
@@ -193,6 +199,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   };
 
   const handleEquipItem = async () => {
+    if (isVibrationSupported) {
+      navigator.vibrate(200);
+    }
     if (!slot && slot !== 0)
       throw new Error('error while getting slot for item, check names in "redux/api/room/dto.ts - RoomItemsSlots"');
     const isSlotNotEmpty = equipedItems?.equipped_items.find(item => item.slot === slot);
@@ -228,6 +237,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   const { processPayment } = useUsdtPayment();
 
   const handleUsdtPayment = async () => {
+    if (isVibrationSupported) {
+      navigator.vibrate(200);
+    }
     try {
       await processPayment(Number(item.price_usdt), async result => {
         if (result.success) {
@@ -490,7 +502,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           </div>
         ))}
 
-      {(isBlocked || !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN)) ? (
+      {isBlocked || !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN) ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>{t('s26')}</p>
@@ -543,6 +555,9 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           <Button
             disabled={idDisabled}
             onClick={() => {
+              if (isVibrationSupported) {
+                navigator.vibrate(200);
+              }
               removeItem({ items_to_remove: [{ id: item.id }] });
             }}
           >
