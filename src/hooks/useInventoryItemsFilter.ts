@@ -7,6 +7,7 @@ type CategorizedItems = {
   image: IShopItem[];
   video: IShopItem[];
   decor: IShopItem[];
+  you: IShopItem[];
 };
 
 export const useInventoryItemsFilter = () => {
@@ -15,7 +16,7 @@ export const useInventoryItemsFilter = () => {
   const items = useMemo(() => data?.items || [], [data]);
 
   const categorizedItems = useMemo(() => {
-    const categories: CategorizedItems = { text: [], image: [], video: [], decor: [] };
+    const categories: CategorizedItems = { text: [], image: [], video: [], decor: [], you: [] };
 
     items.forEach(item => {
       if (categories[item.item_category]) {

@@ -7,7 +7,7 @@ import { GUIDE_ITEMS } from '../../constants';
 
 interface Props {
   tabs: { title: string; value: string }[];
-  currentTab: string;
+  currentTab: string | undefined;
   onChange: (item: { title: string; value: string }) => void;
   colorClass?: string;
 }
