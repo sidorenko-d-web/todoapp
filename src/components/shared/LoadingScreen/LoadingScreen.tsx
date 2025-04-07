@@ -137,7 +137,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   return (
     <>
       <WhiteNoiseCanvas />
-      {isMobile === 1 && (
+      {(isMobile === 1 || buildMode === 'testDev' || buildMode === 'test') &&(
         <div className={styles.root} onClick={handleAccelerate}>
           <div />
           <div className={styles.clickableArea}></div>
@@ -173,7 +173,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
         </div>
       )}
 
-      {isMobile === -1 && (
+        {isMobile === -1 && buildMode !== 'testDev' && buildMode !== 'test' &&  (
         <div className={styles.notMobile}>
           <div className={styles.qr}>
             <img src={qr} />
