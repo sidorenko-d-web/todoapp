@@ -1,4 +1,4 @@
-// const init_data = window.Telegram.WebApp.initData;
+const init_data = window.Telegram.WebApp.initData;
 // const init_data = window.Telegram.WebApp.initDataUnsafe
 // const init_data = WebApp.initData;
 
@@ -26,13 +26,16 @@
 // const init_data =
 //   'query_id%3DAAHa-fEBAwAAANr58QFFg6SM%26user%3D%257B%2522id%2522%253A6475086298%252C%2522first_name%2522%253A%2522%25D0%2590%25D0%25BD%25D0%25B4%25D1%2580%25D0%25B5%25D0%25B9%2522%252C%2522last_name%2522%253A%2522%25D0%2593%25D0%25B5%25D1%2580%25D0%25B0%25D1%2581%25D0%25B8%25D0%25BC%25D0%25BE%25D0%25B2%2522%252C%2522username%2522%253A%2522De_Geras%2522%252C%2522language_code%2522%253A%2522en%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FGzJ9TEsOx7Oc1JJcHr-lzeFQB6alew8O_qoBdhO-6gGt7kZEiGJ6urTqgGlF9_Ye.svg%2522%257D%26auth_date%3D1739263999%26signature%3D6Nc44J8mpAyftuBwiEXHF3YyBtkbAptwj1YO0P99Dhmkpy1G1Nw8wxfR48B22hnqfGPnxxrf9vcSenT5ylpACg%26hash%3D90880b7f94adbd34cac6cd5d023fc5822c26b6d3036709f5dd60f547d2889a2c&tgWebAppVersion=7.2&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22button_text_color%22%3A%22%23ffffff%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22link_color%22%3A%22%23007aff%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22button_color%22%3A%22%23007aff%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22bg_color%22%3A%22%23282828%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%2C%22destructive_text_color%22%3A%22%23ff453a%22%2C%22header_bg_color%22%3A%22%231c1c1c%22%2C%22section_bg_color%22%3A%22%23282828%22%2C%22hint_color%22%3A%22%23ffffff%22%7D';
 // 😍 Новые аккаунты для dev (@wished_sentry_robot)😍
-// InnoSmoke1️⃣
+// InnoSmoke1️⃣ 6983657401
 // const init_data = "query_id=AAG5J0IgAwAAALknQiA2VnvC&user=%7B%22id%22%3A6983657401%2C%22first_name%22%3A%22InnoSmoke%20%F0%9F%98%B6%E2%80%8D%F0%9F%8C%AB%EF%B8%8F%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22InnoSmokeAdmin%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FG6IL84jx2cu6pK5znAc4_zNQ5CGiot09A_OopubxolzjbRKMfYmY1sGiP59VL6Cl.svg%22%7D&auth_date=1744048527&signature=sJB64hld2T1Zq-g17M9vxRldiv33vWYAjmsuYMeH8zVgZhy9Fc9HXffD4TzTkAk4L_ifwZW3xbgq_myMajuEDg&hash=a9c187b49a1efa365dfeccd60d591785b95547355404a32aaa7ff84a97ecb4de"
-// StoriesMaker2️⃣
-const init_data = "query_id=AAErKG1AAAAAACsobUCGKVAZ&user=%7B%22id%22%3A1080895531%2C%22first_name%22%3A%22s%E1%B4%9B%E1%B4%8F%CA%80%C9%AA%E1%B4%87s.%E1%B4%8D%E1%B4%80%E1%B4%8B%E1%B4%87%CA%80%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22InnoQueen%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F9WmGyAANKJiYKRuxylZm193HYWCo8rs9XpMPPwFFJFo.svg%22%7D&auth_date=1744050478&signature=xpO8KUKK2FvMkyJx96ZKe8zRZw7L1rmXS2KFd03HY2JqmRWVaj4Zc3i82roXcaILSnisWYpKU37TkTUucH5aBQ&hash=db9881ab4c8bcfe4652556f86cab10c92b58bae7afe969ceb59a46e2209c4371"
+// StoriesMaker2️⃣ 6983657401
+// const init_data = "query_id=AAErKG1AAAAAACsobUCGKVAZ&user=%7B%22id%22%3A1080895531%2C%22first_name%22%3A%22s%E1%B4%9B%E1%B4%8F%CA%80%C9%AA%E1%B4%87s.%E1%B4%8D%E1%B4%80%E1%B4%8B%E1%B4%87%CA%80%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22InnoQueen%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F9WmGyAANKJiYKRuxylZm193HYWCo8rs9XpMPPwFFJFo.svg%22%7D&auth_date=1744050478&signature=xpO8KUKK2FvMkyJx96ZKe8zRZw7L1rmXS2KFd03HY2JqmRWVaj4Zc3i82roXcaILSnisWYpKU37TkTUucH5aBQ&hash=db9881ab4c8bcfe4652556f86cab10c92b58bae7afe969ceb59a46e2209c4371"
+// Blinsagino3️⃣ 6983657401 TODO: fix auth
+// const init_data = "user=%7B%22id%22%3A7039038714%2C%22first_name%22%3A%22Blinsagino%F0%9F%98%B6%E2%80%8D%F0%9F%8C%AB%EF%B8%8F%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Blinsagino%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F6NSgsX_b4jTWi-xmSOaYz1lTysh0NnMnZ6zpV4ajHHHUNJJhUvs82g8DD1MmH0SL.svg%22%7D&chat_instance=-6435343496836040411&chat_type=private&auth_date=1744053967&signature=MbnX1gFXv7Dah8EI8SH9hvR8mm_1-ctwrLqxA4MXkDcm9lb8y-wUGsmzmApjLlzf3VGzZ5tjhzWpdY6JBSeiAA&hash=5c0d1b325d9247160324f1c6c57504f57491e41d087c6dd5715432bb2ff693f8"
+
 
 // const referral_id= WebApp.initDataUnsafe.user?.id ?? 0
-// const referral_id = window.Telegram.WebApp.initDataUnsafe.user.id;
+const referral_id = window.Telegram.WebApp.initDataUnsafe.user.id;
 // const referral_id = 1259832544; //Марго
 // const referral_id = 1301940582; //Андрей dehopen
 // const referral_id = 6547551264; //Кирилл А
@@ -42,7 +45,9 @@ const init_data = "query_id=AAErKG1AAAAAACsobUCGKVAZ&user=%7B%22id%22%3A10808955
 // const referral_id = 6475086298; //de geras
 
 // const referral_id = 6983657401; // InnoSmoke1️⃣
-const referral_id = 6983657401; // StoriesMaker2️⃣
+// const referral_id = 6983657401; // StoriesMaker2️⃣
+// const referral_id = 6983657401; // Blinsagino3️⃣
+
 
 const buildMode: 'testDev' | 'test' | 'prodDev' | 'production' = 'testDev'; //change type of building here
 
