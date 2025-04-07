@@ -1,4 +1,4 @@
-// const init_data = window.Telegram.WebApp.initData;
+const init_data = window.Telegram.WebApp.initData;
 // const init_data = window.Telegram.WebApp.initDataUnsafe
 // const init_data = WebApp.initData;
 
@@ -33,11 +33,11 @@
 // domiknakolese3️⃣ 6983657401 TODO: fix auth
 // const init_data = "query_id=AAEtHeomAwAAAC0d6ibs8VtG&user=%7B%22id%22%3A7095328045%2C%22first_name%22%3A%22Jdhfdbb%22%2C%22last_name%22%3A%22Dhd%22%2C%22username%22%3A%22domiknakolese%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FGTS6MDV4pmmhfEzKsHerYzzb5Z9vyu6ZzcqIrayei_iQ_kWR7yRcaWbsu3_sVS87.svg%22%7D&auth_date=1744060596&signature=zMhNN0uSkq0hzV6x9wxpKJ0IlmkG_rI04hdW7dl_Us9aTnOIbko0CAk6asmWonOmP-svK-VnsBxTf7wqQvIpAQ&hash=8275b322cb0c149510fe24e590edd4ecf30f8e065b6a9b49b3b1906c202cfcfe"
 // Никита Пирсов4️⃣ 6983657401
-const init_data = "user=%7B%22id%22%3A6542018915%2C%22first_name%22%3A%22%D0%9D%D0%B8%D0%BA%D0%B8%D1%82%D0%B0%20%D0%9F%D0%B8%D1%80%D1%81%D0%BE%D0%B2%F0%9F%A5%8A%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22kolesonomerodin%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F19YKthq2S8VrLUPUzU_AalHuR_2j4AFL1sXHFWf3GlW_urs1HgFjEgUQhCr-R8De.svg%22%7D&chat_instance=8194366508801383098&chat_type=sender&auth_date=1744060159&signature=C_IQQPi_GNm0fNwJuNxFLBiirF8Buie3BzhN3EN5rEaaVQyz6onpf3EPgNcCpSsPPkOCExdYr70ShbrNSLl5Cw&hash=3d1cca001df399208d1097b62469d26bcac4cc9f8fa00f0dd6f4f28ce1fb9dd9"
+// const init_data = "user=%7B%22id%22%3A6542018915%2C%22first_name%22%3A%22%D0%9D%D0%B8%D0%BA%D0%B8%D1%82%D0%B0%20%D0%9F%D0%B8%D1%80%D1%81%D0%BE%D0%B2%F0%9F%A5%8A%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22kolesonomerodin%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F19YKthq2S8VrLUPUzU_AalHuR_2j4AFL1sXHFWf3GlW_urs1HgFjEgUQhCr-R8De.svg%22%7D&chat_instance=8194366508801383098&chat_type=sender&auth_date=1744060159&signature=C_IQQPi_GNm0fNwJuNxFLBiirF8Buie3BzhN3EN5rEaaVQyz6onpf3EPgNcCpSsPPkOCExdYr70ShbrNSLl5Cw&hash=3d1cca001df399208d1097b62469d26bcac4cc9f8fa00f0dd6f4f28ce1fb9dd9"
 
 
 // const referral_id= WebApp.initDataUnsafe.user?.id ?? 0
-// const referral_id = window.Telegram.WebApp.initDataUnsafe.user.id;
+const referral_id = window.Telegram.WebApp.initDataUnsafe.user.id;
 // const referral_id = 1259832544; //Марго
 // const referral_id = 1301940582; //Андрей dehopen
 // const referral_id = 6547551264; //Кирилл А
@@ -49,7 +49,7 @@ const init_data = "user=%7B%22id%22%3A6542018915%2C%22first_name%22%3A%22%D0%9D%
 // const referral_id = 6983657401; // InnoSmoke1️⃣
 // const referral_id = 6983657401; // StoriesMaker2️⃣
 // const referral_id = 6983657401; // domiknakolese3️⃣
-const referral_id = 6983657401; // Никита Пирсов4️⃣
+// const referral_id = 6983657401; // Никита Пирсов4️⃣
 
 
 const buildMode: 'testDev' | 'test' | 'prodDev' | 'production' = 'testDev'; //change type of building here
