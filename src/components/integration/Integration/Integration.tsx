@@ -21,7 +21,7 @@ export const Integration: React.FC<props> = ({ compaignImage }) => {
   const [size, setSize] = useState([0, 0]);
   const [isLoaded, setIsLoaded] = useState(false);
   const character = useGetCharacterQuery(undefined);
-  const { desc, pc, chair, wall } = useRoomItemsSlots();
+  const { desc, pc, wall } = useRoomItemsSlots();
 
   const dpi = window.devicePixelRatio ?? 1;
 

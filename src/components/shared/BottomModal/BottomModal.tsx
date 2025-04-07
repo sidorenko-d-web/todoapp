@@ -41,9 +41,6 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
   const { t } = useTranslation('promotion');
   const [mounted, setMounted] = useState(false);
 
-  const isVibrationSupported =
-    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
-
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
@@ -52,17 +49,17 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
   // Handle scroll lock
   useEffect(() => {
     if (!mounted) return;
-    
+
     if (isOpen && !disableScrollLock) {
       // Save current scroll position
       const scrollY = window.scrollY;
-      
+
       // Apply fixed positioning to body
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
-      
+
       return () => {
         // Restore scroll position when modal closes
         document.body.style.position = '';
@@ -76,14 +73,11 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
 
   // Handle close with animation
   const handleClose = () => {
-    if (isVibrationSupported) {
-      navigator.vibrate(200);
-    }
     setIsClosing(true);
     setTimeout(() => {
       onClose();
       setIsClosing(false);
-    }, 80); 
+    }, 80);
   };
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -93,7 +87,7 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
   };
 
   if (!isOpen || !mounted) return null;
-  
+
   return createPortal(
     <div className={classNames(s.backdropContainer, containerStyles)} onClick={handleBackdropClick}>
       {isCopiedLink && <div className={s.save}>{t('p59')}</div>}
@@ -103,10 +97,7 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
           [s.closing]: isClosing,
         })}
       >
-        <div 
-          className={classNames(s.modal, modalStyles)}
-          onClick={(e) => e.stopPropagation()}
-        >
+        <div className={classNames(s.modal, modalStyles)} onClick={e => e.stopPropagation()}>
           <div className={classNames({ [s.disabled]: disabled })}>
             <header className={classNames(s.header, headerStyles)}>
               <div className={s.gripContainer}>
@@ -129,7 +120,7 @@ const BottomModal: FC<PropsWithChildren<BottomModalProps>> = ({
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 

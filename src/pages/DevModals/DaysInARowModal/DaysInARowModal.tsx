@@ -36,6 +36,9 @@ export default function DaysInARowModal({ onClose }: Props) {
   const [frozenDays, setFrozenDays] = useState<number[]>([]);
   const [streakDays, setStreakDays] = useState<number[]>([]);
 
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
+
   const navigate = useNavigate();
 
   const rerenderAfterPublish = useSelector((state: RootState) => state.guide.refetchAfterPublish);
@@ -202,7 +205,18 @@ export default function DaysInARowModal({ onClose }: Props) {
           <ProgressLine level={calculateLevel} color={color} />
         </div>
         {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) && (
-          <Button onClick={onClose || (() => closeModal(MODALS.DAYS_IN_A_ROW))} variant={color}>
+          <Button
+            onClick={
+              onClose ||
+              (() => {
+                if (isVibrationSupported) {
+                  navigator.vibrate(200);
+                }
+                closeModal(MODALS.DAYS_IN_A_ROW);
+              })
+            }
+            variant={color}
+          >
             {t('p22')}
           </Button>
         )}

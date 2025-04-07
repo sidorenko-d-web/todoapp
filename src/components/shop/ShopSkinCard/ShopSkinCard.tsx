@@ -40,7 +40,13 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
   const { data: characterData, isLoading: isCharacterLoading } = useGetCharacterQuery();
   const { openModal } = useModal();
 
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
+
   const handleBuySkin = async () => {
+    if (isVibrationSupported) {
+      navigator.vibrate(200);
+    }
     try {
       const res = await buySkin({ payment_method: 'internal_wallet', id: item.id });
       if (!res.error) {
@@ -55,14 +61,17 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
   const { processPayment } = useUsdtPayment();
 
   const handleUsdtPayment = async () => {
+    if (isVibrationSupported) {
+      navigator.vibrate(200);
+    }
     try {
-      await processPayment(Number(item.price_usdt), async (result) => {
+      await processPayment(Number(item.price_usdt), async result => {
         if (result.success) {
           const res = await buySkin({
             id: item.id,
             payment_method: 'usdt',
             transaction_id: result.transactionHash,
-            sender_address: result.senderAddress
+            sender_address: result.senderAddress,
           });
 
           if (!res.error) {
@@ -77,7 +86,6 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
       console.error('Error in USDT payment flow:', err);
     }
   };
-
 
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
@@ -178,7 +186,15 @@ export const ShopSkinCard: FC<Props> = ({ item, mode }) => {
             )}
           </Button>
         ) : (
-          <Button onClick={() => handleSelectSkin(item)} className={styles.buttonInventory}>
+          <Button
+            onClick={() => {
+              if (isVibrationSupported) {
+                navigator.vibrate(200);
+              }
+              handleSelectSkin(item);
+            }}
+            className={styles.buttonInventory}
+          >
             {isLoading ? (
               <p>{t('s59')}</p>
             ) : (

@@ -1,5 +1,5 @@
-@use '../../../assets/styles/abstracts/colors' as var;
-@use 'sass:color';
+@use "../../../assets/styles/abstracts/colors" as var;
+@use "sass:color";
 
 .background {
   pointer-events: none;
@@ -112,6 +112,7 @@
 }
 
 .extra {
+  font-size: 12px;
   color: var.$color-text-semi-transparent;
 }
 

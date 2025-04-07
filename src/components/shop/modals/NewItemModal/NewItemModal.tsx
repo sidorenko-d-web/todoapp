@@ -24,7 +24,13 @@ export const NewItemModal: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
+
   const handleClose = () => {
+    if (isVibrationSupported) {
+      navigator.vibrate(200);
+    }
     closeModal(MODALS.NEW_ITEM);
     dispatch(setItemBought(true));
     navigate(AppRoute.ShopInventory);
