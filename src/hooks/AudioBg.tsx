@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 import bgAudio1 from '../assets/audio/Фон1.mp3';
 import bgAudio2 from '../assets/audio/Фон2.mp3';
