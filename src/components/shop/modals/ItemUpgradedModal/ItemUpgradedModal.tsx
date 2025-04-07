@@ -17,9 +17,10 @@ export const ItemUpgradedModal = () => {
   const { closeModal, getModalState, openModal } = useModal();
   const { t } = useTranslation('shop');
 
-  const state = getModalState<{ item: IShopItem; mode: 'skin' | 'item'; reward: string }>(
-    MODALS.UPGRADED_ITEM,
-  );
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
+
+  const state = getModalState<{ item: IShopItem; mode: 'skin' | 'item'; reward: string }>(MODALS.UPGRADED_ITEM);
 
   const isPrem = state.args?.item.item_rarity === 'yellow';
   const isPro = state.args?.item.item_rarity === 'green';
@@ -27,6 +28,9 @@ export const ItemUpgradedModal = () => {
   useAutoPlaySound(MODALS.UPGRADED_ITEM, SOUNDS.upgradeOrBuyItem);
 
   const handleOpenChest = () => {
+    if (isVibrationSupported) {
+      navigator.vibrate(200);
+    }
     closeModal(MODALS.UPGRADED_ITEM);
 
     if (localStorage.getItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST)) {
@@ -35,31 +39,20 @@ export const ItemUpgradedModal = () => {
     }
   };
 
-
   const getImage = (url: string) =>
     buildMode === 'production'
       ? buildLink()?.svgShop(url).replace('https://', 'https://storage.yandexcloud.net/')
       : buildLink()?.svgShop(url);
 
   return (
-    <CentralModal
-      title={t('s62')}
-      onClose={handleOpenChest}
-      modalId={MODALS.UPGRADED_ITEM}
-    >
+    <CentralModal title={t('s62')} onClose={handleOpenChest} modalId={MODALS.UPGRADED_ITEM}>
       <div className={styles.images}>
         <Lottie
           animationData={isPrem ? purpleLight : isPro ? redLight : blueLight}
           loop={true}
           className={styles.bgLight}
         />
-        <div
-          className={clsx(
-            styles.itemImage,
-            isPrem && styles.itemImagePurple,
-            isPro && styles.itemImageRed,
-          )}
-        >
+        <div className={clsx(styles.itemImage, isPrem && styles.itemImagePurple, isPro && styles.itemImageRed)}>
           <img
             src={getImage(state.args?.item.image_url ?? '') + svgHeadersString}
             alt="item-image"
@@ -69,8 +62,8 @@ export const ItemUpgradedModal = () => {
             {state.args?.item.item_premium_level === 'base'
               ? 'Base'
               : state.args?.item.item_premium_level === 'advanced'
-                ? 'Adv'
-                : 'Pro'}
+              ? 'Adv'
+              : 'Pro'}
           </p>
         </div>
       </div>
@@ -92,14 +85,9 @@ export const ItemUpgradedModal = () => {
       <div className={styles.text}>
         <p>
           {t('s45')}{' '}
-          <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>
-            {state.args?.item.name}!
-          </span>
-          ! {t('s46')}{' '}
-          <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>
-            {state.args?.reward}
-          </span>
-          !
+          <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>{state.args?.item.name}!</span>!{' '}
+          {t('s46')}{' '}
+          <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>{state.args?.reward}</span>!
         </p>
       </div>
       <Button onClick={handleOpenChest} variant="blue">

@@ -28,6 +28,9 @@ export default function GetGift({ giftColor, boost }: Props) {
   const { isOpen } = getModalState(MODALS.GET_GIFT);
   const { t } = useTranslation('quests');
 
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
+
   if (!isOpen) return null;
 
   let giftImage;
@@ -112,7 +115,12 @@ export default function GetGift({ giftColor, boost }: Props) {
       </div>
       <Button
         variant={giftColor == null || giftColor === t('q54') ? 'blue' : giftColor === t('q55') ? 'purple' : 'red'}
-        onClick={() => closeModal(MODALS.GET_GIFT)}
+        onClick={() => {
+          if (isVibrationSupported) {
+            navigator.vibrate(200);
+          }
+          closeModal(MODALS.GET_GIFT);
+        }}
       >
         {t('q58')}
       </Button>

@@ -51,6 +51,9 @@ export default function RewardForIntegrationModal() {
     return 0;
   };
 
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
+
   const getProgressBarPercentage = (count: number = 0) => {
     if (count >= starsThresholds.thirdStar) {
       return 100;
@@ -72,15 +75,15 @@ export default function RewardForIntegrationModal() {
 
   function openModalIfNotOpenedToday() {
     const today = new Date().toISOString().split('T')[0];
-    
+
     const lastOpenedDate = localStorage.getItem('lastModalOpenedDate');
-    
+
     if (lastOpenedDate !== today) {
       openModal(MODALS.DAYS_IN_A_ROW);
       localStorage.setItem('lastModalOpenedDate', today);
     }
   }
-  
+
   return (
     <CentralModal
       onClose={() => {
@@ -148,6 +151,9 @@ export default function RewardForIntegrationModal() {
           //   closeModal(MODALS.INTEGRATION_REWARD);
           // }}
           onClick={() => {
+            if (isVibrationSupported) {
+              navigator.vibrate(200);
+            }
             refetch();
             setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED);
             dispatch(setIsPublishedModalClosed(true));

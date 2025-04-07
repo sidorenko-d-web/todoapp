@@ -1,5 +1,5 @@
-@use '../../../assets/styles/abstracts/colors' as var;
-@use 'sass:color';
+@use "../../../assets/styles/abstracts/colors" as var;
+@use "sass:color";
 
 .background {
   pointer-events: none;
@@ -91,6 +91,9 @@
 .statsContainer {
   height: 100%;
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
   margin-top: 20px;
   align-items: end;
@@ -125,6 +128,7 @@
 .statBox {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   padding: 2px;
   border-radius: 4px;
   background-color: var.$color-dark-gray;
