@@ -4,8 +4,7 @@ import loadingVid from '../../../assets/gif/loading.mp4';
 // import Lottie from 'lottie-react';
 // import { coinsAnim } from '../../../assets/animations';
 import { LoadingScreenBar, LoadingScreenBarRef } from '../../loadingScreen/LoadingScreenBar/LoadingScreenBar';
-import useSound from 'use-sound';
-import { buildMode, SOUNDS } from '../../../constants';
+import { buildMode } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
 
@@ -151,7 +150,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   return (
     <>
       <WhiteNoiseCanvas />
-      {isMobile === 1 && (
+      {(isMobile === 1 || buildMode === 'testDev' || buildMode === 'test') &&(
         <div className={styles.root} onClick={handleAccelerate}>
           <div />
           <div className={styles.clickableArea}></div>
@@ -187,7 +186,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
         </div>
       )}
 
-      {isMobile === -1 && (
+        {isMobile === -1 && buildMode !== 'testDev' && buildMode !== 'test' &&  (
         <div className={styles.notMobile}>
           <div className={styles.qr}>
             <img src={qr} />
