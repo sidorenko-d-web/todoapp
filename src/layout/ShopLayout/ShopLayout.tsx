@@ -4,6 +4,7 @@ import {
   RootState,
   setLastOpenedRarity,
   setLastOpenedTab,
+  setSelectedIntegrationCategory,
   TypeItemCategory,
   TypeItemRarity,
   useGetCurrentUserBoostQuery,
@@ -47,6 +48,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 }) => {
   const lastOpenedTab = useSelector((state: RootState) => state.shop.lastOpenedTab);
   const lastOpenedRarity = useSelector((state: RootState) => state.shop.lastOpenedRarity);
+  const selectedIntegrationCategory = useSelector((state: RootState) => state.shop.selectedIntegrationCategory);
   const dispatch = useDispatch();
 
   const { t } = useTranslation('shop');
@@ -62,7 +64,12 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     { title: `${t('s15')}`, value: 'yellow' },
     { title: `${t('s16')}`, value: 'green' },
   ];
-  const [shopCategory, setShopCategory] = useState(lastOpenedTab || shopItemCategories[0]);
+  const [shopCategory, setShopCategory] = useState(
+    lastOpenedTab ||
+      (selectedIntegrationCategory
+        ? shopItemCategories.find(cat => cat.value === selectedIntegrationCategory)
+        : shopItemCategories[0]),
+  );
   const [itemsQuality, setItemsQuality] = useState(lastOpenedRarity || shopItemRarity[0]);
 
   const setRerender = useState(0)[1];
@@ -88,11 +95,25 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     dispatch(setLastOpenedRarity(itemsQuality));
   }, [shopCategory.value, itemsQuality.value]);
 
+  useEffect(() => {
+    if (selectedIntegrationCategory) {
+      const newCategory = shopItemCategories.find(cat => cat.value === selectedIntegrationCategory);
+      if (newCategory) {
+        setShopCategory(newCategory);
+      }
+    }
+  }, [selectedIntegrationCategory]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setSelectedIntegrationCategory(shopItemCategories[0]));
+    };
+  }, [dispatch]);
+
   const navigate = useNavigate();
 
   const itemsInTabs = useMemo(() => {
-    console.log(shop?.items);
-     return shop?.items && inventory?.items && itemsInTab(shop?.items);
+    return shop?.items && inventory?.items && itemsInTab(shop?.items);
   }, [shop?.count, inventory?.count]);
 
   const tabs = useMemo(() => {
@@ -313,7 +334,10 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
       {isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) &&
-        mode === 'inventory' && !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED) && showBackToMainGuide && inventory && (
+        mode === 'inventory' &&
+        !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED) &&
+        showBackToMainGuide &&
+        inventory && (
           <TreeLevelGuide
             item={inventory?.items[0]!}
             onClose={() => {
