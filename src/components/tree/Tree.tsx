@@ -1,4 +1,4 @@
-import { CSSProperties, memo, useRef, useState } from 'react';
+import { CSSProperties, memo, useState } from 'react';
 import s from './Tree.module.scss';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
@@ -26,7 +26,6 @@ import { GUIDE_ITEMS, MODALS } from '../../constants';
 import GetGift from '../../pages/DevModals/GetGift/GetGift';
 import { Loader } from '../Loader';
 import { useOutletContext } from 'react-router-dom';
-import { useTreeProgress } from '../../hooks/useTreeProgress';
 import { isGuideShown } from '../../utils';
 
 import { FixedSizeList as List } from 'react-window';
@@ -42,18 +41,9 @@ export const Tree = () => {
   const { data: userProfileData } = useGetProfileMeQuery();
   const [currentBoost, setCurrentBoost] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
-
   const isGuide = !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
-  const userSubscribers = userProfileData?.subscribers || 0;
-
-  const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
-
   const [unlockAchievement] = useUnlockAchievementMutation();
-  const { progressPercent } = useTreeProgress({
-    treeData,
-    userSubscribers,
-  });
 
   if (!treeData || !isBgLoaded || !userProfileData) {
     return (
@@ -70,8 +60,8 @@ export const Tree = () => {
     try {
       await unlockAchievement({ achievement_id: id }).unwrap();
       setCurrentBoost(boost);
+      await refetch();
       openModal(MODALS.GET_GIFT);
-      refetch();
     } catch (err) {
       alert('Failed to unlock achievement.');
     }
@@ -80,7 +70,6 @@ export const Tree = () => {
   const Reward = memo(
     ({ isUnlocked, index, stage }: { isUnlocked: boolean; index: number; stage: GrowthTreeStage }) => {
       const isEven = index % 2 === 0;
-      index === 4 && console.log(stage);
 
       const giftColors = [giftPurple, giftRed, giftBlue];
 
@@ -157,15 +146,30 @@ export const Tree = () => {
 
   return (
     <div className={s.containerGlobal}>
-      {!isGuide && (
-        <div className={s.progressBarContainer}>
+      {!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) && (
+        <>
           <div
-            className={s.progressBar}
-            style={{ height: `${150 + (treeData ? (treeData.growth_tree_stages.length - 1) * 300 : 0) + 25}px` }}
-          >
-            <div className={s.progressFill} style={{ height: `${progressPercent}%` }} ref={progressBarContainerRef} />
-          </div>
-        </div>
+            style={{
+              position: 'fixed',
+              bottom: '85px',
+              left: '0',
+              width: '100vh',
+              height: '30px',
+              backgroundColor: 'rgba(0, 0, 0, 0.91)',
+            }}
+          />
+
+          <div
+            style={{
+              position: 'fixed',
+              top: '0',
+              left: '0',
+              width: '100vh',
+              height: '165px',
+              backgroundColor: 'rgba(0, 0, 0, 0.91)',
+            }}
+          />
+        </>
       )}
 
       <div className={s.progressBarContainer}>

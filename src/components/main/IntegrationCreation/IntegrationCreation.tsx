@@ -44,7 +44,7 @@ export const IntegrationCreation = () => {
     }
   }, [integrations?.integrations, refetchIntegration]);
 
-  const { openModal, closeModal } = useModal();
+  const { openModal, closeModal, getModalState } = useModal();
 
   const handleIntegrationCreation = () => {
     if (isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN)) {
@@ -56,7 +56,9 @@ export const IntegrationCreation = () => {
       if (!isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) {
         openModal(MODALS.SUBSCRIBE);
       } else {
-        openModal(MODALS.CREATING_INTEGRATION);
+        if(!getModalState(MODALS.CREATING_INTEGRATION).isOpen && !integrationCreating) {
+          openModal(MODALS.CREATING_INTEGRATION);
+        }
       }
     }
   };

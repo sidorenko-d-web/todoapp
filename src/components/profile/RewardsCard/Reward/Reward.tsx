@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // Добавлен useState
+import React, { useEffect, useState } from 'react'; // Добавлен useState
 import styles from './Reward.module.scss';
 import goldMedal from '../../../../assets/icons/medal-gold.svg';
 import silverMedal from '../../../../assets/icons/medal-silver.svg';
@@ -43,6 +43,10 @@ const Reward: React.FC<RewardProps> = ({ name, name_eng, stars, medal, isActive:
     silver: silverMedal,
     bronze: bronzeMedal,
   };
+
+  useEffect(() => {
+    setIsActive(initialIsActive);
+  }, [initialIsActive]);
 
   const handleEquipAchivement = async () => {
     if (!equipped_items) return;

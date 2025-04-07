@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
 import peeps from '../../../assets/icons/peeps.svg';
 import piggy from '../../../assets/icons/piggy.svg';
 import subscribersIcon from '../../../assets/icons/subscribers.png';
+import goldCoinIcon from "../../../assets/Icons/coin.png"
 import s from './IncreaseIncome.module.scss';
 import classNames from 'classnames';
 import { useModal } from '../../../hooks';
@@ -11,8 +11,6 @@ import { InviteFriend, UserReferrals } from '../Modal';
 import { ReferralCard } from '../ReferralCard/ReferralCard';
 import {
   useGetCurrentUsersReferralsQuery,
-  useGetUserProfileInfoByIdQuery,
-  UserProfileInfoResponseDTO,
 } from '../../../redux';
 import { formatAbbreviation } from '../../../helpers';
 import { TrackedButton } from '../..';
@@ -22,50 +20,13 @@ export const IncreaseIncome = () => {
   const { t, i18n } = useTranslation('promotion');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
-  const { data, isLoading, error } = useGetCurrentUsersReferralsQuery();
-  const [profilesData, setProfilesData] = useState<UserProfileInfoResponseDTO[]>([]);
+  const { data: referralData, isLoading, error } = useGetCurrentUsersReferralsQuery();
 
-  const referrals = data?.referrals || [];
+  const referrals = referralData?.referrals || [];
   const visibleReferrals = referrals.slice(0, 3);
-  const visibleReferralsAll = referrals;
   const hiddenReferralsCount = referrals.length - 3;
 
-  const profileIdsAll = useMemo(
-    () => visibleReferralsAll.map(referral => referral.character_data.profile_id),
-    [visibleReferralsAll],
-  );
-
-  const profileQueries = profileIdsAll.map(profileId => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useGetUserProfileInfoByIdQuery(profileId);
-  });
-
-  useEffect(() => {
-    if (profileQueries.every(query => !query.isLoading && query.data)) {
-      const profiles = profileQueries.map(query => query.data!);
-      setProfilesData(profiles);
-    }
-    // }, [profileQueries]); couses react error
-  }, []);
-
-  const { firstLevelSubscribers, secondLevelSubscribers } = useMemo(() => {
-    const firstLevel = profilesData.reduce(
-      (sum, profile) => sum + (profile?.subscribers_for_first_level_referrals || 0),
-      0,
-    );
-    const secondLevel = profilesData.reduce(
-      (sum, profile) => sum + (profile?.subscribers_for_second_level_referrals || 0),
-      0,
-    );
-    return {
-      totalSubscribers: firstLevel + secondLevel,
-      firstLevelSubscribers: firstLevel,
-      secondLevelSubscribers: secondLevel,
-    };
-  }, [profilesData]);
-
-  const sumSubscribers = firstLevelSubscribers + secondLevelSubscribers;
-
+  const sumSubscribers = (referralData?.main_statistics.subscribers_from_first_level ?? 0) + (referralData?.main_statistics.subscribers_from_second_level ?? 0)
   return (
     <>
       <h2 className={s.headerIncrease}>
@@ -82,8 +43,7 @@ export const IncreaseIncome = () => {
             <ul className={s.subscribers}>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +
-                  {formatAbbreviation(firstLevelSubscribers, 'number', {
+                  +{formatAbbreviation(referralData?.main_statistics.subscribers_from_first_level, 'number', {
                     locale: locale,
                   })}{' '}
                   <img src={subscribersIcon} alt="Подписчики" />
@@ -92,10 +52,16 @@ export const IncreaseIncome = () => {
               </li>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +{formatAbbreviation(secondLevelSubscribers, 'number', { locale: locale })}{' '}
+                  +{formatAbbreviation(referralData?.main_statistics.subscribers_from_second_level, 'number', { locale: locale })}{' '}
                   <img src={subscribersIcon} alt="Подписчики" />
                 </span>
                 <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
+              </li>
+              <li className={s.listBadge}>
+                <span className={s.badge}>
+                  +{formatAbbreviation(referralData?.main_statistics.points_from_first_level, 'number', { locale: locale })}{' '}
+                  <img src={goldCoinIcon} alt="Поинты" />
+                </span>
               </li>
             </ul>
           </div>
@@ -105,9 +71,9 @@ export const IncreaseIncome = () => {
 
         {error && <p>{t('p19')}</p>}
 
-        {data && (
+        {referralData && (
           <>
-            {data.referrals.length > 0 ? (
+            {referralData.referrals.length > 0 ? (
               <div className={s.referralsList}>
                 {visibleReferrals.map((referral, index) => (
                   <ReferralCard
@@ -116,10 +82,11 @@ export const IncreaseIncome = () => {
                     name={referral.username}
                     reminded_time={referral.reminded_at}
                     id_referral={referral.id}
-                    profile_id={referral.character_data.profile_id}
-                    total_invited={referral.total_invited}
+                    total_invited={referral.invited_count}
                     streak={referral.push_line_data.in_streak_days}
                     days_missed={referral.push_line_data.failed_days_ago}
+                    points_for_referrer={referral.points_for_referrer}
+                    subscribers_for_referrer={referral.subscribers_for_referrer}
                   />
                 ))}
                 {hiddenReferralsCount > 0 && (
@@ -144,7 +111,7 @@ export const IncreaseIncome = () => {
           >
             {t('p6')}
           </TrackedButton>
-          {data && data.referrals.length > 1 && (
+          {referralData && referralData.referrals.length > 1 && (
             <TrackedButton
               trackingData={{
                 eventType: 'button',

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import GetRewardChestModal from '../DevModals/GetRewardChestModal/GetRewardChestModal';
 import styles from './StrangerProfilePage.module.scss';
@@ -38,12 +38,9 @@ export const StrangerProfilePage: React.FC = () => {
 
   useEffect(() => {
     if (!userProfileData) return;
-    const refetchInterval = setInterval(
-      () => {
-        refetchCurrentProfile();
-      },
-      5 * 60 * 1000,
-    ); // 5 minutes
+    const refetchInterval = setInterval(() => {
+      refetchCurrentProfile();
+    }, 5 * 60 * 1000); // 5 minutes
 
     return () => clearInterval(refetchInterval);
   }, [userProfileData, refetchCurrentProfile]);
@@ -54,17 +51,7 @@ export const StrangerProfilePage: React.FC = () => {
     isLoading: isTopProfilesLoading,
   } = useGetTopProfilesQuery({ ids: [strangerId] });
 
-  const [, setIsModalShown] = useState(false);
-
   const streaks = data?.week_information.filter(day => day.push_line_data?.status === 'passed').length;
-
-  useEffect(() => {
-    if (!sessionStorage.getItem('daysInARowModalShown')) {
-      openModal(MODALS.DAYS_IN_A_ROW);
-      sessionStorage.setItem('daysInARowModalShown', 'true');
-      setIsModalShown(true);
-    }
-  }, [openModal]);
 
   useEffect(() => {
     if (streaks === 30 || streaks === 60 || streaks === 120) {
@@ -160,9 +147,10 @@ export const StrangerProfilePage: React.FC = () => {
           </div>
 
           <ProfileStats
-            favoriteCompany={'Favourite company'}
+            favoriteCompany={userProfileData.favorite_company}
             comments={userProfileData.comments_answered_correctly}
             rewards={userProfileData.achievements_collected}
+            views={userProfileData.total_views}
           />
           {topProfilesData.profiles?.[0]?.achievements.length > 0 && (
             <div className={styles.achivements}>

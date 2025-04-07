@@ -118,11 +118,6 @@ export const MainPage: FC = () => {
   }, [itemsData, isInventoryDataLoading, typewriterFound, profileData, isCurrentUserProfileInfoLoading]);
 
   useEffect(() => {
-    console.log('FETCHING PROFILE')
-  }, [profileData, isCurrentUserProfileInfoLoading]);
-
-
-  useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
       if (data?.count > 2) {
         Object.values(GUIDE_ITEMS).forEach(category => {
@@ -309,7 +304,7 @@ export const MainPage: FC = () => {
       !getModalState(MODALS.DAYS_IN_A_ROW).isOpen &&
       !getModalState(MODALS.DAYS_IN_A_ROW).isOpen
     ) {
-      openModal(MODALS.DAYS_IN_A_ROW);
+      //openModal(MODALS.DAYS_IN_A_ROW);
     }
   }, []);
 
@@ -320,11 +315,11 @@ export const MainPage: FC = () => {
   // const isIntegrationReadyForPublishing = !useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
   const isPublishedModalClosed = useSelector((state: RootState) => state.guide.isPublishedModalClosed);
 
-  const firstIntegrationReadyToPublish = useSelector((state: RootState) => state.guide.integrationReadyForPublishing);
+  const firstIntegrationReadyToPublish = useSelector((state: RootState) => state.guide.firstIntegrationReadyToPublish);
 
   useEffect(() => {
     if (isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
-      openModal(MODALS.DAYS_IN_A_ROW);
+      //openModal(MODALS.DAYS_IN_A_ROW);
     }
   }, [isPublishedModalClosed, isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)]);
 
@@ -347,9 +342,9 @@ export const MainPage: FC = () => {
     }
   }, [treeData]);
 
-  const { data: creatingIntegrations, isLoading: isCreatingIntegrationsLoading } = useGetIntegrationsQuery(
-    { status: 'creating' },
-  );
+  const { data: creatingIntegrations, isLoading: isCreatingIntegrationsLoading } = useGetIntegrationsQuery({
+    status: 'creating',
+  });
 
   const isCreatingIntegration = creatingIntegrations && creatingIntegrations.count > 0;
 
@@ -367,7 +362,7 @@ export const MainPage: FC = () => {
 
   const accelerateIntegration = () => {
     console.log('_acceleration');
-    if (integrationCurrentlyCreating || firstIntegrationReadyToPublish) {
+    if (integrationCurrentlyCreating || firstIntegrationCreating || hasCreatingIntegrations) {
       reduxDispatch(incrementAcceleration());
     }
   };
@@ -382,10 +377,13 @@ export const MainPage: FC = () => {
             eventPlace: 'mainPage tree reward',
           }}
         >
-          <Lottie animationData={giftShake} className={clsx(s.treeReward, {[s.up]: isCreatingIntegration})} />
+          <Lottie
+            style={integrationCurrentlyCreating ? { marginBottom: '45px', zIndex: '1001' } : { zIndex: '1001' }}
+            animationData={giftShake}
+            className={clsx(s.treeReward, { [s.up]: isCreatingIntegration })}
+          />
         </TrackedLink>
       )}
-
       <DaysInARowModal
         onClose={() => {
           if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
@@ -393,35 +391,42 @@ export const MainPage: FC = () => {
           }
         }}
       />
-
-      {(integrationCurrentlyCreating || firstIntegrationReadyToPublish) && (
+      {(integrationCurrentlyCreating || firstIntegrationCreating || hasCreatingIntegrations) && (
         <div
           style={{
             position: 'absolute',
-            top: '0',
-            zIndex: '15000',
-            height: '70%',
+            bottom: '0',
+            left: '0',
+            zIndex: '1000',
+            height: '100vh',
             width: '100%',
-            backgroundColor: 'transparent',
+            background: 'transparent',
           }}
           onClick={accelerateIntegration}
         />
       )}
-
       <Room mode="me" setIsRoomLoaded={setIsRoomLoaded} />
-
-      {isRoomLoaded && (hasCreatingIntegrations && !firstIntegrationReadyToPublish ? (
-        <IntegrationCreation />
-      ) : (
-        <PublishIntegrationButton />
-      ))}
-
+      {isRoomLoaded &&
+        (hasCreatingIntegrations && !firstIntegrationReadyToPublish ? (
+          <IntegrationCreation />
+        ) : (
+          <>
+            <DaysInARowModal
+              onClose={() => {
+                if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+                  closeModal(MODALS.DAYS_IN_A_ROW);
+                }
+              }}
+            />
+            <PublishIntegrationButton />
+          </>
+        ))}
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && !getModalState(MODALS.SUBSCRIBE).isOpen) ||
+        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) &&
+        !getModalState(MODALS.SUBSCRIBE).isOpen) ||
         (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
           !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED)) ||
-        (firstIntegrationCreating &&
-          !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED))) && (
+        firstIntegrationCreating) && (
         <div
           style={{
             position: 'absolute',
@@ -435,14 +440,12 @@ export const MainPage: FC = () => {
           }}
         />
       )}
-
       <InitialGuide
         onClose={() => {
           setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
           setRerender(prev => prev + 1);
         }}
       />
-
       <SubscrieGuide
         onClose={() => {
           setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
@@ -461,7 +464,6 @@ export const MainPage: FC = () => {
           </>
         }
       />
-
       {!isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
         isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && (
           <GetCoinsGuide
@@ -476,7 +478,6 @@ export const MainPage: FC = () => {
             }}
           />
         )}
-
       {firstIntegrationCreating &&
         !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED) && (
           <AccelerateIntegtrationGuide
@@ -487,7 +488,6 @@ export const MainPage: FC = () => {
             }}
           />
         )}
-
       {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (
           <FinishTutorialGuide
@@ -498,7 +498,6 @@ export const MainPage: FC = () => {
             }}
           />
         )}
-
       <RewardForIntegrationModal />
       {/* Награда с указанием медали и количества интеграций с определенной компанией */}
       <IntegrationRewardModal />

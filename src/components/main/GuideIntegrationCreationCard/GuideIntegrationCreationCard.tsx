@@ -36,6 +36,9 @@ export const UserGuideCreationCard: FC = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [playAccelerateSound] = useSound(SOUNDS.speedUp, { volume: useSelector(selectVolume) });
 
+  const [isCreatingIntegration, setIsCreatingIntegration] = useState(false);
+
+
   const accelerationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [createIntegration] = useCreateIntegrationMutation();
@@ -51,7 +54,7 @@ export const UserGuideCreationCard: FC = () => {
   useEffect(() => {
     if (acceleration != reduxAcceleration) {
       handleAccelerateClick();
-      setAcceleration(reduxAcceleration + 20);
+      setAcceleration(reduxAcceleration);
     }
   }, [reduxAcceleration]);
 
@@ -68,8 +71,11 @@ export const UserGuideCreationCard: FC = () => {
           const newTime = prevTime <= 10 && prevTime > 0 ? prevTime : Math.max(prevTime - 1, 0);
           if (newTime <= 10 && newTime > 0) setIsPaused(true);
           if (newTime === 0) {
+            setIsCreatingIntegration(true);
+            
             dispatch(setIsWorking(false));
             clearInterval(timerId);
+            
 
             if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED)) {
               setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED);
@@ -80,6 +86,7 @@ export const UserGuideCreationCard: FC = () => {
                     updateTimeLeft({ integrationId: response.id, timeLeftDelta: 36000 })
                       .unwrap()
                       .then(() => {
+                        setGuideShown(GUIDE_ITEMS.creatingIntegration.FIRST_INTEGRATION_CREATED);
                         dispatch(setFirstIntegrationReadyToPublish(true));
                         localStorage.setItem('FIRST_INTEGRATION_READY_TO_PUBLISH', '1');
                         dispatch(setFirstIntegrationId(response.id));
@@ -91,6 +98,7 @@ export const UserGuideCreationCard: FC = () => {
                         dispatch(integrationsApi.util.invalidateTags(['Integrations']));
                         dispatch(profileApi.util.invalidateTags(['Me']));
                         setIsExpired(true);
+                        setIsCreatingIntegration(false);
                       });
                   }
                 });
@@ -165,16 +173,19 @@ export const UserGuideCreationCard: FC = () => {
       </div>
       <div className={s.body}>
         <div className={s.info}>
-          <div className={s.infoHeader}>
+          {!isCreatingIntegration && <div className={s.infoHeader}>
             <span>{t('i11')}...</span>
             <span>
               {' '}
               {t('i12')} {formatTime(timeLeft)}
             </span>
-          </div>
-          <div className={s.progressBar} style={{ border: hasBorder ? '1px solid #2064C0' : 'none' }}>
+          </div>}
+          
+          {!isCreatingIntegration && <div className={s.progressBar} style={{ border: hasBorder ? '1px solid #2064C0' : 'none' }}>
             <div className={s.progressBarInner} style={{ width: `${progress}%` }} />
-          </div>
+          </div>}
+
+          {isCreatingIntegration && <span>{t('i35')}</span>}
         </div>
         <TrackedButton
           trackingData={{

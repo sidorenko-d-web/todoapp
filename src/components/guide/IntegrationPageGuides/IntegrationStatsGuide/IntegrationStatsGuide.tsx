@@ -34,7 +34,7 @@ export const IntegrationStatsGuide: React.FC<IntegrationStatsGuideProps> = ({ on
     <>
       <Guide align="right"
         noButton={true}
-        zIndex={110}
+        zIndex={100002}
         top={'56%'}
         description={
           <>
@@ -56,7 +56,7 @@ export const IntegrationStatsGuide: React.FC<IntegrationStatsGuideProps> = ({ on
         transform: 'translateX(-50%)',
         width: '90vw',
         display: 'flex',
-        zIndex: '10000',
+        zIndex: '100002',
 
         justifyContent: 'center'
       }}>

@@ -12,12 +12,6 @@ export interface IShopItem {
   image_url: string;
   item_premium_level: TypeItemQuality;
   is_bought: boolean;
-  chest: {
-    id: string,
-    chest_name: string,
-    chest_name_eng: string,
-    chest_image_url: null | string
-  };
 }
 
 export interface IShopItemsResponse {
@@ -44,7 +38,7 @@ export interface IShopSkinsResponse {
 }
 
 export type TypeWearLocation = 'head' | 'face' | 'upper_body' | 'legs' | 'skin_color' | 'entire_body';
-export type TypeItemCategory = 'text' | 'image' | 'video' | 'decor';
+export type TypeItemCategory = 'text' | 'image' | 'video' | 'decor' | 'you';
 export type TypeItemQuality = 'base' | 'advanced' | 'pro';
 export type TypeItemRarity = 'red' | 'yellow' | 'green';
 
@@ -85,7 +79,7 @@ export type Reward_range = {
   subscribers: number[];
   freezes: number[];
   subscriptions: number[];
-}
+};
 
 export type Chest = {
   id: string;
@@ -95,7 +89,7 @@ export type Chest = {
   days_in_streak_list: number[];
   item_levels_to_give: number[];
   chest_image_url: string;
-}
+};
 
 export type UpgradeItemResponse = {
   name: string;
@@ -111,14 +105,13 @@ export type UpgradeItemResponse = {
   is_reward_given: boolean;
   name_eng: string;
   id: string;
-  chest: Chest;
-}
+};
 
 export interface IBuyItemRequest {
   payment_method: 'internal_wallet' | 'usdt';
   id: string;
-  transaction_id?: string
-  sender_address?: string
+  transaction_id?: string;
+  sender_address?: string;
 }
 
 export interface IAchievementBoost {

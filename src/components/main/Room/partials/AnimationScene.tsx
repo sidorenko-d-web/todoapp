@@ -23,13 +23,15 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
   const sceneRef = useRef<HTMLDivElement | null>(null);
   const spineSceneRef = useRef<SpineSceneBase | null>(null);
 
-  const [ size, setSize ] = useState([ 0, 0 ]);
+  const [size, setSize] = useState([0, 0]);
   const isWorking = useSelector(selectIsWorking);
   const isNeedToPlayHappy = useSelector(selectIsNeedToPlayHappy);
 
   const dispatch = useDispatch();
 
   const dpi = window.devicePixelRatio ?? 1;
+
+  const sleep = (m: number) => new Promise(r => setTimeout(r, m));
 
   useEffect(() => {
     if (!sceneRef.current || character?.isLoading) return;
@@ -38,46 +40,51 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
 
     class SpineScene extends SpineSceneBase {
       preload() {
-        if (!(sceneRef.current && gameRef.current)) return;
+        if (typeof this.add.spine !== 'function') {
+          sleep(1000);
+          setSize(prev => [prev[0] + 1, prev[1]]);
+        } else {
+          if (!(sceneRef.current && gameRef.current)) return;
 
-        this.loadPerson();
+          this.loadPerson();
 
-        // Разделение загрузки анимированных и статичных предметов
-        room?.items.forEach(item => {
-          if (findAnimatedItem(item)) {
-            this.loadAnimatedItem(item);
-          } else {
-            this.loadSvgItem(item, contextProps);
-          }
-        });
+          // Разделение загрузки анимированных и статичных предметов
+          room?.items.forEach(item => {
+            if (findAnimatedItem(item)) {
+              this.loadAnimatedItem(item);
+              sleep(100)
+            } else {
+              this.loadSvgItem(item, contextProps);
+              sleep(100)
+            }
+          });
 
-        this.loadBaseItems();
+          this.loadBaseItems();
+        }
       }
 
       create() {
-        try {
+        if (typeof this.add.spine !== 'function') {
+          sleep(1000);
+          setSize(prev => [prev[0] + 1, prev[1]]);
+        } else {
           this.createPerson(contextProps, isWorking);
-        } catch (error: any) {
-          if (error.message === 'add.spine') {
-            console.log('avoid err');
-            setSize(prev => [ prev[0] + 1, prev[1] ]);
-          }
+          // Разделение создания анимированных и статичных предметов
+          room?.items.forEach(async (item, i) => {
+            const animatedItem = findAnimatedItem(item);
+            if (animatedItem) {
+              this.createAnimatedItem(item, i, animatedItem, contextProps);
+            } else {
+              this.createSVGItem(item, i, contextProps);
+            }
+          });
+
+          this.createBaseItems(contextProps);
+
+          spineSceneRef.current = this;
+          this.changeSkin()
+          setIsLoaded(true)
         }
-        // Разделение создания анимированных и статичных предметов
-        room?.items.forEach(async (item, i) => {
-          const animatedItem = findAnimatedItem(item);
-          if (animatedItem) {
-            this.createAnimatedItem(item, i, animatedItem, contextProps);
-          } else {
-            this.createSVGItem(item, i, contextProps);
-          }
-        });
-
-        this.createBaseItems(contextProps);
-
-        spineSceneRef.current = this;
-        this.changeSkin();
-        setTimeout(() => setIsLoaded(true), 5000);
       }
 
       changeSkin() {
@@ -106,11 +113,11 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
       width: window.innerWidth * window.devicePixelRatio,
       height: window.innerHeight * window.devicePixelRatio,
       transparent: true,
-      scene: [ SpineScene ],
+      scene: [SpineScene],
       canvasStyle: `width: ${window.innerWidth}px; height: ${window.innerHeight}px`,
       autoRound: false, // Отключаем округление размеров
       plugins: {
-        scene: [ { key: 'player', plugin: SpinePlugin, mapping: 'spine' } ],
+        scene: [{ key: 'player', plugin: SpinePlugin, mapping: 'spine' }],
       },
       parent: 'player',
       render: {
@@ -130,13 +137,13 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
         spineSceneRef.current = null;
       }
     };
-  }, [ sceneRef, size, character?.isLoading ]);
+  }, [!!sceneRef, size[0], character?.isLoading]);
 
   const getSkin = useCallback(
     (wear_location: TypeWearLocation) => {
       return character?.data?.skins.find(item => item.wear_location === wear_location)?.name.toLowerCase();
     },
-    [ character?.data ],
+    [character?.data],
   );
 
   const findAnimatedItem = useCallback((item: IShopItem) => {
@@ -148,7 +155,7 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
   useEffect(() => {
     if (!spineSceneRef.current) return;
     spineSceneRef.current?.setCurrentLoopedAnimation(isWorking);
-  }, [ isWorking ]);
+  }, [isWorking]);
 
   useEffect(() => {
     if (!spineSceneRef.current) return;
@@ -159,7 +166,7 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
         if (isNeedToPlayHappy) spineSceneRef.current?.setIdle();
       }, 4000);
     }
-  }, [ isNeedToPlayHappy, dispatch ]);
+  }, [isNeedToPlayHappy, dispatch]);
 
   return (
     <>

@@ -68,8 +68,8 @@ export const animated = [
 export const baseItems = [
   { name: 'broken-sofa', slot: 4, width: 150, height: 150, x: 60, y: 320, z: 0 },
   { name: 'chair', slot: 3, width: 46, height: 46, x: -52, y: 422, z: 2 },
-  { name: 'table', slot: 2, width: 140, height: 140, x: -6, y: 442, z: 3 },
-  { name: 'window', slot: 5, width: 70, height: 90, x: -125, y: 260, z: 0 },
+  { name: 'table', slot: 2, width: 150, height: 150, x: -6, y: 442, z: 3 },
+  { name: 'window', slot: 5, width: 120, height: 120, x: -125, y: 260, z: 0 },
   { name: 'vase', slot: 19, width: 70, height: 70, x: -120, y: 485, z: 0 },
 ];
 
@@ -96,15 +96,15 @@ export class SpineSceneBase extends Phaser.Scene {
 
   //helpers for scene loading
   loadPerson() {
-    this.load.spineJson('personJson', createLink('pers_izometria', 'json'));
-    this.load.spineAtlas('personAtlas', createLink('pers_izometria', 'atlas'));
+    this.load.spineJson('personJson', this.createLink('pers_izometria', 'json'));
+    this.load.spineAtlas('personAtlas', this.createLink('pers_izometria', 'atlas'));
   }
 
   loadAnimatedItem(item: IShopItem) {
     const name = (item.name === 'ПК' ? 'Компьютер' : item.name).toLowerCase().replace(' ', '_').replace('й', 'н');
 
-    this.load.spineJson('json' + item.id, createLink(`${name}_${item.item_premium_level}`, 'json'));
-    this.load.spineAtlas('atlas' + item.id, createLink(`${name}_${item.item_premium_level}`, 'atlas'));
+    this.load.spineJson('json' + item.id, this.createLink(`${name}_${item.item_premium_level}`, 'json'));
+    this.load.spineAtlas('atlas' + item.id, this.createLink(`${name}_${item.item_premium_level}`, 'atlas'));
   }
 
   loadSvgItem(item: IShopItem, { equipped_items }: Pick<contextProps, 'equipped_items'>) {
@@ -112,12 +112,12 @@ export class SpineSceneBase extends Phaser.Scene {
     const { width, height } = itemsInSlots[slot];
 
     if ('Постер в рамке' === item.name) {
-      this.load.svg('item' + item.id, createLink(`${item.name}${item.item_premium_level}`, 'base'), {
+      this.load.svg('item' + item.id, this.createLink(`${item.name}${item.item_premium_level}`, 'base'), {
         width: (width + 50) * dpi,
         height: (height + 50) * dpi,
       });
     } else if ('Картина LED' === item.name) {
-      this.load.svg('item' + item.id, createLink(`Картины LED${item.item_premium_level}`, 'base'), {
+      this.load.svg('item' + item.id, this.createLink(`Картины LED${item.item_premium_level}`, 'base'), {
         width: (width + 50) * dpi,
         height: (height + 50) * dpi,
       });
@@ -141,14 +141,17 @@ export class SpineSceneBase extends Phaser.Scene {
 
   loadBaseItems() {
     baseItems.forEach(item => {
-      this.load.image(item.name, createLink(item.name, 'base'));
+      this.load.svg(item.name, this.createLink(item.name, 'base'), {
+        width: item.width * dpi,
+        height: item.height * dpi,
+      });
     });
   }
 
   //helpers for scene creation
-  createPerson({ center }: Pick<contextProps, 'center'>, isWorking: boolean) {
+  createPerson({ center }: Pick<contextProps, 'center'>, isWorking: boolean, height?: number) {
     if (!this.add.spine) throw new Error('add.spine');
-    this.person = this.add.spine(center - 40 * dpi, 437 * dpi, 'personJson', 'personAtlas');
+    this.person = this.add.spine(center - 40 * dpi, (height ?? 437) * dpi, 'personJson', 'personAtlas');
     this.person.scale = 0.07 * dpi;
     this.person.setDepth(3);
     this.person.animationState.data.defaultMix = 0.1;
@@ -211,8 +214,6 @@ export class SpineSceneBase extends Phaser.Scene {
       if (!slots?.includes(item.slot)) {
         const added = this.add.image(center + item.x * dpi, (item.y + 50) * dpi, item.name);
         added.setDepth(item.z);
-        added.displayWidth = item.width * dpi;
-        added.displayHeight = item.height * dpi;
         this.objects?.push(added);
       }
     });
@@ -236,19 +237,18 @@ export class SpineSceneBase extends Phaser.Scene {
     if (!this.person) return;
     this.person?.animationState.setAnimation(0, PersonAnimations.idle, true);
   }
+  createLink(itemString: string, type: 'json' | 'atlas' | 'json1' | 'atlas1' | 'base' | 'png') {
+    let string: string = '';
+    if (type === 'json') string = new URL(itemsBaseUrl + itemString + '.json').href;
+    else if (type === 'atlas') string = new URL(itemsBaseUrl + itemString + 'atlas.txt').href;
+    else if (type === 'json1') string = new URL(itemsBaseUrl + itemString + '1.json').href;
+    else if (type === 'atlas1') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
+    else if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
+    else if (type === 'png') string = new URL(itemsBaseUrl + itemString + '.png').href;
+
+    return proxyImageUrl(string);
+  }
 }
-
-const createLink = (itemString: string, type: 'json' | 'atlas' | 'json1' | 'atlas1' | 'base' | 'png') => {
-  let string: string = '';
-  if (type === 'json') string = new URL(itemsBaseUrl + itemString + '.json').href;
-  else if (type === 'atlas') string = new URL(itemsBaseUrl + itemString + 'atlas.txt').href;
-  else if (type === 'json1') string = new URL(itemsBaseUrl + itemString + '1.json').href;
-  else if (type === 'atlas1') string = new URL(itemsBaseUrl + itemString + 'atlas1.txt').href;
-  else if (type === 'base') string = new URL(itemsBaseUrl + itemString + '.svg').href;
-  else if (type === 'png') string = new URL(itemsBaseUrl + itemString + '.png').href;
-
-  return proxyImageUrl(string);
-};
 
 export enum PersonAnimations {
   idle = '2 idle (основа)',

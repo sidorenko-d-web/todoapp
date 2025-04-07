@@ -2,10 +2,10 @@ import { FC, useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
-import { IntegrationResponseDTO, integrationsApi, selectVolume, setIsWorking } from '../../../redux';
+import { IntegrationResponseDTO, integrationsApi, RootState, selectVolume, setIsWorking } from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
-import { useAccelerateIntegration } from '../../../hooks';
-import { SOUNDS } from '../../../constants';
+import { useAccelerateIntegration, useModal } from '../../../hooks';
+import { MODALS, SOUNDS } from '../../../constants';
 import { setIntegrationReadyForPublishing, setLastIntegrationId } from '../../../redux';
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
@@ -28,6 +28,16 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const accelerationRef = useRef(false);
   const lastUpdateRef = useRef(Date.now());
+
+  const reduxAcceleration = useSelector((state: RootState) => state.acceleration.acceleration);
+  const [acceleration, setAcceleration] = useState(0);
+
+  useEffect(() => {
+    if (acceleration != reduxAcceleration) {
+      handleAccelerateClick();
+      setAcceleration(reduxAcceleration);
+    }
+  }, [reduxAcceleration]);
 
   const getValidatedTimeLeft = useCallback(() => {
     const savedIntegrationId = localStorage.getItem(INTEGRATION_ID_KEY);
@@ -116,6 +126,11 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     };
   }, [integration.id, initialTimeLeft, dispatch]);
 
+  const { closeModal } = useModal();
+  useEffect(() => {
+    closeModal(MODALS.CREATING_INTEGRATION);
+  }, []);
+
   useEffect(() => {
     if (timeLeft <= 0 && !isExpired) {
       setIsExpired(true);
@@ -156,7 +171,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     playAccelerateIntegrationSound();
     dispatch(setLastIntegrationId(integration.id));
 
-    void accelerateIntegration(100).finally(() => {
+    void accelerateIntegration(1).finally(() => {
       refetchIntegration();
     });
 
@@ -166,7 +181,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     const timeoutId = setTimeout(() => {
       setIsAccelerated(false);
       accelerationRef.current = false;
-    }, 2000);
+    }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [isExpired, playAccelerateIntegrationSound, dispatch, integration.id, accelerateIntegration, refetchIntegration]);

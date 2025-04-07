@@ -1,5 +1,5 @@
 import styles from './Footer.module.scss';
-import { AppRoute, footerItems, GUIDE_ITEMS, MODALS } from '../../constants';
+import { footerItems, GUIDE_ITEMS, MODALS } from '../../constants';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -14,15 +14,16 @@ export const Footer = () => {
   const [activeButton, setActiveButton] = useState<number>(-1);
   const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
-  const [hasInitialized, setHasInitialized] = useState<boolean>(false);
 
   const footerItemId = useSelector((state: RootState) => state.guide.activeFooterItemId);
 
   useEffect(() => {
+    console.log('setting item id')
     setActiveButton(footerItemId);
   }, [footerItemId]);
 
   useEffect(() => {
+    console.log('location changed')
     if (location.pathname === '/progressTree' || location.pathname === '/wardrobe') {
       setActiveButton(-1);
     }
@@ -31,16 +32,24 @@ export const Footer = () => {
       setActiveButton(0);
     }
 
-    if (location.pathname === '/shop' || location.pathname === 'shop/inventory') {
-      setActiveButton(1);
-    }
-
     if (location.pathname.includes('integration')) {
       setActiveButton(2);
     }
 
     if (location.pathname === '/') {
       setActiveButton(3);
+    }
+
+    if(location.pathname.includes('shop') || location.pathname.includes('inventory')) {
+      setActiveButton(1);
+    }
+
+    if(location.pathname.includes('promotion')) {
+      setActiveButton(4);
+    }
+
+    if(location.pathname.includes('tasks')) {
+      setActiveButton(5);
     }
   }, [location.pathname]);
 
@@ -51,15 +60,6 @@ export const Footer = () => {
     }
   };
 
-  useEffect(() => {
-    if (!hasInitialized && isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
-      const mainItem = footerItems.find(item => item.redirectTo === AppRoute.Main);
-      if (mainItem) {
-        handleFooterItemClick(mainItem.id, mainItem.redirectTo);
-        setHasInitialized(true);
-      }
-    }
-  }, [hasInitialized, isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)]);
 
   const dim = useSelector((state: RootState) => state.guide.dimHeader);
 
@@ -88,7 +88,7 @@ export const Footer = () => {
     (isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE) &&
       !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED));
 
-  const notDarken = integrationCurrentlyCreating && accelerateGuideShown;
+  const notDarken = integrationCurrentlyCreating && accelerateGuideShown || getModalState(MODALS.SUBSCRIBE).isOpen;;
 
   return (
     <div
