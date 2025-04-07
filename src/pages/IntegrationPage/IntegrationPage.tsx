@@ -38,10 +38,10 @@ export const IntegrationPage: React.FC = () => {
     skip: !queryIntegrationId && queryIntegrationId === 'undefined',
   });
 
-  const [ _, setRerender ] = useState(0);
-  const [ localProgress, setLocalProgress ] = useState(0);
-  const [ localCommentsGenerated, setLocalCommentsGenerated ] = useState(0);
-  const [ isEndComment, setIsEndComment ] = useState(false);
+  const [_, setRerender] = useState(0);
+  const [localProgress, setLocalProgress] = useState(0);
+  const [localCommentsGenerated, setLocalCommentsGenerated] = useState(0);
+  const [isEndComment, setIsEndComment] = useState(false);
 
   const integrationId =
     queryIntegrationId !== 'undefined'
@@ -62,7 +62,7 @@ export const IntegrationPage: React.FC = () => {
     if (data) {
       setLocalCommentsGenerated(data.comments_answered_correctly);
     }
-  }, [ data ]);
+  }, [data]);
 
   useEffect(() => {
     if (!data) return;
@@ -71,7 +71,7 @@ export const IntegrationPage: React.FC = () => {
     }, 5 * 60 * 1000); // 5 minutes
 
     return () => clearInterval(refetchInterval);
-  }, [ data, refetchCurrentIntegration ]);
+  }, [data, refetchCurrentIntegration]);
 
   const {
     data: commentData,
@@ -81,14 +81,14 @@ export const IntegrationPage: React.FC = () => {
     refetchOnMountOrArgChange: true,
   });
 
-  const [ postComment ] = usePostCommentIntegrationsMutation();
+  const [postComment] = usePostCommentIntegrationsMutation();
 
-  const [ currentCommentIndex, setCurrentCommentIndex ] = useState<number>(0);
-  const [ isVoting, setIsVoting ] = useState(false);
+  const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
+  const [isVoting, setIsVoting] = useState(false);
 
-  const comments = commentData ? (Array.isArray(commentData) ? commentData : [ commentData ]) : [];
+  const comments = commentData ? (Array.isArray(commentData) ? commentData : [commentData]) : [];
 
-  const [ showGuide, setShowGuide ] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -102,7 +102,7 @@ export const IntegrationPage: React.FC = () => {
     if (data && !isUnansweredIntegrationCommentLoading && !isEndComment) {
       setIsEndComment(comments.length === 0);
     }
-  }, [ data, comments, isUnansweredIntegrationCommentLoading ]);
+  }, [data, comments, isUnansweredIntegrationCommentLoading]);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     if (isVoting) return;
@@ -155,7 +155,7 @@ export const IntegrationPage: React.FC = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [ data, isIntegrationLoading ]);
+  }, [data, isIntegrationLoading]);
 
   const isLoading = isIntegrationLoading || isUnansweredIntegrationCommentLoading;
 
@@ -175,7 +175,7 @@ export const IntegrationPage: React.FC = () => {
           <div className={styles.container}>
             <div className={styles.integrationNameWrp}>
               <p className={styles.integrationTitle}>
-                {t('i1')} {data.number}
+                {t('i10')} {data.number}
               </p>
               <div className={styles.integrationLevelWrp}>
                 <p className={styles.integrationLevel}>{data.campaign.company_name}</p>

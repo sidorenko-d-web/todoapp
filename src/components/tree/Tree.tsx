@@ -1,4 +1,4 @@
-import { CSSProperties, memo, useRef, useState } from 'react';
+import { CSSProperties, memo, useState } from 'react';
 import s from './Tree.module.scss';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
@@ -26,7 +26,6 @@ import { GUIDE_ITEMS, MODALS } from '../../constants';
 import GetGift from '../../pages/DevModals/GetGift/GetGift';
 import { Loader } from '../Loader';
 import { useOutletContext } from 'react-router-dom';
-import { useTreeProgress } from '../../hooks/useTreeProgress';
 import { isGuideShown } from '../../utils';
 
 import { FixedSizeList as List } from 'react-window';
@@ -44,15 +43,7 @@ export const Tree = () => {
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
   const isGuide = !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
-  const userSubscribers = userProfileData?.subscribers || 0;
-
-  const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
-
   const [unlockAchievement] = useUnlockAchievementMutation();
-  const { progressPercent } = useTreeProgress({
-    treeData,
-    userSubscribers,
-  });
 
   if (!treeData || !isBgLoaded || !userProfileData) {
     return (
