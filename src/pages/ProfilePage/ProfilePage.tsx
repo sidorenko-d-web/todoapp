@@ -193,7 +193,7 @@ export const ProfilePage: React.FC = () => {
               favoriteCompany={userProfileData.favorite_company}
               comments={userProfileData.comments_answered_correctly}
               rewards={userProfileData.achievements_collected}
-              views={userProfileData.total_views}
+              views={userProfileData.total_views || 0}
             />
           </div>
 

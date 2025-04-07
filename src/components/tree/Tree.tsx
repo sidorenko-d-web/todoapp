@@ -46,13 +46,7 @@ export const Tree = () => {
 
   const userSubscribers = userProfileData?.subscribers || 0;
 
-  const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
-
   const [unlockAchievement] = useUnlockAchievementMutation();
-  const { progressPercent } = useTreeProgress({
-    treeData,
-    userSubscribers,
-  });
 
   if (!treeData || !isBgLoaded || !userProfileData) {
     return (

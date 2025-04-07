@@ -93,7 +93,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
     onItemQualityChange(itemsQuality as TypeTab<TypeItemRarity>);
     dispatch(setLastOpenedRarity(itemsQuality));
-  }, [shopCategory.value, itemsQuality.value]);
+  }, [itemsQuality.value]);
 
   useEffect(() => {
     if (selectedIntegrationCategory) {
