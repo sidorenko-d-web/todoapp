@@ -53,15 +53,6 @@ export const Integration: React.FC<props> = ({ compaignImage }) => {
             this.load.svg('desc', this.createLink('table', 'base'), { width: 190 * dpi, height: 190 * dpi });
           }
 
-          const equippedChair = room?.items.find(item => chair.name.includes(item.name));
-          if (equippedChair) {
-            this.load.svg('chair', buildLink()?.svgLink(equippedChair.image_url), {
-              width: 150 * dpi,
-              height: 150 * dpi,
-            });
-          } else {
-            this.load.svg('chair', this.createLink('chair', 'base'), { width: 80 * dpi, height: 80 * dpi });
-          }
           const equippedPc = room?.items.find(item => pc.name.includes(item.name));
           if (equippedPc) {
             this.load.svg('pc', buildLink()?.svgLink(equippedPc.image_url), { width: 80 * dpi, height: 80 * dpi });
@@ -74,23 +65,16 @@ export const Integration: React.FC<props> = ({ compaignImage }) => {
           sleep(500);
           setSize(prev => [prev[0] + 1, prev[1]]);
         } else {
-          this.createPerson(contextProps, true, 105);
+          this.createPerson(contextProps, true, 110);
           if (this.person) {
             this.person.scale = 0.09 * dpi;
           }
 
           const center = ((window.innerWidth - 30) * dpi) / 2;
           const desc = this.add.image(center - 10, 180 * dpi, 'desc');
-          let _chair;
-          if (room?.items.find(item => chair.name.includes(item.name))) {
-            _chair = this.add.image(center - 55 * dpi, 140 * dpi, 'chair');
-          } else {
-            _chair = this.add.image(center - 110 * dpi, 160 * dpi, 'chair');
-          }
           const pc = this.add.image(center - 20 * dpi, 135 * dpi, 'pc');
 
           desc.setDepth(3);
-          _chair.setDepth(1);
           pc.setDepth(4);
 
           this.person?.setDepth(2);

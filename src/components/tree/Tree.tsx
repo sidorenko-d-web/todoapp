@@ -1,5 +1,4 @@
 import { CSSProperties, memo, useState } from 'react';
-import { CSSProperties, memo, useState } from 'react';
 import s from './Tree.module.scss';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
