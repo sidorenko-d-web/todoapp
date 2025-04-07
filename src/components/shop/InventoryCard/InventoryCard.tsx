@@ -86,6 +86,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
     item_rarity: item.item_rarity,
+    item_premium_level: "base"
   });
   const { data: itemsForImages } = useGetShopItemsQuery({
     name: item.name,
@@ -94,6 +95,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
   });
   const [showEquipButton, setShowEquipButton] = useState(false);
 
+  console.warn("Data:", data);
   const dispatch = useDispatch();
 
   const [price, setPrice] = useState('');

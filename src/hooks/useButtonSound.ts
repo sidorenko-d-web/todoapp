@@ -24,10 +24,8 @@ export const useButtonSound = (options: UseButtonSoundOptions = {}) => {
   } = options;
   
   const buttonVolume = useSelector(selectButtonVolume);
-  
   // Используем звук только если он включен в настройках (buttonVolume > 0) и передан флаг enabled
   const effectiveVolume = buttonVolume > 0 && enabled ? buttonVolume * volumeMultiplier : 0;
-  
   const [playSound] = useSound(SOUNDS[sound], {
     volume: effectiveVolume
   });
