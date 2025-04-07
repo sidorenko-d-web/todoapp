@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getCurrentFooterItem, isGuideShown } from "../../utils";
+import { isGuideShown } from "../../utils";
 import { GUIDE_ITEMS } from "../../constants";
 
 interface GuideState {
@@ -61,7 +61,7 @@ const initialState: GuideState = {
   elevateIntegrationStats: !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
   lastIntegrationId: "",
   footerActive: isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN),
-  activeFooterItemId: getCurrentFooterItem(),
+  activeFooterItemId: 3,
 
   dimHeader: false,
 
