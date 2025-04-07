@@ -23,9 +23,11 @@ import {
 import integrationIcon from '../../assets/icons/integration-icon.svg';
 import { useParams } from 'react-router-dom';
 import { isGuideShown, setGuideShown } from '../../utils';
-import { GUIDE_ITEMS } from '../../constants';
+import { GUIDE_ITEMS, MODALS } from '../../constants';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useModal } from '../../hooks';
+import GetRewardModal from '../DevModals/GetRewardModal/GetRewardModal';
 
 export const IntegrationPage: React.FC = () => {
   const { t } = useTranslation('integrations');
@@ -36,10 +38,10 @@ export const IntegrationPage: React.FC = () => {
     skip: !queryIntegrationId && queryIntegrationId === 'undefined',
   });
 
-  const [_, setRerender] = useState(0);
-  const [localProgress, setLocalProgress] = useState(0);
-  const [localCommentsGenerated, setLocalCommentsGenerated] = useState(0);
-  const [isEndComment, setIsEndComment] = useState(false);
+  const [ _, setRerender ] = useState(0);
+  const [ localProgress, setLocalProgress ] = useState(0);
+  const [ localCommentsGenerated, setLocalCommentsGenerated ] = useState(0);
+  const [ isEndComment, setIsEndComment ] = useState(false);
 
   const integrationId =
     queryIntegrationId !== 'undefined'
@@ -60,7 +62,7 @@ export const IntegrationPage: React.FC = () => {
     if (data) {
       setLocalCommentsGenerated(data.comments_answered_correctly);
     }
-  }, [data]);
+  }, [ data ]);
 
   useEffect(() => {
     if (!data) return;
@@ -69,7 +71,7 @@ export const IntegrationPage: React.FC = () => {
     }, 5 * 60 * 1000); // 5 minutes
 
     return () => clearInterval(refetchInterval);
-  }, [data, refetchCurrentIntegration]);
+  }, [ data, refetchCurrentIntegration ]);
 
   const {
     data: commentData,
@@ -79,16 +81,18 @@ export const IntegrationPage: React.FC = () => {
     refetchOnMountOrArgChange: true,
   });
 
-  const [postComment] = usePostCommentIntegrationsMutation();
+  const [ postComment ] = usePostCommentIntegrationsMutation();
 
-  const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
-  const [isVoting, setIsVoting] = useState(false);
+  const [ currentCommentIndex, setCurrentCommentIndex ] = useState<number>(0);
+  const [ isVoting, setIsVoting ] = useState(false);
 
-  const comments = commentData ? (Array.isArray(commentData) ? commentData : [commentData]) : [];
+  const comments = commentData ? (Array.isArray(commentData) ? commentData : [ commentData ]) : [];
 
-  const [showGuide, setShowGuide] = useState(false);
+  const [ showGuide, setShowGuide ] = useState(false);
 
   const dispatch = useDispatch();
+
+  const { openModal } = useModal();
 
   useEffect(() => {
     dispatch(setActiveFooterItemId(2));
@@ -98,7 +102,7 @@ export const IntegrationPage: React.FC = () => {
     if (data && !isUnansweredIntegrationCommentLoading && !isEndComment) {
       setIsEndComment(comments.length === 0);
     }
-  }, [data, comments, isUnansweredIntegrationCommentLoading]);
+  }, [ data, comments, isUnansweredIntegrationCommentLoading ]);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     if (isVoting) return;
@@ -109,6 +113,10 @@ export const IntegrationPage: React.FC = () => {
       const wasCorrect = isThumbsUp === !commentData?.is_hate;
       if (wasCorrect) {
         setLocalProgress(prev => (prev + 1) % 5);
+
+        if (localProgress === 4) {
+          openModal(MODALS.GET_REWARD);
+        }
       }
 
       const response = await postComment({ commentId, isHate: !isThumbsUp });
@@ -147,7 +155,7 @@ export const IntegrationPage: React.FC = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [data, isIntegrationLoading]);
+  }, [ data, isIntegrationLoading ]);
 
   const isLoading = isIntegrationLoading || isUnansweredIntegrationCommentLoading;
 
@@ -155,6 +163,7 @@ export const IntegrationPage: React.FC = () => {
 
   return (
     <div className={styles.wrp}>
+      <GetRewardModal />
       <h1 className={styles.pageTitle}>{t('i1')}</h1>
 
       {error || !integrationId ? <p>{t('i2')}</p> : null}

@@ -1,11 +1,12 @@
 import { FC, useState } from 'react';
 import styles from './ShopItemCard.module.scss';
 import clsx from 'clsx';
-import { useBuyItemMutation } from '../../../redux';
 import {
   IShopItem,
+  profileApi,
   RootState,
   useAddItemToRoomMutation,
+  useBuyItemMutation,
   useGetEquipedQuery,
   useGetProfileMeQuery,
   useRemoveItemFromRoomMutation,
@@ -16,7 +17,7 @@ import LockIcon from '../../../assets/icons/lock_icon.svg';
 import CointsGrey from '@icons/cointsGrey.svg';
 import ViewsIcon from '../../../assets/icons/views.png';
 import { useModal } from '../../../hooks';
-import { GUIDE_ITEMS, MODALS, svgHeadersString, buildMode } from '../../../constants';
+import { buildMode, GUIDE_ITEMS, MODALS, svgHeadersString } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { isGuideShown, setGuideShown } from '../../../utils';
 import { formatAbbreviation } from '../../../helpers';
@@ -34,18 +35,21 @@ interface Props {
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const RoomItemsSlots = useRoomItemsSlots();
-  const [buyItem, { isLoading }] = useBuyItemMutation();
-  const [equipItem] = useAddItemToRoomMutation();
-  const [removeItem] = useRemoveItemFromRoomMutation();
+  const [ buyItem, { isLoading } ] = useBuyItemMutation();
+  const [ equipItem ] = useAddItemToRoomMutation();
+  const [ removeItem ] = useRemoveItemFromRoomMutation();
   const { data: equipedItems } = useGetEquipedQuery();
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
-  const [error, setError] = useState('');
+  const [ error, setError ] = useState('');
 
-  const { data: pointsUser } = useGetProfileMeQuery();
+  const { data: pointsUser } = useGetProfileMeQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const buyButtonGlowing = useSelector((state: RootState) => state.guide.buyItemButtonGlowing);
 
+  console.info(pointsUser?.points, item.price_internal);
   const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal;
 
   const slot = Object.values(RoomItemsSlots).find(_item =>
@@ -59,9 +63,9 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
     try {
       if (isSlotNotEmpty) {
-        await removeItem({ items_to_remove: [{ id: isSlotNotEmpty.id }] });
+        await removeItem({ items_to_remove: [ { id: isSlotNotEmpty.id } ] });
       }
-      await equipItem({ equipped_items: [{ id: item.id, slot }] });
+      await equipItem({ equipped_items: [ { id: item.id, slot } ] });
     } catch (error) {
       console.error(error);
     }
@@ -73,6 +77,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
       if (!res.error) {
         void handleEquipItem();
+        profileApi.util.invalidateTags([ 'Me' ]);
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
       } else {
         setError(JSON.stringify(res.error));
@@ -88,12 +93,12 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     try {
       await processPayment(Number(item.price_usdt), async (result) => {
         if (result.success) {
-          console.warn("Transaction info:", "hash:", result.transactionHash, "senderAddress:", result.senderAddress);
+          console.warn('Transaction info:', 'hash:', result.transactionHash, 'senderAddress:', result.senderAddress);
           const res = await buyItem({
             id: item.id,
             payment_method: 'usdt',
             transaction_id: result.transactionHash,
-            sender_address: result.senderAddress
+            sender_address: result.senderAddress,
           });
 
           if (!res.error) {
@@ -110,7 +115,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     }
   };
 
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const imageString =
     buildMode === 'production'
@@ -132,8 +137,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                ? styles.colorPurple
-                : styles.level
+                  ? styles.colorPurple
+                  : styles.level
             }
           >
             {t('s17')}
@@ -144,8 +149,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 item.item_rarity === 'green'
                   ? styles.colorRed
                   : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                    ? styles.colorPurple
+                    : styles.level
               }
             >
               {'Error while loading data'}

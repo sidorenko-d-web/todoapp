@@ -27,17 +27,16 @@ export default function GetRewardModal() {
       </div>
       <div className={styles.info}>
         <div className={styles.top}>
-          <p>+1 000</p>
+          <p>+100</p>
           <img src={coin} />
         </div>
         <div className={styles.bottom}>
           <p>
-            Поздравляем! За ответы на 20 комментариев <br></br> к интеграции вы получаете
-            баллы!
+            Поздравляем! За ответы на 5 комментариев к интеграции вы получаете баллы!
           </p>
         </div>
       </div>
-      <Button variant={'blue'}>Забрать</Button>
+      <Button variant={'blue'} onClick={() => closeModal(MODALS.GET_REWARD)}>Забрать</Button>
     </CentralModal>
   );
 }

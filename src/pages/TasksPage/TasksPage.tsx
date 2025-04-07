@@ -36,7 +36,7 @@ export const TasksPage: FC = () => {
   const { data: boostData, isLoading: isBoostLoading } = useGetBoostQuery();
 
   useEffect(() => {
-    dispatch(setActiveFooterItemId(4));
+    dispatch(setActiveFooterItemId(5));
   }, []);
 
   const dailyTask = useMemo(() => {

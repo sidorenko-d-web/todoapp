@@ -74,7 +74,7 @@ export const Integration: React.FC<props> = ({ compaignImage }) => {
           sleep(500);
           setSize(prev => [prev[0] + 1, prev[1]]);
         } else {
-          this.createPerson(contextProps, true, 50 * dpi);
+          this.createPerson(contextProps, true, 105);
           if (this.person) {
             this.person.scale = 0.09 * dpi;
           }
@@ -83,11 +83,11 @@ export const Integration: React.FC<props> = ({ compaignImage }) => {
           const desc = this.add.image(center - 10, 180 * dpi, 'desc');
           let _chair;
           if (room?.items.find(item => chair.name.includes(item.name))) {
-            _chair = this.add.image(center - 105, 140 * dpi, 'chair');
+            _chair = this.add.image(center - 55 * dpi, 140 * dpi, 'chair');
           } else {
-            _chair = this.add.image(center - 110, 160 * dpi, 'chair');
+            _chair = this.add.image(center - 110 * dpi, 160 * dpi, 'chair');
           }
-          const pc = this.add.image(center - 30, 135 * dpi, 'pc');
+          const pc = this.add.image(center - 20 * dpi, 135 * dpi, 'pc');
 
           desc.setDepth(3);
           _chair.setDepth(1);
