@@ -31,10 +31,6 @@ export const Footer = () => {
       setActiveButton(0);
     }
 
-    if (location.pathname === '/shop' || location.pathname === 'shop/inventory') {
-      setActiveButton(1);
-    }
-
     if (location.pathname.includes('integration')) {
       setActiveButton(2);
     }
@@ -43,8 +39,16 @@ export const Footer = () => {
       setActiveButton(3);
     }
 
-    if(location.pathname.includes('shop')) {
+    if(location.pathname.includes('shop') || location.pathname.includes('inventory')) {
       setActiveButton(1);
+    }
+
+    if(location.pathname.includes('promotion')) {
+      setActiveButton(4);
+    }
+
+    if(location.pathname.includes('tasks')) {
+      setActiveButton(5);
     }
   }, [location.pathname]);
 
