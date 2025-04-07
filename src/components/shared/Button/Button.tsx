@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
-import { useButtonSound } from '../../../hooks/useButtonSound';
+import { useButtonSound } from '../../../hooks';
 import { SOUNDS } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { selectButtonVolume } from '../../../redux';
@@ -19,8 +19,6 @@ export const Button = ({
   volumeMultiplier = 7,
   ...props
 }: Props) => {
-  const isVibrationSupported =
-    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
 
   const currentButtonVolume = useSelector(selectButtonVolume);
   // Используем новый хук для звука кнопки

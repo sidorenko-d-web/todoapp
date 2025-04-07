@@ -4,8 +4,7 @@ import loadingVid from '../../../assets/gif/loading.mp4';
 // import Lottie from 'lottie-react';
 // import { coinsAnim } from '../../../assets/animations';
 import { LoadingScreenBar, LoadingScreenBarRef } from '../../loadingScreen/LoadingScreenBar/LoadingScreenBar';
-import useSound from 'use-sound';
-import { buildMode, SOUNDS } from '../../../constants';
+import { buildMode } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
 
