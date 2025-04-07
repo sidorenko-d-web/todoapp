@@ -131,14 +131,14 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     closeModal(MODALS.CREATING_INTEGRATION);
   }, []);
 
-  useEffect(() => {
-    if (timeLeft <= 0 && !isExpired) {
-      setIsExpired(true);
-      void accelerateIntegration(3600).finally(() => {
-        dispatch(integrationsApi.util.invalidateTags(['Integrations']));
-      });
-    }
-  }, [timeLeft, isExpired, accelerateIntegration, dispatch]);
+  // useEffect(() => {
+  //   if (timeLeft <= 0 && !isExpired) {
+  //     setIsExpired(true);
+  //     void accelerateIntegration(3600).finally(() => {
+  //       dispatch(integrationsApi.util.invalidateTags(['Integrations']));
+  //     });
+  //   }
+  // }, [timeLeft, isExpired, accelerateIntegration, dispatch]);
 
   // useEffect(() => {
   //   if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET)) {

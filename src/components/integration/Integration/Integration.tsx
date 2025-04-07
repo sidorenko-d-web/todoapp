@@ -72,11 +72,8 @@ export const Integration: React.FC<props> = ({ compaignImage }) => {
           }
 
           const center = ((window.innerWidth - 30) * dpi) / 2;
-          
-          if (equippedDesc) {
-            const desc = this.add.image(center - 10, 180 * dpi, 'desc');
-            desc.setDepth(3);
-          }
+          const desc = this.add.image(center - 10, 180 * dpi, 'desc');
+          desc.setDepth(3);
 
           if (equippedPc) {
             const pc = this.add.image(center - 20 * dpi, 135 * dpi, 'pc');
