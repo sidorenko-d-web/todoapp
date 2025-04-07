@@ -18,36 +18,35 @@ export const ShopUpgradedModal = () => {
   const state = getModalState<{ item: IShopItem; isYellow: boolean }>(MODALS.UPGRADED_SHOP);
   const navigate = useNavigate();
 
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
+
   const handleClose = () => {
+    if (isVibrationSupported) {
+      navigator.vibrate(200);
+    }
     closeModal(MODALS.UPGRADED_SHOP);
     navigate(AppRoute.Shop);
   };
 
   const isYellow = state.args?.isYellow;
 
-  
   useAutoPlaySound(MODALS.UPGRADED_SHOP, SOUNDS.upgradeOrBuyItem);
 
   return (
-    <CentralModal
-      title={t('s43')}
-      onClose={() => closeModal(MODALS.UPGRADED_SHOP)}
-      modalId={MODALS.UPGRADED_SHOP}
-    >
+    <CentralModal title={t('s43')} onClose={() => closeModal(MODALS.UPGRADED_SHOP)} modalId={MODALS.UPGRADED_SHOP}>
       <div className={styles.images}>
         <Lottie animationData={isYellow ? purpleLight : redLight} loop={true} className={styles.bgLight} />
         <div className={clsx(styles.itemImage, isYellow ? styles.itemImagePurple : styles.itemImageRed)}>
           <ShopIcon />
-          <p className={isYellow ? styles.purple :styles.red}>{isYellow ? t('s55') : t('s56')}</p>
+          <p className={isYellow ? styles.purple : styles.red}>{isYellow ? t('s55') : t('s56')}</p>
         </div>
       </div>
 
       <div className={styles.text}>
         <p>
           {t('s54')}{' '}
-          <span className={clsx(isYellow ? styles.spanPurple : styles.spanRed)}>
-            {isYellow ? t('s55') : t('s56')}{' '}
-          </span>
+          <span className={clsx(isYellow ? styles.spanPurple : styles.spanRed)}>{isYellow ? t('s55') : t('s56')} </span>
           {t('s57')}
         </p>
       </div>

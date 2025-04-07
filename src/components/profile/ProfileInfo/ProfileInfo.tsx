@@ -50,7 +50,8 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
   const { data: character, isLoading: isCharacterLoading } = useGetCharacterQuery(undefined, { skip: !!strangerId });
   const { data: strangerCharacter } = useGetCharacterByIdQuery({ id: strangerId! }, { skip: !strangerId });
 
-  const personScale = 0.085;
+  const dpi = window.devicePixelRatio;
+  const personScale = 0.085 * dpi;
 
   useLayoutEffect(() => {
     function updateSize() {
@@ -83,17 +84,18 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
         }
         spineSceneRef.current = this;
         this.changeSkin(personScale, character ?? strangerCharacter);
-        this.spineObject?.setY(118 / 2 + 35);
+        this.spineObject?.setY((118 / 2 + 35) * dpi);
       }
     }
 
     const createAnimation = () => {
       const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
-        width: 118,
-        height: 140,
+        width: 118 * dpi,
+        height: 140 * dpi,
         scene: [SpineScene],
         transparent: true,
+        canvasStyle: `width: ${118}px; height: ${140}px`,
         plugins: {
           scene: [{ key: 'SpinePlugin', plugin: SpinePlugin, mapping: 'spine' }],
         },

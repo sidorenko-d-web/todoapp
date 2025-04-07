@@ -81,8 +81,8 @@ export const useAuthFlow = () => {
     if (
       window?.Telegram &&
       window?.Telegram?.WebApp &&
-      typeof window?.Telegram?.WebApp?.requestFullscreen === 'function'
-      && !buildMode.includes('Dev')
+      typeof window?.Telegram?.WebApp?.requestFullscreen === 'function' &&
+      !buildMode.includes('Dev')
     ) {
       window?.Telegram?.WebApp?.requestFullscreen();
     }

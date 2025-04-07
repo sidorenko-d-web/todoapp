@@ -45,37 +45,49 @@ export const SkinTab: FC<Props> = ({ mode }) => {
       {skins?.head && skins.head.length > 0 && (
         <div className={styles.personCards}>
           <h2>{t('s30')}</h2>
-          {skins.head?.map(item => <ShopSkinCard mode={mode} key={item.id} item={item} />)}
+          {skins.head?.map(item => (
+            <ShopSkinCard mode={mode} key={item.id} item={item} />
+          ))}
         </div>
       )}
       {skins?.upper_body && skins.upper_body.length > 0 && (
         <div className={styles.personCards}>
           <h2>{t('s7')}</h2>
-          {skins.upper_body?.map(item => <ShopSkinCard mode={mode} key={item.id} item={item} />)}
+          {skins.upper_body?.map(item => (
+            <ShopSkinCard mode={mode} key={item.id} item={item} />
+          ))}
         </div>
       )}
       {skins?.skin_color && skins.skin_color.length > 0 && (
         <div className={styles.personCards}>
           <h2>{t('s32')}</h2>
-          {skins.skin_color?.map(item => <ShopSkinCard mode={mode} key={item.id} item={item} />)}
+          {skins.skin_color?.map(item => (
+            <ShopSkinCard mode={mode} key={item.id} item={item} />
+          ))}
         </div>
       )}
       {skins?.face && skins.face.length > 0 && (
         <div className={styles.personCards}>
           <h2>{t('s7')}</h2>
-          {skins.face?.map(item => <ShopSkinCard mode={mode} key={item.id} item={item} />)}
+          {skins.face?.map(item => (
+            <ShopSkinCard mode={mode} key={item.id} item={item} />
+          ))}
         </div>
       )}
       {skins?.legs && skins.legs.length > 0 && (
         <div className={styles.personCards}>
           <h2>{t('s8')}</h2>
-          {skins.legs?.map(item => <ShopSkinCard mode={mode} key={item.id} item={item} />)}
+          {skins.legs?.map(item => (
+            <ShopSkinCard mode={mode} key={item.id} item={item} />
+          ))}
         </div>
       )}
       {skins?.vip && skins.vip.length > 0 && (
         <div className={styles.personCards}>
           <h2 className={styles.vipTitle}>{t('s9')}</h2>
-          {skins.vip?.map(item => <ShopSkinCard mode={mode} key={item.id} item={item} />)}
+          {skins.vip?.map(item => (
+            <ShopSkinCard mode={mode} key={item.id} item={item} />
+          ))}
         </div>
       )}
     </>

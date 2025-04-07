@@ -32,16 +32,19 @@ import { FixedSizeList as List } from 'react-window';
 import clsx from 'clsx';
 import { Button } from '../shared';
 import { formatAbbreviation } from '../../helpers';
+import { useTranslation } from 'react-i18next';
 
 export const Tree = () => {
   const { openModal } = useModal();
-  // const { i18n } = useTranslation('tree');
+  const { t } = useTranslation('tree');
   // const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData, refetch } = useGetTreeInfoQuery();
   const { data: userProfileData } = useGetProfileMeQuery();
   const [currentBoost, setCurrentBoost] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
   const isGuide = !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
+
+
 
   const [unlockAchievement] = useUnlockAchievementMutation();
 
@@ -105,7 +108,7 @@ export const Tree = () => {
           </div>
           <div className={clsx(s.text, isGuide && s.guide)}>
             <span className={clsx(!isUnlocked && s.inactive)}>
-              {formatAbbreviation(stage.subscribers)} <br /> подписчик{stage.subscribers === 1 ? '' : 'ов'}
+              {formatAbbreviation(stage.subscribers)} <br /> {t('t1')}
             </span>
           </div>
         </div>
@@ -135,7 +138,7 @@ export const Tree = () => {
             className={clsx(s.takeRewardBtn)}
             onClick={() => handleUnlock(stage?.achievement.id ?? '', stage?.achievement.boost ?? {})}
           >
-            Забрать
+            {t('t2')}
           </Button>
         )}
 
@@ -174,7 +177,7 @@ export const Tree = () => {
 
       <div className={s.progressBarContainer}>
         <List
-          initialScrollOffset={(449 - (userProfileData?.growth_tree_stage_id ?? 0)) * 330}
+          initialScrollOffset={(449 - (userProfileData?.growth_tree_stage_id ?? 0)) * 330 + 250}
           className={s.list}
           height={window.screen.height}
           itemCount={451}

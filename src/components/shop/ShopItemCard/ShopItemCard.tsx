@@ -35,17 +35,20 @@ interface Props {
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const RoomItemsSlots = useRoomItemsSlots();
-  const [ buyItem, { isLoading } ] = useBuyItemMutation();
-  const [ equipItem ] = useAddItemToRoomMutation();
-  const [ removeItem ] = useRemoveItemFromRoomMutation();
+  const [buyItem, { isLoading }] = useBuyItemMutation();
+  const [equipItem] = useAddItemToRoomMutation();
+  const [removeItem] = useRemoveItemFromRoomMutation();
   const { data: equipedItems } = useGetEquipedQuery();
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
-  const [ error, setError ] = useState('');
+  const [error, setError] = useState('');
 
   const { data: pointsUser } = useGetProfileMeQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
+
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
 
   const buyButtonGlowing = useSelector((state: RootState) => state.guide.buyItemButtonGlowing);
 
@@ -63,21 +66,24 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
     try {
       if (isSlotNotEmpty) {
-        await removeItem({ items_to_remove: [ { id: isSlotNotEmpty.id } ] });
+        await removeItem({ items_to_remove: [{ id: isSlotNotEmpty.id }] });
       }
-      await equipItem({ equipped_items: [ { id: item.id, slot } ] });
+      await equipItem({ equipped_items: [{ id: item.id, slot }] });
     } catch (error) {
       console.error(error);
     }
   };
 
   const handleBuyItem = async () => {
+    if (isVibrationSupported) {
+      navigator.vibrate(200);
+    }
     setGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT);
     try {
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
       if (!res.error) {
         void handleEquipItem();
-        profileApi.util.invalidateTags([ 'Me' ]);
+        profileApi.util.invalidateTags(['Me']);
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
       } else {
         setError(JSON.stringify(res.error));
@@ -91,7 +97,10 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
   const handleUsdtPayment = async () => {
     try {
-      await processPayment(Number(item.price_usdt), async (result) => {
+      if (isVibrationSupported) {
+        navigator.vibrate(200);
+      }
+      await processPayment(Number(item.price_usdt), async result => {
         if (result.success) {
           console.warn('Transaction info:', 'hash:', result.transactionHash, 'senderAddress:', result.senderAddress);
           const res = await buyItem({
@@ -115,7 +124,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     }
   };
 
-  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const imageString =
     buildMode === 'production'
@@ -137,8 +146,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                ? styles.colorPurple
+                : styles.level
             }
           >
             {t('s17')}
@@ -149,8 +158,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 item.item_rarity === 'green'
                   ? styles.colorRed
                   : item.item_rarity === 'yellow'
-                    ? styles.colorPurple
-                    : styles.level
+                  ? styles.colorPurple
+                  : styles.level
               }
             >
               {'Error while loading data'}
