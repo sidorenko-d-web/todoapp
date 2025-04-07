@@ -30,8 +30,8 @@
 // const init_data = "query_id=AAG5J0IgAwAAALknQiA2VnvC&user=%7B%22id%22%3A6983657401%2C%22first_name%22%3A%22InnoSmoke%20%F0%9F%98%B6%E2%80%8D%F0%9F%8C%AB%EF%B8%8F%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22InnoSmokeAdmin%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FG6IL84jx2cu6pK5znAc4_zNQ5CGiot09A_OopubxolzjbRKMfYmY1sGiP59VL6Cl.svg%22%7D&auth_date=1744048527&signature=sJB64hld2T1Zq-g17M9vxRldiv33vWYAjmsuYMeH8zVgZhy9Fc9HXffD4TzTkAk4L_ifwZW3xbgq_myMajuEDg&hash=a9c187b49a1efa365dfeccd60d591785b95547355404a32aaa7ff84a97ecb4de"
 // StoriesMaker2️⃣ 6983657401
 // const init_data = "query_id=AAErKG1AAAAAACsobUCGKVAZ&user=%7B%22id%22%3A1080895531%2C%22first_name%22%3A%22s%E1%B4%9B%E1%B4%8F%CA%80%C9%AA%E1%B4%87s.%E1%B4%8D%E1%B4%80%E1%B4%8B%E1%B4%87%CA%80%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22InnoQueen%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F9WmGyAANKJiYKRuxylZm193HYWCo8rs9XpMPPwFFJFo.svg%22%7D&auth_date=1744050478&signature=xpO8KUKK2FvMkyJx96ZKe8zRZw7L1rmXS2KFd03HY2JqmRWVaj4Zc3i82roXcaILSnisWYpKU37TkTUucH5aBQ&hash=db9881ab4c8bcfe4652556f86cab10c92b58bae7afe969ceb59a46e2209c4371"
-// Blinsagino3️⃣ 6983657401 TODO: fix auth
-// const init_data = "user=%7B%22id%22%3A7039038714%2C%22first_name%22%3A%22Blinsagino%F0%9F%98%B6%E2%80%8D%F0%9F%8C%AB%EF%B8%8F%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Blinsagino%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F6NSgsX_b4jTWi-xmSOaYz1lTysh0NnMnZ6zpV4ajHHHUNJJhUvs82g8DD1MmH0SL.svg%22%7D&chat_instance=-6435343496836040411&chat_type=private&auth_date=1744053967&signature=MbnX1gFXv7Dah8EI8SH9hvR8mm_1-ctwrLqxA4MXkDcm9lb8y-wUGsmzmApjLlzf3VGzZ5tjhzWpdY6JBSeiAA&hash=5c0d1b325d9247160324f1c6c57504f57491e41d087c6dd5715432bb2ff693f8"
+// domiknakolese3️⃣ 6983657401 TODO: fix auth
+// const init_data = "query_id=AAEtHeomAwAAAC0d6ibs8VtG&user=%7B%22id%22%3A7095328045%2C%22first_name%22%3A%22Jdhfdbb%22%2C%22last_name%22%3A%22Dhd%22%2C%22username%22%3A%22domiknakolese%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FGTS6MDV4pmmhfEzKsHerYzzb5Z9vyu6ZzcqIrayei_iQ_kWR7yRcaWbsu3_sVS87.svg%22%7D&auth_date=1744060596&signature=zMhNN0uSkq0hzV6x9wxpKJ0IlmkG_rI04hdW7dl_Us9aTnOIbko0CAk6asmWonOmP-svK-VnsBxTf7wqQvIpAQ&hash=8275b322cb0c149510fe24e590edd4ecf30f8e065b6a9b49b3b1906c202cfcfe"
 // Никита Пирсов4️⃣ 6983657401
 const init_data = "user=%7B%22id%22%3A6542018915%2C%22first_name%22%3A%22%D0%9D%D0%B8%D0%BA%D0%B8%D1%82%D0%B0%20%D0%9F%D0%B8%D1%80%D1%81%D0%BE%D0%B2%F0%9F%A5%8A%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22kolesonomerodin%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F19YKthq2S8VrLUPUzU_AalHuR_2j4AFL1sXHFWf3GlW_urs1HgFjEgUQhCr-R8De.svg%22%7D&chat_instance=8194366508801383098&chat_type=sender&auth_date=1744060159&signature=C_IQQPi_GNm0fNwJuNxFLBiirF8Buie3BzhN3EN5rEaaVQyz6onpf3EPgNcCpSsPPkOCExdYr70ShbrNSLl5Cw&hash=3d1cca001df399208d1097b62469d26bcac4cc9f8fa00f0dd6f4f28ce1fb9dd9"
 
@@ -48,7 +48,7 @@ const init_data = "user=%7B%22id%22%3A6542018915%2C%22first_name%22%3A%22%D0%9D%
 
 // const referral_id = 6983657401; // InnoSmoke1️⃣
 // const referral_id = 6983657401; // StoriesMaker2️⃣
-// const referral_id = 6983657401; // Blinsagino3️⃣
+// const referral_id = 6983657401; // domiknakolese3️⃣
 const referral_id = 6983657401; // Никита Пирсов4️⃣
 
 
