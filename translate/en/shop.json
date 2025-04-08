@@ -63,5 +63,9 @@
   "s59": "Loading...",
   "s60": "Loading",
   "s61": "Error occurred while getting data",
-  "s62": "Item upgraded!"
+  "s62": "Item upgraded!",
+
+  "s63": "Stone chest",
+  "s64": "Rare chest",
+  "s65": "Legendary chest"
 }

@@ -91,14 +91,14 @@ export const ItemUpgradedModal = () => {
         </div>
 
         <div className={styles.statItem}>
-          <p>+{state.args?.item.boost.income_per_second}</p>
+          <p>+</p>
           <img src={chestIcon} alt="Chest icon" />
         </div>
       </div>
       <div className={styles.text}>
         <p>
           {t('s45')}{' '}
-          <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>{state.args?.item.name}!</span>!{' '}
+          <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>{state.args?.item.name}!</span>{' '}
           {t('s46')}{' '}
           <span className={clsx(isPrem ? styles.spanPurple : isPro && styles.spanRed)}>{state.args?.reward}</span>!
         </p>

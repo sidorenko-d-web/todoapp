@@ -182,8 +182,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
             localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
 
-            const rewardForUpgrade = res.data.level === 50 ? 'Каменный сундук' : res.data.level === 100 ? 
-              'Редкий сундук' : 'Легендарный сундук';
+            const rewardForUpgrade = res.data.level === 50 ? t('s63') : res.data.level === 100 ? 
+              t('s64') : t('s65');
 
             openModal(MODALS.UPGRADED_ITEM, {
               item: res.data,
