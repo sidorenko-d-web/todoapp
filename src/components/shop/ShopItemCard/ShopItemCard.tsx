@@ -4,9 +4,11 @@ import clsx from 'clsx';
 import {
   IShopItem,
   profileApi,
+  roomApi,
   RootState,
   useAddItemToRoomMutation,
   useBuyItemMutation,
+  useGetCurrentUserBoostQuery,
   useGetEquipedQuery,
   useGetProfileMeQuery,
   useRemoveItemFromRoomMutation,
@@ -35,13 +37,14 @@ interface Props {
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
   const RoomItemsSlots = useRoomItemsSlots();
-  const [buyItem, { isLoading }] = useBuyItemMutation();
-  const [equipItem] = useAddItemToRoomMutation();
-  const [removeItem] = useRemoveItemFromRoomMutation();
+  const [ buyItem, { isLoading } ] = useBuyItemMutation();
+  const { refetch: refetchBoost } = useGetCurrentUserBoostQuery();
+  const [ equipItem ] = useAddItemToRoomMutation();
+  const [ removeItem ] = useRemoveItemFromRoomMutation();
   const { data: equipedItems } = useGetEquipedQuery();
   const { t, i18n } = useTranslation('shop');
   const { openModal } = useModal();
-  const [error, setError] = useState('');
+  const [ error, setError ] = useState('');
 
   const { data: pointsUser } = useGetProfileMeQuery(undefined, {
     refetchOnMountOrArgChange: true,
@@ -66,9 +69,9 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
     try {
       if (isSlotNotEmpty) {
-        await removeItem({ items_to_remove: [{ id: isSlotNotEmpty.id }] });
+        await removeItem({ items_to_remove: [ { id: isSlotNotEmpty.id } ] });
       }
-      await equipItem({ equipped_items: [{ id: item.id, slot }] });
+      await equipItem({ equipped_items: [ { id: item.id, slot } ] });
     } catch (error) {
       console.error(error);
     }
@@ -83,7 +86,9 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
       const res = await buyItem({ payment_method: 'internal_wallet', id: item.id });
       if (!res.error) {
         void handleEquipItem();
-        profileApi.util.invalidateTags(['Me']);
+        profileApi.util.invalidateTags([ 'Me' ]);
+        roomApi.util.invalidateTags([ 'Boost' ]);
+        refetchBoost();
         openModal(MODALS.NEW_ITEM, { item: item, mode: 'item' });
       } else {
         setError(JSON.stringify(res.error));
@@ -124,7 +129,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
     }
   };
 
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   const imageString =
     buildMode === 'production'
@@ -146,8 +151,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
               item.item_rarity === 'green'
                 ? styles.colorRed
                 : item.item_rarity === 'yellow'
-                ? styles.colorPurple
-                : styles.level
+                  ? styles.colorPurple
+                  : styles.level
             }
           >
             {t('s17')}
@@ -158,8 +163,8 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
                 item.item_rarity === 'green'
                   ? styles.colorRed
                   : item.item_rarity === 'yellow'
-                  ? styles.colorPurple
-                  : styles.level
+                    ? styles.colorPurple
+                    : styles.level
               }
             >
               {'Error while loading data'}
