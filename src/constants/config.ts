@@ -37,6 +37,6 @@ const referral_id = 6547551264; //Кирилл А
 // const referral_id = 7113958933; // дмитрий
 // const referral_id = 6475086298; //de geras
 
-const buildMode: 'testDev' | 'test' | 'prodDev' | 'production' = 'production'; //change type of building here
+const buildMode: 'testDev' | 'test' | 'prodDev' | 'production' = 'test'; //change type of building here
 
 export { init_data, buildMode, referral_id };
