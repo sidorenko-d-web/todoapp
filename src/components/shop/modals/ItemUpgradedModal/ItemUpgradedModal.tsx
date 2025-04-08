@@ -13,6 +13,10 @@ import { SOUNDS } from '../../../../constants/sounds';
 import { CentralModal } from '../../../shared';
 import { useTranslation } from 'react-i18next';
 
+import stoneChest from '../../../../assets/icons/chest-blue.svg';
+import rareChest from '../../../../assets/icons/chest-purple.svg';
+import legendaryChest from '../../../../assets/icons/legendary-chest.svg';
+
 export const ItemUpgradedModal = () => {
   const { closeModal, getModalState, openModal } = useModal();
   const { t } = useTranslation('shop');
@@ -24,6 +28,10 @@ export const ItemUpgradedModal = () => {
 
   const isPrem = state.args?.item.item_rarity === 'yellow';
   const isPro = state.args?.item.item_rarity === 'green';
+
+  const reward = state.args?.reward;
+  const chestIcon = (reward === 'Legendary chest' || reward === 'Легендарный сундук') ? legendaryChest : 
+   (reward === 'Rare chest' || reward === 'Редкий сундук') ? rareChest : stoneChest;
 
   useAutoPlaySound(MODALS.UPGRADED_ITEM, SOUNDS.upgradeOrBuyItem);
 
@@ -80,6 +88,11 @@ export const ItemUpgradedModal = () => {
           <p>+{state.args?.item.boost.income_per_second}</p>
           <img src={CoinIcon} alt="Coin icon" />
           <p>{t('s44')}</p>
+        </div>
+
+        <div className={styles.statItem}>
+          <p>+{state.args?.item.boost.income_per_second}</p>
+          <img src={chestIcon} alt="Chest icon" />
         </div>
       </div>
       <div className={styles.text}>

@@ -182,10 +182,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
             localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
             localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
 
+            const rewardForUpgrade = res.data.level === 50 ? 'Каменный сундук' : res.data.level === 100 ? 
+              'Редкий сундук' : 'Легендарный сундук';
+
             openModal(MODALS.UPGRADED_ITEM, {
               item: res.data,
               mode: 'item',
-              reward: 'reward of item',
+              reward: rewardForUpgrade,
             });
           }
 
@@ -274,10 +277,13 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                     localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
                     localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
 
+                    const rewardForUpgrade = res.data.level === 50 ? 'Каменный сундук' : res.data.level === 100 ? 
+                      'Редкий сундук' : 'Легендарный сундук';
+
                     openModal(MODALS.UPGRADED_ITEM, {
                       item: res.data,
                       mode: 'item',
-                      reward: 'reward of item',
+                      reward: rewardForUpgrade,
                     });
                   }
                 }
