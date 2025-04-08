@@ -10,9 +10,10 @@ interface ProfileStatsProps {
   favoriteCompany: string;
   comments: number;
   rewards: number;
+  views: number;
 }
 
-export const ProfileStats: React.FC<ProfileStatsProps> = ({ favoriteCompany, comments, rewards: awards }) => {
+export const ProfileStats: React.FC<ProfileStatsProps> = ({ favoriteCompany, comments, rewards: awards, views }) => {
   const { t, i18n } = useTranslation('profile');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
@@ -20,7 +21,7 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ favoriteCompany, com
 
   const { in_streak } = usePushLineStatus();
 
-  const { totalViews: displayedTotalViews, totalEarned: displayedTotalEarned } = useIncrementingProfileStats({
+  const { totalEarned: displayedTotalEarned } = useIncrementingProfileStats({
     profileId: userProfileData?.id || '',
     basePoints: userProfileData?.points || '0',
     baseSubscribers: userProfileData?.subscribers || 0,
@@ -30,7 +31,6 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ favoriteCompany, com
     lastUpdatedAt: userProfileData?.updated_at,
   });
 
-  const views = in_streak ? displayedTotalViews : userProfileData?.total_views ?? 0;
   const earned = in_streak ? displayedTotalEarned : userProfileData?.total_earned ?? '';
 
   return (
@@ -58,4 +58,3 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ favoriteCompany, com
     </div>
   );
 };
-

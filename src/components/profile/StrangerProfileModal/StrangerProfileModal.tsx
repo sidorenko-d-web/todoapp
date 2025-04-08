@@ -66,9 +66,10 @@ export const StrangerProfileModal: FC<StrangerProfileModalProps> = ({ modalId, o
           }
         />
         <ProfileStats
-          favoriteCompany={'Favourite company'}
+          favoriteCompany={profile.favorite_company}
           comments={profile.comments_answered_correctly}
           rewards={profile.achievements_collected}
+          views={profile.total_views}
         />
 
         <div className={s.rewards}>

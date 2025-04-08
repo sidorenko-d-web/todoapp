@@ -3,6 +3,7 @@ import { useSignInMutation } from '../../redux';
 import { useTranslation } from 'react-i18next';
 import { performSignIn } from './authService';
 import { AuthStep } from './typesAuth.ts';
+import { buildMode } from '../../constants';
 // import { buildMode } from '../../constants/config.ts';
 // import { useModal } from '../useModal.ts';
 // import { MODALS } from '../../constants';
@@ -80,8 +81,8 @@ export const useAuthFlow = () => {
     if (
       window?.Telegram &&
       window?.Telegram?.WebApp &&
-      typeof window?.Telegram?.WebApp?.requestFullscreen === 'function'
-      // !buildMode.includes('Dev')
+      typeof window?.Telegram?.WebApp?.requestFullscreen === 'function' &&
+      !buildMode.includes('Dev')
     ) {
       window?.Telegram?.WebApp?.requestFullscreen();
     }

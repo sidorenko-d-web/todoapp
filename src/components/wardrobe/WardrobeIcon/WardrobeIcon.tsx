@@ -21,7 +21,8 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
   const [size, setSize] = useState([0, 0]);
   const { data: character, isLoading } = useGetCharacterQuery();
 
-  const personScale = 0.15;
+  const dpi = window.devicePixelRatio;
+  const personScale = 0.15 * dpi;
   useLayoutEffect(() => {
     function updateSize() {
       setSize([window.innerWidth, window.innerHeight]);
@@ -53,9 +54,11 @@ export const WardrobeIcon: React.FC<WardrobeIconProps> = () => {
     const createAnimation = () => {
       const config: Phaser.Types.Core.GameConfig = {
         type: Phaser.AUTO,
-        width: width,
-        height: sceneRef.current!.offsetHeight,
+        width: width * dpi,
+        height: sceneRef.current!.offsetHeight * dpi,
         scene: [SpineScene],
+
+        canvasStyle: `width: ${width}px; height: ${sceneRef.current!.offsetHeight}px`,
         transparent: true,
         plugins: {
           scene: [{ key: 'SpinePlugin', plugin: SpinePlugin, mapping: 'spine' }],

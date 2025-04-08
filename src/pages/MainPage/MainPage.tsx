@@ -378,11 +378,12 @@ export const MainPage: FC = () => {
           }}
         >
           <Lottie
-          style={integrationCurrentlyCreating ? {marginBottom: '45px', zIndex: '1001'} : {zIndex: '1001'}}
-          animationData={giftShake} className={clsx(s.treeReward, { [s.up]: isCreatingIntegration })} />
+            style={integrationCurrentlyCreating ? { marginBottom: '45px', zIndex: '1001' } : { zIndex: '1001' }}
+            animationData={giftShake}
+            className={clsx(s.treeReward, { [s.up]: isCreatingIntegration })}
+          />
         </TrackedLink>
       )}
-
       <DaysInARowModal
         onClose={() => {
           if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
@@ -390,7 +391,6 @@ export const MainPage: FC = () => {
           }
         }}
       />
-
       {(integrationCurrentlyCreating || firstIntegrationCreating || hasCreatingIntegrations) && (
         <div
           style={{
@@ -405,9 +405,7 @@ export const MainPage: FC = () => {
           onClick={accelerateIntegration}
         />
       )}
-
       <Room mode="me" setIsRoomLoaded={setIsRoomLoaded} />
-
       {isRoomLoaded &&
         (hasCreatingIntegrations && !firstIntegrationReadyToPublish ? (
           <IntegrationCreation />
@@ -423,7 +421,6 @@ export const MainPage: FC = () => {
             <PublishIntegrationButton />
           </>
         ))}
-
       {((isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) &&
         !getModalState(MODALS.SUBSCRIBE).isOpen) ||
@@ -443,14 +440,12 @@ export const MainPage: FC = () => {
           }}
         />
       )}
-
       <InitialGuide
         onClose={() => {
           setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
           setRerender(prev => prev + 1);
         }}
       />
-
       <SubscrieGuide
         onClose={() => {
           setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
@@ -469,7 +464,6 @@ export const MainPage: FC = () => {
           </>
         }
       />
-
       {!isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
         isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) && (
           <GetCoinsGuide
@@ -484,7 +478,6 @@ export const MainPage: FC = () => {
             }}
           />
         )}
-
       {firstIntegrationCreating &&
         !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED) && (
           <AccelerateIntegtrationGuide
@@ -495,7 +488,6 @@ export const MainPage: FC = () => {
             }}
           />
         )}
-
       {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (
           <FinishTutorialGuide
@@ -506,7 +498,6 @@ export const MainPage: FC = () => {
             }}
           />
         )}
-
       <RewardForIntegrationModal />
       {/* Награда с указанием медали и количества интеграций с определенной компанией */}
       <IntegrationRewardModal />

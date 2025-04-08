@@ -1,4 +1,4 @@
-import { CSSProperties, memo, useRef, useState } from 'react';
+import { CSSProperties, memo, useState } from 'react';
 import s from './Tree.module.scss';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
@@ -26,34 +26,27 @@ import { GUIDE_ITEMS, MODALS } from '../../constants';
 import GetGift from '../../pages/DevModals/GetGift/GetGift';
 import { Loader } from '../Loader';
 import { useOutletContext } from 'react-router-dom';
-import { useTreeProgress } from '../../hooks/useTreeProgress';
 import { isGuideShown } from '../../utils';
 
 import { FixedSizeList as List } from 'react-window';
 import clsx from 'clsx';
 import { Button } from '../shared';
 import { formatAbbreviation } from '../../helpers';
+import { useTranslation } from 'react-i18next';
 
 export const Tree = () => {
   const { openModal } = useModal();
-  // const { i18n } = useTranslation('tree');
+  const { t } = useTranslation('tree');
   // const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData, refetch } = useGetTreeInfoQuery();
   const { data: userProfileData } = useGetProfileMeQuery();
   const [currentBoost, setCurrentBoost] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
-  console.log(userProfileData);
   const isGuide = !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
-  const userSubscribers = userProfileData?.subscribers || 0;
 
-  const progressBarContainerRef = useRef<HTMLDivElement | null>(null);
 
   const [unlockAchievement] = useUnlockAchievementMutation();
-  const { progressPercent } = useTreeProgress({
-    treeData,
-    userSubscribers,
-  });
 
   if (!treeData || !isBgLoaded || !userProfileData) {
     return (
@@ -70,8 +63,8 @@ export const Tree = () => {
     try {
       await unlockAchievement({ achievement_id: id }).unwrap();
       setCurrentBoost(boost);
+      await refetch();
       openModal(MODALS.GET_GIFT);
-      refetch();
     } catch (err) {
       alert('Failed to unlock achievement.');
     }
@@ -115,7 +108,7 @@ export const Tree = () => {
           </div>
           <div className={clsx(s.text, isGuide && s.guide)}>
             <span className={clsx(!isUnlocked && s.inactive)}>
-              {formatAbbreviation(stage.subscribers)} <br /> подписчик{stage.subscribers === 1 ? '' : 'ов'}
+              {formatAbbreviation(stage.subscribers)} <br /> {t('t1')}
             </span>
           </div>
         </div>
@@ -145,7 +138,7 @@ export const Tree = () => {
             className={clsx(s.takeRewardBtn)}
             onClick={() => handleUnlock(stage?.achievement.id ?? '', stage?.achievement.boost ?? {})}
           >
-            Забрать
+            {t('t2')}
           </Button>
         )}
 
@@ -156,23 +149,35 @@ export const Tree = () => {
 
   return (
     <div className={s.containerGlobal}>
-
-      {
-        !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) &&
+      {!isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) && (
         <>
           <div
-            style={{ position: 'fixed', bottom: '85px', left: '0', width: '100vh', height: '30px', backgroundColor: 'rgba(0, 0, 0, 0.91)' }}
+            style={{
+              position: 'fixed',
+              bottom: '85px',
+              left: '0',
+              width: '100vh',
+              height: '30px',
+              backgroundColor: 'rgba(0, 0, 0, 0.91)',
+            }}
           />
 
           <div
-            style={{ position: 'fixed', top: '0', left: '0', width: '100vh', height: '165px', backgroundColor: 'rgba(0, 0, 0, 0.91)' }}
+            style={{
+              position: 'fixed',
+              top: '0',
+              left: '0',
+              width: '100vh',
+              height: '165px',
+              backgroundColor: 'rgba(0, 0, 0, 0.91)',
+            }}
           />
         </>
-      }
+      )}
 
       <div className={s.progressBarContainer}>
         <List
-          initialScrollOffset={(449 - (userProfileData?.growth_tree_stage_id ?? 0)) * 330}
+          initialScrollOffset={(449 - (userProfileData?.growth_tree_stage_id ?? 0)) * 330 + 250}
           className={s.list}
           height={window.screen.height}
           itemCount={451}

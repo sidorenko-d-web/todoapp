@@ -4,6 +4,7 @@ export type UserProfileInfoResponseDTO = {
   blog_name: string;
   username: string;
   points: string;
+  favorite_company: string;
   total_earned: string;
   growth_tree_stage_id: number;
   days_in_streak: number;
@@ -47,6 +48,6 @@ export type UpdateProfileRequestDTO = {
 
 export type BuySubscriptionRequestDTO = {
   payment_method: 'internal_wallet' | 'usdt' | string;
-  transaction_id?: string
+  transaction_id?: string;
   sender_address?: string;
 };
