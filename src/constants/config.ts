@@ -1,4 +1,4 @@
-const init_data = window.Telegram.WebApp.initData;
+// const init_data = window.Telegram.WebApp.initData;
 // const init_data = window.Telegram.WebApp.initDataUnsafe
 // const init_data = WebApp.initData;
 
@@ -14,7 +14,8 @@ const init_data = window.Telegram.WebApp.initData;
 // Марго 1259832544
 // const init_data = 'query_id%3DAAHghBdLAAAAAOCEF0szYRvU%26user%3D%257B%2522id%2522%253A1259832544%252C%2522first_name%2522%253A%2522%25D0%259C%25D0%25B0%25D1%2580%25D0%25B3%25D0%25BE%25F0%259F%258D%2591%2522%252C%2522last_name%2522%253A%2522%255B%25D0%259D%25D0%2595%2520%25D0%2591%25D0%2595%25D0%25A1%25D0%259F%25D0%259E%25D0%259A%25D0%259E%25D0%2598%25D0%25A2%25D0%25AC%255D%2522%252C%2522username%2522%253A%2522Margonesex%2522%252C%2522language_code%2522%253A%2522ru%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FFKxsxrnykyLu0kA2__5ZVmOF-zIxlsp8Cu8H-IFsmUk.svg%2522%257D%26auth_date%3D1741031727%26signature%3DD7ZrfpixtIE6JRPggPsrCVeZZ7f0hvwq4Qhmkg9a4Xnkgp33UFfhUm7MfDw8T6S_phwyl0otUHySWpbZtJiwAA%26hash%3D626b181635b66cd7977d5f841d26bba24b8d18316069b63d5c46965b1df10e85&tgWebAppVersion=8.0&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22bottom_bar_bg_color%22%3A%22%233e464c%22%2C%22link_color%22%3A%22%23007aff%22%2C%22button_color%22%3A%22%23007aff%22%2C%22hint_color%22%3A%22%23ffffff%22%2C%22button_text_color%22%3A%22%23ffffff%22%2C%22section_bg_color%22%3A%22%23282828%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22header_bg_color%22%3A%22%231c1c1c%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22destructive_text_color%22%3A%22%23ff453a%22%2C%22section_separator_color%22%3A%22%233d3d3d%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%2C%22bg_color%22%3A%22%23282828%22%7D'
 // Кирилл А 6547551264
-// const init_data = 'user=%7B%22id%22%3A6547551264%2C%22first_name%22%3A%22Marketer%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Marketer7%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FZXmZsLRfqSwjww-KJ6vKAk7MdaJgauVvTBeAA_9wyR69odwqAQOCVE4Lm46UHmKn.svg%22%7D&chat_instance=4040856596542184382&chat_type=sender&auth_date=1744035066&signature=SNTUYvrUdwEV11EplX_hVEIg5HaYFO5ps-IF7TE5VPaU7rg35gblqL8mFz1p-2FR5lQ88WuHfUb6jCuboGuGBg&hash=4201163cef017868928531e90e0d326880a2a04518234068b4bdd5dae475ad7d';
+const init_data =
+  'user=%7B%22id%22%3A6547551264%2C%22first_name%22%3A%22Marketer%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22Marketer7%22%2C%22language_code%22%3A%22ru%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FZXmZsLRfqSwjww-KJ6vKAk7MdaJgauVvTBeAA_9wyR69odwqAQOCVE4Lm46UHmKn.svg%22%7D&chat_instance=4040856596542184382&chat_type=sender&auth_date=1744035066&signature=SNTUYvrUdwEV11EplX_hVEIg5HaYFO5ps-IF7TE5VPaU7rg35gblqL8mFz1p-2FR5lQ88WuHfUb6jCuboGuGBg&hash=4201163cef017868928531e90e0d326880a2a04518234068b4bdd5dae475ad7d';
 // Еще акк для тестов 6983657401
 // const init_data = 'query_id=AAG5J0IgAwAAALknQiCiASHP&user=%7B%22id%22%3A6983657401%2C%22first_name%22%3A%22InnoSmoke%20%F0%9F%98%B6%E2%80%8D%F0%9F%8C%AB%EF%B8%8F%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22InnoSmokeAdmin%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FG6IL84jx2cu6pK5znAc4_zNQ5CGiot09A_OopubxolzjbRKMfYmY1sGiP59VL6Cl.svg%22%7D&auth_date=1741741025&signature=WW6o6BrJ3DNhab8frU8-XIc_otCfKD3xWhLVFKt0XBwSRv4J5pexx-fVRE3jzk560Ie5VW10XN9nmrKPp-3fAQ&hash=8ca00869d453dc6cedffd8a2cd527f2fb3dfe05aa5a28d3b14bb32fa129aa6db'
 // const init_data =
@@ -22,9 +23,9 @@ const init_data = window.Telegram.WebApp.initData;
 // Дмитрий
 // const init_data = 'query_id=AAEVZgYoAwAAABVmBihdMq7a&user=%7B%22id%22%3A7113958933%2C%22first_name%22%3A%22%D0%94%D0%BC%D0%B8%D1%82%D1%80%D0%B8%D0%B9%22%2C%22last_name%22%3A%22%D0%A1%D0%B8%D0%B4%D0%BE%D1%80%D0%B5%D0%BD%D0%BA%D0%BE%22%2C%22username%22%3A%22dm1trysidorenko%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FlNf1XkHWreKgWszEAkIC2e7JIdfHmoLxyGKt0kODWIy8iXx4pJuhDZrQ8Xb4BJeU.svg%22%7D&auth_date=1741958671&signature=hE7B0MB41j4Bzx3BovD9OSA8rBrtE2fKckvzYIfdt6SMqWb-c-oJkMp434hu3rx3ePvNWSC35nlrGaoekkFGDw&hash=aee1d7c2c74cd08795ae7e6ed5de5b996099e20851b1705bbe0c1cb95fda7fcc';
 // de geras 6475086298
-
 // const init_data =
-//   'query_id%3DAAHa-fEBAwAAANr58QFFg6SM%26user%3D%257B%2522id%2522%253A6475086298%252C%2522first_name%2522%253A%2522%25D0%2590%25D0%25BD%25D0%25B4%25D1%2580%25D0%25B5%25D0%25B9%2522%252C%2522last_name%2522%253A%2522%25D0%2593%25D0%25B5%25D1%2580%25D0%25B0%25D1%2581%25D0%25B8%25D0%25BC%25D0%25BE%25D0%25B2%2522%252C%2522username%2522%253A%2522De_Geras%2522%252C%2522language_code%2522%253A%2522en%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FGzJ9TEsOx7Oc1JJcHr-lzeFQB6alew8O_qoBdhO-6gGt7kZEiGJ6urTqgGlF9_Ye.svg%2522%257D%26auth_date%3D1739263999%26signature%3D6Nc44J8mpAyftuBwiEXHF3YyBtkbAptwj1YO0P99Dhmkpy1G1Nw8wxfR48B22hnqfGPnxxrf9vcSenT5ylpACg%26hash%3D90880b7f94adbd34cac6cd5d023fc5822c26b6d3036709f5dd60f547d2889a2c&tgWebAppVersion=7.2&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22button_text_color%22%3A%22%23ffffff%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22link_color%22%3A%22%23007aff%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22button_color%22%3A%22%23007aff%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22bg_color%22%3A%22%23282828%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%2C%22destructive_text_color%22%3A%22%23ff453a%22%2C%22header_bg_color%22%3A%22%231c1c1c%22%2C%22section_bg_color%22%3A%22%23282828%22%2C%22hint_color%22%3A%22%23ffffff%22%7D';
+//   'query_id=AAHa-fEBAwAAANr58QH4Eup6&user=%7B%22id%22%3A6475086298%2C%22first_name%22%3A%22%D0%90%D0%BD%D0%B4%D1%80%D0%B5%D0%B9%22%2C%22last_name%22%3A%22%D0%93%D0%B5%D1%80%D0%B0%D1%81%D0%B8%D0%BC%D0%BE%D0%B2%22%2C%22username%22%3A%22De_Geras%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FGzJ9TEsOx7Oc1JJcHr-lzeFQB6alew8O_qoBdhO-6gGt7kZEiGJ6urTqgGlF9_Ye.svg%22%7D&auth_date=1744058745&signature=yMQqCsmf406Rzq6vZ7ERy73kxdQQNZV87LtaRtoynqugZpR1NshLilpG0vNIg9yI5bG1seqiyMbo2Wj3kwQ8BA&hash=0297cba62536518e4a29fc070756985c45568e0003d17224fd4b281462e18b5f';
+
 // 😍 Новые аккаунты для dev (@wished_sentry_robot)😍
 // InnoSmoke1️⃣ 6983657401
 // const init_data = "query_id=AAG5J0IgAwAAALknQiA2VnvC&user=%7B%22id%22%3A6983657401%2C%22first_name%22%3A%22InnoSmoke%20%F0%9F%98%B6%E2%80%8D%F0%9F%8C%AB%EF%B8%8F%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22InnoSmokeAdmin%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FG6IL84jx2cu6pK5znAc4_zNQ5CGiot09A_OopubxolzjbRKMfYmY1sGiP59VL6Cl.svg%22%7D&auth_date=1744048527&signature=sJB64hld2T1Zq-g17M9vxRldiv33vWYAjmsuYMeH8zVgZhy9Fc9HXffD4TzTkAk4L_ifwZW3xbgq_myMajuEDg&hash=a9c187b49a1efa365dfeccd60d591785b95547355404a32aaa7ff84a97ecb4de"
@@ -37,25 +38,21 @@ const init_data = window.Telegram.WebApp.initData;
 
 // const init_data = 'query_id%3DAAHa-fEBAwAAANr58QFFg6SM%26user%3D%257B%2522id%2522%253A6475086298%252C%2522first_name%2522%253A%2522%25D0%2590%25D0%25BD%25D0%25B4%25D1%2580%25D0%25B5%25D0%25B9%2522%252C%2522last_name%2522%253A%2522%25D0%2593%25D0%25B5%25D1%2580%25D0%25B0%25D1%2581%25D0%25B8%25D0%25BC%25D0%25BE%25D0%25B2%2522%252C%2522username%2522%253A%2522De_Geras%2522%252C%2522language_code%2522%253A%2522en%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FGzJ9TEsOx7Oc1JJcHr-lzeFQB6alew8O_qoBdhO-6gGt7kZEiGJ6urTqgGlF9_Ye.svg%2522%257D%26auth_date%3D1739263999%26signature%3D6Nc44J8mpAyftuBwiEXHF3YyBtkbAptwj1YO0P99Dhmkpy1G1Nw8wxfR48B22hnqfGPnxxrf9vcSenT5ylpACg%26hash%3D90880b7f94adbd34cac6cd5d023fc5822c26b6d3036709f5dd60f547d2889a2c&tgWebAppVersion=7.2&tgWebAppPlatform=macos&tgWebAppThemeParams=%7B%22button_text_color%22%3A%22%23ffffff%22%2C%22text_color%22%3A%22%23ffffff%22%2C%22link_color%22%3A%22%23007aff%22%2C%22section_header_text_color%22%3A%22%23e5e5e5%22%2C%22button_color%22%3A%22%23007aff%22%2C%22subtitle_text_color%22%3A%22%23ffffff%22%2C%22bg_color%22%3A%22%23282828%22%2C%22accent_text_color%22%3A%22%23007aff%22%2C%22secondary_bg_color%22%3A%22%231c1c1c%22%2C%22destructive_text_color%22%3A%22%23ff453a%22%2C%22header_bg_color%22%3A%22%231c1c1c%22%2C%22section_bg_color%22%3A%22%23282828%22%2C%22hint_color%22%3A%22%23ffffff%22%7D';
 
-
 // const referral_id= WebApp.initDataUnsafe.user?.id ?? 0
-const referral_id = window.Telegram.WebApp.initDataUnsafe.user.id;
+// const referral_id = window.Telegram.WebApp.initDataUnsafe.user.id;
 // const referral_id = 1259832544; //Марго
 // const referral_id = 1301940582; //Андрей dehopen
-// const referral_id = 6547551264; //Кирилл А
+const referral_id = 6547551264; //Кирилл А
 // const referral_id = 1488618801; //Виктор
 // const referral_id = 563486774; //Тимур
 // const referral_id = 7113958933; // дмитрий
 // const referral_id = 6475086298; //de geras
-
 
 // const referral_id = 6983657401; // InnoSmoke1️⃣
 // const referral_id = 6983657401; // StoriesMaker2️⃣
 // const referral_id = 6983657401; // domiknakolese3️⃣
 // const referral_id = 6983657401; // Никита Пирсов4️⃣
 
-
 const buildMode: 'testDev' | 'test' | 'prodDev' | 'production' = 'testDev'; //change type of building here
-
 
 export { init_data, buildMode, referral_id };

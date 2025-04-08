@@ -1,12 +1,18 @@
-import { FC, useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
-import { IntegrationResponseDTO, integrationsApi, RootState, selectVolume, setIsWorking } from '../../../redux';
+import {
+  IntegrationResponseDTO,
+  RootState,
+  selectVolume,
+  setIntegrationReadyForPublishing,
+  setIsWorking,
+  setLastIntegrationId,
+} from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration, useModal } from '../../../hooks';
 import { MODALS, SOUNDS } from '../../../constants';
-import { setIntegrationReadyForPublishing, setLastIntegrationId } from '../../../redux';
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
@@ -63,7 +69,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     return savedInitial ? parseInt(savedInitial) : integration.time_left;
   });
 
-  const [isExpired, setIsExpired] = useState(timeLeft <= 0);
+  const [isExpired] = useState(timeLeft <= 0);
   const [isAccelerated, setIsAccelerated] = useState(false);
   const [playAccelerateIntegrationSound] = useSound(SOUNDS.speedUp, {
     volume: useSelector(selectVolume),
@@ -171,7 +177,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     playAccelerateIntegrationSound();
     dispatch(setLastIntegrationId(integration.id));
 
-    void accelerateIntegration(1).finally(() => {
+    void accelerateIntegration(1000).finally(() => {
       refetchIntegration();
     });
 

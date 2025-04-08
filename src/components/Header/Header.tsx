@@ -4,13 +4,7 @@ import StreakAlarm from '../../assets/icons/streak-alarm.svg';
 import FireBlue from '../../assets/icons/fire-blue.svg';
 import FireGray from '../../assets/icons/fire-gray.svg';
 import SubscribersIcon from '../../assets/icons/subscribers.png';
-import {
-  RootState,
-  setLastActiveStage,
-  useGetProfileMeQuery,
-  useGetProfileMeWithPollingQuery,
-  useGetTreeInfoWithPollingQuery,
-} from '../../redux';
+import { RootState, setLastActiveStage, useGetProfileMeQuery, useGetTreeInfoWithPollingQuery } from '../../redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AppRoute, GUIDE_ITEMS, MODALS, PROFILE_ME_POLLING_INTERVAL, TREE_POLLING_INTERVAL } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,11 +18,11 @@ import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileS
 import classNames from 'classnames';
 
 export const Header = () => {
-  const { data, isLoading, refetch } = useGetProfileMeWithPollingQuery(undefined, {
+  const { data, isLoading, refetch } = useGetProfileMeQuery(undefined, {
     pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
 
-  const { points: displayedPoints, subscribers: displayedSubscribers } = useIncrementingProfileStats({
+  const { subscribers: displayedSubscribers } = useIncrementingProfileStats({
     profileId: data?.id || '',
     basePoints: data?.points || '0',
     baseSubscribers: data?.subscribers || 0,
@@ -41,7 +35,6 @@ export const Header = () => {
 
   const { in_streak } = usePushLineStatus();
 
-  const points = in_streak ? displayedPoints : data?.points;
   const subscribers = in_streak ? displayedSubscribers : data?.subscribers;
 
   const { data: treeData } = useGetTreeInfoWithPollingQuery(undefined, {
@@ -55,10 +48,10 @@ export const Header = () => {
 
   const lastActiveStage = lastActiveStageFromState ?? lastActiveStageFromProfile;
   const { i18n } = useTranslation('profile');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const platform = getOS();
 
-  const [rerender, setRerender] = useState(0);
+  const [ rerender, setRerender ] = useState(0);
 
   const { getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
@@ -68,7 +61,7 @@ export const Header = () => {
     if (isOpen) {
       refetch();
     }
-  }, [isOpen]);
+  }, [ isOpen ]);
 
   const rerenderAfterPublish = useSelector((state: RootState) => state.guide.refetchAfterPublish);
 
@@ -78,7 +71,8 @@ export const Header = () => {
         setRerender(rerenderAfterPublish);
       });
     }
-  }, [rerenderAfterPublish]);
+  }, [ rerenderAfterPublish ]);
+
 
   const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
@@ -94,7 +88,7 @@ export const Header = () => {
     if (lastActiveStageNumber) {
       dispatch(setLastActiveStage(lastActiveStageNumber));
     }
-  }, [lastActiveStageNumber, dispatch]);
+  }, [ lastActiveStageNumber, dispatch ]);
 
   const handleNavigateToProfile = () => {
     if (footerActive) {
@@ -123,10 +117,10 @@ export const Header = () => {
     } else {
       return 0;
     }
-  }, [profile?.growth_tree_stage_id, profile?.subscribers]);
+  }, [ profile?.growth_tree_stage_id, profile?.subscribers ]);
 
   const showHeaderBG =
-    !['/', '/progressTree'].includes(location) &&
+    ![ '/', '/progressTree' ].includes(location) &&
     !(location.split('/')[1] === 'profile' && location.split('/')[3] === 'room');
 
   const darken =
@@ -200,7 +194,7 @@ export const Header = () => {
 
             <div className={styles.coinsWrapper}>
               <p className={styles.coins}>
-                {formatAbbreviation(showCoins ? points || 0 : '0', 'number', { locale: locale })}
+                {formatAbbreviation(showCoins ? data?.points || 0 : '0', 'number', { locale: locale })}
               </p>
               <img className={styles.coinIcon} src={CoinIcon} alt="CoinIcon" />
             </div>
