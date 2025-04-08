@@ -152,7 +152,7 @@ export const StrangerProfilePage: React.FC = () => {
             rewards={userProfileData.achievements_collected}
             views={userProfileData.total_views}
           />
-          {topProfilesData.profiles?.[0]?.achievements.length > 0 && (
+          {topProfilesData.profiles?.[0]?.achievements?.length > 0 && (
             <div className={styles.achivements}>
               {topProfilesData.profiles?.[0]?.achievements.map(item => {
                 return (

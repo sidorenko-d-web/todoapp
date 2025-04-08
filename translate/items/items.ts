@@ -52,7 +52,7 @@ export const useRoomItemsSlots = (): RoomItemsSlots => {
     },
     window: {
       slot: 5,
-      name: ['Деревянное окно', 'Панорамное окно', 'Двухстворчатое окно'],
+      name: ['Окно', 'Панорамное окно', 'Двухстворчатое окно'],
     },
     poster: {
       slot: 6,
