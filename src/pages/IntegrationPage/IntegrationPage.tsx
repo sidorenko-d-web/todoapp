@@ -39,7 +39,7 @@ export const IntegrationPage: React.FC = () => {
   });
 
   const [_, setRerender] = useState(0);
-  const [localProgress, setLocalProgress] = useState(0);
+  const [localProgress, setLocalProgress] = useState(parseInt(localStorage.getItem('COMMENTS_PROGRESS') || '0'));
   const [localCommentsGenerated, setLocalCommentsGenerated] = useState(0);
   const [isEndComment, setIsEndComment] = useState(false);
 
