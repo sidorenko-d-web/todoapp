@@ -40,10 +40,10 @@ export const IntegrationPage: React.FC = () => {
     skip: !queryIntegrationId && queryIntegrationId === 'undefined',
   });
 
-  const [ _, setRerender ] = useState(0);
-  const [ localProgress, setLocalProgress ] = useState(0);
-  const [ localCommentsGenerated, setLocalCommentsGenerated ] = useState(0);
-  const [ isEndComment, setIsEndComment ] = useState(false);
+  const [_, setRerender] = useState(0);
+  const [localProgress, setLocalProgress] = useState(parseInt(localStorage.getItem('COMMENTS_PROGRESS') || '0'));
+  const [localCommentsGenerated, setLocalCommentsGenerated] = useState(0);
+  const [isEndComment, setIsEndComment] = useState(false);
 
   const integrationId =
     queryIntegrationId !== 'undefined'
@@ -105,6 +105,11 @@ export const IntegrationPage: React.FC = () => {
       setIsEndComment(comments.length === 0);
     }
   }, [ data, comments, isUnansweredIntegrationCommentLoading ]);
+
+  useEffect(() => {
+    console.log('setting comment progress');
+    localStorage.setItem('COMMENTS_PROGRESS', '' + localProgress);
+  }, [localProgress]);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     if (isVoting) return;

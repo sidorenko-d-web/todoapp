@@ -180,22 +180,26 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         playLvlSound();
         refetch();
         refetchEquipped();
-        if (item.item_premium_level === 'pro') {
+        if (item.item_premium_level === 'pro' && res.data.level === 100) {
           openModal(MODALS.UPGRADED_SHOP, {
             item,
             isYellow: item.item_rarity === 'red',
           });
         } else {
-          if (res.data.level % 10 === 0) {
+          if (res.data.level === 50 || res.data.level === 100) {
             localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
             localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
+
+            const rewardForUpgrade = res.data.level === 50 ? t('s63') : res.data.level === 100 ? 
+              t('s64') : t('s65');
+
+            openModal(MODALS.UPGRADED_ITEM, {
+              item: res.data,
+              mode: 'item',
+              reward: rewardForUpgrade,
+            });
           }
 
-          openModal(MODALS.UPGRADED_ITEM, {
-            item: res.data,
-            mode: 'item',
-            reward: 'reward of item',
-          });
         }
       }
     } catch (error) {
@@ -271,22 +275,25 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
                 playLvlSound();
                 refetch();
                 refetchEquipped();
-                if (item.item_premium_level === 'pro') {
+                if (item.item_premium_level === 'pro' && res.data.level === 100) {
                   openModal(MODALS.UPGRADED_SHOP, {
                     item,
                     isYellow: item.item_rarity === 'red',
                   });
                 } else {
-                  if (res.data.level % 10 === 0) {
+                  if (res.data.level === 50 || res.data.level === 100) {
                     localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
                     localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
-                  }
 
-                  openModal(MODALS.UPGRADED_ITEM, {
-                    item: res.data,
-                    mode: 'item',
-                    reward: 'reward of item',
-                  });
+                    const rewardForUpgrade = res.data.level === 50 ? 'Каменный сундук' : res.data.level === 100 ? 
+                      'Редкий сундук' : 'Легендарный сундук';
+
+                    openModal(MODALS.UPGRADED_ITEM, {
+                      item: res.data,
+                      mode: 'item',
+                      reward: rewardForUpgrade,
+                    });
+                  }
                 }
               }
             } catch (error) {
@@ -512,7 +519,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           </div>
         ))}
 
-      {isBlocked || !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN) ? (
+      {isBlocked ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>{t('s26')}</p>
@@ -537,7 +544,7 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         <div className={styles.actions}>
           <Button
             onClick={handleUsdtPayment}
-            disabled={itemLevel === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
+            disabled={itemLevel === 50 || itemLevel === 100 || itemLevel === 150 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
           >
             {formatAbbreviation(data?.items[0].price_usdt || 0, 'currency', {
               locale: locale,
@@ -552,7 +559,8 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
               ),
               { [styles.disabledBtn]: !isAffordable },
             )}
-            disabled={itemLevel === 50 || isLoading || isItemsLoading || isUpdateLoading || !isAffordable}
+            disabled={itemLevel === 50 || itemLevel === 100 || itemLevel === 150 
+              || isLoading || isItemsLoading || isUpdateLoading || !isAffordable}
             onClick={() => handleBuyItem(price ?? '')}
           >
             <>
