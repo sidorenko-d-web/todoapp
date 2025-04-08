@@ -39,6 +39,7 @@ $header-position: calc(var(--tg-content-safe-area-inset-top) + var(--tg-safe-are
 
   &.progressTree {
     background-color: transparent;
+    padding-top: 0;
   }
 
   

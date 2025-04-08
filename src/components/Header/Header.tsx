@@ -4,17 +4,11 @@ import StreakAlarm from '../../assets/icons/streak-alarm.svg';
 import FireBlue from '../../assets/icons/fire-blue.svg';
 import FireGray from '../../assets/icons/fire-gray.svg';
 import SubscribersIcon from '../../assets/icons/subscribers.png';
-import {
-  RootState,
-  setLastActiveStage,
-  useGetProfileMeQuery,
-  useGetProfileMeWithPollingQuery,
-  useGetTreeInfoWithPollingQuery,
-} from '../../redux';
+import { RootState, setLastActiveStage, useGetProfileMeQuery, useGetTreeInfoWithPollingQuery } from '../../redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AppRoute, GUIDE_ITEMS, MODALS, PROFILE_ME_POLLING_INTERVAL, TREE_POLLING_INTERVAL } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
 import { TrackedLink } from '../withTracking';
@@ -24,7 +18,7 @@ import { useIncrementingProfileStats } from '../../hooks/useIncrementingProfileS
 import classNames from 'classnames';
 
 export const Header = () => {
-  const { data, isLoading, refetch } = useGetProfileMeWithPollingQuery(undefined, {
+  const { data, isLoading, refetch } = useGetProfileMeQuery(undefined, {
     pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
 
@@ -55,11 +49,10 @@ export const Header = () => {
 
   const lastActiveStage = lastActiveStageFromState ?? lastActiveStageFromProfile;
   const { i18n } = useTranslation('profile');
-  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const locale = [ 'ru', 'en' ].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const platform = getOS();
 
-  
-  const [rerender, setRerender] = useState(0);
+  const [ rerender, setRerender ] = useState(0);
 
   const { getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
@@ -69,19 +62,19 @@ export const Header = () => {
     if (isOpen) {
       refetch();
     }
-  }, [isOpen]);
+  }, [ isOpen ]);
 
   const rerenderAfterPublish = useSelector((state: RootState) => state.guide.refetchAfterPublish);
 
   useEffect(() => {
-    if(rerenderAfterPublish > rerender) {
+    if (rerenderAfterPublish > rerender) {
       refetch().then(() => {
         setRerender(rerenderAfterPublish);
-      })
+      });
     }
-  }, [rerenderAfterPublish]);
+  }, [ rerenderAfterPublish ]);
 
-  
+
   const footerActive = useSelector((state: RootState) => state.guide.footerActive);
 
   const userSubscribers = data?.subscribers || 0;
@@ -96,7 +89,7 @@ export const Header = () => {
     if (lastActiveStageNumber) {
       dispatch(setLastActiveStage(lastActiveStageNumber));
     }
-  }, [lastActiveStageNumber, dispatch]);
+  }, [ lastActiveStageNumber, dispatch ]);
 
   const handleNavigateToProfile = () => {
     if (footerActive) {
@@ -105,15 +98,30 @@ export const Header = () => {
   };
 
   const showCoins = useSelector((state: RootState) => state.guide.getCoinsGuideShown);
-
   const accelerateGuideShown = useSelector((state: RootState) => state.guide.accelerateIntegrationGuideClosed);
-
   const dim = useSelector((state: RootState) => state.guide.dimHeader);
-
   const integrationCurrentlyCreating = useSelector((state: RootState) => state.acceleration.integrationCreating);
 
+  const currentStage = treeData?.growth_tree_stages.find(item => item.stage_number === profile?.growth_tree_stage_id);
+  const nextStage = treeData?.growth_tree_stages.find(
+    item => item.stage_number === (profile?.growth_tree_stage_id ?? 0) + 1,
+  );
+
+  const progressValue = useMemo(() => {
+    if (currentStage?.stage_number === 450) {
+      return 450;
+    } else if (nextStage && profile && currentStage) {
+      const gap = nextStage.subscribers - currentStage.subscribers;
+      const subscribersInGap = profile?.subscribers - currentStage?.subscribers;
+
+      return (subscribersInGap / gap) * 100;
+    } else {
+      return 0;
+    }
+  }, [profile?.growth_tree_stage_id, profile?.subscribers]);
+
   const showHeaderBG =
-    !['/', '/progressTree'].includes(location) &&
+    ![ '/', '/progressTree' ].includes(location) &&
     !(location.split('/')[1] === 'profile' && location.split('/')[3] === 'room');
 
   const darken =
@@ -130,7 +138,7 @@ export const Header = () => {
     isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
     !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
 
-  const notDarken = integrationCurrentlyCreating && accelerateGuideShown || getModalState(MODALS.SUBSCRIBE).isOpen;
+  const notDarken = (integrationCurrentlyCreating && accelerateGuideShown) || getModalState(MODALS.SUBSCRIBE).isOpen;
 
   return (
     <>
@@ -180,7 +188,7 @@ export const Header = () => {
                   ) : (
                     <span className={styles.levelNumber}>{lastActiveStage}</span>
                   )}
-                  <progress max={10} value={6} className={styles.levelProgressBar}></progress>
+                  <progress max={100} value={progressValue} className={styles.levelProgressBar}></progress>
                 </div>
               </div>
             </div>

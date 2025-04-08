@@ -4,13 +4,13 @@ import loadingVid from '../../../assets/gif/loading.mp4';
 // import Lottie from 'lottie-react';
 // import { coinsAnim } from '../../../assets/animations';
 import { LoadingScreenBar, LoadingScreenBarRef } from '../../loadingScreen/LoadingScreenBar/LoadingScreenBar';
-import useSound from 'use-sound';
-import { buildMode, SOUNDS } from '../../../constants';
+import { buildMode } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { selectVolume } from '../../../redux';
 
 import qr from '../../../assets/icons/qr.png';
 import WhiteNoiseCanvas from '../../WhiteNoise/WhiteNoise';
+import { useButtonSound } from '../../../hooks';
 
 interface LoadingScreenProps {
   onAnimationComplete: () => void;
@@ -26,13 +26,14 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   const currentVolumeEnabled = localStorage.getItem('soundEffectsEnabled') === 'true';
   const currentVolumeNumber = localStorage.getItem('buttonVolume');
   const currenSetupStepIsNotCompleted = localStorage.getItem('currentSetupStep') !== 'completed';
-  const [playAccelerateSound] = useSound(SOUNDS.speedUp, {
-    volume: currenSetupStepIsNotCompleted
-      ? useSelector(selectVolume)
-      : currentVolumeEnabled
-      ? Number(currentVolumeNumber)
-      : 0,
-  });
+  const volume = useSelector(selectVolume);
+  // const [playAccelerateSound] = useSound(SOUNDS.speedUp, {
+  //   volume: currenSetupStepIsNotCompleted
+  //     ? useSelector(selectVolume) / 2
+  //     : currentVolumeEnabled
+  //     ? Number(currentVolumeNumber) / 2
+  //     : 0,
+  // });
   const loadingScreenBarRef = useRef<LoadingScreenBarRef>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -92,9 +93,21 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
     }
   }, [progress]);
 
-  const handleAccelerate = () => {
+  const sound = useButtonSound({
+    sound: "speedUp",
+    enabled: currentVolumeEnabled,
+    volumeMultiplier: currenSetupStepIsNotCompleted
+      ? volume / 4
+      : currentVolumeEnabled
+        ? Number(currentVolumeNumber) / 4
+        : 0,
+  })
+
+
+  const handleAccelerate = async () => {
     if (!showAnimation) {
-      playAccelerateSound();
+      // playAccelerateSound();
+      sound()
       setSpeedMultiplier(prev => prev * 1.5);
 
       if (loadingScreenBarRef.current) {
@@ -137,7 +150,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
   return (
     <>
       <WhiteNoiseCanvas />
-      {isMobile === 1 && (
+      {(isMobile === 1 || buildMode === 'testDev' || buildMode === 'test') &&(
         <div className={styles.root} onClick={handleAccelerate}>
           <div />
           <div className={styles.clickableArea}></div>
@@ -173,7 +186,7 @@ export const LoadingScreen = ({ onAnimationComplete, isAuthComplete }: LoadingSc
         </div>
       )}
 
-      {isMobile === -1 && (
+        {isMobile === -1 && buildMode !== 'testDev' && buildMode !== 'test' &&  (
         <div className={styles.notMobile}>
           <div className={styles.qr}>
             <img src={qr} />

@@ -1,12 +1,18 @@
-import { FC, useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
-import { IntegrationResponseDTO, integrationsApi, RootState, selectVolume, setIsWorking } from '../../../redux';
+import {
+  IntegrationResponseDTO,
+  RootState,
+  selectVolume,
+  setIntegrationReadyForPublishing,
+  setIsWorking,
+  setLastIntegrationId,
+} from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration, useModal } from '../../../hooks';
 import { MODALS, SOUNDS } from '../../../constants';
-import { setIntegrationReadyForPublishing, setLastIntegrationId } from '../../../redux';
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
@@ -63,7 +69,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     return savedInitial ? parseInt(savedInitial) : integration.time_left;
   });
 
-  const [isExpired, setIsExpired] = useState(timeLeft <= 0);
+  const [isExpired] = useState(timeLeft <= 0);
   const [isAccelerated, setIsAccelerated] = useState(false);
   const [playAccelerateIntegrationSound] = useSound(SOUNDS.speedUp, {
     volume: useSelector(selectVolume),
@@ -131,14 +137,14 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     closeModal(MODALS.CREATING_INTEGRATION);
   }, []);
 
-  useEffect(() => {
-    if (timeLeft <= 0 && !isExpired) {
-      setIsExpired(true);
-      void accelerateIntegration(3600).finally(() => {
-        dispatch(integrationsApi.util.invalidateTags(['Integrations']));
-      });
-    }
-  }, [timeLeft, isExpired, accelerateIntegration, dispatch]);
+  // useEffect(() => {
+  //   if (timeLeft <= 0 && !isExpired) {
+  //     setIsExpired(true);
+  //     void accelerateIntegration(3600).finally(() => {
+  //       dispatch(integrationsApi.util.invalidateTags(['Integrations']));
+  //     });
+  //   }
+  // }, [timeLeft, isExpired, accelerateIntegration, dispatch]);
 
   // useEffect(() => {
   //   if (!isGuideShown(GUIDE_ITEMS.creatingIntegration.INITIAL_INTEGRATION_DURATION_SET)) {

@@ -42,7 +42,6 @@ export const ShopPage: FC = () => {
 
   if (isBoostLoading) return <Loader />;
 
-
   return (
     <ShopLayout mode="shop" onItemCategoryChange={setShopCategory} onItemQualityChange={setItemsQuality}>
       {isShopLoading || isShopFetching ? (
@@ -62,4 +61,3 @@ export const ShopPage: FC = () => {
     </ShopLayout>
   );
 };
-

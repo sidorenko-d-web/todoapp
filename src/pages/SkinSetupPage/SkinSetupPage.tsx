@@ -31,9 +31,11 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
   const [activeTab, setActiveTab] = useState('head');
   const { data: character } = useGetCharacterQuery();
   const [updateCharacter] = useUpdateCharacterMutation();
-  const personScale = 0.13;
   const [size, setSize] = useState([0, 0]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const dpi = window.devicePixelRatio;
+  const personScale = 0.13 * dpi;
+
   useLayoutEffect(() => {
     function updateSize() {
       setSize([window.innerWidth, window.innerHeight]);
@@ -89,7 +91,7 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
       }
       spineSceneRef.current = this;
       this.changeSkin(personScale, character);
-      setIsLoaded(true)
+      setIsLoaded(true);
     }
   }
 
@@ -103,10 +105,11 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
     if (!sceneRef.current || isLoading) return;
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
-      width: 280,
-      height: 280,
+      width: 280 * dpi,
+      height: 280 * dpi,
       scene: [SpineScene],
       transparent: true,
+      canvasStyle: `width: ${280}px; height: ${280}px`,
       plugins: {
         scene: [{ key: 'player1', plugin: SpinePlugin, mapping: 'spine' }],
       },
@@ -150,7 +153,7 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
 
   return (
     <>
-      <WhiteNoiseCanvas/>
+      <WhiteNoiseCanvas />
       <div className={styles.root}>
         <div className={styles.skinControls}>
           <div className={styles.avatarSection}>
@@ -171,8 +174,9 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
               {categories.map(({ name, key }) => (
                 <Button
                   key={key}
-                  className={`${styles.tab} ${activeTab === key ? styles.activeTab : ''} ${key === 'entire_body' && activeTab !== key ? styles.vipTab : ''
-                    }`}
+                  className={`${styles.tab} ${activeTab === key ? styles.activeTab : ''} ${
+                    key === 'entire_body' && activeTab !== key ? styles.vipTab : ''
+                  }`}
                   onClick={() => setActiveTab(key)}
                 >
                   {name}
