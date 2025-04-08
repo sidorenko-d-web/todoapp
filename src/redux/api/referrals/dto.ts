@@ -69,4 +69,8 @@ export type GetReferralsDTO = {
   main_statistics: MainStatistics;
   referrals: ReferralDTO[];
 };
+export type IGetReferralsRequest = {
+  limit?: number
+  offset?: number
+};
 

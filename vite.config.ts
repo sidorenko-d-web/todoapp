@@ -50,21 +50,20 @@ export default defineConfig({
     ],
   },
   server:
-    //prodDev
-    // {
-    //   allowedHosts: true,
-    //   proxy: {
-    //     '/api/miniapp-v2-prod': {
-    //       target: 'https://miniapp.apusher.com',
-    //       changeOrigin: true,
-    //       rewrite: path => path.replace(/^\/api\/miniapp-v2-prod/, ''),
-    //     },
-    //   },
-    // }
+    // prodDev
     {
-      //testDev
       allowedHosts: true,
       proxy: {
+        '/api/miniapp-v2-prod': {
+          target: 'https://miniapp.apusher.com',
+          changeOrigin: true,
+          rewrite: path => path.replace(/^\/api\/miniapp-v2-prod/, ''),
+        },
+        '/api/base': {
+          target: 'https://bbaa2o77ubs6r4cta1l2.containers.yandexcloud.net/',
+          changeOrigin: true,
+          rewrite: path => path.replace(/^\/api\/base/, ''),
+        },
         '/api/miniapp-v2-dev': {
           target: 'https://storage.yandexcloud.net',
           changeOrigin: true,

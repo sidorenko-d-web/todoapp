@@ -1,6 +1,5 @@
 @use '../../../../assets/styles/index.scss' as var;
 
-
 .badgesWrp {
   display: flex;
   flex-direction: row;
@@ -17,7 +16,7 @@
     background: #212129;
 
     img {
-      @include var.multi-size(14px, 18px)
+      @include var.multi-size(14px, 18px);
     }
   }
 
@@ -34,8 +33,38 @@
 
     @include var.multi-fz(10px, 12px);
   }
+}
 
+.list {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+  transform: translateX(-15px);
 
+  &::-webkit-scrollbar {
+    width: 1px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+
+  .item {
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px;
+
+    .loadingText {
+      color: var.$color-text-super-transparent;
+    }
+  }
 }
 
 .noReferrals {
