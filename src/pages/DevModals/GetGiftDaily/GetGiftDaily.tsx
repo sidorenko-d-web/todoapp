@@ -36,8 +36,11 @@ export default function GetGiftDaily({ giftColor }: Props) {
   const subscribersBoost = args?.boost?.subscribers;
   const pointsBoost = args?.points;
   const additionalIntegrationsForSubscription = args?.boost?.additional_integrations_for_subscription;
-  
+
   const { t } = useTranslation('gift');
+
+  const isVibrationSupported =
+    typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
 
   if (!isOpen) return null;
 
@@ -73,9 +76,7 @@ export default function GetGiftDaily({ giftColor }: Props) {
         {giftImage}
         <div className={styles.statsContainer}>
           <div className={styles.stat}>
-            {incomePerSecond && (
-              <span className={styles.statValue}>+{formatAbbreviation(incomePerSecond)}</span>
-            )}
+            {incomePerSecond && <span className={styles.statValue}>+{formatAbbreviation(incomePerSecond)}</span>}
             <div className={styles.statBox}>
               <span>x{formatAbbreviation(xIncomePerSecond || 0)}</span>
               <img src={coin} />
@@ -124,10 +125,15 @@ export default function GetGiftDaily({ giftColor }: Props) {
           giftColor == null || giftColor === 'Синий подарок'
             ? 'blue'
             : giftColor === 'Пурпурный подарок'
-              ? 'purple'
-              : 'red'
+            ? 'purple'
+            : 'red'
         }
-        onClick={() => closeModal(MODALS.GET_GIFT_DAILY)}
+        onClick={() => {
+          if (isVibrationSupported) {
+            navigator.vibrate(200);
+          }
+          closeModal(MODALS.GET_GIFT_DAILY);
+        }}
       >
         {t('g3')}
       </Button>

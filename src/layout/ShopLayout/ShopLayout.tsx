@@ -1,9 +1,10 @@
-import { type FC, PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import { Dispatch, type FC, PropsWithChildren, SetStateAction, useEffect, useMemo, useState } from 'react';
 import styles from './ShopLayout.module.scss';
 import {
   RootState,
   setLastOpenedRarity,
   setLastOpenedTab,
+  setSelectedIntegrationCategory,
   TypeItemCategory,
   TypeItemRarity,
   useGetCurrentUserBoostQuery,
@@ -47,30 +48,33 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
                                                          }) => {
   const lastOpenedTab = useSelector((state: RootState) => state.shop.lastOpenedTab);
   const lastOpenedRarity = useSelector((state: RootState) => state.shop.lastOpenedRarity);
+  const selectedIntegrationCategory = useSelector((state: RootState) => state.shop.selectedIntegrationCategory);
   const dispatch = useDispatch();
 
   const { t } = useTranslation('shop');
-  const shopItemCategories = [
+  const shopItemCategories: TypeTab<TypeItemCategory>[] = [
     { title: `${t('s2')}`, value: 'text' },
     { title: `${t('s3')}`, value: 'image' },
     { title: `${t('s4')}`, value: 'video' },
     { title: `${t('s5')}`, value: 'decor' },
     { title: `${t('s6')}`, value: 'you' },
   ];
-  const shopItemRarity = [
+  const shopItemRarity: TypeTab<TypeItemRarity>[] = [
     { title: `${t('s14')}`, value: 'red' },
     { title: `${t('s15')}`, value: 'yellow' },
     { title: `${t('s16')}`, value: 'green' },
   ];
-  const [ shopCategory, setShopCategory ] = useState(lastOpenedTab || shopItemCategories[0]);
-  const [ itemsQuality, setItemsQuality ] = useState(lastOpenedRarity || shopItemRarity[0]);
+
+  const [ shopCategory, setShopCategory ] = useState<TypeTab<TypeItemCategory>>(lastOpenedTab || shopItemCategories[0]);
+
+  const [ itemsQuality, setItemsQuality ] = useState<TypeTab<TypeItemRarity>>(lastOpenedRarity || shopItemRarity[0]);
 
   const setRerender = useState(0)[1];
 
   const { data: inventory, isSuccess } = useGetInventoryItemsQuery({});
   const { data: shop } = useGetShopItemsQuery({
     level: 1,
-    item_category: shopCategory?.value as TypeItemCategory,
+    item_category: shopCategory.value,
     is_bought: mode === 'inventory',
   });
   const { data: boost } = useGetCurrentUserBoostQuery();
@@ -81,12 +85,27 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const [ showBackToMainGuide, setShowBackToMainGuide ] = useState(false);
 
   useEffect(() => {
-    onItemCategoryChange(shopCategory as TypeTab<TypeItemCategory>);
+    if (selectedIntegrationCategory) {
+      const newCategory = shopItemCategories.find(cat => cat.value === selectedIntegrationCategory);
+      if (newCategory) {
+        setShopCategory(newCategory);
+      }
+    }
+  }, [ selectedIntegrationCategory ]);
+
+  useEffect(() => {
+    onItemCategoryChange(shopCategory);
     dispatch(setLastOpenedTab(shopCategory));
 
     onItemQualityChange(itemsQuality as TypeTab<TypeItemRarity>);
     dispatch(setLastOpenedRarity(itemsQuality));
   }, [ shopCategory.value, itemsQuality.value ]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setSelectedIntegrationCategory(shopItemCategories[0].value));
+    };
+  }, [ dispatch ]);
 
   const navigate = useNavigate();
 
@@ -95,7 +114,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   }, [ shop?.count, inventory?.count ]);
 
   const tabs = useMemo(() => {
-    const _tabs = [];
+    const _tabs: TypeTab<TypeItemRarity>[] = [];
     itemsInTabs?.red?.length && itemsInTabs?.red?.length > 0 && _tabs.push(shopItemRarity[0]);
     itemsInTabs?.yellow?.length && itemsInTabs?.yellow?.length > 0 && _tabs.push(shopItemRarity[1]);
     itemsInTabs?.green?.length && itemsInTabs?.green?.length > 0 && _tabs.push(shopItemRarity[2]);
@@ -104,17 +123,18 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   }, [ itemsInTabs?.green?.length, itemsInTabs?.red?.length, itemsInTabs?.yellow?.length, shopItemRarity ]);
 
   const inventoryTabs = useMemo(() => {
-    const _inventoryTabs = [];
-    isSuccess &&
-    inventory?.items.find(item => item.item_rarity === 'red' && item.item_category === shopCategory.value) &&
-    _inventoryTabs.push(shopItemRarity[0]);
-    isSuccess &&
-    inventory?.items.find(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value) &&
-    _inventoryTabs.push(shopItemRarity[1]);
-    isSuccess &&
-    inventory?.items.find(item => item.item_rarity === 'green' && item.item_category === shopCategory.value) &&
-    _inventoryTabs.push(shopItemRarity[2]);
-
+    const _inventoryTabs: TypeTab<TypeItemRarity>[] = [];
+    if (isSuccess && inventory?.items) {
+      if (inventory.items.some(item => item.item_rarity === 'red' && item.item_category === shopCategory.value)) {
+        _inventoryTabs.push(shopItemRarity[0]);
+      }
+      if (inventory.items.some(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value)) {
+        _inventoryTabs.push(shopItemRarity[1]);
+      }
+      if (inventory.items.some(item => item.item_rarity === 'green' && item.item_category === shopCategory.value)) {
+        _inventoryTabs.push(shopItemRarity[2]);
+      }
+    }
     return _inventoryTabs;
   }, [ inventory?.items, isSuccess, shopCategory.value, shopItemRarity ]);
 
@@ -131,8 +151,11 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   };
 
   useEffect(() => {
-    setItemsQuality(shopItemRarity[0]);
-  }, [ shopCategory.value ]);
+    const availableTabs = mode === 'shop' ? tabs : inventoryTabs;
+    if (availableTabs.length > 0 && !availableTabs.some(tab => tab.value === itemsQuality.value)) {
+      setItemsQuality(availableTabs[0]);
+    }
+  }, [ shopCategory.value, tabs, inventoryTabs ]);
 
   const reduxDispatch = useDispatch();
 
@@ -145,7 +168,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   const isTabsNotEmpty = useMemo(() => (
     [ ...(itemsInTabs?.green ?? []), ...(itemsInTabs?.yellow ?? []) ].length > 0
   ), [ itemsInTabs?.green, itemsInTabs?.yellow ]);
-  console.info([ ...(itemsInTabs?.green ?? []), ...(itemsInTabs?.yellow ?? []) ]);
 
   useEffect(() => {
     if (!dimSet) {
@@ -170,8 +192,6 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
       setShowBackToMainGuide(false);
     }
   }, [ mode ]);
-
-  console.info(shopCategory.title !== t('s6') && isTabsNotEmpty);
 
   return (
     <>
@@ -238,7 +258,11 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         </div>
 
         <div className={styles.navs}>
-          <TabsNavigation tabs={shopItemCategories} currentTab={shopCategory.title} onChange={setShopCategory} />
+          <TabsNavigation
+            tabs={shopItemCategories}
+            currentTab={shopCategory.title}
+            onChange={setShopCategory as Dispatch<SetStateAction<{ title: string; value: string }>>}
+          />
           {shopCategory.title !== t('s6') && isTabsNotEmpty && (
             <TabsNavigation
               colorClass={
@@ -250,7 +274,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
               }
               tabs={mode === 'shop' ? tabs : inventoryTabs}
               currentTab={itemsQuality.title}
-              onChange={setItemsQuality}
+              onChange={(item) => setItemsQuality({ title: item.title, value: item.value as TypeItemRarity })}
             />
           )}
         </div>
@@ -316,7 +340,10 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
       {isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.UPGRADE_ITEMS_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW) &&
-        mode === 'inventory' && !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED) && showBackToMainGuide && inventory && (
+        mode === 'inventory' &&
+        !isGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED) &&
+        showBackToMainGuide &&
+        inventory && (
           <TreeLevelGuide
             item={inventory?.items[0]!}
             onClose={() => {

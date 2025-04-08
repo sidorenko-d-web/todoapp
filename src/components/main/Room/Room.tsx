@@ -50,9 +50,11 @@ export const Room = ({ mode, strangerId, setIsRoomLoaded }: props) => {
   const isIntegrationPage = useLocation().pathname.includes('integrations');
 
   const handleSetIsRoomLoaded = (value: boolean) => {
-    setIsLoaded(value)
+    setIsLoaded(value);
     setIsRoomLoaded?.(value);
   };
+
+  console.log(equippedAchivement);
 
   return (
     <div className={styles.room}>
@@ -72,7 +74,9 @@ export const Room = ({ mode, strangerId, setIsRoomLoaded }: props) => {
 
           <img className={styles.shelf} src={Shelf} alt="shelf" />
           <Coin isLoaded={isLoaded} strangerRoom={!!strangerRoom} />
-          {achivementType && <img className={styles.reward} src={achivementType?.image} alt="reward" />}
+          {achivementType && achivementType.type !== 'stage' && (
+            <img className={styles.reward} src={achivementType?.image} alt="reward" />
+          )}
         </>
       )}
       <Floor room={room ?? strangerRoom} />

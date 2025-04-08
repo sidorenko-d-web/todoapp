@@ -49,7 +49,6 @@ export const ProfilePage: React.FC = () => {
     isLoading: isTopProfilesLoading,
   } = useGetTopProfilesQuery({});
 
-
   const streaks = pushLineData?.week_information.filter(day => day.push_line_data?.status === 'passed').length;
 
   // Handle one-time modal display
@@ -148,8 +147,12 @@ export const ProfilePage: React.FC = () => {
       {userProfileData && topProfilesData && (
         <div className={styles.wrp}>
           <div>
-            <h1 className={`${styles.pageTitle} 
-              ${!isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) ? styles.elevated : ''}`}>{t('p1')}</h1>
+            <h1
+              className={`${styles.pageTitle} 
+              ${!isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) ? styles.elevated : ''}`}
+            >
+              {t('p1')}
+            </h1>
 
             <ProfileStatsMini position={position} daysInARow={streaks} />
           </div>
@@ -187,9 +190,10 @@ export const ProfilePage: React.FC = () => {
           <div>
             <p className={styles.statsTitle}>{t('p4')}</p>
             <ProfileStats
-              favoriteCompany={'Favourite company'}
+              favoriteCompany={userProfileData.favorite_company}
               comments={userProfileData.comments_answered_correctly}
               rewards={userProfileData.achievements_collected}
+              views={userProfileData.total_views || 0}
             />
           </div>
 
