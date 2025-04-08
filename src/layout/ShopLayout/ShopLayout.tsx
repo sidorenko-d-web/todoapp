@@ -1,4 +1,4 @@
-import { type FC, PropsWithChildren, useEffect, useMemo, useState, Dispatch, SetStateAction } from 'react';
+import { Dispatch, type FC, PropsWithChildren, SetStateAction, useEffect, useMemo, useState } from 'react';
 import styles from './ShopLayout.module.scss';
 import {
   RootState,
@@ -9,6 +9,7 @@ import {
   TypeItemRarity,
   useGetCurrentUserBoostQuery,
   useGetInventoryItemsQuery,
+  useGetProfileMeQuery,
   useGetShopItemsQuery,
 } from '../../redux';
 import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
@@ -41,11 +42,13 @@ interface Props {
 }
 
 export const ShopLayout: FC<PropsWithChildren<Props>> = ({
-  children,
-  onItemCategoryChange,
-  onItemQualityChange,
-  mode,
-}) => {
+                                                           children,
+                                                           onItemCategoryChange,
+                                                           onItemQualityChange,
+                                                           mode,
+                                                         }) => {
+  const { data: profile } = useGetProfileMeQuery();
+
   const lastOpenedTab = useSelector((state: RootState) => state.shop.lastOpenedTab);
   const lastOpenedRarity = useSelector((state: RootState) => state.shop.lastOpenedRarity);
   const selectedIntegrationCategory = useSelector((state: RootState) => state.shop.selectedIntegrationCategory);
@@ -65,9 +68,9 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     { title: `${t('s16')}`, value: 'green' },
   ];
 
-  const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>(lastOpenedTab || shopItemCategories[0]);
+  const [ shopCategory, setShopCategory ] = useState<TypeTab<TypeItemCategory>>(lastOpenedTab || shopItemCategories[0]);
 
-  const [itemsQuality, setItemsQuality] = useState<TypeTab<TypeItemRarity>>(lastOpenedRarity || shopItemRarity[0]);
+  const [ itemsQuality, setItemsQuality ] = useState<TypeTab<TypeItemRarity>>(lastOpenedRarity || shopItemRarity[0]);
 
   const setRerender = useState(0)[1];
 
@@ -79,10 +82,10 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   });
   const { data: boost } = useGetCurrentUserBoostQuery();
 
-  const [dimSet, setDimSet] = useState(false);
+  const [ dimSet, setDimSet ] = useState(false);
 
-  const [showWelcomeGuide, setShowWelcomeGuide] = useState(false);
-  const [showBackToMainGuide, setShowBackToMainGuide] = useState(false);
+  const [ showWelcomeGuide, setShowWelcomeGuide ] = useState(false);
+  const [ showBackToMainGuide, setShowBackToMainGuide ] = useState(false);
 
   useEffect(() => {
     if (selectedIntegrationCategory) {
@@ -91,52 +94,62 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         setShopCategory(newCategory);
       }
     }
-  }, [selectedIntegrationCategory]);
+  }, [ selectedIntegrationCategory ]);
 
   useEffect(() => {
     onItemCategoryChange(shopCategory);
     dispatch(setLastOpenedTab(shopCategory));
 
-    onItemQualityChange(itemsQuality);
+    onItemQualityChange(itemsQuality as TypeTab<TypeItemRarity>);
     dispatch(setLastOpenedRarity(itemsQuality));
-  }, [itemsQuality.value, shopCategory]);
+  }, [ shopCategory.value, itemsQuality.value ]);
 
   useEffect(() => {
     return () => {
       dispatch(setSelectedIntegrationCategory(shopItemCategories[0].value));
     };
-  }, [dispatch]);
+  }, [ dispatch ]);
 
   const navigate = useNavigate();
 
   const itemsInTabs = useMemo(() => {
     return shop?.items && inventory?.items && itemsInTab(shop?.items);
-  }, [shop?.count, inventory?.count]);
+  }, [ shop?.count, inventory?.count ]);
 
   const tabs = useMemo(() => {
     const _tabs: TypeTab<TypeItemRarity>[] = [];
-    itemsInTabs?.red?.length && itemsInTabs?.red?.length > 0 && _tabs.push(shopItemRarity[0]);
-    itemsInTabs?.yellow?.length && itemsInTabs?.yellow?.length > 0 && _tabs.push(shopItemRarity[1]);
-    itemsInTabs?.green?.length && itemsInTabs?.green?.length > 0 && _tabs.push(shopItemRarity[2]);
+
+    if (itemsInTabs?.red && itemsInTabs.red.length > 0) {
+      _tabs.push(shopItemRarity[0]);
+    }
+
+    if (profile && profile.growth_tree_stage_id >= 150 && itemsInTabs?.yellow && itemsInTabs.yellow.length > 0) {
+      _tabs.push(shopItemRarity[1]);
+    }
+
+    if (profile && profile.growth_tree_stage_id >= 300 && itemsInTabs?.green && itemsInTabs.green.length > 0) {
+      _tabs.push(shopItemRarity[2]);
+    }
 
     return _tabs;
-  }, [itemsInTabs, shopItemRarity]);
+  }, [ itemsInTabs?.green?.length, itemsInTabs?.red?.length, itemsInTabs?.yellow?.length, shopItemRarity ]);
 
   const inventoryTabs = useMemo(() => {
     const _inventoryTabs: TypeTab<TypeItemRarity>[] = [];
+
     if (isSuccess && inventory?.items) {
       if (inventory.items.some(item => item.item_rarity === 'red' && item.item_category === shopCategory.value)) {
         _inventoryTabs.push(shopItemRarity[0]);
       }
-      if (inventory.items.some(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value)) {
+      if (profile && profile.growth_tree_stage_id >= 150 && inventory.items.some(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value)) {
         _inventoryTabs.push(shopItemRarity[1]);
       }
-      if (inventory.items.some(item => item.item_rarity === 'green' && item.item_category === shopCategory.value)) {
+      if (profile && profile.growth_tree_stage_id >= 300 && inventory.items.some(item => item.item_rarity === 'green' && item.item_category === shopCategory.value)) {
         _inventoryTabs.push(shopItemRarity[2]);
       }
     }
     return _inventoryTabs;
-  }, [isSuccess, inventory?.items, shopCategory.value, shopItemRarity]);
+  }, [ inventory?.items, isSuccess, shopCategory.value, shopItemRarity ]);
 
   const handleShop = () => {
     setItemsQuality(lastOpenedRarity || shopItemRarity[0]);
@@ -151,18 +164,23 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   };
 
   useEffect(() => {
-    setItemsQuality(shopItemRarity[0]);
-  }, [shopCategory.value]);
+    const availableTabs = mode === 'shop' ? tabs : inventoryTabs;
+    if (availableTabs.length > 0 && !availableTabs.some(tab => tab.value === itemsQuality.value)) {
+      setItemsQuality(availableTabs[0]);
+    }
+  }, [ shopCategory.value, tabs, inventoryTabs ]);
 
   const reduxDispatch = useDispatch();
 
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(1));
-  }, []);
+  }, [ reduxDispatch ]);
 
   const statsGlowing = useSelector((state: RootState) => state.guide.getShopStatsGlowing);
 
-  const isTabsNotEmpty = [...(itemsInTabs?.green ?? []), ...(itemsInTabs?.yellow ?? [])].length > 0;
+  const isTabsNotEmpty = useMemo(() => (
+    [ ...(itemsInTabs?.green ?? []), ...(itemsInTabs?.yellow ?? []) ].length > 0
+  ), [ itemsInTabs?.green, itemsInTabs?.yellow ]);
 
   useEffect(() => {
     if (!dimSet) {
@@ -186,7 +204,9 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     } else {
       setShowBackToMainGuide(false);
     }
-  }, [mode]);
+  }, [ mode ]);
+
+  const showRarityTabs = profile && profile.growth_tree_stage_id >= 150 && shopCategory.title !== t('s6') && isTabsNotEmpty;
 
   return (
     <>
@@ -258,18 +278,18 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             currentTab={shopCategory.title}
             onChange={setShopCategory as Dispatch<SetStateAction<{ title: string; value: string }>>}
           />
-          {shopCategory.title !== t('s6') && isTabsNotEmpty && (
+          {showRarityTabs && (
             <TabsNavigation
               colorClass={
                 itemsQuality.title === t('s14')
                   ? 'tabItemSelectedBlue'
                   : itemsQuality.title === t('s15')
-                  ? 'tabItemSelectedPurple'
-                  : 'tabItemSelectedRed'
+                    ? 'tabItemSelectedPurple'
+                    : 'tabItemSelectedRed'
               }
               tabs={mode === 'shop' ? tabs : inventoryTabs}
               currentTab={itemsQuality.title}
-              onChange={() => setItemsQuality}
+              onChange={(item) => setItemsQuality({ title: item.title, value: item.value as TypeItemRarity })}
             />
           )}
         </div>
