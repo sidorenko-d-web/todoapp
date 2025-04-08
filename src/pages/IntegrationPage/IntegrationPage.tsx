@@ -104,6 +104,11 @@ export const IntegrationPage: React.FC = () => {
     }
   }, [data, comments, isUnansweredIntegrationCommentLoading]);
 
+  useEffect(() => {
+    console.log('setting comment progress');
+    localStorage.setItem('COMMENTS_PROGRESS', '' + localProgress);
+  }, [localProgress]);
+
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     if (isVoting) return;
     setIsVoting(true);

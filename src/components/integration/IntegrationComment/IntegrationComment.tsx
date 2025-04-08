@@ -49,6 +49,13 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
   const [canShowComment, setCanShowComment] = useState(false);
 
   useEffect(() => {
+    const lastTime = parseInt(localStorage.getItem("LAST_COMMENT_TIME_KEY") || '0');
+    const now = Date.now();
+
+    if (now - lastTime > 180_000 && !canShowComment) {
+      setCanShowComment(true);
+    }
+    
     const checkInterval = setInterval(() => {
       const lastTime = parseInt(localStorage.getItem("LAST_COMMENT_TIME_KEY") || '0');
       const now = Date.now();
