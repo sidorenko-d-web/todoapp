@@ -518,15 +518,16 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
           <p>{t('s26')}</p>
           <img src={LockIcon} alt="" />
         </div>
-      ) : showEquipButton ? (
-        <Button
-          onClick={handleEquipItem}
-          className={styles.disabledActions}
-          disabled={itemLevel === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
-        >
-          {<p>{t('s28')}</p>}
-        </Button>
-      ) : itemLevel === 50 ? (
+      ) : // : showEquipButton ? (
+      //   <Button
+      //     onClick={handleEquipItem}
+      //     className={styles.disabledActions}
+      //     disabled={itemLevel === 50 || isLoading || isItemsLoading || isLoading || isUpdateLoading}
+      //   >
+      //     {<p>{t('s28')}</p>}
+      //   </Button>
+      // )
+      itemLevel === 50 ? (
         <div className={styles.disabledUpgradeActions}>
           <img src={LockIcon} alt="" />
           <p>{t('s27')}</p>

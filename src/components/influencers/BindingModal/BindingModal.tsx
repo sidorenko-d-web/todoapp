@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { parsePhoneNumberFromString } from 'libphonenumber-js'; // <-- Добавлено
+import { useState, useEffect, useRef } from 'react';
+import { parsePhoneNumberFromString, AsYouType } from 'libphonenumber-js';
 import { InfluencerRatingSteps } from '../../../constants';
 import tick from '../../../assets/icons/input-tick.svg';
 import clan from '../../../assets/icons/clan-red.svg';
@@ -29,7 +29,9 @@ type BindingModalProps = {
 export const BindingModal = ({ modalId, onClose, binding, onNext }: BindingModalProps) => {
   const { t } = useTranslation('promotion');
   const [value, setValue] = useState<string>('');
+  const [formattedValue, setFormattedValue] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const dispatch = useDispatch();
   const { inputType } = useSelector((state: RootState) => state.confirmation);
@@ -37,7 +39,43 @@ export const BindingModal = ({ modalId, onClose, binding, onNext }: BindingModal
   const [sendCode] = useSendEmailConfirmationCodeMutation();
   const [sendPhone] = useSendPhoneConfirmationCodeMutation();
 
-  // Проверка валидности телефона через libphonenumber-js
+  useEffect(() => {
+    if (inputType === 'phone') {
+      formatPhoneNumber();
+    } else {
+      setFormattedValue(value);
+    }
+  }, [value, inputType]);
+
+  const formatPhoneNumber = () => {
+    const formatter = new AsYouType();
+    const formatted = formatter.input(value);
+
+    // Для российских номеров делаем специальное форматирование
+    if (formatted.startsWith('+7') && value.replace(/\D/g, '').length > 1) {
+      const digits = value.replace(/\D/g, '').substring(1);
+      let result = '+7 (';
+
+      if (digits.length > 0) {
+        result += digits.substring(0, 3);
+      }
+      if (digits.length > 3) {
+        result += ') ' + digits.substring(3, 6);
+      }
+      if (digits.length > 6) {
+        result += '-' + digits.substring(6, 8);
+      }
+      if (digits.length > 8) {
+        result += '-' + digits.substring(8, 10);
+      }
+
+      setFormattedValue(result);
+      return;
+    }
+
+    setFormattedValue(formatted);
+  };
+
   const isValidPhone = (phone: string) => {
     try {
       const phoneNumber = parsePhoneNumberFromString(phone);
@@ -47,8 +85,32 @@ export const BindingModal = ({ modalId, onClose, binding, onNext }: BindingModal
     }
   };
 
-  // Общая проверка валидности (email или телефон)
-  const isValid = inputType === 'phone' ? isValidPhone(value) : value.trim() !== '';
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  };
+
+  const isValid = inputType === 'phone' ? isValidPhone(value) : inputType === 'email' ? isValidEmail(value) : false;
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    let cleaned = input.replace(/[^\d+]/g, '');
+
+    if ((cleaned.match(/\+/g) || []).length > 1) {
+      cleaned = '+' + cleaned.replace(/\+/g, '');
+    }
+
+    if (cleaned.startsWith('8') && cleaned.length > 1) {
+      cleaned = '+7' + cleaned.substring(1);
+    }
+
+    setValue(cleaned);
+    setError('');
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    setError('');
+  };
 
   const handleNext = async () => {
     try {
@@ -57,13 +119,14 @@ export const BindingModal = ({ modalId, onClose, binding, onNext }: BindingModal
         dispatch(setInputValue(value.trim()));
         dispatch(setInputType('phone'));
         setValue('');
+        setFormattedValue('');
         onNext();
-      }
-      if (inputType === 'phone') {
+      } else if (inputType === 'phone') {
         if (isValidPhone(value)) {
           await sendPhone({ phone_number: value.trim() }).unwrap();
           dispatch(setInputValue(value.trim()));
           setValue('');
+          setFormattedValue('');
           onNext();
         } else {
           setError(t('p67'));
@@ -103,14 +166,12 @@ export const BindingModal = ({ modalId, onClose, binding, onNext }: BindingModal
             <label>{binding.inputLabel}</label>
             <div className={s.inputWrapper}>
               <input
-                type="text"
-                value={value}
-                onChange={e => {
-                  setValue(e.target.value);
-                  setError('');
-                }}
+                ref={inputRef}
+                type={inputType === 'email' ? 'text' : 'tel'}
+                value={inputType === 'phone' ? formattedValue : value}
+                onChange={inputType === 'phone' ? handlePhoneChange : handleEmailChange}
                 className={`${s.input} ${!isValid ? s.invalid : ''}`}
-                placeholder={binding.placeholder}
+                placeholder={inputType === 'phone' ? binding.placeholder : binding.placeholder}
               />
               <img className={s.statusIcon} src={!isValid ? dots : tick} />
             </div>
