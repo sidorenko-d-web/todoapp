@@ -1,12 +1,18 @@
-import { FC, useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import dotIcon from '../../../assets/icons/dot.svg';
 import rocketIcon from '../../../assets/icons/rocket.svg';
-import { IntegrationResponseDTO, integrationsApi, RootState, selectVolume, setIsWorking } from '../../../redux';
+import {
+  IntegrationResponseDTO,
+  RootState,
+  selectVolume,
+  setIntegrationReadyForPublishing,
+  setIsWorking,
+  setLastIntegrationId,
+} from '../../../redux';
 import s from './IntegrationCreationCard.module.scss';
 import { useAccelerateIntegration, useModal } from '../../../hooks';
 import { MODALS, SOUNDS } from '../../../constants';
-import { setIntegrationReadyForPublishing, setLastIntegrationId } from '../../../redux';
 import useSound from 'use-sound';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
@@ -30,14 +36,14 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
   const lastUpdateRef = useRef(Date.now());
 
   const reduxAcceleration = useSelector((state: RootState) => state.acceleration.acceleration);
-  const [acceleration, setAcceleration] = useState(0);
+  const [ acceleration, setAcceleration ] = useState(0);
 
   useEffect(() => {
     if (acceleration != reduxAcceleration) {
       handleAccelerateClick();
       setAcceleration(reduxAcceleration);
     }
-  }, [reduxAcceleration]);
+  }, [ reduxAcceleration ]);
 
   const getValidatedTimeLeft = useCallback(() => {
     const savedIntegrationId = localStorage.getItem(INTEGRATION_ID_KEY);
@@ -51,21 +57,21 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       return Math.min(current, initial);
     }
     return integration.time_left;
-  }, [integration.id, integration.time_left]);
+  }, [ integration.id, integration.time_left ]);
 
-  const [timeLeft, setTimeLeft] = useState(() => {
+  const [ timeLeft, setTimeLeft ] = useState(() => {
     const savedTime = getValidatedTimeLeft();
     return Math.max(savedTime, 0);
   });
 
-  const [initialTimeLeft] = useState(() => {
+  const [ initialTimeLeft ] = useState(() => {
     const savedInitial = localStorage.getItem(INITIAL_TIME_LEFT_KEY);
     return savedInitial ? parseInt(savedInitial) : integration.time_left;
   });
 
-  const [isExpired, setIsExpired] = useState(timeLeft <= 0);
-  const [isAccelerated, setIsAccelerated] = useState(false);
-  const [playAccelerateIntegrationSound] = useSound(SOUNDS.speedUp, {
+  const [ isExpired ] = useState(timeLeft <= 0);
+  const [ isAccelerated, setIsAccelerated ] = useState(false);
+  const [ playAccelerateIntegrationSound ] = useSound(SOUNDS.speedUp, {
     volume: useSelector(selectVolume),
   });
 
@@ -80,7 +86,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
 
   const progress = useMemo(() => {
     return ((initialTimeLeft - timeLeft) / initialTimeLeft) * 100;
-  }, [initialTimeLeft, timeLeft]);
+  }, [ initialTimeLeft, timeLeft ]);
 
   const formatTime = useCallback((seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -89,7 +95,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     return `${hours}:${minutes < 10 ? `0${minutes}` : minutes}:${secs < 10 ? `0${secs}` : secs}`;
   }, []);
 
-  const formattedTime = useMemo(() => formatTime(timeLeft), [formatTime, timeLeft]);
+  const formattedTime = useMemo(() => formatTime(timeLeft), [ formatTime, timeLeft ]);
 
   useEffect(() => {
     setTimeLeft(integration.time_left);
@@ -124,7 +130,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       dispatch(setIntegrationCreating(false));
       dispatch(setIsWorking(false));
     };
-  }, [integration.id, initialTimeLeft, dispatch]);
+  }, [ integration.id, initialTimeLeft, dispatch ]);
 
   const { closeModal } = useModal();
   useEffect(() => {
@@ -184,7 +190,7 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [isExpired, playAccelerateIntegrationSound, dispatch, integration.id, accelerateIntegration, refetchIntegration]);
+  }, [ isExpired, playAccelerateIntegrationSound, dispatch, integration.id, accelerateIntegration, refetchIntegration ]);
 
   const createParticles = useCallback(() => {
     const button = document.querySelector(`.${s.iconButton}`);
