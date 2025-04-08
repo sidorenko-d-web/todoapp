@@ -1,4 +1,4 @@
-import { type FC, PropsWithChildren, useEffect, useMemo, useState, Dispatch, SetStateAction } from 'react';
+import { Dispatch, type FC, PropsWithChildren, SetStateAction, useEffect, useMemo, useState } from 'react';
 import styles from './ShopLayout.module.scss';
 import {
   RootState,
@@ -65,9 +65,9 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     { title: `${t('s16')}`, value: 'green' },
   ];
 
-  const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>(lastOpenedTab || shopItemCategories[0]);
+  const [ shopCategory, setShopCategory ] = useState<TypeTab<TypeItemCategory>>(lastOpenedTab || shopItemCategories[0]);
 
-  const [itemsQuality, setItemsQuality] = useState<TypeTab<TypeItemRarity>>(lastOpenedRarity || shopItemRarity[0]);
+  const [ itemsQuality, setItemsQuality ] = useState<TypeTab<TypeItemRarity>>(lastOpenedRarity || shopItemRarity[0]);
 
   const setRerender = useState(0)[1];
 
@@ -91,7 +91,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
         setShopCategory(newCategory);
       }
     }
-  }, [selectedIntegrationCategory]);
+  }, [ selectedIntegrationCategory ]);
 
   useEffect(() => {
     onItemCategoryChange(shopCategory);
@@ -151,8 +151,11 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   };
 
   useEffect(() => {
-    setItemsQuality(shopItemRarity[0]);
-  }, [ shopCategory.value ]);
+    const availableTabs = mode === 'shop' ? tabs : inventoryTabs;
+    if (availableTabs.length > 0 && !availableTabs.some(tab => tab.value === itemsQuality.value)) {
+      setItemsQuality(availableTabs[0]);
+    }
+  }, [ shopCategory.value, tabs, inventoryTabs ]);
 
   const reduxDispatch = useDispatch();
 
@@ -271,7 +274,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
               }
               tabs={mode === 'shop' ? tabs : inventoryTabs}
               currentTab={itemsQuality.title}
-              onChange={() => setItemsQuality}
+              onChange={(item) => setItemsQuality({ title: item.title, value: item.value as TypeItemRarity })}
             />
           )}
         </div>
