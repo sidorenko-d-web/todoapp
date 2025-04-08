@@ -1,7 +1,7 @@
 import peeps from '../../../assets/icons/peeps.svg';
 import piggy from '../../../assets/icons/piggy.svg';
 import subscribersIcon from '../../../assets/icons/subscribers.png';
-import goldCoinIcon from "../../../assets/Icons/coin.png"
+import goldCoinIcon from '../../../assets/Icons/coin.png';
 import s from './IncreaseIncome.module.scss';
 import classNames from 'classnames';
 import { useModal } from '../../../hooks';
@@ -9,9 +9,7 @@ import { MODALS } from '../../../constants';
 import { InviteFriend, UserReferrals } from '../Modal';
 
 import { ReferralCard } from '../ReferralCard/ReferralCard';
-import {
-  useGetCurrentUsersReferralsQuery,
-} from '../../../redux';
+import { useGetCurrentUsersReferralsQuery } from '../../../redux';
 import { formatAbbreviation } from '../../../helpers';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
@@ -20,13 +18,12 @@ export const IncreaseIncome = () => {
   const { t, i18n } = useTranslation('promotion');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { openModal, closeModal } = useModal();
-  const { data: referralData, isLoading, error } = useGetCurrentUsersReferralsQuery();
+  const { data: referralData, isLoading, error } = useGetCurrentUsersReferralsQuery({ limit: 3 });
 
-  const referrals = referralData?.referrals || [];
-  const visibleReferrals = referrals.slice(0, 3);
-  const hiddenReferralsCount = referrals.length - 3;
+  const sumSubscribers =
+    (referralData?.main_statistics.subscribers_from_first_level ?? 0) +
+    (referralData?.main_statistics.subscribers_from_second_level ?? 0);
 
-  const sumSubscribers = (referralData?.main_statistics.subscribers_from_first_level ?? 0) + (referralData?.main_statistics.subscribers_from_second_level ?? 0)
   return (
     <>
       <h2 className={s.headerIncrease}>
@@ -43,7 +40,8 @@ export const IncreaseIncome = () => {
             <ul className={s.subscribers}>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +{formatAbbreviation(referralData?.main_statistics.subscribers_from_first_level, 'number', {
+                  +
+                  {formatAbbreviation(referralData?.main_statistics.subscribers_from_first_level, 'number', {
                     locale: locale,
                   })}{' '}
                   <img src={subscribersIcon} alt="Подписчики" />
@@ -52,14 +50,20 @@ export const IncreaseIncome = () => {
               </li>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +{formatAbbreviation(referralData?.main_statistics.subscribers_from_second_level, 'number', { locale: locale })}{' '}
+                  +
+                  {formatAbbreviation(referralData?.main_statistics.subscribers_from_second_level, 'number', {
+                    locale: locale,
+                  })}{' '}
                   <img src={subscribersIcon} alt="Подписчики" />
                 </span>
                 <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
               </li>
               <li className={s.listBadge}>
                 <span className={s.badge}>
-                  +{formatAbbreviation(referralData?.main_statistics.points_from_first_level, 'number', { locale: locale })}{' '}
+                  +
+                  {formatAbbreviation(referralData?.main_statistics.points_from_first_level, 'number', {
+                    locale: locale,
+                  })}{' '}
                   <img src={goldCoinIcon} alt="Поинты" />
                 </span>
               </li>
@@ -75,7 +79,7 @@ export const IncreaseIncome = () => {
           <>
             {referralData.referrals.length > 0 ? (
               <div className={s.referralsList}>
-                {visibleReferrals.map((referral, index) => (
+                {referralData.referrals.map((referral, index) => (
                   <ReferralCard
                     key={index}
                     position={index + 1}
@@ -89,9 +93,9 @@ export const IncreaseIncome = () => {
                     subscribers_for_referrer={referral.subscribers_for_referrer}
                   />
                 ))}
-                {hiddenReferralsCount > 0 && (
+                {referralData?.count - 3 > 0 && (
                   <p className={s.showMore}>
-                    {t('p16')} {hiddenReferralsCount} {t('p17')}
+                    {t('p16')} {referralData?.count - 3} {t('p17')}
                   </p>
                 )}
               </div>

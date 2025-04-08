@@ -1,15 +1,16 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryReauth } from '../query';
-import { GetReferralsDTO, ReferralCodeDTO } from './dto';
+import type { GetReferralsDTO, IGetReferralsRequest, ReferralCodeDTO } from './dto';
 
 export const referralsApi = createApi({
   reducerPath: 'referralsApi',
   baseQuery: baseQueryReauth,
   endpoints: builder => ({
-    getCurrentUsersReferrals: builder.query<GetReferralsDTO, void>({
-      query: () => ({
+    getCurrentUsersReferrals: builder.query<GetReferralsDTO, IGetReferralsRequest>({
+      query: (params) => ({
         url: `/referrals`,
         method: 'GET',
+        params
       }),
     }),
     markPushReminderSent: builder.mutation<string, number>({
@@ -59,6 +60,7 @@ export const referralsApi = createApi({
 
 export const {
   useGetCurrentUsersReferralsQuery,
+  useLazyGetCurrentUsersReferralsQuery,
   useMarkPushReminderSentMutation,
   useSendReferralCodeMutation,
 } = referralsApi;
