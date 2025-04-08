@@ -9,6 +9,7 @@ import { ProgressLine } from '../../shared';
 import clsx from 'clsx';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 
 interface IntegrationCommentProps {
   author_username: string;
@@ -43,8 +44,27 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
     volume: useSelector(selectButtonVolume) * 1.5,
   });
 
+
+
+  const [canShowComment, setCanShowComment] = useState(false);
+
+  useEffect(() => {
+    const checkInterval = setInterval(() => {
+      const lastTime = parseInt(localStorage.getItem("LAST_COMMENT_TIME_KEY") || '0');
+      const now = Date.now();
+  
+      if (now - lastTime > 180_000 && !canShowComment) {
+        setCanShowComment(true);
+      }
+    }, 2000); 
+  
+    return () => clearInterval(checkInterval);
+  }, []);
+  
+
   const handleVoteRight = () => {
     if (!isVoting && !finished) {
+      localStorage.setItem("LAST_COMMENT_TIME_KEY", Date.now().toString());
       onVote(true, id);
       voteRightSound();
     }
@@ -52,16 +72,18 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
 
   const handleVoteWrong = () => {
     if (!isVoting && !finished) {
+      localStorage.setItem("LAST_COMMENT_TIME_KEY", Date.now().toString());
       onVote(false, id);
       voteWrongSound();
     }
   };
 
+ 
   const commentGlow = useSelector((state: RootState) => state.guide.commentGlow);
 
   return (
     <div className={`${styles.wrp} ${commentGlow ? styles.elevated : ''}`}>
-      {!finished ? (
+      {!finished && canShowComment ? (
         <div className={styles.usernameAndComment}>
           <p className={styles.username}>{author_username}:</p>
           <p
