@@ -22,7 +22,7 @@ export const Header = () => {
     pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
 
-  const { points: displayedPoints, subscribers: displayedSubscribers } = useIncrementingProfileStats({
+  const { subscribers: displayedSubscribers } = useIncrementingProfileStats({
     profileId: data?.id || '',
     basePoints: data?.points || '0',
     baseSubscribers: data?.subscribers || 0,
@@ -35,7 +35,6 @@ export const Header = () => {
 
   const { in_streak } = usePushLineStatus();
 
-  const points = in_streak ? displayedPoints : data?.points;
   const subscribers = in_streak ? displayedSubscribers : data?.subscribers;
 
   const { data: treeData } = useGetTreeInfoWithPollingQuery(undefined, {
@@ -195,7 +194,7 @@ export const Header = () => {
 
             <div className={styles.coinsWrapper}>
               <p className={styles.coins}>
-                {formatAbbreviation(showCoins ? points || 0 : '0', 'number', { locale: locale })}
+                {formatAbbreviation(showCoins ? data?.points || 0 : '0', 'number', { locale: locale })}
               </p>
               <img className={styles.coinIcon} src={CoinIcon} alt="CoinIcon" />
             </div>

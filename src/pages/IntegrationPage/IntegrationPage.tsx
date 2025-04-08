@@ -8,6 +8,7 @@ import {
   setFooterActive,
   useGetIntegrationQuery,
   useGetIntegrationsQuery,
+  useGetProfileMeQuery,
   useGetUnansweredIntegrationCommentQuery,
   usePostCommentIntegrationsMutation,
 } from '../../redux';
@@ -31,6 +32,7 @@ import GetRewardModal from '../DevModals/GetRewardModal/GetRewardModal';
 
 export const IntegrationPage: React.FC = () => {
   const { t } = useTranslation('integrations');
+  const { refetch: refetchMe } = useGetProfileMeQuery();
   const { integrationId: queryIntegrationId } = useParams<{
     integrationId: string | undefined;
   }>();
@@ -39,7 +41,7 @@ export const IntegrationPage: React.FC = () => {
   });
 
   const [_, setRerender] = useState(0);
-  const [localProgress, setLocalProgress] = useState(0);
+  const [localProgress, setLocalProgress] = useState(parseInt(localStorage.getItem('COMMENTS_PROGRESS') || '0'));
   const [localCommentsGenerated, setLocalCommentsGenerated] = useState(0);
   const [isEndComment, setIsEndComment] = useState(false);
 
@@ -62,7 +64,7 @@ export const IntegrationPage: React.FC = () => {
     if (data) {
       setLocalCommentsGenerated(data.comments_answered_correctly);
     }
-  }, [data]);
+  }, [ data ]);
 
   useEffect(() => {
     if (!data) return;
@@ -71,7 +73,7 @@ export const IntegrationPage: React.FC = () => {
     }, 5 * 60 * 1000); // 5 minutes
 
     return () => clearInterval(refetchInterval);
-  }, [data, refetchCurrentIntegration]);
+  }, [ data, refetchCurrentIntegration ]);
 
   const {
     data: commentData,
@@ -81,14 +83,14 @@ export const IntegrationPage: React.FC = () => {
     refetchOnMountOrArgChange: true,
   });
 
-  const [postComment] = usePostCommentIntegrationsMutation();
+  const [ postComment ] = usePostCommentIntegrationsMutation();
 
-  const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
-  const [isVoting, setIsVoting] = useState(false);
+  const [ currentCommentIndex, setCurrentCommentIndex ] = useState<number>(0);
+  const [ isVoting, setIsVoting ] = useState(false);
 
-  const comments = commentData ? (Array.isArray(commentData) ? commentData : [commentData]) : [];
+  const comments = commentData ? (Array.isArray(commentData) ? commentData : [ commentData ]) : [];
 
-  const [showGuide, setShowGuide] = useState(false);
+  const [ showGuide, setShowGuide ] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -102,7 +104,12 @@ export const IntegrationPage: React.FC = () => {
     if (data && !isUnansweredIntegrationCommentLoading && !isEndComment) {
       setIsEndComment(comments.length === 0);
     }
-  }, [data, comments, isUnansweredIntegrationCommentLoading]);
+  }, [ data, comments, isUnansweredIntegrationCommentLoading ]);
+
+  useEffect(() => {
+    console.log('setting comment progress');
+    localStorage.setItem('COMMENTS_PROGRESS', '' + localProgress);
+  }, [localProgress]);
 
   const handleVote = async (isThumbsUp: boolean, commentId: string) => {
     if (isVoting) return;
@@ -120,6 +127,8 @@ export const IntegrationPage: React.FC = () => {
       }
 
       const response = await postComment({ commentId, isHate: !isThumbsUp });
+      console.info('refetch');
+      refetchMe();
 
       if (response.error) {
         setIsEndComment(true);
@@ -155,7 +164,7 @@ export const IntegrationPage: React.FC = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [data, isIntegrationLoading]);
+  }, [ data, isIntegrationLoading ]);
 
   const isLoading = isIntegrationLoading || isUnansweredIntegrationCommentLoading;
 
