@@ -40,11 +40,11 @@ interface Props {
 }
 
 export const ShopLayout: FC<PropsWithChildren<Props>> = ({
-  children,
-  onItemCategoryChange,
-  onItemQualityChange,
-  mode,
-}) => {
+                                                           children,
+                                                           onItemCategoryChange,
+                                                           onItemQualityChange,
+                                                           mode,
+                                                         }) => {
   const lastOpenedTab = useSelector((state: RootState) => state.shop.lastOpenedTab);
   const lastOpenedRarity = useSelector((state: RootState) => state.shop.lastOpenedRarity);
   const dispatch = useDispatch();
@@ -62,8 +62,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     { title: `${t('s15')}`, value: 'yellow' },
     { title: `${t('s16')}`, value: 'green' },
   ];
-  const [shopCategory, setShopCategory] = useState(lastOpenedTab || shopItemCategories[0]);
-  const [itemsQuality, setItemsQuality] = useState(lastOpenedRarity || shopItemRarity[0]);
+  const [ shopCategory, setShopCategory ] = useState(lastOpenedTab || shopItemCategories[0]);
+  const [ itemsQuality, setItemsQuality ] = useState(lastOpenedRarity || shopItemRarity[0]);
 
   const setRerender = useState(0)[1];
 
@@ -75,10 +75,10 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
   });
   const { data: boost } = useGetCurrentUserBoostQuery();
 
-  const [dimSet, setDimSet] = useState(false);
+  const [ dimSet, setDimSet ] = useState(false);
 
-  const [showWelcomeGuide, setShowWelcomeGuide] = useState(false);
-  const [showBackToMainGuide, setShowBackToMainGuide] = useState(false);
+  const [ showWelcomeGuide, setShowWelcomeGuide ] = useState(false);
+  const [ showBackToMainGuide, setShowBackToMainGuide ] = useState(false);
 
   useEffect(() => {
     onItemCategoryChange(shopCategory as TypeTab<TypeItemCategory>);
@@ -86,14 +86,13 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
     onItemQualityChange(itemsQuality as TypeTab<TypeItemRarity>);
     dispatch(setLastOpenedRarity(itemsQuality));
-  }, [shopCategory.value, itemsQuality.value]);
+  }, [ shopCategory.value, itemsQuality.value ]);
 
   const navigate = useNavigate();
 
   const itemsInTabs = useMemo(() => {
-    console.log(shop?.items);
-     return shop?.items && inventory?.items && itemsInTab(shop?.items);
-  }, [shop?.count, inventory?.count]);
+    return shop?.items && inventory?.items && itemsInTab(shop?.items);
+  }, [ shop?.count, inventory?.count ]);
 
   const tabs = useMemo(() => {
     const _tabs = [];
@@ -102,22 +101,22 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     itemsInTabs?.green?.length && itemsInTabs?.green?.length > 0 && _tabs.push(shopItemRarity[2]);
 
     return _tabs;
-  }, []);
+  }, [ itemsInTabs?.green?.length, itemsInTabs?.red?.length, itemsInTabs?.yellow?.length, shopItemRarity ]);
 
   const inventoryTabs = useMemo(() => {
     const _inventoryTabs = [];
     isSuccess &&
-      inventory?.items.find(item => item.item_rarity === 'red' && item.item_category === shopCategory.value) &&
-      _inventoryTabs.push(shopItemRarity[0]);
+    inventory?.items.find(item => item.item_rarity === 'red' && item.item_category === shopCategory.value) &&
+    _inventoryTabs.push(shopItemRarity[0]);
     isSuccess &&
-      inventory?.items.find(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value) &&
-      _inventoryTabs.push(shopItemRarity[1]);
+    inventory?.items.find(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value) &&
+    _inventoryTabs.push(shopItemRarity[1]);
     isSuccess &&
-      inventory?.items.find(item => item.item_rarity === 'green' && item.item_category === shopCategory.value) &&
-      _inventoryTabs.push(shopItemRarity[2]);
+    inventory?.items.find(item => item.item_rarity === 'green' && item.item_category === shopCategory.value) &&
+    _inventoryTabs.push(shopItemRarity[2]);
 
     return _inventoryTabs;
-  }, []);
+  }, [ inventory?.items, isSuccess, shopCategory.value, shopItemRarity ]);
 
   const handleShop = () => {
     setItemsQuality(lastOpenedRarity || shopItemRarity[0]);
@@ -133,17 +132,20 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     setItemsQuality(shopItemRarity[0]);
-  }, [shopCategory.value]);
+  }, [ shopCategory.value ]);
 
   const reduxDispatch = useDispatch();
 
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(1));
-  }, []);
+  }, [ reduxDispatch ]);
 
   const statsGlowing = useSelector((state: RootState) => state.guide.getShopStatsGlowing);
 
-  const isTabsNotEmpty = [...(itemsInTabs?.green ?? []), ...(itemsInTabs?.yellow ?? [])].length > 0;
+  const isTabsNotEmpty = useMemo(() => (
+    [ ...(itemsInTabs?.green ?? []), ...(itemsInTabs?.yellow ?? []) ].length > 0
+  ), [ itemsInTabs?.green, itemsInTabs?.yellow ]);
+  console.info([ ...(itemsInTabs?.green ?? []), ...(itemsInTabs?.yellow ?? []) ]);
 
   useEffect(() => {
     if (!dimSet) {
@@ -167,7 +169,9 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
     } else {
       setShowBackToMainGuide(false);
     }
-  }, [mode]);
+  }, [ mode ]);
+
+  console.info(shopCategory.title !== t('s6') && isTabsNotEmpty);
 
   return (
     <>
@@ -235,15 +239,14 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
         <div className={styles.navs}>
           <TabsNavigation tabs={shopItemCategories} currentTab={shopCategory.title} onChange={setShopCategory} />
-          {/* https://www.figma.com/design/EitKuxyKAwTD4SJen3OO91?node-id=1892-284346&m=dev#1121980464  */}
           {shopCategory.title !== t('s6') && isTabsNotEmpty && (
             <TabsNavigation
               colorClass={
                 itemsQuality.title === t('s14')
                   ? 'tabItemSelectedBlue'
                   : itemsQuality.title === t('s15')
-                  ? 'tabItemSelectedPurple'
-                  : 'tabItemSelectedRed'
+                    ? 'tabItemSelectedPurple'
+                    : 'tabItemSelectedRed'
               }
               tabs={mode === 'shop' ? tabs : inventoryTabs}
               currentTab={itemsQuality.title}
