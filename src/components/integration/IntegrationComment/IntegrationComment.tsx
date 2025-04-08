@@ -74,7 +74,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
       localStorage.setItem("LAST_COMMENT_TIME_KEY", Date.now().toString());
       setTimeout(() => {
         setCanShowComment(false);
-      }, 1000);
+      }, 800);
       onVote(true, id);
       voteRightSound();
     }
@@ -85,7 +85,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
       localStorage.setItem("LAST_COMMENT_TIME_KEY", Date.now().toString());
       setTimeout(() => {
         setCanShowComment(false);
-      }, 1000);
+      }, 800);
       onVote(false, id);
       voteWrongSound();
     }
