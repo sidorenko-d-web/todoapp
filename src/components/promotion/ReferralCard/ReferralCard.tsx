@@ -7,7 +7,7 @@ import fireGrayIcon from '../../../assets/icons/fire-gray.svg';
 import infoIcon from '../../../assets/icons/info.svg';
 import infoRedIcon from '../../../assets/icons/info-red.svg';
 import goldCoinIcon from '../../../assets/icons/coin.png';
-import { useGetUserProfileInfoByIdQuery, useMarkPushReminderSentMutation } from '../../../redux';
+import { useMarkPushReminderSentMutation } from '../../../redux';
 import { formatAbbreviation } from '../../../helpers';
 import { Button } from '../../shared';
 import { useTranslation } from 'react-i18next';
@@ -20,8 +20,8 @@ interface ReferralCardProps {
   days_missed: number;
   id_referral: number;
   reminded_time?: string;
-  subscribers_for_referrer: number
-  points_for_referrer: number
+  subscribers_for_referrer: number;
+  points_for_referrer: number;
 }
 
 export const ReferralCard: React.FC<ReferralCardProps> = ({
@@ -33,11 +33,10 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
   days_missed,
   reminded_time,
   subscribers_for_referrer,
-  points_for_referrer
+  points_for_referrer,
 }) => {
   const { t, i18n } = useTranslation('promotion');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const { data } = useGetUserProfileInfoByIdQuery(id_referral.toString());
   const [markPushReminderSent] = useMarkPushReminderSentMutation();
   const handleSendMessage = async () => {
     try {
@@ -91,7 +90,7 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
               </span>
               <span className={classNames(s.level, s.text)}>1{t('p4')}.</span>
             </div>
-            {subscribers_for_referrer !== undefined &&
+            {subscribers_for_referrer !== undefined && (
               <div className={s.userCardBonus}>
                 <span className={s.badge}>
                   +{formatAbbreviation(total_invited * 150, 'number', { locale: locale })}
@@ -99,10 +98,10 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
                 </span>
                 <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
               </div>
-            }
-            {data?.subscribers_for_second_level_referrals === undefined && <Button className={classNames(s.userCardRefs, s.text)}>
-              {`(${t('p54')} ${total_invited} ${t('p55')}.)`}
-            </Button>}
+            )}
+            {total_invited > 0 && (
+              <p className={classNames(s.userCardRefs, s.text)}>{`(${t('p54')} ${total_invited} ${t('p55')}.)`}</p>
+            )}
           </div>
           <div className={s.userCardBonus}>
             <span className={s.badge}>

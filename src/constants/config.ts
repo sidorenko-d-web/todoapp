@@ -57,6 +57,6 @@ const referral_id = 1259832544; //Марго
 // const referral_id = 6983657401; // domiknakolese3️⃣
 // const referral_id = 6983657401; // Никита Пирсов4️⃣
 
-const buildMode: 'testDev' | 'test' | 'prodDev' | 'production' = 'prodDev'; //change type of building here
+const buildMode: 'testDev' | 'test' | 'prodDev' | 'production' = 'testDev'; //change type of building here
 
 export { init_data, buildMode, referral_id };

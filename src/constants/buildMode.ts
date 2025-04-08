@@ -34,7 +34,7 @@ const links = {
 
   baseUrl_TestDev: 'https://bbajd7fltqec6462cm1j.containers.yandexcloud.net/',
   baseUrl_Test: 'https://bbajd7fltqec6462cm1j.containers.yandexcloud.net/',
-  baseUrl_ProdDev: 'https://bbaa2o77ubs6r4cta1l2.containers.yandexcloud.net/',
+  baseUrl_ProdDev: '/api/base',
   baseUrl_Production: 'https://bbaa2o77ubs6r4cta1l2.containers.yandexcloud.net/',
 };
 export function buildLink() {
