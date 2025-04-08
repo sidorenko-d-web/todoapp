@@ -9,6 +9,7 @@ import {
   TypeItemRarity,
   useGetCurrentUserBoostQuery,
   useGetInventoryItemsQuery,
+  useGetProfileMeQuery,
   useGetShopItemsQuery,
 } from '../../redux';
 import TabsNavigation from '../../components/TabsNavigation/TabsNavigation';
@@ -46,6 +47,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
                                                            onItemQualityChange,
                                                            mode,
                                                          }) => {
+  const { data: profile } = useGetProfileMeQuery();
+
   const lastOpenedTab = useSelector((state: RootState) => state.shop.lastOpenedTab);
   const lastOpenedRarity = useSelector((state: RootState) => state.shop.lastOpenedRarity);
   const selectedIntegrationCategory = useSelector((state: RootState) => state.shop.selectedIntegrationCategory);
@@ -115,23 +118,33 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
 
   const tabs = useMemo(() => {
     const _tabs: TypeTab<TypeItemRarity>[] = [];
-    itemsInTabs?.red?.length && itemsInTabs?.red?.length > 0 && _tabs.push(shopItemRarity[0]);
-    itemsInTabs?.yellow?.length && itemsInTabs?.yellow?.length > 0 && _tabs.push(shopItemRarity[1]);
-    itemsInTabs?.green?.length && itemsInTabs?.green?.length > 0 && _tabs.push(shopItemRarity[2]);
+
+    if (itemsInTabs?.red && itemsInTabs.red.length > 0) {
+      _tabs.push(shopItemRarity[0]);
+    }
+
+    if (profile && profile.growth_tree_stage_id >= 150 && itemsInTabs?.yellow && itemsInTabs.yellow.length > 0) {
+      _tabs.push(shopItemRarity[1]);
+    }
+
+    if (profile && profile.growth_tree_stage_id >= 300 && itemsInTabs?.green && itemsInTabs.green.length > 0) {
+      _tabs.push(shopItemRarity[2]);
+    }
 
     return _tabs;
   }, [ itemsInTabs?.green?.length, itemsInTabs?.red?.length, itemsInTabs?.yellow?.length, shopItemRarity ]);
 
   const inventoryTabs = useMemo(() => {
     const _inventoryTabs: TypeTab<TypeItemRarity>[] = [];
+
     if (isSuccess && inventory?.items) {
       if (inventory.items.some(item => item.item_rarity === 'red' && item.item_category === shopCategory.value)) {
         _inventoryTabs.push(shopItemRarity[0]);
       }
-      if (inventory.items.some(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value)) {
+      if (profile && profile.growth_tree_stage_id >= 150 && inventory.items.some(item => item.item_rarity === 'yellow' && item.item_category === shopCategory.value)) {
         _inventoryTabs.push(shopItemRarity[1]);
       }
-      if (inventory.items.some(item => item.item_rarity === 'green' && item.item_category === shopCategory.value)) {
+      if (profile && profile.growth_tree_stage_id >= 300 && inventory.items.some(item => item.item_rarity === 'green' && item.item_category === shopCategory.value)) {
         _inventoryTabs.push(shopItemRarity[2]);
       }
     }
@@ -192,6 +205,8 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
       setShowBackToMainGuide(false);
     }
   }, [ mode ]);
+
+  const showRarityTabs = profile && profile.growth_tree_stage_id >= 150 && shopCategory.title !== t('s6') && isTabsNotEmpty;
 
   return (
     <>
@@ -263,7 +278,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({
             currentTab={shopCategory.title}
             onChange={setShopCategory as Dispatch<SetStateAction<{ title: string; value: string }>>}
           />
-          {shopCategory.title !== t('s6') && isTabsNotEmpty && (
+          {showRarityTabs && (
             <TabsNavigation
               colorClass={
                 itemsQuality.title === t('s14')
