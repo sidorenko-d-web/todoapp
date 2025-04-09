@@ -10,11 +10,11 @@ import { buildMode } from '../../constants';
 
 export const useAuthFlow = () => {
   const { i18n } = useTranslation();
-  const [signIn] = useSignInMutation();
-  const [currentStep, setCurrentStep] = useState<AuthStep>('loading');
-  const [selectedLanguage, setSelectedLanguage] = useState(() => localStorage.getItem('selectedLanguage') || 'en');
-  const [isInitializing, setIsInitializing] = useState(true);
-  const [isAnimationFinished, setIsAnimationFinished] = useState(false);
+  const [ signIn ] = useSignInMutation();
+  const [ currentStep, setCurrentStep ] = useState<AuthStep>('loading');
+  const [ selectedLanguage, setSelectedLanguage ] = useState(() => localStorage.getItem('selectedLanguage') || 'en');
+  const [ isInitializing, setIsInitializing ] = useState(true);
+  const [ isAnimationFinished, setIsAnimationFinished ] = useState(false);
   // const { closeModal, openModal } = useModal();
 
   const saveCurrentStep = useCallback((step: AuthStep) => {
@@ -38,7 +38,7 @@ export const useAuthFlow = () => {
       localStorage.setItem('selectedLanguage', language);
       await i18n.changeLanguage(language);
     },
-    [i18n],
+    [ i18n ],
   );
 
   const handleLanguageContinue = useCallback(async () => {
@@ -52,7 +52,7 @@ export const useAuthFlow = () => {
         saveCurrentStep('invite_code');
       }
     }
-  }, [signIn, updateTokens, saveCurrentStep]);
+  }, [ signIn, updateTokens, saveCurrentStep ]);
 
   const handleInviteCodeContinue = useCallback(async () => {
     try {
@@ -62,7 +62,7 @@ export const useAuthFlow = () => {
     } catch (err: any) {
       console.error('Ошибка при авторизации:', err);
     }
-  }, [signIn, updateTokens, saveCurrentStep]);
+  }, [ signIn, updateTokens, saveCurrentStep ]);
 
   const handleSkinContinue = () => {
     saveCurrentStep('final_loading');
@@ -95,38 +95,27 @@ export const useAuthFlow = () => {
 
       try {
         await minLoadingTime;
-        const [authResponse] = await Promise.all([performSignIn(signIn), minLoadingTime]);
+        const [ authResponse ] = await Promise.all([ performSignIn(signIn), minLoadingTime ]);
         updateTokens(authResponse);
-
+        saveCurrentStep(savedStep && savedStep !== 'loading' ? savedStep : 'language');
+      } catch (err: any) {
+        console.error('Ошибка при инициализации:', err);
         if (savedStep === 'completed') {
-          // Обновляем токены для пользователя, у которого сохранён completed
-          try {
-            const authResponse = await performSignIn(signIn);
-            updateTokens(authResponse);
+          if (err?.status === 401 || err?.status === 403) {
+            saveCurrentStep('invite_code');
+          } else {
             saveCurrentStep('completed');
-          } catch (err: any) {
-            console.error('Ошибка при обновлении токена для пользователя completed:', err);
-            if (err?.status === 401 || err?.status === 403) {
-              saveCurrentStep('invite_code');
-            } else {
-              saveCurrentStep('completed');
-            }
           }
-        } else if (savedStep && savedStep !== 'loading') {
-          saveCurrentStep(savedStep);
         } else {
           saveCurrentStep('language');
         }
-      } catch (err: any) {
-        console.error('Ошибка при инициализации:', err);
-        saveCurrentStep('language');
       } finally {
         setIsInitializing(false);
       }
     };
 
     initAuthFlow();
-  }, [signIn, updateTokens, saveCurrentStep]);
+  }, [ signIn, updateTokens, saveCurrentStep ]);
 
   return {
     currentStep,
