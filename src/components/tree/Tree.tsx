@@ -1,4 +1,4 @@
-import { CSSProperties, memo, useState } from 'react';
+import { CSSProperties, memo, useEffect, useState } from 'react';
 import s from './Tree.module.scss';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
@@ -39,11 +39,16 @@ export const Tree = () => {
   const { t } = useTranslation('tree');
   // const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData, refetch } = useGetTreeInfoQuery();
-  const { data: userProfileData } = useGetProfileMeQuery();
+  const { data: userProfileData, isLoading } = useGetProfileMeQuery();
   const [currentBoost, setCurrentBoost] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
   const isGuide = !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
+  useEffect(() => {
+    if(userProfileData && !isLoading) {
+      localStorage.setItem('USER_LEVEL', ''+userProfileData.growth_tree_stage_id);
+    }
+  }, [userProfileData, isLoading]);
 
 
   const [unlockAchievement] = useUnlockAchievementMutation();

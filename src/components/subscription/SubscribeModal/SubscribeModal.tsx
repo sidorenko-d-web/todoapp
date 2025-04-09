@@ -10,7 +10,7 @@ import {
 
 import s from './SubscribeModal.module.scss';
 import { getSubscriptionPurchased, isGuideShown, setGuideShown, setSubscriptionPurchased } from '../../../utils';
-import { formatAbbreviation } from '../../../helpers';
+import { formatAbbreviation, getMaxSubscriptions } from '../../../helpers';
 import { Button, CentralModal } from '../../shared';
 import { GUIDE_ITEMS, MODALS, PROFILE_ME_POLLING_INTERVAL } from '../../../constants';
 import { useModal } from '../../../hooks';
@@ -43,6 +43,8 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
   const { data: current } = useGetProfileMeWithPollingQuery(undefined, {
     pollingInterval: PROFILE_ME_POLLING_INTERVAL,
   });
+
+  const maxSubscriptions = getMaxSubscriptions();
 
   const buyBtnGlowing = getSubscriptionPurchased();
   const { openModal, closeModal } = useModal();
@@ -150,7 +152,7 @@ export const SubscribeModal: FC<SubscribeModalProps> = ({ modalId, onClose, onSu
             <div className={s.progressInfo}>
               <span>{t('g76')}</span>
               <span className={s.progressIcon}>
-                0/5 <img src={integrationWhiteIcon} height={18} width={18} alt={'Integration'} />
+                0/{maxSubscriptions} <img src={integrationWhiteIcon} height={18} width={18} alt={'Integration'} />
               </span>
             </div>
             <div className={s.progressBar}>

@@ -15,7 +15,7 @@ import giftPurple from '../../../assets/icons/gift-purple.svg';
 import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
 import { Boost } from '../../../redux';
-import { formatAbbreviation } from '../../../helpers';
+import { formatAbbreviation, getMaxSubscriptions } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -32,6 +32,9 @@ export default function GetGift({ giftColor, boost }: Props) {
     typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
 
   if (!isOpen) return null;
+
+  const maxSubscriptions = getMaxSubscriptions();
+
 
   let giftImage;
 
@@ -102,7 +105,7 @@ export default function GetGift({ giftColor, boost }: Props) {
           </div>
           {boost?.additional_integrations_for_subscription && (
             <div className={styles.item}>
-              <p>+{formatAbbreviation(boost?.additional_integrations_for_subscription)}</p>
+              <p>+{formatAbbreviation(boost?.additional_integrations_for_subscription + maxSubscriptions)}</p>
               <img src={integration} />
             </div>
           )}

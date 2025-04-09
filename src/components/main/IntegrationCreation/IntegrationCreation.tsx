@@ -16,6 +16,7 @@ import s from './IntegrationCreation.module.scss';
 import { useTranslation } from 'react-i18next';
 import { UserGuideCreationCard } from '../GuideIntegrationCreationCard/GuideIntegrationCreationCard.tsx';
 import { useCallback } from 'react';
+import { getMaxSubscriptions } from '../../../helpers/getMaxSubscriptions.ts';
 
 export const IntegrationCreation = () => {
   const { t } = useTranslation('integrations');
@@ -69,6 +70,8 @@ export const IntegrationCreation = () => {
     openModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
   };
 
+  const maxSubscriptions = getMaxSubscriptions();
+
   const isButtonGlowing = isIntegrationCreationButtonGlowing();
   const createIntegrationButtonGlowing = useSelector((state: RootState) => state.guide.createIntegrationButtonGlowing);
 
@@ -105,7 +108,7 @@ export const IntegrationCreation = () => {
         >
           {t('i9')}
           <span className={s.buttonBadge}>
-            {profile?.subscription_integrations_left || 0}/5{' '}
+            {profile?.subscription_integrations_left || 0}/{maxSubscriptions}{' '}
             <img src={integrationIcon} height={12} width={12} alt="integration" />
           </span>
         </TrackedButton>
