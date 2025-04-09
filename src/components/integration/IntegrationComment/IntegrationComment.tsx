@@ -9,7 +9,7 @@ import { ProgressLine } from '../../shared';
 import clsx from 'clsx';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface IntegrationCommentProps {
   author_username: string;
@@ -44,7 +44,7 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
     volume: useSelector(selectButtonVolume) * 1.5,
   });
 
-
+  const voteLockRef = useRef(false);
 
   const [canShowComment, setCanShowComment] = useState(false);
 
@@ -70,10 +70,13 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
 
 
   const handleVoteRight = () => {
-    if (!isVoting && !finished) {
+    if (!isVoting && !finished && !voteLockRef.current) {
+      voteLockRef.current = true;
+
       localStorage.setItem("LAST_COMMENT_TIME_KEY", Date.now().toString());
       setTimeout(() => {
         setCanShowComment(false);
+        voteLockRef.current = false;
       }, 800);
       onVote(true, id);
       voteRightSound();
@@ -81,10 +84,13 @@ export const IntegrationComment: React.FC<IntegrationCommentProps> = ({
   };
 
   const handleVoteWrong = () => {
-    if (!isVoting && !finished) {
+   if (!isVoting && !finished && !voteLockRef.current) {
+      voteLockRef.current = true;
+
       localStorage.setItem("LAST_COMMENT_TIME_KEY", Date.now().toString());
       setTimeout(() => {
         setCanShowComment(false);
+        voteLockRef.current = false;
       }, 800);
       onVote(false, id);
       voteWrongSound();
