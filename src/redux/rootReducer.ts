@@ -1,5 +1,12 @@
 import { Action, combineReducers } from 'redux';
-import { animationStateReducer, audioReducer, authReducer, mainReducer, shopReducer, transactionNotificationReducer } from './slices';
+import {
+  animationStateReducer,
+  audioReducer,
+  authReducer,
+  mainReducer,
+  shopReducer,
+  transactionNotificationReducer,
+} from './slices';
 import {
   authApi,
   chestApi,
@@ -54,8 +61,7 @@ const appReducer = combineReducers({
 
 export const rootReducer = (state: any, action: Action) => {
   if (action.type === 'auth/signOut') {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('access_token');
     return appReducer(undefined, action);
   }
 
