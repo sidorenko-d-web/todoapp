@@ -59,11 +59,10 @@ export const integrationsApi = createApi({
       },
       providesTags: ['Integrations'],
     }),
-    updateTimeLeft: builder.mutation<IntegrationResponseDTO, IntegrationUpdateRequestDTO>({
-      query: ({ integrationId, timeLeftDelta }) => ({
+    updateTimeLeft: builder.mutation<IntegrationResponseDTO, string>({
+      query: integrationId => ({
         url: `/integrations/${integrationId}/time_left`,
         method: 'PATCH',
-        params: { time_left_delta: timeLeftDelta },
       }),
       invalidatesTags: ['Integrations'],
     }),
