@@ -24,10 +24,9 @@ export const useAuthFlow = () => {
     setCurrentStep(step);
   }, []);
 
-  const updateTokens = useCallback((authResponse: { access_token: string; refresh_token: string }) => {
-    if (authResponse?.access_token && authResponse?.refresh_token) {
+  const updateTokens = useCallback((authResponse: { access_token: string }) => {
+    if (authResponse?.access_token) {
       localStorage.setItem('access_token', authResponse.access_token);
-      localStorage.setItem('refresh_token', authResponse.refresh_token);
     }
   }, []);
 
@@ -43,8 +42,10 @@ export const useAuthFlow = () => {
 
   const handleLanguageContinue = useCallback(async () => {
     try {
-      const authResponse = await performSignIn(signIn);
-      updateTokens(authResponse);
+      if (!localStorage.getItem('access_token')) {
+        const authResponse = await performSignIn(signIn);
+        updateTokens(authResponse);
+      }
       saveCurrentStep('skin');
     } catch (err: any) {
       console.error('Ошибка при обновлении токена:', err);
@@ -56,8 +57,10 @@ export const useAuthFlow = () => {
 
   const handleInviteCodeContinue = useCallback(async () => {
     try {
-      const authResponse = await performSignIn(signIn);
-      updateTokens(authResponse);
+      if (!localStorage.getItem('access_token')) {
+        const authResponse = await performSignIn(signIn);
+        updateTokens(authResponse);
+      }
       saveCurrentStep('skin');
     } catch (err: any) {
       console.error('Ошибка при авторизации:', err);
@@ -95,8 +98,12 @@ export const useAuthFlow = () => {
 
       try {
         await minLoadingTime;
-        const [ authResponse ] = await Promise.all([ performSignIn(signIn), minLoadingTime ]);
-        updateTokens(authResponse);
+
+        if (!localStorage.getItem('access_token')) {
+          const [ authResponse ] = await Promise.all([ performSignIn(signIn), minLoadingTime ]);
+          updateTokens(authResponse);
+        }
+
         saveCurrentStep(savedStep && savedStep !== 'loading' ? savedStep : 'language');
       } catch (err: any) {
         console.error('Ошибка при инициализации:', err);

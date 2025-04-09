@@ -7,8 +7,9 @@ import {
 } from '@reduxjs/toolkit/query';
 import { Mutex } from 'async-mutex';
 import { buildLink } from '../../constants/buildMode';
-import { setCredentials, signOut } from '../slices';
-import { AuthTokensResponseDTO } from './auth';
+import { setCredentials } from '../slices';
+import { AuthTokensResponseDTO, SignInDTO } from './auth';
+import { init_data } from '../../constants';
 
 const mutex = new Mutex();
 
@@ -36,25 +37,20 @@ export const baseQueryReauth: BaseQueryFn<
       result = await baseQuery(args, api, extraOptions);
     }
 
-    if (result.error && result.error.status === 401) {
+    if (result.error && (result.error.status === 401 || result.error.status === 403)) {
       if (!mutex.isLocked()) {
         const release = await mutex.acquire();
 
         try {
-          const refreshToken = window.localStorage.getItem('refresh_token');
-
-          if (!refreshToken) {
-            api.dispatch(signOut());
-            return result;
-          }
+          const payload: SignInDTO = {
+            init_data,
+          };
 
           const refreshResult = await baseQuery(
             {
-              method: 'PATCH',
-              url: '/auth/refresh',
-              body: {
-                refresh_token: refreshToken,
-              },
+              url: '/auth/login',
+              method: 'POST',
+              body: payload,
             },
             api,
             extraOptions,

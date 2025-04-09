@@ -5,6 +5,5 @@ export type SignInDTO = {
 export type AuthTokensResponseDTO = {
   access_token: string;
   expires_at: string;
-  refresh_token: string;
   token_type: string;
 };
