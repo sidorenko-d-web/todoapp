@@ -52,6 +52,7 @@ const SoundOption = ({
     };
     
     const handleVolumeChangeComplete = () => {
+        console.error("Music enabled?", localStorage.getItem("musicEnabled"))
         if (onVolumeChangeComplete) {
             onVolumeChangeComplete();
         }
@@ -59,14 +60,14 @@ const SoundOption = ({
     
     return (
         <div className={`${styles.soundWrapper} ${isEnabled ? styles.selected : ''}`}>
-            <div className={styles.mainContent}>
-                <div className={styles.soundAndIcon} onClick={onToggle}>
+            <div className={styles.mainContent} onClick={onToggle}>
+                <div className={styles.soundAndIcon}>
                     <span>{title}</span>
                     <span className={`${styles.status} ${isEnabled ? styles.statusEnabled : styles.statusDisabled}`}>
                         {isEnabled ? t('s11') : t('s12')}
                     </span>
                 </div>
-                <div className={styles.selectionIconWrapper} onClick={onToggle}>
+                <div className={styles.selectionIconWrapper}>
                     <img
                         src={isEnabled ? tick : circle}
                         alt={isEnabled ? "Selected" : "Not selected"}
