@@ -27,14 +27,55 @@
   padding: 8px;
   border-radius: 8px;
   background: var.$footer-bg;
-  margin-top: 10px;
+
+  &.inModal {
+    background: var.$color-card-bg;
+
+    .streakBadge {
+      background: var.$footer-bg;
+    }
+  }
+
+  .streakBadge {
+    width: fit-content;
+    padding: 4px 8px;
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    height: fit-content;
+    border-radius: 99999px;
+    background: var.$color-badge-bg;
+    font-weight: 500;
+    line-height: 100%;
+    font-size: 14px;
+
+    img {
+      width: 14px;
+      height: 14px;
+
+      &.isGrayInfo {
+        opacity: 0.2;
+      }
+    }
+
+    &.textGray {
+      color: var.$color-pale-semi-transparent;
+    }
+    &.textBlue {
+      color: var.$color-blue-primary;
+    }
+    &.textRed {
+      color: var.$color-red;
+    }
+  }
 }
 
 .userCardBottom {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   margin-top: 10px;
-  gap: 31px;
+  width: 100%;
 }
 
 .userCardAvatar {
@@ -46,7 +87,7 @@
 .userCardTop {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
 }
 
@@ -60,64 +101,40 @@
 .nameAndStreakWrapper {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 }
 
 .streakWrapper {
   display: flex;
-  gap: 5px
-}
-
-.streakBadge {
-  width: fit-content;
-  padding: 2px 6px;
-  display: flex;
-  gap: 2px;
-  align-items: center;
-  color: white;
-  height: fit-content;
-  border-radius: 10px;
-  background: var.$color-badge-bg;
-  font-weight: 500;
-  line-height: 100%;
-
-  @include var.multi-fz(12px, 14px);
-
-  img {
-    @include var.multi-size(12px, 14px)
-  }
-
-  &.notToday {
-    color: var.$color-gray;
-  }
-
-  &.notInDays {
-    color: var.$light-gray-bg;
-  }
-
-  &.warning {
-    text-wrap: pretty;
-    color: var.$color-red;
-
-    img {
-      @include var.multi-size(12px, 14px)
-    }
-  }
+  gap: 5px;
 }
 
 .userCardStats {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 15px;
+  margin-top: 20px;
 }
 
 .userCardBonus {
   display: flex;
-  align-items: center;
+  align-items: end;
   flex-direction: row;
-  gap: 20px;
   position: relative;
   padding: 0px 4px;
+  &:nth-child(2) {
+    width: 70%;
+  }
+
+  .bonusUpper {
+    position: absolute;
+    white-space: nowrap;
+    bottom: 6px;
+    left: 75px;
+    font-size: 11px;
+    color: var.$color-text-semi-transparent;
+  }
 }
 
 .text {
@@ -137,7 +154,8 @@
   @include var.multi-fz(10px, 12px);
 }
 
-.userCardRank, .userCardRefs {
+.userCardRank,
+.userCardRefs {
   color: var.$color-blue-primary;
 }
 
@@ -146,31 +164,46 @@
   border: none;
 }
 
-.streakWarningWrapper {
-  margin-top: 20px;
+.warningButton {
+  color: white;
+  width: fit-content;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  margin-top: 20px;
+  border: 1px solid var.$color-border-red;
+  background-color: var.$color-red;
 
-  .warningButton {
-    color: white;
-    width: fit-content;
-    display: flex;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    border: 1px solid var.$color-border-red;
-    background-color: var.$color-red;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 100%;
 
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 100%;
-
-
-    @media (min-width: var.$breakpoint-md) {
-      padding: 14px;
-    }
+  @media (min-width: var.$breakpoint-md) {
+    padding: 14px;
   }
 }
 
+.statItem {
+  display: flex;
+  font-size: 16px;
+  color: white;
+  gap: 2px;
+  align-items: center;
+
+  img {
+    width: 14px;
+    height: 14px;
+  }
+
+  sup {
+    font-size: 11px;
+    color: var.$color-text-semi-transparent;
+    transform: translateY(-3px);
+  }
+
+  .moreRefs {
+    color: var.$color-blue-primary;
+  }
+}

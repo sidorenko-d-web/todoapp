@@ -3,7 +3,7 @@
 .badgesWrp {
   display: flex;
   flex-direction: row;
-  margin-top: 10px;
+  margin-top: -6px;
   justify-content: center;
   gap: 3px;
 
@@ -41,17 +41,17 @@
   margin-top: 10px;
   transform: translateX(-15px);
 
-  &::-webkit-scrollbar {
-    width: 1px;
-  }
+  // &::-webkit-scrollbar {
+  //   width: 1px;
+  // }
 
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  // &::-webkit-scrollbar-track {
+  //   background: transparent;
+  // }
 
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-  }
+  // &::-webkit-scrollbar-thumb {
+  //   background-color: transparent;
+  // }
 
   .item {
     width: 100%;
@@ -59,7 +59,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 15px;
+    padding: 0 6px 0 15px;
 
     .loadingText {
       color: var.$color-text-super-transparent;

@@ -17,7 +17,7 @@ import { useModal } from '../../hooks';
 import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 import { Loader } from '../../components';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 export const StrangerProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation('profile');
@@ -67,13 +67,9 @@ export const StrangerProfilePage: React.FC = () => {
         .catch(err => console.error('Error claiming reward:', err));
     }
   }, [streaks, claimChestReward, openModal]);
+  const [searchParams] = useSearchParams();
 
-  const userPosition =
-    userProfileData && topProfilesData?.profiles
-      ? topProfilesData.profiles.findIndex((profile: { id: string }) => profile.id === userProfileData.id)
-      : -1;
-
-  const position = userPosition !== -1 ? userPosition + 1 : topProfilesData?.profiles.length!;
+  const position = Number(searchParams.get("topposition")) ?? 1
 
   const weekInformation = data?.week_information || [];
 
