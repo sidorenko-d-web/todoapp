@@ -14,16 +14,20 @@ import giftRed from '../../../assets/icons/gift-red.svg';
 import giftPurple from '../../../assets/icons/gift-purple.svg';
 import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
-import { Boost } from '../../../redux';
+import { Boost, useGetProfileMeQuery } from '../../../redux';
 import { formatAbbreviation, getMaxSubscriptions } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 
+import snowflake from '../../../assets/icons/snowflake.svg'
+import { useEffect, useState } from 'react';
 interface Props {
   giftColor?: string;
   boost?: Boost | null | undefined;
+
+  prevLevelBoost?: Boost | null | undefined;
 }
 
-export default function GetGift({ giftColor, boost }: Props) {
+export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
   const { t } = useTranslation('quests');
@@ -33,7 +37,16 @@ export default function GetGift({ giftColor, boost }: Props) {
 
   if (!isOpen) return null;
 
+  const [userSubscriptions, setUserSubscriptions] = useState(0);
   const maxSubscriptions = getMaxSubscriptions();
+
+  //const { data: profileData, isLoading} = useGetProfileMeQuery();
+
+  // useEffect(() => {
+  //   if(profileData && !isLoading) {
+  //     setUserSubscriptions(profileData.subscription_integrations_left);
+  //   }
+  // }, [profileData, isLoading])
 
 
   let giftImage;
@@ -66,31 +79,50 @@ export default function GetGift({ giftColor, boost }: Props) {
 
       <div className={styles.info}>
         {giftImage}
-        <div className={styles.statsContainer}>
+        <div className={styles.statsContainer} style={{ marginTop: '35px' }}>
           <div className={styles.stat}>
             {boost?.income_per_second && (
               <span className={styles.statValue}>+{formatAbbreviation(boost?.income_per_second)}</span>
             )}
-            <div className={styles.statBox}>
+            {/* <div className={styles.statBox}>
               <span>x{formatAbbreviation(boost?.x_income_per_second || 0)}</span>
               <img src={coin} />
               <span className={styles.extra}>/ {t('q9_1')}</span>
-            </div>
+            </div> */}
           </div>
           <div className={styles.stat}>
             {/*<span className={styles.statValue}>+10</span>*/}
             <div className={styles.statBox}>
+              {prevLevelBoost && 
+              <span className={styles.difference}>
+                +{boost?.subscribers_for_first_level_referrals! - prevLevelBoost?.subscribers_for_first_level_referrals!}</span>
+              }
+
               <span>+{formatAbbreviation(boost?.subscribers_for_first_level_referrals || 0)}</span>
               <img src={subscribers} />
               <span className={styles.extra}>1 {t('q9_2')}</span>
             </div>
           </div>
+
           <div className={styles.stat}>
-            {/*<span className={styles.statValue}>+5</span>*/}
+            {/*<span className={styles.statValue}>+10</span>*/}
             <div className={styles.statBox}>
+              {prevLevelBoost && 
+              <span className={styles.difference}>
+                +{boost?.subscribers_for_second_level_referrals! - prevLevelBoost?.subscribers_for_second_level_referrals!}</span>
+              }
               <span>+{formatAbbreviation(boost?.subscribers_for_second_level_referrals || 0)}</span>
               <img src={subscribers} />
               <span className={styles.extra}>2 {t('q9_2')}</span>
+            </div>
+          </div>
+          <div className={styles.stat}>
+            {/*<span className={styles.statValue}>+5</span>*/}
+            <div className={styles.statBox}>
+              <span className={styles.difference}>+1</span>
+              <span>{formatAbbreviation(userSubscriptions)}/{formatAbbreviation(maxSubscriptions)}</span>
+              <img src={integration} />
+              <span className={styles.extra}>макс.</span>
             </div>
           </div>
         </div>
@@ -109,10 +141,14 @@ export default function GetGift({ giftColor, boost }: Props) {
               <img src={integration} />
             </div>
           )}
-          {/*<div className={styles.item}>*/}
-          {/*  <p>+1</p>*/}
-          {/*  <img src={snowflake} />*/}
-          {/*</div>*/}
+
+          {boost?.freezes && (
+            <div className={styles.item}>
+              <p>+{boost?.freezes}</p>
+              <img src={snowflake} />
+            </div>
+          )}
+
         </div>
         <p className={styles.desc}>{t('q57')}</p>
       </div>

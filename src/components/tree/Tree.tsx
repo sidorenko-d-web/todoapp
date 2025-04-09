@@ -44,11 +44,17 @@ export const Tree = () => {
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
   const isGuide = !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
 
+  const [currentUserLevel, setCurrentUserLevel] = useState(0);
+
+  const [prevLevelBoost, setPrevLevelBoost] = useState<Boost | null>(null);
+
   useEffect(() => {
     if(userProfileData && !isLoading) {
+      setCurrentUserLevel(userProfileData.growth_tree_stage_id);
       localStorage.setItem('USER_LEVEL', ''+userProfileData.growth_tree_stage_id);
     }
   }, [userProfileData, isLoading]);
+
 
 
   const [unlockAchievement] = useUnlockAchievementMutation();
@@ -64,8 +70,16 @@ export const Tree = () => {
     );
   }
 
-  const handleUnlock = async (id: string, boost: Boost) => {
+  const handleUnlock = async (id: string, boost: Boost, stageNumber: number) => {
     try {
+      if (stageNumber > 1 && currentUserLevel === stageNumber) {
+        const prevStage = treeData?.growth_tree_stages[currentUserLevel - 2];
+        setPrevLevelBoost(prevStage?.achievement.boost || null);
+      } else {
+        setPrevLevelBoost(null);
+      }
+      
+
       await unlockAchievement({ achievement_id: id }).unwrap();
       setCurrentBoost(boost);
       await refetch();
@@ -141,7 +155,8 @@ export const Tree = () => {
         {stage?.achievement.is_available && !stage.achievement.is_unlocked && _index > 1 && (
           <Button
             className={clsx(s.takeRewardBtn)}
-            onClick={() => handleUnlock(stage?.achievement.id ?? '', stage?.achievement.boost ?? {})}
+            onClick={() => handleUnlock(stage?.achievement.id ?? '', 
+              stage?.achievement.boost ?? {}, stage?.stage_number ?? 0)}
           >
             {t('t2')}
           </Button>
@@ -193,7 +208,7 @@ export const Tree = () => {
         </List>
       </div>
 
-      <GetGift boost={currentBoost} />
+      <GetGift boost={currentBoost} prevLevelBoost={prevLevelBoost}/>
     </div>
   );
 };
