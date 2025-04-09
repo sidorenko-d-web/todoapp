@@ -109,7 +109,7 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
               <span className={styles.difference1}>+1</span>
               <span>{formatAbbreviation(userSubscriptions)}/{formatAbbreviation(maxSubscriptions)}</span>
               <img src={integration} />
-              <span className={styles.extra}>макс.</span>
+              <span className={styles.extra}>{t('q60')}</span>
             </div>
           </div>
         </div>
