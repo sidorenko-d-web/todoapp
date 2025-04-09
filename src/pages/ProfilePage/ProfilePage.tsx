@@ -135,7 +135,7 @@ export const ProfilePage: React.FC = () => {
   if (isLoading) {
     return <Loader />;
   }
-
+  console.log(userProfileData);
   return (
     <>
       <GetRewardChestModal onClose={() => closeModal(MODALS.TASK_CHEST)} />
