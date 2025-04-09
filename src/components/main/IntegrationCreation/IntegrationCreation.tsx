@@ -57,7 +57,7 @@ export const IntegrationCreation = () => {
       if (!isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN)) {
         openModal(MODALS.SUBSCRIBE);
       } else {
-        if(!getModalState(MODALS.CREATING_INTEGRATION).isOpen && !integrationCreating) {
+        if (!getModalState(MODALS.CREATING_INTEGRATION).isOpen && !integrationCreating) {
           openModal(MODALS.CREATING_INTEGRATION);
         }
       }

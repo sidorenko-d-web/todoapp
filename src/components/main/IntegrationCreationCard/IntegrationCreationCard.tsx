@@ -204,8 +204,8 @@ export const IntegrationCreationCard: FC<CreatingIntegrationCardProps> = ({ inte
       setTimeout(() => particle.remove(), 800);
     }
   }, []);
-
   if (timeLeft <= 0) {
+    console.log(timeLeft);
     dispatch(setIntegrationReadyForPublishing(true));
     dispatch(setLastIntegrationId(integration.id));
     return null;

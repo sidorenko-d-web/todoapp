@@ -72,14 +72,15 @@ export const Tree = () => {
 
   const handleUnlock = async (id: string, boost: Boost, stageNumber: number) => {
     try {
+      localStorage.setItem('GIFT_FOR_TREE_STAGE', '1');
+      
       if (stageNumber > 1 && currentUserLevel === stageNumber) {
         const prevStage = treeData?.growth_tree_stages[currentUserLevel - 2];
         setPrevLevelBoost(prevStage?.achievement.boost || null);
       } else {
         setPrevLevelBoost(null);
       }
-      
-
+   
       await unlockAchievement({ achievement_id: id }).unwrap();
       setCurrentBoost(boost);
       await refetch();

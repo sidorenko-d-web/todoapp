@@ -4,7 +4,6 @@ import {
   IntegrationResponseDTO,
   IntegrationsQueryRequestDTO,
   IntegrationsResponseDTO,
-  IntegrationUpdateRequestDTO,
   UnansweredIntegrationCommentDTO,
 } from '.';
 
@@ -44,16 +43,18 @@ export const integrationsApi = createApi({
     }),
     getIntegrations: builder.query<IntegrationsResponseDTO, IntegrationsQueryRequestDTO | void>({
       query: queryParams => {
-        const params = queryParams
-          ? Object.entries(queryParams)
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              .filter(([_, value]) => value !== undefined && value !== null)
-              .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
-              .join('&')
-          : '';
+        const params = {
+          ...(queryParams || {}),
+          limit: '200', // Лимит интеграций limit=200
+        };
+
+        const queryString = Object.entries(params)
+          .filter(([_, value]) => value !== undefined && value !== null)
+          .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
+          .join('&');
 
         return {
-          url: `/integrations${params ? `?${params}` : ''}`,
+          url: `/integrations${queryString ? `?${queryString}` : ''}`,
           method: 'GET',
         };
       },
