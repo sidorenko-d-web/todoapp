@@ -53,7 +53,6 @@ export const Header = () => {
 
   const [ rerender, setRerender ] = useState(0);
 
-  const [_, setModalStateChange] = useState(0);
 
   const { getModalState } = useModal();
   const { isOpen: isGetGiftModalOpen } = getModalState(MODALS.GET_GIFT);
@@ -76,9 +75,7 @@ export const Header = () => {
       newItemModalOpen ||
       dailyGiftModalOpen
     ) {
-      refetchProfileData().then(() => {
-        setModalStateChange((prev) => prev + 1);
-      });
+      refetchProfileData();
     }
   }, [
     isGetGiftModalOpen,
