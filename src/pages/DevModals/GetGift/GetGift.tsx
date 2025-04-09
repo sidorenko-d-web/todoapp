@@ -64,7 +64,12 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
   }
 
   return (
-    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={t('q59')}>
+    <CentralModal onClose={() => {
+      localStorage.setItem('GIFT_FOR_TREE_STAGE', '0');
+      closeModal(MODALS.GET_GIFT);
+    }
+    }
+      modalId={MODALS.GET_GIFT} title={t('q59')}>
       <div className={styles.background}>
         <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>
@@ -81,7 +86,7 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
           </div>
           <div className={styles.stat}>
             <div className={styles.statBox}>
-              {prevLevelBoost && 
+              {prevLevelBoost &&
                 <span className={styles.difference1}>
                   +{boost?.subscribers_for_first_level_referrals! - prevLevelBoost?.subscribers_for_first_level_referrals!}
                 </span>
@@ -94,7 +99,7 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
 
           <div className={styles.stat}>
             <div className={styles.statBox}>
-              {prevLevelBoost && 
+              {prevLevelBoost &&
                 <span className={styles.difference2}>
                   +{boost?.subscribers_for_second_level_referrals! - prevLevelBoost?.subscribers_for_second_level_referrals!}
                 </span>
@@ -122,7 +127,7 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
             <p>+{formatAbbreviation(boost?.points || 0)}</p>
             <img src={coin} />
           </div>
-          {boost?.additional_integrations_for_subscription && (
+          {boost?.additional_integrations_for_subscription && localStorage.getItem('GIFT_FOR_TREE_STAGE') !== '1' && (
             <div className={styles.item}>
               <p>+{formatAbbreviation(boost?.additional_integrations_for_subscription + maxSubscriptions)}</p>
               <img src={integration} />
@@ -144,6 +149,7 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
           if (isVibrationSupported) {
             navigator.vibrate(200);
           }
+          localStorage.setItem('GIFT_FOR_TREE_STAGE', '0');
           closeModal(MODALS.GET_GIFT);
         }}
       >
