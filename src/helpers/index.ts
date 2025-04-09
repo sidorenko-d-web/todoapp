@@ -5,3 +5,4 @@ export * from './getAchivementType';
 export * from './getPlanStageByUsersCount';
 export * from './hasAvailableTreeReward';
 export * from './getNextLevelReward';
+export * from './getMaxSubscriptions';

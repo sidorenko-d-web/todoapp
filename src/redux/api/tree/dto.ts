@@ -6,6 +6,7 @@ export type Boost = {
   additional_integrations_for_subscription: number;
   subscribers_for_first_level_referrals: number;
   subscribers_for_second_level_referrals: number;
+  freezes: number;
 }
 
 export type Achievement = {

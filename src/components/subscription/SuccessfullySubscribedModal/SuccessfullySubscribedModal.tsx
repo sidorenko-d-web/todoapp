@@ -5,6 +5,7 @@ import spinnerBlueIcon from '../../../assets/icons/spinner-blue.svg';
 import s from './SuccessfullySubscribedModal.module.scss';
 import { Button, CentralModal } from '../../shared';
 import { useTranslation } from 'react-i18next';
+import { getMaxSubscriptions } from '../../../helpers';
 
 interface SuccessfullySubscribedModalProps {
   modalId: string;
@@ -16,6 +17,11 @@ export const SuccessfullySubscribedModal: FC<SuccessfullySubscribedModalProps> =
                                                                                     onClose,
                                                                                   }: SuccessfullySubscribedModalProps) => {
   const { t } = useTranslation('guide');
+
+
+  const maxSubscriptions = getMaxSubscriptions();
+
+
   return (
     <CentralModal modalId={modalId} title={`${t('g78')}`} onClose={onClose}>
       <div className={s.content}>
@@ -29,7 +35,7 @@ export const SuccessfullySubscribedModal: FC<SuccessfullySubscribedModalProps> =
           <div className={s.progress}>
             <div className={s.progressInfo}>
               <span>{t('g76')}</span>
-              <span className={s.progressIcon}>5/5 <img src={integrationWhiteIcon} height={18} width={18}
+              <span className={s.progressIcon}>{maxSubscriptions}/{maxSubscriptions} <img src={integrationWhiteIcon} height={18} width={18}
                                                         alt={'Integration'} /></span>
             </div>
             <div className={s.progressBar}>
