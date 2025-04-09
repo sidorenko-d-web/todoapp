@@ -1,6 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-
-import { caseTransform } from '../../utils';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AuthTokensResponseDTO } from '../api';
 
 const initialState = {
   accessToken: localStorage.getItem('accessToken') || null,
@@ -11,14 +10,12 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (state, action) => {
-      const { accessToken, refreshToken } = caseTransform(action.payload, 'camel');
+    setCredentials: (state, action: PayloadAction<AuthTokensResponseDTO>) => {
+      state.accessToken = action.payload.access_token;
+      state.refreshToken = action.payload.refresh_token;
 
-      state.accessToken = accessToken;
-      state.refreshToken = refreshToken;
-
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('access_token', action.payload.access_token);
+      localStorage.setItem('refresh_token', action.payload.refresh_token);
     },
     signOut: state => {
       state.accessToken = null;
