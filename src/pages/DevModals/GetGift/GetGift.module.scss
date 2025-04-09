@@ -116,10 +116,6 @@
 
 .extra {
   color: var.$color-text-semi-transparent;
-}
-
-.stat:nth-child(2) .extra,
-.stat:last-child .extra {
   font-size: 12px;
   position: relative;
   bottom: 2px;
@@ -143,11 +139,23 @@
 }
 
 
-.difference {
+.difference1 {
   position: absolute;
   bottom: 15px;
   font-size: 12px;
-  left: 40%;
+  left: 38%;
+  background: #282830;
+  padding: 0px 5px;
+  border-radius: 4px;
+  color: #2F80ED;
+  margin-bottom: 12px;
+}
+
+.difference2 {
+  position: absolute;
+  bottom: 15px;
+  font-size: 12px;
+  left: 30%;
   background: #282830;
   padding: 0px 5px;
   border-radius: 4px;

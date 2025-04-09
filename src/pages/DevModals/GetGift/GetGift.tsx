@@ -17,13 +17,12 @@ import { CentralModal } from '../../../components/shared';
 import { Boost, useGetProfileMeQuery } from '../../../redux';
 import { formatAbbreviation, getMaxSubscriptions } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
-
-import snowflake from '../../../assets/icons/snowflake.svg'
+import snowflake from '../../../assets/icons/snowflake.svg';
 import { useEffect, useState } from 'react';
+
 interface Props {
   giftColor?: string;
   boost?: Boost | null | undefined;
-
   prevLevelBoost?: Boost | null | undefined;
 }
 
@@ -31,26 +30,22 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
   const { closeModal, getModalState } = useModal();
   const { isOpen } = getModalState(MODALS.GET_GIFT);
   const { t } = useTranslation('quests');
+  const [userSubscriptions, setUserSubscriptions] = useState(0);
+  const maxSubscriptions = getMaxSubscriptions();
+  const { data: profileData, isLoading } = useGetProfileMeQuery();
 
   const isVibrationSupported =
     typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
 
+  useEffect(() => {
+    if (profileData && !isLoading) {
+      setUserSubscriptions(profileData.subscription_integrations_left);
+    }
+  }, [profileData, isLoading]);
+
   if (!isOpen) return null;
 
-  const [userSubscriptions, setUserSubscriptions] = useState(0);
-  const maxSubscriptions = getMaxSubscriptions();
-
-  //const { data: profileData, isLoading} = useGetProfileMeQuery();
-
-  // useEffect(() => {
-  //   if(profileData && !isLoading) {
-  //     setUserSubscriptions(profileData.subscription_integrations_left);
-  //   }
-  // }, [profileData, isLoading])
-
-
   let giftImage;
-
   if (giftColor == null || giftColor === t('q54')) {
     giftImage = <img src={gift} className={styles.gift} />;
   } else if (giftColor === t('q55')) {
@@ -60,7 +55,6 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
   }
 
   let giftLight;
-
   if (giftColor == null || giftColor === t('q54')) {
     giftLight = <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />;
   } else if (giftColor === t('q55')) {
@@ -84,20 +78,14 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
             {boost?.income_per_second && (
               <span className={styles.statValue}>+{formatAbbreviation(boost?.income_per_second)}</span>
             )}
-            {/* <div className={styles.statBox}>
-              <span>x{formatAbbreviation(boost?.x_income_per_second || 0)}</span>
-              <img src={coin} />
-              <span className={styles.extra}>/ {t('q9_1')}</span>
-            </div> */}
           </div>
           <div className={styles.stat}>
-            {/*<span className={styles.statValue}>+10</span>*/}
             <div className={styles.statBox}>
               {prevLevelBoost && 
-              <span className={styles.difference}>
-                +{boost?.subscribers_for_first_level_referrals! - prevLevelBoost?.subscribers_for_first_level_referrals!}</span>
+                <span className={styles.difference1}>
+                  +{boost?.subscribers_for_first_level_referrals! - prevLevelBoost?.subscribers_for_first_level_referrals!}
+                </span>
               }
-
               <span>+{formatAbbreviation(boost?.subscribers_for_first_level_referrals || 0)}</span>
               <img src={subscribers} />
               <span className={styles.extra}>1 {t('q9_2')}</span>
@@ -105,11 +93,11 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
           </div>
 
           <div className={styles.stat}>
-            {/*<span className={styles.statValue}>+10</span>*/}
             <div className={styles.statBox}>
               {prevLevelBoost && 
-              <span className={styles.difference}>
-                +{boost?.subscribers_for_second_level_referrals! - prevLevelBoost?.subscribers_for_second_level_referrals!}</span>
+                <span className={styles.difference2}>
+                  +{boost?.subscribers_for_second_level_referrals! - prevLevelBoost?.subscribers_for_second_level_referrals!}
+                </span>
               }
               <span>+{formatAbbreviation(boost?.subscribers_for_second_level_referrals || 0)}</span>
               <img src={subscribers} />
@@ -117,9 +105,8 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
             </div>
           </div>
           <div className={styles.stat}>
-            {/*<span className={styles.statValue}>+5</span>*/}
             <div className={styles.statBox}>
-              <span className={styles.difference}>+1</span>
+              <span className={styles.difference1}>+1</span>
               <span>{formatAbbreviation(userSubscriptions)}/{formatAbbreviation(maxSubscriptions)}</span>
               <img src={integration} />
               <span className={styles.extra}>макс.</span>
@@ -148,7 +135,6 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
               <img src={snowflake} />
             </div>
           )}
-
         </div>
         <p className={styles.desc}>{t('q57')}</p>
       </div>
