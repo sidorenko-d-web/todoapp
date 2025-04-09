@@ -4,13 +4,13 @@ import { caseTransform } from '../../../utils';
 
 import { baseQueryReauth } from '../query';
 
-import type { SignInDTO, SignInResponseDTO } from './dto';
+import type { AuthTokensResponseDTO, SignInDTO } from './dto';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: baseQueryReauth,
   endpoints: builder => ({
-    signIn: builder.mutation<SignInResponseDTO, SignInDTO>({
+    signIn: builder.mutation<AuthTokensResponseDTO, SignInDTO>({
       query: credentials => {
         const data = caseTransform(credentials, 'snake');
         return { url: '/auth/login', method: 'POST', body: data };
