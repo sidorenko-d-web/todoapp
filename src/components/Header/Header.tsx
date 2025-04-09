@@ -76,9 +76,8 @@ export const Header = () => {
       newItemModalOpen ||
       dailyGiftModalOpen
     ) {
-      console.log('!UPDATING!')
-      setModalStateChange((prev) => prev + 1);
       refetchProfileData();
+      setModalStateChange((prev) => prev + 1);
     }
   }, [
     isGetGiftModalOpen,
