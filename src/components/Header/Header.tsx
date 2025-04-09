@@ -63,6 +63,7 @@ export const Header = () => {
   const { isOpen: taskChestModalOpen } = getModalState(MODALS.TASK_CHEST);
   const { isOpen: itemUpgradedModalOpen } = getModalState(MODALS.UPGRADED_ITEM);
   const { isOpen: newItemModalOpen } = getModalState(MODALS.NEW_ITEM);
+  const { isOpen: dailyGiftModalOpen } = getModalState(MODALS.GET_GIFT_DAILY);
 
   useEffect(() => {
     if (
@@ -72,7 +73,8 @@ export const Header = () => {
       taskCompletedModalOpen ||
       taskChestModalOpen ||
       itemUpgradedModalOpen ||
-      newItemModalOpen
+      newItemModalOpen ||
+      dailyGiftModalOpen
     ) {
       console.log('!UPDATING!')
       setModalStateChange((prev) => prev + 1);
@@ -85,7 +87,8 @@ export const Header = () => {
     taskCompletedModalOpen,
     taskChestModalOpen,
     itemUpgradedModalOpen,
-    newItemModalOpen
+    newItemModalOpen,
+    dailyGiftModalOpen
   ]);
 
   useEffect(() => {
