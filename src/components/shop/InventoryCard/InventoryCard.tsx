@@ -221,6 +221,10 @@ export const InventoryCard: FC<Props> = ({ disabled, isBlocked, isUpgradeEnabled
         await removeItem({ items_to_remove: [ { id: isSlotNotEmpty.id } ] });
       }
       await equipItem({ equipped_items: [ { id: item.id, slot } ] });
+
+      profileApi.util.invalidateTags([ 'Me' ]);
+      roomApi.util.invalidateTags([ 'Boost' ]);
+      refetchBoost();
     } catch (error) {
       console.error(error);
     }
