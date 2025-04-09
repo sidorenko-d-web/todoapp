@@ -16,6 +16,7 @@ import { Loader, TrackedLink } from '../..';
 import { SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { WardrobeSpineScene } from '../../../constants/wardrobeAnimation';
 import clsx from 'clsx';
+import { getMaxSubscriptions } from '../../../helpers';
 
 interface ProfileInfoProps {
   nickname: string;
@@ -116,6 +117,9 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
     };
   }, [isCharacterLoading, size[0], window.devicePixelRatio]);
 
+  const maxSubscriptions = getMaxSubscriptions();
+
+
   return (
     <div className={clsx(styles.wrp, { [styles.showTreeLink]: showTreeLink })}>
       <div className={`${styles.avatar} ${isVip ? styles.vip : ''}`}>
@@ -176,7 +180,7 @@ export const ProfileInfo: React.FC<ProfileInfoProps> = ({
             <span className={styles.subscriptionText}>{t('p2')}</span>
 
             <div className={styles.subscriptionLevelWrp}>
-              <span className={styles.subscriptionLevel}>{subscriptionIntegrationsLeft}/5</span>
+              <span className={styles.subscriptionLevel}>{subscriptionIntegrationsLeft}/{maxSubscriptions}</span>
               <img src={subscriptionLeveIcon} alt="" />
             </div>
           </div>

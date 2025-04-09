@@ -242,6 +242,14 @@ export const MainPage: FC = () => {
     }
   }, [creatingIntegrationModalState.isOpen]);
 
+  
+  useEffect(() => {
+    if(profileData && !isCurrentUserProfileInfoLoading) {
+      localStorage.setItem('USER_LEVEL', ''+profileData.growth_tree_stage_id);
+    }
+  }, [profileData, isCurrentUserProfileInfoLoading]);
+
+
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(3));
 
