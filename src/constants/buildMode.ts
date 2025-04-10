@@ -17,7 +17,7 @@ const proxy = {
 const links = {
   svgItem_TestDev: (imageUrl: string) => proxy.proxy_TestDev(imageUrl),
   svgItem_Test: (imageUrl: string) => imageUrl,
-  svgItem_ProdDev: (imageUrl: string) => imageUrl!.replace('https://miniapp.apusher.com', '/api/miniapp-v2-prod'),
+  svgItem_ProdDev: (imageUrl: string) => proxy.proxy_ProdDev(imageUrl),
   svgItem_Production: (imageUrl: string) => imageUrl,
 
   itemsBaseUrl_TestDev: 'https://storage.yandexcloud.net/miniapp-v2-dev/',
@@ -29,7 +29,7 @@ const links = {
 
   svgShop_TestDev: (url: string) => url,
   svgShop_Test: (url: string) => url,
-  svgShop_ProdDev: (url: string) => url,
+  svgShop_ProdDev: (url: string) => url.replace('https://', 'https://storage.yandexcloud.net/'),
   svgShop_Production: (url: string) => url,
 
   baseUrl_TestDev: 'https://bbajd7fltqec6462cm1j.containers.yandexcloud.net/',

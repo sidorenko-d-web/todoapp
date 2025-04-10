@@ -26,7 +26,7 @@ import { formatAbbreviation } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../shared';
 import classNames from 'classnames';
-import { useRoomItemsSlots } from '../../../../translate/items/items';
+import { RoomItemsSlots } from '../../../../translate/items/items';
 import { buildLink } from '../../../constants/buildMode';
 import useUsdtPayment from '../../../hooks/useUsdtPayment';
 
@@ -36,7 +36,6 @@ interface Props {
 }
 
 export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
-  const RoomItemsSlots = useRoomItemsSlots();
   const [ buyItem, { isLoading } ] = useBuyItemMutation();
   const { refetch: refetchBoost } = useGetCurrentUserBoostQuery();
   const [ equipItem ] = useAddItemToRoomMutation();
@@ -55,7 +54,7 @@ export const ShopItemCard: FC<Props> = ({ disabled, item }) => {
 
   const buyButtonGlowing = useSelector((state: RootState) => state.guide.buyItemButtonGlowing);
 
-  console.info(pointsUser?.points, item.price_internal);
+  // console.info(pointsUser?.points, item.price_internal);
   const isAffordable = !!pointsUser && +pointsUser.points >= +item.price_internal;
 
   const slot = Object.values(RoomItemsSlots).find(_item =>
