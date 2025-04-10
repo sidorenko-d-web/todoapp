@@ -3,7 +3,7 @@ import styles from './Partials.module.scss';
 
 
 import clsx from 'clsx';
-import { useRoomItemsSlots } from '../../../../../translate/items/items.ts';
+import { RoomItemsSlots } from '../../../../../translate/items/items.ts';
 import { walls } from '../../../../constants';
 
 interface props {
@@ -12,7 +12,6 @@ interface props {
 }
 
 export const Walls = ({ room, isLoading }: props) => {
-  const RoomItemsSlots = useRoomItemsSlots();
   const equipedWall = room?.items.find(
     item => item.id === room.equipped_items.find(_item => _item.slot === RoomItemsSlots.wall.slot)?.id,
   );

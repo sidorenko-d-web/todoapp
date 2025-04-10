@@ -5,7 +5,7 @@ import { TypeWearLocation, useGetCharacterQuery, useGetEquipedQuery } from '../.
 import { SpineSceneBase, buildLink, walls } from '../../../constants';
 import { Skin, SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { Loader } from '../../Loader';
-import { useRoomItemsSlots } from '../../../../translate/items/items';
+import { RoomItemsSlots } from '../../../../translate/items/items';
 
 interface props {
   compaignImage?: string;
@@ -21,7 +21,7 @@ export const Integration: React.FC<props> = ({ compaignImage }) => {
   const [size, setSize] = useState([0, 0]);
   const [isLoaded, setIsLoaded] = useState(false);
   const character = useGetCharacterQuery(undefined);
-  const { desc, pc, wall } = useRoomItemsSlots();
+  const { desc, pc, wall } = RoomItemsSlots
 
   const dpi = window.devicePixelRatio ?? 1;
 

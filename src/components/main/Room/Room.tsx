@@ -10,7 +10,7 @@ import TreshinaRight from '../../../assets/images/start-room/treshina-right.svg'
 import TreshinaLeft from '../../../assets/images/start-room/treshina-left.svg';
 import Shelf from '../../../assets/images/start-room/shelf.svg';
 import { getAchivementType } from '../../../helpers';
-import { useRoomItemsSlots } from '../../../../translate/items/items.ts';
+import { RoomItemsSlots } from '../../../../translate/items/items.ts';
 import { useMemo, useState } from 'react';
 import { Loader } from '../../index.ts';
 import { useLocation } from 'react-router-dom';
@@ -33,7 +33,6 @@ export const Room = ({ mode, strangerId, setIsRoomLoaded }: props) => {
     { skip: mode === 'me' && !strangerId },
   );
   const strangerCharacter = useGetCharacterByIdQuery({ id: strangerId! }, { skip: mode === 'me' && !strangerId });
-  const RoomItemsSlots = useRoomItemsSlots();
   const equippedAchivement = (room ?? strangerRoom)?.achievements?.[0];
   let achivementType;
   if (equippedAchivement) {
