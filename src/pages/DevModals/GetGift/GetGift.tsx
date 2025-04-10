@@ -80,7 +80,12 @@ export default function GetGift() {
   }
 
   return (
-    <CentralModal onClose={() => closeModal(MODALS.GET_GIFT)} modalId={MODALS.GET_GIFT} title={t('q59')}>
+    <CentralModal onClose={() => {
+      localStorage.setItem('GIFT_FOR_TREE_STAGE', '0');
+      closeModal(MODALS.GET_GIFT);
+    }
+    }
+      modalId={MODALS.GET_GIFT} title={t('q59')}>
       <div className={styles.background}>
         <Lottie animationData={confetti} loop={false} className={styles.reward} />
       </div>

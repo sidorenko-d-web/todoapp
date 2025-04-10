@@ -42,7 +42,7 @@ export const Header = () => {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data: profile } = useGetProfileMeQuery();
+  const { data: profile, refetch: refetchProfileData } = useGetProfileMeQuery();
   const lastActiveStageFromProfile = profile?.growth_tree_stage_id;
   const lastActiveStageFromState = useSelector((state: RootState) => state.treeSlice.lastActiveStage);
 
@@ -53,15 +53,47 @@ export const Header = () => {
 
   const [ rerender, setRerender ] = useState(0);
 
+
   const { getModalState } = useModal();
-  const { isOpen } = getModalState(MODALS.GET_GIFT);
+  const { isOpen: isGetGiftModalOpen } = getModalState(MODALS.GET_GIFT);
+  const { isOpen: integrationRewardModalOpen } = getModalState(MODALS.INTEGRATION_REWARD);
+  const { isOpen: rewardModalOpen } = getModalState(MODALS.GET_REWARD);
+  const { isOpen: taskCompletedModalOpen } = getModalState(MODALS.TASK_COMPLETED);  
+  const { isOpen: taskChestModalOpen } = getModalState(MODALS.TASK_CHEST);
+  const { isOpen: itemUpgradedModalOpen } = getModalState(MODALS.UPGRADED_ITEM);
+  const { isOpen: newItemModalOpen } = getModalState(MODALS.NEW_ITEM);
+  const { isOpen: dailyGiftModalOpen } = getModalState(MODALS.GET_GIFT_DAILY);
+
+  useEffect(() => {
+    if (
+      isGetGiftModalOpen ||
+      integrationRewardModalOpen ||
+      rewardModalOpen ||
+      taskCompletedModalOpen ||
+      taskChestModalOpen ||
+      itemUpgradedModalOpen ||
+      newItemModalOpen ||
+      dailyGiftModalOpen
+    ) {
+      refetchProfileData();
+    }
+  }, [
+    isGetGiftModalOpen,
+    integrationRewardModalOpen,
+    rewardModalOpen,
+    taskCompletedModalOpen,
+    taskChestModalOpen,
+    itemUpgradedModalOpen,
+    newItemModalOpen,
+    dailyGiftModalOpen
+  ]);
 
   useEffect(() => {
     //needed to re-render header when gift modal closes to update the coin number
-    if (isOpen) {
+    if (isGetGiftModalOpen) {
       refetch();
     }
-  }, [ isOpen ]);
+  }, [ isGetGiftModalOpen ]);
 
   const rerenderAfterPublish = useSelector((state: RootState) => state.guide.refetchAfterPublish);
 

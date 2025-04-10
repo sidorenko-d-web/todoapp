@@ -156,10 +156,7 @@ export const PublishIntegrationButton: React.FC = () => {
         if (integrationToPublish.status === 'creating' && integrationToPublish.time_left === 0) {
           setIsTimeUpdating(true);
           try {
-            await updateTimeLeft({
-              integrationId: integrationIdToPublish,
-              timeLeftDelta: 1,
-            }).unwrap();
+            await updateTimeLeft(integrationIdToPublish).unwrap();
 
             // Ждём, пока статус не обновится
             let retries = 0;

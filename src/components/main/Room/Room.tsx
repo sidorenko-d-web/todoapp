@@ -53,8 +53,6 @@ export const Room = ({ mode, strangerId, setIsRoomLoaded }: props) => {
     setIsRoomLoaded?.(value);
   };
 
-  console.log(equippedAchivement);
-
   return (
     <div className={styles.room}>
       {isLoading && <Loader className={clsx(styles.loader, isIntegrationPage && styles.upper)} />}

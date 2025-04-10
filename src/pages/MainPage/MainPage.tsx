@@ -242,72 +242,71 @@ export const MainPage: FC = () => {
     }
   }, [creatingIntegrationModalState.isOpen]);
 
-  
-  useEffect(() => {
-    if(profileData && !isCurrentUserProfileInfoLoading) {
-      localStorage.setItem('USER_LEVEL', ''+profileData.growth_tree_stage_id);
-    }
-  }, [profileData, isCurrentUserProfileInfoLoading]);
-
-
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(3));
 
-    if(data && itemsData) {
-      if (
-        isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) &&
-        !purchasingSubscriptionModalState.isOpen
-      ) {
-        openModal(MODALS.SUBSCRIBE);
-      }
-  
-      if (
-        isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) &&
-        !getModalState(MODALS.CREATING_INTEGRATION).isOpen
-      ) {
-        navigate(AppRoute.Shop);
-      }
-  
-      if (
-        isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-        !getSubscriptionPurchased() &&
-        getModalState(MODALS.SUBSCRIBE).isOpen &&
-        data?.count === 0
-      ) {
-        openModal(MODALS.SUBSCRIBE);
-      }
-  
-      if (
-        isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) &&
-        !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-        !creatingIntegrationModalState.isOpen
-      ) {
-        openModal(MODALS.CREATING_INTEGRATION);
-      }
-  
-      if (
-        isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
-        !creatingIntegrationModalState.isOpen
-      ) {
-        openModal(MODALS.CREATING_INTEGRATION);
-      }
-  
-      if (
-        isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) &&
-        !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)
-      ) {
-        navigate(AppRoute.Shop);
-      }
-  
-      if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
-        navigate(AppRoute.ShopInventory);
-      }
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN) &&
+      !purchasingSubscriptionModalState.isOpen
+    ) {
+      openModal(MODALS.SUBSCRIBE);
     }
-  }, [data, itemsData, isInventoryDataLoading, isAllIntegrationsLoading]);
+
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) &&
+      !getModalState(MODALS.CREATING_INTEGRATION).isOpen
+    ) {
+      navigate(AppRoute.Shop);
+    }
+
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+      !getSubscriptionPurchased() &&
+      getModalState(MODALS.SUBSCRIBE).isOpen &&
+      data?.count === 0
+    ) {
+      openModal(MODALS.SUBSCRIBE);
+    }
+
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_BOUGHT) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+      !creatingIntegrationModalState.isOpen
+    ) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
+
+    if (
+      isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_FIRST_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.mainPage.CREATE_INTEGRATION_SECOND_GUIDE_SHOWN) &&
+      !creatingIntegrationModalState.isOpen
+    ) {
+      openModal(MODALS.CREATING_INTEGRATION);
+    }
+
+    if (
+      isGuideShown(GUIDE_ITEMS.shopPage.WELCOME_TO_SHOP_GUIDE_SHOWN) &&
+      !isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT)
+    ) {
+      navigate(AppRoute.Shop);
+    }
+
+    if (isGuideShown(GUIDE_ITEMS.shopPage.ITEM_BOUGHT) && !isGuideShown(GUIDE_ITEMS.shopPage.BACK_TO_MAIN_PAGE_GUIDE)) {
+      navigate(AppRoute.ShopInventory);
+    }
+
+    if (
+      isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_PUBLISHED_MODAL_CLOSED) &&
+      !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
+      !getModalState(MODALS.DAYS_IN_A_ROW).isOpen &&
+      !getModalState(MODALS.DAYS_IN_A_ROW).isOpen
+    ) {
+      //openModal(MODALS.DAYS_IN_A_ROW);
+    }
+  }, []);
 
   useEffect(() => {
     reduxDispatch(setActiveFooterItemId(3));
@@ -327,6 +326,9 @@ export const MainPage: FC = () => {
   const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
   const { isLoading: isRoomLoading } = useGetEquipedQuery();
 
+  // Это условие проверяет есть ли в data интеграции со статусон,
+  // но нужно обратить внимание на количество приходящих интеграций,
+  // !а то кнопка публикации может не появиться
   const hasCreatingIntegrations = !data?.integrations.some(
     integration =>
       integration.status === 'created' || (integration.status === 'creating' && integration.time_left === 0),

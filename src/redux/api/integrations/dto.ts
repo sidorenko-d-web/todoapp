@@ -65,5 +65,4 @@ export type CreateIntegrationCommentDTO = {
 
 export interface IntegrationUpdateRequestDTO {
   integrationId: string;
-  timeLeftDelta: number;
 }
