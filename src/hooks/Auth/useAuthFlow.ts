@@ -68,6 +68,7 @@ export const useAuthFlow = () => {
   }, [ signIn, updateTokens, saveCurrentStep ]);
 
   const handleSkinContinue = () => {
+    localStorage.setItem('setupCompleted', '1');
     saveCurrentStep('final_loading');
     setTimeout(() => saveCurrentStep('completed'), 1500);
   };
@@ -94,7 +95,7 @@ export const useAuthFlow = () => {
   useEffect(() => {
     const initAuthFlow = async () => {
       const minLoadingTime = new Promise(resolve => setTimeout(resolve, 3500));
-      const savedStep = localStorage.getItem('currentSetupStep') as AuthStep;
+      const savedStep = localStorage.getItem('currentSetupStep') as AuthStep || 'loading';
 
       try {
         await minLoadingTime;
@@ -102,6 +103,11 @@ export const useAuthFlow = () => {
         if (!localStorage.getItem('access_token')) {
           const [ authResponse ] = await Promise.all([ performSignIn(signIn), minLoadingTime ]);
           updateTokens(authResponse);
+        }
+
+        if (localStorage.getItem('setupCompleted') === '1') {
+          saveCurrentStep('completed');
+          return;
         }
 
         saveCurrentStep(savedStep && savedStep !== 'loading' ? savedStep : 'language');
