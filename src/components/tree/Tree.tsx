@@ -80,8 +80,13 @@ export const Tree = () => {
     const giftColors = ['purpleGift', 'redGift', 'blueGift'];
     const currentGift = giftColors[stageNumber % giftColors.length];
     const localed = gifts[locale];
-    const boost = treeData?.growth_tree_stages?.[stageNumber]?.achievement.boost;
-    const boostPrev = treeData?.growth_tree_stages?.[stageNumber - 1]?.achievement.boost;
+    const boost = treeData?.growth_tree_stages?.[stageNumber - 1]?.achievement.boost;
+    const boostPrev = (stageNumber > 1 && stageNumber === parseInt(localStorage.getItem('USER_LEVEL') || '1')) 
+      ? treeData?.growth_tree_stages?.[stageNumber - 2]?.achievement.boost : null;
+
+    localStorage.setItem('STAGE_NUMBER', '' + stageNumber);
+    localStorage.setItem('GIFT_FOR_TREE_STAGE', '1');
+
     try {
       await unlockAchievement({ achievement_id: id }).unwrap();
       await refetch();
