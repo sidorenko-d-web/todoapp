@@ -97,7 +97,7 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
                     className={classNames(isLostStreak && !isWarning && s.isGrayInfo)}
                     alt={'Streak'}
                   />
-                  {getDayWord(streak, locale)} {isLostStreak && 'не '}в Пуш-линии!
+                  {getDayWord(isWarning ? days_missed : streak, locale)} {isLostStreak && t('p72')} {t('p71')}
                 </span>
               </div>
             </div>
@@ -111,15 +111,15 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
               ? formatAbbreviation(subscribers_for_referrer, 'number', { locale: locale })
               : 'N/A'}{' '}
             <img src={subscribersIcon} alt="Подписчики" />
-            <sup>1ур.</sup>
+            <sup>1{t('p73')}</sup>
           </span>
 
           {total_invited > 0 && (
             <span className={s.statItem}>
               +{formatAbbreviation(total_invited * 150, 'number', { locale: locale })}{' '}
               <img src={subscribersIcon} alt="Подписчики" />
-              <sup>2ур.</sup>
-              <span className={s.moreRefs}>(еще 2 реф.)</span>
+              <sup>2{t('p73')}</sup>
+              <span className={s.moreRefs}>({t('p54')} {total_invited} {t('p55')}.)</span>
             </span>
           )}
 
@@ -127,7 +127,7 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
             <span className={s.statItem}>
               +{formatAbbreviation(points_for_referrer, 'number', { locale: locale })}{' '}
               <img src={goldCoinIcon} alt="поинты" />
-              <sup>за Пуш-линию</sup>
+              <sup>{t('p74')}</sup>
             </span>
           )}
         </section>
