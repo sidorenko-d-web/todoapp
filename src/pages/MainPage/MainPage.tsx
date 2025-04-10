@@ -173,11 +173,12 @@ export const MainPage: FC = () => {
     }
   }, [data, isInventoryDataLoading]);
 
+
   useEffect(() => {
     localStorage.setItem('GIFT_FOR_TREE_STAGE', '0');
   }, []);
 
-  
+
   useEffect(() => {
     if (data) {
       if (data.count === 0) {
@@ -210,6 +211,13 @@ export const MainPage: FC = () => {
       reduxDispatch(setDimHeader(false));
     }
   }, []);
+
+  useEffect(() => {
+      if (profileData && !isCurrentUserProfileInfoLoading) {
+        // setCurrentUserLevel(userProfileData.growth_tree_stage_id);
+        localStorage.setItem('USER_LEVEL', '' + profileData.growth_tree_stage_id);
+      }
+    }, [profileData, isCurrentUserProfileInfoLoading]);
 
   //const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 

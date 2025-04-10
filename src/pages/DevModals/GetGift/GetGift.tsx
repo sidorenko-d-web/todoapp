@@ -22,7 +22,7 @@ import { useEffect, useState } from 'react';
 
 export default function GetGift() {
   const { closeModal, getModalState } = useModal();
-  const { isOpen, args } = getModalState<{ giftColor: string; itemId: string; boost: Boost; boostPrev: Boost }>(
+  const { isOpen, args } = getModalState<{ giftColor: string; itemId: string; boost: Boost; boostPrev: Boost | null | undefined }>(
     MODALS.GET_GIFT,
   );
   const { t } = useTranslation('quests');
@@ -103,7 +103,7 @@ export default function GetGift() {
           </div>
           <div className={styles.stat}>
             <div className={styles.statBox}>
-              {args?.boost && (
+              {args?.boostPrev && (
                 <span className={styles.difference1}>
                   +
                   {args?.boost?.subscribers_for_first_level_referrals! -
