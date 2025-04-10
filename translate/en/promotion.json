@@ -2,7 +2,7 @@
   "p1": "Promotion",
   "p2": "Increase income",
   "p3": "Invite friends",
-  "p4": "lv",
+  "p4": "lvl",
   "p5": "Invite a friend to MiniApp and receive permanent bonuses for subscribers!",
   "p6": "Invite",
   "p7": "See all",
@@ -65,5 +65,9 @@
   "p67": "Некорректный номер телефона. Пожалуйста, введите действительный номер.",
   "p68": "Ошибка подтверждения. Пожалуйста, проверьте код и форму еще раз.",
   "p69": "Этот адрес электронной почты уже используется. Попробуйте ввести или восстановить пароль.",
-  "p70": "Loading..."
+  "p70": "Loading...",
+  "p71": "in the Push-line!",
+  "p72": "not",
+  "p73": "lvl.",
+  "p74": "for the Push-line"
 }

@@ -23,7 +23,7 @@ export default function GetRewardChestModal({}: GetRewardChestModalProps) {
   const { t } = useTranslation('shop');
   const chestId = localStorage.getItem(localStorageConsts.CHEST_TO_OPEN_ID);
   const [ claimChest, { data: chestReward } ] = useClaimChestRewardMutation();
-  console.log(chestId);
+  
   useEffect(() => {
     if (chestId) {
       claimChest({

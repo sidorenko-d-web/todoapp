@@ -1,6 +1,6 @@
 import { IEquipedRoomResponse } from '../../../../redux';
 import styles from './Partials.module.scss';
-import { useRoomItemsSlots } from '../../../../../translate/items/items.ts';
+import { RoomItemsSlots } from '../../../../../translate/items/items.ts';
 
 import redbase from '../../../../assets/images/walls/Пол-1.svg';
 import redadv from '../../../../assets/images/walls/Пол-2.svg';
@@ -19,7 +19,6 @@ interface props {
 }
 
 export const Floor = ({ room }: props) => {
-  const RoomItemsSlots = useRoomItemsSlots();
 
   const equipedFloor = room?.items.find(
     item => item.id === room.equipped_items.find(_item => _item.slot === RoomItemsSlots.floor.slot)?.id,

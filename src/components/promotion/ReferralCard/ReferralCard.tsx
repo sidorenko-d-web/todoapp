@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import s from './ReferralCard.module.scss';
 import subscribersIcon from '../../../assets/icons/subscribers.png';
 import fireBlueIcon from '../../../assets/icons/fire-blue.svg';
-import fireGrayIcon from '../../../assets/icons/fire-gray.svg';
 import infoIcon from '../../../assets/icons/info.svg';
 import infoRedIcon from '../../../assets/icons/info-red.svg';
 import goldCoinIcon from '../../../assets/icons/coin.png';
@@ -22,6 +21,7 @@ interface ReferralCardProps {
   reminded_time?: string;
   subscribers_for_referrer: number;
   points_for_referrer: number;
+  isModal?: boolean;
 }
 
 export const ReferralCard: React.FC<ReferralCardProps> = ({
@@ -34,6 +34,7 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
   reminded_time,
   subscribers_for_referrer,
   points_for_referrer,
+  isModal,
 }) => {
   const { t, i18n } = useTranslation('promotion');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
@@ -50,28 +51,54 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
     }
   };
 
+  const isLostStreak = streak === 0;
+  const isWarning = days_missed > 1 && reminded_time === null;
+
+  const getDayWord = (number: number, locale: 'ru' | 'en' = 'ru') => {
+    if (locale === 'en') {
+      if (number === 1) {
+        return `${number} day`;
+      }
+      return `${number} days`;
+    } else {
+      const lastTwo = number % 100;
+      const lastOne = number % 10;
+
+      if (lastTwo >= 11 && lastTwo <= 19) {
+        return `${number} дней`;
+      }
+
+      switch (lastOne) {
+        case 1:
+          return `${number} день`;
+        case 2:
+        case 3:
+        case 4:
+          return `${number} дня`;
+        default:
+          return `${number} дней`;
+      }
+    }
+  };
+
   return (
     <>
-      <div className={s.userCard}>
+      <div className={classNames(s.userCard, isModal && s.inModal)}>
         <div className={s.userCardTop}>
           <div className={s.infoUser}>
             <div className={s.nameAndStreakWrapper}>
               <span className={s.text}>{name}</span>
               <div className={s.streakWrapper}>
-                <span className={s.streakBadge}>
-                  {streak} <img src={streak === 0 ? fireGrayIcon : fireBlueIcon} alt={'Streak'} />
+                <span
+                  className={classNames(s.streakBadge, isLostStreak ? s.textGray : s.textBlue, isWarning && s.textRed)}
+                >
+                  <img
+                    src={isLostStreak ? (isWarning ? infoRedIcon : infoIcon) : fireBlueIcon}
+                    className={classNames(isLostStreak && !isWarning && s.isGrayInfo)}
+                    alt={'Streak'}
+                  />
+                  {getDayWord(isWarning ? days_missed : streak, locale)} {isLostStreak && t('p72')} {t('p71')}
                 </span>
-                {days_missed > 0 && (
-                  <span className={classNames(s.streakBadge, days_missed > 1 ? s.notInDays : s.notToday)}>
-                    {days_missed > 1 ? (
-                      <>
-                        <img src={infoIcon} alt="Info" /> {days_missed} {t('p52')}
-                      </>
-                    ) : (
-                      `${t('p53')} :/`
-                    )}
-                  </span>
-                )}
               </div>
             </div>
           </div>
@@ -79,46 +106,35 @@ export const ReferralCard: React.FC<ReferralCardProps> = ({
         </div>
 
         <section className={s.userCardStats}>
-          <div className={s.userCardBottom}>
-            <div className={s.userCardBonus}>
-              <span className={s.badge}>
-                +
-                {subscribers_for_referrer !== undefined
-                  ? formatAbbreviation(subscribers_for_referrer, 'number', { locale: locale })
-                  : 'N/A'}{' '}
-                <img src={subscribersIcon} alt="Подписчики" />
-              </span>
-              <span className={classNames(s.level, s.text)}>1{t('p4')}.</span>
-            </div>
-            {subscribers_for_referrer !== undefined && (
-              <div className={s.userCardBonus}>
-                <span className={s.badge}>
-                  +{formatAbbreviation(total_invited * 150, 'number', { locale: locale })}
-                  <img src={subscribersIcon} alt="Подписчики" />
-                </span>
-                <span className={classNames(s.level, s.text)}>2{t('p4')}.</span>
-              </div>
-            )}
-            {total_invited > 0 && (
-              <p className={classNames(s.userCardRefs, s.text)}>{`(${t('p54')} ${total_invited} ${t('p55')}.)`}</p>
-            )}
-          </div>
-          <div className={s.userCardBonus}>
-            <span className={s.badge}>
-              +{formatAbbreviation(points_for_referrer, 'number', { locale: locale })}
+          <span className={s.statItem}>
+            {subscribers_for_referrer !== undefined
+              ? formatAbbreviation(subscribers_for_referrer, 'number', { locale: locale })
+              : 'N/A'}{' '}
+            <img src={subscribersIcon} alt="Подписчики" />
+            <sup>1{t('p73')}</sup>
+          </span>
+
+          {total_invited > 0 && (
+            <span className={s.statItem}>
+              +{formatAbbreviation(total_invited * 150, 'number', { locale: locale })}{' '}
+              <img src={subscribersIcon} alt="Подписчики" />
+              <sup>2{t('p73')}</sup>
+              <span className={s.moreRefs}>({t('p54')} {total_invited} {t('p55')}.)</span>
+            </span>
+          )}
+
+          {points_for_referrer > 0 && (
+            <span className={s.statItem}>
+              +{formatAbbreviation(points_for_referrer, 'number', { locale: locale })}{' '}
               <img src={goldCoinIcon} alt="поинты" />
+              <sup>{t('p74')}</sup>
             </span>
-          </div>
+          )}
         </section>
-        {days_missed > 1 && reminded_time === null ? (
-          <div className={s.streakWarningWrapper}>
-            <span className={classNames(s.streakBadge, s.warning)}>
-              <img src={infoRedIcon} alt="Info" /> {t('p56')}
-            </span>
-            <Button onClick={handleSendMessage} className={s.warningButton}>
-              {t('p57')}
-            </Button>
-          </div>
+        {isWarning ? (
+          <Button onClick={handleSendMessage} className={s.warningButton}>
+            {t('p57')}
+          </Button>
         ) : null}
       </div>
     </>

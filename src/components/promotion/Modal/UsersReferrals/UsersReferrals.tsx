@@ -21,7 +21,7 @@ const INITIAL_LOAD_COUNT = 20; // Количество элементов для
 export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }: UserReferralsProps) => {
   const { t, i18n } = useTranslation('promotion');
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
-  const listRef = useRef(null);
+  const listRef = useRef<VariableSizeList>(null);
   const isLoaded = useRef(false);
   const [items, setItems] = useState<ReferralDTO[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -41,6 +41,14 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
       if (data) {
         setItems(prev => [...prev, ...data.referrals]);
         setTotalCount(data.count);
+
+        requestAnimationFrame(() => {
+          if (listRef.current) {
+            // Пересчитываем высоты для всех элементов после загруженного диапазона
+            listRef.current.resetAfterIndex(offset);
+          }
+        });
+      
       }
     } catch (error) {
       console.log(error);
@@ -57,10 +65,14 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
   };
 
   const getItemSize = (index: number) => {
-    if (items?.[index]?.push_line_data.failed_days_ago > 1 && items?.[index]?.reminded_at === null) {
-      return 204 + 10;
+    const item = items?.[index]
+    const gap = 10
+    if (item?.push_line_data.failed_days_ago > 1 && item?.reminded_at === null) {
+      return 153 + gap;
+    }else if(item?.invited_count === 0 || item?.points_for_referrer === 0){
+      return 97 + gap
     }
-    return 112 + 10;
+    return 129 + gap;
   };
 
   const Row = ({ index, data, style }: { index: number; data: ReferralDTO[]; style: CSSProperties }) => {
@@ -82,6 +94,7 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
             days_missed={data[index].push_line_data.failed_days_ago}
             points_for_referrer={data[index].points_for_referrer}
             subscribers_for_referrer={data[index].subscribers_for_referrer}
+            isModal
           />
         )}
       </div>
@@ -116,7 +129,7 @@ export const UserReferrals: React.FC<UserReferralsProps> = ({ modalId, onClose }
           <VariableSizeList
             ref={listRef}
             height={window.innerHeight * 0.6}
-            width={window.innerWidth}
+            width={window.innerWidth - 7}
             itemCount={totalCount}
             itemData={items}
             itemSize={getItemSize}
