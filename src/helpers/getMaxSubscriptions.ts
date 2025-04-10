@@ -25,3 +25,9 @@ export function getMaxSubscriptions(): number {
     return 0 + MIN;
   }
   
+  export function isSubscriptionIncreaseLevel(): boolean {
+    const currentLevel = parseInt(localStorage.getItem('USER_LEVEL') || '0');
+    const increaseLevels = [1, 2, 6, 12, 18, 28, 42, 50, 68, 90, 120, 151, 180, 220, 260, 320];
+    
+    return increaseLevels.includes(currentLevel);
+}

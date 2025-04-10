@@ -174,6 +174,11 @@ export const MainPage: FC = () => {
   }, [data, isInventoryDataLoading]);
 
   useEffect(() => {
+    localStorage.setItem('GIFT_FOR_TREE_STAGE', '0');
+  }, []);
+
+  
+  useEffect(() => {
     if (data) {
       if (data.count === 0) {
         if (itemsData) {

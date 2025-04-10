@@ -82,6 +82,9 @@ export const Tree = () => {
     const localed = gifts[locale];
     const boost = treeData?.growth_tree_stages?.[stageNumber]?.achievement.boost;
     const boostPrev = treeData?.growth_tree_stages?.[stageNumber - 1]?.achievement.boost;
+    
+    localStorage.setItem('GIFT_FOR_TREE_STAGE', '1');
+
     try {
       await unlockAchievement({ achievement_id: id }).unwrap();
       await refetch();

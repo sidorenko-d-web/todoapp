@@ -15,7 +15,7 @@ import giftPurple from '../../../assets/icons/gift-purple.svg';
 import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
 import { type ChestRewardResponseDTO, useClaimChestRewardMutation, Boost, useGetProfileMeQuery } from '../../../redux';
-import { formatAbbreviation, getMaxSubscriptions } from '../../../helpers';
+import { formatAbbreviation, getMaxSubscriptions, isSubscriptionIncreaseLevel } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import snowflake from '../../../assets/icons/snowflake.svg';
 import { useEffect, useState } from 'react';
@@ -56,6 +56,7 @@ export default function GetGift() {
     if (isVibrationSupported) {
       navigator.vibrate(200);
     }
+    localStorage.setItem('GIFT_FOR_TREE_STAGE', '0');
     closeModal(MODALS.GET_GIFT);
   };
 
@@ -131,7 +132,11 @@ export default function GetGift() {
           </div>
           <div className={styles.stat}>
             <div className={styles.statBox}>
-              <span className={styles.difference1}>+1</span>
+              {
+                isSubscriptionIncreaseLevel() && 
+                  <span className={styles.difference1}>+1</span>
+              }
+
               <span>
                 {formatAbbreviation(profileData?.subscription_integrations_left)}/{formatAbbreviation(maxSubscriptions)}
               </span>
@@ -149,7 +154,8 @@ export default function GetGift() {
             <p>+{formatAbbreviation(giftData?.reward.points ?? (args?.boost.points || 0))}</p>
             <img src={coin} />
           </div>
-          {(giftData?.reward.subscriptions ?? args?.boost.additional_integrations_for_subscription) && (
+          {localStorage.getItem('GIFT_FOR_TREE_STAGE') !== '1' 
+            && (giftData?.reward.subscriptions ?? args?.boost.additional_integrations_for_subscription) && (
             <div className={styles.item}>
               <p>
                 +
