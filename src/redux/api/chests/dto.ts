@@ -11,6 +11,7 @@ export type ChestRewardResponseDTO = {
     points: number;
     subscribers: number;
     freezes: number;
+    subscriptions: number
   };
   chest_name: string;
   chest_image_url: string;

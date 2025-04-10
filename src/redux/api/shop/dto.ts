@@ -93,9 +93,9 @@ export type Chest = {
 
 export type UpgradeItemResponse = {
   name: string;
-  item_category: string;
-  item_rarity: string;
-  item_premium_level: string;
+  item_category: TypeItemCategory;
+  item_rarity: TypeItemRarity;
+  item_premium_level: TypeItemQuality;
   depends: string;
   level: number;
   price_internal: string;

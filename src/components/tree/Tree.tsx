@@ -1,10 +1,9 @@
-import { CSSProperties, memo, useEffect, useState } from 'react';
+import { CSSProperties, memo, useEffect } from 'react';
 import s from './Tree.module.scss';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
 import question from '../../assets/icons/question.svg';
 import {
-  Boost,
   GrowthTreeStage,
   useGetProfileMeQuery,
   useGetTreeInfoQuery,
@@ -36,26 +35,20 @@ import { useTranslation } from 'react-i18next';
 
 export const Tree = () => {
   const { openModal } = useModal();
-  const { t } = useTranslation('tree');
-  // const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
+  const { t, i18n } = useTranslation('tree');
+  const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
   const { data: treeData, refetch } = useGetTreeInfoQuery();
   const { data: userProfileData, isLoading } = useGetProfileMeQuery();
-  const [currentBoost, setCurrentBoost] = useState<Boost | null>(null);
   const { isBgLoaded } = useOutletContext<{ isBgLoaded: boolean }>();
   const isGuide = !isGuideShown(GUIDE_ITEMS.treePage.TREE_GUIDE_SHONW);
-
-  const [currentUserLevel, setCurrentUserLevel] = useState(0);
-
-  const [prevLevelBoost, setPrevLevelBoost] = useState<Boost | null>(null);
+  // const [currentUserLevel, setCurrentUserLevel] = useState(0);
 
   useEffect(() => {
-    if(userProfileData && !isLoading) {
-      setCurrentUserLevel(userProfileData.growth_tree_stage_id);
-      localStorage.setItem('USER_LEVEL', ''+userProfileData.growth_tree_stage_id);
+    if (userProfileData && !isLoading) {
+      // setCurrentUserLevel(userProfileData.growth_tree_stage_id);
+      localStorage.setItem('USER_LEVEL', '' + userProfileData.growth_tree_stage_id);
     }
   }, [userProfileData, isLoading]);
-
-
 
   const [unlockAchievement] = useUnlockAchievementMutation();
 
@@ -70,20 +63,29 @@ export const Tree = () => {
     );
   }
 
-  const handleUnlock = async (id: string, boost: Boost, stageNumber: number) => {
-    try {
-      if (stageNumber > 1 && currentUserLevel === stageNumber) {
-        const prevStage = treeData?.growth_tree_stages[currentUserLevel - 2];
-        setPrevLevelBoost(prevStage?.achievement.boost || null);
-      } else {
-        setPrevLevelBoost(null);
-      }
-      
+  const handleUnlock = async (id: string, stageNumber: number) => {
+    const gifts = {
+      ru: {
+        blueGift: 'Синий подарок',
+        purpleGift: 'Фиолетовый подарок',
+        redGift: 'Красный подарок',
+      },
+      en: {
+        blueGift: 'Blue Gift',
+        purpleGift: 'Purple Gift',
+        redGift: 'Red Gift',
+      },
+    };
 
+    const giftColors = ['purpleGift', 'redGift', 'blueGift'];
+    const currentGift = giftColors[stageNumber % giftColors.length];
+    const localed = gifts[locale];
+    const boost = treeData?.growth_tree_stages?.[stageNumber]?.achievement.boost;
+    const boostPrev = treeData?.growth_tree_stages?.[stageNumber - 1]?.achievement.boost;
+    try {
       await unlockAchievement({ achievement_id: id }).unwrap();
-      setCurrentBoost(boost);
       await refetch();
-      openModal(MODALS.GET_GIFT);
+      openModal(MODALS.GET_GIFT, { giftColor: localed[currentGift as keyof typeof localed], boost, boostPrev });
     } catch (err) {
       alert('Failed to unlock achievement.');
     }
@@ -94,7 +96,6 @@ export const Tree = () => {
       const isEven = index % 2 === 0;
 
       const giftColors = [giftPurple, giftRed, giftBlue];
-
       const giftIcon = giftColors[index % giftColors.length];
       return (
         <div className={clsx(s.reward, !isEven && s.right)}>
@@ -155,8 +156,7 @@ export const Tree = () => {
         {stage?.achievement.is_available && !stage.achievement.is_unlocked && _index > 1 && (
           <Button
             className={clsx(s.takeRewardBtn)}
-            onClick={() => handleUnlock(stage?.achievement.id ?? '', 
-              stage?.achievement.boost ?? {}, stage?.stage_number ?? 0)}
+            onClick={() => handleUnlock(stage?.achievement.id ?? '', stage?.stage_number ?? 0)}
           >
             {t('t2')}
           </Button>
@@ -208,7 +208,7 @@ export const Tree = () => {
         </List>
       </div>
 
-      <GetGift boost={currentBoost} prevLevelBoost={prevLevelBoost}/>
+      <GetGift />
     </div>
   );
 };

@@ -14,52 +14,68 @@ import giftRed from '../../../assets/icons/gift-red.svg';
 import giftPurple from '../../../assets/icons/gift-purple.svg';
 import Lottie from 'lottie-react';
 import { CentralModal } from '../../../components/shared';
-import { Boost, useGetProfileMeQuery } from '../../../redux';
+import { type ChestRewardResponseDTO, useClaimChestRewardMutation, Boost, useGetProfileMeQuery } from '../../../redux';
 import { formatAbbreviation, getMaxSubscriptions } from '../../../helpers';
 import { useTranslation } from 'react-i18next';
 import snowflake from '../../../assets/icons/snowflake.svg';
 import { useEffect, useState } from 'react';
 
-interface Props {
-  giftColor?: string;
-  boost?: Boost | null | undefined;
-  prevLevelBoost?: Boost | null | undefined;
-}
-
-export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
+export default function GetGift() {
   const { closeModal, getModalState } = useModal();
-  const { isOpen } = getModalState(MODALS.GET_GIFT);
+  const { isOpen, args } = getModalState<{ giftColor: string; itemId: string; boost: Boost; boostPrev: Boost }>(
+    MODALS.GET_GIFT,
+  );
   const { t } = useTranslation('quests');
-  const [userSubscriptions, setUserSubscriptions] = useState(0);
   const maxSubscriptions = getMaxSubscriptions();
-  const { data: profileData, isLoading } = useGetProfileMeQuery();
+  const [claimChest] = useClaimChestRewardMutation();
+  const [giftData, setGiftData] = useState<ChestRewardResponseDTO>();
+
+  const { data: profileData } = useGetProfileMeQuery();
 
   const isVibrationSupported =
     typeof navigator !== 'undefined' && 'vibrate' in navigator && typeof navigator.vibrate === 'function';
 
+  // useEffect(() => {
+  //   if (profileData && !isLoading) {
+  //     setUserSubscriptions(profileData.subscription_integrations_left);
+  //   }
+  // }, [profileData?.id, isLoading]);
+
   useEffect(() => {
-    if (profileData && !isLoading) {
-      setUserSubscriptions(profileData.subscription_integrations_left);
+    if (!args?.itemId) return;
+    (async () => {
+      const res = await claimChest({ chest_reward_reason: 'item_upgrade', entity_id: args?.itemId });
+      if (res?.data) {
+        setGiftData(res.data);
+        console.log(res.data);
+      }
+    })();
+  }, []);
+
+  const handleClaimGift = async () => {
+    if (isVibrationSupported) {
+      navigator.vibrate(200);
     }
-  }, [profileData, isLoading]);
+    closeModal(MODALS.GET_GIFT);
+  };
 
   if (!isOpen) return null;
 
   let giftImage;
-  if (giftColor == null || giftColor === t('q54')) {
+  if (args?.giftColor == null || args.giftColor === t('q54')) {
     giftImage = <img src={gift} className={styles.gift} />;
-  } else if (giftColor === t('q55')) {
+  } else if (args.giftColor === t('q55')) {
     giftImage = <img src={giftPurple} className={styles.gift} />;
-  } else if (giftColor === t('q56')) {
+  } else if (args.giftColor === t('q56')) {
     giftImage = <img src={giftRed} className={styles.gift} />;
   }
 
   let giftLight;
-  if (giftColor == null || giftColor === t('q54')) {
+  if (args?.giftColor == null || args.giftColor === t('q54')) {
     giftLight = <Lottie animationData={blueLightAnimation} loop={true} className={styles.light} />;
-  } else if (giftColor === t('q55')) {
+  } else if (args.giftColor === t('q55')) {
     giftLight = <Lottie animationData={purpleLightAnimation} loop={true} className={styles.light} />;
-  } else if (giftColor === t('q56')) {
+  } else if (args.giftColor === t('q56')) {
     giftLight = <Lottie animationData={redLightAnimation} loop={true} className={styles.light} />;
   }
 
@@ -75,18 +91,20 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
         {giftImage}
         <div className={styles.statsContainer} style={{ marginTop: '35px' }}>
           <div className={styles.stat}>
-            {boost?.income_per_second && (
-              <span className={styles.statValue}>+{formatAbbreviation(boost?.income_per_second)}</span>
+            {args?.boost?.income_per_second && (
+              <span className={styles.statValue}>+{formatAbbreviation(args?.boost?.income_per_second)}</span>
             )}
           </div>
           <div className={styles.stat}>
             <div className={styles.statBox}>
-              {prevLevelBoost && 
+              {args?.boost && (
                 <span className={styles.difference1}>
-                  +{boost?.subscribers_for_first_level_referrals! - prevLevelBoost?.subscribers_for_first_level_referrals!}
+                  +
+                  {args?.boost?.subscribers_for_first_level_referrals! -
+                    args?.boostPrev?.subscribers_for_first_level_referrals}
                 </span>
-              }
-              <span>+{formatAbbreviation(boost?.subscribers_for_first_level_referrals || 0)}</span>
+              )}
+              <span>+{formatAbbreviation(args?.boost?.subscribers_for_first_level_referrals || 0)}</span>
               <img src={subscribers} />
               <span className={styles.extra}>1 {t('q9_2')}</span>
             </div>
@@ -94,12 +112,14 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
 
           <div className={styles.stat}>
             <div className={styles.statBox}>
-              {prevLevelBoost && 
+              {args?.boostPrev && (
                 <span className={styles.difference2}>
-                  +{boost?.subscribers_for_second_level_referrals! - prevLevelBoost?.subscribers_for_second_level_referrals!}
+                  +
+                  {args?.boost?.subscribers_for_second_level_referrals! -
+                    args?.boostPrev?.subscribers_for_second_level_referrals!}
                 </span>
-              }
-              <span>+{formatAbbreviation(boost?.subscribers_for_second_level_referrals || 0)}</span>
+              )}
+              <span>+{formatAbbreviation(args?.boost?.subscribers_for_second_level_referrals || 0)}</span>
               <img src={subscribers} />
               <span className={styles.extra}>2 {t('q9_2')}</span>
             </div>
@@ -107,7 +127,9 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
           <div className={styles.stat}>
             <div className={styles.statBox}>
               <span className={styles.difference1}>+1</span>
-              <span>{formatAbbreviation(userSubscriptions)}/{formatAbbreviation(maxSubscriptions)}</span>
+              <span>
+                {formatAbbreviation(profileData?.subscription_integrations_left)}/{formatAbbreviation(maxSubscriptions)}
+              </span>
               <img src={integration} />
               <span className={styles.extra}>{t('q60')}</span>
             </div>
@@ -115,23 +137,28 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
         </div>
         <div className={styles.items}>
           <div className={styles.item}>
-            <p>+{formatAbbreviation(boost?.subscribers || 0)}</p>
+            <p>+{formatAbbreviation(giftData?.reward.subscribers ?? (args?.boost.subscribers || 0))}</p>
             <img src={subscribers} />
           </div>
           <div className={styles.item}>
-            <p>+{formatAbbreviation(boost?.points || 0)}</p>
+            <p>+{formatAbbreviation(giftData?.reward.points ?? (args?.boost.points || 0))}</p>
             <img src={coin} />
           </div>
-          {boost?.additional_integrations_for_subscription && (
+          {(giftData?.reward.subscriptions ?? args?.boost.additional_integrations_for_subscription) && (
             <div className={styles.item}>
-              <p>+{formatAbbreviation(boost?.additional_integrations_for_subscription + maxSubscriptions)}</p>
+              <p>
+                +
+                {formatAbbreviation(
+                  giftData?.reward.subscriptions ?? args?.boost.additional_integrations_for_subscription,
+                )}
+              </p>
               <img src={integration} />
             </div>
           )}
 
-          {boost?.freezes && (
+          {giftData?.reward.freezes && (
             <div className={styles.item}>
-              <p>+{boost?.freezes}</p>
+              <p>+{giftData?.reward.freezes}</p>
               <img src={snowflake} />
             </div>
           )}
@@ -139,13 +166,14 @@ export default function GetGift({ giftColor, boost, prevLevelBoost }: Props) {
         <p className={styles.desc}>{t('q57')}</p>
       </div>
       <Button
-        variant={giftColor == null || giftColor === t('q54') ? 'blue' : giftColor === t('q55') ? 'purple' : 'red'}
-        onClick={() => {
-          if (isVibrationSupported) {
-            navigator.vibrate(200);
-          }
-          closeModal(MODALS.GET_GIFT);
-        }}
+        variant={
+          args?.giftColor == null || args?.giftColor === t('q54')
+            ? 'blue'
+            : args?.giftColor === t('q55')
+            ? 'purple'
+            : 'red'
+        }
+        onClick={handleClaimGift}
       >
         {t('q58')}
       </Button>

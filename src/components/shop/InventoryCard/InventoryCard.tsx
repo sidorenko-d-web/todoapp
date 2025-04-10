@@ -151,10 +151,10 @@ export const InventoryCard: FC<Props> = ({ item }) => {
         mode: 'item',
         reward: rewardForUpgrade,
       });
-    }else if(data.level % 10 === 0){
+    } else if (data.level % 10 === 0) {
       openModal(MODALS.GET_GIFT, {
         giftColor: upgradeReward?.name,
-        itemId: nextLevelItem?.items[0].id
+        itemId: nextLevelItem?.items[0].id,
       });
     }
   };
@@ -201,30 +201,7 @@ export const InventoryCard: FC<Props> = ({ item }) => {
                 playLvlSound();
                 refetchProfile();
                 refetchEquipped();
-                if (item.item_premium_level === 'pro' && res.data.level === 100) {
-                  openModal(MODALS.UPGRADED_SHOP, {
-                    item,
-                    isYellow: item.item_rarity === 'red',
-                  });
-                } else {
-                  if (res.data.level === 50 || res.data.level === 100) {
-                    localStorage.setItem(localStorageConsts.IS_NEED_TO_OPEN_CHEST, 'true');
-                    localStorage.setItem(localStorageConsts.CHEST_TO_OPEN_ID, res.data.id);
-
-                    const rewardForUpgrade =
-                      res.data.level === 50
-                        ? 'Каменный сундук'
-                        : res.data.level === 100
-                        ? 'Редкий сундук'
-                        : 'Легендарный сундук';
-
-                    openModal(MODALS.UPGRADED_ITEM, {
-                      item: res.data,
-                      mode: 'item',
-                      reward: rewardForUpgrade,
-                    });
-                  }
-                }
+                handleRewardAfterUpgrade(res.data);
               }
             } catch (error) {
               console.log(error);

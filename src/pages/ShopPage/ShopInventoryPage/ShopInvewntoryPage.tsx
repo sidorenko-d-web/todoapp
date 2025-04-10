@@ -13,6 +13,7 @@ import { compareItems } from '../../../helpers';
 import styles from '../ShopPage.module.scss';
 import GetRewardChestModal from '../../DevModals/GetRewardChestModal/GetRewardChestModal';
 import { useTranslation } from 'react-i18next';
+import GetGift from '../../DevModals/GetGift/GetGift';
 
 type TypeTab<T> = { title: string; value: T };
 
@@ -127,6 +128,7 @@ export const ShopInventoryPage = () => {
       <ItemUpgradedModal />
       <ShopUpgradedModal />
       <GetRewardChestModal />
+      <GetGift />
       <NewItemModal />
     </ShopLayout>
   );
