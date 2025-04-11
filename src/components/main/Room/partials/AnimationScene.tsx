@@ -166,7 +166,7 @@ export const AnimationScene = memo(({ room, character, setIsLoaded }: props) => 
         if (isNeedToPlayHappy) spineSceneRef.current?.setIdle();
       }, 4000);
     }
-  }, [isNeedToPlayHappy, dispatch]);
+  }, [isNeedToPlayHappy]);
 
   return (
     <>

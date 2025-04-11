@@ -116,7 +116,7 @@ export const MainPage: FC = () => {
         }
       }
     }
-  }, [itemsData, isInventoryDataLoading, typewriterFound, profileData, isCurrentUserProfileInfoLoading]);
+  }, [itemsData?.count, isInventoryDataLoading, typewriterFound, profileData?.id, isCurrentUserProfileInfoLoading]);
 
   useEffect(() => {
     if (typeof data?.count !== 'undefined' && data?.count > 0) {
@@ -172,7 +172,7 @@ export const MainPage: FC = () => {
         }
       }
     }
-  }, [data, isInventoryDataLoading]);
+  }, [data?.count, isInventoryDataLoading]);
 
   useEffect(() => {
     localStorage.setItem('GIFT_FOR_TREE_STAGE', '0');
@@ -203,7 +203,7 @@ export const MainPage: FC = () => {
         }
       }
     }
-  }, [data, isAllIntegrationsLoading, itemsData, isInventoryDataLoading]);
+  }, [data?.count, isAllIntegrationsLoading, itemsData?.count, isInventoryDataLoading]);
 
   useEffect(() => {
     if (isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN)) {
@@ -216,7 +216,7 @@ export const MainPage: FC = () => {
       // setCurrentUserLevel(userProfileData.growth_tree_stage_id);
       localStorage.setItem('USER_LEVEL', '' + profileData.growth_tree_stage_id);
     }
-  }, [profileData, isCurrentUserProfileInfoLoading]);
+  }, [profileData?.id, isCurrentUserProfileInfoLoading]);
 
   //const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
@@ -241,7 +241,7 @@ export const MainPage: FC = () => {
         }
       }
     });
-  }, [data, isAllIntegrationsLoading]);
+  }, [data?.count, isAllIntegrationsLoading]);
   // const showAccelerateGuide = useSelector((state: RootState) => state.guide.integrationCreated);
   // const showAccelerateGuide = localStorage.getItem('integrationCreated') === 'true';
 
@@ -333,7 +333,7 @@ export const MainPage: FC = () => {
     if (isPublishedModalClosed && !isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
       //openModal(MODALS.DAYS_IN_A_ROW);
     }
-  }, [isPublishedModalClosed, isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)]);
+  }, [isPublishedModalClosed]);
 
   const { isLoading: isIntegrationsLoading } = useGetIntegrationsQuery({ status: 'creating' });
   const { isLoading: isRoomLoading } = useGetEquipedQuery();
@@ -355,7 +355,7 @@ export const MainPage: FC = () => {
     if (treeData) {
       return hasAvailableTreeReward(treeData.growth_tree_stages);
     }
-  }, [treeData]);
+  }, [treeData?.count]);
 
   const { data: creatingIntegrations, isLoading: isCreatingIntegrationsLoading } = useGetIntegrationsQuery({
     status: 'creating',
@@ -380,6 +380,44 @@ export const MainPage: FC = () => {
     if (integrationCurrentlyCreating || firstIntegrationCreating || hasCreatingIntegrations) {
       reduxDispatch(incrementAcceleration());
     }
+  };
+
+  const onCloseDaysInARowModal = () => {
+    if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+      closeModal(MODALS.DAYS_IN_A_ROW);
+    }
+  };
+
+  const onCloseInitialGuide = () => {
+    setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
+    setRerender(prev => prev + 1);
+  };
+
+  const onCloseSubscribersGuide = () => {
+    setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
+    openModal(MODALS.SUBSCRIBE);
+    reduxDispatch(setSubscribeGuideShown(true));
+    setRerender(prev => prev + 1);
+  };
+
+  const onCloseGetCoinsGuide = () => {
+    reduxDispatch(setGetCoinsGuideShown(true));
+    setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+    setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
+    setRerender(prev => prev + 1);
+    openModal(MODALS.SUBSCRIBE);
+  };
+
+  const onCloseAccelerateIntegtrationGuide = () => {
+    setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
+    reduxDispatch(setAccelerateIntegrationGuideClosed(true));
+    setRerender(prev => prev + 1);
+  };
+
+  const onCloseFinishTutorialGuide = () => {
+    reduxDispatch(setDimHeader(false));
+    setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
+    setRerender(prev => prev + 1);
   };
 
   return (
@@ -422,15 +460,7 @@ export const MainPage: FC = () => {
           <>
             <WithModal
               modalId={MODALS.DAYS_IN_A_ROW}
-              component={
-                <DaysInARowModal
-                  onClose={() => {
-                    if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
-                      closeModal(MODALS.DAYS_IN_A_ROW);
-                    }
-                  }}
-                />
-              }
+              component={<DaysInARowModal onClose={onCloseDaysInARowModal} />}
             />
             <PublishIntegrationButton />
           </>
@@ -454,19 +484,9 @@ export const MainPage: FC = () => {
           }}
         />
       )}
-      <InitialGuide
-        onClose={() => {
-          setGuideShown(GUIDE_ITEMS.mainPage.FIRST_GUIDE_SHOWN);
-          setRerender(prev => prev + 1);
-        }}
-      />
+      <InitialGuide onClose={onCloseInitialGuide} />
       <SubscrieGuide
-        onClose={() => {
-          setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
-          openModal(MODALS.SUBSCRIBE);
-          reduxDispatch(setSubscribeGuideShown(true));
-          setRerender(prev => prev + 1);
-        }}
+        onClose={onCloseSubscribersGuide}
         top="50%"
         zIndex={12500}
         description={
@@ -483,49 +503,20 @@ export const MainPage: FC = () => {
           <GetCoinsGuide
             welcomeBonus={welcomeBonusData?.welcome_bonus || '500'}
             refBonus={welcomeBonusData?.referrer_bonus || '250'}
-            onClose={() => {
-              reduxDispatch(setGetCoinsGuideShown(true));
-              setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-              setGuideShown(GUIDE_ITEMS.mainPage.GET_COINS_GUIDE_SHOWN);
-              setRerender(prev => prev + 1);
-              openModal(MODALS.SUBSCRIBE);
-            }}
+            onClose={onCloseGetCoinsGuide}
           />
         )}
       {firstIntegrationCreating &&
         !isGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED) && (
-          <AccelerateIntegtrationGuide
-            onClose={() => {
-              setGuideShown(GUIDE_ITEMS.creatingIntegration.INTEGRATION_ACCELERATED_GUIDE_CLOSED);
-              reduxDispatch(setAccelerateIntegrationGuideClosed(true));
-              setRerender(prev => prev + 1);
-            }}
-          />
+          <AccelerateIntegtrationGuide onClose={onCloseAccelerateIntegtrationGuide} />
         )}
       {isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN) && (
-          <FinishTutorialGuide
-            onClose={() => {
-              reduxDispatch(setDimHeader(false));
-              setGuideShown(GUIDE_ITEMS.mainPageSecondVisit.FINISH_TUTORIAL_GUIDE_SHOWN);
-              setRerender(prev => prev + 1);
-            }}
-          />
+          <FinishTutorialGuide onClose={onCloseFinishTutorialGuide} />
         )}
       <WithModal modalId={MODALS.INTEGRATION_REWARD} component={<RewardForIntegrationModal />} />
       <WithModal modalId={MODALS.INTEGRATION_REWARD_CONGRATULATIONS} component={<IntegrationRewardModal />} />
-      <WithModal
-        modalId={MODALS.DAYS_IN_A_ROW}
-        component={
-          <DaysInARowModal
-            onClose={() => {
-              if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
-                closeModal(MODALS.DAYS_IN_A_ROW);
-              }
-            }}
-          />
-        }
-      />
+      <WithModal modalId={MODALS.DAYS_IN_A_ROW} component={<DaysInARowModal onClose={onCloseDaysInARowModal} />} />
     </main>
   );
 };

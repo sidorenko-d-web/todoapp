@@ -14,6 +14,8 @@ import clsx from 'clsx';
 import { StrangerHeader } from '../components/profile/StrangerHeader';
 import { SoundSettingsModal } from '../components/settings/SoundSettingsModal';
 import { WithModal } from '../components/shared/WithModal/WithModa';
+
+
 const Layout = () => {
   const location = useLocation();
   const platform = getOS();
@@ -67,7 +69,7 @@ const Layout = () => {
         contentRef.current?.removeEventListener('scroll', handleScroll);
       };
     }
-  }, [showRoadmapBg, contentRef.current]);
+  }, [showRoadmapBg, !!contentRef.current]);
 
   const [isBgLoaded, setIsBgLoaded] = useState(false);
 

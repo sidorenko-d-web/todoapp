@@ -19,7 +19,6 @@ interface props {
 }
 
 export const Floor = ({ room }: props) => {
-
   const equipedFloor = room?.items.find(
     item => item.id === room.equipped_items.find(_item => _item.slot === RoomItemsSlots.floor.slot)?.id,
   );
@@ -36,11 +35,9 @@ export const Floor = ({ room }: props) => {
     greenpro,
   };
 
-  console.log(equipedFloor);
-
-  const floor =  equipedFloor
-  ? `url("${floors[(equipedFloor.item_rarity + equipedFloor.item_premium_level) as keyof typeof floors]}")`
-  : 'gray'
+  const floor = equipedFloor
+    ? `url("${floors[(equipedFloor.item_rarity + equipedFloor.item_premium_level) as keyof typeof floors]}")`
+    : 'gray';
 
   // const floor = `url("${floors.yellowpro}")`;
   return (
@@ -50,16 +47,7 @@ export const Floor = ({ room }: props) => {
         style={{
           background: floor,
         }}
-      >
-        {/* <div className={styles.floor}>
-          {equipedFloor && (
-            <img
-              src={floor[(equipedFloor.item_rarity + equipedFloor.item_premium_level) as keyof typeof floor]}
-              alt="floor"
-            />
-          )}
-        </div> */}
-      </div>
+      ></div>
     </>
   );
 };

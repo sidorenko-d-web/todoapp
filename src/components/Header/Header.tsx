@@ -88,13 +88,6 @@ export const Header = () => {
     dailyGiftModalOpen
   ]);
 
-  useEffect(() => {
-    //needed to re-render header when gift modal closes to update the coin number
-    if (isGetGiftModalOpen) {
-      refetch();
-    }
-  }, [ isGetGiftModalOpen ]);
-
   const rerenderAfterPublish = useSelector((state: RootState) => state.guide.refetchAfterPublish);
 
   useEffect(() => {
@@ -120,7 +113,7 @@ export const Header = () => {
     if (lastActiveStageNumber) {
       dispatch(setLastActiveStage(lastActiveStageNumber));
     }
-  }, [ lastActiveStageNumber, dispatch ]);
+  }, [ lastActiveStageNumber ]);
 
   const handleNavigateToProfile = () => {
     if (footerActive) {

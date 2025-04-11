@@ -83,6 +83,8 @@ export const InventoryCard: FC<Props> = ({ item }) => {
   const { data: profile, refetch: refetchProfile } = useGetProfileMeQuery();
   const { refetch: refetchBoost } = useGetCurrentUserBoostQuery();
 
+  const isItemEquipped = equipedItems?.equipped_items.map(item => item.id).includes(item.id)
+
   const { data: nextLevelItem, isLoading: isItemsLoading } = useGetShopItemsQuery({
     level: item.level === 50 ? 50 : item.level + 1,
     name: item.name,
@@ -109,6 +111,7 @@ export const InventoryCard: FC<Props> = ({ item }) => {
       setGuideShown(GUIDE_ITEMS.shopPageSecondVisit.ITEM_UPGRADED);
 
       setIsUpdateLoading(true);
+      if(!isItemEquipped) await handleEquipItem()
       const res = await upgradeItem({ payment_method: 'internal_wallet', id: item.id });
       localStorage.setItem('giftName', upgradeReward?.name || '');
 
@@ -158,7 +161,6 @@ export const InventoryCard: FC<Props> = ({ item }) => {
       });
     }
   };
-
   const handleEquipItem = async () => {
     vibrate();
     if (!slot && slot !== 0)
