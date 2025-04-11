@@ -11,9 +11,9 @@ import Lottie from 'lottie-react';
 import { lampTable } from '../assets/animations';
 import roadmapBg from '../assets/pages-bg/roadmap-bg.png';
 import clsx from 'clsx';
-import WhiteNoiseCanvas from '../components/WhiteNoise/WhiteNoise';
 import { StrangerHeader } from '../components/profile/StrangerHeader';
 import { SoundSettingsModal } from '../components/settings/SoundSettingsModal';
+import { WithModal } from '../components/shared/WithModal/WithModa';
 const Layout = () => {
   const location = useLocation();
   const platform = getOS();
@@ -80,10 +80,8 @@ const Layout = () => {
   }, [showRoadmapBg]);
 
   const strangerId = location.pathname.split('/')[1] === 'profile' && location.pathname.split('/')[2];
-
   return (
     <>
-      <WhiteNoiseCanvas />
       {strangerId && <StrangerHeader />}
       {/* {showHeaderBG && <div className={styles.headerBG} />} */}
       <div className={`${styles.settingsIcon} ${platform ? styles[platform + 'Settings'] : ''}`}>
@@ -105,10 +103,11 @@ const Layout = () => {
         {showHeader && <Header />}
         <main className={contentClassName} ref={contentRef}>
           <Outlet context={{ isBgLoaded }} />
-          <SettingsModal />
-          <WalletConnectionModal />
-          <LanguageSelectionModal />
-          <SoundSettingsModal />
+          <WithModal modalId={MODALS.SETTINGS} component={<SettingsModal />} />
+          <WithModal modalId={MODALS.WALLET_CONNECTION} component={<WalletConnectionModal />} />
+          <WithModal modalId={MODALS.LANGUAGE_SELECTION} component={<LanguageSelectionModal />} />
+          <WithModal modalId={MODALS.SOUND_SETTINGS} component={<SoundSettingsModal />} />
+
           <AudioBg />
         </main>
         <Footer />

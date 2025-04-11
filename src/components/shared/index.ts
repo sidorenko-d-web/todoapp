@@ -3,4 +3,4 @@ export * from './CentralModal'
 export * from './BottomModal'
 export * from './common'
 export * from './Button'
-export * from "./ExpandableBottomModal"
+export * from "./WithModal"

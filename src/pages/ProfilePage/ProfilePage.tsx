@@ -16,6 +16,7 @@ import { useModal } from '../../hooks';
 import { GUIDE_ITEMS, MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 import { FreezeGuide, Loader, ProfileFirstGuide, PushLineGuide } from '../../components';
+import { WithModal } from '../../components/shared/WithModal/WithModa';
 
 export const ProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation('profile');
@@ -138,12 +139,12 @@ export const ProfilePage: React.FC = () => {
   console.log(userProfileData);
   return (
     <>
-      <GetRewardChestModal onClose={() => closeModal(MODALS.TASK_CHEST)} />
-
+      <WithModal
+        modalId={MODALS.TASK_CHEST}
+        component={<GetRewardChestModal onClose={() => closeModal(MODALS.TASK_CHEST)} />}
+      />
       {(isUserLoading || isTopProfilesLoading) && <p>{t('p3')}</p>}
-
       {(userError || topProfilesError) && <p>{t('p17')}</p>}
-
       {userProfileData && topProfilesData && (
         <div className={styles.wrp}>
           <div>
@@ -157,11 +158,16 @@ export const ProfilePage: React.FC = () => {
             <ProfileStatsMini position={position} daysInARow={streaks} />
           </div>
 
-          <ChangeNicknameModal
+          <WithModal
             modalId={MODALS.CHANGING_NICKNAME}
-            onClose={() => closeModal(MODALS.CHANGING_NICKNAME)}
-            currentNickname={userProfileData.username}
-            currentBlogName={userProfileData.blog_name}
+            component={
+              <ChangeNicknameModal
+                modalId={MODALS.CHANGING_NICKNAME}
+                onClose={() => closeModal(MODALS.CHANGING_NICKNAME)}
+                currentNickname={userProfileData.username}
+                currentBlogName={userProfileData.blog_name}
+              />
+            }
           />
 
           <div className={styles.info}>
@@ -205,7 +211,6 @@ export const ProfilePage: React.FC = () => {
           )}
         </div>
       )}
-
       {!isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) && showGuide && (
         <ProfileFirstGuide
           onClose={() => {
@@ -214,7 +219,6 @@ export const ProfilePage: React.FC = () => {
           }}
         />
       )}
-
       {isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_FIRST_GUIDE) &&
         !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN) && (
           <PushLineGuide
@@ -224,7 +228,6 @@ export const ProfilePage: React.FC = () => {
             }}
           />
         )}
-
       {isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_SECOND_GUIDE_SHOWN) &&
         !isGuideShown(GUIDE_ITEMS.profilePage.PROFILE_THIRD_GUIDE_SHOWN) && (
           <FreezeGuide

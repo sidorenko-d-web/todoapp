@@ -10,6 +10,7 @@ import { Task } from '../../../redux/api/tasks/dto';
 import { useTranslation } from 'react-i18next';
 import GetRewardChestModal from '../../../pages/DevModals/GetRewardChestModal/GetRewardChestModal';
 import { useClaimChestRewardMutation } from '../../../redux';
+import { WithModal } from '../../shared/WithModal/WithModa';
 
 interface TaskState {
   currentStep: number;
@@ -32,11 +33,10 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
     currentStep: task.completed_stages,
     totalSteps: task.stages,
     completed: task.is_completed,
-    hasError: false
+    hasError: false,
   });
 
   const handleOpenTopTasks = async () => {
-
     if (task.is_completed && !task.is_reward_given) {
       openModal(MODALS.TASK_CHEST, {
         points: 0,
@@ -122,14 +122,22 @@ export const TopTasks: FC<TopTasksProps> = ({ task }) => {
           isTopTask={true}
         />
       </div>
-      <ModalTopTasks
+      <WithModal
         modalId={MODALS.TOP_TASK}
-        taskId={task.id}
-        onClose={handleCloseModal}
-        onStateChange={handleStateChange}
-        task={task}
+        component={
+          <ModalTopTasks
+            modalId={MODALS.TOP_TASK}
+            taskId={task.id}
+            onClose={handleCloseModal}
+            onStateChange={handleStateChange}
+            task={task}
+          />
+        }
       />
-      <GetRewardChestModal onClose={() => closeModal(MODALS.TASK_CHEST)} />
+      <WithModal
+        modalId={MODALS.TASK_CHEST}
+        component={<GetRewardChestModal onClose={() => closeModal(MODALS.TASK_CHEST)} />}
+      />
     </section>
   );
 };

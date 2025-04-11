@@ -10,7 +10,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setActiveFooterItemId } from '../../redux';
 import GetGiftDaily from '../DevModals/GetGiftDaily/GetGiftDaily';
-import { total_users } from '../../constants';
+import { MODALS, total_users } from '../../constants';
+import { WithModal } from '../../components/shared/WithModal/WithModa';
 
 export const TasksPage: FC = () => {
   const dispatch = useDispatch();
@@ -19,16 +20,22 @@ export const TasksPage: FC = () => {
   const locale = ['ru', 'en'].includes(i18n.language) ? (i18n.language as 'ru' | 'en') : 'ru';
 
   // Мемоизируем параметры запросов
-  const tasksQueryParams = useMemo(() => ({
-    offset: 0,
-    limit: 100,
-  }), []);
+  const tasksQueryParams = useMemo(
+    () => ({
+      offset: 0,
+      limit: 100,
+    }),
+    [],
+  );
 
-  const dailyTasksQueryParams = useMemo(() => ({
-    ...tasksQueryParams,
-    is_assigned: true,
-    category: 'quiz' as TaskCategory,
-  }), []);
+  const dailyTasksQueryParams = useMemo(
+    () => ({
+      ...tasksQueryParams,
+      is_assigned: true,
+      category: 'quiz' as TaskCategory,
+    }),
+    [],
+  );
 
   // Используем мемоизированные параметры
   const { data, error, isLoading: isTasksLoading } = useGetTasksQuery(tasksQueryParams);
@@ -120,7 +127,8 @@ export const TasksPage: FC = () => {
       {dailyTask && getPlanStageByUsersCount(total_users) >= 4 && <DailyTasks task={dailyTask} />}
       {/*{topTask && <TopTasks task={topTask} />}*/}
       {socialTasks.length > 0 && <SocialTasks tasks={socialTasks} />}
-      <GetGiftDaily />
+
+      <WithModal modalId={MODALS.GET_GIFT_DAILY} component={<GetGiftDaily />} />
     </main>
   );
 };

@@ -10,7 +10,6 @@ import clsx from 'clsx';
 import { svgHeadersString } from '../../constants';
 import { SpinePlugin } from '@esotericsoftware/spine-phaser';
 import { WardrobeSpineScene } from '../../constants/wardrobeAnimation';
-import WhiteNoiseCanvas from '../../components/WhiteNoise/WhiteNoise';
 
 interface SkinSetupPageProps {
   onContinue: () => void;
@@ -153,7 +152,6 @@ export const SkinSetupPage = ({ onContinue }: SkinSetupPageProps) => {
 
   return (
     <>
-      <WhiteNoiseCanvas />
       <div className={styles.root}>
         <div className={styles.skinControls}>
           <div className={styles.avatarSection}>

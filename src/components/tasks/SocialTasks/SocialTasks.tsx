@@ -16,6 +16,7 @@ import { useModal } from '../../../hooks';
 import { MODALS } from '../../../constants';
 import TaskCompletedModal from '../../../pages/DevModals/TaskCompletedModal/TaskCompletedModal';
 import { Loader } from '../../Loader';
+import { WithModal } from '../../shared/WithModal/WithModa';
 
 const TELEGRAM_CHANNEL_URL = 'https://t.me/tgnewss_vf';
 
@@ -203,10 +204,10 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
               pendingTaskId === task.id
                 ? t('q51')
                 : task.is_completed && !task.is_reward_given
-                  ? t('q33')
-                  : task.is_completed
-                    ? t('q15')
-                    : t('q13')
+                ? t('q33')
+                : task.is_completed
+                ? t('q15')
+                : t('q13')
             }
             isCompleted={task.is_completed}
             isRewardGiven={task.is_reward_given}
@@ -219,10 +220,15 @@ export const SocialTasks: FC<SocialTasksProps> = ({ tasks }) => {
         ))}
       </div>
       {selectedTask && (
-        <TaskCompletedModal
-          income={Number(selectedTask.boost.views)}
-          subscribers={selectedTask.boost.subscribers}
-          passiveIncome={Number(selectedTask.boost.income_per_second)}
+        <WithModal
+          modalId={MODALS.TASK_COMPLETED}
+          component={
+            <TaskCompletedModal
+              income={Number(selectedTask.boost.views)}
+              subscribers={selectedTask.boost.subscribers}
+              passiveIncome={Number(selectedTask.boost.income_per_second)}
+            />
+          }
         />
       )}
     </section>

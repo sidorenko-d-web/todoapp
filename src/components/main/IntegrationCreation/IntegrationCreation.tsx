@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { UserGuideCreationCard } from '../GuideIntegrationCreationCard/GuideIntegrationCreationCard.tsx';
 import { useCallback } from 'react';
 import { getMaxSubscriptions } from '../../../helpers/getMaxSubscriptions.ts';
+import { WithModal } from '../../shared/WithModal/WithModa.tsx';
 
 export const IntegrationCreation = () => {
   const { t } = useTranslation('integrations');
@@ -113,39 +114,51 @@ export const IntegrationCreation = () => {
           </span>
         </TrackedButton>
       )}
-
       {firstIntegrationCreating && <UserGuideCreationCard />}
-
       {!isLoading && integration && integrations?.integrations?.[0]?.id && !firstIntegrationCreating && (
         <>
           <IntegrationCreationCard integration={integration!} refetchIntegration={safeRefetchIntegration} />
         </>
       )}
-
-      <IntegrationCreationModal
+      <WithModal
         modalId={MODALS.CREATING_INTEGRATION}
-        onClose={() => closeModal(MODALS.CREATING_INTEGRATION)}
-        hasCreatingIntegration={
-          integrations &&
-          integrations.count !== 0 &&
-          integrations?.integrations &&
-          integrations?.integrations.length > 0
+        component={
+          <IntegrationCreationModal
+            modalId={MODALS.CREATING_INTEGRATION}
+            onClose={() => closeModal(MODALS.CREATING_INTEGRATION)}
+            hasCreatingIntegration={
+              integrations &&
+              integrations.count !== 0 &&
+              integrations?.integrations &&
+              integrations?.integrations.length > 0
+            }
+          />
         }
       />
-      <SubscribeModal
+      <WithModal
         modalId={MODALS.SUBSCRIBE}
-        onClose={() => {
-          setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
-          closeModal(MODALS.SUBSCRIBE);
-        }}
-        onSuccess={handleSuccessfullySubscribed}
+        component={
+          <SubscribeModal
+            modalId={MODALS.SUBSCRIBE}
+            onClose={() => {
+              setGuideShown(GUIDE_ITEMS.mainPage.SUBSCRIPTION_GUIDE_SHOWN);
+              closeModal(MODALS.SUBSCRIBE);
+            }}
+            onSuccess={handleSuccessfullySubscribed}
+          />
+        }
       />
-      <SuccessfullySubscribedModal
+      <WithModal
         modalId={MODALS.SUCCESSFULLY_SUBSCRIBED}
-        onClose={() => {
-          closeModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
-          openModal(MODALS.CREATING_INTEGRATION);
-        }}
+        component={
+          <SuccessfullySubscribedModal
+            modalId={MODALS.SUCCESSFULLY_SUBSCRIBED}
+            onClose={() => {
+              closeModal(MODALS.SUCCESSFULLY_SUBSCRIBED);
+              openModal(MODALS.CREATING_INTEGRATION);
+            }}
+          />
+        }
       />
     </section>
   );

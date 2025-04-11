@@ -29,6 +29,7 @@ import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useModal } from '../../hooks';
 import GetRewardModal from '../DevModals/GetRewardModal/GetRewardModal';
+import { WithModal } from '../../components/shared/WithModal/WithModa';
 
 export const IntegrationPage: React.FC = () => {
   const { t } = useTranslation('integrations');
@@ -64,7 +65,7 @@ export const IntegrationPage: React.FC = () => {
     if (data) {
       setLocalCommentsGenerated(data.comments_answered_correctly);
     }
-  }, [ data ]);
+  }, [ data?.id ]);
 
   useEffect(() => {
     if (!data) return;
@@ -73,7 +74,7 @@ export const IntegrationPage: React.FC = () => {
     }, 5 * 60 * 1000); // 5 minutes
 
     return () => clearInterval(refetchInterval);
-  }, [ data, refetchCurrentIntegration ]);
+  }, [ data?.id, refetchCurrentIntegration ]);
 
   const {
     data: commentData,
@@ -172,7 +173,11 @@ export const IntegrationPage: React.FC = () => {
 
   return (
     <div className={styles.wrp}>
-      <GetRewardModal />
+      
+      <WithModal
+        modalId={MODALS.GET_REWARD}
+        component={<GetRewardModal />}
+      />
       <h1 className={styles.pageTitle}>{t('i1')}</h1>
 
       {error || !integrationId ? <p>{t('i2')}</p> : null}

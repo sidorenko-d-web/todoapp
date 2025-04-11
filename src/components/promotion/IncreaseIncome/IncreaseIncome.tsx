@@ -13,6 +13,7 @@ import { useGetCurrentUsersReferralsQuery } from '../../../redux';
 import { formatAbbreviation } from '../../../helpers';
 import { TrackedButton } from '../..';
 import { useTranslation } from 'react-i18next';
+import { WithModal } from '../../shared/WithModal/WithModa';
 
 export const IncreaseIncome = () => {
   const { t, i18n } = useTranslation('promotion');
@@ -128,8 +129,16 @@ export const IncreaseIncome = () => {
             </TrackedButton>
           )}
         </div>
-        <InviteFriend modalId={MODALS.INVITE_FRIEND} onClose={() => closeModal(MODALS.INVITE_FRIEND)} />
-        <UserReferrals modalId={MODALS.USERS_REFERRALS} onClose={() => closeModal(MODALS.USERS_REFERRALS)} />
+        <WithModal
+          modalId={MODALS.INVITE_FRIEND}
+          component={<InviteFriend modalId={MODALS.INVITE_FRIEND} onClose={() => closeModal(MODALS.INVITE_FRIEND)} />}
+        />
+        <WithModal
+          modalId={MODALS.USERS_REFERRALS}
+          component={
+            <UserReferrals modalId={MODALS.USERS_REFERRALS} onClose={() => closeModal(MODALS.USERS_REFERRALS)} />
+          }
+        />
       </section>
     </>
   );

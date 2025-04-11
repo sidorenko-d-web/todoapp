@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatAbbreviation } from '../../../helpers';
 import { useDispatch, useSelector } from 'react-redux';
+import { WithModal } from '../../shared/WithModal/WithModa';
 
 export const TopInfluencers = () => {
   const { t, i18n } = useTranslation('promotion');
@@ -98,45 +99,63 @@ export const TopInfluencers = () => {
             {isInfluencersLocked ? `${t('p13')}` : `${t('p22')}`}
           </TrackedButton>
 
-          <TopUsers modalId={MODALS.TOP_USERS} onClose={() => closeModal(MODALS.TOP_USERS)} />
+          <WithModal
+            modalId={MODALS.TOP_USERS}
+            component={<TopUsers modalId={MODALS.TOP_USERS} onClose={() => closeModal(MODALS.TOP_USERS)} />}
+          />
 
           {isInfluencersLocked && (
             <>
-              <BindingModal
+              <WithModal
                 modalId={MODALS.BINDING}
-                onClose={() => closeModal(MODALS.BINDING)}
-                binding={INFLUENCER_RATING_STEPS[influencersUnlockingStep].binding}
-                onNext={() => {
-                  closeModal(MODALS.BINDING);
-                  openModal(inputType === 'phone' ? MODALS.BINDING_SUCCESS : MODALS.BINDING_CONFIRMATION);
-                }}
+                component={
+                  <BindingModal
+                    modalId={MODALS.BINDING}
+                    onClose={() => closeModal(MODALS.BINDING)}
+                    binding={INFLUENCER_RATING_STEPS[influencersUnlockingStep].binding}
+                    onNext={() => {
+                      closeModal(MODALS.BINDING);
+                      openModal(inputType === 'phone' ? MODALS.BINDING_SUCCESS : MODALS.BINDING_CONFIRMATION);
+                    }}
+                  />
+                }
               />
-              <BindingConfirmationModal
+              <WithModal
                 modalId={MODALS.BINDING_CONFIRMATION}
-                onClose={() => closeModal(MODALS.BINDING_CONFIRMATION)}
-                confirmation={INFLUENCER_RATING_STEPS[influencersUnlockingStep].confirmation}
-                onNext={() => {
-                  closeModal(MODALS.BINDING_CONFIRMATION);
-                  openModal(MODALS.BINDING_SUCCESS);
-                }}
+                component={
+                  <BindingConfirmationModal
+                    modalId={MODALS.BINDING_CONFIRMATION}
+                    onClose={() => closeModal(MODALS.BINDING_CONFIRMATION)}
+                    confirmation={INFLUENCER_RATING_STEPS[influencersUnlockingStep].confirmation}
+                    onNext={() => {
+                      closeModal(MODALS.BINDING_CONFIRMATION);
+                      openModal(MODALS.BINDING_SUCCESS);
+                    }}
+                  />
+                }
               />
-              <BindingSuccessModal
+              <WithModal
                 modalId={MODALS.BINDING_SUCCESS}
-                onClose={() => closeModal(MODALS.BINDING_SUCCESS)}
-                success={INFLUENCER_RATING_STEPS[influencersUnlockingStep].success}
-                onNext={() => {
-                  closeModal(MODALS.BINDING_SUCCESS);
-                  switch (influencersUnlockingStep) {
-                    case 'email':
-                      setInfluencersUnlockingStep('phone');
-                      openModal(MODALS.BINDING);
-                      break;
-                    case 'phone':
-                      setInfluencersUnlockingStep('email');
-                      setIsInfluencersLocked(false);
-                      break;
-                  }
-                }}
+                component={
+                  <BindingSuccessModal
+                    modalId={MODALS.BINDING_SUCCESS}
+                    onClose={() => closeModal(MODALS.BINDING_SUCCESS)}
+                    success={INFLUENCER_RATING_STEPS[influencersUnlockingStep].success}
+                    onNext={() => {
+                      closeModal(MODALS.BINDING_SUCCESS);
+                      switch (influencersUnlockingStep) {
+                        case 'email':
+                          setInfluencersUnlockingStep('phone');
+                          openModal(MODALS.BINDING);
+                          break;
+                        case 'phone':
+                          setInfluencersUnlockingStep('email');
+                          setIsInfluencersLocked(false);
+                          break;
+                      }
+                    }}
+                  />
+                }
               />
             </>
           )}

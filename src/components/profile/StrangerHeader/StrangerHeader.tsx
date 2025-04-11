@@ -21,6 +21,8 @@ export const StrangerHeader = () => {
 
   const isRoom = useLocation().pathname.includes('room');
 
+  const handleNavigate = () => navigate(isRoom ? '/profile/' + profileId : '/profile/' + profileId + '/room');
+
   return (
     <div className={s.listUser}>
       <div
@@ -53,7 +55,7 @@ export const StrangerHeader = () => {
         className={classNames(s.cardBox, {
           /*{ [s.vipCardBox]: profile.vip }*/
         })}
-        onClick={() => navigate(isRoom ? '/profile/' + profileId : '/profile/' + profileId + '/room')}
+        onClick={handleNavigate}
       >
         {/*{profile.vip ? <img src={chest} height={20} width={20} alt="chest" /> :*/}
         <img src={infoIcon} alt="close" width={20} height={20} />

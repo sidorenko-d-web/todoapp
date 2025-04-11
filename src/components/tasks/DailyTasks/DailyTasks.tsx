@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { MODALS } from '../../../constants';
 import GetGiftDaily from '../../../pages/DevModals/GetGiftDaily/GetGiftDaily';
 import { useGetProfileMeQuery, useGetTreeInfoQuery } from '../../../redux';
+import { WithModal } from '../../shared/WithModal/WithModa';
 
 type QuestionState = 'solved' | 'current' | 'closed';
 
@@ -36,7 +37,6 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
     return questionStates.filter(state => state === 'solved').length;
   }, [questionStates]);
 
-
   const isCompleted = task.is_completed || questionStates.every(state => state === 'solved');
 
   const stage = treeData?.growth_tree_stages?.find((_item, index) => index === profile?.growth_tree_stage_id);
@@ -52,7 +52,7 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
         if (reward) {
           openModal(MODALS.GET_GIFT_DAILY, {
             points: reward.points,
-            boost: stage?.achievement?.boost
+            boost: stage?.achievement?.boost,
           });
         }
         return;
@@ -70,7 +70,6 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
   const handleQuestionStatesChange = (states: QuestionState[]) => {
     setQuestionStates(states);
   };
-
 
   return (
     <section className={s.section}>
@@ -96,14 +95,20 @@ export const DailyTasks: FC<DailyTasksProps> = ({ task }) => {
           isDailyTask={true}
         />
       </div>
-      <ModalDailyTasks
+      <WithModal
         modalId={MODALS.DAILY_TASKS}
-        onClose={handleCloseModal}
-        onStateChange={handleQuestionStatesChange}
-        taskId={task.id}
-        task={task}
+        component={
+          <ModalDailyTasks
+            modalId={MODALS.DAILY_TASKS}
+            onClose={handleCloseModal}
+            onStateChange={handleQuestionStatesChange}
+            taskId={task.id}
+            task={task}
+          />
+        }
       />
-      <GetGiftDaily boost={stage?.achievement?.boost} />
+
+      <WithModal modalId={MODALS.GET_GIFT_DAILY} component={<GetGiftDaily boost={stage?.achievement?.boost} />} />
     </section>
   );
 };

@@ -4,7 +4,6 @@ import circleIcon from '../../../src/assets/icons/circle-blue.svg';
 import usFlag from '../../../src/assets/icons/us-flag.svg';
 import ruFlag from '../../../src/assets/icons/ru-flag.svg';
 import { Button } from '../../components/shared';
-import WhiteNoiseCanvas from '../../components/WhiteNoise/WhiteNoise';
 
 interface LanguageSelectProps {
   selectedLanguage: string;
@@ -20,7 +19,6 @@ const LANGUAGES = [
 export const LanguageSelect = ({ selectedLanguage, onLanguageSelect, onContinue }: LanguageSelectProps) => {
   return (
     <>
-      <WhiteNoiseCanvas/>
       <div className={styles.root}>
         <div className={styles.languageOptions}>
           {LANGUAGES.map(({ id, flag, label }) => (

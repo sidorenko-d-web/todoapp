@@ -18,6 +18,7 @@ import { MODALS } from '../../constants';
 import ChangeNicknameModal from '../../components/profile/ChangeNicknameModal/ChangeNicknameModal';
 import { Loader } from '../../components';
 import { useLocation, useSearchParams } from 'react-router-dom';
+import { WithModal } from '../../components/shared/WithModal/WithModa';
 
 export const StrangerProfilePage: React.FC = () => {
   const { t, i18n } = useTranslation('profile');
@@ -69,7 +70,7 @@ export const StrangerProfilePage: React.FC = () => {
   }, [streaks, claimChestReward, openModal]);
   const [searchParams] = useSearchParams();
 
-  const position = Number(searchParams.get("topposition")) ?? 1
+  const position = Number(searchParams.get('topposition')) ?? 1;
 
   const weekInformation = data?.week_information || [];
 
@@ -93,12 +94,12 @@ export const StrangerProfilePage: React.FC = () => {
 
   return (
     <>
-      <GetRewardChestModal onClose={() => closeModal(MODALS.TASK_CHEST)} />
-
+      <WithModal
+        modalId={MODALS.TASK_CHEST}
+        component={<GetRewardChestModal onClose={() => closeModal(MODALS.TASK_CHEST)} />}
+      />
       {(isUserLoading || isTopProfilesLoading) && <p>{t('p3')}</p>}
-
       {(userError || topProfilesError) && <p>{t('p17')}</p>}
-
       {userProfileData && topProfilesData && (
         <div className={styles.wrp}>
           <div>
@@ -111,13 +112,17 @@ export const StrangerProfilePage: React.FC = () => {
             />
           </div>
 
-          <ChangeNicknameModal
+          <WithModal
             modalId={MODALS.CHANGING_NICKNAME}
-            onClose={() => closeModal(MODALS.CHANGING_NICKNAME)}
-            currentNickname={userProfileData.username}
-            currentBlogName={userProfileData.blog_name}
+            component={
+              <ChangeNicknameModal
+                modalId={MODALS.CHANGING_NICKNAME}
+                onClose={() => closeModal(MODALS.CHANGING_NICKNAME)}
+                currentNickname={userProfileData.username}
+                currentBlogName={userProfileData.blog_name}
+              />
+            }
           />
-
           <div className={styles.info}>
             <ProfileInfo
               nickname={userProfileData.username}

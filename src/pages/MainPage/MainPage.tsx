@@ -47,6 +47,7 @@ import Lottie from 'lottie-react';
 import { giftShake } from '../../assets/animations';
 import { hasAvailableTreeReward } from '../../helpers';
 import clsx from 'clsx';
+import { WithModal } from '../../components/shared/WithModal/WithModa.tsx';
 
 export const MainPage: FC = () => {
   const { t } = useTranslation('guide');
@@ -173,11 +174,9 @@ export const MainPage: FC = () => {
     }
   }, [data, isInventoryDataLoading]);
 
-
   useEffect(() => {
     localStorage.setItem('GIFT_FOR_TREE_STAGE', '0');
   }, []);
-
 
   useEffect(() => {
     if (data) {
@@ -213,11 +212,11 @@ export const MainPage: FC = () => {
   }, []);
 
   useEffect(() => {
-      if (profileData && !isCurrentUserProfileInfoLoading) {
-        // setCurrentUserLevel(userProfileData.growth_tree_stage_id);
-        localStorage.setItem('USER_LEVEL', '' + profileData.growth_tree_stage_id);
-      }
-    }, [profileData, isCurrentUserProfileInfoLoading]);
+    if (profileData && !isCurrentUserProfileInfoLoading) {
+      // setCurrentUserLevel(userProfileData.growth_tree_stage_id);
+      localStorage.setItem('USER_LEVEL', '' + profileData.growth_tree_stage_id);
+    }
+  }, [profileData, isCurrentUserProfileInfoLoading]);
 
   //const integrationId = useSelector((state: RootState) => state.guide.lastIntegrationId);
 
@@ -400,13 +399,7 @@ export const MainPage: FC = () => {
           />
         </TrackedLink>
       )}
-      <DaysInARowModal
-        onClose={() => {
-          if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
-            closeModal(MODALS.DAYS_IN_A_ROW);
-          }
-        }}
-      />
+
       {(integrationCurrentlyCreating || firstIntegrationCreating || hasCreatingIntegrations) && (
         <div
           style={{
@@ -427,12 +420,17 @@ export const MainPage: FC = () => {
           <IntegrationCreation />
         ) : (
           <>
-            <DaysInARowModal
-              onClose={() => {
-                if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
-                  closeModal(MODALS.DAYS_IN_A_ROW);
-                }
-              }}
+            <WithModal
+              modalId={MODALS.DAYS_IN_A_ROW}
+              component={
+                <DaysInARowModal
+                  onClose={() => {
+                    if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+                      closeModal(MODALS.DAYS_IN_A_ROW);
+                    }
+                  }}
+                />
+              }
             />
             <PublishIntegrationButton />
           </>
@@ -465,7 +463,7 @@ export const MainPage: FC = () => {
       <SubscrieGuide
         onClose={() => {
           setGuideShown(GUIDE_ITEMS.mainPage.SECOND_GUIDE_SHOWN);
-          //openModal(MODALS.SUBSCRIBE);
+          openModal(MODALS.SUBSCRIBE);
           reduxDispatch(setSubscribeGuideShown(true));
           setRerender(prev => prev + 1);
         }}
@@ -514,9 +512,20 @@ export const MainPage: FC = () => {
             }}
           />
         )}
-      <RewardForIntegrationModal />
-      {/* Награда с указанием медали и количества интеграций с определенной компанией */}
-      <IntegrationRewardModal />
+      <WithModal modalId={MODALS.INTEGRATION_REWARD} component={<RewardForIntegrationModal />} />
+      <WithModal modalId={MODALS.INTEGRATION_REWARD_CONGRATULATIONS} component={<IntegrationRewardModal />} />
+      <WithModal
+        modalId={MODALS.DAYS_IN_A_ROW}
+        component={
+          <DaysInARowModal
+            onClose={() => {
+              if (isGuideShown(GUIDE_ITEMS.integrationPage.INTEGRATION_PAGE_GUIDE_SHOWN)) {
+                closeModal(MODALS.DAYS_IN_A_ROW);
+              }
+            }}
+          />
+        }
+      />
     </main>
   );
 };

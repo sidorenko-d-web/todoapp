@@ -5,8 +5,9 @@ import {MODALS} from "../../constants";
 
 export const Settings = () => {
     const {openModal} = useModal()
+    const handleOpenModal = () => openModal(MODALS.SETTINGS)
     return (
-        <div className={styles.settingsIconWrapper} onClick={() => openModal(MODALS.SETTINGS)}>
+        <div className={styles.settingsIconWrapper} onClick={handleOpenModal}>
             <img className={styles.settingsIcon} src={settings} alt="Settings"/>
         </div>
     );

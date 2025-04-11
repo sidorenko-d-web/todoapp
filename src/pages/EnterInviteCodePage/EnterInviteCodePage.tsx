@@ -10,7 +10,6 @@ import { Button } from '../../components/shared';
 import { useSendReferralCodeMutation } from '../../redux';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import WhiteNoiseCanvas from '../../components/WhiteNoise/WhiteNoise';
 
 interface EnterInviteCodePageProps {
   referral_id: number;
@@ -97,7 +96,6 @@ export const EnterInviteCodePage: React.FC<EnterInviteCodePageProps> = ({ referr
 
   return (
     <>
-      <WhiteNoiseCanvas />
       <div className={styles.root}>
         <img src={isSentCode ? lockOpen : lock} className={styles.lock} width={120} height={120} />
 

@@ -14,13 +14,15 @@ import styles from '../ShopPage.module.scss';
 import GetRewardChestModal from '../../DevModals/GetRewardChestModal/GetRewardChestModal';
 import { useTranslation } from 'react-i18next';
 import GetGift from '../../DevModals/GetGift/GetGift';
+import { WithModal } from '../../../components/shared/WithModal/WithModa';
+import { MODALS } from '../../../constants';
 
 type TypeTab<T> = { title: string; value: T };
 
 export const ShopInventoryPage = () => {
   const { t } = useTranslation('shop');
-  const [ shopCategory, setShopCategory ] = useState<TypeTab<TypeItemCategory>>();
-  const [ itemsQuality, setItemsQuality ] = useState<TypeTab<TypeItemRarity>>();
+  const [shopCategory, setShopCategory] = useState<TypeTab<TypeItemCategory>>();
+  const [itemsQuality, setItemsQuality] = useState<TypeTab<TypeItemRarity>>();
 
   const {
     data: inventory,
@@ -28,7 +30,7 @@ export const ShopInventoryPage = () => {
     isLoading: isInventoryLoading,
   } = useGetInventoryItemsQuery(
     {
-      item_categories: shopCategory ? [ shopCategory.value ] : [],
+      item_categories: shopCategory ? [shopCategory.value] : [],
       item_rarity: itemsQuality?.value as TypeItemRarity,
     },
     { skip: !shopCategory?.value },
@@ -53,25 +55,24 @@ export const ShopInventoryPage = () => {
 
     const filteredInventory = inventory.items.filter(item => item.item_category === shopCategory.value);
 
-    return filteredInventory
-      .filter((item, _, arr) => {
-        if (item.item_premium_level === 'base') {
-          return !arr.find(
-            _item =>
-              _item.name === item.name &&
-              _item.item_rarity === item.item_rarity &&
-              _item.item_premium_level === 'advanced',
-          );
-        } else if (item.item_premium_level === 'advanced') {
-          return !arr.find(
-            _item =>
-              _item.name === item.name && _item.item_rarity === item.item_rarity && _item.item_premium_level === 'pro',
-          );
-        } else {
-          return true;
-        }
-      })
-  }, [ inventory, shop, shopCategory ]);
+    return filteredInventory.filter((item, _, arr) => {
+      if (item.item_premium_level === 'base') {
+        return !arr.find(
+          _item =>
+            _item.name === item.name &&
+            _item.item_rarity === item.item_rarity &&
+            _item.item_premium_level === 'advanced',
+        );
+      } else if (item.item_premium_level === 'advanced') {
+        return !arr.find(
+          _item =>
+            _item.name === item.name && _item.item_rarity === item.item_rarity && _item.item_premium_level === 'pro',
+        );
+      } else {
+        return true;
+      }
+    });
+  }, [inventory, shop, shopCategory]);
 
   const itemsForBuy = useMemo(() => {
     if (!inventory || !shop || !shopCategory) return [];
@@ -90,7 +91,7 @@ export const ShopInventoryPage = () => {
             _item.name === item.name,
         ),
       );
-  }, [ inventory, shop, shopCategory ]);
+  }, [inventory, shop, shopCategory]);
 
   const handleItemCategoryChange = useCallback((category: TypeTab<TypeItemCategory>) => {
     setShopCategory(category);
@@ -125,11 +126,11 @@ export const ShopInventoryPage = () => {
         <SkinTab mode="inventory" />
       )}
 
-      <ItemUpgradedModal />
-      <ShopUpgradedModal />
-      <GetRewardChestModal />
-      <GetGift />
-      <NewItemModal />
+      <WithModal modalId={MODALS.UPGRADED_ITEM} component={<ItemUpgradedModal />} />
+      <WithModal modalId={MODALS.UPGRADED_SHOP} component={<ShopUpgradedModal />} />
+      <WithModal modalId={MODALS.TASK_CHEST} component={<GetRewardChestModal />} />
+      <WithModal modalId={MODALS.NEW_ITEM} component={<NewItemModal />} />
+      <WithModal modalId={MODALS.GET_GIFT} component={<GetGift />} />
     </ShopLayout>
   );
 };

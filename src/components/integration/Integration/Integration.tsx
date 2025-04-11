@@ -21,7 +21,7 @@ export const Integration: React.FC<props> = ({ compaignImage }) => {
   const [size, setSize] = useState([0, 0]);
   const [isLoaded, setIsLoaded] = useState(false);
   const character = useGetCharacterQuery(undefined);
-  const { desc, pc, wall } = RoomItemsSlots
+  const { desc, pc, wall } = RoomItemsSlots;
 
   const dpi = window.devicePixelRatio ?? 1;
 
@@ -86,7 +86,7 @@ export const Integration: React.FC<props> = ({ compaignImage }) => {
 
           spineSceneRef.current = this;
           this.changeSkin();
-          setTimeout(() => setIsLoaded(true), 1);
+          setIsLoaded(true);
         }
       }
 

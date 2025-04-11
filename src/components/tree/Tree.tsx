@@ -3,12 +3,7 @@ import s from './Tree.module.scss';
 import tickCircle from '../../assets/icons/tickCircle.svg';
 import circle from '../../assets/icons/circle.svg';
 import question from '../../assets/icons/question.svg';
-import {
-  GrowthTreeStage,
-  useGetProfileMeQuery,
-  useGetTreeInfoQuery,
-  useUnlockAchievementMutation,
-} from '../../redux';
+import { GrowthTreeStage, useGetProfileMeQuery, useGetTreeInfoQuery, useUnlockAchievementMutation } from '../../redux';
 
 import giftBlue from '../../assets/icons/gift.svg';
 import giftPurple from '../../assets/icons/gift-purple.svg';
@@ -32,6 +27,7 @@ import clsx from 'clsx';
 import { Button } from '../shared';
 import { formatAbbreviation } from '../../helpers';
 import { useTranslation } from 'react-i18next';
+import { WithModal } from '../shared/WithModal/WithModa';
 
 export const Tree = () => {
   const { openModal } = useModal();
@@ -81,8 +77,10 @@ export const Tree = () => {
     const currentGift = giftColors[stageNumber % giftColors.length];
     const localed = gifts[locale];
     const boost = treeData?.growth_tree_stages?.[stageNumber - 1]?.achievement.boost;
-    const boostPrev = (stageNumber > 1 && stageNumber === parseInt(localStorage.getItem('USER_LEVEL') || '1')) 
-      ? treeData?.growth_tree_stages?.[stageNumber - 2]?.achievement.boost : null;
+    const boostPrev =
+      stageNumber > 1 && stageNumber === parseInt(localStorage.getItem('USER_LEVEL') || '1')
+        ? treeData?.growth_tree_stages?.[stageNumber - 2]?.achievement.boost
+        : null;
 
     localStorage.setItem('STAGE_NUMBER', '' + stageNumber);
     localStorage.setItem('GIFT_FOR_TREE_STAGE', '1');
@@ -213,7 +211,7 @@ export const Tree = () => {
         </List>
       </div>
 
-      <GetGift />
+      <WithModal modalId={MODALS.GET_GIFT} component={<GetGift />} />
     </div>
   );
 };
